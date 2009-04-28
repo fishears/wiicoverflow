@@ -423,16 +423,23 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
     GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
     GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
 
-    width = tex.w * 0.01;
-    height = tex.h * 0.01;
+    width = tex.w * 0.01 * scale;
+    height = tex.h * 0.01 * scale;
     guMtxIdentity (m);
-    //guMtxScaleApply(m, m, scale, scale, 1.0);
+    guMtxScaleApply(m, m, 1.0, 1.0, 10.0);
     Vector axis = (Vector) {0, 1, 0 };
     guMtxRotAxisDeg (m, &axis, degrees);
    // guMtxConcat(m2, m1, m);
 
     //guMtxTransApply(m, m, loc+width, 150+height, 0);
-    guMtxTransApply(m, m, loc, 0, 8.0f);
+	if(scale > 1)
+	{
+		guMtxTransApply(m, m, loc, 0, 6.0f);
+	}
+	else
+	{
+		guMtxTransApply(m, m, loc, 0, 8.0f);
+	}
     guMtxConcat (view, m, mv);
     GX_LoadPosMtxImm (mv, GX_PNMTX0);
 
@@ -453,6 +460,25 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
     GX_Color1u32(color);
     GX_TexCoord2f32(1, 0);
     GX_End();
+	
+	GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+    GX_Position3f32(-width, -height-height*2.05, 0);
+    GX_Color1u32(0xFFFFFFA0);
+    GX_TexCoord2f32(0, 0);
+
+    GX_Position3f32(width, -height-height*2.05, 0);
+    GX_Color1u32(0xFFFFFFA0);
+    GX_TexCoord2f32(1, 0);
+
+    GX_Position3f32(width, height-height*2.05, 0);
+    GX_Color1u32(0xFFFFFF00);
+    GX_TexCoord2f32(1, 1);
+
+    GX_Position3f32(-width, height-height*2.05, 0);
+    GX_Color1u32(0xFFFFFF00);
+    GX_TexCoord2f32(0, 1);
+    GX_End();
+	
     GX_LoadPosMtxImm (GXmodelView2D, GX_PNMTX0);
 
     GX_SetTevOp (GX_TEVSTAGE0, GX_PASSCLR);
@@ -926,6 +952,9 @@ void GRRLIB_Init() {
     guMtxIdentity(GXmodelView2D);
     guMtxTransApply (GXmodelView2D, GXmodelView2D, 0.0F, 0.0F, -50.0F);
     GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
+
+	GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+	GX_SetAlphaUpdate(GX_TRUE);
 
 	Vector cam = {0.0F, 0.0F, 0.0F},
 			up = {0.0F, 1.0F, 0.0F},
