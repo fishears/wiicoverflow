@@ -54,7 +54,7 @@ bool selected = false;
 int DRAW_WINDOW = 5;
 
 #ifdef TEST_MODE
-int COVER_COUNT = 29e;
+int COVER_COUNT = 29;
 #else
 int COVER_COUNT = 0;
 #endif
