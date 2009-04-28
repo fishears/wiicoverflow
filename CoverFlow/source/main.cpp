@@ -12,22 +12,52 @@
 #include <gccore.h>
 #include <wiiuse/wpad.h>
  
+#include "wbfs.h"
+
+#include "disc.h"
+
 #include <iostream> 
  
 #include "GRRLIB.h"
 #include "pngu/pngu.h"
+#include "fat.h"
+#include "sys.h"
+#include "subsystem.h" 
  
+#define COVER_WIDTH		160
+#define COVER_HEIGHT		225
+
 #include <vector>
  
 #define DEFAULT_FIFO_SIZE	(256*1024)
 
+#define TEST_MODE 1
+
+/* Constants */
+#define ENTRIES_PER_PAGE	12
+#define MAX_CHARACTERS		30
+
+/* Gamelist buffer */
+static struct discHdr *gameList = NULL;
+
+/* Gamelist variables */
+static s32 gameCnt = 0, gameSelected = 0, gameStart = 0;
+
+/* WBFS device */
+static s32 wbfsDev = WBFS_MIN_DEVICE;
+
+
 float shift = 0.0;
 	
-
 bool selected = false;
 
 int DRAW_WINDOW = 5;
-int COVER_COUNT = 100;
+
+#ifdef TEST_MODE
+int COVER_COUNT = 29e;
+#else
+int COVER_COUNT = 0;
+#endif
 
 float animate_flip = 0.0;
 float FLIP_SPEED   = 0.008;
@@ -51,6 +81,9 @@ extern const u32	R2FE5G_png_size;
 
 extern const u8		R2HE41_png[];
 extern const u32	R2HE41_png_size;
+
+extern const u8		no_cover_png[];
+extern const u32	no_cover_png_size;
 #define USBLOADER_PATH		"sdhc:/usb-loader"
 
 Mtx GXmodelView2D;
@@ -87,6 +120,42 @@ float change_scale(float val, float in_min, float in_max,
 
 void Init_Covers()
 {
+	cover_texture = GRRLIB_LoadTexture(no_cover_png);
+	#ifndef TEST_MODE
+	for(int i = 0; i < gameCnt; i++)
+	{
+		void *imgData = (void *)no_cover_png;
+
+		char filepath[128];
+		s32  ret;
+
+		struct discHdr *header = &gameList[i];
+		
+		sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
+
+		ret = Fat_ReadFile(filepath, &imgData);
+		
+		GRRLIB_texImg tmpTex = GRRLIB_LoadTexture((const unsigned char*)imgData);
+		
+		if (ret > 0) {
+
+			if ((tmpTex.w > COVER_WIDTH) || (tmpTex.h > COVER_HEIGHT))
+			{
+				covers.push_back(cover_texture);
+			}
+			else
+			{
+				covers.push_back(tmpTex);
+			}
+		}
+		else
+		{
+			covers.push_back(tmpTex);
+		}
+	}
+	
+	#else
+	
 	int CoverCount = COVER_COUNT;
 	
 	for(int i = 0; i < CoverCount; i++)
@@ -94,7 +163,7 @@ void Init_Covers()
 		switch(rand()%6)
 		{
 			case 0:
-				covers.push_back( GRRLIB_LoadTexture(R2AE7D_png) );
+				covers.push_back( GRRLIB_LoadTexture(no_cover_png) );
 				break;
 			case 1:
 				covers.push_back( GRRLIB_LoadTexture(R2DEAP_png) );
@@ -112,13 +181,17 @@ void Init_Covers()
 				covers.push_back( GRRLIB_LoadTexture(RC8P7D_png) );
 		}
 	}
+	#endif
 }
 
 void GRRLIB_Cover(float pos, int texture_id)
 {
 
 	  if((selected || animate_flip > 0) && pos == 0)
+	  {
+		gameSelected = texture_id;
 		return;
+	  }
 
 	  static const float SPACING = 3.5;
 	  float dir = 1;
@@ -178,7 +251,7 @@ void draw_selected()
 	  }
 	  else
 	  {
-		GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
+		GRRLIB_DrawCoverImg(loc*1.2,covers[gameSelected],angle,1.0,0xFFFFFFFF);
 	  }
 }
 
@@ -198,21 +271,187 @@ void draw_covers()
 	}
 }
 
+s32 __Menu_EntryCmp(const void *a, const void *b)
+{
+	struct discHdr *hdr1 = (struct discHdr *)a;
+	struct discHdr *hdr2 = (struct discHdr *)b;
+
+	/* Compare strings */
+	return strcmp(hdr1->title, hdr2->title);
+}
+
+s32 GetEntries(void)
+{
+	struct discHdr *buffer = NULL;
+
+	u32 cnt, len;
+	s32 ret;
+
+	/* Get list length */
+	ret = WBFS_GetCount(&cnt);
+	if (ret < 0)
+		return ret;
+
+	/* Buffer length */
+	len = sizeof(struct discHdr) * cnt;
+
+	/* Allocate memory */
+	buffer = (struct discHdr *)memalign(32, len);
+	if (!buffer)
+		return -1;
+
+	/* Clear buffer */
+	memset(buffer, 0, len);
+
+	/* Get header list */
+	ret = WBFS_GetHeaders(buffer, cnt, sizeof(struct discHdr));
+	if (ret < 0)
+		goto err;
+
+	/* Sort entries */
+	qsort(buffer, cnt, sizeof(struct discHdr), __Menu_EntryCmp);
+
+	/* Free memory */
+	if (gameList)
+		free(gameList);
+
+	/* Set values */
+	gameList = buffer;
+	gameCnt  = cnt;
+	COVER_COUNT = gameCnt;
+	
+	Init_Covers();
+
+	/* Reset variables */
+	gameSelected = gameStart = 0;
+
+	return 0;
+
+err:
+	/* Free memory */
+	if (buffer)
+		free(buffer);
+
+	return ret;
+}
+
+bool init_usbfs()
+{
+	s32 ret;
+
+	/* Load Custom IOS */
+	ret = IOS_ReloadIOS(249);
+	
+	/* Initialize system */
+	Sys_Init();
+
+	/* Initialize subsystems */
+	Subsystem_Init();
+	
+	
+	/* Check if Custom IOS is loaded */
+	if (ret < 0) {
+		printf("[+] ERROR:\n");
+		printf("    Custom IOS could not be loaded! (ret = %d)\n", ret);
+
+		return false;
+	}
+
+	/* Initialize DIP module */
+	ret = Disc_Init();
+	if (ret < 0) {
+		printf("[+] ERROR:\n");
+		printf("    Could not initialize DIP module! (ret = %d)\n", ret);
+
+		return false;
+	}
+
+	return true;
+}
+
+bool Init_Game_List(void)
+{
+	u32 timeout = 30;
+	s32 ret;
+
+	//char *devname = "USB Mass Storage Device";
+
+	wbfsDev = WBFS_DEVICE_USB;
+
+	/* Initialize WBFS */
+	ret = WBFS_Init(wbfsDev, timeout);
+
+	/* Try to open device */
+	if (WBFS_Open() >= 0) {
+		/* Get game list */
+		GetEntries();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
+void Menu_Boot(void)
+{
+	struct discHdr *header = NULL;
+
+	s32 ret;
+
+	/* No game list */
+	if (!gameCnt)
+		return;
+
+	/* Selected game */
+	header = &gameList[gameSelected];
+
+	printf("\n");
+	printf("[+] Booting Wii game, please wait...\n");
+
+	/* Set WBFS mode */
+	Disc_SetWBFS(wbfsDev, header->id);
+
+	/* Open disc */
+	ret = Disc_Open();
+	if (ret < 0) {
+		printf("    ERROR: Could not open game! (ret = %d)\n", ret);
+		goto out;
+	}
+
+	/* Boot Wii disc */
+	Disc_WiiBoot();
+
+	printf("    Returned! (ret = %d)\n", ret);
+
+out:
+	printf("\n");
+	printf("    Press any button to continue...\n");
+}
+
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
 
-	bool flip = true;
+	#ifndef TEST_MODE
+	if(!init_usbfs())
+		return 0;
+	
+	//bool flip = true;
 
+	Init_Game_List();
+	#else
+	Init_Covers();
+	#endif
 	GRRLIB_Init();
 	WPAD_Init();
 	PAD_Init();
 
-	Init_Covers();
-	cover_texture = GRRLIB_LoadTexture(RC8P7D_png);
+	//cover_texture = GRRLIB_LoadTexture(RC8P7D_png);
 
 	selected = false;
-    int wait_time = 0;
+    //int wait_time = 0;
 	
 	while(1) {
 
@@ -234,11 +473,18 @@ int main( int argc, char **argv ){
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A ||
 			PAD_ButtonsDown(0) & PAD_BUTTON_A)
 		{
-			if(!selected && animate_flip <= 0.0)
+			if(!gameCnt)
 			{
-				selected = true;
+				if(!selected && animate_flip <= 0.0)
+				{
+					selected = true;
+				}
+				else if(selected && animate_flip == 1.0)
+				{
+					//TODO Prompt to boot game...
+					Menu_Boot();
+				}
 			}
-			
 		}
 
 		if(!selected && animate_flip == 0)
@@ -247,13 +493,14 @@ int main( int argc, char **argv ){
 				PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT)
 			
 			{	
-				
-				shift -= SCROLL_SPEED;
+				if(!((int)shift-1 <= (-1)*(COVER_COUNT/2.0)))
+					shift -= SCROLL_SPEED;
 			}
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||
 				PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT)
 			{
-				shift += SCROLL_SPEED;
+				if(!((int)shift+.5 >= (COVER_COUNT/2.0)))
+					shift += SCROLL_SPEED;
 			}
 			else
 			{
