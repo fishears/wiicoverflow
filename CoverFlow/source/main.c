@@ -17,7 +17,7 @@
 
 #include "disc.h"
 
-#include <iostream> 
+//#include <iostream> 
  
 #include "GRRLIB.h"
 #include "pngu/pngu.h"
@@ -27,7 +27,7 @@
 #define COVER_WIDTH		160
 #define COVER_HEIGHT		225
 
-#include <vector>
+//#include <vector>
  
 #define DEFAULT_FIFO_SIZE	(256*1024)
 
@@ -105,11 +105,24 @@ extern const u32    loading_main_png_size;
 
 extern const u8     progress_png[];
 extern const u32    progress_png_size;
+
+extern const u8     gradient_bg_png[];
+extern const u32    gradient_bg_png_size;
+
+extern const u8     slide_png[];
+extern const u32    slide_png_size;
+
+extern const u8     slide_bar_png[];
+extern const u32    slide_bar_size;
+
 #define USBLOADER_PATH		"sdhc:/usb-loader"
 
 Mtx GXmodelView2D;
 
-std::vector<GRRLIB_texImg> covers;
+#define MAX_COVERS 500
+int array_size = 0;
+GRRLIB_texImg covers[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
+
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg back_texture;
 
@@ -125,6 +138,11 @@ GRRLIB_texImg text_font1;
 GRRLIB_texImg loader_main_texture;
 
 GRRLIB_texImg progress_texture;
+
+GRRLIB_texImg gradient_texture;
+
+GRRLIB_texImg slide_texture;
+GRRLIB_texImg slide_bar_texture;
 
 float change_scale_without_containing(float val, float in_min, float in_max, 
                                       float out_min, float out_max)
@@ -158,12 +176,15 @@ void Paint_Progress(float v)
 {
 	int count = (int)(v*10);
 	
-	if(count > 18)
-		count = 18;
+	if(count > 40)
+		count = 40;
+	int i;
 	
-	for(int i = 0; i < count; i++)
+	GRRLIB_DrawImg(0, 0, gradient_texture, 0, 1, 1, 0xFFFFFFFF);
+	
+	for(i = 0; i < count; i++)
 	{
-		GRRLIB_DrawImg(60+34*i, 330, progress_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(165+12*i, 231, progress_texture, 0, 1, 1, 0xFFFFFFFF);
 	}
 
 	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
@@ -203,25 +224,52 @@ void LoadCurrentCover(int id)
 	
 }
 
+void AddCover(GRRLIB_texImg tex)
+{
+	if(array_size < MAX_COVERS)
+	{
+		covers[array_size] = tex;
+		array_size++;
+	}
+	
+	/*
+	array_size = array_size + 1;
+	covers = (GRRLIB_texImg*)realloc(covers, (array_size * sizeof(GRRLIB_texImg)));
+
+	if (covers == NULL)
+	{
+	   // fprintf(stdout, "ERROR: Couldn't realloc memory!");
+	   return;
+	}
+
+    covers[array_size - 1] = tex;
+	*/
+}
+
 void Init_Covers()
 {
+	int i;
 	
 	cover_texture = GRRLIB_LoadTexture(no_cover_png);
 	back_texture = GRRLIB_LoadTexture(back_cover_png);
     no_disc_texture = GRRLIB_LoadTexture(no_disc_png);
     select_menu_texture = GRRLIB_LoadTexture(select_menu_png);
 	text_font1 = GRRLIB_LoadTexture(font1_png);
+	
+	slide_texture = GRRLIB_LoadTexture(slide_png);
+	slide_bar_texture = GRRLIB_LoadTexture(slide_bar_png);
+	
     GRRLIB_InitTileSet(&text_font1, 32, 36, 32);
 	
 	progress+=0.05;
 	Paint_Progress(progress);
 	
-	float max_progress = 1.2;
+	float max_progress = 2.1;
 	
 	float per_game_prog = max_progress/gameCnt;
 	
 	#ifndef TEST_MODE
-	for(int i = 0; i < gameCnt; i++)
+	for(i = 0; i < gameCnt; i++)
 	{
 		void *imgData;// = (void *)no_cover_png;
 
@@ -241,16 +289,16 @@ void Init_Covers()
 			
 			if ((tmpTex.w > COVER_WIDTH) || (tmpTex.h > COVER_HEIGHT))
 			{
-				covers.push_back(cover_texture);
+				AddCover(cover_texture);
 			}
 			else
 			{
-				covers.push_back(tmpTex);
+				AddCover(tmpTex);
 			}
 		}
 		else
 		{
-			covers.push_back(cover_texture);
+			AddCover(cover_texture);
 		}
 		progress+=per_game_prog;
 		Paint_Progress(progress);
@@ -260,29 +308,30 @@ void Init_Covers()
 	
 	int CoverCount = COVER_COUNT;
 	
-	for(int i = 0; i < CoverCount; i++)
+	for(i = 0; i < CoverCount; i++)
 	{
 		switch(rand()%6)
 		{
 			case 0:
-				covers.push_back( GRRLIB_LoadTexture(no_cover_png) );
+				AddCover( GRRLIB_LoadTexture(no_cover_png) );
 				break;
 			case 1:
-				covers.push_back( GRRLIB_LoadTexture(R2DEAP_png) );
+				AddCover( GRRLIB_LoadTexture(R2DEAP_png) );
 				break;
 			case 2:
-				covers.push_back( GRRLIB_LoadTexture(R2DEEB_png) );
+				AddCover( GRRLIB_LoadTexture(R2DEEB_png) );
 				break;
 			case 3:
-				covers.push_back( GRRLIB_DuplicateTexture(GRRLIB_LoadTexture(R2FE5G_png) , 160, 225));
+				AddCover( GRRLIB_DuplicateTexture(GRRLIB_LoadTexture(R2FE5G_png) , 160, 225));
 				break;
 			case 4:
-				covers.push_back( GRRLIB_LoadTexture(R2HE41_png) );
+				AddCover( GRRLIB_LoadTexture(R2HE41_png) );
 				break;
 			default:
-				covers.push_back( GRRLIB_LoadTexture(RC8P7D_png) );
+				AddCover( GRRLIB_LoadTexture(RC8P7D_png) );
 		}
 	}
+	
 	#endif
 }
 
@@ -365,6 +414,8 @@ void draw_selected()
 		
 		if(scale >= 360)
 		{
+			int i ;
+			int len;
 			animate_rotate++;
 			if(animate_rotate == 360) animate_rotate = 0;
 			
@@ -380,10 +431,10 @@ void draw_selected()
 			WBFS_GameSize(header->id, &size);
 			char name[64];
 			
-			for(int i = 0; i < 64; i++)
+			for(i = 0; i < 64; i++)
 				name[i] = toupper(header->title[i]);
 				
-			int len = strlen(name);
+			len = strlen(name);
 			float tsize = .8;
 
 			if(len > 20)
@@ -507,7 +558,7 @@ err:
 
 bool init_usbfs()
 {    
-    __Disc_SetLowMem();
+   // __Disc_SetLowMem();
 
 	s32 ret;
 
@@ -545,12 +596,10 @@ bool Init_Game_List(void)
 	u32 timeout = 30;
 	s32 ret;
 
-	//char *devname = "USB Mass Storage Device";
-
 	my_wbfsDev = WBFS_DEVICE_USB;
 
 	/* Initialize WBFS */
-	ret = WBFS_Init(my_wbfsDev);
+	ret = WBFS_Init(my_wbfsDev, timeout);
 
 	progress+=0.05;
 	Paint_Progress(progress);
@@ -570,9 +619,23 @@ bool Init_Game_List(void)
 	}
 }
 
+void DrawSlider(void)
+{
+	int min_loc = 0;
+	int max_loc = 313;
+	
+	GRRLIB_DrawImg(120, 400, slide_bar_texture, 0, 1, 1, 0xFFFFFFFF);
+	
+	int x = change_scale(shift, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0, min_loc, max_loc);
+	
+	
+	GRRLIB_DrawImg(126+x, 416, slide_texture, 0, 1, 1, 0xFFFFFFFF);
+	
+	
+}
+
 bool Menu_Boot(void)
 {
-    __Disc_SetLowMem();
 
 	struct discHdr *header = NULL;
 
@@ -582,15 +645,27 @@ bool Menu_Boot(void)
 	if (!gameCnt)
 		return false;
 
+    //__Disc_SetLowMem();
+	
 	/* Selected game */
 	header = &gameList[gameSelected];
 
 	//printf("\n");
 	//printf("[+] Booting Wii game, please wait...\n");
 
-	/* Set WBFS mode */
-	Disc_SetUSB(header->id);
+    GRRLIB_FillScreen(0x000000FF);
+    GRRLIB_Render();
 
+    GRRLIB_FillScreen(0x000000FF);
+    GRRLIB_Render();
+
+	Con_Clear();
+
+    //GRRLIB_Exit();
+	
+	/* Set WBFS mode */
+	Disc_SetWBFS(WBFS_DEVICE_USB,header->id);
+		
 	/* Open disc */
 	ret = Disc_Open();
 	if (ret < 0) {
@@ -599,23 +674,9 @@ bool Menu_Boot(void)
 		return false;
 	}
 
-    GRRLIB_FillScreen(0x000000FF);
-    GRRLIB_Render();
-
-    GRRLIB_FillScreen(0x000000FF);
-    GRRLIB_Render();
-
-    GRRLIB_Exit(); 
-	
-	/* Boot Wii disc */
-	Wpad_Disconnect();
-
-	/* Unmount SDHC */
-	Fat_UnmountSDHC();
-
-	ret = Disc_WiiBoot(3, 0, 0);
+	ret = Disc_WiiBoot();
     if (ret < 0) {
-        printf("    ERROR: BOOT ERROR! (ret = %d)\n", ret);
+        //printf("    ERROR: BOOT ERROR! (ret = %d)\n", ret);
         SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
     }
 
@@ -632,7 +693,8 @@ bool Menu_Boot(void)
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
-	__Disc_SetLowMem();
+	#ifndef TEST_MODE
+	//__Disc_SetLowMem();
 	/* Load Custom IOS */
 	int ret = IOS_ReloadIOS(249);
 	/* Check if Custom IOS is loaded */
@@ -642,13 +704,15 @@ int main( int argc, char **argv ){
 
 		return 0;
 	}
-
+	#endif
+		
 	GRRLIB_Init();
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
 	
+    gradient_texture = GRRLIB_LoadTexture(gradient_bg_png);
     loader_main_texture = GRRLIB_LoadTexture(loading_main_png);
     progress_texture = GRRLIB_LoadTexture(progress_png);
 	
@@ -662,7 +726,8 @@ int main( int argc, char **argv ){
 	
 	//bool flip = true;
 
-	Init_Game_List();
+	if(!Init_Game_List())
+		return 0;
 	
 	Paint_Progress(progress);
 	
@@ -675,7 +740,7 @@ int main( int argc, char **argv ){
 	Paint_Progress(1.0);
 
 	//WPAD_Init();
-	PAD_Init();
+	//PAD_Init();
 	
 	//cover_texture = GRRLIB_LoadTexture(RC8P7D_png);
 
@@ -690,7 +755,7 @@ int main( int argc, char **argv ){
 	while(1) {
 
 		WPAD_ScanPads();
-		PAD_ScanPads();
+		//PAD_ScanPads();
 
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
@@ -699,8 +764,7 @@ int main( int argc, char **argv ){
 			exit(0);
 		}
 		
-		if (PAD_ButtonsDown(0) & PAD_BUTTON_B ||
-			WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
 		{
 			if(selected && animate_flip >= 1.0)
 			{
@@ -708,8 +772,7 @@ int main( int argc, char **argv ){
 			}
 		}
 		
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A ||
-			PAD_ButtonsDown(0) & PAD_BUTTON_A)
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 		{
 			if(gameCnt)
 			{
@@ -736,15 +799,13 @@ int main( int argc, char **argv ){
 
 		if(!selected && animate_flip == 0)
 		{
-			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT ||
-				PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT)
+			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT )
 			
 			{	
 				if(!((int)shift-1 <= (-1)*(COVER_COUNT/2.0)))
 					shift -= SCROLL_SPEED;
 			}
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||
-				PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT)
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT)
 			{
 				if(!((int)shift+.5 >= (COVER_COUNT/2.0)))
 					shift += SCROLL_SPEED;
@@ -771,11 +832,15 @@ int main( int argc, char **argv ){
 		}
 		draw_covers();
 
+
 		if(selected || animate_flip != 0)
 		{
 			draw_selected();
 		}
-		
+		else
+		{
+			DrawSlider();
+		}
         GRRLIB_Render();
 
 	}

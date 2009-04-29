@@ -1,13 +1,6 @@
 #ifndef _WDVD_H_
 #define _WDVD_H_
 
-#include <asndlib.h>
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 /* Prototypes */
 s32 WDVD_Init(void);
 s32 WDVD_Close(void);
@@ -24,12 +17,7 @@ s32 WDVD_UnencryptedRead(void *, u32, u64);
 s32 WDVD_Read(void *, u32, u64);
 s32 WDVD_WaitForDisc(void);
 s32 WDVD_GetCoverStatus(u32 *);
-s32 WDVD_DisableReset(u8);
-s32 WDVD_SetUSBMode(u8 *);
-
-#ifdef __cplusplus
-}
-#endif
+s32 WDVD_SetWBFSMode(u32, u8 *);
 
 #endif
 

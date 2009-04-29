@@ -15,6 +15,8 @@ Download and Help Forum : http://grrlib.santo.fr
 #include "GRRLIB.h"
 #include <fat.h> 
 
+#include "video.h"
+
 #define DEFAULT_FIFO_SIZE (256 * 1024)
 
 u32 fb = 0;
@@ -984,6 +986,8 @@ void GRRLIB_Init() {
 
 	GRRLIB_2D_Init();
 	
+	Video_ManualSet(xfb[0], rmode);
+
 }
 
 
@@ -1034,14 +1038,17 @@ void GRRLIB_Render() {
  * Call this before exiting your application.
  */
 void GRRLIB_Exit() {
+	
     GX_Flush();
     GX_AbortFrame();
 
     if(xfb[0] != NULL) {
+		VIDEO_ClearFrameBuffer(rmode, xfb[0], 0x000000);
         free(MEM_K1_TO_K0(xfb[0]));
         xfb[0] = NULL;
     }
     if(xfb[1] != NULL) {
+		VIDEO_ClearFrameBuffer(rmode, xfb[1], 0x000000);
         free(MEM_K1_TO_K0(xfb[1]));
         xfb[1] = NULL;
     }
