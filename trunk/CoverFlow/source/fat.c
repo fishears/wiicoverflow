@@ -6,8 +6,7 @@
 #include <sys/stat.h>
 
 /* Constants */
-#define SDHC_MOUNT	"sdhc"
-
+#define SDHC_MOUNT	"SD"
 /* Disc interfaces */
 extern const DISC_INTERFACE __io_sdhc;
 
@@ -25,21 +24,6 @@ s32 Fat_MountSDHC(void)
 	ret = fatMountSimple(SDHC_MOUNT, &__io_sdhc);
 	if (!ret)
 		return -2;
-
-	return 0;
-}
-
-s32 Fat_UnmountSDHC(void)
-{
-	s32 ret;
-
-	/* Unmount device */
-	fatUnmount(SDHC_MOUNT);
-
-	/* Shutdown SDHC interface */
-	ret = __io_sdhc.shutdown();
-	if (!ret)
-		return -1;
 
 	return 0;
 }
@@ -94,4 +78,19 @@ out:
 		fclose(fp);
 
 	return ret;
+}
+
+s32 Fat_UnmountSDHC(void)
+{
+	s32 ret;
+
+	/* Unmount device */
+	fatUnmount(SDHC_MOUNT);
+	
+	/* Close SDHC interface */
+	ret = __io_sdhc.shutdown();
+	if (!ret)
+		return -1;
+
+	return 0;
 }

@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <ctype.h>
 #include <ogcsys.h>
+
 #include "cfg.h"
 
 char *cfg_path = "SD:/apps/usbloader/";
@@ -14,24 +15,22 @@ char current_path[100];
 /* configurable fields */
 
 /* default */
-//int ENTRIES_PER_PAGE = 12;
-//int MAX_CHARACTERS   = 37;
-//int CONSOLE_XCOORD   = 260;
-//int CONSOLE_YCOORD   = 30;
-//int CONSOLE_WIDTH    = 340;
-//int CONSOLE_HEIGHT   = 290;
-//int CONSOLE_FG_COLOR = 15;
-//int CONSOLE_BG_COLOR = 0;
-//int COVER_XCOORD     = 28;
-//int COVER_YCOORD     = 105;
+int ENTRIES_PER_PAGE = 12;
+int MAX_CHARACTERS   = 37;
+int CONSOLE_XCOORD   = 260;
+int CONSOLE_YCOORD   = 30;
+int CONSOLE_WIDTH    = 340;
+int CONSOLE_HEIGHT   = 290;
+int CONSOLE_FG_COLOR = 15;
+int CONSOLE_BG_COLOR = 0;
+int COVER_XCOORD     = 28;
+int COVER_YCOORD     = 105;
 
 struct CFG CFG;
-struct THEME THEME;
-u8 ocarinaChoice = 0;
-u8 videoChoice = 0;
-u8 languageChoice = 0;
-u8 viChoice = 0;
-u8 iosChoice = 0;
+u8 ocarinaChoice;
+u8 videoChoice;
+u8 languageChoice;
+u8 viChoice;
 
 #define TITLE_MAX 65
 
@@ -65,6 +64,7 @@ struct TextMap map_video[] =
 {
 	{ "system", CFG_VIDEO_SYS },
 	{ "game",   CFG_VIDEO_GAME },
+	{ "auto",   CFG_VIDEO_DEFAULT },
 	{ "patch",  CFG_VIDEO_PATCH },
 	{ "pal50", CFG_VIDEO_PAL50 },
 	{ "pal60", CFG_VIDEO_PAL60 },
@@ -88,15 +88,18 @@ struct TextMap map_language[] =
 	{ NULL, -1 }
 };
 
-
-struct TextMap map_alignment[] =
+struct TextMap map_layout[] =
 {
-	{ "left",   CFG_ALIGN_LEFT },
-	{ "right",  CFG_ALIGN_RIGHT },
-	{ "center",   CFG_ALIGN_CENTRE },
-	{ "top",    CFG_ALIGN_TOP },
-	{ "bottom",    CFG_ALIGN_BOTTOM },
-	{ "middle",   CFG_ALIGN_MIDDLE },
+	{ "original",  CFG_LAYOUT_ORIG },
+	{ "original1", CFG_LAYOUT_ORIG },
+	{ "original2", CFG_LAYOUT_ORIG_12 },
+	{ "small",     CFG_LAYOUT_SMALL },
+	{ "medium",    CFG_LAYOUT_MEDIUM },
+	{ "large",     CFG_LAYOUT_LARGE },
+	{ "large2",    CFG_LAYOUT_LARGE_2 },
+	{ "ultimate1", CFG_LAYOUT_ULTIMATE1 },
+	{ "ultimate2", CFG_LAYOUT_ULTIMATE2 },
+	{ "ultimatew", CFG_LAYOUT_ULTIMATE_W },
 	{ NULL, -1 }
 };
 
@@ -165,78 +168,166 @@ void cfg_int(char *name, short *var, int count)
 		cfg_map(name, tmp, var, i);
 	}
 }
-
 /* Mapping */
 
-//static char bg_path[100];
+void cfg_layout()
+{
+
+	switch (CFG.layout) {
+		case CFG_LAYOUT_ORIG: // 1.0+
+			ENTRIES_PER_PAGE = 6;
+			MAX_CHARACTERS   = 30;
+			CONSOLE_XCOORD   = 260;
+			CONSOLE_YCOORD   = 115;
+			CONSOLE_WIDTH    = 340;
+			CONSOLE_HEIGHT   = 218;
+			CONSOLE_FG_COLOR = 15;
+			CONSOLE_BG_COLOR = 0;
+			break;
+
+		case CFG_LAYOUT_ORIG_12: // 1.2+
+			ENTRIES_PER_PAGE = 12;
+			MAX_CHARACTERS   = 30;
+			CONSOLE_XCOORD   = 258;
+			CONSOLE_YCOORD   = 112;
+			CONSOLE_WIDTH    = 354;
+			CONSOLE_HEIGHT   = 304;
+			CONSOLE_FG_COLOR = 15;
+			CONSOLE_BG_COLOR = 0;
+			COVER_XCOORD     = 24;
+			COVER_YCOORD     = 104;
+			break;
+
+		case CFG_LAYOUT_SMALL: // same as 1.0 + use more space
+			ENTRIES_PER_PAGE = 9;
+			MAX_CHARACTERS   = 38;
+			CONSOLE_XCOORD   = 260;
+			CONSOLE_YCOORD   = 115;
+			CONSOLE_WIDTH    = 340;
+			CONSOLE_HEIGHT   = 218;
+			CONSOLE_FG_COLOR = 15;
+			CONSOLE_BG_COLOR = 0;
+			break;
+
+		case CFG_LAYOUT_MEDIUM:
+			ENTRIES_PER_PAGE = 19; //17;
+			MAX_CHARACTERS   = 38;
+			CONSOLE_XCOORD   = 260;
+			CONSOLE_YCOORD   = 50;
+			CONSOLE_WIDTH    = 340;
+			CONSOLE_HEIGHT   = 380;
+			CONSOLE_FG_COLOR = 15;
+			CONSOLE_BG_COLOR = 0;
+			COVER_XCOORD     = 28;
+			COVER_YCOORD     = 175;
+			break;
+
+		// nixx:
+		case CFG_LAYOUT_LARGE:
+			ENTRIES_PER_PAGE = 21;
+			MAX_CHARACTERS   = 38;
+			CONSOLE_XCOORD   = 260;
+			CONSOLE_YCOORD   = 40;
+			CONSOLE_WIDTH    = 340;
+			CONSOLE_HEIGHT   = 402;
+			CONSOLE_FG_COLOR = 15;
+			CONSOLE_BG_COLOR = 0;
+			COVER_XCOORD     = 28;
+			COVER_YCOORD     = 175;
+			break;
+
+		// usptactical:
+		case CFG_LAYOUT_LARGE_2:
+			ENTRIES_PER_PAGE = 21;
+			MAX_CHARACTERS   = 38;
+			CONSOLE_XCOORD   = 260;
+			CONSOLE_YCOORD   = 40;
+			CONSOLE_WIDTH    = 340;
+			CONSOLE_HEIGHT   = 402;
+			CONSOLE_FG_COLOR = 15;
+			CONSOLE_BG_COLOR = 0;
+			COVER_XCOORD     = 30;
+			COVER_YCOORD     = 180;
+			break;
+
+		// Ultimate1: (WiiShizza) White background
+		case CFG_LAYOUT_ULTIMATE1:
+			ENTRIES_PER_PAGE = 12;
+			MAX_CHARACTERS   = 37;
+			CONSOLE_XCOORD   = 260;
+			CONSOLE_YCOORD   = 30;
+			CONSOLE_WIDTH    = 340;
+			CONSOLE_HEIGHT   = 290;
+			CONSOLE_FG_COLOR = 0;
+			CONSOLE_BG_COLOR = 15;
+			COVER_XCOORD     = 28;
+			COVER_YCOORD     = 105;
+			break;
+
+		// Ultimate2: (jservs7 / hungyip84)
+		case CFG_LAYOUT_ULTIMATE2:
+			ENTRIES_PER_PAGE = 12;
+			MAX_CHARACTERS   = 37;
+			CONSOLE_XCOORD   = 40;
+			CONSOLE_YCOORD   = 71;
+			CONSOLE_WIDTH    = 340;
+			CONSOLE_HEIGHT   = 290;
+			CONSOLE_FG_COLOR = 0;
+			CONSOLE_BG_COLOR = 15;
+			COVER_XCOORD     = 446;
+			COVER_YCOORD     = 109;
+			break;
+		
+		case CFG_LAYOUT_ULTIMATE_W: // Ultimate with widescreen
+			ENTRIES_PER_PAGE = 12;
+			MAX_CHARACTERS   = 37;
+			CONSOLE_XCOORD   = 40;
+			CONSOLE_YCOORD   = 71;
+			CONSOLE_WIDTH    = 340;
+			CONSOLE_HEIGHT   = 290;
+			CONSOLE_FG_COLOR = 0;
+			CONSOLE_BG_COLOR = 15;
+			COVER_XCOORD     = 482;
+			COVER_YCOORD     = 110;
+			break;
+	}
+}
+
+static char bg_path[100];
 
 void CFG_Default()
 {
-	CFG.widescreen = CONF_GetAspectRatio();
+	u8 widescreen = CONF_GetAspectRatio();
 	
-	if (CFG.widescreen) {
-		snprintf(CFG.theme_path, sizeof(CFG.theme_path), "SD:/wtheme/");
+	if (widescreen)
+	{
+		snprintf(bg_path, sizeof(bg_path), "SD:/wimages/wbg.png");
+		CFG.layout = CFG_LAYOUT_ULTIMATE_W;
+		CFG.widescreen = 1;
+		snprintf(CFG.images_path, sizeof(CFG.images_path), "SD:/wimages/");
 	}
 	else
 	{
-		snprintf(CFG.theme_path, sizeof(CFG.theme_path), "SD:/theme/");
+		snprintf(bg_path, sizeof(bg_path), "SD:/images/bg.png");
+		CFG.layout = CFG_LAYOUT_ULTIMATE2;
+		CFG.widescreen = 0;
+		snprintf(CFG.images_path, sizeof(CFG.images_path), "SD:/images/");
 	}
-//	CFG.simple  = 0;
-//	CFG.video	= CFG_VIDEO_DEFAULT;
-//	CFG.home	= CFG_HOME_REBOOT;
-//	CFG.download = 0;
-//	CFG.language = CFG_LANG_CONSOLE;
-//	CFG.ocarina = 0;
-//	CFG.vipatch = 0;
-//	CFG.savesettings = 0;
+
+	CFG.background = bg_path;
+	CFG.covers  = 1;
+	CFG.simple  = 0;
+	CFG.video	= CFG_VIDEO_DEFAULT;
+	CFG.home	= CFG_HOME_REBOOT;
+	CFG.download = 0;
+	CFG.language = CFG_LANG_CONSOLE;
+	CFG.ocarina = 0;
+	CFG.vipatch = 0;
+	CFG.savesettings = 0;
 	CFG.parentalcontrol = 0;
-	CFG.maxcharacters = 38;
-	CFG.godmode = 0;
-//	CFG.installdownload = 0;
-//	CFG.hidesettingmenu = 0;
-	snprintf(CFG.covers_path, sizeof(CFG.covers_path), "SD:/images/");
-	snprintf(CFG.disc_path, sizeof(CFG.disc_path), "SD:/images/disc/");
-	snprintf(CFG.unlockCode, sizeof(CFG.unlockCode), "ab121b");
-	
-	//all alignments are left top here
-	THEME.selection_x = 200;
-	THEME.selection_y = 40;
-	THEME.selection_w = 396;
-	THEME.selection_h = 280;
-	THEME.cover_x = 26;
-	THEME.cover_y = 55;
-	THEME.showID = 1;
-	THEME.id_x = 68;
-	THEME.id_y = 305;
-	THEME.region_x = 68;
-	THEME.region_y = 30;
-	THEME.power_x = 576;
-	THEME.power_y = 355;
-	THEME.home_x = 485;//215;
-	THEME.home_y = 367;
-	THEME.setting_x = 60;//-210
-	THEME.setting_y = 367;
-	THEME.showHDD = 1;
-	THEME.showGameCnt = 1;
-	THEME.install_x = 16;//-280
-	THEME.install_y = 355;
-	THEME.showBattery = 1;
-	THEME.showRegion = 1;
-	THEME.hddInfo_x = 0;
-	THEME.hddInfo_y = 330;
-	THEME.hddInfoAlign = CFG_ALIGN_CENTRE;
-	THEME.gameCnt_x = 0;
-	THEME.gameCnt_y = 350;
-	THEME.gameCntAlign = CFG_ALIGN_CENTRE;
-	THEME.showToolTip = 1;
-	THEME.battery1_x = 245;
-	THEME.battery1_y = 400;
-	THEME.battery2_x = 335;
-	THEME.battery2_y = 400;
-	THEME.battery3_x = 245;
-	THEME.battery3_y = 425;
-	THEME.battery4_x = 335;
-	THEME.battery4_y = 425;
+	CFG.installdownload = 0;
+	CFG.hidesettingmenu = 0;
+	cfg_layout();
 }
 
 
@@ -342,24 +433,25 @@ void widescreen_set(char *name, char *val)
 	if (cfg_bool("widescreen", &CFG.widescreen)) //reset default
 	{
 		if (CFG.widescreen) {
-//			snprintf(CFG.covers_path, sizeof(CFG.covers_path), "SD:/wimages/");
-			snprintf(CFG.theme_path, sizeof(CFG.theme_path), "SD:/wtheme/");
+			snprintf(bg_path, sizeof(bg_path), "SD:/wimages/wbg.png");
+			CFG.layout = CFG_LAYOUT_ULTIMATE_W;
+			snprintf(CFG.images_path, sizeof(CFG.images_path), "SD:/wimages/");
+			cfg_layout();
 		}
 		else
 		{
-//			snprintf(CFG.covers_path, sizeof(CFG.covers_path), "SD:/images/");
-			snprintf(CFG.theme_path, sizeof(CFG.theme_path), "SD:/theme/");
+			snprintf(bg_path, sizeof(bg_path), "SD:/images/bg.png");
+			CFG.layout = CFG_LAYOUT_ULTIMATE2;
+			snprintf(CFG.images_path, sizeof(CFG.images_path), "SD:/images/");
+			cfg_layout();
 		}
 	}
 }
-
-
-
 void cfg_set(char *name, char *val)
 {
 	cfg_name = name;
 	cfg_val = val;
-/*
+
 	if (!CFG.widescreen &&(strcmp(name, "images_path") == 0)) {
 		strcopy(CFG.images_path, val, sizeof(CFG.images_path));
 		snprintf(bg_path, sizeof(bg_path), "%sbg.png", CFG.images_path); //reset path
@@ -391,165 +483,50 @@ void cfg_set(char *name, char *val)
 	cfg_map("home", "exit",   &CFG.home, CFG_HOME_EXIT);
 	cfg_map("home", "reboot", &CFG.home, CFG_HOME_REBOOT);
 	cfg_int("simple", &CFG.simple, 3);
-*/
-	if (!CFG.widescreen &&(strcmp(name, "theme_path") == 0)) {
-		strcopy(CFG.theme_path, val, sizeof(CFG.theme_path));
-		return;
-	}
-
-	if (CFG.widescreen && strcmp(name, "wtheme_path") == 0) {
-		strcopy(CFG.theme_path, val, sizeof(CFG.theme_path));
-		return;
-	}
-	
-	if (strcmp(name, "cover_path") == 0) {
-		strcopy(CFG.covers_path, val, sizeof(CFG.covers_path));
-		return;
-	}
-	
-	if (strcmp(name, "disc_path") == 0) {
-		strcopy(CFG.disc_path, val, sizeof(CFG.disc_path));
-		return;
-	}
-	
 	cfg_int("parentalcontrol", &CFG.parentalcontrol, 4);
-	cfg_bool("godmode", &CFG.godmode);
-	
-	if (strcmp(name, "unlock_code") == 0) {
-		strcopy(CFG.unlockCode, val, sizeof(CFG.unlockCode));
-		return;
-	}
 }
 
-void theme_set(char *name, char *val)
+void console_set(char *name, char *val)
 {
 	cfg_name = name;
 	cfg_val = val;
 
-	if(strcmp(cfg_name, "gamelist_coords") == 0) {
+	if ((!CFG.widescreen && (strcmp(cfg_name, "background")==0)) || (CFG.widescreen && (strcmp(cfg_name, "wbackground") == 0))){
+		if (strcmp(val, "0")==0) {
+			CFG.background = NULL;
+		} 
+		else {
+			snprintf(bg_path, sizeof(bg_path), "%s%s", CFG.images_path, val);
+			CFG.background = bg_path;
+		}
+	}
+	
+	else if ((!CFG.widescreen && (strcmp(cfg_name, "console_coords")==0)) || (CFG.widescreen && (strcmp(cfg_name, "wconsole_coords")==0))) {
 		int x,y,w,h;
 		if (sscanf(val, "%d,%d,%d,%d", &x, &y, &w, &h) == 4) {
-			THEME.selection_x = x - (x % 4);
-			THEME.selection_y = y;
-			THEME.selection_w = w;
-			THEME.selection_h = h;
-		}
-	}
-
-	else if (strcmp(cfg_name, "covers_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.cover_x = x - (x % 4);
-			THEME.cover_y = y;
+			CONSOLE_XCOORD = x;
+			CONSOLE_YCOORD = y;
+			CONSOLE_WIDTH  = w;
+			CONSOLE_HEIGHT = h;
 		}
 	}
 	
-	else if (strcmp(cfg_name, "id_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.id_x = x - (x % 4);
-			THEME.id_y = y;
-		}
-	}
-
-	else if (strcmp(cfg_name, "hddinfo_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.hddInfo_x = x - (x % 4);
-			THEME.hddInfo_y = y;
+	else if (strcmp(cfg_name, "console_color")==0) {
+		int fg,bg;
+		if (sscanf(val, "%d,%d", &fg, &bg) == 2) {
+			CONSOLE_FG_COLOR = fg;
+			CONSOLE_BG_COLOR = bg;
 		}
 	}
 	
-	else if (strcmp(cfg_name, "gamecount_coords") == 0) {
+	else if ((!CFG.widescreen && (strcmp(cfg_name, "covers_coords")==0)) || (CFG.widescreen && (strcmp(cfg_name, "wcovers_coords")==0))) {
 		int x,y;
 		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.gameCnt_x = x - (x % 4);
-			THEME.gameCnt_y = y;
-		}
-	}
-
-	else if (strcmp(cfg_name, "region_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.region_x = x - (x % 4);
-			THEME.region_y = y;
+			COVER_XCOORD = x - (x % 4);
+			COVER_YCOORD = y;
 		}
 	}
 	
-	else if (strcmp(cfg_name, "power_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.power_x = x - (x % 4);
-			THEME.power_y = y;
-		}
-	}
-	
-	else if (strcmp(cfg_name, "home_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.home_x = x - (x % 4);
-			THEME.home_y = y;
-		}
-	}
-	
-	else if (strcmp(cfg_name, "setting_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.setting_x = x - (x % 4);
-			THEME.setting_y = y;
-		}
-	}
-
-	else if (strcmp(cfg_name, "install_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.install_x = x - (x % 4);
-			THEME.install_y = y;
-		}
-	}
-
-	else if (strcmp(cfg_name, "battery1_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.battery1_x = x - (x % 4);
-			THEME.battery1_y = y;
-		}
-	}
-
-	else if (strcmp(cfg_name, "battery2_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.battery2_x = x - (x % 4);
-			THEME.battery2_y = y;
-		}
-	}
-
-	else if (strcmp(cfg_name, "battery3_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.battery3_x = x - (x % 4);
-			THEME.battery3_y = y;
-		}
-	}
-
-	else if (strcmp(cfg_name, "battery4_coords") == 0) {
-		int x,y;
-		if (sscanf(val, "%d,%d", &x, &y) == 2) {
-			THEME.battery4_x = x - (x % 4);
-			THEME.battery4_y = y;
-		}
-	}
-	
-	cfg_bool("show_id", &THEME.showID);
-	cfg_bool("show_hddinfo", &THEME.showHDD);
-	cfg_bool("show_gamecount", &THEME.showGameCnt);
-	cfg_bool("show_region", &THEME.showRegion);
-	cfg_bool("show_battery", &THEME.showBattery);
-	cfg_bool("show_tooltip", &THEME.showToolTip);
-	cfg_map_auto("hddinfo_align", map_alignment, &THEME.hddInfoAlign);
-	cfg_map_auto("gamecount_align", map_alignment, &THEME.gameCntAlign);
-	
-	/*
 	else if (strcmp(cfg_name, "entry_lines") == 0) {
 		int x;
 		if (sscanf(val, "%d", &x) == 1) {
@@ -562,10 +539,8 @@ void theme_set(char *name, char *val)
 		if (sscanf(val, "%d", &x) == 1) {
 			MAX_CHARACTERS = x;
 		}
-	}*/
+	}
 }
-
-
 // split line to part1 delimiter part2 
 bool trimsplit(char *line, char *part1, char *part2, char delim, int size)
 {
@@ -657,7 +632,6 @@ bool cfg_parsetitlefile(char *fname, void (*set_func)(char*, char*, u8))
 	return true;
 }
 
-/*
 void cfg_parsearg(int argc, char **argv)
 {
 	int i;
@@ -674,7 +648,7 @@ void cfg_parsearg(int argc, char **argv)
 		}
 	}
 }
-*/
+
 
 // PER-GAME SETTINGS
 
@@ -699,7 +673,6 @@ void cfg_set_game_opt(struct Game_CFG *game, u8 *id)
 	game->language = languageChoice;
 	game->ocarina = ocarinaChoice;
 	game->vipatch = viChoice;
-	game->ios = iosChoice;
 }
 
 void game_set(char *name, char *val)
@@ -750,11 +723,6 @@ void game_set(char *name, char *val)
 					game->vipatch = opt_c;
 				}
 			}
-			if (strcmp("ios", opt_name) == 0) {
-				if (sscanf(opt_val, "%hd", &opt_c) == 1) {
-					game->ios = opt_c;
-				}
-			}
 		}
 		// next opt
 		if (np) p = np + 1; else p = NULL;
@@ -763,15 +731,15 @@ void game_set(char *name, char *val)
 
 bool cfg_load_games()
 {
-	return cfg_parsefile("SD:/config/settings.cfg", &game_set);
+	return cfg_parsefile("settings.cfg", &game_set);
 }
 
 bool cfg_save_games()
 {
 	FILE *f;
 	int i;
-	mkdir("SD:/config/", 0777);
-	f = fopen("SD:/config/settings.cfg", "wb");
+
+	f = fopen("settings.cfg", "wb");
 	if (!f) {
 		printf("Error saving %s\n", "settings.cfg");
 		sleep(1);
@@ -788,8 +756,7 @@ bool cfg_save_games()
 		s = map_get_name(map_language, cfg_game[i].language);
 		if (s) fprintf(f, "language:%s; ", s);
 		fprintf(f, "ocarina:%d; ", cfg_game[i].ocarina);
-		fprintf(f, "vipatch:%d; ", cfg_game[i].vipatch);
-		fprintf(f, "ios:%d;\n", cfg_game[i].ios);
+		fprintf(f, "vipatch:%d;\n", cfg_game[i].vipatch);
 	}
 	fprintf(f, "# END\n");
 	fclose(f);
@@ -829,39 +796,56 @@ bool CFG_forget_game_opt(u8 *id)
 	return cfg_save_games();
 }
 
+void chdir_app(char *arg)
+{
+	char appdir[100] = "SD:";
+	char dir[100], *pos1, *pos2;
+
+	pos1 = strchr(arg, ':');
+	// trim file name
+	pos2 = strrchr(arg, '/');
+	if (pos1 && pos2) {
+		pos1++;
+		pos2++;
+		strncpy(dir, pos1, pos2 - pos1);
+		dir[pos2 - pos1] = 0;
+		strcat(appdir,dir);
+		chdir(appdir);
+		strncpy(current_path, appdir, sizeof(current_path));
+	}
+}   
+
 void CFG_Load(int argc, char **argv)
 {
 	char pathname[200];
-//	bool ret = false;
+	bool ret = false;
 
 	//set app path
-//	chdir_app(argv[0]);
+	chdir_app(argv[0]);
 	
 	CFG_Default();
 	
-	snprintf(pathname, sizeof(pathname), "SD:/config/config.txt");
+	snprintf(pathname, sizeof(pathname), "%s", "config.txt");
 	
 	cfg_parsefile(pathname, &widescreen_set); //first set widescreen
 	cfg_parsefile(pathname, &cfg_set); //then set config and layout options
+	ret = cfg_parsefile(pathname, &console_set); //finally set console information
 	
-	snprintf(pathname, sizeof(pathname), "%stheme.txt", CFG.theme_path);
-	cfg_parsefile(pathname, &theme_set); //finally set console information 
+	if (!ret)
+	{
+		cfg_parsefile("SD:/config.txt", &widescreen_set);
+		cfg_parsefile("SD:/config.txt", &cfg_set);
+		cfg_parsefile("SD:/config.txt", &console_set);
+	}
 	
-//	if (!ret)
-//	{
-//		cfg_parsefile("SD:/config.txt", &widescreen_set);
-//		cfg_parsefile("SD:/config.txt", &cfg_set);
-//		cfg_parsefile("SD:/config.txt", &console_set);
-//	}
-	
-	snprintf(pathname, sizeof(pathname), "SD:/config/titles.txt");
+	snprintf(pathname, sizeof(pathname), "%s%s", current_path, "titles.txt");
 	cfg_parsetitlefile(pathname, &title_set);
 	
 	// load per-game settings
 	cfg_load_games();
 		
 	
-//	cfg_parsearg(argc, argv);
+	cfg_parsearg(argc, argv);
 }
 
 void CFG_Cleanup(void)

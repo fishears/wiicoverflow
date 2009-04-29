@@ -118,13 +118,13 @@ extern const u32    slide_bar_png_size;
 extern const u8     usb_error_png[];
 extern const u32    usb_error_png_size;
 
-#define USBLOADER_PATH		"sdhc:/usb-loader"
+#define USBLOADER_PATH		"SD:/usb-loader"
 
 Mtx GXmodelView2D;
 
-#define MAX_COVERS 500
+#define MAX_COVERS 20
 int array_size = 0;
-GRRLIB_texImg* covers;//[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
+GRRLIB_texImg covers[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg back_texture;
@@ -231,12 +231,12 @@ void LoadCurrentCover(int id)
 
 void AddCover(GRRLIB_texImg tex)
 {
-	//if(array_size < MAX_COVERS)
-	//{
-	//	covers[array_size] = tex;
-	//	array_size++;
-	//}
-	
+	if(array_size < MAX_COVERS)
+	{
+		covers[array_size] = tex;
+		array_size++;
+	}
+	/*
 	array_size = array_size + 1;
 	covers = (GRRLIB_texImg*)realloc(covers, (array_size * sizeof(GRRLIB_texImg)));
 
@@ -247,6 +247,7 @@ void AddCover(GRRLIB_texImg tex)
 	}
 
     covers[array_size - 1] = tex;
+	*/
 }
 
 void Init_Covers()
@@ -281,27 +282,30 @@ void Init_Covers()
 
 		struct discHdr *header = &gameList[i];
 		
-		sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
+		if(array_size < MAX_COVERS)
+		{
+			sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
 
-		ret = Fat_ReadFile(filepath, &imgData);
-		
-		
-		if (ret > 0) {
-
-			GRRLIB_texImg tmpTex = GRRLIB_LoadTexture((const unsigned char*)imgData);
+			ret = Fat_ReadFile(filepath, &imgData);
 			
-			if ((tmpTex.w > COVER_WIDTH) || (tmpTex.h > COVER_HEIGHT))
-			{
-				AddCover(cover_texture);
+			
+			if (ret > 0) {
+
+				GRRLIB_texImg tmpTex = GRRLIB_LoadTexture((const unsigned char*)imgData);
+				
+				if ((tmpTex.w > COVER_WIDTH) || (tmpTex.h > COVER_HEIGHT))
+				{
+					AddCover(cover_texture);
+				}
+				else
+				{
+					AddCover(tmpTex);
+				}
 			}
 			else
 			{
-				AddCover(tmpTex);
+				AddCover(cover_texture);
 			}
-		}
-		else
-		{
-			AddCover(cover_texture);
 		}
 		progress+=per_game_prog;
 		Paint_Progress(progress);
@@ -361,7 +365,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 	  scale = pow(pos + 1, -2);
 	  angle = -1 * dir * change_scale(scale, 0, 1, 45, 0);
 	
-	  if(texture_id != -1)
+	  if(texture_id != -1 && texture_id < array_size)
 	  {
 			GRRLIB_DrawCoverImg(loc*1.2,covers[texture_id],angle,1.0,0xFFFFFFFF);
 	  }
@@ -633,14 +637,14 @@ bool Menu_Boot(void)
 {
 
 	struct discHdr *header = NULL;
-
+	int i = 0;
 	s32 ret;
 
 	/* No game list */
 	if (!gameCnt)
 		return false;
 
-    __Disc_SetLowMem();
+    //__Disc_SetLowMem();
 	
 	/* Selected game */
 	header = &gameList[gameSelected];
@@ -648,16 +652,24 @@ bool Menu_Boot(void)
 	//printf("\n");
 	//printf("[+] Booting Wii game, please wait...\n");
 
-    GRRLIB_FillScreen(0x000000FF);
-    GRRLIB_Render();
-
-    GRRLIB_FillScreen(0x000000FF);
-    GRRLIB_Render();
-
 	//Con_Clear();
 
     GRRLIB_Exit();
-	free(covers);
+	
+	for(i = 0; i < array_size; i++)
+	{
+		free(covers[i].data);
+	}
+	
+	free(cover_texture.data);
+	free(back_texture.data);
+	free(empty_texture.data);
+	free(no_disc_texture.data);
+	free(current_cover_texture.data);
+	free(select_menu_texture.data);
+	free(text_font1.data);
+
+	//free(covers);
 	
 	/* Set WBFS mode */
 	Disc_SetWBFS(WBFS_DEVICE_USB,header->id);
@@ -686,11 +698,16 @@ bool Menu_Boot(void)
 }
 
 
+void quit()
+{
+	exit(0);
+}
+
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
 	#ifndef TEST_MODE
-	__Disc_SetLowMem();
+	//__Disc_SetLowMem();
 	/* Load Custom IOS */
 	int ret = IOS_ReloadIOS(249);
 	/* Check if Custom IOS is loaded */
@@ -725,7 +742,7 @@ int main( int argc, char **argv ){
 	my_wbfsDev = WBFS_DEVICE_USB;
 
 	/* Initialize WBFS */
-	ret = WBFS_Init(my_wbfsDev, timeout);
+	ret = WBFS_Init(my_wbfsDev);
 	
 	//bool flip = true;
   USB_RETRY:
@@ -751,23 +768,23 @@ int main( int argc, char **argv ){
 		}
 	}
 	
-	Paint_Progress(progress);
-	
 	#else
 	gameCnt = 29;
 	Init_Covers();
 	#endif
 	
 
-	Paint_Progress(1.0);
+	free(gradient_texture.data);
+	free(loader_main_texture.data);
+	free(progress_texture.data);
+	free(usb_error_texture.data);
+	
+	//Paint_Progress(1.0);
 
 	//WPAD_Init();
 	//PAD_Init();
-	
-	//cover_texture = GRRLIB_LoadTexture(RC8P7D_png);
 
 	selected = false;
-    //int wait_time = 0;
 	
 	f32 free, used;
 
@@ -783,10 +800,7 @@ int main( int argc, char **argv ){
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
-			GRRLIB_Exit(); 
-			SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
-			
-			exit(0);
+			quit();
 		}
 		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)

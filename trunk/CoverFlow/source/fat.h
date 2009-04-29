@@ -3,7 +3,7 @@
 
 /* Prototypes */
 s32 Fat_MountSDHC(void);
-s32 Fat_UnmountSDHC(void);
 s32 Fat_ReadFile(const char *, void **);
+s32 Fat_UnmountSDHC(void);
 
 #endif

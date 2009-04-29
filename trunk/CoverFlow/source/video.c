@@ -3,10 +3,12 @@
 
 #include "sys.h"
 #include "video.h"
+#include "cfg.h"
 
 /* Video variables */
 static void *framebuffer = NULL;
 static GXRModeObj *vmode = NULL;
+
 
 
 void Con_Init(u32 x, u32 y, u32 w, u32 h)
@@ -17,6 +19,8 @@ void Con_Init(u32 x, u32 y, u32 w, u32 h)
 
 void Con_Clear(void)
 {
+	Con_FgColor(CONSOLE_FG_COLOR & 7, CONSOLE_FG_COLOR > 7 ? 1 : 0);
+	Con_BgColor(CONSOLE_BG_COLOR & 7, CONSOLE_BG_COLOR > 7 ? 1 : 0);
 	/* Clear console */
 	printf("\x1b[2J");
 	fflush(stdout);
@@ -93,7 +97,7 @@ void Con_FillRow(u32 row, u32 color, u8 bold)
 }
 
 void Video_Configure(GXRModeObj *rmode)
-{
+{	
 	/* Configure the video subsystem */
 	VIDEO_Configure(rmode);
 
@@ -106,19 +110,17 @@ void Video_Configure(GXRModeObj *rmode)
 		VIDEO_WaitVSync();
 }
 
-void Video_ManualSet(void *fb, GXRModeObj *vm)
-{
-	vmode = vm;
-	framebuffer = fb;
-	
-	/* Clear the screen */
-	Video_Clear(COLOR_BLACK);
-}
-
 void Video_SetMode(void)
 {
 	/* Select preferred video mode */
 	vmode = VIDEO_GetPreferredMode(NULL);
+
+	// widescreen fix	
+	if (CFG.widescreen)
+	{
+		vmode->viWidth = 678;
+		vmode->viXOrigin = ((VI_MAX_WIDTH_NTSC - 678) / 2);
+	}
 
 	/* Allocate memory for the framebuffer */
 	framebuffer = MEM_K0_TO_K1(SYS_AllocateFramebuffer(vmode));

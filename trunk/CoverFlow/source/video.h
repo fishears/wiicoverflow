@@ -1,9 +1,5 @@
 #ifndef _VIDEO_H_
 #define _VIDEO_H_
-#include <stdio.h>
-#include <ogcsys.h>
-
-#include "sys.h"
 
 #include "pngu/pngu.h"
 
@@ -19,6 +15,5 @@ void Video_Configure(GXRModeObj *);
 void Video_SetMode(void);
 void Video_Clear(s32);
 void Video_DrawPng(IMGCTX, PNGUPROP, u16, u16);
-void Video_ManualSet(void *fb, GXRModeObj *vm);
 
 #endif
