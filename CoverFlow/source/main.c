@@ -25,7 +25,7 @@
 #include "sys.h"
  
 #define COVER_WIDTH		160
-#define COVER_HEIGHT		225
+#define COVER_HEIGHT		224
 
 //#include <vector>
  
