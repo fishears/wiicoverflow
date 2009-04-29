@@ -2,13 +2,14 @@
 #include <unistd.h>
 #include <malloc.h>
 #include <ogcsys.h>
+#include <errno.h>
 
 #include "sdhc.h"
 #include "usbstorage.h"
 #include "utils.h"
 #include "video.h"
-#include "wbfs.h"
 #include "wdvd.h"
+#include "wbfs.h"
 
 #include "libwbfs/libwbfs.h"
 
@@ -23,9 +24,8 @@ static rw_sector_callback_t readCallback  = NULL;
 static rw_sector_callback_t writeCallback = NULL;
 
 /* Variables */
+
 static u32 nb_sectors, sector_size;
-
-
 void __WBFS_Spinner(s32 x, s32 max)
 {
 	static time_t start;
@@ -61,7 +61,7 @@ void __WBFS_Spinner(s32 x, s32 max)
 	percent = (x * 100.0) / max;
 	size    = (hdd->wii_sec_sz / GB_SIZE) * max;
 
-	Con_ClearLine();
+    //Con_ClearLine();
 
 	/* Show progress */
 	if (x != max) {
@@ -69,6 +69,11 @@ void __WBFS_Spinner(s32 x, s32 max)
 		fflush(stdout);
 	} else
 		printf("    %.2fGB copied in %d:%02d:%02d\n", size, h, m, s);
+}
+
+wbfs_t *GetHddInfo(void)
+{
+    return hdd;
 }
 
 s32 __WBFS_ReadDVD(void *fp, u32 lba, u32 len, void *iobuf)
@@ -106,7 +111,7 @@ s32 __WBFS_ReadDVD(void *fp, u32 lba, u32 len, void *iobuf)
 			goto out;
 
 		/* Copy data */
-		memcpy((char*)iobuf + size, buffer, mod);
+		memcpy(iobuf + size, buffer, mod);
 	}
 
 	/* Success */
@@ -224,29 +229,87 @@ s32 __WBFS_WriteSDHC(void *fp, u32 lba, u32 count, void *iobuf)
 	return 0;
 }
 
+s32 WBFS_Init(u32 device)
+{
+	s32 ret;
 
+	switch (device) {
+	case WBFS_DEVICE_USB:
+		/* Initialize USB storage */
+		ret = USBStorage_Init();
+		if (ret >= 0) {
+			/* Setup callbacks */
+			readCallback = __WBFS_ReadUSB;
+			writeCallback = __WBFS_WriteUSB;
+			/* Device info */
+			/* Get USB capacity */
+			nb_sectors = USBStorage_GetCapacity(&sector_size);
+			if (!nb_sectors)
+				return -1;
+		}
+		else 
+			return ret;
+		break;
+	case WBFS_DEVICE_SDHC:
+		/* Initialize SDHC */
+		ret = SDHC_Init();
+
+		if (ret) {
+			/* Setup callbacks */
+			readCallback  = __WBFS_ReadSDHC;
+			writeCallback = __WBFS_WriteSDHC;
+
+			/* Device info */
+			nb_sectors  = 0;
+			sector_size = SDHC_SECTOR_SIZE;
+		} 
+		else
+			return -1;
+		break;
+	}
+	
+	return 0;
+}
+//s32 WBFS_Init(void)
+//{
+//	s32 ret;
+//
+//	/* Initialize USB storage */
+//	ret = USBStorage_Init();
+//	if (ret < 0)
+//		return ret;
+//
+//	/* Get USB capacity */
+//	nb_sectors = USBStorage_GetCapacity(&sector_size);
+//	if (!nb_sectors)
+//		return -1;
+//
+//	return 0;
+//}
+
+/*
 s32 WBFS_Init(u32 device, u32 timeout)
 {
 	u32 cnt;
 	s32 ret;
 
-	/* Wrong timeout */
+	// Wrong timeout 
 	if (!timeout)
 		return -1;
 
-	/* Try to mount device */
+	// Try to mount device 
 	for (cnt = 0; cnt < timeout; cnt++) {
 		switch (device) {
 		case WBFS_DEVICE_USB: {
-			/* Initialize USB storage */
+			// Initialize USB storage 
 			ret = USBStorage_Init();
 
 			if (ret >= 0) {
-				/* Setup callbacks */
+				// Setup callbacks
 				readCallback  = __WBFS_ReadUSB;
 				writeCallback = __WBFS_WriteUSB;
 
-				/* Device info */
+				// Device info
 				nb_sectors = USBStorage_GetCapacity(&sector_size);
 
 				goto out;
@@ -254,15 +317,15 @@ s32 WBFS_Init(u32 device, u32 timeout)
 		}
 
 		case WBFS_DEVICE_SDHC: {
-			/* Initialize SDHC */
+			// Initialize SDHC 
 			ret = SDHC_Init();
 
 			if (ret) {
-				/* Setup callbacks */
+				// Setup callbacks 
 				readCallback  = __WBFS_ReadSDHC;
 				writeCallback = __WBFS_WriteSDHC;
 
-				/* Device info */
+				// Device info
 				nb_sectors  = 0;
 				sector_size = SDHC_SECTOR_SIZE;
 
@@ -275,13 +338,14 @@ s32 WBFS_Init(u32 device, u32 timeout)
 			return -1;
 		}
 
-		/* Sleep 1 second */
+		// Sleep 1 second 
 		sleep(1);
 	}
 
 out:
 	return ret;
 }
+*/
 
 s32 WBFS_Open(void)
 {
@@ -293,6 +357,16 @@ s32 WBFS_Open(void)
 	hdd = wbfs_open_hd(readCallback, writeCallback, NULL, sector_size, nb_sectors, 0);
 	if (!hdd)
 		return -1;
+
+	return 0;
+}
+
+s32 WBFS_Close(void)
+
+{
+	/* Close hard disk */
+	if (hdd)
+		wbfs_close(hdd);
 
 	return 0;
 }
@@ -385,7 +459,7 @@ s32 WBFS_RemoveGame(u8 *discid)
 	if (!hdd)
 		return -1;
 
-	/* Remove game from device */
+	/* Remove game from USB device */
 	ret = wbfs_rm_disc(hdd, discid);
 	if (ret < 0)
 		return ret;
@@ -438,6 +512,20 @@ s32 WBFS_DiskSpace(f32 *used, f32 *free)
 	/* Copy values */
 	*free = ssize * cnt;
 	*used = ssize * (hdd->n_wbfs_sec - cnt);
+
+	return 0;
+}
+
+s32 WBFS_RenameGame(u8 *discid, const void *newname)
+{
+	s32 ret;
+
+	/* No USB device open */
+	if (!hdd)
+		return -1;
+	ret = wbfs_ren_disc(hdd, discid,(u8*)newname);
+	if (ret < 0)
+		return ret;
 
 	return 0;
 }

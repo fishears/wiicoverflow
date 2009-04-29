@@ -3,12 +3,14 @@
 #include <string.h>
 #include <ogcsys.h>
 #include <ogc/lwp_watchdog.h>
+#include <wiiuse/wpad.h>
+
 
 #include "apploader.h"
 #include "disc.h"
-#include "subsystem.h"
 #include "video.h"
 #include "wdvd.h"
+#include "fst.h"
 
 /* Constants */
 #define PTABLE_OFFSET	0x40000
@@ -17,6 +19,7 @@
 /* Disc pointers */
 static u32 *buffer = (u32 *)0x93000000;
 static u8  *diskid = (u8  *)0x80000000;
+static char gameid[8];
 
 
 void __Disc_SetLowMem(void)
@@ -37,7 +40,7 @@ void __Disc_SetLowMem(void)
 	DCFlushRange((void *)0x80000000, 0x3F00);
 }
 
-void __Disc_SetVMode(void)
+void __Disc_SetVMode(u8 videoselected)
 {
 	GXRModeObj *vmode = NULL;
 
@@ -50,12 +53,7 @@ void __Disc_SetVMode(void)
 	/* Select video mode register */
 	switch (tvmode) {
 	case CONF_VIDEO_PAL:
-		if (CONF_GetEuRGB60() > 0) {
-			vmode_reg = 5;
-			vmode     = (progressive) ? &TVNtsc480Prog : &TVEurgb60Hz480IntDf;
-		} else
-			vmode_reg = 1;
-
+		vmode_reg = (CONF_GetEuRGB60() > 0) ? 5 : 1;
 		break;
 
 	case CONF_VIDEO_MPAL:
@@ -67,6 +65,9 @@ void __Disc_SetVMode(void)
 		break;
 	}
 
+    switch (videoselected) {
+    case 0:
+
 	/* Select video mode */
 	switch(diskid[3]) {
 	/* PAL */
@@ -76,8 +77,8 @@ void __Disc_SetVMode(void)
 	case 'X':
 	case 'Y':
 		if (tvmode != CONF_VIDEO_PAL) {
-			vmode_reg = 1;
-			vmode     = (progressive) ? &TVNtsc480Prog : &TVNtsc480IntDf;
+			vmode_reg = 5;
+			vmode     = (progressive) ? &TVNtsc480Prog : &TVEurgb60Hz480IntDf;
 		}
 
 		break;
@@ -87,21 +88,49 @@ void __Disc_SetVMode(void)
 	case 'J':
 		if (tvmode != CONF_VIDEO_NTSC) {
 			vmode_reg = 0;
-			vmode     = (progressive) ? &TVNtsc480Prog : &TVEurgb60Hz480IntDf;
+			vmode     = (progressive) ? &TVNtsc480Prog : &TVNtsc480IntDf;
 		}
 
 		break;
 	}
+	break;
 
+	case 1:
+        vmode_reg = 1;
+        progressive = (CONF_GetProgressiveScan() > 0) && VIDEO_HaveComponentCable();
+        vmode     = (progressive) ? &TVEurgb60Hz480Prog : &TVPal528IntDf;
+        break;
+    case 2:
+        vmode_reg = 5;
+        progressive = (CONF_GetProgressiveScan() > 0) && VIDEO_HaveComponentCable();
+        vmode     = (progressive) ? &TVEurgb60Hz480Prog : &TVEurgb60Hz480IntDf;
+        break;
+    case 3:
+        vmode_reg = 0;
+        progressive = (CONF_GetProgressiveScan() > 0) && VIDEO_HaveComponentCable();
+        vmode     = (progressive) ? &TVNtsc480Prog : &TVNtsc480IntDf;
+        break;
+    case 4:
+ //       vmode     = VIDEO_GetPreferredMode(NULL);
+        break;
+    }
+			
 	/* Set video mode register */
 	*(vu32 *)0x800000CC = vmode_reg;
 
 	/* Set video mode */
-	if (vmode)
-		Video_Configure(vmode);
+	if (vmode) {
 
-	/* Clear screen */
-	Video_Clear(COLOR_BLACK);
+	VIDEO_Configure(vmode);
+
+	/* Setup video */
+	VIDEO_SetBlack(FALSE);
+	VIDEO_Flush();
+	VIDEO_WaitVSync();
+
+	if (vmode->viTVMode & VI_NON_INTERLACE)
+		VIDEO_WaitVSync();
+	}
 }
 
 void __Disc_SetTime(void)
@@ -189,10 +218,10 @@ s32 Disc_Wait(void)
 	return 0;
 }
 
-s32 Disc_SetWBFS(u32 mode, u8 *id)
+s32 Disc_SetUSB(u8 *id)
 {
-	/* Set WBFS mode */
-	return WDVD_SetWBFSMode(mode, id);
+	/* Set USB mode */
+	return WDVD_SetUSBMode(id);
 }
 
 s32 Disc_ReadHeader(void *outbuf)
@@ -219,7 +248,7 @@ s32 Disc_IsWii(void)
 	return 0;
 }
 
-s32 Disc_BootPartition(u64 offset)
+s32 Disc_BootPartition(u64 offset, u8 videoselected, u8 cheat, u8 vipatch)
 {
 	entry_point p_entry;
 
@@ -231,7 +260,7 @@ s32 Disc_BootPartition(u64 offset)
 		return ret;
 
 	/* Run apploader */
-	ret = Apploader_Run(&p_entry);
+	ret = Apploader_Run(&p_entry, cheat, videoselected, vipatch);
 	if (ret < 0)
 		return ret;
 
@@ -239,27 +268,34 @@ s32 Disc_BootPartition(u64 offset)
 	__Disc_SetLowMem();
 
 	/* Set an appropiate video mode */
-	__Disc_SetVMode();
+	__Disc_SetVMode(videoselected);
 
 	/* Set time */
 	__Disc_SetTime();
 
-	/* Close subsystems */
-	Subsystem_Close();
+	if (cheat == 1) {
+    /* OCARINA STUFF - FISHEARS*/
+    memset(gameid, 0, 8);
+	memcpy(gameid, (char*)0x80000000, 6);
+	do_sd_code(gameid);
+    /* OCARINA STUFF - FISHEARS*/
+	}
 
-	/* Shutdown IOS */
+	/* Disconnect Wiimote */
+    WPAD_Flush(0);
+    WPAD_Disconnect(0);
+    WPAD_Shutdown();
+
+	/* Shutdown IOS subsystems */
  	SYS_ResetSystem(SYS_SHUTDOWN, 0, 0);
 
 	/* Jump to entry point */
 	p_entry();
 
-	/* Epic failure */
-	while (1);
-
 	return 0;
 }
 
-s32 Disc_WiiBoot(void)
+s32 Disc_WiiBoot(u8 videoselected, u8 cheat, u8 vipatch)
 {
 	u64 offset;
 	s32 ret;
@@ -270,5 +306,5 @@ s32 Disc_WiiBoot(void)
 		return ret;
 
 	/* Boot partition */
-	return Disc_BootPartition(offset);
+	return Disc_BootPartition(offset, videoselected, cheat, vipatch);
 }

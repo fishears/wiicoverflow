@@ -3,10 +3,8 @@
 #include <ogcsys.h>
 
 #include "partition.h"
-#include "sdhc.h"
 #include "usbstorage.h"
 #include "utils.h"
-#include "wbfs.h"
 
 /* 'partition table' structure */
 typedef struct {
@@ -18,45 +16,22 @@ typedef struct {
 } ATTRIBUTE_PACKED partitionTable;
 
 
-s32 Partition_GetEntries(u32 device, partitionEntry *outbuf, u32 *outval)
+s32 Partition_GetEntries(partitionEntry *outbuf, u32 *outval)
 {
 	static partitionTable table ATTRIBUTE_ALIGN(32);
 
 	u32 cnt, sector_size;
 	s32 ret;
 
-	/* Read from specified device */
-	switch (device) {
-	case WBFS_DEVICE_USB: {
-		/* Get sector size */
-		ret = USBStorage_GetCapacity(&sector_size);
-		if (ret < 0)
-			return ret;
+	/* Get sector size */
+	ret = USBStorage_GetCapacity(&sector_size);
+	if (ret < 0)
+		return ret;
 
-		/* Read partition table */
-		ret = USBStorage_ReadSectors(0, 1, &table);
-		if (ret < 0)
-			return ret;
-
-		break;
-	}
-
-	case WBFS_DEVICE_SDHC: {
-		/* SDHC sector size */
-		sector_size = SDHC_SECTOR_SIZE;
-
-		/* Read partition table */
-		ret = SDHC_ReadSectors(0, 1, &table);
-		if (!ret)
-			return -1;
-
-		break;
-	}
-
-	default:
-		return -1;
-	}
-
+	/* Read partition table */
+	ret = USBStorage_ReadSectors(0, 1, &table);
+	if (ret < 0)
+		return ret;
 
 	/* Swap endianess */
 	for (cnt = 0; cnt < 4; cnt++) {

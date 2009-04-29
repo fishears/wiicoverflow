@@ -64,6 +64,9 @@ typedef struct GRRLIB_bytemapFont{
 
 extern Mtx GXmodelView2D;
 
+void GRRLIB_2D_Init();
+void GRRLIB_3D_Init();
+
 inline void GRRLIB_FillScreen(u32 color);
 
 inline void GRRLIB_Plot(f32 x, f32 y, u32 color);
@@ -76,6 +79,7 @@ void GRRLIB_NGone(Vector v[], u32 color, long n);
 void GRRLIB_NGoneFilled(Vector v[], u32 color, long n);
 
 GRRLIB_texImg GRRLIB_CreateEmptyTexture(unsigned int, unsigned int);
+GRRLIB_texImg GRRLIB_DuplicateTexture(GRRLIB_texImg tex, unsigned int w, unsigned int h);
 GRRLIB_texImg GRRLIB_LoadTexture(const unsigned char my_img[]);
 
 GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]);
