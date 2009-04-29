@@ -113,7 +113,10 @@ extern const u8     slide_png[];
 extern const u32    slide_png_size;
 
 extern const u8     slide_bar_png[];
-extern const u32    slide_bar_size;
+extern const u32    slide_bar_png_size;
+
+extern const u8     usb_error_png[];
+extern const u32    usb_error_png_size;
 
 #define USBLOADER_PATH		"sdhc:/usb-loader"
 
@@ -143,6 +146,8 @@ GRRLIB_texImg gradient_texture;
 
 GRRLIB_texImg slide_texture;
 GRRLIB_texImg slide_bar_texture;
+
+GRRLIB_texImg usb_error_texture;
 
 float change_scale_without_containing(float val, float in_min, float in_max, 
                                       float out_min, float out_max)
@@ -419,8 +424,9 @@ void draw_selected()
 			animate_rotate++;
 			if(animate_rotate == 360) animate_rotate = 0;
 			
-			GRRLIB_DrawImg(230,100, current_cover_texture, animate_rotate, 1, 1, 0xFFFFFFFF);
-			GRRLIB_DrawImg(170,260, select_menu_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(220, 150, current_cover_texture, animate_rotate, 1, 1, 0xFFFFFFFF);
+			//GRRLIB_DrawImg(130, 100, covers[gameSelected], 0, 1, 1,0xFFFFFFFF);
+			GRRLIB_DrawImg(170, 300, select_menu_texture, 0, 1, 1, 0xFFFFFFFF);
 			
 			#ifndef TEST_MODE
 			struct discHdr *header = NULL;
@@ -593,15 +599,7 @@ bool init_usbfs()
 
 bool Init_Game_List(void)
 {
-	u32 timeout = 30;
-	s32 ret;
 
-	my_wbfsDev = WBFS_DEVICE_USB;
-
-	/* Initialize WBFS */
-	ret = WBFS_Init(my_wbfsDev, timeout);
-
-	progress+=0.05;
 	Paint_Progress(progress);
 	
 	/* Try to open device */
@@ -716,6 +714,8 @@ int main( int argc, char **argv ){
     loader_main_texture = GRRLIB_LoadTexture(loading_main_png);
     progress_texture = GRRLIB_LoadTexture(progress_png);
 	
+	usb_error_texture = GRRLIB_LoadTexture(usb_error_png);
+		
 	Paint_Progress(progress);
 	
 	#ifndef TEST_MODE
@@ -723,11 +723,35 @@ int main( int argc, char **argv ){
 		return 0;
 	
 	Paint_Progress(progress);
+		u32 timeout = 30;
+	my_wbfsDev = WBFS_DEVICE_USB;
+
+	/* Initialize WBFS */
+	ret = WBFS_Init(my_wbfsDev, timeout);
 	
 	//bool flip = true;
-
+  USB_RETRY:
 	if(!Init_Game_List())
-		return 0;
+	{
+		while(1)
+		{
+			WPAD_ScanPads();
+		
+			GRRLIB_DrawImg(0, 0, usb_error_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_Render();
+				
+			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+			{
+				goto USB_RETRY;
+			}
+			
+			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+			{
+				GRRLIB_Exit();
+				exit(0);
+			}
+		}
+	}
 	
 	Paint_Progress(progress);
 	
