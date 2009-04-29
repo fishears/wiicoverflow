@@ -32,6 +32,7 @@
 #include "fst.h"
 #include "dvd_broadway.h"
 #include "wpad.h"
+#include "fat.h"
 
 
 #define FSTDIRTYPE 1
@@ -45,7 +46,7 @@
 static vu32 dvddone = 0;
 
 
-// Real basic
+// Real basic 
 u32 do_sd_code(char *filename)
 {
 	FILE *fp;
@@ -53,16 +54,17 @@ u32 do_sd_code(char *filename)
 	u32 filesize;
 	u32 ret;
 	char filepath[128];
+	
+	ret = Fat_MountSDHC();
 
-	__io_wiisd.startup();
-	ret = fatMountSimple("SD", &__io_wiisd);
-
-	if (!ret) {
+	if (ret < 0) {
+		printf("[+] SD Error\n");
+		sleep (2);
 		return 0;
 	}
 
 	fflush(stdout);
-
+	
 	sprintf(filepath, FILEDIR "/%s", filename);
 	filepath[16] = 0x2E;
 	filepath[17] = 0x67;
@@ -70,18 +72,19 @@ u32 do_sd_code(char *filename)
 	filepath[19] = 0x74;
 	filepath[20] = 0;
 	//printf("filename %s\n",filepath);
-
+	
 	fp = fopen(filepath, "rb");
 	if (!fp) {
-		fatUnmount("SD");
-	__io_wiisd.shutdown();
+		printf("[+] No SD codes found\n");
+		Fat_UnmountSDHC();
+		sleep(2);
 		return 0;
 	}
 
 	fseek(fp, 0, SEEK_END);
 	filesize = ftell(fp);
 	fseek(fp, 0, SEEK_SET);
-
+	
 	filebuff = (u8*) malloc (filesize);
 	if(filebuff == 0){
 		fclose(fp);
@@ -90,25 +93,27 @@ u32 do_sd_code(char *filename)
 	}
 
 	ret = fread(filebuff, 1, filesize, fp);
-	if(ret != filesize){
+	if(ret != filesize){	
+		printf("[+] SD Code Error\n");
 		free(filebuff);
 		fclose(fp);
-		fatUnmount("SD");
-	__io_wiisd.shutdown();
+		Fat_UnmountSDHC();
+		sleep(2);
 		return 0;
 	}
+        printf("[+] SD Codes found.\n");
 
         memcpy((void*)0x800027E8,filebuff,filesize);
         *(vu8*)0x80001807 = 0x01;
-
-
+	
+	
 
 	free(filebuff);
 	fclose(fp);
-
-	fatUnmount("SD");
-	__io_wiisd.shutdown();
-
+	
+	Fat_UnmountSDHC();
+	
+	sleep(2);
 	return 1;
 }
 

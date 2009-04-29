@@ -9,6 +9,7 @@
 /* Variables */
 static const char certs_fs[] ATTRIBUTE_ALIGN(32) = "/sys/cert.sys";
 
+u8 shutdown = 0;
 
 void __Sys_ResetCallback(void)
 {
@@ -19,7 +20,7 @@ void __Sys_ResetCallback(void)
 void __Sys_PowerCallback(void)
 {
 	/* Poweroff console */
-	Sys_Shutdown();
+	shutdown = 1;
 }
 
 
@@ -63,7 +64,6 @@ void Sys_LoadMenu(void)
 	/* Return to the Wii system menu */
 	SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
 }
-
 
 s32 Sys_GetCerts(signed_blob **certs, u32 *len)
 {

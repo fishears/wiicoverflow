@@ -1,16 +1,29 @@
-#ifndef _CFG_H_
-#define _CFG_H_
-
 #include <gctypes.h>
 #include "disc.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+extern int ENTRIES_PER_PAGE;
+extern int MAX_CHARACTERS;
+extern int CONSOLE_XCOORD;
+extern int CONSOLE_YCOORD;
+extern int CONSOLE_WIDTH;
+extern int CONSOLE_HEIGHT;
+extern int CONSOLE_BG_COLOR;
+extern int CONSOLE_FG_COLOR;
+extern int COVER_XCOORD;
+extern int COVER_YCOORD;
 
 #define CFG_HOME_REBOOT 0
 #define CFG_HOME_EXIT   1
+
+#define CFG_LAYOUT_ORIG      0
+#define CFG_LAYOUT_ORIG_12   1
+#define CFG_LAYOUT_SMALL     2
+#define CFG_LAYOUT_MEDIUM    3
+#define CFG_LAYOUT_LARGE     4 // nixx
+#define CFG_LAYOUT_LARGE_2   5 // usptactical
+#define CFG_LAYOUT_ULTIMATE1 6 // Ultimate1: (WiiShizza)
+#define CFG_LAYOUT_ULTIMATE2 7 // Ultimate2: (jservs7 / hungyip84)
+#define CFG_LAYOUT_ULTIMATE_W 8 // Ultimate widescreen: (jservs7 / hungyip84)
 
 #define CFG_VIDEO_SYS   0  // system default
 #define CFG_VIDEO_DEFAULT  1
@@ -34,91 +47,34 @@ extern "C"
 #define CFG_LANG_KOREAN   10
 #define CFG_LANG_COUNT    11
 
-#define CFG_ALIGN_LEFT 0
-#define CFG_ALIGN_RIGHT 1
-#define CFG_ALIGN_CENTRE 2
-#define CFG_ALIGN_TOP 3
-#define CFG_ALIGN_BOTTOM 4
-#define CFG_ALIGN_MIDDLE 5
-
 extern char *cfg_path;
 //extern char *cfg_images_path;
 
 struct CFG
 {
-//	char *background;
-//	short covers;
-//	short simple;
-//	short video;
-//	short language;
-//	short ocarina;
-//	short vipatch;
-//	short home;
-//	short download;
-//	short installdownload;
-//	short hidesettingmenu;
-//	short savesettings;
+	char *background;
+	short layout;
+	short covers;
+	short simple;
+	short video;
+	short language;
+	short ocarina;
+	short vipatch;
+	short home;
+	short download;
+	short installdownload;
+	short hidesettingmenu;
+	short savesettings;
 	short widescreen;
 	short parentalcontrol;
-	short maxcharacters;
-	short godmode;
-	char unlockCode[20];
-	char covers_path[100];
-	char theme_path[100];
-	char disc_path[100];
-};
-
-struct THEME
-{
-	int selection_x;
-	int selection_y;
-	int selection_w;
-	int selection_h;
-	int cover_x;
-	int cover_y;
-	short showID;
-	int id_x;
-	int id_y;
-	int region_x;
-	int region_y;
-	int power_x;
-	int power_y;
-	int home_x;
-	int home_y;
-	int battery1_x;
-	int battery2_x;
-	int battery3_x;
-	int battery4_x;
-	int battery1_y;
-	int battery2_y;
-	int battery3_y;
-	int battery4_y;
-//	short showPower;
-//	short showHome;
-	int setting_x;
-	int setting_y;
-	int install_x;
-	int install_y;
-	short showHDD;
-	short hddInfoAlign;
-	int hddInfo_x;
-	int hddInfo_y;
-	short showGameCnt;
-	short gameCntAlign;
-	int gameCnt_x;
-	int gameCnt_y;
-	short showRegion;
-	short showBattery;
-	short showToolTip;
+	char images_path[100];
 };
 
 extern struct CFG CFG;
-extern struct THEME THEME;
 extern u8 ocarinaChoice;
 extern u8 videoChoice;
 extern u8 languageChoice;
 extern u8 viChoice;
-extern u8 iosChoice;
 
 struct Game_CFG
 {
@@ -127,7 +83,6 @@ struct Game_CFG
 	u8 language;
 	u8 ocarina;
 	u8 vipatch;
-	u8 ios;
 };
 
 
@@ -142,8 +97,3 @@ u8 get_block(struct discHdr *header);
 
 void CFG_Cleanup(void);
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif

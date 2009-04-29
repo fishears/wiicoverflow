@@ -17,6 +17,7 @@
 #define IOCTL_DI_OFFSET		0xD9
 #define IOCTL_DI_STOPMOTOR	0xE3
 #define IOCTL_DI_SETWBFSMODE	0xF4
+#define IOCTL_DI_DISABLERESET	0xF6
 
 /* Variables */
 static u32 inbuf[8]  ATTRIBUTE_ALIGN(32);
@@ -291,6 +292,23 @@ s32 WDVD_GetCoverStatus(u32 *status)
 	}
 
 	return -ret;
+}
+
+s32 WDVD_DisableReset(u8 val)
+{
+	s32 ret;
+
+	memset(inbuf, 0, sizeof(inbuf));
+
+	/* Disable/Enable reset */
+	inbuf[0] = IOCTL_DI_DISABLERESET << 24;
+	inbuf[1] = val;
+
+	ret = IOS_Ioctl(di_fd, IOCTL_DI_DISABLERESET, inbuf, sizeof(inbuf), outbuf, sizeof(outbuf));
+	if (ret < 0)
+		return ret;
+
+	return (ret == 1) ? 0 : -ret;
 }
 
 s32 WDVD_SetWBFSMode(u32 mode, u8 *discid)

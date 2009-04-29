@@ -1,15 +1,15 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <malloc.h>
 #include <ogcsys.h>
+#include <unistd.h>
 
-#include "sdhc.h"
 #include "usbstorage.h"
 #include "utils.h"
 #include "video.h"
-#include "wbfs.h"
 #include "wdvd.h"
-
+#include "disc.h"
+#include "sdhc.h"
+#include "wbfs.h"
 #include "libwbfs/libwbfs.h"
 
 /* Constants */
@@ -23,6 +23,7 @@ static rw_sector_callback_t readCallback  = NULL;
 static rw_sector_callback_t writeCallback = NULL;
 
 /* Variables */
+
 static u32 nb_sectors, sector_size;
 
 
@@ -197,7 +198,6 @@ s32 __WBFS_ReadSDHC(void *fp, u32 lba, u32 count, void *iobuf)
 
 	return 0;
 }
-
 s32 __WBFS_WriteSDHC(void *fp, u32 lba, u32 count, void *iobuf)
 {
 	u32 cnt = 0;
@@ -224,63 +224,46 @@ s32 __WBFS_WriteSDHC(void *fp, u32 lba, u32 count, void *iobuf)
 	return 0;
 }
 
-
-s32 WBFS_Init(u32 device, u32 timeout)
+s32 WBFS_Init(u32 device)
 {
-	u32 cnt;
 	s32 ret;
 
-	/* Wrong timeout */
-	if (!timeout)
-		return -1;
-
-	/* Try to mount device */
-	for (cnt = 0; cnt < timeout; cnt++) {
-		switch (device) {
-		case WBFS_DEVICE_USB: {
-			/* Initialize USB storage */
-			ret = USBStorage_Init();
-
-			if (ret >= 0) {
-				/* Setup callbacks */
-				readCallback  = __WBFS_ReadUSB;
-				writeCallback = __WBFS_WriteUSB;
-
-				/* Device info */
-				nb_sectors = USBStorage_GetCapacity(&sector_size);
-
-				goto out;
-			}
+	switch (device) {
+	case WBFS_DEVICE_USB:
+		/* Initialize USB storage */
+		ret = USBStorage_Init();
+		if (ret >= 0) {
+			/* Setup callbacks */
+			readCallback = __WBFS_ReadUSB;
+			writeCallback = __WBFS_WriteUSB;
+			/* Device info */
+			/* Get USB capacity */
+			nb_sectors = USBStorage_GetCapacity(&sector_size);
+			if (!nb_sectors)
+				return -1;
 		}
+		else 
+			return ret;
+		break;
+	case WBFS_DEVICE_SDHC:
+		/* Initialize SDHC */
+		ret = SDHC_Init();
 
-		case WBFS_DEVICE_SDHC: {
-			/* Initialize SDHC */
-			ret = SDHC_Init();
+		if (ret) {
+			/* Setup callbacks */
+			readCallback  = __WBFS_ReadSDHC;
+			writeCallback = __WBFS_WriteSDHC;
 
-			if (ret) {
-				/* Setup callbacks */
-				readCallback  = __WBFS_ReadSDHC;
-				writeCallback = __WBFS_WriteSDHC;
-
-				/* Device info */
-				nb_sectors  = 0;
-				sector_size = SDHC_SECTOR_SIZE;
-
-				goto out;
-			} else
-				ret = -1;
-		}
-
-		default:
+			/* Device info */
+			nb_sectors  = 0;
+			sector_size = SDHC_SECTOR_SIZE;
+		} 
+		else
 			return -1;
-		}
-
-		/* Sleep 1 second */
-		sleep(1);
+		break;
 	}
-
-out:
-	return ret;
+	
+	return 0;
 }
 
 s32 WBFS_Open(void)
@@ -393,6 +376,19 @@ s32 WBFS_RemoveGame(u8 *discid)
 	return 0;
 }
 
+s32 WBFS_SetOptions(u8 *discid, u8 *options)
+{
+	/* No USB device open */
+	if (!hdd)
+		return -1;
+
+	int ret = wbfs_setopt_disc(hdd, discid, options, sizeof(struct discHdr)-4, 4);
+	if (ret < 0)
+		return ret;
+
+	return 0;
+}
+	
 s32 WBFS_GameSize(u8 *discid, f32 *size)
 {
 	wbfs_disc_t *disc = NULL;
@@ -441,3 +437,4 @@ s32 WBFS_DiskSpace(f32 *used, f32 *free)
 
 	return 0;
 }
+

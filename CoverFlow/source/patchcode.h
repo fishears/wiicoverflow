@@ -21,10 +21,7 @@
 
 #ifndef __PATCHCODE_H__
 #define __PATCHCODE_H__
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+
 // Globals
 u32 hooktype;
 int patched;
@@ -37,10 +34,5 @@ void langpatcher(void *addr, u32 len);
 void vidolpatcher(void *addr, u32 len);
 void patchdebug(void *addr, u32 len);
 
-
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // __PATCHCODE_H__

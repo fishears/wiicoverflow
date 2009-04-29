@@ -8,6 +8,10 @@
 #include "disc.h"
 #include "video.h"
 #include "wdvd.h"
+#include "wpad.h"
+#include "fst.h"
+#include "cfg.h"
+#include "subsystem.h"
 
 /* Constants */
 #define PTABLE_OFFSET	0x40000
@@ -16,7 +20,7 @@
 /* Disc pointers */
 static u32 *buffer = (u32 *)0x93000000;
 static u8  *diskid = (u8  *)0x80000000;
-
+static char gameid[8];
 
 void __Disc_SetLowMem(void)
 {
@@ -39,7 +43,7 @@ void __Disc_SetLowMem(void)
 void __Disc_SetVMode(void)
 {
 	GXRModeObj *vmode = NULL;
-
+	
 	u32 progressive, tvmode, vmode_reg = 0;
 
 	/* Get video mode configuration */
@@ -50,57 +54,72 @@ void __Disc_SetVMode(void)
 	switch (tvmode) {
 	case CONF_VIDEO_PAL:
 		if (CONF_GetEuRGB60() > 0) {
-			vmode_reg = 5;
+			vmode_reg = 5; //PAL60
 			vmode     = (progressive) ? &TVNtsc480Prog : &TVEurgb60Hz480IntDf;
 		} else
-			vmode_reg = 1;
+			vmode_reg = 1; //PAL
 
 		break;
 
 	case CONF_VIDEO_MPAL:
-		vmode_reg = 4;
-		break;
-
-	case CONF_VIDEO_NTSC:
-		vmode_reg = 0;
+		vmode_reg = 4; //MPAL
 		break;
 	}
 
-	/* Select video mode */
-	switch(diskid[3]) {
-	/* PAL */
-	case 'D':
-	case 'F':
-	case 'P':
-	case 'X':
-	case 'Y':
-		if (tvmode != CONF_VIDEO_PAL) {
-			vmode_reg = 1;
-			vmode     = (progressive) ? &TVNtsc480Prog : &TVNtsc480IntDf;
-		}
-
+	switch (videoChoice) {
+	case 0:
 		break;
+	case 1:
+	{
+		/* Select video mode */
+		switch(diskid[3]) {
+		/* PAL */
+		case 'D':
+		case 'F':
+		case 'P':
+		case 'X':
+		case 'Y':
+			if (tvmode != CONF_VIDEO_PAL) {
+				vmode_reg = 5;
+				vmode     = (progressive) ? &TVNtsc480Prog : &TVEurgb60Hz480IntDf;
+			}
+			break;
 
-	/* NTSC or unknown */
-	case 'E':
-	case 'J':
-		if (tvmode != CONF_VIDEO_NTSC) {
-			vmode_reg = 0;
-			vmode     = (progressive) ? &TVNtsc480Prog : &TVEurgb60Hz480IntDf;
+		/* NTSC or unknown */
+		case 'E':
+		case 'J':
+			if (tvmode != CONF_VIDEO_NTSC) {
+				vmode_reg = 0;
+				vmode     = (progressive) ? &TVNtsc480Prog : &TVNtsc480IntDf;
+			}
+			break;
 		}
-
-		break;
 	}
-
+	break;
+	
+	case 3: // Force PAL50
+        vmode_reg = 1;
+        progressive = (CONF_GetProgressiveScan() > 0) && VIDEO_HaveComponentCable();
+        vmode     = (progressive) ? &TVNtsc480Prog : &TVPal528IntDf;
+        break;
+    case 4: // Force PAL60
+        vmode_reg = 5;
+        progressive = (CONF_GetProgressiveScan() > 0) && VIDEO_HaveComponentCable();
+        vmode     = (progressive) ? &TVNtsc480Prog : &TVEurgb60Hz480IntDf;
+        break;
+    case 5: // Force NTSC
+        vmode_reg = 0;
+        progressive = (CONF_GetProgressiveScan() > 0) && VIDEO_HaveComponentCable();
+        vmode     = (progressive) ? &TVNtsc480Prog : &TVNtsc480IntDf;
+        break;
+	}
+	
 	/* Set video mode register */
 	*(vu32 *)0x800000CC = vmode_reg;
 
 	/* Set video mode */
 	if (vmode)
 		Video_Configure(vmode);
-
-	/* Clear screen */
-	Video_Clear(COLOR_BLACK);
 }
 
 void __Disc_SetTime(void)
@@ -242,22 +261,24 @@ s32 Disc_BootPartition(u64 offset)
 
 	/* Set time */
 	__Disc_SetTime();
+	
+	/* OCARINA STUFF - FISHEARS*/
+	if (ocarinaChoice)
+	{
+		memset(gameid, 0, 8);
+		memcpy(gameid, (char*)0x80000000, 6);
+		do_sd_code(gameid);
+	}
+    /* OCARINA STUFF - FISHEARS*/
 
 	/* Close subsystems */
-	/* Disconnect Wiimotes */
-	Wpad_Disconnect();
+	Subsystem_Close();
 
-	/* Unmount SDHC */
-	Fat_UnmountSDHC();
-
-	/* Shutdown IOS */
+	/* Shutdown IOS subsystems */
  	SYS_ResetSystem(SYS_SHUTDOWN, 0, 0);
 
 	/* Jump to entry point */
 	p_entry();
-
-	/* Epic failure */
-	while (1);
 
 	return 0;
 }

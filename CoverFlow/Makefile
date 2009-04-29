@@ -25,10 +25,11 @@ INCLUDES	:=
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= -save-temps -g -O2 -Wall $(MACHDEP) $(INCLUDE)
+CFLAGS	= -Os -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
+#LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project

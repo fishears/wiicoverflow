@@ -3,18 +3,17 @@
 
 #include "sys.h"
 #include "wpad.h"
+#include "subsystem.h"
 
 /* Constants */
 #define MAX_WIIMOTES	4
 
-
-#if 0
+extern u8 shutdown;
 void __Wpad_PowerCallback(s32 chan)
 {
 	/* Poweroff console */
-	Sys_Shutdown();
+	shutdown = 1;
 }
-#endif
 
 
 s32 Wpad_Init(void)
@@ -26,10 +25,8 @@ s32 Wpad_Init(void)
 	if (ret < 0)
 		return ret;
 
-#if 0
 	/* Set POWER button callback */
 	WPAD_SetPowerButtonCallback(__Wpad_PowerCallback);
-#endif
 
 	return ret;
 }
@@ -62,10 +59,16 @@ u32 Wpad_GetButtons(void)
 
 u32 Wpad_WaitButtons(void)
 {
+		
 	u32 buttons = 0;
 
 	/* Wait for button pressing */
 	while (!buttons) {
+		if (shutdown)
+		{
+			Subsystem_Close();
+			Sys_Shutdown();
+		}
 		buttons = Wpad_GetButtons();
 		VIDEO_WaitVSync();
 	}
