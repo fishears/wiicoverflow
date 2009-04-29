@@ -66,7 +66,7 @@ float animate_flip = 0.0;
 float FLIP_SPEED   = 0.016;
 
 float SCROLL_SPEED = 0.050;
-
+/*
 extern const u8		RC8P7D_png[];
 extern const u32	RC8P7D_png_size;
 
@@ -84,7 +84,7 @@ extern const u32	R2FE5G_png_size;
 
 extern const u8		R2HE41_png[];
 extern const u32	R2HE41_png_size;
-
+*/
 extern const u8		no_cover_png[];
 extern const u32	no_cover_png_size;
 
@@ -124,7 +124,7 @@ Mtx GXmodelView2D;
 
 #define MAX_COVERS 500
 int array_size = 0;
-GRRLIB_texImg covers[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
+GRRLIB_texImg* covers;//[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg back_texture;
@@ -231,13 +231,12 @@ void LoadCurrentCover(int id)
 
 void AddCover(GRRLIB_texImg tex)
 {
-	if(array_size < MAX_COVERS)
-	{
-		covers[array_size] = tex;
-		array_size++;
-	}
+	//if(array_size < MAX_COVERS)
+	//{
+	//	covers[array_size] = tex;
+	//	array_size++;
+	//}
 	
-	/*
 	array_size = array_size + 1;
 	covers = (GRRLIB_texImg*)realloc(covers, (array_size * sizeof(GRRLIB_texImg)));
 
@@ -248,7 +247,6 @@ void AddCover(GRRLIB_texImg tex)
 	}
 
     covers[array_size - 1] = tex;
-	*/
 }
 
 void Init_Covers()
@@ -424,9 +422,8 @@ void draw_selected()
 			animate_rotate++;
 			if(animate_rotate == 360) animate_rotate = 0;
 			
-			GRRLIB_DrawImg(220, 150, current_cover_texture, animate_rotate, 1, 1, 0xFFFFFFFF);
-			//GRRLIB_DrawImg(130, 100, covers[gameSelected], 0, 1, 1,0xFFFFFFFF);
-			GRRLIB_DrawImg(170, 300, select_menu_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(230,100, current_cover_texture, animate_rotate, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(170,260, select_menu_texture, 0, 1, 1, 0xFFFFFFFF);
 			
 			#ifndef TEST_MODE
 			struct discHdr *header = NULL;
@@ -643,7 +640,7 @@ bool Menu_Boot(void)
 	if (!gameCnt)
 		return false;
 
-    //__Disc_SetLowMem();
+    __Disc_SetLowMem();
 	
 	/* Selected game */
 	header = &gameList[gameSelected];
@@ -657,9 +654,10 @@ bool Menu_Boot(void)
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
 
-	Con_Clear();
+	//Con_Clear();
 
-    //GRRLIB_Exit();
+    GRRLIB_Exit();
+	free(covers);
 	
 	/* Set WBFS mode */
 	Disc_SetWBFS(WBFS_DEVICE_USB,header->id);
@@ -692,7 +690,7 @@ bool Menu_Boot(void)
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
 	#ifndef TEST_MODE
-	//__Disc_SetLowMem();
+	__Disc_SetLowMem();
 	/* Load Custom IOS */
 	int ret = IOS_ReloadIOS(249);
 	/* Check if Custom IOS is loaded */
@@ -748,7 +746,7 @@ int main( int argc, char **argv ){
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
 			{
 				GRRLIB_Exit();
-				exit(0);
+				SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
 			}
 		}
 	}
@@ -775,6 +773,7 @@ int main( int argc, char **argv ){
 
 	/* Get free space */
 	//WBFS_DiskSpace(&used, &free);
+	bool select_ready = false;
 	
 	while(1) {
 
@@ -785,6 +784,8 @@ int main( int argc, char **argv ){
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
 			GRRLIB_Exit(); 
+			SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
+			
 			exit(0);
 		}
 		
@@ -802,8 +803,11 @@ int main( int argc, char **argv ){
 			{
 				if(!selected && animate_flip <= 0.0)
 				{
-					selected = true;
-					LoadCurrentCover(gameSelected);
+					if(select_ready)
+					{
+						selected = true;
+						LoadCurrentCover(gameSelected);
+					}
 				}
 				else if(selected && animate_flip == 1.0)
 				{
@@ -826,11 +830,15 @@ int main( int argc, char **argv ){
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT )
 			
 			{	
+				select_ready = false;
+					
 				if(!((int)shift-1 <= (-1)*(COVER_COUNT/2.0)))
 					shift -= SCROLL_SPEED;
 			}
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT)
 			{
+				select_ready = false;
+					
 				if(!((int)shift+.5 >= (COVER_COUNT/2.0)))
 					shift += SCROLL_SPEED;
 			}
@@ -838,6 +846,7 @@ int main( int argc, char **argv ){
 			{
 				if(abs(((int)shift * 10000.0) - (shift*10000.0))/10000.0 > (SCROLL_SPEED+SCROLL_SPEED/2.0))
 				{
+					select_ready = false;
 					if((int)((int)(shift+0.5) - (int)shift) == 0)
 					{
 						shift -= SCROLL_SPEED;
@@ -850,6 +859,7 @@ int main( int argc, char **argv ){
 				else
 				{
 					shift = (int)shift;
+					select_ready = true;
 				}
 					
 			}
@@ -872,6 +882,8 @@ int main( int argc, char **argv ){
 	//Preview
 	
     GRRLIB_Exit(); 
+	
+	SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
 	
 	return 0;
 }

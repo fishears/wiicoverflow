@@ -28,7 +28,7 @@ INCLUDES	:=
 CFLAGS	= -save-temps -g -O2 -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
-LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
+LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
