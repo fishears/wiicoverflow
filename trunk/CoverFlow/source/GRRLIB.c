@@ -986,7 +986,7 @@ void GRRLIB_Init() {
 
 	GRRLIB_2D_Init();
 	
-	Video_ManualSet(xfb[0], rmode);
+	//Video_ManualSet(xfb[0], rmode);
 
 }
 
@@ -1043,12 +1043,12 @@ void GRRLIB_Exit() {
     GX_AbortFrame();
 
     if(xfb[0] != NULL) {
-		VIDEO_ClearFrameBuffer(rmode, xfb[0], 0x000000);
+	//	VIDEO_ClearFrameBuffer(rmode, xfb[0], 0x000000);
         free(MEM_K1_TO_K0(xfb[0]));
         xfb[0] = NULL;
     }
     if(xfb[1] != NULL) {
-		VIDEO_ClearFrameBuffer(rmode, xfb[1], 0x000000);
+	//	VIDEO_ClearFrameBuffer(rmode, xfb[1], 0x000000);
         free(MEM_K1_TO_K0(xfb[1]));
         xfb[1] = NULL;
     }
