@@ -8,7 +8,7 @@
 
 /* Variables */
 static const char certs_fs[] ATTRIBUTE_ALIGN(32) = "/sys/cert.sys";
-u8 shutdown = 0;
+
 
 void __Sys_ResetCallback(void)
 {
@@ -19,14 +19,14 @@ void __Sys_ResetCallback(void)
 void __Sys_PowerCallback(void)
 {
 	/* Poweroff console */
-	shutdown = 1;
+	Sys_Shutdown();
 }
 
 
 void Sys_Init(void)
 {
 	/* Initialize video subsytem */
-	//VIDEO_Init();
+	VIDEO_Init();
 
 	/* Set RESET/POWER button callback */
 	SYS_SetResetCallback(__Sys_ResetCallback);
@@ -63,6 +63,7 @@ void Sys_LoadMenu(void)
 	/* Return to the Wii system menu */
 	SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
 }
+
 
 s32 Sys_GetCerts(signed_blob **certs, u32 *len)
 {

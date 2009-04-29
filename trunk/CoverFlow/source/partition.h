@@ -1,13 +1,6 @@
 #ifndef _PARTITION_H_
 #define _PARTITION_H_
 
-#include <asndlib.h>
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 /* 'partition entry' structure */
 typedef struct {
 	/* Boot indicator */
@@ -33,10 +26,6 @@ typedef struct {
 #define MAX_PARTITIONS		4
 
 /* Prototypes */
-s32 Partition_GetEntries(partitionEntry *, u32 *);
-
-#ifdef __cplusplus
-}
-#endif
+s32 Partition_GetEntries(u32, partitionEntry *, u32 *);
 
 #endif

@@ -106,6 +106,15 @@ void Video_Configure(GXRModeObj *rmode)
 		VIDEO_WaitVSync();
 }
 
+void Video_ManualSet(void *fb, GXRModeObj *vm)
+{
+	vmode = vm;
+	framebuffer = fb;
+	
+	/* Clear the screen */
+	Video_Clear(COLOR_BLACK);
+}
+
 void Video_SetMode(void)
 {
 	/* Select preferred video mode */
@@ -135,7 +144,7 @@ void Video_Clear(s32 color)
 	VIDEO_ClearFrameBuffer(vmode, framebuffer, color);
 }
 
-//void Video_DrawPng(IMGCTX ctx, PNGUPROP imgProp, u16 x, u16 y)
-//{
-//	PNGU_DECODE_TO_COORDS_YCbYCr(ctx, x, y, imgProp.imgWidth, imgProp.imgHeight, vmode->fbWidth, vmode->xfbHeight, framebuffer);
-//}
+void Video_DrawPng(IMGCTX ctx, PNGUPROP imgProp, u16 x, u16 y)
+{
+	PNGU_DECODE_TO_COORDS_YCbYCr(ctx, x, y, imgProp.imgWidth, imgProp.imgHeight, vmode->fbWidth, vmode->xfbHeight, framebuffer);
+}
