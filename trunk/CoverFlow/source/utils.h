@@ -9,16 +9,7 @@
 /* Macros */
 #define round_up(x,n)	(-(-(x) & -(n)))
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 /* Prototypes */
 u32 swap32(u32);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

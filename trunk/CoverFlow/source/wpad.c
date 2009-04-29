@@ -7,14 +7,13 @@
 /* Constants */
 #define MAX_WIIMOTES	4
 
+extern u8 shutdown;
 
-#if 0
 void __Wpad_PowerCallback(s32 chan)
 {
 	/* Poweroff console */
-	Sys_Shutdown();
+	shutdown = 1;
 }
-#endif
 
 
 s32 Wpad_Init(void)
@@ -26,10 +25,8 @@ s32 Wpad_Init(void)
 	if (ret < 0)
 		return ret;
 
-#if 0
 	/* Set POWER button callback */
 	WPAD_SetPowerButtonCallback(__Wpad_PowerCallback);
-#endif
 
 	return ret;
 }

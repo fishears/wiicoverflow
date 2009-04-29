@@ -345,6 +345,29 @@ GRRLIB_texImg GRRLIB_CreateEmptyTexture(unsigned int w, unsigned int h) {
 }
 
 /**
+ * Create an empty texture.
+ * @param w width of the new texture to create.
+ * @param h height of the new texture to create.
+ * @return A GRRLIB_texImg structure newly created.
+ */
+GRRLIB_texImg GRRLIB_DuplicateTexture(GRRLIB_texImg tex, unsigned int w, unsigned int h) {
+    unsigned int x, y;
+    GRRLIB_texImg my_texture;
+
+    my_texture.data = memalign (32, h * w * 4);
+    my_texture.w = w;
+    my_texture.h = h;
+    // Initialize the texture
+    for(y=0; y<h; y++) {
+        for(x=0; x<w; x++) {
+            GRRLIB_SetPixelTotexImg(x, y, my_texture, GRRLIB_GetPixelFromtexImg(x, y, tex));
+        }
+    }
+    GRRLIB_FlushTex(my_texture);
+    return my_texture;
+}
+
+/**
  * Draw a texture.
  * @param xpos specifies the x-coordinate of the upper-left corner.
  * @param ypos specifies the y-coordinate of the upper-left corner.
@@ -412,9 +435,11 @@ inline void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees,
  * @param color
  */
 inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float scale, u32 color ) {
+	GRRLIB_3D_Init();
+
     GXTexObj texObj;
     u16 width, height;
-    Mtx m, m1, m2, mv;
+    Mtx m, m1, m2, m3, mv;
 
     GX_InitTexObj(&texObj, tex.data, tex.w, tex.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
@@ -440,6 +465,7 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
 	{
 		guMtxTransApply(m, m, loc, 0, 8.0f);
 	}
+	
     guMtxConcat (view, m, mv);
     GX_LoadPosMtxImm (mv, GX_PNMTX0);
 
@@ -461,28 +487,32 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
     GX_TexCoord2f32(1, 0);
     GX_End();
 	
+    GX_LoadPosMtxImm (mv, GX_PNMTX0);
+	
 	GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
     GX_Position3f32(-width, -height-height*2.05, 0);
     GX_Color1u32(0xFFFFFFA0);
-    GX_TexCoord2f32(0, 0);
+    GX_TexCoord2f32(1, 0);
 
     GX_Position3f32(width, -height-height*2.05, 0);
     GX_Color1u32(0xFFFFFFA0);
-    GX_TexCoord2f32(1, 0);
+    GX_TexCoord2f32(0, 0);
 
     GX_Position3f32(width, height-height*2.05, 0);
     GX_Color1u32(0xFFFFFF00);
-    GX_TexCoord2f32(1, 1);
+    GX_TexCoord2f32(0, 1);
 
     GX_Position3f32(-width, height-height*2.05, 0);
     GX_Color1u32(0xFFFFFF00);
-    GX_TexCoord2f32(0, 1);
+    GX_TexCoord2f32(1, 1);
     GX_End();
 	
     GX_LoadPosMtxImm (GXmodelView2D, GX_PNMTX0);
 
     GX_SetTevOp (GX_TEVSTAGE0, GX_PASSCLR);
     GX_SetVtxDesc (GX_VA_TEX0, GX_NONE);
+	
+	GRRLIB_2D_Init();
 }
 /**
  * Draw a tile.
@@ -542,9 +572,6 @@ inline void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees
     GX_TexCoord2f32(s1, t2);
     GX_End();
 	
-	/*Draw reflection*/
-	//TODO??
-
     GX_LoadPosMtxImm (GXmodelView2D, GX_PNMTX0);
 
     
@@ -873,7 +900,6 @@ void GRRLIB_GXEngine(Vector v[], u32 color, long n, u8 fmt) {
 void GRRLIB_Init() {
     f32 yscale;
     u32 xfbHeight;
-    Mtx44 perspective;
 
     VIDEO_Init();
     rmode = VIDEO_GetPreferredMode(NULL);
@@ -956,6 +982,15 @@ void GRRLIB_Init() {
 	GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
 	GX_SetAlphaUpdate(GX_TRUE);
 
+	GRRLIB_2D_Init();
+	
+}
+
+
+void GRRLIB_3D_Init()
+{
+    Mtx44 perspective;
+	
 	Vector cam = {0.0F, 0.0F, 0.0F},
 			up = {0.0F, 1.0F, 0.0F},
 		  look = {0.0F, 0.0F, 1.0F};
@@ -968,6 +1003,16 @@ void GRRLIB_Init() {
     f32 h = rmode->viHeight;
 	guPerspective(perspective, 45, (f32)w/h, 0.1F, 300.0F);
 	GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
+}
+
+void GRRLIB_2D_Init()
+{
+    Mtx44 perspective;
+	
+    guOrtho(perspective,0, 479, 0, 639, 0, 300.0F);
+    GX_LoadProjectionMtx(perspective, GX_ORTHOGRAPHIC);
+
+    GX_SetViewport(0, 0, rmode->fbWidth, rmode->efbHeight, 0, 1);
 }
 
 /**
