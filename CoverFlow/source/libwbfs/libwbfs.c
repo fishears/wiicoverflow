@@ -541,3 +541,62 @@ error:
         return 1;
 }
 u32 wbfs_extract_file(wbfs_disc_t*d, char *path);
+
+u32 wbfs_estimate_disc(
+		wbfs_t *p, read_wiidisc_callback_t read_src_wii_disc,
+		void *callback_data,
+		partition_selector_t sel)
+{
+	u8 *b;
+	int disc_info_sz_lba;
+	int i;
+	u32 tot;
+	u32 wii_sec_per_wbfs_sect = 1 << (p->wbfs_sec_sz_s-p->wii_sec_sz_s);
+	wiidisc_t *d = 0;
+	u8 *used = 0;
+	wbfs_disc_info_t *info = 0;
+
+	tot = 0;
+
+	used = wbfs_malloc(p->n_wii_sec_per_disc);
+	if (!used)
+	{
+		ERROR("unable to alloc memory");
+	}
+
+	d = wd_open_disc(read_src_wii_disc, callback_data);
+	if (!d)
+	{
+		ERROR("unable to open wii disc");
+	}
+
+	wd_build_disc_usage(d,sel,used);
+	wd_close_disc(d);
+	d = 0;
+
+	info = wbfs_ioalloc(p->disc_info_sz);
+	b = (u8 *)info;
+	read_src_wii_disc(callback_data, 0, 0x100, info->disc_header_copy);
+
+	fprintf(stderr, "estimating %c%c%c%c%c%c %s...\n",b[0], b[1], b[2], b[3], b[4], b[5], b + 0x20);
+
+	for (i = 0; i < p->n_wbfs_sec_per_disc; i++)
+	{
+		if (block_used(used, i, wii_sec_per_wbfs_sect))
+		{
+			tot++;
+		}
+	}
+
+error:
+	if (d)
+		wd_close_disc(d);
+
+	if (used)
+		wbfs_free(used);
+
+	if (info)
+		wbfs_iofree(info);
+
+	return tot * ((p->wbfs_sec_sz / p->hd_sec_sz) * 512);
+}

@@ -14,6 +14,8 @@
 #include "wpad.h"
 
 #include "wbfs.h"
+#include "wdvd.h"
+#include "libwbfs/libwbfs.h"
 
 #include "disc.h"
 
@@ -40,11 +42,18 @@
 /* Gamelist buffer */
 static struct discHdr *gameList = NULL;
 
+
+static wbfs_t *hdd = NULL;
+
 /* Gamelist variables */
 static s32 gameCnt = 0, gameSelected = 0, gameStart = 0;
 
 /* WBFS device */
 static s32 my_wbfsDev = WBFS_DEVICE_USB;
+
+#define BACK_BUTTON   1000
+#define CANCEL_BUTTON 1001
+#define OK_BUTTON     1002
 
 
 float shift = 0.0;
@@ -674,6 +683,183 @@ void DrawSlider(void)
 	
 	
 }
+int DiscWait()
+{
+    u32 cover = 0;
+	s32 ret = 0;
+
+	while(!(cover & 0x2))
+	{
+		//TODO Add GUI For Cancel Button
+		
+		ret = WDVD_GetCoverStatus(&cover);
+		if (ret < 0)
+			return ret;
+	}
+
+
+	return ret;
+}
+
+int WindowPrompt(char* title, char* txt, int choice_a, int choice_b)
+{
+	/*TODO Create Graphical Prompt*/
+	
+	return choice_a;
+}
+/****************************************************************************
+ * ShowProgress
+ *
+ * Updates the variables used by the progress window for drawing a progress
+ * bar. Also resumes the progress window thread if it is suspended.
+ ***************************************************************************/
+void
+ShowProgress (s32 done, s32 total)
+{
+
+    static time_t start;
+	static u32 expected;
+
+    f32 percent; //, size;
+	u32 d, h, m, s;
+
+	//first time
+	if (!done) {
+		start    = time(0);
+		expected = 300;
+	}
+
+	//Elapsed time
+	d = time(0) - start;
+
+	if (done != total) {
+		//Expected time
+		if (d)
+			expected = (expected * 3 + d * total / done) / 4;
+
+		//Remaining time
+		d = (expected > d) ? (expected - d) : 0;
+	}
+
+	//Calculate time values
+	h =  d / 3600;
+	m = (d / 60) % 60;
+	s =  d % 60;
+
+	//Calculate percentage/size
+	percent = (done * 100.0) / total;
+	//size    = (hdd->wbfs_sec_sz / GB_SIZE) * total;
+
+    //progressTotal = total;
+	//progressDone = done;
+
+	//sprintf(prozent, "%0.2f%%", percent);
+    //prTxt.SetText(prozent);
+    //sprintf(timet,"Time left: %d:%02d:%02d",h,m,s);
+    //timeTxt.SetText(timet);
+	//progressbarImg.SetTile(100*progressDone/progressTotal);
+
+	/*Update and Draw Progress Window Here*/
+	
+}
+
+
+int ProgressWindow(char* title, char* msg)
+{
+	/*TODO Draw Window*/
+	int ret = wbfs_add_disc(hdd, __WBFS_ReadDVD, NULL, ShowProgress, ONLY_GAME_PARTITION, 0);
+	
+	return ret;
+
+}
+
+bool Menu_Install(void)
+{
+
+    static struct discHdr headerdisc ATTRIBUTE_ALIGN(32);
+	
+	WDVD_SetWBFSMode(WBFS_DEVICE_USB, NULL);
+
+    int ret, choice = 0;
+	char *name;
+	static char buffer[MAX_CHARACTERS + 4];
+
+	ret = DiscWait();
+	if (ret < 0) {
+		WindowPrompt ("Error reading Disc",0,BACK_BUTTON,0);
+		return false;
+	}
+	ret = Disc_Open();
+	if (ret < 0) {
+		WindowPrompt ("Could not open Disc",0,BACK_BUTTON,0);
+		return false;
+	}
+
+	ret = Disc_IsWii();
+	
+	if (ret < 0) {
+		choice = WindowPrompt ("Not a Wii Disc","Insert a Wii Disc!",OK_BUTTON,CANCEL_BUTTON);
+
+		if (choice != 1) {
+			return false;
+		}
+		else
+		{
+			return Menu_Install();
+		}
+	}
+	
+	Disc_ReadHeader(&headerdisc);
+	name = headerdisc.title;
+	if (strlen(name) < (22 + 3)) {
+			memset(buffer, 0, sizeof(buffer));
+			sprintf(name, "%s", name);
+		} else {
+			strncpy(buffer, name,  MAX_CHARACTERS);
+			strncat(buffer, "...", 3);
+			sprintf(name, "%s", buffer);
+	}
+
+	ret = WBFS_CheckGame(headerdisc.id);
+	if (ret) {
+		WindowPrompt ("Game is already installed:",name,BACK_BUTTON,0);
+		return false;
+	}
+	hdd = GetHddInfo();
+	if (!hdd) {
+		WindowPrompt ("No HDD found!","Error!!",BACK_BUTTON,0);
+		return false;
+		}
+
+	f32 freespace, used;
+
+	WBFS_DiskSpace(&used, &freespace);
+	u32 estimation = wbfs_estimate_disc(hdd, __WBFS_ReadDVD, NULL, ONLY_GAME_PARTITION);
+	f32 gamesize = ((f32) estimation)/1073741824;
+	char gametxt[50];
+	
+	sprintf(gametxt, "Installing game %.2fGB:", gamesize);
+	
+	if (gamesize > freespace) {
+		char errortxt[50];
+		sprintf(errortxt, "Game Size: %.2fGB, Free Space: %.2fGB", gamesize, freespace);
+		choice = WindowPrompt("Not enough free space!",errortxt,CANCEL_BUTTON, 0);
+		return false;
+	}
+	else {
+		ret = ProgressWindow(gametxt, name);
+		if (ret != 0) {
+			WindowPrompt ("Install error!",0,BACK_BUTTON,0);
+			return false;
+		} else {
+			GetEntries();
+			WindowPrompt ("Successfully installed:",name,OK_BUTTON,0);
+			return true;
+		}
+	}
+
+	return false;
+}
 
 bool Menu_Boot(void)
 {
@@ -782,7 +968,7 @@ int main( int argc, char **argv ){
 		return 0;
 	
 	Paint_Progress(progress);
-		u32 timeout = 30;
+	
 	my_wbfsDev = WBFS_DEVICE_USB;
 
   INIT_RETRY:
@@ -853,10 +1039,6 @@ int main( int argc, char **argv ){
 
 	selected = false;
 	
-	f32 free, used;
-
-	/* Get free space */
-	//WBFS_DiskSpace(&used, &free);
 	bool select_ready = false;
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 	
