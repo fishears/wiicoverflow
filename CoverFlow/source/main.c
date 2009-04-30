@@ -33,7 +33,7 @@
  
 #define DEFAULT_FIFO_SIZE	(256*1024)
 
-#define TEST_MODE 1
+//#define TEST_MODE 1
 
 /* Constants */
 #define ENTRIES_PER_PAGE	12
