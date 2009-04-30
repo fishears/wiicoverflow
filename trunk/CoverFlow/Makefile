@@ -19,7 +19,7 @@ TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source source/pngu images source/libwbfs
 DATA		:=	data 
-INCLUDES	:=
+INCLUDES	:=  include include/pngu include/libwbfs
 
 #---------------------------------------------------------------------------------
 # options for code generation
