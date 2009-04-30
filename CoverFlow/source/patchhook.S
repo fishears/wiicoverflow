@@ -1,7 +1,7 @@
 
 	# (c) Nuke www.usbgecko.com. Licensed under GPL V2
 .text
-#include "ppc.h"
+#include "../include/ppc.h"
 
 
 .globl patchhook		# r3 address
