@@ -361,26 +361,9 @@ void Init_Covers()
 	
 	for(i = 0; i < CoverCount; i++)
 	{
-		switch(rand()%6)
-		{
-			case 0:
-				AddCover( GRRLIB_LoadTexture(no_cover_png) );
-				break;
-			case 1:
-				AddCover( GRRLIB_LoadTexture(R2DEAP_png) );
-				break;
-			case 2:
-				AddCover( GRRLIB_LoadTexture(R2DEEB_png) );
-				break;
-			case 3:
-				AddCover( GRRLIB_DuplicateTexture(GRRLIB_LoadTexture(R2FE5G_png) , 160, 225));
-				break;
-			case 4:
-				AddCover( GRRLIB_LoadTexture(R2HE41_png) );
-				break;
-			default:
-				AddCover( GRRLIB_LoadTexture(RC8P7D_png) );
-		}
+		AddCover( GRRLIB_LoadTexture(no_cover_png) );
+		progress+=per_game_prog;
+		Paint_Progress(progress);
 	}
 	
 	#endif
@@ -886,7 +869,7 @@ bool Menu_Install(void)
 
 bool Menu_Boot(void)
 {
-
+	#ifndef TEST_MODE
 	struct discHdr *header = NULL;
 	int i = 0;
 	s32 ret;
@@ -929,7 +912,8 @@ bool Menu_Boot(void)
         SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
     }
 
-
+	#endif
+	
 	return true;
 }
 
@@ -1050,11 +1034,18 @@ int main( int argc, char **argv ){
 	bool select_ready = false;
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 	
+	#ifdef TEST_MODE
+	PAD_Init();
+	#endif
+	
 	while(1) {
 
 		WPAD_ScanPads();
-		//PAD_ScanPads();
-
+		
+		#ifdef TEST_MODE
+		PAD_ScanPads();
+		#endif
+		
 		ir_t ir; // The struct for infrared
 		
 		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
@@ -1071,7 +1062,8 @@ int main( int argc, char **argv ){
 			quit();
 		}
 		
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B ||
+			PAD_ButtonsDown(0) & PAD_BUTTON_B)
 		{
 			if(selected && animate_flip >= 1.0)
 			{
@@ -1079,7 +1071,8 @@ int main( int argc, char **argv ){
 			}
 		}
 		
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A ||
+			PAD_ButtonsDown(0) & PAD_BUTTON_A)
 		{
 			if(gameCnt)
 			{
@@ -1124,7 +1117,8 @@ int main( int argc, char **argv ){
 
 		if(!selected && animate_flip == 0)
 		{
-			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT )
+			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT  ||
+				PAD_ButtonsDown(0) & PAD_BUTTON_LEFT)
 			
 			{	
 				select_ready = false;
@@ -1132,7 +1126,8 @@ int main( int argc, char **argv ){
 				if(!((int)shift-1 <= (-1)*(COVER_COUNT/2.0)))
 					shift -= SCROLL_SPEED;
 			}
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT)
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||
+				PAD_ButtonsDown(0) & PAD_BUTTON_RIGHT)
 			{
 				select_ready = false;
 					
