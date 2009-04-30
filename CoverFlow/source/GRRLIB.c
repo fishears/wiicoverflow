@@ -1005,7 +1005,7 @@ void GRRLIB_3D_Init()
 	// and aspect ratio based on the display resolution
     f32 w = rmode->viWidth;
     f32 h = rmode->viHeight;
-	guPerspective(perspective, 45, (f32)w/h, 0.1F, 300.0F);
+	guPerspective(perspective, 45, (f32)h/w, 0.1F, 300.0F);
 	GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
 
