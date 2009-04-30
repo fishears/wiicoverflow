@@ -33,7 +33,7 @@
  
 #define DEFAULT_FIFO_SIZE	(256*1024)
 
-//#define TEST_MODE 1
+#define TEST_MODE 1
 
 /* Constants */
 #define ENTRIES_PER_PAGE	12
@@ -379,7 +379,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 		return;
 	  }
 
-	  static const float SPACING = 3.5;
+	  static const float SPACING = 2.8;
 	  float dir = 1;
 	  float loc, scale, angle;
 
@@ -390,7 +390,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 	  
 	  loc = SPACING * dir * (pow(pos + 1, -1) - 1);
 	  scale = pow(pos + 1, -2);
-	  angle = -1 * dir * change_scale(scale, 0, 1, 45, 0);
+	  angle = -1 * dir * change_scale(scale, 0, 1, 90, 0);
 	
 	  if(texture_id != -1 && texture_id < array_size)
 	  {
