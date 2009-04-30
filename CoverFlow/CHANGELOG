@@ -1,0 +1,8 @@
+V2.0
++Add Mouse Pointer for quick scrolling through games by clicking covers
++Add Mouse Pointer interaction for opening selected game
++Fix Language bug (Commented out langauage patch code by fishears until config is up)
++Added Text for selected game
+
+V1.1
++Initial Release

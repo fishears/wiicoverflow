@@ -48,7 +48,8 @@ static s32 my_wbfsDev = WBFS_DEVICE_USB;
 
 
 float shift = 0.0;
-	
+float select_shift = 0.0;
+
 bool selected = false;
 
 float progress = 0.0;
@@ -118,6 +119,9 @@ extern const u32    slide_bar_png_size;
 extern const u8     usb_error_png[];
 extern const u32    usb_error_png_size;
 
+extern const u8     generic_point_png[];
+extern const u32    generic_point_png_size;
+
 #define USBLOADER_PATH		"SD:/usb-loader"
 
 Mtx GXmodelView2D;
@@ -148,6 +152,14 @@ GRRLIB_texImg slide_texture;
 GRRLIB_texImg slide_bar_texture;
 
 GRRLIB_texImg usb_error_texture;
+
+float p_ang = 0;
+float p_x   = 0;
+float p_y   = 0;
+
+WPADData *wd;
+
+GRRLIB_texImg pointer_texture;
 
 float change_scale_without_containing(float val, float in_min, float in_max, 
                                       float out_min, float out_max)
@@ -471,6 +483,36 @@ void draw_selected()
 	  }
 }
 
+void draw_game_title(int index)
+{
+	if(index != -1)
+	{
+		    int i = 0;
+			int len = 0;
+			struct discHdr *header = NULL;
+			header = &gameList[index];
+			
+			char name[17];
+			
+			for(i = 0; i < 16; i++)
+				name[i] = toupper(header->title[i]);
+				
+			name[16] = 0;
+			
+			float tsize = .5;
+
+			len = strlen(name);
+			
+			int offset = (len*10);
+			
+			if(offset > 240) offset = 240;
+			
+            GRRLIB_Printf(340 - offset, 400, text_font1, 0XFFFFFF40, tsize, "%s", name);
+				
+	}
+
+}
+
 void draw_covers()
 {
 	int i;
@@ -623,12 +665,12 @@ void DrawSlider(void)
 	int min_loc = 0;
 	int max_loc = 313;
 	
-	GRRLIB_DrawImg(120, 400, slide_bar_texture, 0, 1, 1, 0xFFFFFFFF);
+	GRRLIB_DrawImg(120, 410, slide_bar_texture, 0, 1, 1, 0xFFFFFFFF);
 	
 	int x = change_scale(shift, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0, min_loc, max_loc);
 	
 	
-	GRRLIB_DrawImg(126+x, 416, slide_texture, 0, 1, 1, 0xFFFFFFFF);
+	GRRLIB_DrawImg(126+x, 426, slide_texture, 0, 1, 1, 0xFFFFFFFF);
 	
 	
 }
@@ -730,6 +772,8 @@ int main( int argc, char **argv ){
     progress_texture = GRRLIB_LoadTexture(progress_png);
 	
 	usb_error_texture = GRRLIB_LoadTexture(usb_error_png);
+	
+	pointer_texture = GRRLIB_LoadTexture(generic_point_png);
 		
 	Paint_Progress(progress);
 	
@@ -741,8 +785,31 @@ int main( int argc, char **argv ){
 		u32 timeout = 30;
 	my_wbfsDev = WBFS_DEVICE_USB;
 
+  INIT_RETRY:
 	/* Initialize WBFS */
 	ret = WBFS_Init(my_wbfsDev);
+	
+	if(ret < 0)
+	{
+		while(1)
+		{
+			WPAD_ScanPads();
+		
+			GRRLIB_DrawImg(0, 0, usb_error_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_Render();
+				
+			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+			{
+				goto INIT_RETRY;
+			}
+			
+			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+			{
+				GRRLIB_Exit();
+				SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
+			}
+		}
+	}
 	
 	//bool flip = true;
   USB_RETRY:
@@ -791,12 +858,21 @@ int main( int argc, char **argv ){
 	/* Get free space */
 	//WBFS_DiskSpace(&used, &free);
 	bool select_ready = false;
+	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 	
 	while(1) {
 
 		WPAD_ScanPads();
 		//PAD_ScanPads();
 
+		ir_t ir; // The struct for infrared
+		
+		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
+		wd = WPAD_Data(WPAD_CHAN_0);
+
+		p_x = ir.sx-200;
+		p_y = ir.sy-250;
+		p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
@@ -817,13 +893,28 @@ int main( int argc, char **argv ){
 			{
 				if(!selected && animate_flip <= 0.0)
 				{
-					if(select_ready)
+					if(p_x < 360 && p_x > 200 &&
+						p_y > 60 && p_y < 380)
 					{
-						selected = true;
-						LoadCurrentCover(gameSelected);
+						if(select_ready && select_shift == 0.0)
+						{
+							selected = true;
+							LoadCurrentCover(gameSelected);
+						}
+					}
+					else if(p_x < 200 &&
+						p_y > 60 && p_y < 380)
+					{
+						select_shift = (-4)*((200-p_x)/200.0);
+					}
+					else if(p_x > 360 &&
+						p_y > 60 && p_y < 380)
+					{
+						select_shift = 5*(p_x-330.0-15)/280.0;
 					}
 				}
-				else if(selected && animate_flip == 1.0)
+				
+				if(selected && animate_flip == 1.0)
 				{
 					//TODO Prompt to boot game...
 					if(!Menu_Boot())
@@ -858,7 +949,25 @@ int main( int argc, char **argv ){
 			}
 			else
 			{
-				if(abs(((int)shift * 10000.0) - (shift*10000.0))/10000.0 > (SCROLL_SPEED+SCROLL_SPEED/2.0))
+				if(abs(select_shift) > SCROLL_SPEED)
+				{
+					int mult = abs((int)select_shift);
+					if(select_shift > 0)
+					{
+					
+						select_shift -= mult*SCROLL_SPEED;
+						if(!((int)shift-1 <= (-1)*(COVER_COUNT/2.0)))
+							shift -= mult*SCROLL_SPEED;
+					}
+					else
+					{
+						select_shift += mult*SCROLL_SPEED;
+						if(!((int)shift+.5 >= (COVER_COUNT/2.0)))
+							shift += mult*SCROLL_SPEED;
+					}
+					
+				}
+				else if(abs(((int)shift * 10000.0) - (shift*10000.0))/10000.0 > (SCROLL_SPEED+SCROLL_SPEED/2.0))
 				{
 					select_ready = false;
 					if((int)((int)(shift+0.5) - (int)shift) == 0)
@@ -872,8 +981,12 @@ int main( int argc, char **argv ){
 				}
 				else
 				{
+					select_shift = 0;
 					shift = (int)shift;
 					select_ready = true;
+					
+					/*Draw Game Title*/
+					draw_game_title(gameSelected);
 				}
 					
 			}
@@ -889,6 +1002,8 @@ int main( int argc, char **argv ){
 		{
 			DrawSlider();
 		}
+		
+		GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
         GRRLIB_Render();
 
 	}
