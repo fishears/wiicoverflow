@@ -5,6 +5,7 @@
 ---------------------------------------------------------------------------------*/
 
 #include <stdio.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
@@ -18,6 +19,11 @@
 #include "libwbfs/libwbfs.h"
 
 #include "disc.h"
+#include "cfg.h"
+#include "network.h"
+#include "sys/errno.h"
+#include "sys/unistd.h"
+#include "http.h"
 
 //#include <iostream> 
  
@@ -76,6 +82,10 @@ float animate_flip = 0.0;
 float FLIP_SPEED   = 0.016;
 
 float SCROLL_SPEED = 0.050;
+
+bool firstTimeDownload = true;
+bool donotdownload = false;
+bool imageNotFound = false;
 /*
 extern const u8		RC8P7D_png[];
 extern const u32	RC8P7D_png_size;
@@ -182,6 +192,8 @@ float p_y   = 0;
 WPADData *wd;
 
 GRRLIB_texImg pointer_texture;
+
+void Download_Cover(struct discHdr *header);
 
 void Init_Buttons()
 {
@@ -328,6 +340,7 @@ void Init_Covers()
 		
 		if(array_size < MAX_COVERS)
 		{
+			Download_Cover(header);
 			sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
 
 			ret = Fat_ReadFile(filepath, &imgData);
@@ -444,7 +457,7 @@ void draw_selected()
 	  if(scale >= 180)
 	  {
 		//Use back art texture
-		GRRLIB_DrawCoverImg(loc*1.2,back_texture,angle,2.0,0xFFFFFFFF);
+		GRRLIB_DrawCoverImg(loc*1.2,back_texture,angle,1.4,0xFFFFFFFF);
 		
 		if(scale >= 360)
 		{
@@ -494,7 +507,14 @@ void draw_selected()
 	  }
 	  else
 	  {
-		GRRLIB_DrawCoverImg(loc*1.2,covers[gameSelected],angle,1.0,0xFFFFFFFF);
+	    if(gameSelected < array_size)
+		{
+			GRRLIB_DrawCoverImg(loc*1.2,covers[gameSelected],angle,1.0,0xFFFFFFFF);
+		}
+		else
+		{
+			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
+		}
 	  }
 }
 
@@ -923,6 +943,134 @@ void quit()
 	exit(0);
 }
 
+int Net_Init(char *ip){
+	
+	s32 res;
+    while ((res = net_init()) == -EAGAIN)
+	{
+		usleep(100 * 1000); //100ms
+	}
+	
+    if (if_config(ip, NULL, NULL, true) < 0) {
+		printf("      Error reading IP address, exiting");
+		usleep(1000 * 1000 * 1); //1 sec
+		return false;
+	}
+	return true;
+}
+
+void saveFile(char* imgPath, struct block file){
+	//printf("\n\n    Size: %d byte", file.size);
+			
+	/* save png to sd card for future use*/
+			
+	FILE *f;
+	f = fopen(imgPath, "wb");
+	if (f)
+	{
+		fwrite(file.data,1,file.size,f);
+		fclose (f);
+		//free(file.data);
+		//printf("\n\n    Download complete. \n");
+	}
+}
+
+void Download_Cover(struct discHdr *header)
+{
+	char imgPath[100];
+
+	if (!header)
+		return;
+		
+	//the first time no image is found, attempt to init network
+	/* Initialize Network <<<TO BE THREADED>>> */
+	if(firstTimeDownload == true){
+		char myIP[16];
+		printf("\n[+] Initializing Network.");
+		if( !Net_Init(myIP) ){
+			printf("\n    Error Initializing Network.");
+			printf("\n    Download aborted.");
+			//donotdownload = true; // download failed once. Do not download
+		}
+		firstTimeDownload = false;
+	}
+		
+	//if(donotdownload == false) {
+		//printf("\n    Network connection established.");
+		/*try to download image */
+			
+		char url[100];
+		struct block file;
+	
+		char region[4];
+		switch(header->id[3]){
+	
+		case 'E':
+			sprintf(region,"ntsc");
+			break;
+
+		case 'J':
+			sprintf(region,"ntscj");
+			break;
+
+		case 'P':
+			sprintf(region,"pal");
+			break;
+		}
+		//printf("\n    Downloading cover...");
+
+		snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", CFG.images_path, header->id);
+		
+		FILE *fp;
+		fp = fopen(imgPath, "rb");
+		if (fp)
+		{
+			fclose (fp);
+		}
+		else{
+			
+			/*
+			if (CFG.widescreen)
+				sprintf(url, "http://www.theotherzone.com/wii/widescreen/%s/%s.png", region, header->id);
+			else
+				sprintf(url, "http://www.theotherzone.com/wii/%s/%s.png", region, header->id);
+			*/
+			sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, header->id);
+					
+			file = downloadfile(url);
+			
+			if(file.data != NULL){
+				saveFile(imgPath, file);
+				free(file.data);
+				//else
+					//donotdownload = true;
+			}
+		}
+		
+		fp = fopen(imgPath, "rb");
+		if (fp)
+		{
+			fclose (fp);
+		}
+		else{
+			snprintf(imgPath, sizeof(imgPath), "%s/disks/%s.png", CFG.images_path, header->id);
+			sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c.png", header->id[0], header->id[1], header->id[2]);
+			
+			file = downloadfile(url);
+			
+			if(file.data != NULL){
+				saveFile(imgPath, file);
+				free(file.data);
+				//else
+					//donotdownload = true;
+			}
+		//else
+			//donotdownload = true;
+		}
+	//}
+	//refresh = true;				
+} /* end download */
+
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
@@ -958,6 +1106,13 @@ int main( int argc, char **argv ){
 	#ifndef TEST_MODE
 	if(!init_usbfs())
 		return 0;
+		
+	//LOAD CONFIG
+	strcpy(CFG.images_path, USBLOADER_PATH);
+	CFG.widescreen = 0;
+	CFG.download = 1;
+	//HARDCODED FOR NOW
+	
 	
 	Paint_Progress(progress);
 	
