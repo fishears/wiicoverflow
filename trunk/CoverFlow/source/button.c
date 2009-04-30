@@ -1,7 +1,7 @@
 
 #include "button.h"
 
-Button Button_Init(u8* normal_img, u8* hover_img, int x, int y)
+Button Button_Init(const unsigned char normal_img[], const unsigned char hover_img[], int x, int y)
 {
 	Button new_button;
 	new_button.texture = GRRLIB_LoadTexture(normal_img);

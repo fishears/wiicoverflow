@@ -131,13 +131,6 @@ extern const u32    usb_error_png_size;
 extern const u8     generic_point_png[];
 extern const u32    generic_point_png_size;
 
-#define USBLOADER_PATH		"SD:/usb-loader"
-
-Mtx GXmodelView2D;
-
-#define MAX_COVERS 20
-int array_size = 0;
-GRRLIB_texImg covers[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg back_texture;
@@ -162,6 +155,26 @@ GRRLIB_texImg slide_bar_texture;
 
 GRRLIB_texImg usb_error_texture;
 
+/*--------------------------------------
+  Button Textures
+---------------------------------------*/
+#include "button.h"
+
+extern const u8     add_button_png[];
+extern const u8    add_button_hover_png[];
+
+Button addButton;
+
+/*--------------------------------------*/
+
+#define USBLOADER_PATH		"SD:/usb-loader"
+
+Mtx GXmodelView2D;
+
+#define MAX_COVERS 20
+int array_size = 0;
+GRRLIB_texImg covers[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
+
 float p_ang = 0;
 float p_x   = 0;
 float p_y   = 0;
@@ -169,6 +182,16 @@ float p_y   = 0;
 WPADData *wd;
 
 GRRLIB_texImg pointer_texture;
+
+void Init_Buttons()
+{
+	addButton = Button_Init(add_button_png, add_button_hover_png, 550, 400);
+}
+
+void Hover_Buttons()
+{
+	Button_Hover(&addButton, p_x, p_y);
+}
 
 float change_scale_without_containing(float val, float in_min, float in_max, 
                                       float out_min, float out_max)
@@ -872,15 +895,8 @@ bool Menu_Boot(void)
 	if (!gameCnt)
 		return false;
 
-    //__Disc_SetLowMem();
-	
 	/* Selected game */
 	header = &gameList[gameSelected];
-
-	//printf("\n");
-	//printf("[+] Booting Wii game, please wait...\n");
-
-	//Con_Clear();
 
     GRRLIB_Exit();
 	
@@ -905,23 +921,15 @@ bool Menu_Boot(void)
 	/* Open disc */
 	ret = Disc_Open();
 	if (ret < 0) {
-		//printf("    ERROR: Could not open game! (ret = %d)\n", ret);
-		//goto out;
 		return false;
 	}
 
 	ret = Disc_WiiBoot();
     if (ret < 0) {
-        //printf("    ERROR: BOOT ERROR! (ret = %d)\n", ret);
         SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
     }
 
 
-	//printf("    Returned! (ret = %d)\n", ret);
-
-//out:
-	//printf("\n");
-	//printf("    Press any button to continue...\n");
 	return true;
 }
 
@@ -1026,16 +1034,16 @@ int main( int argc, char **argv ){
 	Init_Covers();
 	#endif
 	
-
+	Init_Buttons();
+	
+	progress += 0.5;
+	Paint_Progress(progress);
+	
 	free(gradient_texture.data);
 	free(loader_main_texture.data);
 	free(progress_texture.data);
 	free(usb_error_texture.data);
 	
-	//Paint_Progress(1.0);
-
-	//WPAD_Init();
-	//PAD_Init();
 
 	selected = false;
 	
@@ -1055,6 +1063,8 @@ int main( int argc, char **argv ){
 		p_x = ir.sx-200;
 		p_y = ir.sy-250;
 		p_ang = ir.angle/2; // Set angle/2 to translate correctly
+
+		Hover_Buttons();
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
@@ -1185,6 +1195,7 @@ int main( int argc, char **argv ){
 			DrawSlider();
 		}
 		
+		Button_Paint(addButton);
 		GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
         GRRLIB_Render();
 
