@@ -185,7 +185,7 @@ GRRLIB_texImg pointer_texture;
 
 void Init_Buttons()
 {
-	addButton = Button_Init(add_button_png, add_button_hover_png, 550, 400);
+	addButton = Button_Init(add_button_png, add_button_hover_png, 580, 400);
 }
 
 void Hover_Buttons()
