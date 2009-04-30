@@ -72,6 +72,14 @@ void __WBFS_Spinner(s32 x, s32 max)
 		printf("    %.2fGB copied in %d:%02d:%02d\n", size, h, m, s);
 }
 
+
+ 
+ wbfs_t *GetHddInfo(void)
+ {
+     return hdd;
+ }
+ 
+
 s32 __WBFS_ReadDVD(void *fp, u32 lba, u32 len, void *iobuf)
 {
 	void *buffer = NULL;
