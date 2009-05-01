@@ -40,6 +40,7 @@
 #define DEFAULT_FIFO_SIZE	(256*1024)
 
 //#define TEST_MODE 1
+#define DEBUG 1
 
 /* Constants */
 #define ENTRIES_PER_PAGE	12
@@ -87,7 +88,7 @@ float FLIP_SPEED   = 0.016;
 float SCROLL_SPEED = 0.050;
 
 bool firstTimeDownload = true;
-bool donotdownload = false;
+bool inetOk = false;
 bool imageNotFound = false;
 
 extern const u8		no_cover_png[];
@@ -202,6 +203,8 @@ float p_y   = 0;
 
 WPADData *wd;
 
+
+char debugMsg[1024];
 GRRLIB_texImg pointer_texture;
 
 void Download_Cover(struct discHdr *header);
@@ -289,6 +292,9 @@ void Paint_Progress(float v)
 	}
 
 	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
+	#ifdef DEBUG
+	GRRLIB_Printf(70, 278, tex_BMfont5,  0xFFFFFFFF, 1, "%s", debugMsg);
+    #endif
     
 	GRRLIB_Render();
 }
@@ -306,7 +312,8 @@ void LoadCurrentCover(int id)
 	
 //		substr
 	
-	sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c.png", header->id[0],header->id[1],header->id[2]);
+	//sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c.png", header->id[0],header->id[1],header->id[2]);
+	sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c%c.png", header->id[0],header->id[1],header->id[2],header->id[3]);
 
 	ret = Fat_ReadFile(filepath, &imgData);
 	
@@ -382,6 +389,8 @@ void Init_Covers()
 		
 		if(array_size < MAX_COVERS)
 		{
+			sprintf(debugMsg, "Checking next cover...%s", header->id);
+			Paint_Progress(1);
 			Download_Cover(header);
 			sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
 
@@ -1125,16 +1134,33 @@ void Download_Cover(struct discHdr *header)
 	/* Initialize Network <<<TO BE THREADED>>> */
 	if(firstTimeDownload == true){
 		char myIP[16];
-		printf("\n[+] Initializing Network.");
-		if( !Net_Init(myIP) ){
-			printf("\n    Error Initializing Network.");
-			printf("\n    Download aborted.");
-			//donotdownload = true; // download failed once. Do not download
+		//printf("\n[+] Initializing Network.");
+		sprintf(debugMsg, "Initializing Network");
+		Paint_Progress(1);
+		//GRRLIB_Printf(100, 100, text_font1, 0XFFFFFFFF, 1.0, "Initializing Network");
+		if( Net_Init(myIP) ){
+			//GRRLIB_Printf(100, 120, tex_BMfont5, 0XFFFFFFFF, 1.0, "Error Initializing Network");
+			sprintf(debugMsg, "Error Initializing Network");
+			Paint_Progress(1);
+			inetOk = true;
 		}
+		else{
+			sprintf(debugMsg, "Network Initialized");
+			Paint_Progress(1);
+		}
+
 		firstTimeDownload = false;
 	}
+	
+	/*
+	GRRLIB_Render();
+	usleep(50000);
+	GRRLIB_Exit(); 
+    free(tex_BMfont5.data);
+	exit (0);
+	*/
 		
-	//if(donotdownload == false) {
+	if(inetOk) {
 		//printf("\n    Network connection established.");
 		/*try to download image */
 			
@@ -1160,11 +1186,16 @@ void Download_Cover(struct discHdr *header)
 
 		snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", CFG.images_path, header->id);
 		
+		sprintf(debugMsg, "Checking presence of %s", imgPath);
+		Paint_Progress(1);
+		
 		FILE *fp;
 		fp = fopen(imgPath, "rb");
 		if (fp)
 		{
 			fclose (fp);
+			sprintf(debugMsg, "%s present, not downloading", imgPath);
+			Paint_Progress(1);
 		}
 		else{
 			
@@ -1174,39 +1205,61 @@ void Download_Cover(struct discHdr *header)
 			else
 				sprintf(url, "http://www.theotherzone.com/wii/%s/%s.png", region, header->id);
 			*/
+			
 			sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, header->id);
-					
+			sprintf(debugMsg, "Getting %s", url);
+			Paint_Progress(1);
+		
 			file = downloadfile(url);
 			
 			if(file.data != NULL){
 				saveFile(imgPath, file);
 				free(file.data);
+				sprintf(debugMsg, "done");
+			    Paint_Progress(1);
 				//else
 					//donotdownload = true;
 			}
+			else {
+				sprintf(debugMsg, "some error occurred");
+				Paint_Progress(1);
+			}
 		}
+		
+		snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c%c.png", CFG.images_path,  header->id[0], header->id[1], header->id[2], header->id[3]);
+		sprintf(debugMsg, "Checking presence of %s", imgPath);
+		Paint_Progress(1);
 		
 		fp = fopen(imgPath, "rb");
 		if (fp)
 		{
 			fclose (fp);
+			sprintf(debugMsg, "%s present, not downloading", imgPath);
+			Paint_Progress(1);
 		}
 		else{
-			snprintf(imgPath, sizeof(imgPath), "%s/disks/%s.png", CFG.images_path, header->id);
-			sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c.png", header->id[0], header->id[1], header->id[2]);
+			sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c%c.png", header->id[0], header->id[1], header->id[2], header->id[3]);
+			sprintf(debugMsg, "Getting %s", url);
+			Paint_Progress(1);
 			
 			file = downloadfile(url);
 			
 			if(file.data != NULL){
 				saveFile(imgPath, file);
 				free(file.data);
+				sprintf(debugMsg, "done");
+			    Paint_Progress(1);
 				//else
 					//donotdownload = true;
+			}
+			else {
+				sprintf(debugMsg, "some error occurred");
+				Paint_Progress(1);
 			}
 		//else
 			//donotdownload = true;
 		}
-	//}
+	}
 	//refresh = true;				
 } /* end download */
 
@@ -1255,12 +1308,14 @@ int main( int argc, char **argv ){
     gradient_texture    = GRRLIB_LoadTexture(gradient_bg_png);
     loader_main_texture = GRRLIB_LoadTexture(loading_main_png);
     progress_texture    = GRRLIB_LoadTexture(progress_png);
-		
+	
+	sprintf(debugMsg, "Loading textures");
 	Paint_Progress(progress);
 	
 	LoadTextures();
 	
 	progress += .1;
+	sprintf(debugMsg, "Init USB");
 	Paint_Progress(progress);
 	
 	#ifndef TEST_MODE
@@ -1273,7 +1328,7 @@ int main( int argc, char **argv ){
 	CFG.download = 1;
 	//HARDCODED FOR NOW
 	
-	
+	sprintf(debugMsg, "Initializing WBFS");
 	Paint_Progress(progress);
 	
 	my_wbfsDev = WBFS_DEVICE_USB;
@@ -1336,6 +1391,7 @@ int main( int argc, char **argv ){
 	Init_Buttons();
 	
 	progress += 0.5;
+	sprintf(debugMsg, "Freeing unused textures");
 	Paint_Progress(progress);
 	
 	free(gradient_texture.data);
