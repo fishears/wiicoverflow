@@ -43,14 +43,14 @@ bool Button_Select(struct Button* btn, int x, int y)
 	return btn->hovering;
 }
 
-void Button_Paint(Button btn)
+void Button_Paint(struct Button* btn)
 {
-	if(btn.hovering)
+	if(btn->hovering)
 	{
-		GRRLIB_DrawImg(btn.x, btn.y, btn.hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
 	}
 	else
 	{
-		GRRLIB_DrawImg(btn.x, btn.y, btn.texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
 	}	
 }
