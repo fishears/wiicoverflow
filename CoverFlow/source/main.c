@@ -166,13 +166,19 @@ extern const u8     yes_hover_png[];
 extern const u8     no_png[];
 extern const u8     no_hover_png[];
 
+extern const u8     cheatson_png[];
+extern const u8     cheatson_hover_png[];
+extern const u8     cheatsoff_png[];
+extern const u8     cheatsoff_hover_png[];
+
 Button addButton;
 Button slideButton;
 Button okButton;
 Button backButton;
 Button cancelButton;
 Button loadButton;
-
+Button cheatonButton;
+Button cheatoffButton;
 Button yesButton;
 Button noButton;
 
@@ -185,6 +191,7 @@ char* _msg;
 
 Mtx GXmodelView2D;
 
+u8 ocarinaChoice = 0;
 #define MAX_COVERS 19
 int array_size = 0;
 GRRLIB_texImg covers[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
@@ -206,12 +213,15 @@ void quit()
 
 void Init_Buttons()
 {
-	addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
+
+        addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
 	slideButton = Button_Init(slide_png,  slide_hover_png, 580, 400);
 	okButton    = Button_Init(ok_png,   ok_hover_png, 220, 250);
 	loadButton  = Button_Init(load_png,   load_hover_png, 220, 300);
 	backButton  = Button_Init(back_png,   back_hover_png, 340, 300);
 	cancelButton = Button_Init(cancel_png, cancel_hover_png, 340, 250);
+        cheatonButton = Button_Init(cheatson_png, cheatson_hover_png, 30,420);
+        cheatoffButton = Button_Init(cheatsoff_png, cheatsoff_hover_png, 30,420);
 	
 	yesButton  = Button_Init(yes_png, yes_hover_png, 220, 250);
 	noButton = Button_Init(no_png, no_hover_png, 340, 250);
@@ -227,6 +237,12 @@ void Hover_Buttons()
 	Button_Hover(&cancelButton, p_x, p_y);
 	Button_Hover(&yesButton,    p_x, p_y);
 	Button_Hover(&noButton,     p_x, p_y);
+        if (ocarinaChoice)
+        {
+            Button_Hover(&cheatonButton,  p_x, p_y);
+        }
+        else Button_Hover(&cheatoffButton,  p_x, p_y);
+        
 }
 
 float change_scale_without_containing(float val, float in_min, float in_max, 
@@ -1188,7 +1204,7 @@ void LoadTextures()
 	
 	cover_texture = GRRLIB_LoadTexture(no_cover_png);
 	back_texture = GRRLIB_LoadTexture(back_cover_png);
-    no_disc_texture = GRRLIB_LoadTexture(no_disc_png);
+        no_disc_texture = GRRLIB_LoadTexture(no_disc_png);
 	text_font1 = GRRLIB_LoadTexture(font1_png);
 	
 	slide_bar_texture = GRRLIB_LoadTexture(slide_bar_png);
@@ -1378,6 +1394,10 @@ int main( int argc, char **argv ){
 			{
 				AddGame();
 			}
+                        else if(Button_Select(&cheatonButton, p_x, p_y) || Button_Select(&cheatoffButton, p_x, p_y))
+                        {
+                            ocarinaChoice = (ocarinaChoice) ? 0 : 1;
+                        }
 			else if(Button_Select(&slideButton, p_x, p_y))
 			{
 				dragging = true;
@@ -1507,9 +1527,15 @@ int main( int argc, char **argv ){
 		{
 			DrawSlider();
 			Button_Paint(&addButton);
+                        if (ocarinaChoice)
+                        {
+                            Button_Paint(&cheatonButton);
+                        }
+                        else Button_Paint(&cheatoffButton);
+                        
 		}
-		
-		GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
+
+	GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
         GRRLIB_Render();
 
 	}
@@ -1521,5 +1547,4 @@ int main( int argc, char **argv ){
 	SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
 	
 	return 0;
-}
- 
+} 
