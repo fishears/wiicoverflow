@@ -1178,10 +1178,12 @@ bool Menu_Boot(void)
 
     GRRLIB_Exit();
 	
+	#ifndef BUFFER_TEST
 	for(i = 0; i < array_size; i++)
 	{
 		free(covers[i].data);
 	}
+	#endif
 	
 	free(cover_texture.data);
 	free(back_texture.data);
@@ -1627,6 +1629,11 @@ int main( int argc, char **argv ){
 					{
 						if(Button_Select(&loadButton, p_x, p_y))
 						{
+							#ifdef BUFFER_TEST
+							BUFFER_ClearCovers();
+							BUFFER_KillBuffer();
+							#endif
+							
 							//TODO Prompt to boot game...
 							if(!Menu_Boot())
 							{
