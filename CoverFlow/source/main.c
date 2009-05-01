@@ -93,14 +93,9 @@ extern const u8		back_cover_png[];
 
 extern const u8		no_disc_png[];
 
-extern const u8		select_menu_png[];
-
 extern const u8     font1_png[];
 
 extern const u8     BMfont5_png[];
-
-//extern const u8     helvetica_font_png[];
-//extern const u32    helvetica_font_png_size;
 
 extern const u8     loading_main_png[];
 
@@ -122,8 +117,6 @@ GRRLIB_texImg empty_texture;
 
 GRRLIB_texImg no_disc_texture;
 GRRLIB_texImg current_cover_texture;
-
-GRRLIB_texImg select_menu_texture;
 
 GRRLIB_texImg text_font1;
 GRRLIB_texImg helvetica;
@@ -150,8 +143,20 @@ extern const u8     add_button_hover_png[];
 extern const u8     slide_png[];
 extern const u8     slide_hover_png[];
 
+extern const u8     load_png[];
+extern const u8     load_hover_png[];
+
+extern const u8     back_png[];
+extern const u8     back_hover_png[];
+
+extern const u8     cancel_png[];
+extern const u8     cancel_hover_png[];
+
 Button addButton;
 Button slideButton;
+Button backButton;
+Button cancelButton;
+Button loadButton;
 
 /*--------------------------------------*/
 
@@ -176,13 +181,19 @@ void Download_Cover(struct discHdr *header);
 void Init_Buttons()
 {
 	addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 400);
-	slideButton = Button_Init(slide_png, slide_hover_png, 580, 400);
+	slideButton = Button_Init(slide_png,  slide_hover_png, 580, 400);
+	loadButton  = Button_Init(load_png,   load_hover_png, 220, 300);
+	backButton  = Button_Init(back_png,   back_hover_png, 340, 300);
+	cancelButton = Button_Init(cancel_png, cancel_hover_png, 340, 300);
 }
 
 void Hover_Buttons()
 {
-	Button_Hover(&addButton, p_x, p_y);
-	Button_Hover(&slideButton, p_x, p_y);
+	Button_Hover(&addButton,    p_x, p_y);
+	Button_Hover(&slideButton,  p_x, p_y);
+	Button_Hover(&loadButton,   p_x, p_y);
+	Button_Hover(&backButton,   p_x, p_y);
+	Button_Hover(&cancelButton, p_x, p_y);
 }
 
 float change_scale_without_containing(float val, float in_min, float in_max, 
@@ -293,7 +304,6 @@ void Init_Covers()
 	cover_texture = GRRLIB_LoadTexture(no_cover_png);
 	back_texture = GRRLIB_LoadTexture(back_cover_png);
     no_disc_texture = GRRLIB_LoadTexture(no_disc_png);
-    select_menu_texture = GRRLIB_LoadTexture(select_menu_png);
 	text_font1 = GRRLIB_LoadTexture(font1_png);
 	
 	slide_bar_texture = GRRLIB_LoadTexture(slide_bar_png);
@@ -450,7 +460,9 @@ void draw_selected()
 			if(animate_rotate == 360) animate_rotate = 0;
 			
 			GRRLIB_DrawImg(230,100, current_cover_texture, animate_rotate, 1, 1, 0xFFFFFFFF);
-			GRRLIB_DrawImg(170,260, select_menu_texture, 0, 1, 1, 0xFFFFFFFF);
+			
+			Button_Paint(loadButton);
+			Button_Paint(backButton);
 			
 			#ifndef TEST_MODE
 			struct discHdr *header = NULL;
@@ -906,7 +918,6 @@ bool Menu_Boot(void)
 	free(empty_texture.data);
 	free(no_disc_texture.data);
 	free(current_cover_texture.data);
-	free(select_menu_texture.data);
 	free(text_font1.data);
 
 	//free(covers);
@@ -1271,15 +1282,22 @@ int main( int argc, char **argv ){
 					
 					if(selected && animate_flip == 1.0)
 					{
-						//TODO Prompt to boot game...
-						if(!Menu_Boot())
+						if(Button_Select(&loadButton, p_x, p_y))
+						{
+							//TODO Prompt to boot game...
+							if(!Menu_Boot())
+							{
+								selected = false;
+								animate_flip = 0;
+							}
+							else
+							{
+								return 0;
+							}
+						}
+						else if(Button_Select(&backButton, p_x, p_y))
 						{
 							selected = false;
-							animate_flip = 0;
-						}
-						else
-						{
-							return 0;
 						}
 					}
 				}
