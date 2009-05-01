@@ -88,46 +88,31 @@ bool donotdownload = false;
 bool imageNotFound = false;
 
 extern const u8		no_cover_png[];
-extern const u32	no_cover_png_size;
 
 extern const u8		back_cover_png[];
-extern const u32	back_cover_png_size;
 
 extern const u8		no_disc_png[];
-extern const u32	no_disc_png_size;
 
 extern const u8		select_menu_png[];
-extern const u32	select_menu_png_size;
 
 extern const u8     font1_png[];
-extern const u32    font1_png_size;
 
 extern const u8     BMfont5_png[];
-extern const u32    BMfont5_png_size;
 
 //extern const u8     helvetica_font_png[];
 //extern const u32    helvetica_font_png_size;
 
 extern const u8     loading_main_png[];
-extern const u32    loading_main_png_size;
 
 extern const u8     progress_png[];
-extern const u32    progress_png_size;
 
 extern const u8     gradient_bg_png[];
-extern const u32    gradient_bg_png_size;
-
-extern const u8     slide_png[];
-extern const u32    slide_png_size;
 
 extern const u8     slide_bar_png[];
-extern const u32    slide_bar_png_size;
 
 extern const u8     usb_error_png[];
-extern const u32    usb_error_png_size;
 
 extern const u8     generic_point_png[];
-extern const u32    generic_point_png_size;
 
 
 GRRLIB_texImg cover_texture;
@@ -149,7 +134,6 @@ GRRLIB_texImg progress_texture;
 
 GRRLIB_texImg gradient_texture;
 
-GRRLIB_texImg slide_texture;
 GRRLIB_texImg slide_bar_texture;
 
 GRRLIB_texImg usb_error_texture;
@@ -161,9 +145,13 @@ GRRLIB_texImg tex_BMfont5;
 #include "button.h"
 
 extern const u8     add_button_png[];
-extern const u8    add_button_hover_png[];
+extern const u8     add_button_hover_png[];
+
+extern const u8     slide_png[];
+extern const u8     slide_hover_png[];
 
 Button addButton;
+Button slideButton;
 
 /*--------------------------------------*/
 
@@ -187,12 +175,14 @@ void Download_Cover(struct discHdr *header);
 
 void Init_Buttons()
 {
-	addButton = Button_Init(add_button_png, add_button_hover_png, 580, 400);
+	addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 400);
+	slideButton = Button_Init(slide_png, slide_hover_png, 580, 400);
 }
 
 void Hover_Buttons()
 {
 	Button_Hover(&addButton, p_x, p_y);
+	Button_Hover(&slideButton, p_x, p_y);
 }
 
 float change_scale_without_containing(float val, float in_min, float in_max, 
@@ -306,7 +296,6 @@ void Init_Covers()
     select_menu_texture = GRRLIB_LoadTexture(select_menu_png);
 	text_font1 = GRRLIB_LoadTexture(font1_png);
 	
-	slide_texture = GRRLIB_LoadTexture(slide_png);
 	slide_bar_texture = GRRLIB_LoadTexture(slide_bar_png);
 	
     GRRLIB_InitTileSet(&helvetica, 22, 40, 0);
@@ -516,17 +505,9 @@ void draw_game_title(int index)
 {
 	if(index != -1)
 	{
-		    int i = 0;
 			int len = 0;
 			struct discHdr *header = NULL;
 			header = &gameList[index];
-			
-			//char name[17];
-			
-			//for(i = 0; i < 16; i++)
-			//	name[i] = header->toupper(header->title[i]);
-				
-			//name[16] = 0;
 			
 			float tsize = 1;
 
@@ -552,7 +533,6 @@ void draw_covers()
 		/*Some logic to avoid drawing everything*/
 		if(abs(shift+i) < DRAW_WINDOW)
 		{
-			//printf("Shift: %f, %d\n", shift, i);
 			GRRLIB_Cover(i+shift, i+(COVER_COUNT/2.0));
 		}
 	}
@@ -698,10 +678,23 @@ void DrawSlider(void)
 	
 	int x = change_scale(shift, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0, min_loc, max_loc);
 	
+	slideButton.x = 126+x;
+	slideButton.y = 426;
 	
-	GRRLIB_DrawImg(126+x, 426, slide_texture, 0, 1, 1, 0xFFFFFFFF);
+	//GRRLIB_DrawImg(126+x, 426, slide_texture, 0, 1, 1, 0xFFFFFFFF);
 	
+	Button_Paint(slideButton);
 	
+}
+
+void DragSlider(int xPos)
+{
+
+	int min_loc = 126;
+	int max_loc = 439;
+		
+	shift = change_scale(xPos, min_loc, max_loc, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0);
+
 }
 
 int DiscWait()
@@ -882,6 +875,11 @@ bool Menu_Install(void)
 	return false;
 }
 
+void AddGame(void)
+{
+
+}
+
 bool Menu_Boot(void)
 {
 	#ifndef TEST_MODE
@@ -932,7 +930,6 @@ bool Menu_Boot(void)
 	return true;
 }
 
-
 void quit()
 {
 	exit(0);
@@ -965,8 +962,6 @@ void saveFile(char* imgPath, struct block file){
 	{
 		fwrite(file.data,1,file.size,f);
 		fclose (f);
-		//free(file.data);
-		//printf("\n\n    Download complete. \n");
 	}
 }
 
@@ -1188,6 +1183,8 @@ int main( int argc, char **argv ){
 	PAD_Init();
 	#endif
 	
+	bool dragging = false;
+	
 	while(1) {
 
 		WPAD_ScanPads();
@@ -1221,45 +1218,69 @@ int main( int argc, char **argv ){
 			}
 		}
 		
+		if(dragging)
+		{
+			if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A)
+			{
+				DragSlider(p_x);
+			}
+			else
+			{
+				dragging = false;
+			}
+		}
+				
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A ||
 			PAD_ButtonsDown(0) & PAD_BUTTON_A)
 		{
-			if(gameCnt)
+			//First Check Buttons
+			if(Button_Select(&addButton, p_x, p_y))
 			{
-				if(!selected && animate_flip <= 0.0)
+				AddGame();
+			}
+			else if(Button_Select(&slideButton, p_x, p_y))
+			{
+				dragging = true;
+			}
+			else
+			{
+				if(gameCnt)
 				{
-					if(p_x < 360 && p_x > 200 &&
-						p_y > 60 && p_y < 380)
+					if(!selected && animate_flip <= 0.0)
 					{
-						if(select_ready && select_shift == 0.0)
+						if(p_x < 400 && p_x > 200 &&
+							p_y > 60 && p_y < 380)
 						{
-							selected = true;
-							LoadCurrentCover(gameSelected);
+							if(select_ready && select_shift == 0.0)
+							{
+								selected = true;
+								LoadCurrentCover(gameSelected);
+							}
+						}
+						else if(p_x < 200 &&
+							p_y > 60 && p_y < 380)
+						{
+							select_shift = (-4)*((200-p_x)/200.0);
+						}
+						else if(p_x > 400 &&
+							p_y > 60 && p_y < 380)
+						{
+							select_shift = 5*(p_x-345.0)/280.0;
 						}
 					}
-					else if(p_x < 200 &&
-						p_y > 60 && p_y < 380)
+					
+					if(selected && animate_flip == 1.0)
 					{
-						select_shift = (-4)*((200-p_x)/200.0);
-					}
-					else if(p_x > 360 &&
-						p_y > 60 && p_y < 380)
-					{
-						select_shift = 5*(p_x-330.0-15)/280.0;
-					}
-				}
-				
-				if(selected && animate_flip == 1.0)
-				{
-					//TODO Prompt to boot game...
-					if(!Menu_Boot())
-					{
-						selected = false;
-						animate_flip = 0;
-					}
-					else
-					{
-						return 0;
+						//TODO Prompt to boot game...
+						if(!Menu_Boot())
+						{
+							selected = false;
+							animate_flip = 0;
+						}
+						else
+						{
+							return 0;
+						}
 					}
 				}
 			}
@@ -1338,9 +1359,9 @@ int main( int argc, char **argv ){
 		else
 		{
 			DrawSlider();
+			Button_Paint(addButton);
 		}
 		
-		Button_Paint(addButton);
 		GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
         GRRLIB_Render();
 

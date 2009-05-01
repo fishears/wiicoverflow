@@ -15,8 +15,8 @@ Button Button_Init(const unsigned char normal_img[], const unsigned char hover_i
 
 bool Button_Hover(struct Button* btn, int x, int y)
 {
-	if(x > (btn->x) && x < (btn->texture.w + x) &&
-		y > (btn->y) && y < (btn->texture.h + y))
+	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) &&
+		y > (btn->y) && y < (btn->texture.h + (btn->y)))
 	{
 		btn->hovering = true;
 	}
@@ -30,8 +30,8 @@ bool Button_Hover(struct Button* btn, int x, int y)
 
 bool Button_Select(struct Button* btn, int x, int y)
 {
-	if(x > (btn->x) && x < (btn->texture.w + x) &&
-		y > (btn->y) && y < (btn->texture.h + y))
+	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) &&
+		y > (btn->y) && y < (btn->texture.h + (btn->y)))
 	{
 		btn->hovering = true;
 	}
