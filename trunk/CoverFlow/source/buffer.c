@@ -10,6 +10,17 @@
 
 #define USBLOADER_PATH		"SD:/usb-loader"
 
+extern const u8		back_cover_png[];
+
+#include <unistd.h>
+void Sleep(unsigned long milliseconds)
+{
+	if (milliseconds<1000)
+		usleep(milliseconds*1000);
+	else
+		sleep(milliseconds/1000);
+}
+	
 void BUFFER_InitBuffer(int thread_count)
 {
 	int i = 0;
@@ -36,7 +47,7 @@ void BUFFER_InitBuffer(int thread_count)
 	}
 }
 
-void BUFFER_RequestCover(int index, u8 id[6])
+void BUFFER_RequestCover(int index, struct discHdr *header)
 {
 	int i;
 	
@@ -44,10 +55,10 @@ void BUFFER_RequestCover(int index, u8 id[6])
 	{
 		pthread_mutex_lock(&queue_mutex);
 		_cq.request[index]   = true;
-		for(i = 0; i < 6; i++)
-		{
-			_cq.requestId[index][i] = id[i];
-		}
+		//for(i = 0; i < 6; i++)
+		//{
+		_cq.requestId[i] = header;
+		//}
 		pthread_mutex_unlock(&queue_mutex);
 	}
 }
@@ -103,7 +114,7 @@ bool BUFFER_LockTexture(int index, GRRLIB_texImg* tex)
 		pthread_mutex_lock(&buffer_mutex[index]);
 		tex = &_texture_data[index];
 		
-		if(tex == 0)
+		if(tex->data == 0)
 		{
 			pthread_mutex_unlock(&buffer_mutex[index]);
 			return false;
@@ -166,6 +177,8 @@ void* process(void *arg)
 	int  i = 0;
 	bool b = false;
 	/*Main Buffering Thread*/
+	//Fat_MountSDHC();
+	
 	while(1)
 	{
 		for(i = 0; i < MAX_BUFFERED_COVERS; i++)
@@ -178,45 +191,49 @@ void* process(void *arg)
 			if(b)
 			{
 				pthread_mutex_lock(&buffer_mutex[i]);
-				if(_texture_data[i].data)
+				
+				/*Definitely dont need to load the same texture twice*/
+				if(!(_texture_data[i].data))
 				{
-					free(_texture_data[i].data);
-				}
-				
-				void *imgData;// = (void *)no_cover_png;
-
-				char filepath[128];
-				s32  ret;
-
-				u8 tId[6];
-				int j = 0;
-				pthread_mutex_lock(&queue_mutex);
-				
-				for(j = 0; j < 6; j++)
-					tId[j] = _cq.requestId[i][j];
 					
-				pthread_mutex_unlock(&queue_mutex);
-				
-				
-				//TODO add download capability to thread
-				//Download_Cover(header);
-				sprintf(filepath, USBLOADER_PATH "/covers/%s.png", tId);
+					void *imgData;// = (void *)no_cover_png;
 
-				ret = Fat_ReadFile(filepath, &imgData);
-				
-				if (ret > 0) {
-					_texture_data[i] = GRRLIB_LoadTexture((const unsigned char*)imgData);
+					char filepath[128];
+					s32  ret;
+
+					//u8 tId[6];
+					int j = 0;
 					
-					pthread_mutex_lock(&count_mutex);
-					_cover_count++;
-					pthread_mutex_unlock(&count_mutex);
-				}
-			
-				pthread_mutex_lock(&queue_mutex);
-				_cq.request[i] = false;
-				_cq.ready[i]   = true;
-				pthread_mutex_unlock(&queue_mutex);
+					pthread_mutex_lock(&queue_mutex);
+					
+					//tId = _cq.requestId;
+						
+					pthread_mutex_unlock(&queue_mutex);
+					
+					
+					//TODO add download capability to thread
+					//Download_Cover(header);
+					sprintf(filepath, USBLOADER_PATH "/covers/%s.png", _cq.requestId[i]->id);
+
+					ret = Fat_ReadFile(filepath, &imgData);
+					
+					if (ret > 0) {
+						_texture_data[i] = GRRLIB_LoadTexture((const unsigned char*)imgData);
+						
+						pthread_mutex_lock(&count_mutex);
+						_cover_count++;
+						pthread_mutex_unlock(&count_mutex);
+					}
+					else
+					{
+						_texture_data[i].data = 0;
+					}
 				
+					pthread_mutex_lock(&queue_mutex);
+					_cq.request[i] = false;
+					_cq.ready[i]   = true;
+					pthread_mutex_unlock(&queue_mutex);
+				}	
 				pthread_mutex_unlock(&buffer_mutex[i]);
 			}
 			
@@ -228,11 +245,14 @@ void* process(void *arg)
 			if(b)
 			{
 				pthread_mutex_lock(&buffer_mutex[i]);
-				free(_texture_data[i].data);
+				if(_texture_data[i].data != 0)
+					free(_texture_data[i].data);
 				pthread_mutex_unlock(&buffer_mutex[i]);
 			
 				pthread_mutex_lock(&queue_mutex);
-				_cq.remove[i] = false;
+				_cq.remove[i]  = false;
+				_cq.ready[i]   = false;
+				_cq.request[i] = false;
 				pthread_mutex_unlock(&queue_mutex);
 				
 				pthread_mutex_lock(&count_mutex);
@@ -241,7 +261,8 @@ void* process(void *arg)
 					_cover_count = 0;
 				pthread_mutex_unlock(&count_mutex);
 
-			}			
+			}
+			Sleep(10);
 		}
 		
 		

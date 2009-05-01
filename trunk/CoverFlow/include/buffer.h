@@ -5,9 +5,11 @@
 #include "GRRLIB.h"
 
 #define BUFFER_SIZE 20
-#define MAX_BUFFERED_COVERS  100
+#define MAX_BUFFERED_COVERS  50
 
 #define MAX_THREADS 5
+
+#include "disc.h"
 
 pthread_t thread[MAX_THREADS];
 
@@ -26,7 +28,7 @@ pthread_mutex_t quit_mutex;
 typedef struct COVERQUEUE {
 	bool ready[MAX_BUFFERED_COVERS];
 	bool request[MAX_BUFFERED_COVERS];
-	u8 requestId[MAX_BUFFERED_COVERS][6];
+	struct discHdr *requestId[MAX_BUFFERED_COVERS];
 	bool remove[MAX_BUFFERED_COVERS];
 } COVERQUEUE;
 
@@ -37,10 +39,11 @@ bool _requestQuit;
 GRRLIB_texImg _texture_data[MAX_BUFFERED_COVERS];
 
 int _cover_count;
+inline void Sleep(unsigned long milliseconds);
 
 inline void BUFFER_InitBuffer(int thread_count);
 
-inline void BUFFER_RequestCover(int index, u8 id[6]);
+inline void BUFFER_RequestCover(int index, struct discHdr *header);
 
 inline bool BUFFER_IsCoverReady(int index);
 inline bool BUFFER_IsCoverQueued(int index);

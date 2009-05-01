@@ -225,6 +225,35 @@ char debugMsg[1024];
 GRRLIB_texImg pointer_texture;
 
 void Download_Cover(struct discHdr *header);
+int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
+
+
+float change_scale_without_containing(float val, float in_min, float in_max, 
+                                      float out_min, float out_max)
+{
+  float percent = 0;
+  if (in_min == in_max) {
+    return 0;
+  }
+  percent = (val - in_min) / (in_max - in_min);
+  return (out_min + percent * (out_max - out_min));
+}
+
+float change_scale(float val, float in_min, float in_max, 
+                   float out_min, float out_max)
+{
+  if(val > in_max)
+  {
+	val = in_max;
+  }
+  
+  if(val < in_min)
+  {
+     val = in_min;
+  }
+  
+  return change_scale_without_containing(val, in_min, in_max, out_min, out_max);
+}
 
 #ifdef BUFFER_TEST
 int buffer_window_min = 0;
@@ -232,13 +261,16 @@ int buffer_window_max = 0;
 int oldmin = 0;
 int oldmax = 0;
 
-void DrawBufferedCover(int i, int loc, int angle)
+void DrawBufferedCover(int i, float loc, float angle)
 {
 	GRRLIB_texImg ret;
+	GRRLIB_texImg testret;
 	
 	if(BUFFER_LockTexture(i, &ret))
 	{
+		//testret = &back_texture;
 		GRRLIB_DrawCoverImg(loc*1.2,ret,angle,1.0,0xFFFFFFFF);
+		//GRRLIB_DrawCoverImg(loc*1.2,testret,angle,1.0,0xFFFFFFFF);
 		BUFFER_ReleaseTexture(i);
 	}
 	else
@@ -251,63 +283,40 @@ void DrawBufferedCover(int i, int loc, int angle)
 void UpdateBufferedImages()
 {
 	int i;
+	int index = 0;
 	
-	buffer_window_min = ((int)shift - BUFFER_WINDOW) + (COVER_COUNT/2);
-	buffer_window_max = ((int)shift + BUFFER_WINDOW) + (COVER_COUNT/2);
-	
-	if(buffer_window_min < 0)
+	for(i = (-1*(COVER_COUNT/2.0)); i < (COVER_COUNT/2.0); i++)
 	{
-		buffer_window_max += abs(buffer_window_min);
-		buffer_window_min = 0;
-	}
-	
-	if(buffer_window_max > COVER_COUNT)
-	{
-		buffer_window_min -= (buffer_window_max - COVER_COUNT);
-		buffer_window_max = COVER_COUNT;
-		if(buffer_window_min < 0)
-			buffer_window_min = 0;
-	}
-	
-	
-	/*Request New Covers*/
-	for(i = buffer_window_min; i < buffer_window_max; i++)
-	{
-		//Is this cover already loaded?
-		if(!BUFFER_IsCoverReady(i))
+		index = i+(COVER_COUNT/2.0);
+		
+		/*Some logic to avoid drawing everything*/
+		if(abs(shift+i) < BUFFER_WINDOW)
 		{
-			//Is this cover already queued up?
-			if(!BUFFER_IsCoverQueued(i))
+			//Is this cover already loaded?
+			if(!BUFFER_IsCoverReady(index))
 			{
-				if(i < gameCnt)
+				//Is this cover already queued up?
+				if(!BUFFER_IsCoverQueued(index))
 				{
 					//Request this cover
-					struct discHdr *header = &gameList[i];
-			
-					BUFFER_RequestCover(i, header->id);
+					if(index < gameCnt)
+					{
+						struct discHdr *header = &gameList[index];
+						//char buff[200];
+						//sprintf(buff, "%s min=%d max=%d i=%d shift=%f", get_title(header), buffer_window_min, buffer_window_max, index, shift);
+						//WindowPrompt ("Requesting Cover...", buff ,&okButton,0);
+		
+						BUFFER_RequestCover(index, header);
+					}
 				}
 			}
 		}
-	}
-	
-	if(oldmin < buffer_window_min)
-	{
-		for(i = oldmin; i < buffer_window_min; i++)
+		else
 		{
-			BUFFER_RemoveCover(i);
+		//	BUFFER_RemoveCover(index);
 		}
 	}
 	
-	if(oldmax > buffer_window_max)
-	{
-		for(i = buffer_window_max; i < oldmax; i++)
-		{
-			BUFFER_RemoveCover(i);
-		}
-	}
-	
-	oldmin = buffer_window_min;
-	oldmax = buffer_window_max;
 }
 
 
@@ -354,33 +363,6 @@ void Hover_Buttons()
         
 }
 
-
-float change_scale_without_containing(float val, float in_min, float in_max, 
-                                      float out_min, float out_max)
-{
-  float percent = 0;
-  if (in_min == in_max) {
-    return 0;
-  }
-  percent = (val - in_min) / (in_max - in_min);
-  return (out_min + percent * (out_max - out_min));
-}
-
-float change_scale(float val, float in_min, float in_max, 
-                   float out_min, float out_max)
-{
-  if(val > in_max)
-  {
-	val = in_max;
-  }
-  
-  if(val < in_min)
-  {
-     val = in_min;
-  }
-  
-  return change_scale_without_containing(val, in_min, in_max, out_min, out_max);
-}
 
 
 void Paint_Progress(float v)
@@ -574,7 +556,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 	  angle = -1 * dir * change_scale(scale, 0, 1, 90, 0);
 	
 	  #ifdef BUFFER_TEST
-	  DrawBufferedCover(gameSelected, loc, angle);
+	  DrawBufferedCover(texture_id, loc, angle);
 	  #else
 	
 	  if(texture_id != -1 && texture_id < array_size)
@@ -1201,7 +1183,7 @@ bool Menu_Delete(void)
 		else
 		{
 			GetEntries();
-			WindowPrompt("Successfully deleted:", gameName, &okButton, 0);
+			WindowPrompt("Successfully deleted.", "Press Ok to Continue.", &okButton, 0);
 			return true;
 		}
 	}
@@ -1557,12 +1539,14 @@ int main( int argc, char **argv ){
 	Init_Covers();
 	#endif
 	
+	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+	Init_Buttons();
+	
 	#ifdef BUFFER_TEST
 	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
 	UpdateBufferedImages();
 	#endif
 	
-	Init_Buttons();
 	
 	progress += 0.5;
 	sprintf(debugMsg, "Freeing unused textures");
@@ -1678,8 +1662,8 @@ int main( int argc, char **argv ){
 						if(Button_Select(&loadButton, p_x, p_y))
 						{
 							#ifdef BUFFER_TEST
-							BUFFER_ClearCovers();
-							BUFFER_KillBuffer();
+							//BUFFER_ClearCovers();
+							//BUFFER_KillBuffer();
 							#endif
 							
 							//TODO Prompt to boot game...
@@ -1797,6 +1781,7 @@ int main( int argc, char **argv ){
 		GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
         GRRLIB_Render();
 
+		Sleep(1);
 	}
 	
 	//Preview
