@@ -17,7 +17,7 @@ typedef struct Button {
 Button Button_Init(const unsigned char normal_img[], const unsigned char hover_img[], int x, int y);
 bool Button_Hover(struct Button* btn, int x, int y);
 bool Button_Select(struct Button* btn, int x, int y);
-void Button_Paint(Button btn);
+void Button_Paint(struct Button* btn);
 
 #endif //_BUTTON_H_
 

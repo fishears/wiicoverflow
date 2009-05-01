@@ -45,6 +45,9 @@
 #define ENTRIES_PER_PAGE	12
 #define MAX_CHARACTERS		30
 
+static char prozent[MAX_CHARACTERS + 16];
+static char timet[MAX_CHARACTERS + 16];
+	
 /* Gamelist buffer */
 static struct discHdr *gameList = NULL;
 
@@ -109,6 +112,7 @@ extern const u8     usb_error_png[];
 
 extern const u8     generic_point_png[];
 
+extern const u8     menu_bg_png[];
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg back_texture;
@@ -126,6 +130,7 @@ GRRLIB_texImg loader_main_texture;
 GRRLIB_texImg progress_texture;
 
 GRRLIB_texImg gradient_texture;
+GRRLIB_texImg menu_bg_texture;
 
 GRRLIB_texImg slide_bar_texture;
 
@@ -149,14 +154,30 @@ extern const u8     load_hover_png[];
 extern const u8     back_png[];
 extern const u8     back_hover_png[];
 
+extern const u8     ok_png[];
+extern const u8     ok_hover_png[];
+
 extern const u8     cancel_png[];
 extern const u8     cancel_hover_png[];
 
+extern const u8     yes_png[];
+extern const u8     yes_hover_png[];
+
+extern const u8     no_png[];
+extern const u8     no_hover_png[];
+
 Button addButton;
 Button slideButton;
+Button okButton;
 Button backButton;
 Button cancelButton;
 Button loadButton;
+
+Button yesButton;
+Button noButton;
+
+char* _title;
+char* _msg;
 
 /*--------------------------------------*/
 
@@ -178,22 +199,34 @@ GRRLIB_texImg pointer_texture;
 
 void Download_Cover(struct discHdr *header);
 
+void quit()
+{
+	exit(0);
+}
+
 void Init_Buttons()
 {
 	addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 400);
 	slideButton = Button_Init(slide_png,  slide_hover_png, 580, 400);
+	okButton    = Button_Init(ok_png,   ok_hover_png, 220, 250);
 	loadButton  = Button_Init(load_png,   load_hover_png, 220, 300);
 	backButton  = Button_Init(back_png,   back_hover_png, 340, 300);
-	cancelButton = Button_Init(cancel_png, cancel_hover_png, 340, 300);
+	cancelButton = Button_Init(cancel_png, cancel_hover_png, 340, 250);
+	
+	yesButton  = Button_Init(yes_png, yes_hover_png, 220, 250);
+	noButton = Button_Init(no_png, no_hover_png, 340, 250);
 }
 
 void Hover_Buttons()
 {
 	Button_Hover(&addButton,    p_x, p_y);
+	Button_Hover(&okButton,     p_x, p_y);
 	Button_Hover(&slideButton,  p_x, p_y);
 	Button_Hover(&loadButton,   p_x, p_y);
 	Button_Hover(&backButton,   p_x, p_y);
 	Button_Hover(&cancelButton, p_x, p_y);
+	Button_Hover(&yesButton,    p_x, p_y);
+	Button_Hover(&noButton,     p_x, p_y);
 }
 
 float change_scale_without_containing(float val, float in_min, float in_max, 
@@ -300,19 +333,7 @@ void AddCover(GRRLIB_texImg tex)
 void Init_Covers()
 {
 	int i;
-	
-	cover_texture = GRRLIB_LoadTexture(no_cover_png);
-	back_texture = GRRLIB_LoadTexture(back_cover_png);
-    no_disc_texture = GRRLIB_LoadTexture(no_disc_png);
-	text_font1 = GRRLIB_LoadTexture(font1_png);
-	
-	slide_bar_texture = GRRLIB_LoadTexture(slide_bar_png);
-	
-    GRRLIB_InitTileSet(&helvetica, 22, 40, 0);
-    GRRLIB_InitTileSet(&text_font1, 32, 36, 32);
-	
-    tex_BMfont5 = GRRLIB_LoadTexture(BMfont5_png);
-    GRRLIB_InitTileSet(&tex_BMfont5, 8, 16, 0);
+	array_size = 0;
 	
 	progress+=0.05;
 	Paint_Progress(progress);
@@ -461,8 +482,8 @@ void draw_selected()
 			
 			GRRLIB_DrawImg(230,100, current_cover_texture, animate_rotate, 1, 1, 0xFFFFFFFF);
 			
-			Button_Paint(loadButton);
-			Button_Paint(backButton);
+			Button_Paint(&loadButton);
+			Button_Paint(&backButton);
 			
 			#ifndef TEST_MODE
 			struct discHdr *header = NULL;
@@ -695,7 +716,7 @@ void DrawSlider(void)
 	
 	//GRRLIB_DrawImg(126+x, 426, slide_texture, 0, 1, 1, 0xFFFFFFFF);
 	
-	Button_Paint(slideButton);
+	Button_Paint(&slideButton);
 	
 }
 
@@ -727,11 +748,93 @@ int DiscWait()
 	return ret;
 }
 
-int WindowPrompt(char* title, char* txt, int choice_a, int choice_b)
+int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
 {
 	/*TODO Create Graphical Prompt*/
 	
-	return choice_a;
+	bool doloop = true;
+	
+	if(choice_a == 0 && choice_b == 0)
+	{
+		doloop = false;
+	}
+	else
+	{
+		doloop = true;
+	}
+	
+	
+	do{
+
+		WPAD_ScanPads();
+		
+		ir_t ir; // The struct for infrared
+		
+		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
+		wd = WPAD_Data(WPAD_CHAN_0);
+
+		p_x = ir.sx-200;
+		p_y = ir.sy-250;
+		p_ang = ir.angle/2; // Set angle/2 to translate correctly
+
+		Hover_Buttons();
+
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
+		{
+			quit();
+		}
+		
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+		{
+			return false;
+		}
+		
+		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+		{
+			if(choice_a != 0)
+			{
+				if(Button_Select(choice_a, p_x, p_y))
+				{
+					return true;
+				}
+			}
+			
+			if(choice_b != 0)
+			{
+				if(Button_Select(choice_b, p_x, p_y))
+				{
+					return false;
+				}
+			}
+		}
+		
+		Hover_Buttons();
+		
+		GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+		
+		if(choice_a != 0)
+		{
+			Button_Paint(choice_a);
+		}
+		
+		if(choice_b != 0)
+		{
+			Button_Paint(choice_b);
+		}
+		
+		/*Draw Text*/
+        GRRLIB_Printf(140, 70, tex_BMfont5,  0xFFFFFFFF, 1.5, "%s", title);
+        GRRLIB_Printf(160, 110, tex_BMfont5, 0xFFFFFFFF, 1, "%s", txt);
+		
+		if(doloop)
+			GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
+		
+		GRRLIB_Render();
+		
+	}while(doloop);
+	
+	return false;
 }
 /****************************************************************************
  * ShowProgress
@@ -774,25 +877,22 @@ ShowProgress (s32 done, s32 total)
 
 	//Calculate percentage/size
 	percent = (done * 100.0) / total;
-	//size    = (hdd->wbfs_sec_sz / GB_SIZE) * total;
 
-    //progressTotal = total;
-	//progressDone = done;
+	sprintf(prozent, "%s%0.2f%%", "Installing Game...", percent);
 
-	//sprintf(prozent, "%0.2f%%", percent);
-    //prTxt.SetText(prozent);
-    //sprintf(timet,"Time left: %d:%02d:%02d",h,m,s);
-    //timeTxt.SetText(timet);
-	//progressbarImg.SetTile(100*progressDone/progressTotal);
+    sprintf(timet,"Time left: %d:%02d:%02d",h,m,s);
 
 	/*Update and Draw Progress Window Here*/
-	
+	WindowPrompt(prozent, timet, 0, 0);
 }
 
 
 int ProgressWindow(char* title, char* msg)
 {
 	/*TODO Draw Window*/
+	_title = title;
+	_msg   = msg;
+	
 	int ret = wbfs_add_disc(hdd, __WBFS_ReadDVD, NULL, ShowProgress, ONLY_GAME_PARTITION, 0);
 	
 	return ret;
@@ -804,29 +904,32 @@ bool Menu_Install(void)
 
     static struct discHdr headerdisc ATTRIBUTE_ALIGN(32);
 	
-	WDVD_SetWBFSMode(WBFS_DEVICE_USB, NULL);
-
+	WindowPrompt ("Initializing DVD Drive", "Please Wait...",0,0);
+	
+	/* Disable WBFS mode */
+	Disc_SetWBFS(0, NULL);
+	
     int ret, choice = 0;
 	char *name;
 	static char buffer[MAX_CHARACTERS + 4];
 
-	ret = DiscWait();
+	ret = Disc_Wait();
 	if (ret < 0) {
-		WindowPrompt ("Error reading Disc",0,BACK_BUTTON,0);
+		WindowPrompt ("Error reading Disc",0,&cancelButton,0);
 		return false;
 	}
 	ret = Disc_Open();
 	if (ret < 0) {
-		WindowPrompt ("Could not open Disc",0,BACK_BUTTON,0);
+		WindowPrompt ("Could not open Disc",0,&cancelButton,0);
 		return false;
 	}
 
 	ret = Disc_IsWii();
 	
 	if (ret < 0) {
-		choice = WindowPrompt ("Not a Wii Disc","Insert a Wii Disc!",OK_BUTTON,CANCEL_BUTTON);
+		choice = WindowPrompt ("Not a Wii Disc","Insert a Wii Disc!",&okButton,&cancelButton);
 
-		if (choice != 1) {
+		if (!choice) {
 			return false;
 		}
 		else
@@ -848,12 +951,12 @@ bool Menu_Install(void)
 
 	ret = WBFS_CheckGame(headerdisc.id);
 	if (ret) {
-		WindowPrompt ("Game is already installed:",name,BACK_BUTTON,0);
+		WindowPrompt ("Game is already installed:",name,&cancelButton,0);
 		return false;
 	}
 	hdd = GetHddInfo();
 	if (!hdd) {
-		WindowPrompt ("No HDD found!","Error!!",BACK_BUTTON,0);
+		WindowPrompt ("No HDD found!","Error!!",&cancelButton,0);
 		return false;
 		}
 
@@ -866,30 +969,39 @@ bool Menu_Install(void)
 	
 	sprintf(gametxt, "Installing game %.2fGB:", gamesize);
 	
-	if (gamesize > freespace) {
-		char errortxt[50];
-		sprintf(errortxt, "Game Size: %.2fGB, Free Space: %.2fGB", gamesize, freespace);
-		choice = WindowPrompt("Not enough free space!",errortxt,CANCEL_BUTTON, 0);
-		return false;
-	}
-	else {
-		ret = ProgressWindow(gametxt, name);
-		if (ret != 0) {
-			WindowPrompt ("Install error!",0,BACK_BUTTON,0);
+	char ttext[50];
+	char tsize[50];
+	sprintf(ttext, "Install %s?", name);
+	sprintf(tsize, "Game Size: %.2fGB", gamesize);
+	
+	
+	if(WindowPrompt (ttext,tsize,&okButton,&cancelButton))
+	{
+		if (gamesize > freespace) {
+			char errortxt[50];
+			sprintf(errortxt, "Game Size: %.2fGB, Free Space: %.2fGB", gamesize, freespace);
+			WindowPrompt("Not enough free space!",errortxt,&cancelButton, 0);
 			return false;
-		} else {
-			GetEntries();
-			WindowPrompt ("Successfully installed:",name,OK_BUTTON,0);
-			return true;
+		}
+		else {
+			ret = ProgressWindow(gametxt, name);
+			if (ret != 0) {
+				WindowPrompt ("Install error!",0,&cancelButton,0);
+				return false;
+			} else {
+				GetEntries();
+				WindowPrompt ("Successfully installed:",name,&okButton,0);
+				return true;
+			}
 		}
 	}
-
+	
 	return false;
 }
 
 void AddGame(void)
 {
-
+	Menu_Install();
 }
 
 bool Menu_Boot(void)
@@ -941,10 +1053,6 @@ bool Menu_Boot(void)
 	return true;
 }
 
-void quit()
-{
-	exit(0);
-}
 
 int Net_Init(char *ip){
 	
@@ -1072,6 +1180,26 @@ void Download_Cover(struct discHdr *header)
 	//refresh = true;				
 } /* end download */
 
+void LoadTextures()
+{
+	usb_error_texture = GRRLIB_LoadTexture(usb_error_png);
+	pointer_texture   = GRRLIB_LoadTexture(generic_point_png);
+	menu_bg_texture   = GRRLIB_LoadTexture(menu_bg_png);
+	
+	cover_texture = GRRLIB_LoadTexture(no_cover_png);
+	back_texture = GRRLIB_LoadTexture(back_cover_png);
+    no_disc_texture = GRRLIB_LoadTexture(no_disc_png);
+	text_font1 = GRRLIB_LoadTexture(font1_png);
+	
+	slide_bar_texture = GRRLIB_LoadTexture(slide_bar_png);
+	
+    GRRLIB_InitTileSet(&helvetica, 22, 40, 0);
+    GRRLIB_InitTileSet(&text_font1, 32, 36, 32);
+	
+    tex_BMfont5 = GRRLIB_LoadTexture(BMfont5_png);
+    GRRLIB_InitTileSet(&tex_BMfont5, 8, 16, 0);
+}
+
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
@@ -1094,14 +1222,15 @@ int main( int argc, char **argv ){
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
 	
-    gradient_texture = GRRLIB_LoadTexture(gradient_bg_png);
+    gradient_texture    = GRRLIB_LoadTexture(gradient_bg_png);
     loader_main_texture = GRRLIB_LoadTexture(loading_main_png);
-    progress_texture = GRRLIB_LoadTexture(progress_png);
-	
-	usb_error_texture = GRRLIB_LoadTexture(usb_error_png);
-	
-	pointer_texture = GRRLIB_LoadTexture(generic_point_png);
+    progress_texture    = GRRLIB_LoadTexture(progress_png);
 		
+	Paint_Progress(progress);
+	
+	LoadTextures();
+	
+	progress += .1;
 	Paint_Progress(progress);
 	
 	#ifndef TEST_MODE
@@ -1377,7 +1506,7 @@ int main( int argc, char **argv ){
 		else
 		{
 			DrawSlider();
-			Button_Paint(addButton);
+			Button_Paint(&addButton);
 		}
 		
 		GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
