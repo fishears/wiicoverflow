@@ -206,7 +206,7 @@ void quit()
 
 void Init_Buttons()
 {
-	addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 400);
+	addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
 	slideButton = Button_Init(slide_png,  slide_hover_png, 580, 400);
 	okButton    = Button_Init(ok_png,   ok_hover_png, 220, 250);
 	loadButton  = Button_Init(load_png,   load_hover_png, 220, 300);
