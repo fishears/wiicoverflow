@@ -48,8 +48,8 @@
 
 //---------------------------------------------
 /*Buffering Code [untested]*/
-//#define BUFFER_TEST 1
-#define BUFFER_WINDOW 5
+#define BUFFER_TEST 1
+#define BUFFER_WINDOW 8
 #define BUFFER_THREAD_COUNT 1
 #include "buffer.h"
 
@@ -263,22 +263,33 @@ int oldmax = 0;
 
 void DrawBufferedCover(int i, float loc, float angle)
 {
-	GRRLIB_texImg ret;
-	GRRLIB_texImg testret;
-	
-	if(BUFFER_LockTexture(i, &ret))
+	if(i < MAX_BUFFERED_COVERS || i >= 0)
 	{
-		//testret = &back_texture;
-		GRRLIB_DrawCoverImg(loc*1.2,ret,angle,1.0,0xFFFFFFFF);
-		//GRRLIB_DrawCoverImg(loc*1.2,testret,angle,1.0,0xFFFFFFFF);
-		BUFFER_ReleaseTexture(i);
+		if(BUFFER_IsCoverReady(i))
+		{
+			pthread_mutex_lock(&buffer_mutex[i]);
+			if(_texture_data[i].data)
+			{
+				GRRLIB_DrawCoverImg(loc*1.2,_texture_data[i],angle,1.0,0xFFFFFFFF);
+			}
+			else
+			{
+				GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
+			}
+			pthread_mutex_unlock(&buffer_mutex[i]);
+		}
+		else
+		{
+			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
+		}	
 	}
 	else
 	{
 		GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
-	}
-	
+	}	
+
 }
+
 
 void UpdateBufferedImages()
 {
@@ -382,7 +393,7 @@ void Paint_Progress(float v)
 
 	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
 	#ifdef DEBUG
-	GRRLIB_Printf(70, 278, tex_BMfont5,  0xFFFFFFFF, 1, "%s", debugMsg);
+	GRRLIB_Printf(160, 255, tex_BMfont5,  0x444444FF, 1, "%s", debugMsg);
     #endif
     
 	GRRLIB_Render();
@@ -466,7 +477,7 @@ void Init_Covers()
 	progress+=0.05;
 	Paint_Progress(progress);
 	
-	float max_progress = 2.1;
+	float max_progress = 1.7;
 	
 	float per_game_prog = max_progress/gameCnt;
 	
@@ -513,9 +524,6 @@ void Init_Covers()
 		progress+=per_game_prog;
 		Paint_Progress(progress);
 	}
-	#else
-	progress+=max_progress;
-	Paint_Progress(progress);
 	#endif
 	
 	#else
@@ -1222,7 +1230,9 @@ bool Menu_Boot(void)
 	free(current_cover_texture.data);
 	free(text_font1.data);
 
-	//free(covers);
+	BUFFER_ClearCovers();
+	BUFFER_KillBuffer();
+	Sleep(300);
 	
 	/* Set WBFS mode */
 	Disc_SetWBFS(WBFS_DEVICE_USB,header->id);
@@ -1545,10 +1555,22 @@ int main( int argc, char **argv ){
 	#ifdef BUFFER_TEST
 	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
 	UpdateBufferedImages();
+	
+	int wait = 300; //ms
+	float prog = 2.1/300.0;
+	
+	sprintf(debugMsg, "Initializing Threaded Image Buffer...");
+	while(wait > 0)
+	{
+		wait--;
+		progress += prog;
+		Paint_Progress(progress);
+		Sleep(1);
+	}
+	
 	#endif
 	
 	
-	progress += 0.5;
 	sprintf(debugMsg, "Freeing unused textures");
 	Paint_Progress(progress);
 	
@@ -1557,7 +1579,8 @@ int main( int argc, char **argv ){
 	free(progress_texture.data);
 	free(usb_error_texture.data);
 	
-
+	Sleep(300);
+	
 	selected = false;
 	
 	bool select_ready = false;
@@ -1590,6 +1613,9 @@ int main( int argc, char **argv ){
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
+			BUFFER_ClearCovers();
+			BUFFER_KillBuffer();
+			Sleep(300);
 			quit();
 		}
 		

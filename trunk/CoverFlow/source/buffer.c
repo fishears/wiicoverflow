@@ -262,7 +262,7 @@ void* process(void *arg)
 				pthread_mutex_unlock(&count_mutex);
 
 			}
-			Sleep(10);
+			Sleep(1);
 		}
 		
 		
