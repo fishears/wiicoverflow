@@ -346,10 +346,22 @@ void AddCover(GRRLIB_texImg tex)
 	*/
 }
 
+void ClearCovers()
+{
+	int i;
+	for(i = 0; i < array_size; i++)
+	{
+		free(covers[array_size].data);
+	}
+	
+	array_size = 0;
+}
+
 void Init_Covers()
 {
 	int i;
-	array_size = 0;
+	
+	ClearCovers();
 	
 	progress+=0.05;
 	Paint_Progress(progress);
@@ -910,6 +922,8 @@ int ProgressWindow(char* title, char* msg)
 	_msg   = msg;
 	
 	int ret = wbfs_add_disc(hdd, __WBFS_ReadDVD, NULL, ShowProgress, ONLY_GAME_PARTITION, 0);
+	
+	progress = 0.0;
 	
 	return ret;
 
