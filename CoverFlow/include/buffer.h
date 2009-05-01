@@ -5,7 +5,7 @@
 #include "GRRLIB.h"
 
 #define BUFFER_SIZE 20
-#define MAX_BUFFERED_COVERS  50
+#define MAX_BUFFERED_COVERS  500
 
 #define MAX_THREADS 5
 
@@ -18,6 +18,8 @@ pthread_mutex_t count_mutex;
 
 /*Protect the Ready Queue*/
 pthread_mutex_t queue_mutex;
+
+extern pthread_mutex_t buffer_mutex[];
 
 /*Protect each buffer*/
 pthread_mutex_t buffer_mutex[MAX_BUFFERED_COVERS];
@@ -36,6 +38,7 @@ COVERQUEUE _cq;
 
 bool _requestQuit;
 
+extern GRRLIB_texImg _texture_data[];
 GRRLIB_texImg _texture_data[MAX_BUFFERED_COVERS];
 
 int _cover_count;
