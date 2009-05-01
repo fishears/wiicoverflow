@@ -2,37 +2,45 @@
 #include "disc.h"
 #include "fat.h"
 
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
+#include <malloc.h>
+
 #define USBLOADER_PATH		"SD:/usb-loader"
 
-void InitBuffer()
+void BUFFER_InitBuffer(int thread_count)
 {
 	int i = 0;
 	
-	pthread_mutex_lock(&count_mutex);
-	_cover_count = 0;
-	pthread_mutex_unlock(&count_mutex);
-
-	pthread_mutex_lock(&queue_mutex);
-	for(i = 0; i < MAX_COVERS; i++)
-	{
-		_cq.ready[i]   = false;
-		_cq.request[i] = false;
-		_cq.remove[i]  = false;
-	}
+	/*Initialize Mutexs*/
+	pthread_mutex_init(&count_mutex, 0);
+	pthread_mutex_init(&queue_mutex, 0);
+	pthread_mutex_init(&quit_mutex, 0);
 	
-	pthread_mutex_unlock(&queue_mutex);
+	for(i = 0; i < MAX_BUFFERED_COVERS; i++)
+		pthread_mutex_init(&buffer_mutex[i], 0);
+	
+	
+	BUFFER_ClearCovers();
 	
 	pthread_mutex_lock(&quit_mutex);
 	_requestQuit = false;
 	pthread_mutex_unlock(&quit_mutex);
 	
+	for(i = 0; i < thread_count; i++)
+	{
+		if(i < MAX_THREADS)
+			pthread_create(&thread[i], 0, process, (void *)i);
+	}
 }
 
-void RequestCover(int index, u8 id[6])
+void BUFFER_RequestCover(int index, u8 id[6])
 {
 	int i;
 	
-	if(index < MAX_COVERS)
+	if(index < MAX_BUFFERED_COVERS)
 	{
 		pthread_mutex_lock(&queue_mutex);
 		_cq.request[index]   = true;
@@ -44,11 +52,11 @@ void RequestCover(int index, u8 id[6])
 	}
 }
 
-bool IsCoverReady(int index)
+bool BUFFER_IsCoverReady(int index)
 {
 	bool retval = false;
 	
-	if(index < MAX_COVERS)
+	if(index < MAX_BUFFERED_COVERS)
 	{
 		pthread_mutex_lock(&queue_mutex);
 		retval = _cq.ready[index];
@@ -58,9 +66,23 @@ bool IsCoverReady(int index)
 	return retval;
 }
 
-void RemoveCover(int index)
+bool BUFFER_IsCoverQueued(int index)
 {
-	if(index < MAX_COVERS)
+	bool retval = false;
+	
+	if(index < MAX_BUFFERED_COVERS)
+	{
+		pthread_mutex_lock(&queue_mutex);
+		retval = _cq.request[index];
+		pthread_mutex_unlock(&queue_mutex);
+	}
+	
+	return retval;
+}
+
+void BUFFER_RemoveCover(int index)
+{
+	if(index < MAX_BUFFERED_COVERS)
 	{
 		pthread_mutex_lock(&queue_mutex);
 		_cq.remove[index] = true;
@@ -68,9 +90,9 @@ void RemoveCover(int index)
 	}
 }
 
-bool LockTexture(int index, GRRLIB_texImg* tex)
+bool BUFFER_LockTexture(int index, GRRLIB_texImg* tex)
 {
-	if(index >= MAX_COVERS)
+	if(index >= MAX_BUFFERED_COVERS || index < 0)
 		return false;
 		
 	pthread_mutex_lock(&queue_mutex);
@@ -99,18 +121,44 @@ bool LockTexture(int index, GRRLIB_texImg* tex)
 	return false;
 }
 
-void ReleaseTexture(int index)
+void BUFFER_ReleaseTexture(int index)
 {
-	if(index < MAX_COVERS)
+	if(index < MAX_BUFFERED_COVERS)
 		pthread_mutex_unlock(&buffer_mutex[index]);
 }
 
-void KillBuffer()
+void BUFFER_KillBuffer()
 {
 
 	pthread_mutex_lock(&quit_mutex);
 	_requestQuit = true;
 	pthread_mutex_unlock(&quit_mutex);
+}
+
+void BUFFER_ClearCovers()
+{
+	int i;
+	
+	pthread_mutex_lock(&count_mutex);
+	_cover_count = 0;
+	pthread_mutex_unlock(&count_mutex);
+
+	pthread_mutex_lock(&queue_mutex);
+	for(i = 0; i < MAX_BUFFERED_COVERS; i++)
+	{
+		_cq.ready[i]   = false;
+		_cq.request[i] = false;
+		_cq.remove[i]  = false;
+		
+		pthread_mutex_lock(&buffer_mutex[i]);
+		if(_texture_data[i].data)
+			free(_texture_data[i].data);
+		pthread_mutex_unlock(&buffer_mutex[i]);
+			
+	}
+	pthread_mutex_unlock(&queue_mutex);
+	
+	
 }
 
 void* process(void *arg)
@@ -120,7 +168,7 @@ void* process(void *arg)
 	/*Main Buffering Thread*/
 	while(1)
 	{
-		for(i = 0; i < MAX_COVERS; i++)
+		for(i = 0; i < MAX_BUFFERED_COVERS; i++)
 		{
 			/*Handle Load Requests*/
 			pthread_mutex_lock(&queue_mutex);
@@ -145,7 +193,7 @@ void* process(void *arg)
 				pthread_mutex_lock(&queue_mutex);
 				
 				for(j = 0; j < 6; j++)
-					tId[j] = _cq.requestId[j];
+					tId[j] = _cq.requestId[i][j];
 					
 				pthread_mutex_unlock(&queue_mutex);
 				
@@ -201,10 +249,21 @@ void* process(void *arg)
 		if(_requestQuit)
 		{
 			pthread_mutex_unlock(&quit_mutex);
+			
+			int m = 0;
+			
+			/*Initialize Mutexs*/
+			pthread_mutex_destroy(&count_mutex);
+			pthread_mutex_destroy(&queue_mutex);
+			pthread_mutex_destroy(&quit_mutex);
+			
+			for(m = 0; m < MAX_BUFFERED_COVERS; m++)
+				pthread_mutex_destroy(&buffer_mutex[m]);
+
 			return 0;
 		}
 		pthread_mutex_unlock(&quit_mutex);
 	}
-
+	
 }
 
