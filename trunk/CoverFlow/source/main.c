@@ -183,6 +183,9 @@ extern const u8     cheatson_hover_png[];
 extern const u8     cheatsoff_png[];
 extern const u8     cheatsoff_hover_png[];
 
+extern const u8     delete_png[];
+extern const u8     delete_hover_png[];
+
 Button addButton;
 Button slideButton;
 Button okButton;
@@ -193,6 +196,7 @@ Button cheatonButton;
 Button cheatoffButton;
 Button yesButton;
 Button noButton;
+Button deleteButton;
 
 char* _title;
 char* _msg;
@@ -317,14 +321,15 @@ void quit()
 void Init_Buttons()
 {
 
-        addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
+    addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
 	slideButton = Button_Init(slide_png,  slide_hover_png, 580, 400);
 	okButton    = Button_Init(ok_png,   ok_hover_png, 220, 250);
 	loadButton  = Button_Init(load_png,   load_hover_png, 220, 300);
+	deleteButton  = Button_Init(delete_png,   delete_hover_png, 220, 400);
 	backButton  = Button_Init(back_png,   back_hover_png, 340, 300);
 	cancelButton = Button_Init(cancel_png, cancel_hover_png, 340, 250);
-        cheatonButton = Button_Init(cheatson_png, cheatson_hover_png, 30,420);
-        cheatoffButton = Button_Init(cheatsoff_png, cheatsoff_hover_png, 30,420);
+    cheatonButton = Button_Init(cheatson_png, cheatson_hover_png, 30,420);
+    cheatoffButton = Button_Init(cheatsoff_png, cheatsoff_hover_png, 30,420);
 	
 	yesButton  = Button_Init(yes_png, yes_hover_png, 220, 250);
 	noButton = Button_Init(no_png, no_hover_png, 340, 250);
@@ -340,13 +345,15 @@ void Hover_Buttons()
 	Button_Hover(&cancelButton, p_x, p_y);
 	Button_Hover(&yesButton,    p_x, p_y);
 	Button_Hover(&noButton,     p_x, p_y);
-        if (ocarinaChoice)
-        {
-            Button_Hover(&cheatonButton,  p_x, p_y);
-        }
-        else Button_Hover(&cheatoffButton,  p_x, p_y);
+	Button_Hover(&deleteButton,     p_x, p_y);
+	if (ocarinaChoice)
+	{
+		Button_Hover(&cheatonButton,  p_x, p_y);
+	}
+	else Button_Hover(&cheatoffButton,  p_x, p_y);
         
 }
+
 
 float change_scale_without_containing(float val, float in_min, float in_max, 
                                       float out_min, float out_max)
@@ -636,6 +643,7 @@ void draw_selected()
 			
 			Button_Paint(&loadButton);
 			Button_Paint(&backButton);
+			Button_Paint(&deleteButton);
 			
 			#ifndef TEST_MODE
 			struct discHdr *header = NULL;
@@ -1162,6 +1170,46 @@ void AddGame(void)
 	Menu_Install();
 }
 
+bool Menu_Delete(void)
+{
+	struct discHdr *header = NULL;
+ 	char gameName[31]; 
+	
+	/* No game list */
+	if (!gameCnt)
+		return false;
+
+	/* Selected game */
+	header = &gameList[gameSelected];
+
+	if(strlen(get_title(header)) < 30) {
+		sprintf(gameName, "%s", get_title(header));
+	}
+	else
+	{
+		strncpy(gameName, get_title(header), 27);
+		gameName[27] = '\0';
+		strncat(gameName, "...", 3);
+	}
+
+	if(WindowPrompt("Do you want to delete:", gameName, &yesButton, &noButton))
+	{
+		if(0 > WBFS_RemoveGame(header->id))
+		{
+			WindowPrompt("Delete Failed.", "Could not delete game.", &okButton, 0);
+		}
+		else
+		{
+			GetEntries();
+			WindowPrompt("Successfully deleted:", gameName, &okButton, 0);
+			return true;
+		}
+	}
+	
+	return false;
+}
+		
+
 bool Menu_Boot(void)
 {
 	#ifndef TEST_MODE
@@ -1590,10 +1638,10 @@ int main( int argc, char **argv ){
 			{
 				AddGame();
 			}
-                        else if(Button_Select(&cheatonButton, p_x, p_y) || Button_Select(&cheatoffButton, p_x, p_y))
-                        {
-                            ocarinaChoice = (ocarinaChoice) ? 0 : 1;
-                        }
+			else if(Button_Select(&cheatonButton, p_x, p_y) || Button_Select(&cheatoffButton, p_x, p_y))
+			{
+				ocarinaChoice = (ocarinaChoice) ? 0 : 1;
+			}
 			else if(Button_Select(&slideButton, p_x, p_y))
 			{
 				dragging = true;
@@ -1644,6 +1692,11 @@ int main( int argc, char **argv ){
 							{
 								return 0;
 							}
+						}
+						else if(Button_Select(&deleteButton, p_x, p_y))
+						{
+							Menu_Delete();
+							selected = false;
 						}
 						else if(Button_Select(&backButton, p_x, p_y))
 						{
