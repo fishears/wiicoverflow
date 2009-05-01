@@ -5,9 +5,11 @@
 #include "GRRLIB.h"
 
 #define BUFFER_SIZE 20
-#define MAX_COVERS  100
+#define MAX_BUFFERED_COVERS  100
 
-pthread_t thread;
+#define MAX_THREADS 5
+
+pthread_t thread[MAX_THREADS];
 
 /*Protect cover count*/
 pthread_mutex_t count_mutex;
@@ -16,37 +18,40 @@ pthread_mutex_t count_mutex;
 pthread_mutex_t queue_mutex;
 
 /*Protect each buffer*/
-pthread_mutex_t buffer_mutex[MAX_COVERS];
+pthread_mutex_t buffer_mutex[MAX_BUFFERED_COVERS];
 	
 /*Protect quit*/
 pthread_mutex_t quit_mutex;
 
 typedef struct COVERQUEUE {
-	bool ready[MAX_COVERS];
-	bool request[MAX_COVERS];
-	u8 requestId[MAX_COVERS][6];
-	bool remove[MAX_COVERS];
+	bool ready[MAX_BUFFERED_COVERS];
+	bool request[MAX_BUFFERED_COVERS];
+	u8 requestId[MAX_BUFFERED_COVERS][6];
+	bool remove[MAX_BUFFERED_COVERS];
 } COVERQUEUE;
 
 COVERQUEUE _cq;
 
 bool _requestQuit;
 
-GRRLIB_texImg _texture_data[MAX_COVERS];
+GRRLIB_texImg _texture_data[MAX_BUFFERED_COVERS];
 
 int _cover_count;
 
-void InitBuffer();
+inline void BUFFER_InitBuffer(int thread_count);
 
-void RequestCover(int index, u8 id[6]);
+inline void BUFFER_RequestCover(int index, u8 id[6]);
 
-bool IsCoverReady(int index);
+inline bool BUFFER_IsCoverReady(int index);
+inline bool BUFFER_IsCoverQueued(int index);
 
-void RemoveCover(int index);
+inline void BUFFER_RemoveCover(int index);
 
-bool LockTexture(int index, GRRLIB_texImg* tex);
-void ReleaseTexture(int index);
+inline bool BUFFER_LockTexture(int index, GRRLIB_texImg* tex);
+inline void BUFFER_ReleaseTexture(int index);
 
-void KillBuffer();
+inline void BUFFER_KillBuffer();
 
-void* process(void *arg);
+inline void BUFFER_ClearCovers();
+
+inline void* process(void *arg);

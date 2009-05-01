@@ -46,6 +46,17 @@
 #define ENTRIES_PER_PAGE	12
 #define MAX_CHARACTERS		30
 
+//---------------------------------------------
+/*Buffering Code [untested]*/
+//#define BUFFER_TEST 1
+#define BUFFER_WINDOW 5
+#define BUFFER_THREAD_COUNT 1
+#include "buffer.h"
+
+
+//---------------------------------------------
+
+
 static char prozent[MAX_CHARACTERS + 16];
 static char timet[MAX_CHARACTERS + 16];
 	
@@ -193,7 +204,9 @@ char* _msg;
 Mtx GXmodelView2D;
 
 u8 ocarinaChoice = 0;
+
 #define MAX_COVERS 19
+
 int array_size = 0;
 GRRLIB_texImg covers[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
 
@@ -208,6 +221,93 @@ char debugMsg[1024];
 GRRLIB_texImg pointer_texture;
 
 void Download_Cover(struct discHdr *header);
+
+#ifdef BUFFER_TEST
+int buffer_window_min = 0;
+int buffer_window_max = 0;
+int oldmin = 0;
+int oldmax = 0;
+
+void DrawBufferedCover(int i, int loc, int angle)
+{
+	GRRLIB_texImg ret;
+	
+	if(BUFFER_LockTexture(i, &ret))
+	{
+		GRRLIB_DrawCoverImg(loc*1.2,ret,angle,1.0,0xFFFFFFFF);
+		BUFFER_ReleaseTexture(i);
+	}
+	else
+	{
+		GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
+	}
+	
+}
+
+void UpdateBufferedImages()
+{
+	int i;
+	
+	buffer_window_min = ((int)shift - BUFFER_WINDOW) + (COVER_COUNT/2);
+	buffer_window_max = ((int)shift + BUFFER_WINDOW) + (COVER_COUNT/2);
+	
+	if(buffer_window_min < 0)
+	{
+		buffer_window_max += abs(buffer_window_min);
+		buffer_window_min = 0;
+	}
+	
+	if(buffer_window_max > COVER_COUNT)
+	{
+		buffer_window_min -= (buffer_window_max - COVER_COUNT);
+		buffer_window_max = COVER_COUNT;
+		if(buffer_window_min < 0)
+			buffer_window_min = 0;
+	}
+	
+	
+	/*Request New Covers*/
+	for(i = buffer_window_min; i < buffer_window_max; i++)
+	{
+		//Is this cover already loaded?
+		if(!BUFFER_IsCoverReady(i))
+		{
+			//Is this cover already queued up?
+			if(!BUFFER_IsCoverQueued(i))
+			{
+				if(i < gameCnt)
+				{
+					//Request this cover
+					struct discHdr *header = &gameList[i];
+			
+					BUFFER_RequestCover(i, header->id);
+				}
+			}
+		}
+	}
+	
+	if(oldmin < buffer_window_min)
+	{
+		for(i = oldmin; i < buffer_window_min; i++)
+		{
+			BUFFER_RemoveCover(i);
+		}
+	}
+	
+	if(oldmax > buffer_window_max)
+	{
+		for(i = buffer_window_max; i < oldmax; i++)
+		{
+			BUFFER_RemoveCover(i);
+		}
+	}
+	
+	oldmin = buffer_window_min;
+	oldmax = buffer_window_max;
+}
+
+
+#endif
 
 void quit()
 {
@@ -355,6 +455,7 @@ void AddCover(GRRLIB_texImg tex)
 
 void ClearCovers()
 {
+	#ifndef BUFFER_TEST
 	int i;
 	for(i = 0; i < array_size; i++)
 	{
@@ -362,6 +463,9 @@ void ClearCovers()
 	}
 	
 	array_size = 0;
+	#else
+	BUFFER_ClearCovers();
+	#endif
 }
 
 void Init_Covers()
@@ -378,6 +482,8 @@ void Init_Covers()
 	float per_game_prog = max_progress/gameCnt;
 	
 	#ifndef TEST_MODE
+	
+	#ifndef BUFFER_TEST
 	for(i = 0; i < gameCnt; i++)
 	{
 		void *imgData;// = (void *)no_cover_png;
@@ -418,6 +524,10 @@ void Init_Covers()
 		progress+=per_game_prog;
 		Paint_Progress(progress);
 	}
+	#else
+	progress+=max_progress;
+	Paint_Progress(progress);
+	#endif
 	
 	#else
 	
@@ -456,6 +566,10 @@ void GRRLIB_Cover(float pos, int texture_id)
 	  scale = pow(pos + 1, -2);
 	  angle = -1 * dir * change_scale(scale, 0, 1, 90, 0);
 	
+	  #ifdef BUFFER_TEST
+	  DrawBufferedCover(gameSelected, loc, angle);
+	  #else
+	
 	  if(texture_id != -1 && texture_id < array_size)
 	  {
 			GRRLIB_DrawCoverImg(loc*1.2,covers[texture_id],angle,1.0,0xFFFFFFFF);
@@ -464,6 +578,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 	  {
 			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
 	  }
+	  #endif
 }
 
 void draw_selected()
@@ -560,6 +675,9 @@ void draw_selected()
 	  }
 	  else
 	  {
+	    #ifdef BUFFER_TEST
+		DrawBufferedCover(gameSelected, loc, angle);
+		#else
 	    if(gameSelected < array_size)
 		{
 			GRRLIB_DrawCoverImg(loc*1.2,covers[gameSelected],angle,1.0,0xFFFFFFFF);
@@ -568,6 +686,7 @@ void draw_selected()
 		{
 			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
 		}
+		#endif
 	  }
 }
 
@@ -1388,6 +1507,11 @@ int main( int argc, char **argv ){
 	Init_Covers();
 	#endif
 	
+	#ifdef BUFFER_TEST
+	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
+	UpdateBufferedImages();
+	#endif
+	
 	Init_Buttons();
 	
 	progress += 0.5;
@@ -1586,6 +1710,11 @@ int main( int argc, char **argv ){
 					
 			}
 		}
+		
+		#ifdef BUFFER_TEST
+		UpdateBufferedImages();
+		#endif
+		
 		draw_covers();
 
 
@@ -1597,15 +1726,15 @@ int main( int argc, char **argv ){
 		{
 			DrawSlider();
 			Button_Paint(&addButton);
-                        if (ocarinaChoice)
-                        {
-                            Button_Paint(&cheatonButton);
-                        }
-                        else Button_Paint(&cheatoffButton);
+			if (ocarinaChoice)
+			{
+				Button_Paint(&cheatonButton);
+			}
+			else Button_Paint(&cheatoffButton);
                         
 		}
 
-	GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
         GRRLIB_Render();
 
 	}
