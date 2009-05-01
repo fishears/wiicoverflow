@@ -1,9 +1,11 @@
 V3.0
 +Added Auto Download of missing covers/disc images (Scognito)
+  ++Temporarily not turned on.
 +Added Install Game GUI
 +Added Working Scroll Bar
 +Added Debug information (Scognito)
 +Fixed Stretching of Covers
++Added Threaded Image buffer to speed up init time and handle more images
 
 V2.0
 +Add Mouse Pointer for quick scrolling through games by clicking covers
