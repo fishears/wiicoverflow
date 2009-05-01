@@ -261,7 +261,7 @@ s32 Disc_BootPartition(u64 offset)
 
 	/* Set time */
 	__Disc_SetTime();
-	
+
 	/* OCARINA STUFF - FISHEARS*/
 	if (ocarinaChoice)
 	{

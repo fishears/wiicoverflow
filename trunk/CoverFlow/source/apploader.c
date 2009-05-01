@@ -246,8 +246,8 @@ s32 Apploader_Run(entry_point *entry)
 	/* Initialize apploader */
 	appldr_init(__noprint);
 
-	if (ocarinaChoice)
-    {
+//	if (ocarinaChoice)
+//    {
 		/*HOOKS STUFF - FISHEARS*/
 		memset((void*)0x80001800,0,kenobiwii_size);
 		memcpy((void*)0x80001800,kenobiwii,kenobiwii_size);
@@ -255,7 +255,7 @@ s32 Apploader_Run(entry_point *entry)
 		hooktype = 1;
 		memcpy((void*)0x80001800, (char*)0x80000000, 6);	// For WiiRD
 		/*HOOKS STUFF - FISHEARS*/
-	}
+//	}
 	for (;;) {
 		void *dst = NULL;
 		s32   len = 0, offset = 0;
