@@ -86,25 +86,7 @@ float SCROLL_SPEED = 0.050;
 bool firstTimeDownload = true;
 bool donotdownload = false;
 bool imageNotFound = false;
-/*
-extern const u8		RC8P7D_png[];
-extern const u32	RC8P7D_png_size;
 
-extern const u8		R2AE7D_png[];
-extern const u32	R2AE7D_png_size;
-
-extern const u8		R2DEAP_png[];
-extern const u32	R2DEAP_png_size;
-
-extern const u8		R2DEEB_png[];
-extern const u32	R2DEEB_png_size;
-
-extern const u8		R2FE5G_png[];
-extern const u32	R2FE5G_png_size;
-
-extern const u8		R2HE41_png[];
-extern const u32	R2HE41_png_size;
-*/
 extern const u8		no_cover_png[];
 extern const u32	no_cover_png_size;
 
@@ -119,6 +101,12 @@ extern const u32	select_menu_png_size;
 
 extern const u8     font1_png[];
 extern const u32    font1_png_size;
+
+extern const u8     BMfont5_png[];
+extern const u32    BMfont5_png_size;
+
+//extern const u8     helvetica_font_png[];
+//extern const u32    helvetica_font_png_size;
 
 extern const u8     loading_main_png[];
 extern const u32    loading_main_png_size;
@@ -153,6 +141,7 @@ GRRLIB_texImg current_cover_texture;
 GRRLIB_texImg select_menu_texture;
 
 GRRLIB_texImg text_font1;
+GRRLIB_texImg helvetica;
 
 GRRLIB_texImg loader_main_texture;
 
@@ -164,6 +153,7 @@ GRRLIB_texImg slide_texture;
 GRRLIB_texImg slide_bar_texture;
 
 GRRLIB_texImg usb_error_texture;
+GRRLIB_texImg tex_BMfont5;
 
 /*--------------------------------------
   Button Textures
@@ -181,7 +171,7 @@ Button addButton;
 
 Mtx GXmodelView2D;
 
-#define MAX_COVERS 20
+#define MAX_COVERS 19
 int array_size = 0;
 GRRLIB_texImg covers[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
 
@@ -319,7 +309,11 @@ void Init_Covers()
 	slide_texture = GRRLIB_LoadTexture(slide_png);
 	slide_bar_texture = GRRLIB_LoadTexture(slide_bar_png);
 	
+    GRRLIB_InitTileSet(&helvetica, 22, 40, 0);
     GRRLIB_InitTileSet(&text_font1, 32, 36, 32);
+	
+    tex_BMfont5 = GRRLIB_LoadTexture(BMfont5_png);
+    GRRLIB_InitTileSet(&tex_BMfont5, 8, 16, 0);
 	
 	progress+=0.05;
 	Paint_Progress(progress);
@@ -527,25 +521,25 @@ void draw_game_title(int index)
 			struct discHdr *header = NULL;
 			header = &gameList[index];
 			
-			char name[17];
+			//char name[17];
 			
-			for(i = 0; i < 16; i++)
-				name[i] = toupper(header->title[i]);
+			//for(i = 0; i < 16; i++)
+			//	name[i] = header->toupper(header->title[i]);
 				
-			name[16] = 0;
+			//name[16] = 0;
 			
-			float tsize = .5;
+			float tsize = 1;
 
-			len = strlen(name);
+			len = strlen(header->title);
 			
-			int offset = (len*10);
+			int offset = (len*5);
 			
 			if(offset > 240) offset = 240;
 			
-            GRRLIB_Printf(340 - offset, 400, text_font1, 0XFFFFFF40, tsize, "%s", name);
+            GRRLIB_Printf(340 - offset, 400, tex_BMfont5, 0xFFFFFFFF, tsize, "%s", header->title);
 				
 	}
-
+				
 }
 
 void draw_covers()
@@ -709,6 +703,7 @@ void DrawSlider(void)
 	
 	
 }
+
 int DiscWait()
 {
     u32 cover = 0;
