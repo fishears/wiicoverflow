@@ -558,8 +558,10 @@ void Settings_Menu(void)
 			}
 			
 			else if(Button_Select(&downloadButton, pointer.p_x, pointer.p_y)){
-				if(WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
-				batchDownloadCover();
+				if(WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton)){
+					batchDownloadCover();
+					//Init_Covers();
+				}
 			}
 		}
 		
@@ -1161,7 +1163,7 @@ int main( int argc, char **argv ){
 	Paint_Progress(progress,self.debugMsg);
 	
 	free(gradient_texture.data);
-	free(loader_main_texture.data);
+	//free(loader_main_texture.data);
 	free(progress_texture.data);
 	free(usb_error_texture.data);
 	
@@ -1197,11 +1199,12 @@ int main( int argc, char **argv ){
 
 		Hover_Buttons();
 		
+		/*
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1){
 			if(WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
 				batchDownloadCover();
 		}
-		
+		*/
 		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
