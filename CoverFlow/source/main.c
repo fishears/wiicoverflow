@@ -23,7 +23,22 @@ extern const u8     menu_bg_png[];
 
 static char prozent[MAX_CHARACTERS + 16];
 static char timet[MAX_CHARACTERS + 16];
-	
+
+// Language selection config
+u32 langsel = 0;
+char languages[11][22] =
+{{"Console Default"},
+{"   Japanese"},
+{"    English"},
+{"    German"},
+{"    French"},
+{"    Spanish"},
+{"    Italian"},
+{"     Dutch"},
+{"   S. Chinese"},
+{"   T. Chinese"},
+{"    Korean"}};
+
 /* Gamelist buffer */
 static struct discHdr *gameList = NULL;
 
@@ -756,6 +771,28 @@ void Settings_Menu(void)
 			{
 				ocarinaChoice = (ocarinaChoice) ? 0 : 1;
 			}
+                        else if(Button_Select(&langdownButton, self.p_x, self.p_y))
+                        {
+                            if(langsel > 0)
+                            {
+                                langsel --;
+                            }
+                            else
+                            {
+                                langsel = 10;
+                            }
+                        }
+                        else if(Button_Select(&langupButton, self.p_x, self.p_y))
+                        {
+                            if(langsel <10)
+                            {
+                                langsel ++;
+                            }
+                            else
+                            {
+                            langsel = 0;
+                            }
+                        }
 		}
 		
 		Hover_Buttons();
@@ -764,11 +801,16 @@ void Settings_Menu(void)
 		//GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
-        GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
+                GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
 		
 		Button_Paint(&settingsButton);
+                Button_Paint(&langupButton);
+                Button_Paint(&langdownButton);
 			
-        GRRLIB_Printf(145, 103, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina");
+                GRRLIB_Printf(145, 103, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina enabled?:");
+
+                GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Language:");
+                GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[langsel]);
 		/*Draw Menu*/
 		if (ocarinaChoice)
 		{

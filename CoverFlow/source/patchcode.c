@@ -28,6 +28,7 @@
 #include "patchcode.h"
 #include "fwrite_patch.h"
 
+extern u32 langsel;
 extern void patchhook(u32 address, u32 len);
 extern void patchhook2(u32 address, u32 len);
 extern void patchhook3(u32 address, u32 len);
@@ -310,6 +311,53 @@ void langpatcher(void *addr, u32 len)
 	
 	void *addr_start = addr;
 	void *addr_end = addr+len;
+
+        switch(langsel)
+                {
+                        case 0:
+                                configbytes[0] = 0xCD;
+                        break;
+
+                        case 1:
+                                configbytes[0] = 0x00;
+                        break;
+
+                        case 2:
+                                configbytes[0] = 0x01;
+                        break;
+
+                        case 3:
+                                configbytes[0] = 0x02;
+                        break;
+
+                        case 4:
+                                configbytes[0] = 0x03;
+                        break;
+
+                        case 5:
+                                configbytes[0] = 0x04;
+                        break;
+
+                        case 6:
+                                configbytes[0] = 0x05;
+                        break;
+
+                        case 7:
+                                configbytes[0] = 0x06;
+                        break;
+
+                        case 8:
+                                configbytes[0] = 0x07;
+                        break;
+
+                        case 9:
+                                configbytes[0] = 0x08;
+                        break;
+
+                        case 10:
+                                configbytes[0] = 0x09;
+                        break;
+                }
 
 	while(addr_start < addr_end)
 	{
