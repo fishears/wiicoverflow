@@ -577,7 +577,7 @@ void Settings_Menu(void)
 		Button_Paint(&langupButton);
 		Button_Paint(&langdownButton);
 	
-		GRRLIB_Printf(145, 103, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina enabled?:");
+		GRRLIB_Printf(145, 103, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina:");
 
 		GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Language:");
 		GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[langsel]);
