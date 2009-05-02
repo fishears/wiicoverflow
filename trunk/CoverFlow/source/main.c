@@ -529,28 +529,32 @@ void Settings_Menu(void)
 			{
 				ocarinaChoice = (ocarinaChoice) ? 0 : 1;
 			}
-                        else if(Button_Select(&langdownButton, self.p_x, self.p_y))
-                        {
-                            if(langsel > 0)
-                            {
-                                langsel --;
-                            }
-                            else
-                            {
-                                langsel = 10;
-                            }
-                        }
-                        else if(Button_Select(&langupButton, self.p_x, self.p_y))
-                        {
-                            if(langsel <10)
-                            {
-                                langsel ++;
-                            }
-                            else
-                            {
-                            langsel = 0;
-                            }
-                        }
+			else if(Button_Select(&toggleOnButton, pointer.p_x, pointer.p_y) || Button_Select(&toggleOffButton, pointer.p_x, pointer.p_y))
+			{
+				dummy = (dummy) ? 0 : 1;
+			}
+			else if(Button_Select(&langdownButton, pointer.p_x, pointer.p_y))
+			{
+				if(langsel > 0)
+				{
+					langsel --;
+				}
+				else
+				{
+					langsel = 10;
+				}
+			}
+			else if(Button_Select(&langupButton, pointer.p_x, pointer.p_y))
+			{
+				if(langsel <10)
+				{
+					langsel ++;
+				}
+				else
+				{
+				langsel = 0;
+				}
+			}
 		}
 		
 		Hover_Buttons();
@@ -559,17 +563,18 @@ void Settings_Menu(void)
 		//GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
-                GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
+        GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
 		
 		Button_Paint(&settingsButton);
-                Button_Paint(&langupButton);
-                Button_Paint(&langdownButton);
-			
-                GRRLIB_Printf(145, 103, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina enabled?:");
+		Button_Paint(&langupButton);
+		Button_Paint(&langdownButton);
+	
+		GRRLIB_Printf(145, 103, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina enabled?:");
 
-                GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Language:");
-                GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[langsel]);
-		GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Dummy");
+		GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Language:");
+		GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[langsel]);
+		GRRLIB_Printf(145, 183, tex_BMfont5, 0xFFFFFFFF, 1, "W la gnocca (dummy test)");
+		
 		/*Draw Menu*/
 		if (ocarinaChoice)
 		{
@@ -823,6 +828,7 @@ void saveFile(char* imgPath, struct block file){
 	}
 }
 
+
 void Download_Cover(struct discHdr *header)
 {
 	char imgPath[100];
@@ -852,15 +858,7 @@ void Download_Cover(struct discHdr *header)
 
 		firstTimeDownload = false;
 	}
-	
-	/*
-	GRRLIB_Render();
-	usleep(50000);
-	GRRLIB_Exit(); 
-    free(tex_BMfont5.data);
-	exit (0);
-	*/
-		
+
 	if(inetOk) {
 		//printf("\n    Network connection established.");
 		/*try to download image */
@@ -981,6 +979,8 @@ void Download_Cover(struct discHdr *header)
 } /* end download */
 
 
+void batchDownloadCover(){
+}
 
 void initVars(){
 
