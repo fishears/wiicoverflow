@@ -57,6 +57,7 @@ u8 ocarinaChoice = 0;
 
 
 void Download_Cover(struct discHdr *header);
+void batchDownloadCover();
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
 
 
@@ -555,6 +556,11 @@ void Settings_Menu(void)
 				langsel = 0;
 				}
 			}
+			
+			else if(Button_Select(&downloadButton, pointer.p_x, pointer.p_y)){
+				if(WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
+				batchDownloadCover();
+			}
 		}
 		
 		Hover_Buttons();
@@ -573,7 +579,8 @@ void Settings_Menu(void)
 
 		GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Language:");
 		GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[langsel]);
-		GRRLIB_Printf(145, 183, tex_BMfont5, 0xFFFFFFFF, 1, "W la gnocca (dummy test)");
+		GRRLIB_Printf(145, 193, tex_BMfont5, 0xFFFFFFFF, 1, "W la gnocca (dummy test)");
+		GRRLIB_Printf(145, 243, tex_BMfont5, 0xFFFFFFFF, 1, "Download missing covers");
 		
 		/*Draw Menu*/
 		if (ocarinaChoice)
@@ -587,6 +594,8 @@ void Settings_Menu(void)
 			Button_Paint(&toggleOffButton);
 		}
 		else Button_Paint(&toggleOnButton);
+		
+		Button_Paint(&downloadButton);
 		
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		
@@ -980,6 +989,23 @@ void Download_Cover(struct discHdr *header)
 
 
 void batchDownloadCover(){
+
+	int i;
+	
+	for(i = 0; i < self.gameCnt; i++)
+	{
+		struct discHdr *header = &gameList[i];
+		
+		if(self.array_size < MAX_COVERS)
+		{
+			sprintf(self.debugMsg, "Checking next cover...%s", header->id);
+			Paint_Progress(1, self.debugMsg);
+			Download_Cover(header);
+			//sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
+		}
+	}
+	
+	WindowPrompt ("Operation finished!","Press A to continue", &okButton, 0);
 }
 
 void initVars(){
@@ -1171,11 +1197,11 @@ int main( int argc, char **argv ){
 
 		Hover_Buttons();
 		
-		/*
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1){
-			WindowPrompt ("Titolo","msg", &okButton, 0);
+			if(WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
+				batchDownloadCover();
 		}
-		*/
+		
 		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
