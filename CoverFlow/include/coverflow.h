@@ -26,8 +26,8 @@
 #include "buffer.h"
 #include "gfx.h"
  
-#define COVER_WIDTH        160
-#define COVER_HEIGHT       224
+#define COVER_WIDTH    160
+#define COVER_HEIGHT   224
 #define DEFAULT_FIFO_SIZE  (256*1024)
 //#define TEST_MODE 1
 #define DEBUG 1
@@ -35,22 +35,42 @@
 /* Constants */
 #define ENTRIES_PER_PAGE 	 12
 #define MAX_CHARACTERS	 	 30
-#define BUFFER_TEST          1
+//#define BUFFER_TEST          1
 #define BUFFER_WINDOW        9
 #define BUFFER_THREAD_COUNT  1
-#define USBLOADER_PATH		 "SD:/usb-loader"
+#define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           19
 #define DRAW_WINDOW          7
 
 
+extern const u8 no_cover_png[];
+extern const u8 back_cover_png[];
+extern const u8 no_disc_png[];
+extern const u8 font1_png[];
+extern const u8 BMfont5_png[];
+extern const u8 loading_main_png[];
+extern const u8 progress_png[];
+extern const u8 gradient_bg_png[];
+extern const u8 slide_bar_png[];
+extern const u8 usb_error_png[];
+extern const u8 generic_point_png[];
+extern const u8 menu_bg_png[];
+
+GRRLIB_texImg covers[MAX_COVERS];
+GRRLIB_texImg pointer_texture;
+
 int COVER_COUNT;
-//static struct discHdr *gameList = NULL;
-GRRLIB_texImg covers[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
+WPADData *wd;
 
 typedef struct{
-	char debugMsg[1024];
 	float p_x;
     float p_y;
+	float p_ang;
+} s_pointer;
+
+typedef struct{
+
+	char debugMsg[1024];
 	float shift;
     float select_shift;
     s32 gameCnt;
@@ -58,8 +78,11 @@ typedef struct{
 	s32 gameStart;
 	bool selected;
 	float animate_flip;
+	float animate_rotate;
 	int array_size;
+	
 } s_self;
+
 
 void initVars();
 
