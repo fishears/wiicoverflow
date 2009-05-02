@@ -308,7 +308,7 @@ s32 Apploader_Run(entry_point *entry)
 			vidolpatcher(dst,len);
 		
 		/*LANGUAGE PATCH - FISHEARS*/
-		//langpatcher(dst,len);
+		langpatcher(dst,len);
 
 		DCFlushRange(dst, len);
     }

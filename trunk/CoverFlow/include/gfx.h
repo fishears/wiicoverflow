@@ -28,6 +28,10 @@ extern const u8 delete_png[];
 extern const u8 delete_hover_png[];
 extern const u8 settings_png[];
 extern const u8 settings_hover_png[];
+extern const u8 plus_button_png[];
+extern const u8 plus_button_hover_png[];
+extern const u8 minus_button_png[];
+extern const u8 minus_button_hover_png[];
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg back_texture;
@@ -56,6 +60,8 @@ Button yesButton;
 Button noButton;
 Button deleteButton;
 Button settingsButton;
+Button langupButton;
+Button langdownButton;
 
 void DrawBufferedCover(int i, float loc, float angle);
 void Paint_Progress(float v, char* msg);
