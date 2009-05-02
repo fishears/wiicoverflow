@@ -8,6 +8,18 @@
 
 //---------------------------------------------
 
+extern const u8		no_cover_png[];
+extern const u8		back_cover_png[];
+extern const u8		no_disc_png[];
+extern const u8     font1_png[];
+extern const u8     BMfont5_png[];
+extern const u8     loading_main_png[];
+extern const u8     progress_png[];
+extern const u8     gradient_bg_png[];
+extern const u8     slide_bar_png[];
+extern const u8     usb_error_png[];
+extern const u8     generic_point_png[];
+extern const u8     menu_bg_png[];
 
 static char prozent[MAX_CHARACTERS + 16];
 static char timet[MAX_CHARACTERS + 16];
@@ -15,32 +27,23 @@ static char timet[MAX_CHARACTERS + 16];
 /* Gamelist buffer */
 static struct discHdr *gameList = NULL;
 
-
 static wbfs_t *hdd = NULL;
-
-/* Gamelist variables */
-static s32 gameCnt = 0, gameSelected = 0, gameStart = 0;
 
 /* WBFS device */
 static s32 my_wbfsDev = WBFS_DEVICE_USB;
 
-float shift = 0.0;
-float select_shift = 0.0;
-
-bool selected = false;
-
 float progress = 0.0;
 
-int DRAW_WINDOW = 7;
+s_self self;
 
 #ifdef TEST_MODE
-int COVER_COUNT = 29;
+COVER_COUNT = 29;
 #else
-int COVER_COUNT = 0;
+COVER_COUNT = 0;
 #endif
 
 float animate_rotate = 0.0;
-float animate_flip = 0.0;
+//float animate_flip = 0.0;
 float FLIP_SPEED   = 0.016;
 
 float SCROLL_SPEED = 0.050;
@@ -49,198 +52,31 @@ bool firstTimeDownload = true;
 bool inetOk = false;
 bool imageNotFound = false;
 
-extern const u8		no_cover_png[];
-
-extern const u8		back_cover_png[];
-
-extern const u8		no_disc_png[];
-
-extern const u8     font1_png[];
-
-extern const u8     BMfont5_png[];
-
-extern const u8     loading_main_png[];
-
-extern const u8     progress_png[];
-
-extern const u8     gradient_bg_png[];
-
-extern const u8     slide_bar_png[];
-
-extern const u8     usb_error_png[];
-
-extern const u8     generic_point_png[];
-
-extern const u8     menu_bg_png[];
-
-GRRLIB_texImg cover_texture;
-GRRLIB_texImg back_texture;
-
-GRRLIB_texImg empty_texture;
-
-GRRLIB_texImg no_disc_texture;
-GRRLIB_texImg current_cover_texture;
-
-GRRLIB_texImg text_font1;
-GRRLIB_texImg helvetica;
-
-GRRLIB_texImg loader_main_texture;
-
-GRRLIB_texImg progress_texture;
-
-GRRLIB_texImg gradient_texture;
-GRRLIB_texImg menu_bg_texture;
-
-GRRLIB_texImg slide_bar_texture;
-
-GRRLIB_texImg usb_error_texture;
-GRRLIB_texImg tex_BMfont5;
-
-/*--------------------------------------
-  Button Textures
----------------------------------------*/
-#include "button.h"
-
-extern const u8     add_button_png[];
-extern const u8     add_button_hover_png[];
-
-extern const u8     slide_png[];
-extern const u8     slide_hover_png[];
-
-extern const u8     load_png[];
-extern const u8     load_hover_png[];
-
-extern const u8     back_png[];
-extern const u8     back_hover_png[];
-
-extern const u8     ok_png[];
-extern const u8     ok_hover_png[];
-
-extern const u8     cancel_png[];
-extern const u8     cancel_hover_png[];
-
-extern const u8     yes_png[];
-extern const u8     yes_hover_png[];
-
-extern const u8     no_png[];
-extern const u8     no_hover_png[];
-
-extern const u8     cheatson_png[];
-extern const u8     cheatson_hover_png[];
-extern const u8     cheatsoff_png[];
-extern const u8     cheatsoff_hover_png[];
-
-extern const u8     delete_png[];
-extern const u8     delete_hover_png[];
-
-extern const u8     settings_png[];
-extern const u8     settings_hover_png[];
-
-Button addButton;
-Button slideButton;
-Button okButton;
-Button backButton;
-Button cancelButton;
-Button loadButton;
-Button cheatonButton;
-Button cheatoffButton;
-Button yesButton;
-Button noButton;
-Button deleteButton;
-Button settingsButton;
-
 char* _title;
 char* _msg;
 
 /*--------------------------------------*/
 
-#define USBLOADER_PATH		"SD:/usb-loader"
+
 
 Mtx GXmodelView2D;
-
 u8 ocarinaChoice = 0;
-
-#define MAX_COVERS 19
-
-int array_size = 0;
-GRRLIB_texImg covers[MAX_COVERS];      //std::vector<GRRLIB_texImg> covers;
-
+//int self.array_size = 0;
 float p_ang = 0;
-float p_x   = 0;
-float p_y   = 0;
-
 WPADData *wd;
-
-
-char debugMsg[1024];
 GRRLIB_texImg pointer_texture;
 
 void Download_Cover(struct discHdr *header);
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
 
 
-float change_scale_without_containing(float val, float in_min, float in_max, 
-                                      float out_min, float out_max)
-{
-  float percent = 0;
-  if (in_min == in_max) {
-    return 0;
-  }
-  percent = (val - in_min) / (in_max - in_min);
-  return (out_min + percent * (out_max - out_min));
-}
 
-float change_scale(float val, float in_min, float in_max, 
-                   float out_min, float out_max)
-{
-  if(val > in_max)
-  {
-	val = in_max;
-  }
-  
-  if(val < in_min)
-  {
-     val = in_min;
-  }
-  
-  return change_scale_without_containing(val, in_min, in_max, out_min, out_max);
-}
 
 #ifdef BUFFER_TEST
 int buffer_window_min = 0;
 int buffer_window_max = 0;
 int oldmin = 0;
 int oldmax = 0;
-
-void DrawBufferedCover(int i, float loc, float angle)
-{
-	if(i < MAX_BUFFERED_COVERS || i >= 0)
-	{
-		if(BUFFER_IsCoverReady(i))
-		{
-			pthread_mutex_lock(&buffer_mutex[i]);
-			if(_texture_data[i].data)
-			{
-				GRRLIB_DrawCoverImg(loc*1.2,_texture_data[i],angle,1.0,0xFFFFFFFF);
-			}
-			else
-			{
-				GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
-			}
-			pthread_mutex_unlock(&buffer_mutex[i]);
-		}
-		else
-		{
-			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
-		}	
-	}
-	else
-	{
-		GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
-	}	
-
-}
-
 
 void UpdateBufferedImages()
 {
@@ -252,7 +88,7 @@ void UpdateBufferedImages()
 		index = i+(COVER_COUNT/2.0);
 		
 		/*Some logic to avoid drawing everything*/
-		if(abs(shift+i) < BUFFER_WINDOW)
+		if(abs(self.shift+i) < BUFFER_WINDOW)
 		{
 			//Is this cover already loaded?
 			if(!BUFFER_IsCoverReady(index))
@@ -261,7 +97,7 @@ void UpdateBufferedImages()
 				if(!BUFFER_IsCoverQueued(index))
 				{
 					//Request this cover
-					if(index < gameCnt)
+					if(index < self.gameCnt)
 					{
 						struct discHdr *header = &gameList[index];
 		
@@ -286,71 +122,27 @@ void quit()
 	exit(0);
 }
 
-void Init_Buttons()
+void draw_game_title(int index)
 {
-
-    addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
-	slideButton = Button_Init(slide_png,  slide_hover_png, 580, 400);
-	okButton    = Button_Init(ok_png,   ok_hover_png, 220, 250);
-	loadButton  = Button_Init(load_png,   load_hover_png, 220, 300);
-	deleteButton  = Button_Init(delete_png,   delete_hover_png, 220, 400);
-	backButton  = Button_Init(back_png,   back_hover_png, 340, 300);
-	cancelButton = Button_Init(cancel_png, cancel_hover_png, 340, 250);
-	
-    cheatonButton = Button_Init(cheatson_png, cheatson_hover_png, 220,100);
-    cheatoffButton = Button_Init(cheatsoff_png, cheatsoff_hover_png,220,100);
-	
-	yesButton  = Button_Init(yes_png, yes_hover_png, 220, 250);
-	noButton   = Button_Init(no_png, no_hover_png, 340, 250);
-	
-	settingsButton = Button_Init(settings_png, settings_hover_png, 30, 420);
-}
-
-void Hover_Buttons()
-{
-	Button_Hover(&addButton,    p_x, p_y);
-	Button_Hover(&okButton,     p_x, p_y);
-	Button_Hover(&slideButton,  p_x, p_y);
-	Button_Hover(&loadButton,   p_x, p_y);
-	Button_Hover(&backButton,   p_x, p_y);
-	Button_Hover(&cancelButton, p_x, p_y);
-	Button_Hover(&yesButton,    p_x, p_y);
-	Button_Hover(&noButton,     p_x, p_y);
-	Button_Hover(&deleteButton,     p_x, p_y);
-	
-	Button_Hover(&settingsButton,     p_x, p_y);
-	
-	if (ocarinaChoice)
+	if(index != -1)
 	{
-		Button_Hover(&cheatonButton,  p_x, p_y);
+		float tsize = 1;
+		int len = 0;
+		struct discHdr *header = NULL;
+		
+		//WindowPrompt ("Msg 2", "pre1" ,&okButton,&cancelButton);
+		header = &gameList[index];
+		//WindowPrompt ("Msg 2", header->title ,&okButton,&cancelButton);
+		
+		len = strlen(header->title);
+		
+		int offset = (len*5);
+		
+		if(offset > 240)
+			offset = 240;
+			
+		GRRLIB_Printf(340 - offset, 400, tex_BMfont5, 0xFFFFFFFF, tsize, "%s", header->title);
 	}
-	else Button_Hover(&cheatoffButton,  p_x, p_y);
-        
-}
-
-
-
-void Paint_Progress(float v)
-{
-	int count = (int)(v*10);
-	
-	if(count > 40)
-		count = 40;
-	int i;
-	
-	GRRLIB_DrawImg(0, 0, gradient_texture, 0, 1, 1, 0xFFFFFFFF);
-	
-	for(i = 0; i < count; i++)
-	{
-		GRRLIB_DrawImg(165+12*i, 231, progress_texture, 0, 1, 1, 0xFFFFFFFF);
-	}
-
-	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
-	#ifdef DEBUG
-	GRRLIB_Printf(160, 255, tex_BMfont5,  0x444444FF, 1, "%s", debugMsg);
-    #endif
-    
-	GRRLIB_Render();
 }
 
 void LoadCurrentCover(int id)
@@ -388,14 +180,14 @@ void LoadCurrentCover(int id)
 
 void AddCover(GRRLIB_texImg tex)
 {
-	if(array_size < MAX_COVERS)
+	if(self.array_size < MAX_COVERS)
 	{
-		covers[array_size] = tex;
-		array_size++;
+		covers[self.array_size] = tex;
+		self.array_size++;
 	}
 	/*
-	array_size = array_size + 1;
-	covers = (GRRLIB_texImg*)realloc(covers, (array_size * sizeof(GRRLIB_texImg)));
+	self.array_size = self.array_size + 1;
+	covers = (GRRLIB_texImg*)realloc(covers, (self.array_size * sizeof(GRRLIB_texImg)));
 
 	if (covers == NULL)
 	{
@@ -403,7 +195,7 @@ void AddCover(GRRLIB_texImg tex)
 	   return;
 	}
 
-    covers[array_size - 1] = tex;
+    covers[self.array_size - 1] = tex;
 	*/
 }
 
@@ -411,12 +203,12 @@ void ClearCovers()
 {
 	#ifndef BUFFER_TEST
 	int i;
-	for(i = 0; i < array_size; i++)
+	for(i = 0; i < self.array_size; i++)
 	{
-		free(covers[array_size].data);
+		free(covers[self.array_size].data);
 	}
 	
-	array_size = 0;
+	self.array_size = 0;
 	#else
 	BUFFER_ClearCovers();
 	#endif
@@ -424,21 +216,25 @@ void ClearCovers()
 
 void Init_Covers()
 {
-	int i;
+	//int i;
 	
 	ClearCovers();
 	
 	progress+=0.05;
-	Paint_Progress(progress);
+	Paint_Progress(progress, NULL);
 	
-	float max_progress = 1.7;
+	//float max_progress = 1.7;
 	
-	float per_game_prog = max_progress/gameCnt;
+	//float per_game_prog = max_progress/self.gameCnt;
 	
 	#ifndef TEST_MODE
 	
 	#ifndef BUFFER_TEST
-	for(i = 0; i < gameCnt; i++)
+	int i;
+	float max_progress = 1.7;
+	float per_game_prog = max_progress/self.gameCnt;
+	
+	for(i = 0; i < self.gameCnt; i++)
 	{
 		void *imgData;// = (void *)no_cover_png;
 
@@ -447,10 +243,10 @@ void Init_Covers()
 
 		struct discHdr *header = &gameList[i];
 		
-		if(array_size < MAX_COVERS)
+		if(self.array_size < MAX_COVERS)
 		{
-			sprintf(debugMsg, "Checking next cover...%s", header->id);
-			Paint_Progress(1);
+			sprintf(self.debugMsg, "Checking next cover...%s", header->id);
+			Paint_Progress(1, self.debugMsg);
 			Download_Cover(header);
 			sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
 
@@ -476,7 +272,7 @@ void Init_Covers()
 			}
 		}
 		progress+=per_game_prog;
-		Paint_Progress(progress);
+		Paint_Progress(progress, self.debugMsg);
 	}
 	#endif
 	
@@ -488,77 +284,39 @@ void Init_Covers()
 	{
 		AddCover( GRRLIB_LoadTexture(no_cover_png) );
 		progress+=per_game_prog;
-		Paint_Progress(progress);
+		Paint_Progress(progress, NULL);
 	}
 	
 	#endif
 }
 
-void GRRLIB_Cover(float pos, int texture_id)
-{
-		if(pos == 0)
-			gameSelected = texture_id;
-
-	  if((selected || animate_flip > 0) && pos == 0)
-	  {
-		return;
-	  }
-
-	  static const float SPACING = 2.8;
-	  float dir = 1;
-	  float loc, scale, angle;
-
-	  if (pos < 0) {
-		dir *= -1;
-		pos *= -1;
-	  }
-	  
-	  loc = SPACING * dir * (pow(pos + 1, -1) - 1);
-	  scale = pow(pos + 1, -2);
-	  angle = -1 * dir * change_scale(scale, 0, 1, 90, 0);
-	
-	  #ifdef BUFFER_TEST
-	  DrawBufferedCover(texture_id, loc, angle);
-	  #else
-	
-	  if(texture_id != -1 && texture_id < array_size)
-	  {
-			GRRLIB_DrawCoverImg(loc*1.2,covers[texture_id],angle,1.0,0xFFFFFFFF);
-	  }
-	  else
-	  {
-			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
-	  }
-	  #endif
-}
-
 void draw_selected()
 {
 	
-	if(selected && animate_flip < 1.0)
+	if(self.selected && self.animate_flip < 1.0)
 	{
-		animate_flip += FLIP_SPEED;
-		if(animate_flip > 1.0)
-			animate_flip = 1.0;
+		self.animate_flip += FLIP_SPEED;
+		if(self.animate_flip > 1.0)
+			self.animate_flip = 1.0;
 			
-		if(animate_flip > 0.3 && animate_flip < 0.7)
+		if(self.animate_flip > 0.3 && self.animate_flip < 0.7)
 		{
-			animate_flip = 0.7;
+			self.animate_flip = 0.7;
 		}
 			
 	}
-	else if(!selected)
+	else if(!self.selected)
 	{
-		animate_flip -= FLIP_SPEED;
+		self.animate_flip -= FLIP_SPEED;
 		
-		if(animate_flip > 0.3 && animate_flip < 0.7)
+		if(self.animate_flip > 0.3 && self.animate_flip < 0.7)
 		{
-			animate_flip = 0.3;
+			self.animate_flip = 0.3;
 		}
 		
-		if(animate_flip < 0)
+		if(self.animate_flip < 0)
 		{
-			animate_flip = 0;
+			self.animate_flip = 0;
 		}
 	}
 	
@@ -568,7 +326,7 @@ void draw_selected()
 	  float loc, scale, angle;
 	  
 	  loc = SPACING * dir * (pow(1, -1) - 1);
-	  scale = change_scale(animate_flip, 0, 1, 0, 360);
+	  scale = change_scale(self.animate_flip, 0, 1, 0, 360);
 	  angle = -1 * dir * scale;
 	
 	  if(scale >= 180)
@@ -591,7 +349,7 @@ void draw_selected()
 			
 			#ifndef TEST_MODE
 			struct discHdr *header = NULL;
-			header = &gameList[gameSelected];
+			header = &gameList[self.gameSelected];
 			f32 size = 0.0;
 
 			/* Get game size */
@@ -628,11 +386,11 @@ void draw_selected()
 	  else
 	  {
 	    #ifdef BUFFER_TEST
-		DrawBufferedCover(gameSelected, loc, angle);
+		DrawBufferedCover(self.gameSelected, loc, angle);
 		#else
-	    if(gameSelected < array_size)
+	    if(self.gameSelected < self.array_size)
 		{
-			GRRLIB_DrawCoverImg(loc*1.2,covers[gameSelected],angle,1.0,0xFFFFFFFF);
+			GRRLIB_DrawCoverImg(loc*1.2,covers[self.gameSelected],angle,1.0,0xFFFFFFFF);
 		}
 		else
 		{
@@ -642,42 +400,6 @@ void draw_selected()
 	  }
 }
 
-void draw_game_title(int index)
-{
-	if(index != -1)
-	{
-			int len = 0;
-			struct discHdr *header = NULL;
-			header = &gameList[index];
-			
-			float tsize = 1;
-
-			len = strlen(header->title);
-			
-			int offset = (len*5);
-			
-			if(offset > 240) offset = 240;
-			
-            GRRLIB_Printf(340 - offset, 400, tex_BMfont5, 0xFFFFFFFF, tsize, "%s", header->title);
-				
-	}
-				
-}
-
-void draw_covers()
-{
-	int i;
-	
-	for(i = (-1*(COVER_COUNT/2.0)); i < (COVER_COUNT/2.0); i++)
-	{
-		
-		/*Some logic to avoid drawing everything*/
-		if(abs(shift+i) < DRAW_WINDOW)
-		{
-			GRRLIB_Cover(i+shift, i+(COVER_COUNT/2.0));
-		}
-	}
-}
 
 s32 __Menu_EntryCmp(const void *a, const void *b)
 {
@@ -712,7 +434,7 @@ s32 GetEntries(void)
 	memset(buffer, 0, len);
 
 	progress+=0.05;
-	Paint_Progress(progress);
+	Paint_Progress(progress, NULL);
 	
 	/* Get header list */
 	ret = WBFS_GetHeaders(buffer, cnt, sizeof(struct discHdr));
@@ -720,13 +442,13 @@ s32 GetEntries(void)
 		goto err;
 
 	progress+=0.05;
-	Paint_Progress(progress);
+	Paint_Progress(progress, NULL);
 	
 	/* Sort entries */
 	qsort(buffer, cnt, sizeof(struct discHdr), __Menu_EntryCmp);
 
 	progress+=0.05;
-	Paint_Progress(progress);
+	Paint_Progress(progress, NULL);
 	
 	/* Free memory */
 	if (gameList)
@@ -734,16 +456,16 @@ s32 GetEntries(void)
 
 	/* Set values */
 	gameList = buffer;
-	gameCnt  = cnt;
-	COVER_COUNT = gameCnt;
+	self.gameCnt  = cnt;
+	COVER_COUNT = self.gameCnt;
 	
 	Init_Covers();
 
 	progress+=0.05;
-	Paint_Progress(progress);
+	Paint_Progress(progress, NULL);
 	
 	/* Reset variables */
-	gameSelected = gameStart = 0;
+	self.gameSelected = self.gameStart = 0;
 
 	return 0;
 
@@ -772,13 +494,13 @@ bool init_usbfs()
 	Fat_MountSDHC();
 	
 	progress+=0.05;
-	Paint_Progress(progress);
+	Paint_Progress(progress, NULL);
 	
 
 	/* Initialize DIP module */
 	ret = Disc_Init();
 	progress+=0.05;
-	Paint_Progress(progress);
+	Paint_Progress(progress, NULL);
 	
 	if (ret < 0) {
 		printf("[+] ERROR:\n");
@@ -793,14 +515,14 @@ bool init_usbfs()
 bool Init_Game_List(void)
 {
 
-	Paint_Progress(progress);
+	Paint_Progress(progress, NULL);
 	
 	/* Try to open device */
 	if (WBFS_Open() >= 0) {
 		/* Get game list */
 		
 		progress+=0.05;
-		Paint_Progress(progress);
+		Paint_Progress(progress, NULL);
 		GetEntries();
 		return true;
 	}
@@ -810,23 +532,7 @@ bool Init_Game_List(void)
 	}
 }
 
-void DrawSlider(void)
-{
-	int min_loc = 0;
-	int max_loc = 313;
-	
-	GRRLIB_DrawImg(120, 410, slide_bar_texture, 0, 1, 1, 0xFFFFFFFF);
-	
-	int x = change_scale(shift, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0, min_loc, max_loc);
-	
-	slideButton.x = 126+x;
-	slideButton.y = 426;
-	
-	//GRRLIB_DrawImg(126+x, 426, slide_texture, 0, 1, 1, 0xFFFFFFFF);
-	
-	Button_Paint(&slideButton);
-	
-}
+
 
 void DragSlider(int xPos)
 {
@@ -834,8 +540,7 @@ void DragSlider(int xPos)
 	int min_loc = 126;
 	int max_loc = 439;
 		
-	shift = change_scale(xPos, min_loc, max_loc, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0);
-
+	self.shift = change_scale(xPos, min_loc, max_loc, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0);
 }
 
 int DiscWait()
@@ -851,7 +556,6 @@ int DiscWait()
 		if (ret < 0)
 			return ret;
 	}
-
 
 	return ret;
 }
@@ -883,8 +587,8 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
 		wd = WPAD_Data(WPAD_CHAN_0);
 
-		p_x = ir.sx-200;
-		p_y = ir.sy-250;
+		self.p_x = ir.sx-200;
+		self.p_y = ir.sy-250;
 		p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
 		Hover_Buttons();
@@ -903,7 +607,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		{
 			if(choice_a != 0)
 			{
-				if(Button_Select(choice_a, p_x, p_y))
+				if(Button_Select(choice_a, self.p_x, self.p_y))
 				{
 					return true;
 				}
@@ -911,7 +615,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			
 			if(choice_b != 0)
 			{
-				if(Button_Select(choice_b, p_x, p_y))
+				if(Button_Select(choice_b, self.p_x, self.p_y))
 				{
 					return false;
 				}
@@ -939,7 +643,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
         GRRLIB_Printf(160, 110, tex_BMfont5, 0xFFFFFFFF, 1, "%s", txt);
 		
 		if(doloop)
-			GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(self.p_x, self.p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
 		
 		GRRLIB_Render();
 		
@@ -1026,8 +730,8 @@ void Settings_Menu(void)
 		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
 		wd = WPAD_Data(WPAD_CHAN_0);
 
-		p_x = ir.sx-200;
-		p_y = ir.sy-250;
+		self.p_x = ir.sx-200;
+		self.p_y = ir.sy-250;
 		p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
 		Hover_Buttons();
@@ -1044,11 +748,11 @@ void Settings_Menu(void)
 		
 		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 		{
-			if(Button_Select(&settingsButton, p_x, p_y))
+			if(Button_Select(&settingsButton, self.p_x, self.p_y))
 			{
 				doloop = false;
 			}
-			else if(Button_Select(&cheatonButton, p_x, p_y) || Button_Select(&cheatoffButton, p_x, p_y))
+			else if(Button_Select(&cheatonButton, self.p_x, self.p_y) || Button_Select(&cheatoffButton, self.p_x, self.p_y))
 			{
 				ocarinaChoice = (ocarinaChoice) ? 0 : 1;
 			}
@@ -1072,7 +776,7 @@ void Settings_Menu(void)
 		}
 		else Button_Paint(&cheatoffButton);
 		
-		GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(self.p_x, self.p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
 		
 		GRRLIB_Render();
 		
@@ -1193,11 +897,11 @@ bool Menu_Delete(void)
  	char gameName[31]; 
 	
 	/* No game list */
-	if (!gameCnt)
+	if (!self.gameCnt)
 		return false;
 
 	/* Selected game */
-	header = &gameList[gameSelected];
+	header = &gameList[self.gameSelected];
 
 	if(strlen(get_title(header)) < 30) {
 		sprintf(gameName, "%s", get_title(header));
@@ -1231,20 +935,21 @@ bool Menu_Boot(void)
 {
 	#ifndef TEST_MODE
 	struct discHdr *header = NULL;
-	int i = 0;
+	//int i = 0;
 	s32 ret;
 
 	/* No game list */
-	if (!gameCnt)
+	if (!self.gameCnt)
 		return false;
 
 	/* Selected game */
-	header = &gameList[gameSelected];
+	header = &gameList[self.gameSelected];
 
     GRRLIB_Exit();
 	
 	#ifndef BUFFER_TEST
-	for(i = 0; i < array_size; i++)
+	int i = 0;
+	for(i = 0; i < self.array_size; i++)
 	{
 		free(covers[i].data);
 	}
@@ -1323,18 +1028,18 @@ void Download_Cover(struct discHdr *header)
 	if(firstTimeDownload == true){
 		char myIP[16];
 		//printf("\n[+] Initializing Network.");
-		sprintf(debugMsg, "Initializing Network");
-		Paint_Progress(1);
+		sprintf(self.debugMsg, "Initializing Network");
+		Paint_Progress(1, self.debugMsg);
 		//GRRLIB_Printf(100, 100, text_font1, 0XFFFFFFFF, 1.0, "Initializing Network");
 		if( Net_Init(myIP) ){
 			//GRRLIB_Printf(100, 120, tex_BMfont5, 0XFFFFFFFF, 1.0, "Error Initializing Network");
-			sprintf(debugMsg, "Error Initializing Network");
-			Paint_Progress(1);
+			sprintf(self.debugMsg, "Error Initializing Network");
+			Paint_Progress(1, self.debugMsg);
 			inetOk = true;
 		}
 		else{
-			sprintf(debugMsg, "Network Initialized");
-			Paint_Progress(1);
+			sprintf(self.debugMsg, "Network Initialized");
+			Paint_Progress(1, self.debugMsg);
 		}
 
 		firstTimeDownload = false;
@@ -1374,16 +1079,16 @@ void Download_Cover(struct discHdr *header)
 
 		snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", CFG.images_path, header->id);
 		
-		sprintf(debugMsg, "Checking presence of %s", imgPath);
-		Paint_Progress(1);
+		sprintf(self.debugMsg, "Checking presence of %s", imgPath);
+		Paint_Progress(1,self.debugMsg);
 		
 		FILE *fp;
 		fp = fopen(imgPath, "rb");
 		if (fp)
 		{
 			fclose (fp);
-			sprintf(debugMsg, "%s present, not downloading", imgPath);
-			Paint_Progress(1);
+			sprintf(self.debugMsg, "%s present, not downloading", imgPath);
+			Paint_Progress(1,self.debugMsg);
 		}
 		else{
 			
@@ -1395,54 +1100,54 @@ void Download_Cover(struct discHdr *header)
 			*/
 			
 			sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, header->id);
-			sprintf(debugMsg, "Getting %s", url);
-			Paint_Progress(1);
+			sprintf(self.debugMsg, "Getting %s", url);
+			Paint_Progress(1,self.debugMsg);
 		
 			file = downloadfile(url);
 			
 			if(file.data != NULL){
 				saveFile(imgPath, file);
 				free(file.data);
-				sprintf(debugMsg, "done");
-			    Paint_Progress(1);
+				sprintf(self.debugMsg, "done");
+			    Paint_Progress(1,self.debugMsg);
 				//else
 					//donotdownload = true;
 			}
 			else {
-				sprintf(debugMsg, "some error occurred");
-				Paint_Progress(1);
+				sprintf(self.debugMsg, "some error occurred");
+				Paint_Progress(1,self.debugMsg);
 			}
 		}
 		
 		snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c%c.png", CFG.images_path,  header->id[0], header->id[1], header->id[2], header->id[3]);
-		sprintf(debugMsg, "Checking presence of %s", imgPath);
-		Paint_Progress(1);
+		sprintf(self.debugMsg, "Checking presence of %s", imgPath);
+		Paint_Progress(1,self.debugMsg);
 		
 		fp = fopen(imgPath, "rb");
 		if (fp)
 		{
 			fclose (fp);
-			sprintf(debugMsg, "%s present, not downloading", imgPath);
-			Paint_Progress(1);
+			sprintf(self.debugMsg, "%s present, not downloading", imgPath);
+			Paint_Progress(1,self.debugMsg);
 		}
 		else{
 			sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c%c.png", header->id[0], header->id[1], header->id[2], header->id[3]);
-			sprintf(debugMsg, "Getting %s", url);
-			Paint_Progress(1);
+			sprintf(self.debugMsg, "Getting %s", url);
+			Paint_Progress(1,self.debugMsg);
 			
 			file = downloadfile(url);
 			
 			if(file.data != NULL){
 				saveFile(imgPath, file);
 				free(file.data);
-				sprintf(debugMsg, "done");
-			    Paint_Progress(1);
+				sprintf(self.debugMsg, "done");
+			    Paint_Progress(1,self.debugMsg);
 				//else
 					//donotdownload = true;
 			}
 			else {
-				sprintf(debugMsg, "some error occurred");
-				Paint_Progress(1);
+				sprintf(self.debugMsg, "some error occurred");
+				Paint_Progress(1,self.debugMsg);
 			}
 		//else
 			//donotdownload = true;
@@ -1471,6 +1176,20 @@ void LoadTextures()
     GRRLIB_InitTileSet(&tex_BMfont5, 8, 16, 0);
 }
 
+void initVars(){
+
+	self.p_x = 0;
+	self.p_y = 0;
+	self.shift = 0;
+	self.select_shift = 0;
+	self.gameCnt = 0;
+	self.gameSelected = 0;
+	self.gameStart = 0;
+	self.selected = false;
+	self.animate_flip = 0.0;
+	self.array_size = 0;
+}
+
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
@@ -1493,18 +1212,20 @@ int main( int argc, char **argv ){
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
 	
+	initVars();
+	
     gradient_texture    = GRRLIB_LoadTexture(gradient_bg_png);
     loader_main_texture = GRRLIB_LoadTexture(loading_main_png);
     progress_texture    = GRRLIB_LoadTexture(progress_png);
 	
-	sprintf(debugMsg, "Loading textures");
-	Paint_Progress(progress);
+	sprintf(self.debugMsg, "Loading textures");
+	Paint_Progress(progress,self.debugMsg);
 	
 	LoadTextures();
 	
 	progress += .1;
-	sprintf(debugMsg, "Init USB");
-	Paint_Progress(progress);
+	sprintf(self.debugMsg, "Init USB");
+	Paint_Progress(progress,self.debugMsg);
 	
 	#ifndef TEST_MODE
 	if(!init_usbfs())
@@ -1516,8 +1237,8 @@ int main( int argc, char **argv ){
 	CFG.download = 1;
 	//HARDCODED FOR NOW
 	
-	sprintf(debugMsg, "Initializing WBFS");
-	Paint_Progress(progress);
+	sprintf(self.debugMsg, "Initializing WBFS");
+	Paint_Progress(progress,self.debugMsg);
 	
 	my_wbfsDev = WBFS_DEVICE_USB;
 
@@ -1572,7 +1293,7 @@ int main( int argc, char **argv ){
 	}
 	
 	#else
-	gameCnt = 29;
+	self.gameCnt = 29;
 	Init_Covers();
 	#endif
 	
@@ -1586,20 +1307,19 @@ int main( int argc, char **argv ){
 	int wait = 300; //ms
 	float prog = 2.1/300.0;
 	
-	sprintf(debugMsg, "Initializing Threaded Image Buffer...");
+	sprintf(self.debugMsg, "Initializing Threaded Image Buffer...");
 	while(wait > 0)
 	{
 		wait--;
 		progress += prog;
-		Paint_Progress(progress);
+		Paint_Progress(progress, self.debugMsg);
 		Sleep(1);
 	}
 	
 	#endif
 	
-	
-	sprintf(debugMsg, "Freeing unused textures");
-	Paint_Progress(progress);
+	sprintf(self.debugMsg, "Freeing unused textures");
+	Paint_Progress(progress,self.debugMsg);
 	
 	free(gradient_texture.data);
 	free(loader_main_texture.data);
@@ -1608,7 +1328,7 @@ int main( int argc, char **argv ){
 	
 	Sleep(300);
 	
-	selected = false;
+	self.selected = false;
 	
 	bool select_ready = false;
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
@@ -1632,12 +1352,12 @@ int main( int argc, char **argv ){
 		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
 		wd = WPAD_Data(WPAD_CHAN_0);
 
-		p_x = ir.sx-200;
-		p_y = ir.sy-250;
+		self.p_x = ir.sx-200;
+		self.p_y = ir.sy-250;
 		p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
 		Hover_Buttons();
-
+		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
 			BUFFER_ClearCovers();
@@ -1649,9 +1369,9 @@ int main( int argc, char **argv ){
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B ||
 			PAD_ButtonsDown(0) & PAD_BUTTON_B)
 		{
-			if(selected && animate_flip >= 1.0)
+			if(self.selected && self.animate_flip >= 1.0)
 			{
-				selected = false;
+				self.selected = false;
 			}
 		}
 		
@@ -1659,7 +1379,7 @@ int main( int argc, char **argv ){
 		{
 			if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A)
 			{
-				DragSlider(p_x);
+				DragSlider(self.p_x);
 			}
 			else
 			{
@@ -1671,48 +1391,48 @@ int main( int argc, char **argv ){
 			PAD_ButtonsDown(0) & PAD_BUTTON_A)
 		{
 			//First Check Buttons
-			if(Button_Select(&addButton, p_x, p_y))
+			if(Button_Select(&addButton, self.p_x, self.p_y))
 			{
 				AddGame();
 			}
-			if(Button_Select(&settingsButton, p_x, p_y))
+			if(Button_Select(&settingsButton, self.p_x, self.p_y))
 			{
 				Settings_Menu();
 			}
-			else if(Button_Select(&slideButton, p_x, p_y))
+			else if(Button_Select(&slideButton, self.p_x, self.p_y))
 			{
 				dragging = true;
 			}
 			else
 			{
-				if(gameCnt)
+				if(self.gameCnt)
 				{
-					if(!selected && animate_flip <= 0.0)
+					if(!self.selected && self.animate_flip <= 0.0)
 					{
-						if(p_x < 400 && p_x > 200 &&
-							p_y > 60 && p_y < 380)
+						if(self.p_x < 400 && self.p_x > 200 &&
+							self.p_y > 60 && self.p_y < 380)
 						{
-							if(select_ready && select_shift == 0.0)
+							if(select_ready && self.select_shift == 0.0)
 							{
-								selected = true;
-								LoadCurrentCover(gameSelected);
+								self.selected = true;
+								LoadCurrentCover(self.gameSelected);
 							}
 						}
-						else if(p_x < 200 &&
-							p_y > 60 && p_y < 380)
+						else if(self.p_x < 200 &&
+							self.p_y > 60 && self.p_y < 380)
 						{
-							select_shift = (-4)*((200-p_x)/200.0);
+							self.select_shift = (-4)*((200-self.p_x)/200.0);
 						}
-						else if(p_x > 400 &&
-							p_y > 60 && p_y < 380)
+						else if(self.p_x > 400 &&
+							self.p_y > 60 && self.p_y < 380)
 						{
-							select_shift = 5*(p_x-345.0)/280.0;
+							self.select_shift = 5*(self.p_x-345.0)/280.0;
 						}
 					}
 					
-					if(selected && animate_flip == 1.0)
+					if(self.selected && self.animate_flip == 1.0)
 					{
-						if(Button_Select(&loadButton, p_x, p_y))
+						if(Button_Select(&loadButton, self.p_x, self.p_y))
 						{
 							#ifdef BUFFER_TEST
 							//BUFFER_ClearCovers();
@@ -1722,29 +1442,29 @@ int main( int argc, char **argv ){
 							//TODO Prompt to boot game...
 							if(!Menu_Boot())
 							{
-								selected = false;
-								animate_flip = 0;
+								self.selected = false;
+								self.animate_flip = 0;
 							}
 							else
 							{
 								return 0;
 							}
 						}
-						else if(Button_Select(&deleteButton, p_x, p_y))
+						else if(Button_Select(&deleteButton, self.p_x, self.p_y))
 						{
 							Menu_Delete();
-							selected = false;
+							self.selected = false;
 						}
-						else if(Button_Select(&backButton, p_x, p_y))
+						else if(Button_Select(&backButton, self.p_x, self.p_y))
 						{
-							selected = false;
+							self.selected = false;
 						}
 					}
 				}
 			}
 		}
 
-		if(!selected && animate_flip == 0)
+		if(!self.selected && self.animate_flip == 0)
 		{
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT  ||
 				PAD_ButtonsDown(0) & PAD_BUTTON_LEFT)
@@ -1752,57 +1472,57 @@ int main( int argc, char **argv ){
 			{	
 				select_ready = false;
 					
-				if(!((int)shift-1 <= (-1)*(COVER_COUNT/2.0)))
-					shift -= SCROLL_SPEED;
+				if(!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0)))
+					self.shift -= SCROLL_SPEED;
 			}
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||
 				PAD_ButtonsDown(0) & PAD_BUTTON_RIGHT)
 			{
 				select_ready = false;
 					
-				if(!((int)shift+.5 >= (COVER_COUNT/2.0)))
-					shift += SCROLL_SPEED;
+				if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
+					self.shift += SCROLL_SPEED;
 			}
 			else
 			{
-				if(abs(select_shift) > SCROLL_SPEED)
+				if(abs(self.select_shift) > SCROLL_SPEED)
 				{
-					int mult = abs((int)select_shift);
-					if(select_shift > 0)
+					int mult = abs((int)self.select_shift);
+					if(self.select_shift > 0)
 					{
-					
-						select_shift -= mult*SCROLL_SPEED;
-						if(!((int)shift-1 <= (-1)*(COVER_COUNT/2.0)))
-							shift -= mult*SCROLL_SPEED;
+						self.select_shift -= mult*SCROLL_SPEED;
+						if(!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0)))
+							self.shift -= mult*SCROLL_SPEED;
 					}
 					else
 					{
-						select_shift += mult*SCROLL_SPEED;
-						if(!((int)shift+.5 >= (COVER_COUNT/2.0)))
-							shift += mult*SCROLL_SPEED;
+						self.select_shift += mult*SCROLL_SPEED;
+						if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
+							self.shift += mult*SCROLL_SPEED;
 					}
 					
 				}
-				else if(abs(((int)shift * 10000.0) - (shift*10000.0))/10000.0 > (SCROLL_SPEED+SCROLL_SPEED/2.0))
+				else if(abs(((int)self.shift * 10000.0) - (self.shift*10000.0))/10000.0 > (SCROLL_SPEED+SCROLL_SPEED/2.0))
 				{
 					select_ready = false;
-					if((int)((int)(shift+0.5) - (int)shift) == 0)
+					if((int)((int)(self.shift+0.5) - (int)self.shift) == 0)
 					{
-						shift -= SCROLL_SPEED;
+						self.shift -= SCROLL_SPEED;
 					}
 					else
 					{
-						shift += SCROLL_SPEED;
+						self.shift += SCROLL_SPEED;
 					}
 				}
 				else
 				{
-					select_shift = 0;
-					shift = (int)shift;
+					self.select_shift = 0;
+					self.shift = (int)self.shift;
 					select_ready = true;
-					
+				
+					//CRASH!
 					/*Draw Game Title*/
-					draw_game_title(gameSelected);
+					draw_game_title(self.gameSelected);
 				}
 					
 			}
@@ -1815,7 +1535,7 @@ int main( int argc, char **argv ){
 		draw_covers();
 
 
-		if(selected || animate_flip != 0)
+		if(self.selected || self.animate_flip != 0)
 		{
 			draw_selected();
 		}
@@ -1826,7 +1546,7 @@ int main( int argc, char **argv ){
 			Button_Paint(&settingsButton);
 		}
 
-		GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(self.p_x, self.p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
         GRRLIB_Render();
 
 		Sleep(1);

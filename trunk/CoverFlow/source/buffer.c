@@ -49,7 +49,7 @@ void BUFFER_InitBuffer(int thread_count)
 
 void BUFFER_RequestCover(int index, struct discHdr *header)
 {
-	int i;
+	//int i;
 	
 	if(index < MAX_BUFFERED_COVERS)
 	{
