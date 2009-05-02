@@ -4,6 +4,8 @@
 #include "coverflow.h"
 #include "button.h"
 
+#define FLIP_SPEED  0.016
+
 extern const u8 add_button_png[];
 extern const u8 add_button_hover_png[];
 extern const u8 slide_png[];
@@ -28,10 +30,13 @@ extern const u8 delete_png[];
 extern const u8 delete_hover_png[];
 extern const u8 settings_png[];
 extern const u8 settings_hover_png[];
+extern const u8 toggle_on_png[];
+extern const u8 toggle_off_png[];
 extern const u8 plus_button_png[];
 extern const u8 plus_button_hover_png[];
 extern const u8 minus_button_png[];
 extern const u8 minus_button_hover_png[];
+
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg back_texture;
@@ -60,9 +65,12 @@ Button yesButton;
 Button noButton;
 Button deleteButton;
 Button settingsButton;
+Button toggleOnButton;
+Button toggleOffButton;
 Button langupButton;
 Button langdownButton;
 
+void LoadTextures();
 void DrawBufferedCover(int i, float loc, float angle);
 void Paint_Progress(float v, char* msg);
 void Init_Buttons();
@@ -71,7 +79,10 @@ void DrawSlider();
 void GRRLIB_Cover(float pos, int texture_id);
 //void draw_game_title(int index);
 void draw_covers();
+void draw_game_title(int index, struct discHdr *gameList);
+void draw_selected(struct discHdr *gameList);
 float change_scale_without_containing(float val, float in_min, float in_max, float out_min, float out_max);
 float change_scale(float val, float in_min, float in_max, float out_min, float out_max);
+int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
 
 #endif
