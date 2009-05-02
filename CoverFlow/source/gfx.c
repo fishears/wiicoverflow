@@ -80,7 +80,7 @@ void Paint_Progress(float v, char* msg)
 void Init_Buttons()
 {
 
-        addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
+    addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
 	slideButton = Button_Init(slide_png,  slide_hover_png, 580, 400);
 	okButton    = Button_Init(ok_png,   ok_hover_png, 220, 250);
 	loadButton  = Button_Init(load_png,   load_hover_png, 220, 300);
@@ -88,14 +88,14 @@ void Init_Buttons()
 	backButton  = Button_Init(back_png,   back_hover_png, 340, 300);
 	cancelButton = Button_Init(cancel_png, cancel_hover_png, 340, 250);
 	
-        cheatonButton = Button_Init(yes_png, yes_hover_png, 350,95);
-        cheatoffButton = Button_Init(no_png, no_hover_png, 350,95);
+	cheatonButton = Button_Init(yes_png, yes_hover_png, 350,95);
+	cheatoffButton = Button_Init(no_png, no_hover_png, 350,95);
 
-        langupButton = Button_Init(plus_button_png, plus_button_hover_png,456,138);
-        langdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,138);
-	
-	toggleOnButton = Button_Init(toggle_on_png, toggle_on_png, 220,140);
-    toggleOffButton = Button_Init(toggle_off_png, toggle_off_png,220,140);
+	langupButton = Button_Init(plus_button_png, plus_button_hover_png,456,138);
+	langdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,138);
+
+	toggleOnButton = Button_Init(toggle_on_png, toggle_on_png, 350, 180);
+    toggleOffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 180);
 	
 	yesButton  = Button_Init(yes_png, yes_hover_png, 220, 250);
 	noButton   = Button_Init(no_png, no_hover_png, 340, 250);
@@ -115,8 +115,8 @@ void Hover_Buttons()
 	Button_Hover(&noButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&settingsButton, pointer.p_x, pointer.p_y);
-        Button_Hover(&langupButton, self.p_x, self.p_y);
-        Button_Hover(&langdownButton, self.p_x, self.p_y);
+    Button_Hover(&langupButton, pointer.p_x, pointer.p_y);
+    Button_Hover(&langdownButton, pointer.p_x, pointer.p_y);
 	
 	if(ocarinaChoice)
 		Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y);
