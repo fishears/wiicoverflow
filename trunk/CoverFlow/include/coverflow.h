@@ -35,10 +35,7 @@
 #define ENTRIES_PER_PAGE 	 12
 #define MAX_CHARACTERS	 	 30
 #define BUFFER_TEST          1
-#define BUFFER_WINDOW        8
+#define BUFFER_WINDOW        9
 #define BUFFER_THREAD_COUNT  1
-#define BACK_BUTTON          1000
-#define CANCEL_BUTTON        1001
-#define OK_BUTTON            1002
 
 #endif

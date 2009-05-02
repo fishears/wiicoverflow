@@ -57,7 +57,7 @@ void BUFFER_RequestCover(int index, struct discHdr *header)
 		_cq.request[index]   = true;
 		//for(i = 0; i < 6; i++)
 		//{
-		_cq.requestId[i] = header;
+		_cq.requestId[index] = header;
 		//}
 		pthread_mutex_unlock(&queue_mutex);
 	}
@@ -202,7 +202,7 @@ void* process(void *arg)
 					s32  ret;
 
 					//u8 tId[6];
-					int j = 0;
+					//int j = 0;
 					
 					pthread_mutex_lock(&queue_mutex);
 					
