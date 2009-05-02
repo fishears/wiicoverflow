@@ -97,10 +97,15 @@ void Init_Buttons()
 	toggleOnButton = Button_Init(toggle_on_png, toggle_on_png, 350, 180);
     toggleOffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 180);
 	
+	toggleOnButton = Button_Init(toggle_on_png, toggle_on_png, 350, 180);
+    toggleOffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 180);
+	
 	yesButton  = Button_Init(yes_png, yes_hover_png, 220, 250);
 	noButton   = Button_Init(no_png, no_hover_png, 340, 250);
 	
 	settingsButton = Button_Init(settings_png, settings_hover_png, 30, 420);
+	
+	downloadButton = Button_Init(download_png, download_hover_png, 350, 240);
 }
 
 void Hover_Buttons()
@@ -117,6 +122,7 @@ void Hover_Buttons()
 	Button_Hover(&settingsButton, pointer.p_x, pointer.p_y);
     Button_Hover(&langupButton, pointer.p_x, pointer.p_y);
     Button_Hover(&langdownButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&downloadButton, pointer.p_x, pointer.p_y);
 	
 	if(ocarinaChoice)
 		Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y);

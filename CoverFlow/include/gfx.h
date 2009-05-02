@@ -36,6 +36,8 @@ extern const u8 plus_button_png[];
 extern const u8 plus_button_hover_png[];
 extern const u8 minus_button_png[];
 extern const u8 minus_button_hover_png[];
+extern const u8 download_png[];
+extern const u8 download_hover_png[];
 
 
 GRRLIB_texImg cover_texture;
@@ -69,6 +71,7 @@ Button toggleOnButton;
 Button toggleOffButton;
 Button langupButton;
 Button langdownButton;
+Button downloadButton;
 
 void LoadTextures();
 void DrawBufferedCover(int i, float loc, float angle);
