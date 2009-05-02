@@ -859,8 +859,6 @@ int DiscWait()
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
 {
 	/*TODO Create Graphical Prompt*/
-	GRRLIB_FillScreen(0xFFFFFFFF);
-	GRRLIB_Render();
 		
 	bool doloop = true;
 	
@@ -871,6 +869,8 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 	else
 	{
 		doloop = true;
+		GRRLIB_FillScreen(0x000000FF);
+		GRRLIB_Render();
 	}
 	
 	
@@ -920,8 +920,8 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		
 		Hover_Buttons();
 		
-		GRRLIB_FillScreen(0xFFFFFFFF);
-		GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_FillScreen(0x000000FF);
+		//GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
 		if(choice_a != 0)
@@ -1056,8 +1056,8 @@ void Settings_Menu(void)
 		
 		Hover_Buttons();
 		
-		GRRLIB_FillScreen(0xFFFFFFFF);
-		GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_FillScreen(0x000000FF);
+		//GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
         GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
