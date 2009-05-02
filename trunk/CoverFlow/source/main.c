@@ -133,6 +133,9 @@ extern const u8     cheatsoff_hover_png[];
 extern const u8     delete_png[];
 extern const u8     delete_hover_png[];
 
+extern const u8     settings_png[];
+extern const u8     settings_hover_png[];
+
 Button addButton;
 Button slideButton;
 Button okButton;
@@ -144,6 +147,7 @@ Button cheatoffButton;
 Button yesButton;
 Button noButton;
 Button deleteButton;
+Button settingsButton;
 
 char* _title;
 char* _msg;
@@ -260,9 +264,6 @@ void UpdateBufferedImages()
 					if(index < gameCnt)
 					{
 						struct discHdr *header = &gameList[index];
-						//char buff[200];
-						//sprintf(buff, "%s min=%d max=%d i=%d shift=%f", get_title(header), buffer_window_min, buffer_window_max, index, shift);
-						//WindowPrompt ("Requesting Cover...", buff ,&okButton,0);
 		
 						BUFFER_RequestCover(index, header);
 					}
@@ -295,11 +296,14 @@ void Init_Buttons()
 	deleteButton  = Button_Init(delete_png,   delete_hover_png, 220, 400);
 	backButton  = Button_Init(back_png,   back_hover_png, 340, 300);
 	cancelButton = Button_Init(cancel_png, cancel_hover_png, 340, 250);
-    cheatonButton = Button_Init(cheatson_png, cheatson_hover_png, 30,420);
-    cheatoffButton = Button_Init(cheatsoff_png, cheatsoff_hover_png, 30,420);
+	
+    cheatonButton = Button_Init(cheatson_png, cheatson_hover_png, 220,100);
+    cheatoffButton = Button_Init(cheatsoff_png, cheatsoff_hover_png,220,100);
 	
 	yesButton  = Button_Init(yes_png, yes_hover_png, 220, 250);
-	noButton = Button_Init(no_png, no_hover_png, 340, 250);
+	noButton   = Button_Init(no_png, no_hover_png, 340, 250);
+	
+	settingsButton = Button_Init(settings_png, settings_hover_png, 30, 420);
 }
 
 void Hover_Buttons()
@@ -313,6 +317,9 @@ void Hover_Buttons()
 	Button_Hover(&yesButton,    p_x, p_y);
 	Button_Hover(&noButton,     p_x, p_y);
 	Button_Hover(&deleteButton,     p_x, p_y);
+	
+	Button_Hover(&settingsButton,     p_x, p_y);
+	
 	if (ocarinaChoice)
 	{
 		Button_Hover(&cheatonButton,  p_x, p_y);
@@ -852,7 +859,9 @@ int DiscWait()
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
 {
 	/*TODO Create Graphical Prompt*/
-	
+	GRRLIB_FillScreen(0xFFFFFFFF);
+	GRRLIB_Render();
+		
 	bool doloop = true;
 	
 	if(choice_a == 0 && choice_b == 0)
@@ -911,6 +920,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		
 		Hover_Buttons();
 		
+		GRRLIB_FillScreen(0xFFFFFFFF);
 		GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
@@ -1002,9 +1012,79 @@ int ProgressWindow(char* title, char* msg)
 
 }
 
+void Settings_Menu(void)
+{
+	bool doloop = true;
+
+	/*Render and control Settings*/
+	do{
+
+		WPAD_ScanPads();
+		
+		ir_t ir; // The struct for infrared
+		
+		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
+		wd = WPAD_Data(WPAD_CHAN_0);
+
+		p_x = ir.sx-200;
+		p_y = ir.sy-250;
+		p_ang = ir.angle/2; // Set angle/2 to translate correctly
+
+		Hover_Buttons();
+
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
+		{
+			doloop = false;
+		}
+		
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+		{
+			doloop = false;
+		}
+		
+		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+		{
+			if(Button_Select(&settingsButton, p_x, p_y))
+			{
+				doloop = false;
+			}
+			else if(Button_Select(&cheatonButton, p_x, p_y) || Button_Select(&cheatoffButton, p_x, p_y))
+			{
+				ocarinaChoice = (ocarinaChoice) ? 0 : 1;
+			}
+		}
+		
+		Hover_Buttons();
+		
+		GRRLIB_FillScreen(0xFFFFFFFF);
+		GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+		
+        GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
+		
+		Button_Paint(&settingsButton);
+			
+        GRRLIB_Printf(145, 103, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina");
+		/*Draw Menu*/
+		if (ocarinaChoice)
+		{
+			Button_Paint(&cheatonButton);
+		}
+		else Button_Paint(&cheatoffButton);
+		
+		GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
+		
+		GRRLIB_Render();
+		
+	}while(doloop);
+}
+
 bool Menu_Install(void)
 {
 
+	if(!WindowPrompt ("Install new Game?", "Place disk in drive and hit ok.",&okButton,&cancelButton))
+		return false;
+	
     static struct discHdr headerdisc ATTRIBUTE_ALIGN(32);
 	
 	WindowPrompt ("Initializing DVD Drive", "Please Wait...",0,0);
@@ -1595,9 +1675,9 @@ int main( int argc, char **argv ){
 			{
 				AddGame();
 			}
-			else if(Button_Select(&cheatonButton, p_x, p_y) || Button_Select(&cheatoffButton, p_x, p_y))
+			if(Button_Select(&settingsButton, p_x, p_y))
 			{
-				ocarinaChoice = (ocarinaChoice) ? 0 : 1;
+				Settings_Menu();
 			}
 			else if(Button_Select(&slideButton, p_x, p_y))
 			{
@@ -1743,12 +1823,7 @@ int main( int argc, char **argv ){
 		{
 			DrawSlider();
 			Button_Paint(&addButton);
-			if (ocarinaChoice)
-			{
-				Button_Paint(&cheatonButton);
-			}
-			else Button_Paint(&cheatoffButton);
-                        
+			Button_Paint(&settingsButton);
 		}
 
 		GRRLIB_DrawImg(p_x, p_y, pointer_texture, p_ang, 1, 1, 0xFFFFFFFF);
