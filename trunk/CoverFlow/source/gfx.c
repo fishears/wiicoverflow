@@ -1,5 +1,7 @@
 #include "gfx.h"
 
+#include "settings.h"
+
 extern s_self self;
 extern s_pointer pointer;
 
@@ -97,6 +99,8 @@ void Init_Buttons()
 	toggleOnButton = Button_Init(toggle_on_png, toggle_on_png, 350, 180);
     toggleOffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 180);
 	
+    graphicsButton = Button_Init(ok_png, ok_hover_png, 350, 180);
+	
 	//toggleOnButton = Button_Init(toggle_on_png, toggle_on_png, 350, 180);
     //toggleOffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 180);
 	
@@ -106,6 +110,18 @@ void Init_Buttons()
 	settingsButton = Button_Init(settings_png, settings_hover_png, 30, 420);
 	
 	downloadButton = Button_Init(download_png, download_hover_png, 350, 240);
+	
+	spacingupButton = Button_Init(plus_button_png, plus_button_hover_png,456,138);
+	spacingdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,138);
+	
+	zoomupButton = Button_Init(plus_button_png, plus_button_hover_png,456,95);
+	zoomdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,95);
+	
+	angleupButton = Button_Init(plus_button_png, plus_button_hover_png,456,191);
+	angledownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,191);
+	
+	windowupButton = Button_Init(plus_button_png, plus_button_hover_png,456, 239);
+	windowdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,239);
 }
 
 void Hover_Buttons()
@@ -123,6 +139,19 @@ void Hover_Buttons()
     Button_Hover(&langupButton, pointer.p_x, pointer.p_y);
     Button_Hover(&langdownButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&downloadButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&graphicsButton, pointer.p_x, pointer.p_y);
+	
+    Button_Hover(&spacingupButton, pointer.p_x, pointer.p_y);
+    Button_Hover(&spacingdownButton, pointer.p_x, pointer.p_y);
+	
+    Button_Hover(&zoomupButton, pointer.p_x, pointer.p_y);
+    Button_Hover(&zoomdownButton, pointer.p_x, pointer.p_y);
+	
+    Button_Hover(&angleupButton, pointer.p_x, pointer.p_y);
+    Button_Hover(&angledownButton, pointer.p_x, pointer.p_y);
+	
+    Button_Hover(&windowupButton, pointer.p_x, pointer.p_y);
+    Button_Hover(&windowdownButton, pointer.p_x, pointer.p_y);
 	
 	if(ocarinaChoice)
 		Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y);
@@ -156,7 +185,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 	if((self.selected || self.animate_flip > 0) && pos == 0)
 		return;
 
-	static const float SPACING = 3.1;//2.8;
+	//static const float SPACING = 2.8;
 	float dir = 1;
 	float loc, scale, angle;
 
@@ -165,9 +194,9 @@ void GRRLIB_Cover(float pos, int texture_id)
 		pos *= -1;
 	}
 
-	loc = SPACING * dir * (pow(pos + 1, -1) - 1);
+	loc = SETTING_coverSpacing * dir * (pow(pos + 1, -1) - 1);
 	scale = pow(pos + 1, -2);
-	angle = -1 * dir * change_scale(scale, 0, 1, 90, 0);
+	angle = -1 * dir * change_scale(scale, 0, 1, SETTING_coverAngle, 0);
 
 	#ifdef BUFFER_TEST
 	DrawBufferedCover(texture_id, loc, angle);
@@ -187,7 +216,7 @@ void draw_covers()
 	for(i = (-1*(COVER_COUNT/2.0)); i < (COVER_COUNT/2.0); i++)
 	{
 		/*Some logic to avoid drawing everything*/
-		if(abs(self.shift+i) < DRAW_WINDOW)
+		if(abs(self.shift+i) < SETTING_drawWindow)
 			GRRLIB_Cover(i+self.shift, i+(COVER_COUNT/2.0));
 	}
 }
@@ -236,11 +265,11 @@ void draw_selected(struct discHdr *gameList)
 	}
 	
 	
-	static const float SPACING = 2.8;
+//	static const float SPACING = 2.8;
 	float dir = 1;
 	float loc, scale, angle;
 
-	loc = SPACING * dir * (pow(1, -1) - 1);
+	loc = SETTING_coverSpacing * dir * (pow(1, -1) - 1);
 	scale = change_scale(self.animate_flip, 0, 1, 0, 360);
 	angle = -1 * dir * scale;
 	

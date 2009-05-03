@@ -48,7 +48,7 @@ char* _title;
 char* _msg;
 
 /*--------------------------------------*/
-
+#include "settings.h"
 
 
 Mtx GXmodelView2D;
@@ -252,7 +252,7 @@ void Init_Covers()
 	#endif
 	
 	#else
-	
+	int i;
 	int CoverCount = COVER_COUNT;
 	float max_progress = 1.7;
 	float per_game_prog = max_progress/self.gameCnt;
@@ -491,6 +491,133 @@ int ProgressWindow(char* title, char* msg)
 
 }
 
+void Graphic_Settings_Menu(void)
+{
+	bool doloop = true;
+	bool dummy = false;
+
+	/*Render and control Settings*/
+	do{
+
+		WPAD_ScanPads();
+		
+		ir_t ir; // The struct for infrared
+		
+		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
+		wd = WPAD_Data(WPAD_CHAN_0);
+
+		pointer.p_x = ir.sx-200;
+		pointer.p_y = ir.sy-250;
+		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
+
+		Hover_Buttons();
+
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
+		{
+			doloop = false;
+		}
+		
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+		{
+			doloop = false;
+		}
+		
+		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+		{
+			if(Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
+			{
+				doloop = false;
+			}
+			if(Button_Select(&windowdownButton, pointer.p_x, pointer.p_y))
+			{
+				if(SETTING_drawWindow > 1)
+				{
+					SETTING_drawWindow -= 1;
+				}
+			}
+			else if(Button_Select(&windowupButton, pointer.p_x, pointer.p_y))
+			{
+				if(SETTING_drawWindow < 20)
+				{
+					SETTING_drawWindow += 1;
+				}
+			}
+		}
+		
+		if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A)
+		{
+			if(Button_Select(&spacingdownButton, pointer.p_x, pointer.p_y))
+			{
+				SETTING_coverSpacing -= 0.05;
+			}
+			else if(Button_Select(&spacingupButton, pointer.p_x, pointer.p_y))
+			{
+				SETTING_coverSpacing += 0.05;
+			}
+			else if(Button_Select(&angledownButton, pointer.p_x, pointer.p_y))
+			{
+				SETTING_coverAngle -= 1;
+			}
+			else if(Button_Select(&angleupButton, pointer.p_x, pointer.p_y))
+			{
+				SETTING_coverAngle += 1;
+			}
+			else if(Button_Select(&zoomdownButton, pointer.p_x, pointer.p_y))
+			{
+				SETTING_coverZoom -= 0.1;
+			}
+			else if(Button_Select(&zoomupButton, pointer.p_x, pointer.p_y))
+			{
+				SETTING_coverZoom += 0.1;
+			}
+		}
+		
+		Hover_Buttons();
+		
+		//GRRLIB_FillScreen(0x000000FF);
+		//GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
+		
+		/*Draw Covers*/ //PREVIEW
+		draw_covers();
+		
+		
+		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+		
+        GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings (GFX)");
+		
+		Button_Paint(&settingsButton);
+		Button_Paint(&spacingupButton);
+		Button_Paint(&spacingdownButton);
+	
+		Button_Paint(&zoomupButton);
+		Button_Paint(&zoomdownButton);
+	
+		Button_Paint(&angleupButton);
+		Button_Paint(&angledownButton);
+	
+		Button_Paint(&windowupButton);
+		Button_Paint(&windowdownButton);
+	
+		GRRLIB_Printf(145, 95, tex_BMfont5, 0xFFFFFFFF, 1, "Zoom:");
+		GRRLIB_Printf(330, 95, tex_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverZoom);
+
+		GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Spacing:");
+		GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverSpacing);
+		
+		GRRLIB_Printf(145, 191, tex_BMfont5, 0xFFFFFFFF, 1, "Angle:");
+		GRRLIB_Printf(330, 191, tex_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverAngle);
+		
+		GRRLIB_Printf(145, 239, tex_BMfont5, 0xFFFFFFFF, 1, "Draw Window:");
+		GRRLIB_Printf(330, 239, tex_BMfont5, 0xFFFFFFFF, 1, "%d", SETTING_drawWindow);
+		
+		/*Draw Menu*/
+		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		
+		GRRLIB_Render();
+		
+	}while(doloop);
+}
+
 void Settings_Menu(void)
 {
 	bool doloop = true;
@@ -532,9 +659,9 @@ void Settings_Menu(void)
 			{
 				ocarinaChoice = (ocarinaChoice) ? 0 : 1;
 			}
-			else if(Button_Select(&toggleOnButton, pointer.p_x, pointer.p_y) || Button_Select(&toggleOffButton, pointer.p_x, pointer.p_y))
+			else if(Button_Select(&graphicsButton, pointer.p_x, pointer.p_y))
 			{
-				dummy = (dummy) ? 0 : 1;
+				Graphic_Settings_Menu();
 			}
 			else if(Button_Select(&langdownButton, pointer.p_x, pointer.p_y))
 			{
@@ -578,12 +705,14 @@ void Settings_Menu(void)
 		Button_Paint(&settingsButton);
 		Button_Paint(&langupButton);
 		Button_Paint(&langdownButton);
+		
+		Button_Paint(&graphicsButton);
 	
 		GRRLIB_Printf(145, 103, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina:");
 
 		GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Language:");
 		GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[langsel]);
-		GRRLIB_Printf(145, 193, tex_BMfont5, 0xFFFFFFFF, 1, "W la gnocca (dummy test)");
+		GRRLIB_Printf(145, 193, tex_BMfont5, 0xFFFFFFFF, 1, "Graphics:");
 		GRRLIB_Printf(145, 243, tex_BMfont5, 0xFFFFFFFF, 1, "Download missing covers");
 		
 		/*Draw Menu*/
@@ -593,12 +722,14 @@ void Settings_Menu(void)
 		}
 		else Button_Paint(&cheatoffButton);
 		
-		if (dummy)
+		/*if (dummy)
 		{
 			Button_Paint(&toggleOffButton);
 		}
 		else Button_Paint(&toggleOnButton);
+		*/
 		
+		Button_Paint(&graphicsButton);
 		Button_Paint(&downloadButton);
 		
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
@@ -607,6 +738,7 @@ void Settings_Menu(void)
 		
 	}while(doloop);
 }
+
 
 bool Menu_Install(void)
 {
@@ -1044,7 +1176,9 @@ int main( int argc, char **argv ){
 		return 0;
 	}
 	#endif
-		
+	
+	SETTINGS_Init();
+	
 	GRRLIB_Init();
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
@@ -1182,6 +1316,7 @@ int main( int argc, char **argv ){
 	
 	bool dragging = false;
 	
+		
 	while(1) {
 
 		WPAD_ScanPads();

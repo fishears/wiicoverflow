@@ -72,6 +72,17 @@ Button toggleOffButton;
 Button langupButton;
 Button langdownButton;
 Button downloadButton;
+Button graphicsButton;
+
+/*gfx buttons*/
+Button spacingupButton;
+Button spacingdownButton;
+Button angleupButton;
+Button angledownButton;
+Button zoomupButton;
+Button zoomdownButton;
+Button windowupButton;
+Button windowdownButton;
 
 void LoadTextures();
 void DrawBufferedCover(int i, float loc, float angle);

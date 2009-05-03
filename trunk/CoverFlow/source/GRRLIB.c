@@ -15,6 +15,8 @@ Download and Help Forum : http://grrlib.santo.fr
 #include "GRRLIB.h"
 #include <fat.h> 
 
+#include "settings.h"
+
 #include "video.h"
 
 #define DEFAULT_FIFO_SIZE (256 * 1024)
@@ -995,7 +997,7 @@ void GRRLIB_3D_Init()
 {
     Mtx44 perspective;
 	
-	Vector cam = {0.0F, 0.0F, -2.0F},
+	Vector cam = {0.0F, 0.0F, SETTING_coverZoom},
 			up = {0.0F, 1.0F, 0.0F},
 		  look = {0.0F, 0.0F, 1.0F};
 	guLookAt(view, &cam, &up, &look);
