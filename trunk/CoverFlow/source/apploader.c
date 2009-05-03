@@ -246,7 +246,7 @@ s32 Apploader_Run(entry_point *entry)
 	/* Initialize apploader */
 	appldr_init(__noprint);
 
-//	if (ocarinaChoice)
+//	if (CFG.ocarina)
 //    {
 		// copy kenobiwii code into tempoarary memory area
 		memset((void*)0x80001800,0,kenobiwii_size);
@@ -268,7 +268,7 @@ s32 Apploader_Run(entry_point *entry)
 		/* Read data from DVD */
 		WDVD_Read(dst, len, (u64)(offset << 2));
 
-		if (videoChoice == 2) // patch
+		if (videoChoice == 1) // patch
 
 		{
 			switch(CONF_GetVideo())
@@ -291,10 +291,7 @@ s32 Apploader_Run(entry_point *entry)
 				table = NTSC2PAL;
 				break;
 
-
-
-
-				default:
+			default:
 				table = PAL2NTSC;
 				break;
 			}
@@ -303,7 +300,7 @@ s32 Apploader_Run(entry_point *entry)
 		
 		dogamehooks(dst,len);
 
-		if (viChoice)
+		if (CFG.vipatch)
 			vidolpatcher(dst,len);
 		
 		/*LANGUAGE PATCH - FISHEARS*/

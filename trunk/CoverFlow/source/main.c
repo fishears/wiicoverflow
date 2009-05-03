@@ -4,7 +4,6 @@ static char prozent[MAX_CHARACTERS + 16];
 static char timet[MAX_CHARACTERS + 16];
 
 // Language selection config
-
 char languages[11][22] =
 {{"Console Default"},
 {"   Japanese"},
@@ -17,6 +16,14 @@ char languages[11][22] =
 {"   S. Chinese"},
 {"   T. Chinese"},
 {"    Korean"}};
+//video mode text
+char vidmodes[6][10] =
+{{ " game " },
+	{ " auto ", },
+	{ " pal50", },
+	{ " pal60", },
+	{ " ntsc ", },
+        { "system"}};
 
 /* Gamelist buffer */
 static struct discHdr *gameList = NULL;
@@ -671,18 +678,18 @@ void Settings_Menu(void)
 				}
 				else
 				{
-					CFG.language = 10;
+					CFG.language = (CFG_LANG_COUNT -1);
 				}
 			}
 			else if(Button_Select(&langupButton, pointer.p_x, pointer.p_y))
 			{
-				if(CFG.language <10)
+				if(CFG.language <(CFG_LANG_COUNT -1))
 				{
 					CFG.language ++;
 				}
 				else
 				{
-				CFG.language = 0;
+                                        CFG.language = 0;
 				}
 			}
 			else if(Button_Select(&downloadButton, pointer.p_x, pointer.p_y)){
@@ -691,6 +698,29 @@ void Settings_Menu(void)
 					//Init_Covers();
 				}
 			}
+                        else if(Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
+                        {
+                            if(CFG.video > 0)
+				{
+					CFG.video --;
+				}
+				else
+				{
+					CFG.video = (CFG_VIDEO_COUNT -1);
+				}
+                        }
+                        else if(Button_Select(&vidupButton, pointer.p_x,pointer.p_y))
+                        {
+                            if(CFG.video <(CFG_VIDEO_COUNT -1))
+				{
+					CFG.video ++;
+				}
+				else
+				{
+					CFG.video = 0;
+				}
+                        }
+
 			else if(Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y) || Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
 			{
 				CFG.themeblack = (CFG.themeblack) ? 0 : 1;
@@ -703,21 +733,28 @@ void Settings_Menu(void)
 		//GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
-        GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
+                GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
 		
 		Button_Paint(&settingsButton);
 		Button_Paint(&langupButton);
 		Button_Paint(&langdownButton);
-		
+		Button_Paint(&vidupButton);
+		Button_Paint(&viddownButton);
+
 		Button_Paint(&graphicsButton);
 	
 		GRRLIB_Printf(145, 103, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina:");
 
 		GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Language:");
 		GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[CFG.language]);
-		GRRLIB_Printf(145, 193, tex_BMfont5, 0xFFFFFFFF, 1, "Graphics:");
+		GRRLIB_Printf(145, 213, tex_BMfont5, 0xFFFFFFFF, 1, "Graphics:");
 		GRRLIB_Printf(145, 243, tex_BMfont5, 0xFFFFFFFF, 1, "Download missing covers");
+
+                GRRLIB_Printf(145, 180, tex_BMfont5, 0xFFFFFFFF, 1, "Video mode:");
+                GRRLIB_Printf(365, 180, tex_BMfont5, 0xFFFFFFFF, 1, "%s",vidmodes[CFG.video]);
+
 		GRRLIB_Printf(145, 303, tex_BMfont5, 0xFFFFFFFF, 1, "Theme");
+
 		
 		/*Draw Menu*/
 		if (CFG.ocarina)
