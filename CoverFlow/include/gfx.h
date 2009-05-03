@@ -74,6 +74,8 @@ Button toggleOnButton;
 Button toggleOffButton;
 Button langupButton;
 Button langdownButton;
+Button vidupButton;
+Button viddownButton;
 Button downloadButton;
 Button graphicsButton;
 Button themeWhiteButton;

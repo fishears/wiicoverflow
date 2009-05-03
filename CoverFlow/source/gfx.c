@@ -84,7 +84,7 @@ void Paint_Progress(float v, char* msg)
 void Init_Buttons()
 {
 
-    addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
+        addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
 	slideButton = Button_Init(slide_png,  slide_hover_png, 580, 400);
 	okButton    = Button_Init(ok_png,   ok_hover_png, 220, 250);
 	loadButton  = Button_Init(load_png,   load_hover_png, 220, 300);
@@ -98,13 +98,13 @@ void Init_Buttons()
 	langupButton = Button_Init(plus_button_png, plus_button_hover_png,456,138);
 	langdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,138);
 
+        vidupButton = Button_Init(plus_button_png, plus_button_hover_png, 456,175);
+        viddownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,175);
+
 	toggleOnButton = Button_Init(toggle_on_png, toggle_on_png, 350, 180);
-    toggleOffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 180);
+        toggleOffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 180);
 	
-    graphicsButton = Button_Init(ok_png, ok_hover_png, 350, 180);
-	
-	//toggleOnButton = Button_Init(toggle_on_png, toggle_on_png, 350, 180);
-    //toggleOffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 180);
+        graphicsButton = Button_Init(ok_png, ok_hover_png, 350, 200);
 	
 	yesButton  = Button_Init(yes_png, yes_hover_png, 220, 250);
 	noButton   = Button_Init(no_png, no_hover_png, 340, 250);
@@ -141,22 +141,24 @@ void Hover_Buttons()
 	Button_Hover(&noButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&settingsButton, pointer.p_x, pointer.p_y);
-    Button_Hover(&langupButton, pointer.p_x, pointer.p_y);
-    Button_Hover(&langdownButton, pointer.p_x, pointer.p_y);
+        Button_Hover(&langupButton, pointer.p_x, pointer.p_y);
+        Button_Hover(&langdownButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&downloadButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&graphicsButton, pointer.p_x, pointer.p_y);
+        Button_Hover(&vidupButton, pointer.p_x, pointer.p_y);
+        Button_Hover(&viddownButton, pointer.p_x, pointer.p_y);
 	
-    Button_Hover(&spacingupButton, pointer.p_x, pointer.p_y);
-    Button_Hover(&spacingdownButton, pointer.p_x, pointer.p_y);
+        Button_Hover(&spacingupButton, pointer.p_x, pointer.p_y);
+        Button_Hover(&spacingdownButton, pointer.p_x, pointer.p_y);
 	
-    Button_Hover(&zoomupButton, pointer.p_x, pointer.p_y);
-    Button_Hover(&zoomdownButton, pointer.p_x, pointer.p_y);
-	
-    Button_Hover(&angleupButton, pointer.p_x, pointer.p_y);
-    Button_Hover(&angledownButton, pointer.p_x, pointer.p_y);
-	
-    Button_Hover(&windowupButton, pointer.p_x, pointer.p_y);
-    Button_Hover(&windowdownButton, pointer.p_x, pointer.p_y);
+        Button_Hover(&zoomupButton, pointer.p_x, pointer.p_y);
+        Button_Hover(&zoomdownButton, pointer.p_x, pointer.p_y);
+
+        Button_Hover(&angleupButton, pointer.p_x, pointer.p_y);
+        Button_Hover(&angledownButton, pointer.p_x, pointer.p_y);
+
+        Button_Hover(&windowupButton, pointer.p_x, pointer.p_y);
+        Button_Hover(&windowdownButton, pointer.p_x, pointer.p_y);
 	
 	if(CFG.ocarina)
 		Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y);

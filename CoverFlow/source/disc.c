@@ -66,10 +66,10 @@ void __Disc_SetVMode(void)
 		break;
 	}
 
-	switch (videoChoice) {
-	case 0:
+	switch (CFG.video) {
+	case 5:
 		break;
-	case 1:
+	case 0:
 	{
 		/* Select video mode */
 		switch(diskid[3]) {
@@ -97,17 +97,17 @@ void __Disc_SetVMode(void)
 	}
 	break;
 	
-	case 3: // Force PAL50
+	case 2: // Force PAL50
         vmode_reg = 1;
         progressive = (CONF_GetProgressiveScan() > 0) && VIDEO_HaveComponentCable();
         vmode     = (progressive) ? &TVNtsc480Prog : &TVPal528IntDf;
         break;
-    case 4: // Force PAL60
+    case 3: // Force PAL60
         vmode_reg = 5;
         progressive = (CONF_GetProgressiveScan() > 0) && VIDEO_HaveComponentCable();
         vmode     = (progressive) ? &TVNtsc480Prog : &TVEurgb60Hz480IntDf;
         break;
-    case 5: // Force NTSC
+    case 4: // Force NTSC
         vmode_reg = 0;
         progressive = (CONF_GetProgressiveScan() > 0) && VIDEO_HaveComponentCable();
         vmode     = (progressive) ? &TVNtsc480Prog : &TVNtsc480IntDf;
