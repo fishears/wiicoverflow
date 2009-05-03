@@ -263,7 +263,7 @@ s32 Disc_BootPartition(u64 offset)
 	__Disc_SetTime();
 
 	/* OCARINA STUFF - FISHEARS*/
-	if (ocarinaChoice)
+	if (CFG.ocarina)
 	{
 		memset(gameid, 0, 8);
 		memcpy(gameid, (char*)0x80000000, 6);

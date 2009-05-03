@@ -153,7 +153,7 @@ void Hover_Buttons()
     Button_Hover(&windowupButton, pointer.p_x, pointer.p_y);
     Button_Hover(&windowdownButton, pointer.p_x, pointer.p_y);
 	
-	if(ocarinaChoice)
+	if(CFG.ocarina)
 		Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y);
 	else
 		Button_Hover(&cheatoffButton, pointer.p_x, pointer.p_y);

@@ -4,7 +4,7 @@ static char prozent[MAX_CHARACTERS + 16];
 static char timet[MAX_CHARACTERS + 16];
 
 // Language selection config
-u32 langsel = 0;
+
 char languages[11][22] =
 {{"Console Default"},
 {"   Japanese"},
@@ -52,7 +52,7 @@ char* _msg;
 
 
 Mtx GXmodelView2D;
-u8 ocarinaChoice = 0;
+
 //int self.array_size = 0;
 
 
@@ -657,7 +657,7 @@ void Settings_Menu(void)
 			}
 			else if(Button_Select(&cheatonButton, pointer.p_x, pointer.p_y) || Button_Select(&cheatoffButton, pointer.p_x, pointer.p_y))
 			{
-				ocarinaChoice = (ocarinaChoice) ? 0 : 1;
+				CFG.ocarina = (CFG.ocarina) ? 0 : 1;
 			}
 			else if(Button_Select(&graphicsButton, pointer.p_x, pointer.p_y))
 			{
@@ -665,24 +665,24 @@ void Settings_Menu(void)
 			}
 			else if(Button_Select(&langdownButton, pointer.p_x, pointer.p_y))
 			{
-				if(langsel > 0)
+				if(CFG.language > 0)
 				{
-					langsel --;
+					CFG.language --;
 				}
 				else
 				{
-					langsel = 10;
+					CFG.language = 10;
 				}
 			}
 			else if(Button_Select(&langupButton, pointer.p_x, pointer.p_y))
 			{
-				if(langsel <10)
+				if(CFG.language <10)
 				{
-					langsel ++;
+					CFG.language ++;
 				}
 				else
 				{
-				langsel = 0;
+				CFG.language = 0;
 				}
 			}
 			
@@ -711,12 +711,12 @@ void Settings_Menu(void)
 		GRRLIB_Printf(145, 103, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina:");
 
 		GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Language:");
-		GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[langsel]);
+		GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[CFG.language]);
 		GRRLIB_Printf(145, 193, tex_BMfont5, 0xFFFFFFFF, 1, "Graphics:");
 		GRRLIB_Printf(145, 243, tex_BMfont5, 0xFFFFFFFF, 1, "Download missing covers");
 		
 		/*Draw Menu*/
-		if (ocarinaChoice)
+		if (CFG.ocarina)
 		{
 			Button_Paint(&cheatonButton);
 		}
