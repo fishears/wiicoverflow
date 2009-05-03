@@ -23,6 +23,8 @@ void LoadTextures()
 
 	tex_BMfont5 = GRRLIB_LoadTexture(BMfont5_png);
 	GRRLIB_InitTileSet(&tex_BMfont5, 8, 16, 0);
+	
+	gradient_white_texture = GRRLIB_LoadTexture(gradient_bg_white_png);
 }
 
 void DrawBufferedCover(int i, float loc, float angle)
@@ -122,6 +124,9 @@ void Init_Buttons()
 	
 	windowupButton = Button_Init(plus_button_png, plus_button_hover_png,456, 239);
 	windowdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,239);
+	
+	themeWhiteButton = Button_Init(theme_white_png, theme_white_png, 350, 290);
+	themeBlackButton = Button_Init(theme_black_png, theme_black_png, 350, 290);
 }
 
 void Hover_Buttons()

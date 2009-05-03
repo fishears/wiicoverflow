@@ -68,6 +68,7 @@ struct CFG
 	short widescreen;
 	short parentalcontrol;
 	char images_path[100];
+	short themeblack;
 };
 
 extern struct CFG CFG;

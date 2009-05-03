@@ -494,7 +494,7 @@ int ProgressWindow(char* title, char* msg)
 void Graphic_Settings_Menu(void)
 {
 	bool doloop = true;
-	bool dummy = false;
+	//bool dummy = false;
 
 	/*Render and control Settings*/
 	do{
@@ -685,12 +685,15 @@ void Settings_Menu(void)
 				CFG.language = 0;
 				}
 			}
-			
 			else if(Button_Select(&downloadButton, pointer.p_x, pointer.p_y)){
 				if(WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton)){
 					batchDownloadCover();
 					//Init_Covers();
 				}
+			}
+			else if(Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y) || Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
+			{
+				CFG.themeblack = (CFG.themeblack) ? 0 : 1;
 			}
 		}
 		
@@ -714,6 +717,7 @@ void Settings_Menu(void)
 		GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[CFG.language]);
 		GRRLIB_Printf(145, 193, tex_BMfont5, 0xFFFFFFFF, 1, "Graphics:");
 		GRRLIB_Printf(145, 243, tex_BMfont5, 0xFFFFFFFF, 1, "Download missing covers");
+		GRRLIB_Printf(145, 303, tex_BMfont5, 0xFFFFFFFF, 1, "Theme");
 		
 		/*Draw Menu*/
 		if (CFG.ocarina)
@@ -722,12 +726,12 @@ void Settings_Menu(void)
 		}
 		else Button_Paint(&cheatoffButton);
 		
-		/*if (dummy)
+		if (CFG.themeblack)
 		{
-			Button_Paint(&toggleOffButton);
+			Button_Paint(&themeBlackButton);
 		}
-		else Button_Paint(&toggleOnButton);
-		*/
+		else Button_Paint(&themeWhiteButton);
+		
 		
 		Button_Paint(&graphicsButton);
 		Button_Paint(&downloadButton);
@@ -1212,6 +1216,7 @@ int main( int argc, char **argv ){
 	strcpy(CFG.images_path, USBLOADER_PATH);
 	CFG.widescreen = 0;
 	CFG.download = 1;
+	//CFG.theme = 0; //BLACK
 	//HARDCODED FOR NOW
 	
 	sprintf(self.debugMsg, "Initializing WBFS");
@@ -1334,6 +1339,7 @@ int main( int argc, char **argv ){
 		pointer.p_y = ir.sy-250;
 		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
+		//GRRLIB_FillScreen(0xFFFFFFFF);
 		Hover_Buttons();
 		
 		/*
