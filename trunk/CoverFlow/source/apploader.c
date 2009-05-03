@@ -248,13 +248,12 @@ s32 Apploader_Run(entry_point *entry)
 
 //	if (ocarinaChoice)
 //    {
-		/*HOOKS STUFF - FISHEARS*/
+		// copy kenobiwii code into tempoarary memory area
 		memset((void*)0x80001800,0,kenobiwii_size);
 		memcpy((void*)0x80001800,kenobiwii,kenobiwii_size);
 		DCFlushRange((void*)0x80001800,kenobiwii_size);
 		hooktype = 1;
 		memcpy((void*)0x80001800, (char*)0x80000000, 6);	// For WiiRD
-		/*HOOKS STUFF - FISHEARS*/
 //	}
 	for (;;) {
 		void *dst = NULL;

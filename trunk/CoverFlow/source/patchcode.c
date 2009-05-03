@@ -27,8 +27,10 @@
 #include "apploader.h"
 #include "patchcode.h"
 #include "fwrite_patch.h"
+#include "cfg.h"
 
-extern u32 langsel;
+extern struct CFG;
+
 extern void patchhook(u32 address, u32 len);
 extern void patchhook2(u32 address, u32 len);
 extern void patchhook3(u32 address, u32 len);
@@ -312,7 +314,7 @@ void langpatcher(void *addr, u32 len)
 	void *addr_start = addr;
 	void *addr_end = addr+len;
 
-        switch(langsel)
+        switch(CFG.language)
                 {
                         case 0:
                                 configbytes[0] = 0xCD;
