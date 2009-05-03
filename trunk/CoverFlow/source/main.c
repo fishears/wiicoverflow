@@ -666,6 +666,12 @@ void Settings_Menu(void)
 			{
 				CFG.ocarina = (CFG.ocarina) ? 0 : 1;
 			}
+/* NOT LIVE JUST YET
+			else if(Button_Select(&vidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&vidtvoffButton, pointer.p_x, pointer.p_y))
+			{
+				CFG.vipatch = (CFG.vipatch) ? 0 : 1;
+			}
+*/
 			else if(Button_Select(&graphicsButton, pointer.p_x, pointer.p_y))
 			{
 				Graphic_Settings_Menu();
@@ -762,7 +768,15 @@ void Settings_Menu(void)
 			Button_Paint(&cheatonButton);
 		}
 		else Button_Paint(&cheatoffButton);
-		
+
+/* NOT LIVE JUST YET
+		if (CFG.vipatch)
+		{
+			Button_Paint(&vidtvonButton);
+		}
+		else Button_Paint(&vidtvoffButton);
+*/
+
 		if (CFG.themeblack)
 		{
 			Button_Paint(&themeBlackButton);
