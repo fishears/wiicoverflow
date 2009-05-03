@@ -2,10 +2,10 @@
 
 inline void SETTINGS_Init()
 {
-	SETTING_coverZoom    = 0.0;
+	SETTING_coverZoom    = -2.0;
 	SETTING_coverAngle   = 90;
-	SETTING_coverSpacing = 2.8;
-	SETTING_drawWindow   = 7; //DRAW_WINDOW          7
+	SETTING_coverSpacing = 3.1;
+	SETTING_drawWindow   = 7;
 }
 
 /*
