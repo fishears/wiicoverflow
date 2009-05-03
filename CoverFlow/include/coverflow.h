@@ -26,11 +26,13 @@
 #include "buffer.h"
 #include "gfx.h"
  
-#define COVER_WIDTH          160
-#define COVER_HEIGHT         224
-#define DEFAULT_FIFO_SIZE    (256*1024)
-//#define TEST_MODE            1
-#define DEBUG                1
+#include "settings.h"
+ 
+#define COVER_WIDTH    160
+#define COVER_HEIGHT   224
+#define DEFAULT_FIFO_SIZE  (256*1024)
+//#define TEST_MODE 1
+#define DEBUG 1
 
 /* Constants */
 #define ENTRIES_PER_PAGE 	 12
@@ -40,7 +42,6 @@
 #define BUFFER_THREAD_COUNT  1
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           19
-#define DRAW_WINDOW          7
 
 
 extern const u8 no_cover_png[];
