@@ -156,7 +156,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 	if((self.selected || self.animate_flip > 0) && pos == 0)
 		return;
 
-	static const float SPACING = 2.8;
+	static const float SPACING = 3.1;//2.8;
 	float dir = 1;
 	float loc, scale, angle;
 

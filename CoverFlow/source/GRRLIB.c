@@ -995,7 +995,7 @@ void GRRLIB_3D_Init()
 {
     Mtx44 perspective;
 	
-	Vector cam = {0.0F, 0.0F, 0.0F},
+	Vector cam = {0.0F, 0.0F, -2.0F},
 			up = {0.0F, 1.0F, 0.0F},
 		  look = {0.0F, 0.0F, 1.0F};
 	guLookAt(view, &cam, &up, &look);
@@ -1005,6 +1005,7 @@ void GRRLIB_3D_Init()
 	// and aspect ratio based on the display resolution
     f32 w = rmode->viWidth;
     f32 h = rmode->viHeight;
+	//guPerspective(perspective, 45, 1.0, 0.1F, 300.0F);
 	guPerspective(perspective, 45, 1.0, 0.1F, 300.0F);
 	GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
