@@ -191,7 +191,7 @@ void ClearCovers()
 
 void Init_Covers()
 {
-	//int i;
+	int i;
 	
 	ClearCovers();
 	
@@ -254,6 +254,8 @@ void Init_Covers()
 	#else
 	
 	int CoverCount = COVER_COUNT;
+	float max_progress = 1.7;
+	float per_game_prog = max_progress/self.gameCnt;
 	
 	for(i = 0; i < CoverCount; i++)
 	{
@@ -1393,6 +1395,7 @@ int main( int argc, char **argv ){
 			Button_Paint(&settingsButton);
 		}
 
+		//GRRLIB_DrawImg(0, 0, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
         GRRLIB_Render();
 
