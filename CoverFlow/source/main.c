@@ -537,7 +537,7 @@ void Graphic_Settings_Menu(void)
 			}
 			else if(Button_Select(&windowupButton, pointer.p_x, pointer.p_y))
 			{
-				if(SETTING_drawWindow < 20)
+				if(SETTING_drawWindow < 100) // Allow for user to shoot self in foot
 				{
 					SETTING_drawWindow += 1;
 				}
@@ -564,11 +564,11 @@ void Graphic_Settings_Menu(void)
 			}
 			else if(Button_Select(&zoomdownButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_coverZoom -= 0.1;
+				SETTING_coverZoom -= 0.01;
 			}
 			else if(Button_Select(&zoomupButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_coverZoom += 0.1;
+				SETTING_coverZoom += 0.01;
 			}
 		}
 		
