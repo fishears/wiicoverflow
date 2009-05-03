@@ -758,9 +758,9 @@ void Settings_Menu(void)
 
                 GRRLIB_Printf(145, 180, tex_BMfont5, 0xFFFFFFFF, 1, "Video mode:");
                 GRRLIB_Printf(365, 180, tex_BMfont5, 0xFFFFFFFF, 1, "%s",vidmodes[CFG.video]);
-
+/* Waiting on issue #31 fix
 		GRRLIB_Printf(145, 303, tex_BMfont5, 0xFFFFFFFF, 1, "Theme");
-
+*/
 		
 		/*Draw Menu*/
 		if (CFG.ocarina)
@@ -776,13 +776,13 @@ void Settings_Menu(void)
 		}
 		else Button_Paint(&vidtvoffButton);
 */
-
+/* Waiting on issue #31 fix
 		if (CFG.themeblack)
 		{
 			Button_Paint(&themeBlackButton);
 		}
 		else Button_Paint(&themeWhiteButton);
-		
+*/
 		
 		Button_Paint(&graphicsButton);
 		Button_Paint(&downloadButton);
