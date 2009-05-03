@@ -1216,6 +1216,60 @@ void initVars(){
 	self.array_size = 0;
 }
 
+void checkDirs(){
+	
+	int result = 0;
+	
+	DIR_ITER* dir = diropen(USBLOADER_PATH);
+	if (dir == NULL) {
+		
+		mkdir(USBLOADER_PATH, S_ISVTX);
+		//int result = chdir("SD:/usb-loader/");
+		result = chdir(USBLOADER_PATH);
+		
+		if(result == 0){
+			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
+			mkdir("disks", S_ISVTX);
+			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
+			mkdir("covers", S_ISVTX);
+		}
+		else{
+			WindowPrompt("ERROR!","Can't create directories. Covers will not be saved.", &okButton, NULL);
+		}
+	}
+	else{
+	
+	//	WindowPrompt("Cover download","Closing dir", &okButton, NULL);
+		dirclose(dir);
+		
+		result = chdir(USBLOADER_PATH);
+		
+		if(result == 0){
+			dir = diropen("disks");
+	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);
+			if(dir == NULL) {
+				mkdir("disks", S_ISVTX);
+			}
+			else{
+				dirclose(dir);
+			}
+			
+			dir = diropen("covers");
+	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);	
+			if(dir == NULL) {
+				mkdir("covers", S_ISVTX);
+			}
+			else{
+				dirclose(dir);
+			}
+		}
+		
+		else{
+			WindowPrompt("ERROR!","Can't create directories. Covers will not be saved.", &okButton, NULL);
+		}
+	}
+}
+
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
@@ -1274,6 +1328,8 @@ int main( int argc, char **argv ){
 	Paint_Progress(progress,self.debugMsg);
 	
 	my_wbfsDev = WBFS_DEVICE_USB;
+	
+	checkDirs();
 
   INIT_RETRY:
 	/* Initialize WBFS */

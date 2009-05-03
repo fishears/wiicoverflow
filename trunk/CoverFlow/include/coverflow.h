@@ -9,6 +9,7 @@
 #include <math.h>
 #include <gccore.h>
 #include <wiiuse/wpad.h>
+#include <sys/dir.h>
 #include "wpad.h"
 #include "wbfs.h"
 #include "wdvd.h"
