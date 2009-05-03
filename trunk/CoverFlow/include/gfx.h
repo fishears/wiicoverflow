@@ -40,7 +40,7 @@ extern const u8 download_png[];
 extern const u8 download_hover_png[];
 extern const u8 theme_white_png[];
 extern const u8 theme_black_png[];
-extern const u8 gradient_bg_white_png[];
+//extern const u8 gradient_bg_white_png[];
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg back_texture;
@@ -52,7 +52,7 @@ GRRLIB_texImg helvetica;
 GRRLIB_texImg loader_main_texture;
 GRRLIB_texImg progress_texture;
 GRRLIB_texImg gradient_texture;
-GRRLIB_texImg gradient_white_texture;
+//GRRLIB_texImg gradient_white_texture;
 GRRLIB_texImg menu_bg_texture;
 GRRLIB_texImg slide_bar_texture;
 GRRLIB_texImg usb_error_texture;

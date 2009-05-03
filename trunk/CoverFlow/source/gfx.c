@@ -24,7 +24,7 @@ void LoadTextures()
 	tex_BMfont5 = GRRLIB_LoadTexture(BMfont5_png);
 	GRRLIB_InitTileSet(&tex_BMfont5, 8, 16, 0);
 	
-	gradient_white_texture = GRRLIB_LoadTexture(gradient_bg_white_png);
+//	gradient_white_texture = GRRLIB_LoadTexture(gradient_bg_white_png);
 }
 
 void DrawBufferedCover(int i, float loc, float angle)
