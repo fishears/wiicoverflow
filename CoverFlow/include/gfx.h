@@ -76,6 +76,8 @@ Button langupButton;
 Button langdownButton;
 Button vidupButton;
 Button viddownButton;
+//Button vidtvonButton;
+//Button vidtvoffButton;
 Button downloadButton;
 Button graphicsButton;
 Button themeWhiteButton;

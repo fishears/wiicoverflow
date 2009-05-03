@@ -101,6 +101,9 @@ void Init_Buttons()
         vidupButton = Button_Init(plus_button_png, plus_button_hover_png, 456,175);
         viddownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,175);
 
+	//vidtvonButton = Button_Init(toggle_on_png, toggle_on_png, 320, 180);
+        //vidtvoffButton = Button_Init(toggle_off_png, toggle_off_png, 320, 180);
+
 	toggleOnButton = Button_Init(toggle_on_png, toggle_on_png, 350, 180);
         toggleOffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 180);
 	
@@ -164,6 +167,12 @@ void Hover_Buttons()
 		Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y);
 	else
 		Button_Hover(&cheatoffButton, pointer.p_x, pointer.p_y);
+/*
+        if(CFG.vipatch)
+                Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y);
+	else
+		Button_Hover(&vidtvoffButton, pointer.p_x, pointer.p_y);
+*/
 
 }
 
