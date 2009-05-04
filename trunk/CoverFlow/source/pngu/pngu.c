@@ -208,30 +208,37 @@ int PNGU_DecodeToRGBA8 (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *buffe
 		return result;
 
 	buffWidth = width + stride;
+	
+	if(ctx->row_pointers)
+	{
 
-	// Check is source image has an alpha channel
-	if ( (ctx->prop.imgColorType == PNGU_COLOR_TYPE_GRAY_ALPHA) || (ctx->prop.imgColorType == PNGU_COLOR_TYPE_RGB_ALPHA) )
-	{
-		// Alpha channel present, copy image to the output buffer
-		for (y = 0; y < height; y++)
-			memcpy (buffer + (y * buffWidth * 4), ctx->row_pointers[y], width * 4);
-	}
-	else
-	{
-		// No alpha channel present, copy image to the output buffer
-		for (y = 0; y < height; y++)
-			for (x = 0; x < width; x++)
-				((PNGU_u32 *)buffer)[y*buffWidth+x] = 
-					(((PNGU_u32) ctx->row_pointers[y][x*3]) << 24) | 
-					(((PNGU_u32) ctx->row_pointers[y][x*3+1]) << 16) | 
-					(((PNGU_u32) ctx->row_pointers[y][x*3+2]) << 8) | 
-					((PNGU_u32) default_alpha);
+		// Check is source image has an alpha channel
+		if ( (ctx->prop.imgColorType == PNGU_COLOR_TYPE_GRAY_ALPHA) || (ctx->prop.imgColorType == PNGU_COLOR_TYPE_RGB_ALPHA) )
+		{
+			// Alpha channel present, copy image to the output buffer
+			for (y = 0; y < height; y++)
+				memcpy (buffer + (y * buffWidth * 4), ctx->row_pointers[y], width * 4);
+		}
+		else
+		{
+			// No alpha channel present, copy image to the output buffer
+			for (y = 0; y < height; y++)
+				for (x = 0; x < width; x++)
+					((PNGU_u32 *)buffer)[y*buffWidth+x] = 
+						(((PNGU_u32) ctx->row_pointers[y][x*3]) << 24) | 
+						(((PNGU_u32) ctx->row_pointers[y][x*3+1]) << 16) | 
+						(((PNGU_u32) ctx->row_pointers[y][x*3+2]) << 8) | 
+						((PNGU_u32) default_alpha);
+		}
+		
+		// Free resources
+		if(ctx->img_data)
+			free (ctx->img_data);
+			
+		if(ctx->row_pointers)
+			free (ctx->row_pointers);
 	}
 	
-	// Free resources
-	free (ctx->img_data);
-	free (ctx->row_pointers);
-
 	// Success
 	return PNGU_OK;
 }
@@ -567,6 +574,12 @@ int PNGU_DecodeTo4x4RGBA8 (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *bu
 	if (result != PNGU_OK)
 		return result;
 
+	if(!ctx)
+		return PNGU_INVALID_WIDTH_OR_HEIGHT;
+
+	if(!(ctx->row_pointers))
+		return PNGU_INVALID_WIDTH_OR_HEIGHT;
+		
 	// Init some variables
 	qwidth = width / 4;
 	qheight = height / 4;
@@ -675,8 +688,11 @@ int PNGU_DecodeTo4x4RGBA8 (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *bu
 	}
 	
 	// Free resources
-	free (ctx->img_data);
-	free (ctx->row_pointers);
+	if(ctx->img_data)
+		free (ctx->img_data);
+	
+	if(ctx->row_pointers)
+		free (ctx->row_pointers);
 
 	// Success
 	return PNGU_OK;

@@ -1407,7 +1407,13 @@ int main( int argc, char **argv ){
 	
 	#endif
 	
-	sprintf(self.debugMsg, "Freeing unused textures");
+	sprintf(self.debugMsg, "Loading User Settings...");
+	Paint_Progress(progress,self.debugMsg);
+	
+	/*Load Saved Settings*/
+	SETTINGS_Load();
+	
+	sprintf(self.debugMsg, "Freeing unused textures...");
 	Paint_Progress(progress,self.debugMsg);
 	
 	free(gradient_texture.data);
@@ -1428,7 +1434,6 @@ int main( int argc, char **argv ){
 	
 	bool dragging = false;
 	
-		
 	while(1) {
 
 		WPAD_ScanPads();
@@ -1458,6 +1463,8 @@ int main( int argc, char **argv ){
 		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
+			SETTINGS_Save();
+							
 			BUFFER_ClearCovers();
 			BUFFER_KillBuffer();
 			Sleep(300);
@@ -1536,6 +1543,8 @@ int main( int argc, char **argv ){
 							//BUFFER_ClearCovers();
 							//BUFFER_KillBuffer();
 							#endif
+							
+							SETTINGS_Save();
 							
 							//TODO Prompt to boot game...
 							if(!Menu_Boot())

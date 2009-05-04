@@ -5,16 +5,16 @@ extern float SETTING_coverZoom;
 extern float SETTING_coverAngle;
 extern int SETTING_drawWindow;
 
-#ifndef _SETTINGS
-#define _SETTINGS
+#ifndef _SETTINGS_
+#define _SETTINGS_
 float SETTING_coverZoom;
 float SETTING_coverAngle;
 float SETTING_coverSpacing;
 int SETTING_drawWindow;
 #endif /* _SYMBOL */
 
-inline void SETTINGS_Init();
+inline void SETTINGS_Init(void);
 
-//inline bool SETTINGS_Load(char* settingsFileName);
+inline int SETTINGS_Load();
 
-//inline bool SETTINGS_Save(char* settingsFileName);
+inline int SETTINGS_Save();
