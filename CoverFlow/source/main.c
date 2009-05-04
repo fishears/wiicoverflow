@@ -1205,6 +1205,31 @@ void checkDirs(){
 	}
 }
 
+bool LaunchGame()
+{
+	bool done = false;
+	while(!done)
+	{
+		draw_covers();
+		
+		done = draw_selected_two(gameList, false);
+		
+		GRRLIB_Render();
+	}
+	
+	/*Fade to black*/
+	//TODO Fade to black instead of just drawing black
+	GRRLIB_FillScreen(0x000000FF);
+	GRRLIB_Render();
+	
+	GRRLIB_FillScreen(0x000000FF);
+	GRRLIB_Render();
+	
+	Menu_Boot();
+	
+	return false;
+}
+
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
@@ -1465,6 +1490,10 @@ int main( int argc, char **argv ){
 							
 							SETTINGS_Save();
 							
+							#ifdef ANIMATE_TEST
+							if(!LaunchGame())
+								return 0;
+							#else
 							//TODO Prompt to boot game...
 							if(!Menu_Boot())
 							{
@@ -1475,6 +1504,7 @@ int main( int argc, char **argv ){
 							{
 								return 0;
 							}
+							#endif
 						}
 						else if(Button_Select(&deleteButton, pointer.p_x, pointer.p_y))
 						{
@@ -1558,10 +1588,13 @@ int main( int argc, char **argv ){
 		
 		draw_covers();
 
-
 		if(self.selected || self.animate_flip != 0)
 		{
+			#ifndef ANIMATE_TEST
 			draw_selected(gameList);
+			#else
+			draw_selected_two(gameList, false);
+			#endif
 		}
 		else
 		{

@@ -43,6 +43,7 @@ extern const u8 download_hover_png[];
 extern const u8 theme_white_png[];
 extern const u8 theme_black_png[];
 //extern const u8 gradient_bg_white_png[];
+extern const u8 bg_options_screen_no_transparency_png[];
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg back_texture;
@@ -58,6 +59,7 @@ GRRLIB_texImg gradient_texture;
 GRRLIB_texImg menu_bg_texture;
 GRRLIB_texImg slide_bar_texture;
 GRRLIB_texImg tex_BMfont5;
+GRRLIB_texImg load_bg_texture;
 
 Button addButton;
 Button slideButton;
@@ -111,6 +113,10 @@ void GRRLIB_Cover(float pos, int texture_id);
 void draw_covers();
 void draw_game_title(int index, struct discHdr *gameList);
 void draw_selected(struct discHdr *gameList);
+
+//Work for new Load Animation
+int draw_selected_two(struct discHdr *gameList, bool load);
+
 float change_scale_without_containing(float val, float in_min, float in_max, float out_min, float out_max);
 float change_scale(float val, float in_min, float in_max, float out_min, float out_max);
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
