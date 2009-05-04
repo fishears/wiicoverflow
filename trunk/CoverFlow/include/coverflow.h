@@ -54,7 +54,7 @@ extern const u8 loading_main_png[];
 extern const u8 progress_png[];
 extern const u8 gradient_bg_png[];
 extern const u8 slide_bar_png[];
-extern const u8 usb_error_png[];
+//extern const u8 usb_error_png[];
 extern const u8 generic_point_png[];
 extern const u8 menu_bg_png[];
 

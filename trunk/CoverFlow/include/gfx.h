@@ -57,7 +57,6 @@ GRRLIB_texImg gradient_texture;
 //GRRLIB_texImg gradient_white_texture;
 GRRLIB_texImg menu_bg_texture;
 GRRLIB_texImg slide_bar_texture;
-GRRLIB_texImg usb_error_texture;
 GRRLIB_texImg tex_BMfont5;
 
 Button addButton;
