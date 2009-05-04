@@ -34,13 +34,13 @@ LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	-lpng -lz -lfat -lwiiuse -lbte -logc -lm
+LIBS	:=	-lmxml -lpng -lz -lfat -lwiiuse -lbte -logc -lm
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(CURDIR)/libs/png
+LIBDIRS	:= $(CURDIR)/libs/png $(CURDIR)/libs/mxml
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
