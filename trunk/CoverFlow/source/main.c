@@ -672,12 +672,10 @@ void Settings_Menu(void)
 			{
 				CFG.ocarina = (CFG.ocarina) ? 0 : 1;
 			}
-/* NOT LIVE JUST YET
 			else if(Button_Select(&vidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&vidtvoffButton, pointer.p_x, pointer.p_y))
 			{
 				CFG.vipatch = (CFG.vipatch) ? 0 : 1;
 			}
-*/
 			else if(Button_Select(&graphicsButton, pointer.p_x, pointer.p_y))
 			{
 				Graphic_Settings_Menu();
@@ -755,15 +753,15 @@ void Settings_Menu(void)
 
 		Button_Paint(&graphicsButton);
 	
-		GRRLIB_Printf(145, 103, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina:");
+		GRRLIB_Printf(145, 93, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina:");
 
-		GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Language:");
-		GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[CFG.language]);
-		GRRLIB_Printf(145, 213, tex_BMfont5, 0xFFFFFFFF, 1, "Graphics:");
-		GRRLIB_Printf(145, 243, tex_BMfont5, 0xFFFFFFFF, 1, "Download missing covers");
-
-                GRRLIB_Printf(145, 180, tex_BMfont5, 0xFFFFFFFF, 1, "Video mode:");
-                GRRLIB_Printf(365, 180, tex_BMfont5, 0xFFFFFFFF, 1, "%s",vidmodes[CFG.video]);
+		GRRLIB_Printf(145, 128, tex_BMfont5, 0xFFFFFFFF, 1, "Language:");
+		GRRLIB_Printf(330, 128, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[CFG.language]);
+		GRRLIB_Printf(145, 223, tex_BMfont5, 0xFFFFFFFF, 1, "Graphics:");
+		GRRLIB_Printf(145, 253, tex_BMfont5, 0xFFFFFFFF, 1, "Download missing covers");
+                GRRLIB_Printf(145, 180, tex_BMfont5, 0xFFFFFFFF, 1, "VIDTV patch:");
+                GRRLIB_Printf(145, 155, tex_BMfont5, 0xFFFFFFFF, 1, "Video mode:");
+                GRRLIB_Printf(365, 155, tex_BMfont5, 0xFFFFFFFF, 1, "%s",vidmodes[CFG.video]);
 /* Waiting on issue #31 fix
 		GRRLIB_Printf(145, 303, tex_BMfont5, 0xFFFFFFFF, 1, "Theme");
 */
@@ -775,13 +773,12 @@ void Settings_Menu(void)
 		}
 		else Button_Paint(&cheatoffButton);
 
-/* NOT LIVE JUST YET
 		if (CFG.vipatch)
 		{
 			Button_Paint(&vidtvonButton);
 		}
 		else Button_Paint(&vidtvoffButton);
-*/
+
 /* Waiting on issue #31 fix
 		if (CFG.themeblack)
 		{
