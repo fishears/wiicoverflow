@@ -168,8 +168,6 @@ void BUFFER_ClearCovers()
 			
 	}
 	pthread_mutex_unlock(&queue_mutex);
-	
-	
 }
 
 void* process(void *arg)
