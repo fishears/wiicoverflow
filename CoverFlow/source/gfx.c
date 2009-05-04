@@ -7,7 +7,6 @@ extern s_pointer pointer;
 
 void LoadTextures()
 {
-	usb_error_texture = GRRLIB_LoadTexture(usb_error_png);
 	pointer_texture   = GRRLIB_LoadTexture(generic_point_png);
 	menu_bg_texture   = GRRLIB_LoadTexture(menu_bg_png);
 	

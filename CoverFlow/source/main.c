@@ -1349,8 +1349,9 @@ int main( int argc, char **argv ){
 		while(1)
 		{
 			WPAD_ScanPads();
-		
-			GRRLIB_DrawImg(0, 0, usb_error_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_Printf(190, 100, tex_BMfont5, 0xFFFFFFFF, 1, "USB Error - Drive not found");
+			GRRLIB_Printf(190, 120, tex_BMfont5, 0xFFFFFFFF, 1, "Press A to Retry, B to Exit");
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
@@ -1373,8 +1374,9 @@ int main( int argc, char **argv ){
 		while(1)
 		{
 			WPAD_ScanPads();
-		
-			GRRLIB_DrawImg(0, 0, usb_error_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_Printf(190, 100, tex_BMfont5, 0xFFFFFFFF, 1, "USB Error - Drive not found");
+			GRRLIB_Printf(190, 120, tex_BMfont5, 0xFFFFFFFF, 1, "Press A to Retry, B to Exit");
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
@@ -1428,7 +1430,6 @@ int main( int argc, char **argv ){
 	free(gradient_texture.data);
 	//free(loader_main_texture.data);
 	free(progress_texture.data);
-	free(usb_error_texture.data);
 	
 	Sleep(300);
 	
