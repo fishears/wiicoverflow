@@ -463,12 +463,14 @@ ShowProgress (s32 done, s32 total)
 	//Calculate percentage/size
 	percent = (done * 100.0) / total;
 
-	sprintf(prozent, "%s%0.2f%%", "Installing Game...", percent);
+	//sprintf(prozent, "%s%0.2f%%", "Installing Game...", percent);
 
-    sprintf(timet,"Time left: %d:%02d:%02d",h,m,s);
+    sprintf(timet,"Installing Game (%0.2f%%) Time left: %d:%02d:%02d",percent, h,m,s);
 
 	/*Update and Draw Progress Window Here*/
-	WindowPrompt(prozent, timet, 0, 0);
+	//WindowPrompt(prozent, timet, 0, 0);
+	
+	Paint_Progress_Generic(done, total, timet); 
 }
 
 
