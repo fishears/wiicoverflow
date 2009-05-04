@@ -81,16 +81,39 @@ void Paint_Progress(float v, char* msg)
 	GRRLIB_Render();
 }
 
+void Paint_Progress_Generic(int v, int max, char* msg)
+{
+	float percent = (float)v/(float)max;
+
+	int count = percent*28;
+	int i;
+	
+	for(i = 0; i < count; i++)
+	{
+		GRRLIB_DrawImg(165+12*i, 231, progress_texture, 0, 1, 1, 0xFFFFFFFF);
+	}
+
+	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
+	
+	#ifdef DEBUG
+	if(msg != NULL)
+		GRRLIB_Printf(160, 255, tex_BMfont5,  0x444444FF, 1, "%s", msg);
+    #endif
+    
+	GRRLIB_Render();
+}
+
 void Init_Buttons()
 {
 
-        addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
+    addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
 	slideButton = Button_Init(slide_png,  slide_hover_png, 580, 400);
 	okButton    = Button_Init(ok_png,   ok_hover_png, 220, 250);
 	loadButton  = Button_Init(load_png,   load_hover_png, 220, 300);
 	deleteButton  = Button_Init(delete_png,   delete_hover_png, 220, 400);
+	resetButton   = Button_Init(reset_png,   reset_hover_png, 285, 320);
 	backButton  = Button_Init(back_png,   back_hover_png, 340, 300);
-	cancelButton = Button_Init(cancel_png, cancel_hover_png, 340, 250);
+	cancelButton = Button_Init(cancel_png, cancel_hover_png, 360, 250);
 	
 	cheatonButton = Button_Init(toggle_on_png, toggle_on_png, 350,95);
 	cheatoffButton = Button_Init(toggle_off_png, toggle_off_png, 350,95);
@@ -98,16 +121,16 @@ void Init_Buttons()
 	langupButton = Button_Init(plus_button_png, plus_button_hover_png,456,138);
 	langdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,138);
 
-        vidupButton = Button_Init(plus_button_png, plus_button_hover_png, 456,175);
-        viddownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,175);
+    vidupButton = Button_Init(plus_button_png, plus_button_hover_png, 456,175);
+    viddownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,175);
 
 	//vidtvonButton = Button_Init(toggle_on_png, toggle_on_png, 320, 180);
         //vidtvoffButton = Button_Init(toggle_off_png, toggle_off_png, 320, 180);
 
-	toggleOnButton = Button_Init(toggle_on_png, toggle_on_png, 350, 180);
-        toggleOffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 180);
+	coverTextOnButton = Button_Init(toggle_on_png, toggle_on_png, 390, 287);
+    coverTextOffButton = Button_Init(toggle_off_png, toggle_off_png, 390, 287);
 	
-        graphicsButton = Button_Init(ok_png, ok_hover_png, 350, 200);
+    graphicsButton = Button_Init(ok_png, ok_hover_png, 350, 200);
 	
 	yesButton  = Button_Init(yes_png, yes_hover_png, 220, 250);
 	noButton   = Button_Init(no_png, no_hover_png, 340, 250);
@@ -143,6 +166,7 @@ void Hover_Buttons()
 	Button_Hover(&yesButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&noButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&resetButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&settingsButton, pointer.p_x, pointer.p_y);
         Button_Hover(&langupButton, pointer.p_x, pointer.p_y);
         Button_Hover(&langdownButton, pointer.p_x, pointer.p_y);
@@ -167,6 +191,13 @@ void Hover_Buttons()
 		Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y);
 	else
 		Button_Hover(&cheatoffButton, pointer.p_x, pointer.p_y);
+		
+		
+	if(SETTING_coverText)
+		Button_Hover(&coverTextOnButton, pointer.p_x, pointer.p_y);
+	else
+		Button_Hover(&coverTextOffButton, pointer.p_x, pointer.p_y);
+		
 /*
         if(CFG.vipatch)
                 Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y);

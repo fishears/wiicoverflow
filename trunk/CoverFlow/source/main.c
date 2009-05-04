@@ -63,7 +63,7 @@ Mtx GXmodelView2D;
 //int self.array_size = 0;
 
 
-void Download_Cover(struct discHdr *header);
+void Download_Cover(struct discHdr *header, int v, int max);
 void batchDownloadCover();
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
 
@@ -167,18 +167,6 @@ void AddCover(GRRLIB_texImg tex)
 		covers[self.array_size] = tex;
 		self.array_size++;
 	}
-	/*
-	self.array_size = self.array_size + 1;
-	covers = (GRRLIB_texImg*)realloc(covers, (self.array_size * sizeof(GRRLIB_texImg)));
-
-	if (covers == NULL)
-	{
-	   // fprintf(stdout, "ERROR: Couldn't realloc memory!");
-	   return;
-	}
-
-    covers[self.array_size - 1] = tex;
-	*/
 }
 
 void ClearCovers()
@@ -535,7 +523,11 @@ void Graphic_Settings_Menu(void)
 			{
 				doloop = false;
 			}
-			if(Button_Select(&windowdownButton, pointer.p_x, pointer.p_y))
+			else if(Button_Select(&resetButton, pointer.p_x, pointer.p_y))
+			{
+				SETTINGS_Init();
+			}
+			else if(Button_Select(&windowdownButton, pointer.p_x, pointer.p_y))
 			{
 				if(SETTING_drawWindow > 1)
 				{
@@ -548,6 +540,10 @@ void Graphic_Settings_Menu(void)
 				{
 					SETTING_drawWindow += 1;
 				}
+			}
+			else if(Button_Select(&coverTextOnButton, pointer.p_x, pointer.p_y) || Button_Select(&coverTextOffButton, pointer.p_x, pointer.p_y))
+			{
+				SETTING_coverText = (SETTING_coverText) ? 0 : 1;
 			}
 		}
 		
@@ -605,6 +601,14 @@ void Graphic_Settings_Menu(void)
 		Button_Paint(&windowupButton);
 		Button_Paint(&windowdownButton);
 	
+		if (SETTING_coverText)
+		{
+			Button_Paint(&coverTextOnButton);
+		}
+		else Button_Paint(&coverTextOffButton);
+		
+		Button_Paint(&resetButton);
+	
 		GRRLIB_Printf(145, 95, tex_BMfont5, 0xFFFFFFFF, 1, "Zoom:");
 		GRRLIB_Printf(330, 95, tex_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverZoom);
 
@@ -616,6 +620,8 @@ void Graphic_Settings_Menu(void)
 		
 		GRRLIB_Printf(145, 239, tex_BMfont5, 0xFFFFFFFF, 1, "Draw Window:");
 		GRRLIB_Printf(330, 239, tex_BMfont5, 0xFFFFFFFF, 1, "%d", SETTING_drawWindow);
+		
+		GRRLIB_Printf(145, 287, tex_BMfont5, 0xFFFFFFFF, 1, "Game Title:");
 		
 		/*Draw Menu*/
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
@@ -1029,7 +1035,7 @@ void saveFile(char* imgPath, struct block file){
 }
 
 
-void Download_Cover(struct discHdr *header)
+void Download_Cover(struct discHdr *header, int v, int max)
 {
 	char imgPath[100];
 
@@ -1041,18 +1047,18 @@ void Download_Cover(struct discHdr *header)
 		char myIP[16];
 		
 		sprintf(self.debugMsg, "Initializing Network");
-		Paint_Progress(1, self.debugMsg);
+		Paint_Progress_Generic(v, max, self.debugMsg);
 		
 		if(!Net_Init(myIP))
 		{
 			sprintf(self.debugMsg, "Error Initializing Network");
-			Paint_Progress(1, self.debugMsg);
+			Paint_Progress_Generic(v, max, self.debugMsg);
 			WindowPrompt ("ERROR!","Error initializing network", &okButton, 0);
 		}
 		else
 		{
 			sprintf(self.debugMsg, "Network Initialized");
-			Paint_Progress(1, self.debugMsg);
+			Paint_Progress_Generic(v, max, self.debugMsg);
 			inetOk = true;
 		}
 
@@ -1086,7 +1092,7 @@ void Download_Cover(struct discHdr *header)
 		snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", CFG.images_path, header->id);
 		
 		sprintf(self.debugMsg, "Checking presence of %s", imgPath);
-		Paint_Progress(1,self.debugMsg);
+		Paint_Progress_Generic(v, max,self.debugMsg);
 		
 		FILE *fp;
 		fp = fopen(imgPath, "rb");
@@ -1094,7 +1100,7 @@ void Download_Cover(struct discHdr *header)
 		{
 			fclose (fp);
 			sprintf(self.debugMsg, "%s present, not downloading", imgPath);
-			Paint_Progress(1,self.debugMsg);
+			Paint_Progress_Generic(v, max,self.debugMsg);
 		}
 		else{
 			
@@ -1107,7 +1113,7 @@ void Download_Cover(struct discHdr *header)
 			
 			sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, header->id);
 			sprintf(self.debugMsg, "Getting %s", url);
-			Paint_Progress(1,self.debugMsg);
+			Paint_Progress_Generic(v, max,self.debugMsg);
 		
 			file = downloadfile(url);
 			
@@ -1115,31 +1121,31 @@ void Download_Cover(struct discHdr *header)
 				saveFile(imgPath, file);
 				free(file.data);
 				sprintf(self.debugMsg, "done");
-			    Paint_Progress(1,self.debugMsg);
+			    Paint_Progress_Generic(v, max,self.debugMsg);
 				//else
 					//donotdownload = true;
 			}
 			else {
 				sprintf(self.debugMsg, "some error occurred");
-				Paint_Progress(1,self.debugMsg);
+				Paint_Progress_Generic(v, max,self.debugMsg);
 			}
 		}
 		
 		snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c%c.png", CFG.images_path,  header->id[0], header->id[1], header->id[2], header->id[3]);
 		sprintf(self.debugMsg, "Checking presence of %s", imgPath);
-		Paint_Progress(1,self.debugMsg);
+		Paint_Progress_Generic(v, max,self.debugMsg);
 		
 		fp = fopen(imgPath, "rb");
 		if (fp)
 		{
 			fclose (fp);
 			sprintf(self.debugMsg, "%s present, not downloading", imgPath);
-			Paint_Progress(1,self.debugMsg);
+			Paint_Progress_Generic(v, max,self.debugMsg);
 		}
 		else{
 			sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c%c.png", header->id[0], header->id[1], header->id[2], header->id[3]);
 			sprintf(self.debugMsg, "Getting %s", url);
-			Paint_Progress(1,self.debugMsg);
+			Paint_Progress_Generic(v, max,self.debugMsg);
 			
 			file = downloadfile(url);
 			
@@ -1147,7 +1153,7 @@ void Download_Cover(struct discHdr *header)
 				saveFile(imgPath, file);
 				free(file.data);
 				sprintf(self.debugMsg, "done");
-			    Paint_Progress(1,self.debugMsg);
+			    Paint_Progress_Generic(v, max,self.debugMsg);
 				//else
 					//donotdownload = true;
 			}
@@ -1156,7 +1162,7 @@ void Download_Cover(struct discHdr *header)
 				snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c.png", CFG.images_path,  header->id[0], header->id[1], header->id[2]);
 				sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c.png", header->id[0], header->id[1], header->id[2]);
 				sprintf(self.debugMsg, "Getting %s", url);
-				Paint_Progress(1,self.debugMsg);
+				Paint_Progress_Generic(v, max,self.debugMsg);
 				
 				file = downloadfile(url);
 			
@@ -1164,11 +1170,11 @@ void Download_Cover(struct discHdr *header)
 					saveFile(imgPath, file);
 					free(file.data);
 					sprintf(self.debugMsg, "done");
-					Paint_Progress(1,self.debugMsg);
+					Paint_Progress_Generic(v, max,self.debugMsg);
 				}
 				else {
 					sprintf(self.debugMsg, "some error occurred");
-					Paint_Progress(1,self.debugMsg);
+					Paint_Progress_Generic(v, max,self.debugMsg);
 				}
 			}
 		//else
@@ -1190,8 +1196,8 @@ void batchDownloadCover(){
 		if(self.array_size < MAX_COVERS)
 		{
 			sprintf(self.debugMsg, "Checking next cover...%s", header->id);
-			Paint_Progress(1, self.debugMsg);
-			Download_Cover(header);
+			Paint_Progress_Generic(i, self.gameCnt, self.debugMsg);
+			Download_Cover(header, i, self.gameCnt);
 			//sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
 		}
 	}
@@ -1500,7 +1506,7 @@ int main( int argc, char **argv ){
 			{
 				AddGame();
 			}
-			if(Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
+			else if(Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
 			{
 				Settings_Menu();
 			}
@@ -1628,7 +1634,8 @@ int main( int argc, char **argv ){
 					select_ready = true;
 				
 					/*Draw Game Title*/
-					draw_game_title(self.gameSelected, gameList);
+					if(SETTING_coverText)
+						draw_game_title(self.gameSelected, gameList);
 				}
 					
 			}
