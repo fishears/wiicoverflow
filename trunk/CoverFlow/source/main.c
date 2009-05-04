@@ -1,6 +1,6 @@
 #include "coverflow.h"
 
-static char prozent[MAX_CHARACTERS + 16];
+//static char prozent[MAX_CHARACTERS + 16];
 static char timet[MAX_CHARACTERS + 16];
 
 // Language selection config
@@ -39,9 +39,9 @@ s_self self;
 s_pointer pointer;
 
 #ifdef TEST_MODE
-COVER_COUNT = 29;
+int COVER_COUNT = 29;
 #else
-COVER_COUNT = 0;
+int COVER_COUNT = 0;
 #endif
 
 
@@ -67,8 +67,6 @@ void Download_Cover(struct discHdr *header, int v, int max);
 void batchDownloadCover();
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
 
-
-#ifdef BUFFER_TEST
 int buffer_window_min = 0;
 int buffer_window_max = 0;
 int oldmin = 0;
@@ -109,9 +107,6 @@ void UpdateBufferedImages()
 	}
 	
 }
-
-
-#endif
 
 void quit()
 {
@@ -176,8 +171,6 @@ void ClearCovers()
 
 void Init_Covers()
 {
-	int i;
-	
 	#ifdef TEST_MODE
 	progress+=0.05;
 	Paint_Progress(progress, NULL);
@@ -571,7 +564,6 @@ void Graphic_Settings_Menu(void)
 void Settings_Menu(void)
 {
 	bool doloop = true;
-	bool dummy = false;
 
 	/*Render and control Settings*/
 	do{
@@ -677,7 +669,6 @@ void Settings_Menu(void)
 		Hover_Buttons();
 		
 		GRRLIB_FillScreen(0x000000FF);
-		//GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
                 GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
@@ -911,14 +902,6 @@ bool Menu_Boot(void)
 
     GRRLIB_Exit();
 	
-	#ifndef BUFFER_TEST
-	int i = 0;
-	for(i = 0; i < self.array_size; i++)
-	{
-		free(covers[i].data);
-	}
-	#endif
-	
 	free(cover_texture.data);
 	free(back_texture.data);
 	free(empty_texture.data);
@@ -958,7 +941,6 @@ int Net_Init(char *ip){
 		usleep(100 * 1000); //100ms
 	
     if (if_config(ip, NULL, NULL, true) < 0) {
-		//printf("      Error reading IP address, exiting");
 		WindowPrompt ("ERROR!","Cannot get local IP address.", &okButton, 0);
 		usleep(1000 * 1000 * 1); //1 sec
 		return false;
@@ -967,7 +949,6 @@ int Net_Init(char *ip){
 }
 
 void saveFile(char* imgPath, struct block file){
-	//printf("\n\n    Size: %d byte", file.size);
 			
 	/* save png to sd card for future use*/
 			
@@ -1033,7 +1014,6 @@ void Download_Cover(struct discHdr *header, int v, int max)
 			sprintf(region,"pal");
 			break;
 		}
-		//printf("\n    Downloading cover...");
 
 		snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", CFG.images_path, header->id);
 		
@@ -1229,7 +1209,7 @@ void checkDirs(){
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
 	#ifndef TEST_MODE
-	//__Disc_SetLowMem();
+	
 	/* Load Custom IOS */
 	int ret = IOS_ReloadIOS(249);
 	/* Check if Custom IOS is loaded */
@@ -1344,9 +1324,7 @@ int main( int argc, char **argv ){
 	#endif
 	
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
-	//Init_Buttons();
-	
-	#ifdef BUFFER_TEST
+
 	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
 	UpdateBufferedImages();
 	
@@ -1362,8 +1340,6 @@ int main( int argc, char **argv ){
 		Sleep(1);
 	}
 	
-	#endif
-	
 	sprintf(self.debugMsg, "Loading User Settings...");
 	Paint_Progress(progress,self.debugMsg);
 	
@@ -1374,7 +1350,6 @@ int main( int argc, char **argv ){
 	Paint_Progress(progress,self.debugMsg);
 	
 	free(gradient_texture.data);
-	//free(loader_main_texture.data);
 	free(progress_texture.data);
 	
 	Sleep(300);
@@ -1407,15 +1382,7 @@ int main( int argc, char **argv ){
 		pointer.p_y = ir.sy-250;
 		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
-		//GRRLIB_FillScreen(0xFFFFFFFF);
 		Hover_Buttons();
-		
-		/*
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1){
-			if(WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
-				batchDownloadCover();
-		}
-		*/
 		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
@@ -1495,10 +1462,6 @@ int main( int argc, char **argv ){
 					{
 						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y))
 						{
-							#ifdef BUFFER_TEST
-							//BUFFER_ClearCovers();
-							//BUFFER_KillBuffer();
-							#endif
 							
 							SETTINGS_Save();
 							
@@ -1591,9 +1554,7 @@ int main( int argc, char **argv ){
 			}
 		}
 		
-		#ifdef BUFFER_TEST
 		UpdateBufferedImages();
-		#endif
 		
 		draw_covers();
 
@@ -1609,14 +1570,11 @@ int main( int argc, char **argv ){
 			Button_Paint(&settingsButton);
 		}
 
-		//GRRLIB_DrawImg(0, 0, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
         GRRLIB_Render();
 
 		Sleep(1);
 	}
-	
-	//Preview
 	
     GRRLIB_Exit(); 
 	
