@@ -114,29 +114,29 @@ void Init_Buttons()
 	backButton  = Button_Init(back_png,   back_hover_png, 340, 300);
 	cancelButton = Button_Init(cancel_png, cancel_hover_png, 360, 250);
 	
-	cheatonButton = Button_Init(toggle_on_png, toggle_on_png, 350,95);
-	cheatoffButton = Button_Init(toggle_off_png, toggle_off_png, 350,95);
+	cheatonButton = Button_Init(toggle_on_png, toggle_on_png, 350,85);
+	cheatoffButton = Button_Init(toggle_off_png, toggle_off_png, 350,85);
 
-	langupButton = Button_Init(plus_button_png, plus_button_hover_png,456,138);
-	langdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,138);
+	langupButton = Button_Init(plus_button_png, plus_button_hover_png,456,123);
+	langdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,123);
 
-    vidupButton = Button_Init(plus_button_png, plus_button_hover_png, 456,175);
-    viddownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,175);
+    vidupButton = Button_Init(plus_button_png, plus_button_hover_png, 456,150);
+    viddownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,150);
 
-	//vidtvonButton = Button_Init(toggle_on_png, toggle_on_png, 320, 180);
-        //vidtvoffButton = Button_Init(toggle_off_png, toggle_off_png, 320, 180);
+	vidtvonButton = Button_Init(toggle_on_png, toggle_on_png, 350, 175);
+        vidtvoffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 175);
 
 	coverTextOnButton = Button_Init(toggle_on_png, toggle_on_png, 390, 287);
     coverTextOffButton = Button_Init(toggle_off_png, toggle_off_png, 390, 287);
 	
-    graphicsButton = Button_Init(ok_png, ok_hover_png, 350, 200);
+    graphicsButton = Button_Init(ok_png, ok_hover_png, 350, 210);
 	
 	yesButton  = Button_Init(yes_png, yes_hover_png, 220, 250);
 	noButton   = Button_Init(no_png, no_hover_png, 340, 250);
 	
 	settingsButton = Button_Init(settings_png, settings_hover_png, 30, 420);
 	
-	downloadButton = Button_Init(download_png, download_hover_png, 350, 240);
+	downloadButton = Button_Init(download_png, download_hover_png, 350, 250);
 	
 	spacingupButton = Button_Init(plus_button_png, plus_button_hover_png,456,138);
 	spacingdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,138);
@@ -197,12 +197,10 @@ void Hover_Buttons()
 	else
 		Button_Hover(&coverTextOffButton, pointer.p_x, pointer.p_y);
 		
-/*
         if(CFG.vipatch)
                 Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y);
 	else
 		Button_Hover(&vidtvoffButton, pointer.p_x, pointer.p_y);
-*/
 
 }
 
