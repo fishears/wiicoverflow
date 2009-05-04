@@ -1212,7 +1212,7 @@ bool LaunchGame()
 	{
 		draw_covers();
 		
-		done = draw_selected_two(gameList, false);
+		done = draw_selected_two(gameList, true);
 		
 		GRRLIB_Render();
 	}
