@@ -242,15 +242,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 	scale = pow(pos + 1, -2);
 	angle = -1 * dir * change_scale(scale, 0, 1, SETTING_coverAngle, 0);
 
-	#ifdef BUFFER_TEST
 	DrawBufferedCover(texture_id, loc, angle);
-	#else
-
-	if(texture_id != -1 && texture_id < self.array_size)
-		GRRLIB_DrawCoverImg(loc*1.2,covers[texture_id],angle,1.0,0xFFFFFFFF);
-	else
-		GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
-	#endif
 }
 
 void draw_covers()
@@ -377,14 +369,8 @@ void draw_selected(struct discHdr *gameList)
   }
   else
   {
-	#ifdef BUFFER_TEST
 	DrawBufferedCover(self.gameSelected, loc, angle);
-	#else
-	if(self.gameSelected < self.array_size)
-		GRRLIB_DrawCoverImg(loc*1.2,covers[self.gameSelected],angle,1.0,0xFFFFFFFF);
-	else
-		GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
-	#endif
+	
   }
 }
 
