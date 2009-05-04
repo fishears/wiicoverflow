@@ -21,6 +21,9 @@ void LoadTextures()
 	GRRLIB_InitTileSet(&text_font1, 32, 36, 32);
 
 	tex_BMfont5 = GRRLIB_LoadTexture(BMfont5_png);
+	
+	load_bg_texture = GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
+	
 	GRRLIB_InitTileSet(&tex_BMfont5, 8, 16, 0);
 	
 //	gradient_white_texture = GRRLIB_LoadTexture(gradient_bg_white_png);
@@ -275,6 +278,142 @@ void draw_game_title(int index, struct discHdr *gameList)
 			
 		GRRLIB_Printf(340 - offset, 400, tex_BMfont5, 0xFFFFFFFF, tsize, "%s", header->title);
 	}
+}
+
+int draw_selected_two(struct discHdr *gameList, bool load)
+{
+	/*Animate fliping cover*/
+	if(self.selected && self.animate_flip < 1.0)
+	{
+		self.animate_rotate = 0.0;
+		self.animate_load  = 0.0;
+		self.animate_load_speed = ANIMATE_SPEED;
+		self.animate_direction = 1;
+		
+		self.animate_flip += FLIP_SPEED;
+		if(self.animate_flip > 1.0)
+			self.animate_flip = 1.0;
+			
+		if(self.animate_flip > 0.3 && self.animate_flip < 0.7)
+			self.animate_flip = 0.7;
+	}
+	else if(!self.selected)
+	{
+		self.animate_flip -= FLIP_SPEED;
+		
+		if(self.animate_flip > 0.3 && self.animate_flip < 0.7)
+			self.animate_flip = 0.3;
+		
+		if(self.animate_flip < 0)
+			self.animate_flip = 0;
+	}
+	
+	float dir = 1;
+	float loc, scale, angle;
+
+	loc = SETTING_coverSpacing * dir * (pow(1, -1) - 1);
+	scale = change_scale(self.animate_flip, 0, 1, 0, 180);
+	angle = -1 * dir * scale;
+
+	if(load)
+	{
+		self.animate_rotate+=5;
+		if(self.animate_rotate == 360) self.animate_rotate = 0;
+		
+		self.animate_load_speed -= 1;
+		
+		if(self.animate_load_speed <= 0)
+		{
+			self.animate_load_speed = ANIMATE_SPEED;
+			self.animate_load += 1;
+		}
+		
+		if(self.animate_load > 100)
+		{
+			return 1;
+		}
+	}
+	else
+	{
+		
+		if(self.animate_load > 15 )
+		{
+			self.animate_direction = -1;
+		}
+		else if(self.animate_load < -15)
+		{
+			self.animate_direction = 1;
+		}
+		
+		self.animate_load += (self.animate_direction)*0.03;
+	}
+	
+		
+	if(scale >= 180)
+	{
+		GRRLIB_DrawImg(120, 60, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+		
+		GRRLIB_DrawImg(140,30+self.animate_load, current_cover_texture, self.animate_rotate, 1, 1, 0xFFFFFFFF);
+		
+		if(self.gameSelected < MAX_BUFFERED_COVERS || self.gameSelected >= 0)
+		{
+			if(BUFFER_IsCoverReady(self.gameSelected))
+			{
+				pthread_mutex_lock(&buffer_mutex[self.gameSelected]);
+				if(_texture_data[self.gameSelected].data)
+				{
+					GRRLIB_DrawImg(120, 60, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+				}
+				else
+				{
+					GRRLIB_DrawImg(120, 60, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+				}
+				pthread_mutex_unlock(&buffer_mutex[self.gameSelected]);
+			}
+			else
+			{
+					GRRLIB_DrawImg(120, 60, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+			}	
+		}
+		else
+		{
+			GRRLIB_DrawImg(120, 60, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+		}	
+
+		loadButton.x = 320;
+		loadButton.y = 250;
+		backButton.x = 400;
+		backButton.y = 250;
+		deleteButton.x = 480;
+		deleteButton.y = 250;
+		
+		Button_Paint(&loadButton);
+		Button_Paint(&backButton);
+		Button_Paint(&deleteButton);
+		
+		#ifndef TEST_MODE
+		struct discHdr *header = NULL;
+		header = &gameList[self.gameSelected];
+		f32 size = 0.0;
+
+		/* Get game size */
+		WBFS_GameSize(header->id, &size);
+
+		GRRLIB_Printf(210, 30, tex_BMfont5, 0x777777FF, 1, "%s", header->title);
+		GRRLIB_Printf(210, 60, tex_BMfont5, 0x444444FF, .8, " Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
+		GRRLIB_Printf(210, 80, tex_BMfont5, 0x444444FF, .8, " Size:    %.2fGB", size);
+		#else
+		GRRLIB_Printf(210, 30, tex_BMfont5, 0x777777FF, 1, "%s", "Test Game Id Goes Here");
+		GRRLIB_Printf(210, 60, tex_BMfont5, 0x444444FF, .8, "%s", " Game ID: TEST");
+		GRRLIB_Printf(210, 80, tex_BMfont5, 0x444444FF, .8, "%s", " Size:    2.0GB");
+		#endif
+  }
+  else
+  {
+	DrawBufferedCover(self.gameSelected, loc, angle);
+  }
+  
+  return 0;
 }
 
 void draw_selected(struct discHdr *gameList)
