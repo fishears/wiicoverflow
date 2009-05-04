@@ -171,82 +171,17 @@ void AddCover(GRRLIB_texImg tex)
 
 void ClearCovers()
 {
-	#ifndef BUFFER_TEST
-	int i;
-	for(i = 0; i < self.array_size; i++)
-	{
-		free(covers[self.array_size].data);
-	}
-	
-	self.array_size = 0;
-	#else
 	BUFFER_ClearCovers();
-	#endif
 }
 
 void Init_Covers()
 {
 	int i;
 	
-	ClearCovers();
-	
+	#ifdef TEST_MODE
 	progress+=0.05;
 	Paint_Progress(progress, NULL);
 	
-	//float max_progress = 1.7;
-	
-	//float per_game_prog = max_progress/self.gameCnt;
-	
-	#ifndef TEST_MODE
-	
-	#ifndef BUFFER_TEST
-	int i;
-	float max_progress = 1.7;
-	float per_game_prog = max_progress/self.gameCnt;
-	
-	for(i = 0; i < self.gameCnt; i++)
-	{
-		void *imgData;// = (void *)no_cover_png;
-
-		char filepath[128];
-		s32  ret;
-
-		struct discHdr *header = &gameList[i];
-		
-		if(self.array_size < MAX_COVERS)
-		{
-			sprintf(self.debugMsg, "Checking next cover...%s", header->id);
-			Paint_Progress(1, self.debugMsg);
-			Download_Cover(header);
-			sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
-
-			ret = Fat_ReadFile(filepath, &imgData);
-			
-			
-			if (ret > 0) {
-
-				GRRLIB_texImg tmpTex = GRRLIB_LoadTexture((const unsigned char*)imgData);
-				
-				if ((tmpTex.w > COVER_WIDTH) || (tmpTex.h > COVER_HEIGHT))
-				{
-					AddCover(cover_texture);
-				}
-				else
-				{
-					AddCover(tmpTex);
-				}
-			}
-			else
-			{
-				AddCover(cover_texture);
-			}
-		}
-		progress+=per_game_prog;
-		Paint_Progress(progress, self.debugMsg);
-	}
-	#endif
-	
-	#else
 	int i;
 	int CoverCount = COVER_COUNT;
 	float max_progress = 1.7;
@@ -893,7 +828,13 @@ bool Menu_Install(void)
 				WindowPrompt ("Install error!",0,&cancelButton,0);
 				return false;
 			} else {
+				BUFFER_ClearCovers();
+				Sleep(300);
 				GetEntries();
+				Sleep(300);
+				UpdateBufferedImages();
+				Sleep(100);
+				
 				WindowPrompt ("Successfully installed:",name,&okButton,0);
 				return true;
 			}
@@ -938,7 +879,13 @@ bool Menu_Delete(void)
 		}
 		else
 		{
+			BUFFER_ClearCovers();
+			Sleep(300);
 			GetEntries();
+			Sleep(300);
+			UpdateBufferedImages();
+			Sleep(100);
+			
 			WindowPrompt("Successfully deleted.", "Press Ok to Continue.", &okButton, 0);
 			return true;
 		}
