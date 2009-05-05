@@ -2,12 +2,12 @@
 The following environment configs are being used to develop/test:
 
 
-||Region||OS||cIOS||#Covers that show OK||TV Type||Connection||Developer||
-||NTSC-U||3.2U||cIOS 10||27 of 50||DEV:pc monitor TEST:DLP TV||DEV:composite TEST:component||afour98||
-||NTSC-U||3.2U||cIOS 10||40 of 40||||||||
-||PAL-UK||4.0E||cIOS 10||less than 32 of 32 (variable)||Multi-sync LCD||Component||F1SHE4RS||
-||PAL-DUT||4.0E||cIOS 10||31 of 31||||||||
-
+||Build||Region||OS||cIOS||#Covers that show OK||TV Type||Connection||Developer||
+|| ||NTSC-U||3.2U||cIOS 10||27 of 50||DEV:pc monitor TEST:DLP TV||DEV:composite TEST:component||afour98||
+|| ||NTSC-U||3.2U||cIOS 10||40 of 40||||||||
+|| ||PAL-UK||4.0E||cIOS 10||less than 32 of 32 (variable)||Multi-sync LCD||Component||F1SHE4RS||
+|| ||PAL-DUT||4.0E||cIOS 10||31 of 31||||||||
+||r107||PAL-IT||3.2E||cIOS 10||10 of 10||LCD 32''||Component||Scognito||
 
 
 Please post additional configurations.
