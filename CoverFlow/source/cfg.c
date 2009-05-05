@@ -27,10 +27,12 @@ int COVER_XCOORD     = 28;
 int COVER_YCOORD     = 105;
 
 struct CFG CFG;
+/*
 u8 ocarinaChoice;
 u8 videoChoice;
 u8 languageChoice;
 u8 viChoice;
+*/
 u8 themeBlack;
 
 #define TITLE_MAX 65
