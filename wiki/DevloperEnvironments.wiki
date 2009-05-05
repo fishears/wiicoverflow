@@ -3,7 +3,6 @@ The following environment configs are being used to develop/test:
 
 
 ||Region||OS||cIOS||#Covers that show OK||
-||-------||------||---------||----------------------||
 ||NTSC-U||3.2U||cIOS 10||27 of 50||
 ||NTSC-U||3.2U||cIOS 10||40 of 40||
 ||PAL-UK||4.0E||cIOS 10||32 of 32||
