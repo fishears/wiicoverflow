@@ -55,7 +55,7 @@ s32 Fat_ReadFile(const char *filepath, void **outbuf)
 		goto err;
 
 	/* Read file */
-	ret = fread(buffer, 1, filelen, fp);
+	ret = fread(buffer, 1, filelen, fp);	
 	if (ret != filelen)
 		goto err;
 

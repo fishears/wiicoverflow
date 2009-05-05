@@ -43,6 +43,7 @@ void DrawBufferedCover(int i, float loc, float angle)
 			else
 			{
 				GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
+			//	WindowPrompt("Cover Ready", "No DATA", &okButton, 0);
 			}
 			pthread_mutex_unlock(&buffer_mutex[i]);
 		}

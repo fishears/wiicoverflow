@@ -96,7 +96,9 @@ void BUFFER_RemoveCover(int index)
 	if(index < MAX_BUFFERED_COVERS)
 	{
 		pthread_mutex_lock(&queue_mutex);
-		_cq.remove[index] = true;
+		_cq.ready[index]   = false;
+		_cq.request[index] = false;
+		_cq.remove[index]  = true;
 		pthread_mutex_unlock(&queue_mutex);
 	}
 }
@@ -194,23 +196,11 @@ void* process(void *arg)
 				if(!(_texture_data[i].data))
 				{
 					
-					void *imgData;// = (void *)no_cover_png;
+					void *imgData;
 
 					char filepath[128];
 					s32  ret;
 
-					//u8 tId[6];
-					//int j = 0;
-					
-					pthread_mutex_lock(&queue_mutex);
-					
-					//tId = _cq.requestId;
-						
-					pthread_mutex_unlock(&queue_mutex);
-					
-					
-					//TODO add download capability to thread
-					//Download_Cover(header);
 					sprintf(filepath, USBLOADER_PATH "/covers/%s.png", _cq.requestId[i]->id);
 
 					ret = Fat_ReadFile(filepath, &imgData);
@@ -218,25 +208,25 @@ void* process(void *arg)
 					if (ret > 0) {
 						_texture_data[i] = GRRLIB_LoadTexture((const unsigned char*)imgData);
 						
-						pthread_mutex_lock(&count_mutex);
-						_cover_count++;
-						pthread_mutex_unlock(&count_mutex);
+						pthread_mutex_lock(&queue_mutex);
+						_cq.ready[i]   = true;
+						pthread_mutex_unlock(&queue_mutex);
 					}
 					else
 					{
+						pthread_mutex_lock(&queue_mutex);
+						_cq.ready[i]   = false;
+						pthread_mutex_unlock(&queue_mutex);
 						_texture_data[i].data = 0;
 					}
 				
-					pthread_mutex_lock(&queue_mutex);
-					_cq.request[i] = false;
-					_cq.ready[i]   = true;
-					pthread_mutex_unlock(&queue_mutex);
 				}	
 				pthread_mutex_unlock(&buffer_mutex[i]);
 			}
 			
 			/*Handle Remove Requests*/
 			pthread_mutex_lock(&queue_mutex);
+			_cq.request[i] = false;
 			b = _cq.remove[i];
 			pthread_mutex_unlock(&queue_mutex);
 		
@@ -245,6 +235,8 @@ void* process(void *arg)
 				pthread_mutex_lock(&buffer_mutex[i]);
 				if(_texture_data[i].data != 0)
 					free(_texture_data[i].data);
+					
+				_texture_data[i].data = 0;
 				pthread_mutex_unlock(&buffer_mutex[i]);
 			
 				pthread_mutex_lock(&queue_mutex);
@@ -253,12 +245,6 @@ void* process(void *arg)
 				_cq.request[i] = false;
 				pthread_mutex_unlock(&queue_mutex);
 				
-				pthread_mutex_lock(&count_mutex);
-				_cover_count--;
-				if(_cover_count < 0)
-					_cover_count = 0;
-				pthread_mutex_unlock(&count_mutex);
-
 			}
 			Sleep(1);
 		}
