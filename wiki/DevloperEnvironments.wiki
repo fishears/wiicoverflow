@@ -6,7 +6,7 @@ The following environment configs are being used to develop/test:
 ||NTSC-U||3.2U||cIOS 10||27 of 50||
 ||NTSC-U||3.2U||cIOS 10||40 of 40||
 ||PAL-UK||4.0E||cIOS 10||32 of 32||
-||PAD-DUT||4.0E||cIOS 10||31 of 31||
+||PAL-DUT||4.0E||cIOS 10||31 of 31||
 
 
 
