@@ -49,14 +49,11 @@ GRRLIB_texImg back_texture;
 GRRLIB_texImg empty_texture;
 GRRLIB_texImg no_disc_texture;
 GRRLIB_texImg current_cover_texture;
-GRRLIB_texImg text_font1;
-GRRLIB_texImg helvetica;
 GRRLIB_texImg loader_main_texture;
 GRRLIB_texImg progress_texture;
-//GRRLIB_texImg gradient_texture;
 GRRLIB_texImg menu_bg_texture;
 GRRLIB_texImg slide_bar_texture;
-GRRLIB_texImg tex_BMfont5;
+GRRLIB_texImg text_BMfont5;		// main font
 GRRLIB_texImg load_bg_texture;
 
 GRRLIB_texImg gradient_bg_strip_w; //white background
@@ -111,6 +108,9 @@ void Hover_Buttons();
 void DrawSlider();
 void GRRLIB_Cover(float pos, int texture_id);
 //void draw_game_title(int index);
+
+void DrawBackground(int theme_id); // takes a SETTING_theme, but defaults to black
+
 void draw_covers();
 void draw_game_title(int index, struct discHdr *gameList);
 void draw_selected(struct discHdr *gameList);

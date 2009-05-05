@@ -6,28 +6,18 @@ extern s_pointer pointer;
 
 void LoadTextures()
 {
-	// start new background graphics code
 	gradient_bg_strip_w = GRRLIB_LoadTexture(gradient_bg_strip_w_png);
 	gradient_bg_strip_b = GRRLIB_LoadTexture(gradient_bg_strip_b_png);
-	// end background code
+	pointer_texture     = GRRLIB_LoadTexture(generic_point_png);
+	menu_bg_texture		= GRRLIB_LoadTexture(menu_bg_png);
+	cover_texture		= GRRLIB_LoadTexture(no_cover_png);
+	back_texture		= GRRLIB_LoadTexture(back_cover_png);
+	no_disc_texture		= GRRLIB_LoadTexture(no_disc_png);
+	slide_bar_texture	= GRRLIB_LoadTexture(slide_bar_png);
+	load_bg_texture		= GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
+	text_BMfont5		= GRRLIB_LoadTexture(BMfont5_png);
 	
-	pointer_texture   = GRRLIB_LoadTexture(generic_point_png);
-	menu_bg_texture   = GRRLIB_LoadTexture(menu_bg_png);
-	cover_texture = GRRLIB_LoadTexture(no_cover_png);
-	back_texture = GRRLIB_LoadTexture(back_cover_png);
-	no_disc_texture = GRRLIB_LoadTexture(no_disc_png);
-	text_font1 = GRRLIB_LoadTexture(font1_png);
-	
-	slide_bar_texture = GRRLIB_LoadTexture(slide_bar_png);
-	
-	GRRLIB_InitTileSet(&helvetica, 22, 40, 0);
-	GRRLIB_InitTileSet(&text_font1, 32, 36, 32);
-
-	tex_BMfont5 = GRRLIB_LoadTexture(BMfont5_png);
-	
-	load_bg_texture = GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
-	
-	GRRLIB_InitTileSet(&tex_BMfont5, 8, 16, 0);
+	GRRLIB_InitTileSet(&text_BMfont5, 8, 16, 0);
 }
 
 void DrawBufferedCover(int i, float loc, float angle)
@@ -67,31 +57,18 @@ void Paint_Progress(float v, char* msg)
 	if(count > 40)
 		count = 40;
 
-	// draw the backgound gradient strip over and over to create solid bg
-	// need to add code to check for widescreen and adjust accordingly
-	int x;
-	for(x=0;x<=637;x=x+4)
-	{
-		if(SETTING_theme) //draw the white gradient
-		{
-			GRRLIB_DrawImg(x, 0, gradient_bg_strip_w, 0, 1, 1, 0xFFFFFFFF);
-		}
-		else //draw the default black background
-		{
-			GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
-		}
-	}
-	
+	DrawBackground(SETTING_theme);
+
+	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
+
 	for(i = 0; i < count; i++)
 	{
 		GRRLIB_DrawImg(165+12*i, 231, progress_texture, 0, 1, 1, 0xFFFFFFFF);
 	}
-
-	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
 	
 	#ifdef DEBUG
 	if(msg != NULL)
-		GRRLIB_Printf(160, 255, tex_BMfont5,  0x444444FF, 1, "%s", msg);
+		GRRLIB_Printf(160, 255, text_BMfont5,  0x444444FF, 1, "%s", msg);
     #endif
     
 	GRRLIB_Render();
@@ -102,31 +79,19 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 	float percent = (float)v/(float)max;
 	int count = percent*28;
 	int i, x;
-	
-	// draw the backgound gradient strip over and over to create solid bg
-	// need to add code to check for widescreen and adjust accordingly
-	for(x=0;x<=637;x=x+4)
-	{
-		if(SETTING_theme) //draw the white gradient
-		{
-			GRRLIB_DrawImg(x, 0, gradient_bg_strip_w, 0, 1, 1, 0xFFFFFFFF);
-		}
-		else //draw the default black background
-		{
-			GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
-		}
-	}
+
+	DrawBackground(SETTING_theme);
+
+	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
 	
 	for(i = 0; i < count; i++)
 	{
 		GRRLIB_DrawImg(165+12*i, 231, progress_texture, 0, 1, 1, 0xFFFFFFFF);
 	}
-
-	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
 	
 	#ifdef DEBUG
 	if(msg != NULL)
-		GRRLIB_Printf(160, 255, tex_BMfont5,  0x444444FF, 1, "%s", msg);
+		GRRLIB_Printf(160, 255, text_BMfont5,  0x444444FF, 1, "%s", msg);
     #endif
     
 	GRRLIB_Render();
@@ -134,54 +99,39 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 
 void Init_Buttons()
 {
-
-    addButton   = Button_Init(add_button_png, add_button_hover_png, 580, 417);
-	slideButton = Button_Init(slide_png,  slide_hover_png, 580, 400);
-	okButton    = Button_Init(ok_png,   ok_hover_png, 220, 250);
-	loadButton  = Button_Init(load_png,   load_hover_png, 220, 300);
-	deleteButton  = Button_Init(delete_png,   delete_hover_png, 220, 400);
-	resetButton   = Button_Init(reset_png,   reset_hover_png, 285, 320);
-	backButton  = Button_Init(back_png,   back_hover_png, 340, 300);
-	cancelButton = Button_Init(cancel_png, cancel_hover_png, 360, 250);
-	
-	cheatonButton = Button_Init(toggle_on_png, toggle_on_png, 350,85);
-	cheatoffButton = Button_Init(toggle_off_png, toggle_off_png, 350,85);
-
-	langupButton = Button_Init(plus_button_png, plus_button_hover_png,456,123);
-	langdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,123);
-
-    vidupButton = Button_Init(plus_button_png, plus_button_hover_png, 456,150);
-    viddownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,150);
-
-	vidtvonButton = Button_Init(toggle_on_png, toggle_on_png, 350, 175);
-        vidtvoffButton = Button_Init(toggle_off_png, toggle_off_png, 350, 175);
-
-	coverTextOnButton = Button_Init(toggle_on_png, toggle_on_png, 390, 287);
-    coverTextOffButton = Button_Init(toggle_off_png, toggle_off_png, 390, 287);
-	
-    graphicsButton = Button_Init(ok_png, ok_hover_png, 350, 210);
-	
-	yesButton  = Button_Init(yes_png, yes_hover_png, 220, 250);
-	noButton   = Button_Init(no_png, no_hover_png, 340, 250);
-	
-	settingsButton = Button_Init(settings_png, settings_hover_png, 30, 420);
-	
-	downloadButton = Button_Init(download_png, download_hover_png, 350, 250);
-	
-	spacingupButton = Button_Init(plus_button_png, plus_button_hover_png,456,138);
-	spacingdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,138);
-	
-	zoomupButton = Button_Init(plus_button_png, plus_button_hover_png,456,95);
-	zoomdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,95);
-	
-	angleupButton = Button_Init(plus_button_png, plus_button_hover_png,456,191);
-	angledownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,191);
-	
-	windowupButton = Button_Init(plus_button_png, plus_button_hover_png,456, 239);
-	windowdownButton = Button_Init(minus_button_png, minus_button_hover_png, 300,239);
-	
-	themeWhiteButton = Button_Init(theme_white_png, theme_white_png, 350, 290);
-	themeBlackButton = Button_Init(theme_black_png, theme_black_png, 350, 290);
+    addButton			= Button_Init(add_button_png, add_button_hover_png, 580, 417);
+	slideButton			= Button_Init(slide_png, slide_hover_png, 580, 400);
+	okButton			= Button_Init(ok_png, ok_hover_png, 220, 250);
+	loadButton			= Button_Init(load_png, load_hover_png, 220, 300);
+	deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
+	resetButton			= Button_Init(reset_png, reset_hover_png, 285, 320);
+	backButton			= Button_Init(back_png, back_hover_png, 340, 300);
+	cancelButton		= Button_Init(cancel_png, cancel_hover_png, 360, 250);
+	cheatonButton		= Button_Init(toggle_on_png, toggle_on_png, 350,85);
+	cheatoffButton		= Button_Init(toggle_off_png, toggle_off_png, 350,85);
+	langupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,123);
+	langdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,123);
+    vidupButton			= Button_Init(plus_button_png, plus_button_hover_png, 456,150);
+    viddownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,150);
+	vidtvonButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 175);
+	vidtvoffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 175);
+	coverTextOnButton	= Button_Init(toggle_on_png, toggle_on_png, 390, 287);
+    coverTextOffButton	= Button_Init(toggle_off_png, toggle_off_png, 390, 287);
+    graphicsButton		= Button_Init(ok_png, ok_hover_png, 350, 210);
+	yesButton			= Button_Init(yes_png, yes_hover_png, 220, 250);
+	noButton			= Button_Init(no_png, no_hover_png, 340, 250);
+	settingsButton		= Button_Init(settings_png, settings_hover_png, 30, 420);
+	downloadButton		= Button_Init(download_png, download_hover_png, 350, 250);
+	spacingupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,138);
+	spacingdownButton	= Button_Init(minus_button_png, minus_button_hover_png, 300,138);
+	zoomupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,95);
+	zoomdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,95);
+	angleupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,191);
+	angledownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,191);
+	windowupButton		= Button_Init(plus_button_png, plus_button_hover_png,456, 239);
+	windowdownButton	= Button_Init(minus_button_png, minus_button_hover_png, 300,239);
+	themeWhiteButton	= Button_Init(theme_white_png, theme_white_png, 350, 290);
+	themeBlackButton	= Button_Init(theme_black_png, theme_black_png, 350, 290);
 }
 
 void Hover_Buttons()
@@ -197,40 +147,47 @@ void Hover_Buttons()
 	Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&resetButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&settingsButton, pointer.p_x, pointer.p_y);
-        Button_Hover(&langupButton, pointer.p_x, pointer.p_y);
-        Button_Hover(&langdownButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&langupButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&langdownButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&downloadButton, pointer.p_x, pointer.p_y);
 	Button_Hover(&graphicsButton, pointer.p_x, pointer.p_y);
-        Button_Hover(&vidupButton, pointer.p_x, pointer.p_y);
-        Button_Hover(&viddownButton, pointer.p_x, pointer.p_y);
-	
-        Button_Hover(&spacingupButton, pointer.p_x, pointer.p_y);
-        Button_Hover(&spacingdownButton, pointer.p_x, pointer.p_y);
-	
-        Button_Hover(&zoomupButton, pointer.p_x, pointer.p_y);
-        Button_Hover(&zoomdownButton, pointer.p_x, pointer.p_y);
-
-        Button_Hover(&angleupButton, pointer.p_x, pointer.p_y);
-        Button_Hover(&angledownButton, pointer.p_x, pointer.p_y);
-
-        Button_Hover(&windowupButton, pointer.p_x, pointer.p_y);
-        Button_Hover(&windowdownButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&vidupButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&viddownButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&spacingupButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&spacingdownButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&zoomupButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&zoomdownButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&angleupButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&angledownButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&windowupButton, pointer.p_x, pointer.p_y);
+	Button_Hover(&windowdownButton, pointer.p_x, pointer.p_y);
 	
 	if(CFG.ocarina)
+	{
 		Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y);
+	}
 	else
+	{
 		Button_Hover(&cheatoffButton, pointer.p_x, pointer.p_y);
-		
+	}
 		
 	if(SETTING_coverText)
+	{
 		Button_Hover(&coverTextOnButton, pointer.p_x, pointer.p_y);
+	}
 	else
+	{
 		Button_Hover(&coverTextOffButton, pointer.p_x, pointer.p_y);
+	}
 		
-        if(CFG.vipatch)
-                Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y);
+	if(CFG.vipatch)
+	{	
+		Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y);
+	}
 	else
+	{
 		Button_Hover(&vidtvoffButton, pointer.p_x, pointer.p_y);
+	}
 
 }
 
@@ -275,17 +232,67 @@ void GRRLIB_Cover(float pos, int texture_id)
 	DrawBufferedCover(texture_id, loc, angle);
 }
 
+
+void DrawBackground(int theme_id)
+{
+	// draw the backgound gradient strip over and over to create solid bg
+	// need to add code to check for widescreen and adjust accordingly
+	int x;
+	for(x=0;x<=637;x=x+4)
+	{
+		switch (theme_id)
+		{
+			case 0: // black theme
+				GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
+				break;
+			case 1: // white theme
+				GRRLIB_DrawImg(x, 0, gradient_bg_strip_w, 0, 1, 1, 0xFFFFFFFF);
+				break;
+			default:
+				GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
+				break;
+		}
+	}
+	
+	
+}
+
+// This is wha needs fixin' to draw the sequence order properly
+/*
 void draw_covers()
 {
 	int i;
 	
 	for(i = (-1*(COVER_COUNT/2.0)); i < (COVER_COUNT/2.0); i++)
 	{
-		/*Some logic to avoid drawing everything*/
+		//Some logic to avoid drawing everything
 		if(abs(self.shift+i) < SETTING_drawWindow)
 			GRRLIB_Cover(i+self.shift, i+(COVER_COUNT/2.0));
 	}
 }
+*/
+
+void draw_covers()
+{
+	int i;
+	
+	for(i = (-1*(COVER_COUNT/2.0)); i < 0; i++)
+	{
+		//Some logic to avoid drawing everything
+		if(abs(self.shift+i) < SETTING_drawWindow)
+			GRRLIB_Cover(i+self.shift, i+(COVER_COUNT/2.0));
+	}
+	
+	for(i = ((COVER_COUNT/2.0)); i >= 0; i--)
+	{
+		// Some logic to avoid drawing everything
+		if(abs(self.shift+i) < SETTING_drawWindow)
+			GRRLIB_Cover(i+self.shift, i+(COVER_COUNT/2.0));
+	}
+	
+}
+
+
 
 void draw_game_title(int index, struct discHdr *gameList)
 {
@@ -301,9 +308,11 @@ void draw_game_title(int index, struct discHdr *gameList)
 		int offset = (len*5);
 		
 		if(offset > 240)
+		{
 			offset = 240;
+		}
 			
-		GRRLIB_Printf(340 - offset, 400, tex_BMfont5, 0xFFFFFFFF, tsize, "%s", header->title);
+		GRRLIB_Printf(340 - offset, 400, text_BMfont5, 0xFFFFFFFF, tsize, "%s", header->title);
 	}
 }
 
@@ -405,13 +414,13 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		/* Get game size */
 		WBFS_GameSize(header->id, &size);
 
-		GRRLIB_Printf(280, 180, tex_BMfont5, 0x999999FF, 1, "%s", header->title);
-		GRRLIB_Printf(290, 210, tex_BMfont5, 0x888888FF, .8, " Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
-		GRRLIB_Printf(290, 230, tex_BMfont5, 0x888888FF, .8, " Size:    %.2fGB", size);
+		GRRLIB_Printf(280, 180, text_BMfont5, 0x999999FF, 1, "%s", header->title);
+		GRRLIB_Printf(290, 210, text_BMfont5, 0x888888FF, .8, " Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
+		GRRLIB_Printf(290, 230, text_BMfont5, 0x888888FF, .8, " Size:    %.2fGB", size);
 		#else
-		GRRLIB_Printf(280, 180, tex_BMfont5, 0x999999FF, 1, "%s", "Test Game Id Goes Here");
-		GRRLIB_Printf(290, 210, tex_BMfont5, 0x888888FF, .8, "%s", " Game ID: TEST");
-		GRRLIB_Printf(290, 230, tex_BMfont5, 0x888888FF, .8, "%s", " Size:    2.0GB");
+		GRRLIB_Printf(280, 180, text_BMfont5, 0x999999FF, 1, "%s", "Test Game Id Goes Here");
+		GRRLIB_Printf(290, 210, text_BMfont5, 0x888888FF, .8, "%s", " Game ID: TEST");
+		GRRLIB_Printf(290, 230, text_BMfont5, 0x888888FF, .8, "%s", " Size:    2.0GB");
 		#endif
 		
 		GRRLIB_DrawImg(102+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, 1, 1, 0xFFFFFFFF);
@@ -533,11 +542,11 @@ void draw_selected(struct discHdr *gameList)
 			if(offset > 240)
 				offset = 240;
 			
-			GRRLIB_Printf(300 - offset, 10, text_font1, 0XFFFFFFFF, tsize, "%s", name);
-			GRRLIB_Printf(210, 50, text_font1, 0XFFFFFFFF, .4, "(%c%c%c%c) (%.2fGB)", header->id[0], header->id[1], header->id[2], header->id[3], size);
+			GRRLIB_Printf(300 - offset, 10, text_BMfont5, 0XFFFFFFFF, tsize, "%s", name);
+			GRRLIB_Printf(210, 50, text_BMfont5, 0XFFFFFFFF, .4, "(%c%c%c%c) (%.2fGB)", header->id[0], header->id[1], header->id[2], header->id[3], size);
 			#else
-			GRRLIB_Printf(90, 10, text_font1, 0XFFFFFFFF, .8, "%s", "JUSTINS GAME");
-			GRRLIB_Printf(180, 50, text_font1, 0XFFFFFFFF, .5, "%s", "JUSTINS GAME");
+			GRRLIB_Printf(90, 10, text_BMfont5, 0XFFFFFFFF, .8, "%s", "JUSTINS GAME");
+			GRRLIB_Printf(180, 50, text_BMfont5, 0XFFFFFFFF, .5, "%s", "JUSTINS GAME");
 			#endif
 		}
   }
@@ -637,7 +646,6 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		Hover_Buttons();
 		
 		GRRLIB_FillScreen(0x000000FF);
-		//GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
 		
@@ -669,11 +677,13 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		}
 		
 		/*Draw Text*/
-        GRRLIB_Printf(140, 70, tex_BMfont5,  0xFFFFFFFF, 1.5, "%s", title);
-        GRRLIB_Printf(160, 110, tex_BMfont5, 0xFFFFFFFF, 1, "%s", txt);
+        GRRLIB_Printf(140, 70, text_BMfont5,  0xFFFFFFFF, 1.5, "%s", title);
+        GRRLIB_Printf(160, 110, text_BMfont5, 0xFFFFFFFF, 1, "%s", txt);
 		
 		if(doloop)
+		{
 			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		}
 		
 		GRRLIB_Render();
 		

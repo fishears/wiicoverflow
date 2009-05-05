@@ -19,11 +19,11 @@ char languages[11][22] =
 //video mode text
 char vidmodes[6][10] =
 {{ " game " },
-	{ " auto ", },
-	{ " pal50", },
-	{ " pal60", },
-	{ " ntsc ", },
-        { "system"}};
+{ " auto ", },
+{ " pal50", },
+{ " pal60", },
+{ " ntsc ", },
+{ "system"}};
 
 /* Gamelist buffer */
 static struct discHdr *gameList = NULL;
@@ -512,16 +512,12 @@ void Graphic_Settings_Menu(void)
 		
 		Hover_Buttons();
 		
-		//GRRLIB_FillScreen(0x000000FF);
-		//GRRLIB_DrawImg(0, 0,    gradient_texture, 0, 1, 1, 0xFFFFFFFF);
-		
 		/*Draw Covers*/ //PREVIEW
 		draw_covers();
 		
-		
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
-        GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings (GFX)");
+        GRRLIB_Printf(190, 63, text_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings (GFX)");
 		
 		Button_Paint(&settingsButton);
 		Button_Paint(&spacingupButton);
@@ -544,19 +540,19 @@ void Graphic_Settings_Menu(void)
 		
 		Button_Paint(&resetButton);
 	
-		GRRLIB_Printf(145, 95, tex_BMfont5, 0xFFFFFFFF, 1, "Zoom:");
-		GRRLIB_Printf(330, 95, tex_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverZoom);
+		GRRLIB_Printf(145, 95, text_BMfont5, 0xFFFFFFFF, 1, "Zoom:");
+		GRRLIB_Printf(330, 95, text_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverZoom);
 
-		GRRLIB_Printf(145, 143, tex_BMfont5, 0xFFFFFFFF, 1, "Spacing:");
-		GRRLIB_Printf(330, 143, tex_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverSpacing);
+		GRRLIB_Printf(145, 143, text_BMfont5, 0xFFFFFFFF, 1, "Spacing:");
+		GRRLIB_Printf(330, 143, text_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverSpacing);
 		
-		GRRLIB_Printf(145, 191, tex_BMfont5, 0xFFFFFFFF, 1, "Angle:");
-		GRRLIB_Printf(330, 191, tex_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverAngle);
+		GRRLIB_Printf(145, 191, text_BMfont5, 0xFFFFFFFF, 1, "Angle:");
+		GRRLIB_Printf(330, 191, text_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverAngle);
 		
-		GRRLIB_Printf(145, 239, tex_BMfont5, 0xFFFFFFFF, 1, "Draw Window:");
-		GRRLIB_Printf(330, 239, tex_BMfont5, 0xFFFFFFFF, 1, "%d", SETTING_drawWindow);
+		GRRLIB_Printf(145, 239, text_BMfont5, 0xFFFFFFFF, 1, "Draw Window:");
+		GRRLIB_Printf(330, 239, text_BMfont5, 0xFFFFFFFF, 1, "%d", SETTING_drawWindow);
 		
-		GRRLIB_Printf(145, 287, tex_BMfont5, 0xFFFFFFFF, 1, "Game Title:");
+		GRRLIB_Printf(145, 287, text_BMfont5, 0xFFFFFFFF, 1, "Game Title:");
 		
 		/*Draw Menu*/
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
@@ -674,9 +670,10 @@ void Settings_Menu(void)
 		Hover_Buttons();
 		
 		GRRLIB_FillScreen(0x000000FF);
+		DrawBackground(SETTING_theme);
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-		
-                GRRLIB_Printf(190, 63, tex_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
+
+		GRRLIB_Printf(190, 63, text_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
 		
 		Button_Paint(&settingsButton);
 		Button_Paint(&langupButton);
@@ -686,16 +683,16 @@ void Settings_Menu(void)
 
 		Button_Paint(&graphicsButton);
 	
-		GRRLIB_Printf(145, 93, tex_BMfont5, 0xFFFFFFFF, 1, "Ocarina:");
+		GRRLIB_Printf(145, 93, text_BMfont5, 0xFFFFFFFF, 1, "Ocarina:");
 
-		GRRLIB_Printf(145, 128, tex_BMfont5, 0xFFFFFFFF, 1, "Language:");
-		GRRLIB_Printf(330, 128, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[CFG.language]);
-		GRRLIB_Printf(145, 223, tex_BMfont5, 0xFFFFFFFF, 1, "Graphics:");
-		GRRLIB_Printf(145, 253, tex_BMfont5, 0xFFFFFFFF, 1, "Download missing covers");
-		GRRLIB_Printf(145, 180, tex_BMfont5, 0xFFFFFFFF, 1, "VIDTV patch:");
-		GRRLIB_Printf(145, 155, tex_BMfont5, 0xFFFFFFFF, 1, "Video mode:");
-		GRRLIB_Printf(365, 155, tex_BMfont5, 0xFFFFFFFF, 1, "%s",vidmodes[CFG.video]);
-		GRRLIB_Printf(145, 303, tex_BMfont5, 0xFFFFFFFF, 1, "Theme:");
+		GRRLIB_Printf(145, 128, text_BMfont5, 0xFFFFFFFF, 1, "Language:");
+		GRRLIB_Printf(330, 128, text_BMfont5, 0xFFFFFFFF, 1, "%s",languages[CFG.language]);
+		GRRLIB_Printf(145, 223, text_BMfont5, 0xFFFFFFFF, 1, "Graphics:");
+		GRRLIB_Printf(145, 253, text_BMfont5, 0xFFFFFFFF, 1, "Download missing covers");
+		GRRLIB_Printf(145, 180, text_BMfont5, 0xFFFFFFFF, 1, "VIDTV patch:");
+		GRRLIB_Printf(145, 155, text_BMfont5, 0xFFFFFFFF, 1, "Video mode:");
+		GRRLIB_Printf(365, 155, text_BMfont5, 0xFFFFFFFF, 1, "%s",vidmodes[CFG.video]);
+		GRRLIB_Printf(145, 303, text_BMfont5, 0xFFFFFFFF, 1, "Theme:");
 		
 		/*Draw Menu*/
 		if (CFG.ocarina)
@@ -908,7 +905,7 @@ bool Menu_Boot(void)
 	free(empty_texture.data);
 	free(no_disc_texture.data);
 	free(current_cover_texture.data);
-	free(text_font1.data);
+	free(text_BMfont5.data);
 
 	BUFFER_ClearCovers();
 	BUFFER_KillBuffer();
@@ -1253,7 +1250,6 @@ int main( int argc, char **argv ){
 	
 	initVars();
 	
-    //gradient_texture    = GRRLIB_LoadTexture(gradient_bg_png);
     loader_main_texture = GRRLIB_LoadTexture(loading_main_png);
     progress_texture    = GRRLIB_LoadTexture(progress_png);
 
@@ -1299,8 +1295,8 @@ int main( int argc, char **argv ){
 		{
 			WPAD_ScanPads();
 			GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 100, tex_BMfont5, 0xFFFFFFFF, 1, "USB Error - Drive not found");
-			GRRLIB_Printf(190, 120, tex_BMfont5, 0xFFFFFFFF, 1, "Press A to Retry, B to Exit");
+			GRRLIB_Printf(190, 100, text_BMfont5, 0xFFFFFFFF, 1, "USB Error - Drive not found");
+			GRRLIB_Printf(190, 120, text_BMfont5, 0xFFFFFFFF, 1, "Press A to Retry, B to Exit");
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
@@ -1324,8 +1320,8 @@ int main( int argc, char **argv ){
 		{
 			WPAD_ScanPads();
 			GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 100, tex_BMfont5, 0xFFFFFFFF, 1, "USB Error - Drive not found");
-			GRRLIB_Printf(190, 120, tex_BMfont5, 0xFFFFFFFF, 1, "Press A to Retry, B to Exit");
+			GRRLIB_Printf(190, 100, text_BMfont5, 0xFFFFFFFF, 1, "USB Error - Drive not found");
+			GRRLIB_Printf(190, 120, text_BMfont5, 0xFFFFFFFF, 1, "Press A to Retry, B to Exit");
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
@@ -1372,7 +1368,6 @@ int main( int argc, char **argv ){
 
 	sprintf(self.debugMsg, "Freeing unused textures...");
 	Paint_Progress(progress,self.debugMsg);
-	//free(gradient_texture.data);
 	free(progress_texture.data);
 	Sleep(300);
 	
@@ -1393,8 +1388,6 @@ int main( int argc, char **argv ){
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
 
-	int x;
-
 	// gui loop
 	while(1) 
 	{
@@ -1414,23 +1407,7 @@ int main( int argc, char **argv ){
 		pointer.p_y = ir.sy-250;
 		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
-		// draw the backgound gradient strip over and over to create solid bg
-		// need to add code to check for widescreen and adjust accordingly
-		// this is causing problems with the Z order. I had to change it
-		// in GRRLib.c line 1033 to make it draw 2D and 3D together.
-		// But now the right hand side of the covers draws weird.
-		for(x=0;x<=637;x=x+4)
-		{
-			if(SETTING_theme) //draw the white gradient
-			{
-				GRRLIB_DrawImg(x, 0, gradient_bg_strip_w, 0, 1, 1, 0xFFFFFFFF);
-			}
-			else //draw the default black background
-			{
-				GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
-			}
-		}
-
+		DrawBackground(SETTING_theme);
 		Hover_Buttons();
 
 		// Check for 'HOME' button press
