@@ -115,7 +115,7 @@ void draw_game_title(int index, struct discHdr *gameList);
 void draw_selected(struct discHdr *gameList);
 
 //Work for new Load Animation
-int draw_selected_two(struct discHdr *gameList, bool load);
+int draw_selected_two(struct discHdr *gameList, bool load, bool hover);
 
 float change_scale_without_containing(float val, float in_min, float in_max, float out_min, float out_max);
 float change_scale(float val, float in_min, float in_max, float out_min, float out_max);
