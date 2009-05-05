@@ -667,7 +667,7 @@ void Settings_Menu(void)
 
 			else if(Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y) || Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
 			{
-				CFG.themeblack = (CFG.themeblack) ? 0 : 1;
+				SETTING_theme = (SETTING_theme) ? 0 : 1;
 			}
 		}
 		
@@ -692,12 +692,10 @@ void Settings_Menu(void)
 		GRRLIB_Printf(330, 128, tex_BMfont5, 0xFFFFFFFF, 1, "%s",languages[CFG.language]);
 		GRRLIB_Printf(145, 223, tex_BMfont5, 0xFFFFFFFF, 1, "Graphics:");
 		GRRLIB_Printf(145, 253, tex_BMfont5, 0xFFFFFFFF, 1, "Download missing covers");
-                GRRLIB_Printf(145, 180, tex_BMfont5, 0xFFFFFFFF, 1, "VIDTV patch:");
-                GRRLIB_Printf(145, 155, tex_BMfont5, 0xFFFFFFFF, 1, "Video mode:");
-                GRRLIB_Printf(365, 155, tex_BMfont5, 0xFFFFFFFF, 1, "%s",vidmodes[CFG.video]);
-/* Waiting on issue #31 fix
-		GRRLIB_Printf(145, 303, tex_BMfont5, 0xFFFFFFFF, 1, "Theme");
-*/
+		GRRLIB_Printf(145, 180, tex_BMfont5, 0xFFFFFFFF, 1, "VIDTV patch:");
+		GRRLIB_Printf(145, 155, tex_BMfont5, 0xFFFFFFFF, 1, "Video mode:");
+		GRRLIB_Printf(365, 155, tex_BMfont5, 0xFFFFFFFF, 1, "%s",vidmodes[CFG.video]);
+		GRRLIB_Printf(145, 303, tex_BMfont5, 0xFFFFFFFF, 1, "Theme:");
 		
 		/*Draw Menu*/
 		if (CFG.ocarina)
@@ -712,13 +710,11 @@ void Settings_Menu(void)
 		}
 		else Button_Paint(&vidtvoffButton);
 
-/* Waiting on issue #31 fix
-		if (CFG.themeblack)
+		if (SETTING_theme==1) 
 		{
-			Button_Paint(&themeBlackButton);
+			Button_Paint(&themeWhiteButton);
 		}
-		else Button_Paint(&themeWhiteButton);
-*/
+		else Button_Paint(&themeBlackButton);
 		
 		Button_Paint(&graphicsButton);
 		Button_Paint(&downloadButton);
@@ -1227,9 +1223,6 @@ bool LaunchGame()
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
 	
-	GRRLIB_FillScreen(0x000000FF);
-	GRRLIB_Render();
-	
 	Menu_Boot();
 	
 	return false;
@@ -1254,8 +1247,7 @@ int main( int argc, char **argv ){
 	SETTINGS_Init();
 	
 	GRRLIB_Init();
-    GRRLIB_FillScreen(0x000000FF);
-    GRRLIB_Render();
+
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
 	
@@ -1264,15 +1256,17 @@ int main( int argc, char **argv ){
     gradient_texture    = GRRLIB_LoadTexture(gradient_bg_png);
     loader_main_texture = GRRLIB_LoadTexture(loading_main_png);
     progress_texture    = GRRLIB_LoadTexture(progress_png);
-	
+
+	progress += .1;
+
 	sprintf(self.debugMsg, "Loading textures");
 	Paint_Progress(progress,self.debugMsg);
 	
-	LoadTextures();
-	
-	Init_Buttons(); //Button loaded first so they can be used for error msgs
-	
+	LoadTextures();		// load textures
+	Init_Buttons();		// load buttons so they can be used for error msgs
+
 	progress += .1;
+
 	sprintf(self.debugMsg, "Init USB");
 	Paint_Progress(progress,self.debugMsg);
 	
@@ -1283,11 +1277,10 @@ int main( int argc, char **argv ){
 	}
 		
 	//LOAD CONFIG
+	// need to clean up CFG and move to the XML based settings
 	strcpy(CFG.images_path, USBLOADER_PATH);
 	CFG.widescreen = 0;
 	CFG.download = 1;
-	//CFG.theme = 0; //BLACK
-	//HARDCODED FOR NOW
 	
 	sprintf(self.debugMsg, "Initializing WBFS");
 	Paint_Progress(progress,self.debugMsg);
@@ -1370,18 +1363,17 @@ int main( int argc, char **argv ){
 		Sleep(1);
 	}
 	
-	sprintf(self.debugMsg, "Loading User Settings...");
+	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
+
+	// set the background
+	sprintf(self.debugMsg, "Setting background theme...");
 	Paint_Progress(progress,self.debugMsg);
-	
-	/*Load Saved Settings*/
-	SETTINGS_Load();
-	
+	Sleep(300);
+
 	sprintf(self.debugMsg, "Freeing unused textures...");
 	Paint_Progress(progress,self.debugMsg);
-	
 	free(gradient_texture.data);
 	free(progress_texture.data);
-	
 	Sleep(300);
 	
 	self.selected = false;
@@ -1398,10 +1390,14 @@ int main( int argc, char **argv ){
 	self.animate_count = 50;
 	self.animate_slide_x = 0;
 	
-	//self.selected = true;
-	//LaunchGame();
-	//Sleep(10000);
-	while(1) {
+	GRRLIB_FillScreen(0x000000FF);
+	GRRLIB_Render();
+
+	int x;
+
+	// gui loop
+	while(1) 
+	{
 
 		WPAD_ScanPads();
 		
@@ -1418,8 +1414,26 @@ int main( int argc, char **argv ){
 		pointer.p_y = ir.sy-250;
 		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
+		// draw the backgound gradient strip over and over to create solid bg
+		// need to add code to check for widescreen and adjust accordingly
+		// this is causing problems with the Z order. I had to change it
+		// in GRRLib.c line 1033 to make it draw 2D and 3D together.
+		// But now the right hand side of the covers draws weird.
+		for(x=0;x<=637;x=x+4)
+		{
+			if(SETTING_theme) //draw the white gradient
+			{
+				GRRLIB_DrawImg(x, 0, gradient_bg_strip_w, 0, 1, 1, 0xFFFFFFFF);
+			}
+			else //draw the default black background
+			{
+				GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
+			}
+		}
+
 		Hover_Buttons();
-		
+
+		// Check for 'HOME' button press
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
 			SETTINGS_Save();
@@ -1430,12 +1444,10 @@ int main( int argc, char **argv ){
 			//BUFFER_ClearCovers();
 			BUFFER_KillBuffer();
 			Sleep(500);
-			
 			quit();
 		}
 		
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B ||
-			PAD_ButtonsDown(0) & PAD_BUTTON_B)
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_B)
 		{
 			if(self.selected && self.animate_flip >= 1.0)
 			{
@@ -1598,7 +1610,7 @@ int main( int argc, char **argv ){
 					
 			}
 		}
-		
+	
 		UpdateBufferedImages();
 		
 		draw_covers();

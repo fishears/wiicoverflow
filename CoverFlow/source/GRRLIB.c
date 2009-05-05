@@ -439,7 +439,7 @@ inline void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees,
  * @param color
  */
 inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float scale, u32 color ) {
-	GRRLIB_3D_Init();
+	GRRLIB_3D_Init(); // does this need to be called each time?
 
     GXTexObj texObj;
     u16 width, height;
@@ -1005,8 +1005,8 @@ void GRRLIB_3D_Init()
 	// setup our projection matrix
 	// this creates a perspective matrix with a view angle of 90,
 	// and aspect ratio based on the display resolution
-    f32 w = rmode->viWidth;
-    f32 h = rmode->viHeight;
+    //f32 w = rmode->viWidth;
+    //f32 h = rmode->viHeight;
 	//guPerspective(perspective, 45, 1.0, 0.1F, 300.0F);
 	guPerspective(perspective, 45, 1.0, 0.1F, 300.0F);
 	GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
@@ -1029,7 +1029,9 @@ void GRRLIB_Render() {
     GX_DrawDone ();
 
     fb ^= 1;        // flip framebuffer
-    GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
+	// afour98: I need help with the next line
+    GX_SetZMode(GX_TRUE, GX_ALWAYS, GX_TRUE); // I changed the 2nd var from GX_LEQUAL to GX_ALWAYS, but it messes up the right hand side
+//    GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE); // I changed the first var from GX_TRUE to GX_FALSE, but it messes up the right hand side
     GX_SetColorUpdate(GX_TRUE);
     GX_CopyDisp(xfb[fb], GX_TRUE);
     VIDEO_SetNextFramebuffer(xfb[fb]);

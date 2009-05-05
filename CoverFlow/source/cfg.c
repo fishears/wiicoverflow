@@ -323,7 +323,7 @@ void CFG_Default()
 	CFG.download = 0;
 	CFG.language = CFG_LANG_CONSOLE;
 	CFG.ocarina = 0;
-	CFG.themeblack = 1;
+//	CFG.themeblack = 1;
 	CFG.vipatch = 0;
 	CFG.savesettings = 0;
 	CFG.parentalcontrol = 0;
