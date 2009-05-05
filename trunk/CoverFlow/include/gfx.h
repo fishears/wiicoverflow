@@ -53,7 +53,7 @@ GRRLIB_texImg text_font1;
 GRRLIB_texImg helvetica;
 GRRLIB_texImg loader_main_texture;
 GRRLIB_texImg progress_texture;
-GRRLIB_texImg gradient_texture;
+//GRRLIB_texImg gradient_texture;
 GRRLIB_texImg menu_bg_texture;
 GRRLIB_texImg slide_bar_texture;
 GRRLIB_texImg tex_BMfont5;
