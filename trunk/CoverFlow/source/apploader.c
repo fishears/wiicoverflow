@@ -268,7 +268,7 @@ s32 Apploader_Run(entry_point *entry)
 		/* Read data from DVD */
 		WDVD_Read(dst, len, (u64)(offset << 2));
 
-		if (videoChoice == 1) // patch
+		if (CFG.video == 1) // patch
 
 		{
 			switch(CONF_GetVideo())
