@@ -1253,7 +1253,7 @@ int main( int argc, char **argv ){
 	
 	initVars();
 	
-    gradient_texture    = GRRLIB_LoadTexture(gradient_bg_png);
+    //gradient_texture    = GRRLIB_LoadTexture(gradient_bg_png);
     loader_main_texture = GRRLIB_LoadTexture(loading_main_png);
     progress_texture    = GRRLIB_LoadTexture(progress_png);
 
@@ -1372,7 +1372,7 @@ int main( int argc, char **argv ){
 
 	sprintf(self.debugMsg, "Freeing unused textures...");
 	Paint_Progress(progress,self.debugMsg);
-	free(gradient_texture.data);
+	//free(gradient_texture.data);
 	free(progress_texture.data);
 	Sleep(300);
 	
