@@ -80,29 +80,34 @@ void UpdateBufferedImages()
 	for(i = (-1*(COVER_COUNT/2.0)); i < (COVER_COUNT/2.0); i++)
 	{
 		index = i+(COVER_COUNT/2.0);
-		
-		/*Some logic to avoid drawing everything*/
-		if(abs(self.shift+i) < BUFFER_WINDOW)
+		if(index < self.gameCnt)
 		{
-			//Is this cover already loaded?
-			if(!BUFFER_IsCoverReady(index))
+			/*Some logic to avoid drawing everything*/
+			if(abs(self.shift+i) <= BUFFER_WINDOW)
 			{
-				//Is this cover already queued up?
-				if(!BUFFER_IsCoverQueued(index))
+				//Is this cover already loaded?
+				if(!BUFFER_IsCoverReady(index))
 				{
-					//Request this cover
-					if(index < self.gameCnt)
+					//Is this cover already queued up?
+					if(!BUFFER_IsCoverQueued(index))
 					{
+						//Request this cover
 						struct discHdr *header = &gameList[index];
 		
 						BUFFER_RequestCover(index, header);
 					}
 				}
 			}
-		}
-		else
-		{
-		//	BUFFER_RemoveCover(index);
+			else
+			{
+				if(BUFFER_IsCoverReady(index))
+				{
+					//TODO Fix this
+					//calling this fixes the fuked up graphics when you load
+					//too many covers, but it causes a code dump eventually... HELP
+					//BUFFER_RemoveCover(index);
+				}
+			}
 		}
 	}
 	
@@ -1422,11 +1427,10 @@ int main( int argc, char **argv ){
 			GRRLIB_FillScreen(0x000000FF);
 			GRRLIB_Render();
 			
-			BUFFER_ClearCovers();
-			Sleep(1000);
-			
+			//BUFFER_ClearCovers();
 			BUFFER_KillBuffer();
 			Sleep(500);
+			
 			quit();
 		}
 		
