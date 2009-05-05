@@ -51,7 +51,6 @@
 extern const u8 no_cover_png[];
 extern const u8 back_cover_png[];
 extern const u8 no_disc_png[];
-extern const u8 font1_png[];
 extern const u8 BMfont5_png[];
 extern const u8 loading_main_png[];
 extern const u8 progress_png[];
