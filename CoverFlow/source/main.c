@@ -1212,7 +1212,7 @@ bool LaunchGame()
 	{
 		draw_covers();
 		
-		done = draw_selected_two(gameList, true);
+		done = draw_selected_two(gameList, true, false);
 		
 		GRRLIB_Render();
 	}
@@ -1390,6 +1390,12 @@ int main( int argc, char **argv ){
 	
 	bool dragging = false;
 	
+	self.animate_count = 50;
+	self.animate_slide_x = 0;
+	
+	//self.selected = true;
+	//LaunchGame();
+	//Sleep(10000);
 	while(1) {
 
 		WPAD_ScanPads();
@@ -1412,10 +1418,15 @@ int main( int argc, char **argv ){
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
 			SETTINGS_Save();
-							
+			
+			GRRLIB_FillScreen(0x000000FF);
+			GRRLIB_Render();
+			
 			BUFFER_ClearCovers();
+			Sleep(1000);
+			
 			BUFFER_KillBuffer();
-			Sleep(300);
+			Sleep(500);
 			quit();
 		}
 		
@@ -1593,7 +1604,7 @@ int main( int argc, char **argv ){
 			#ifndef ANIMATE_TEST
 			draw_selected(gameList);
 			#else
-			draw_selected_two(gameList, false);
+			draw_selected_two(gameList, false, Button_Hover(&loadButton, pointer.p_x, pointer.p_y));
 			#endif
 		}
 		else

@@ -43,9 +43,9 @@
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           19
 
-//#define ANIMATE_TEST 1
+#define ANIMATE_TEST 1
 
-#define ANIMATE_SPEED 10
+#define ANIMATE_SPEED 0
 
 extern const u8 no_cover_png[];
 extern const u8 back_cover_png[];
@@ -89,6 +89,9 @@ typedef struct{
 	float animate_load;
 	int animate_load_speed;
 	int animate_direction;
+	
+	int animate_count;
+	int animate_slide_x;
 	
 } s_self;
 
