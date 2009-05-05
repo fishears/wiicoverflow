@@ -42,7 +42,6 @@ extern const u8 download_png[];
 extern const u8 download_hover_png[];
 extern const u8 theme_white_png[];
 extern const u8 theme_black_png[];
-//extern const u8 gradient_bg_white_png[];
 extern const u8 bg_options_screen_no_transparency_png[];
 
 GRRLIB_texImg cover_texture;
@@ -55,11 +54,13 @@ GRRLIB_texImg helvetica;
 GRRLIB_texImg loader_main_texture;
 GRRLIB_texImg progress_texture;
 GRRLIB_texImg gradient_texture;
-//GRRLIB_texImg gradient_white_texture;
 GRRLIB_texImg menu_bg_texture;
 GRRLIB_texImg slide_bar_texture;
 GRRLIB_texImg tex_BMfont5;
 GRRLIB_texImg load_bg_texture;
+
+GRRLIB_texImg gradient_bg_strip_w; //white background
+GRRLIB_texImg gradient_bg_strip_b; //black background
 
 Button addButton;
 Button slideButton;
@@ -122,3 +123,4 @@ float change_scale(float val, float in_min, float in_max, float out_min, float o
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
 
 #endif
+

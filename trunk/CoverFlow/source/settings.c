@@ -1,5 +1,4 @@
 #include "settings.h"
-
 #include "mxml.h"
 
 /* my save callback */
@@ -37,6 +36,7 @@ inline void SETTINGS_Init()
 	SETTING_coverSpacing = 3.1;
 	SETTING_drawWindow   = 7;
 	SETTING_coverText    = 1;
+	SETTING_theme		 = 0; // default to black
 }
 
 inline int SETTINGS_Load()
@@ -66,16 +66,18 @@ inline int SETTINGS_Load()
 	  
 	  if(next_n != NULL)
 	  {
-		if(mxmlElementGetAttr(next_n,"spacing"))
-		 SETTING_coverSpacing = atof(mxmlElementGetAttr(next_n,"spacing"));
-		if(mxmlElementGetAttr(next_n,"angle"))
-		 SETTING_coverAngle   = atof(mxmlElementGetAttr(next_n,"angle"));
-		if(mxmlElementGetAttr(next_n,"zoom"))
-		 SETTING_coverZoom    = atof(mxmlElementGetAttr(next_n,"zoom"));
-		if(mxmlElementGetAttr(next_n,"drawWindow"))
-		 SETTING_drawWindow   = atoi(mxmlElementGetAttr(next_n,"drawWindow"));
-		if(mxmlElementGetAttr(next_n,"coverText"))
-		 SETTING_coverText   = atoi(mxmlElementGetAttr(next_n,"coverText"));
+		  if(mxmlElementGetAttr(next_n,"spacing"))
+			  SETTING_coverSpacing = atof(mxmlElementGetAttr(next_n,"spacing"));
+		  if(mxmlElementGetAttr(next_n,"angle"))
+			  SETTING_coverAngle   = atof(mxmlElementGetAttr(next_n,"angle"));
+		  if(mxmlElementGetAttr(next_n,"zoom"))
+			  SETTING_coverZoom    = atof(mxmlElementGetAttr(next_n,"zoom"));
+		  if(mxmlElementGetAttr(next_n,"drawWindow"))
+			  SETTING_drawWindow   = atoi(mxmlElementGetAttr(next_n,"drawWindow"));
+		  if(mxmlElementGetAttr(next_n,"coverText"))
+			  SETTING_coverText    = atoi(mxmlElementGetAttr(next_n,"coverText"));
+		  if(mxmlElementGetAttr(next_n,"theme"))
+			  SETTING_theme		   = atoi(mxmlElementGetAttr(next_n,"theme"));
 	  }
 	  else
 	  {
@@ -121,6 +123,9 @@ inline int SETTINGS_Save()
 	
 	sprintf(buffer, "%d", SETTING_coverText);
 	mxmlElementSetAttr(node, "coverText", buffer);
+
+	sprintf(buffer, "%d", SETTING_theme);
+	mxmlElementSetAttr(node, "theme", buffer);
 
 	FILE *fp;
 

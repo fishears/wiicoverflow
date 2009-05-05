@@ -1,5 +1,4 @@
 #include "gfx.h"
-
 #include "settings.h"
 
 extern s_self self;
@@ -7,9 +6,13 @@ extern s_pointer pointer;
 
 void LoadTextures()
 {
+	// start new background graphics code
+	gradient_bg_strip_w = GRRLIB_LoadTexture(gradient_bg_strip_w_png);
+	gradient_bg_strip_b = GRRLIB_LoadTexture(gradient_bg_strip_b_png);
+	// end background code
+	
 	pointer_texture   = GRRLIB_LoadTexture(generic_point_png);
 	menu_bg_texture   = GRRLIB_LoadTexture(menu_bg_png);
-	
 	cover_texture = GRRLIB_LoadTexture(no_cover_png);
 	back_texture = GRRLIB_LoadTexture(back_cover_png);
 	no_disc_texture = GRRLIB_LoadTexture(no_disc_png);
@@ -25,8 +28,6 @@ void LoadTextures()
 	load_bg_texture = GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
 	
 	GRRLIB_InitTileSet(&tex_BMfont5, 8, 16, 0);
-	
-//	gradient_white_texture = GRRLIB_LoadTexture(gradient_bg_white_png);
 }
 
 void DrawBufferedCover(int i, float loc, float angle)
@@ -43,7 +44,6 @@ void DrawBufferedCover(int i, float loc, float angle)
 			else
 			{
 				GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
-			//	WindowPrompt("Cover Ready", "No DATA", &okButton, 0);
 			}
 			pthread_mutex_unlock(&buffer_mutex[i]);
 		}
@@ -66,8 +66,21 @@ void Paint_Progress(float v, char* msg)
 	
 	if(count > 40)
 		count = 40;
-	
-	GRRLIB_DrawImg(0, 0, gradient_texture, 0, 1, 1, 0xFFFFFFFF);
+
+	// draw the backgound gradient strip over and over to create solid bg
+	// need to add code to check for widescreen and adjust accordingly
+	int x;
+	for(x=0;x<=637;x=x+4)
+	{
+		if(SETTING_theme) //draw the white gradient
+		{
+			GRRLIB_DrawImg(x, 0, gradient_bg_strip_w, 0, 1, 1, 0xFFFFFFFF);
+		}
+		else //draw the default black background
+		{
+			GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
+		}
+	}
 	
 	for(i = 0; i < count; i++)
 	{
@@ -87,9 +100,22 @@ void Paint_Progress(float v, char* msg)
 void Paint_Progress_Generic(int v, int max, char* msg)
 {
 	float percent = (float)v/(float)max;
-
 	int count = percent*28;
-	int i;
+	int i, x;
+	
+	// draw the backgound gradient strip over and over to create solid bg
+	// need to add code to check for widescreen and adjust accordingly
+	for(x=0;x<=637;x=x+4)
+	{
+		if(SETTING_theme) //draw the white gradient
+		{
+			GRRLIB_DrawImg(x, 0, gradient_bg_strip_w, 0, 1, 1, 0xFFFFFFFF);
+		}
+		else //draw the default black background
+		{
+			GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
+		}
+	}
 	
 	for(i = 0; i < count; i++)
 	{

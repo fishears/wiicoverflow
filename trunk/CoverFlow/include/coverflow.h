@@ -26,6 +26,7 @@
 #include "sys.h"
 #include "buffer.h"
 #include "gfx.h"
+#include "mxml.h"
  
 #include "settings.h"
  
@@ -38,7 +39,7 @@
 /* Constants */
 #define ENTRIES_PER_PAGE 	 12
 #define MAX_CHARACTERS	 	 30
-#define BUFFER_WINDOW        8
+#define BUFFER_WINDOW        9
 #define BUFFER_THREAD_COUNT  1
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           19
@@ -56,9 +57,10 @@ extern const u8 loading_main_png[];
 extern const u8 progress_png[];
 extern const u8 gradient_bg_png[];
 extern const u8 slide_bar_png[];
-//extern const u8 usb_error_png[];
 extern const u8 generic_point_png[];
 extern const u8 menu_bg_png[];
+extern const u8 gradient_bg_strip_w_png[];
+extern const u8 gradient_bg_strip_b_png[];
 
 GRRLIB_texImg covers[MAX_COVERS];
 GRRLIB_texImg pointer_texture;
