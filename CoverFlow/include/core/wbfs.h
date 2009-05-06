@@ -24,7 +24,6 @@ s32 __WBFS_ReadDVD(void *fp, u32 lba, u32 len, void *iobuf);
 wbfs_t *GetHddInfo(void);
 s32 WBFS_AddGame(void);
 s32 WBFS_RemoveGame(u8 *);
-s32 WBFS_SetOptions(u8 *, u8 *);
 s32 WBFS_GameSize(u8 *, f32 *);
 s32 WBFS_DiskSpace(f32 *, f32 *);
 

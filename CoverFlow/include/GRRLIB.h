@@ -70,6 +70,7 @@ void GRRLIB_2D_Init();
 void GRRLIB_3D_Init();
 
 inline void GRRLIB_FillScreen(u32 color);
+void GRRLIB_RawTo4x4RGBA(const unsigned char *src, void *dst, const unsigned int width, const unsigned int height);
 
 inline void GRRLIB_Plot(f32 x, f32 y, u32 color);
 void GRRLIB_NPlot(Vector v[], u32 color, long n);

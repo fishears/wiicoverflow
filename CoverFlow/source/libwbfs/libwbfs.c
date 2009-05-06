@@ -548,7 +548,7 @@ u32 wbfs_estimate_disc(
 		partition_selector_t sel)
 {
 	u8 *b;
-	int disc_info_sz_lba;
+//	int disc_info_sz_lba;
 	int i;
 	u32 tot;
 	u32 wii_sec_per_wbfs_sect = 1 << (p->wbfs_sec_sz_s-p->wii_sec_sz_s);
