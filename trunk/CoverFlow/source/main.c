@@ -955,8 +955,8 @@ bool Menu_Boot(void)
 	bzero(&argv, sizeof(argv));
 	argv.argvMagic = ARGV_MAGIC;
 	//length is bootloader length + null + header length + null + null
-	argv.length = strlen(buffer);
-	argv.commandLine = malloc(argv.length) + 1;
+	argv.length = strlen(buffer) + 1;
+	argv.commandLine = malloc(argv.length);
 	strcpy(argv.commandLine, buffer);
 	
 	argv.commandLine[argv.length - 1] = '\x00';
