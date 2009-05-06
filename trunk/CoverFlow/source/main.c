@@ -907,7 +907,6 @@ bool Menu_Boot(void)
 	#ifndef TEST_MODE
 	struct discHdr *header = NULL;
 	//int i = 0;
-	s32 ret;
 
 	/* No game list */
 	if (!self.gameCnt)
@@ -933,6 +932,8 @@ bool Menu_Boot(void)
 	/* Set WBFS mode */
 	Disc_SetWBFS(WBFS_DEVICE_USB,header->id);
 		
+	s32 ret;
+	
 	/* Open disc */
 	ret = Disc_Open();
 	if (ret < 0) {
@@ -946,16 +947,25 @@ bool Menu_Boot(void)
 
 	#else
 	//TODO No really sure how args need to be set up...
-	struct __argv args[10];
-	args[0].argc = 1;
-	args[0].argv[0] = (char*) malloc(strlen("bootloader") * sizeof(char));
-	memcpy(args[0].argv[0], "bootloader", strlen("bootloader"));
+	char* buffer;
+	buffer = malloc(strlen("bootloader.dol") + 1 + 6 + 1);
+	sprintf(buffer, "bootloader.dol%c%s%c", '\0', header->id, '\0');
 	
-	args[1].argc = 1;
-	args[1].argv[0] = (char*) malloc(6 * sizeof(u8));
-	memcpy(args[1].argv[0], header->id, 6*sizeof(u8));
+	struct __argv argv;
+	bzero(&argv, sizeof(argv));
+	argv.argvMagic = ARGV_MAGIC;
+	//length is bootloader length + null + header length + null + null
+	argv.length = strlen(buffer);
+	argv.commandLine = malloc(argv.length) + 1;
+	strcpy(argv.commandLine, buffer);
 	
-	run_dol(bootloader_dol, args);
+	argv.commandLine[argv.length - 1] = '\x00';
+	argv.argc = 2;
+	argv.argv = & argv.commandLine;
+	
+	argv.endARGV = argv.argv + 1;
+			
+	run_dol(bootloader_dol, &argv);
 	#endif
 
 	#endif
