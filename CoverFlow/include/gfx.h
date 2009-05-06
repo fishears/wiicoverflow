@@ -123,6 +123,5 @@ float change_scale_without_containing(float val, float in_min, float in_max, flo
 float change_scale(float val, float in_min, float in_max, float out_min, float out_max);
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
 
-
 #endif
 
