@@ -9,7 +9,7 @@
 
 #define MAX_THREADS 5
 
-#include "disc.h"
+#include "core/disc.h"
 
 pthread_t thread[MAX_THREADS];
 

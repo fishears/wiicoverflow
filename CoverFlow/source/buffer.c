@@ -1,6 +1,6 @@
 #include "buffer.h"
-#include "disc.h"
-#include "fat.h"
+#include "core/disc.h"
+#include "core/fat.h"
 
 #include <stdio.h>
 #include <ctype.h>
@@ -31,8 +31,10 @@ void BUFFER_InitBuffer(int thread_count)
 	pthread_mutex_init(&quit_mutex, 0);
 	
 	for(i = 0; i < MAX_BUFFERED_COVERS; i++)
+	{
 		pthread_mutex_init(&buffer_mutex[i], 0);
-	
+		_texture_data[i].data=0;
+	}
 	
 	BUFFER_ClearCovers();
 	
@@ -242,7 +244,6 @@ void* process(void *arg)
 				pthread_mutex_lock(&queue_mutex);
 				_cq.remove[i]  = false;
 				_cq.ready[i]   = false;
-				_cq.request[i] = false;
 				pthread_mutex_unlock(&queue_mutex);
 				
 			}

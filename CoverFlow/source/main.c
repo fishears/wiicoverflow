@@ -112,7 +112,7 @@ void UpdateBufferedImages()
 					//TODO Fix this
 					//calling this fixes the fuked up graphics when you load
 					//too many covers, but it causes a code dump eventually... HELP
-					//BUFFER_RemoveCover(index);
+					BUFFER_RemoveCover(index);
 				}
 			}
 		}
