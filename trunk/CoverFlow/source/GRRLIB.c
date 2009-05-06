@@ -16,7 +16,7 @@ Download and Help Forum : http://grrlib.santo.fr
 #include <fat.h> 
 #include "settings.h"
 
-#include "video.h"
+#include "core/video.h"
 
 #define DEFAULT_FIFO_SIZE (256 * 1024)
 
