@@ -4,14 +4,14 @@
 #include <ogcsys.h>
 #include <ogc/lwp_watchdog.h>
 
-#include "core/apploader.h"
-#include "core/disc.h"
-#include "core/video.h"
-#include "core/wdvd.h"
-#include "core/wpad.h"
-#include "core/fst.h"
-#include "core/cfg.h"
-#include "core/subsystem.h"
+#include "apploader.h"
+#include "disc.h"
+#include "video.h"
+#include "wdvd.h"
+#include "wpad.h"
+#include "fst.h"
+#include "cfg.h"
+#include "subsystem.h"
 
 /* Constants */
 #define PTABLE_OFFSET	0x40000

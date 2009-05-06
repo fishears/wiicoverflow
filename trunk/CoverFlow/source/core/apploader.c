@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <ogcsys.h>
 #include <string.h>
-#include "core/apploader.h"
-#include "core/wdvd.h"
-#include "core/video.h"
-#include "core/patchcode.h" /*FISHEARS*/
-#include "core/kenobiwii.h" /*FISHEARS*/
-#include "core/cfg.h"
+#include "apploader.h"
+#include "wdvd.h"
+#include "video.h"
+#include "patchcode.h" /*FISHEARS*/
+#include "kenobiwii.h" /*FISHEARS*/
+#include "cfg.h"
 
 /*KENOBI! - FISHEARS*/
 extern const unsigned char kenobiwii[];

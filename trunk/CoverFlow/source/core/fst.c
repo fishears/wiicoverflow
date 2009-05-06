@@ -29,10 +29,10 @@
 #include <fat.h>
 #include <sdcard/wiisd_io.h>
 #include "ogc/ipc.h"
-#include "core/fst.h"
-#include "core/dvd_broadway.h"
-#include "core/wpad.h"
-#include "core/fat.h"
+#include "fst.h"
+#include "dvd_broadway.h"
+#include "wpad.h"
+#include "fat.h"
 
 
 #define FSTDIRTYPE 1

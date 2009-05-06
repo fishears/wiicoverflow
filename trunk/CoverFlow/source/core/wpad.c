@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <ogcsys.h>
 
-#include "core/sys.h"
-#include "core/wpad.h"
-#include "core/subsystem.h"
+#include "sys.h"
+#include "wpad.h"
+#include "subsystem.h"
 
 /* Constants */
 #define MAX_WIIMOTES	4

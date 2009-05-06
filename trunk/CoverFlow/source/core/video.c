@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <ogcsys.h>
 
-#include "core/sys.h"
-#include "core/video.h"
-#include "core/cfg.h"
+#include "sys.h"
+#include "video.h"
+#include "cfg.h"
 
 /* Video variables */
 static void *framebuffer = NULL;
@@ -146,7 +146,3 @@ void Video_Clear(s32 color)
 	VIDEO_ClearFrameBuffer(vmode, framebuffer, color);
 }
 
-void Video_DrawPng(IMGCTX ctx, PNGUPROP imgProp, u16 x, u16 y)
-{
-	PNGU_DECODE_TO_COORDS_YCbYCr(ctx, x, y, imgProp.imgWidth, imgProp.imgHeight, vmode->fbWidth, vmode->xfbHeight, framebuffer);
-}

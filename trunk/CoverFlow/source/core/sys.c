@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ogcsys.h>
 
-#include "core/sys.h"
+#include "sys.h"
 
 /* Constants */
 #define CERTS_LEN	0x280

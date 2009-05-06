@@ -28,7 +28,7 @@
 #include <ogc/lwp_queue.h>
 #include <gccore.h>	
  
-#include "core/dvd_broadway.h"
+#include "dvd_broadway.h"
  
 #define DI_CMDCTX_CNT				4
  

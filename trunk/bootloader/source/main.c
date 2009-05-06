@@ -1,7 +1,4 @@
-#include "coverflow.h"
-
-//static char prozent[MAX_CHARACTERS + 16];
-static char timet[MAX_CHARACTERS + 16];
+#include "bootloader.h"
 
 // Language selection config
 char languages[11][22] =
@@ -24,11 +21,6 @@ char vidmodes[6][10] =
 	{ " pal60", },
 	{ " ntsc ", },
         { "system"}};
-
-/* Gamelist buffer */
-static struct discHdr *gameList = NULL;
-
-static wbfs_t *hdd = NULL;
 
 /* WBFS device */
 static s32 my_wbfsDev = WBFS_DEVICE_USB;
@@ -86,9 +78,16 @@ int main( int argc, char **argv ){
 	
 	ret = WBFS_Init(my_wbfsDev);
 		
-	/* Set WBFS mode */
-	Disc_SetWBFS(WBFS_DEVICE_USB,"RFLE69");
+	if(argc > 0)
+	{
+		/*arg 1 == Game ID*/
 		
+		/* Set WBFS mode */
+		Disc_SetWBFS(WBFS_DEVICE_USB,argv[1]);
+	}
+	
+	/*TODO Use other args to set up CFG for patching, etc...*/
+	
 	/* Open disc */
 	ret = Disc_Open();
 	if (ret < 0) {
