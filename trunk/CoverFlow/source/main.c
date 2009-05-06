@@ -340,7 +340,7 @@ void DragSlider(int xPos)
 
 	int min_loc = 126;
 	int max_loc = 439;
-		
+
 	self.shift = -1*(change_scale(xPos, min_loc, max_loc, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0));
 }
 
@@ -1556,7 +1556,7 @@ int main( int argc, char **argv )
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsDown(0) & PAD_BUTTON_LEFT)
 			{	
 				select_ready = false;
-				if(!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0)))
+                                if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
 				{
 					self.shift += SCROLL_SPEED; // real Apple like flow direction ;-)
 				}
@@ -1564,7 +1564,7 @@ int main( int argc, char **argv )
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsDown(0) & PAD_BUTTON_RIGHT)
 			{
 				select_ready = false;
-				if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
+                                if(!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0)))
 				{
 					self.shift -= SCROLL_SPEED; // real Apple like flow direction ;-)
 				}
