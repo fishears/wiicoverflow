@@ -18,7 +18,7 @@ include $(DEVKITPPC)/wii_rules
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source source/pngu images source/libwbfs source/core
-DATA		:=	data 
+DATA		:=	data bootloader
 INCLUDES	:=  include include/pngu include/libwbfs include/core
 
 #---------------------------------------------------------------------------------
@@ -129,6 +129,11 @@ $(OUTPUT).elf: $(OFILES)
 %.png.o : %.png
 	@echo $(notdir $<)
 	$(bin2o)
+	
+%.dol.o : %.dol
+	@echo $(notdir $<)
+	$(bin2o)
+	
 #---------------------------------------------------------------------------------
 endif
 #---------------------------------------------------------------------------------

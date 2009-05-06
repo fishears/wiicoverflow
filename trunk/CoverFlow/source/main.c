@@ -927,6 +927,7 @@ bool Menu_Boot(void)
 	BUFFER_KillBuffer();
 	Sleep(300);
 	
+	#ifndef DOL_TEST
 	/* Set WBFS mode */
 	Disc_SetWBFS(WBFS_DEVICE_USB,header->id);
 		
@@ -940,6 +941,18 @@ bool Menu_Boot(void)
     if (ret < 0) {
         SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
     }
+
+	#else
+	//TODO No really sure how args need to be set up...
+	struct __argv args[10];
+	args[0].argc = 1;
+	memcpy(args[0].argv[0], "bootloader", strlen("bootloader"));
+	
+	args[1].argc = 1;
+	memcpy(args[1].argv[0], header->id, 6*sizeof(u8));
+	
+	run_dol(bootloader_dol, args);
+	#endif
 
 	#endif
 	
