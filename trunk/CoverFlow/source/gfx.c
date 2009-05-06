@@ -1,6 +1,7 @@
 #include "gfx.h"
 #include "settings.h"
 
+
 extern s_self self;
 extern s_pointer pointer;
 
@@ -69,7 +70,7 @@ void Paint_Progress(float v, char* msg)
 	
 	#ifdef DEBUG
 	if(msg != NULL)
-		GRRLIB_Printf(160, 255, font_texture,  0x444444FF, 1, "%s", msg);
+		GRRLIB_Printf(160, 255, font_texture,  0xAAAAAAFF, 1, "%s", msg);
     #endif
     
 	GRRLIB_Render();
@@ -717,5 +718,3 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 	
 	return false;
 }
-
-

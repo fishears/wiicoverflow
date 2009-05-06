@@ -10,6 +10,7 @@
 #include <gccore.h>
 #include <wiiuse/wpad.h>
 #include <sys/dir.h>
+#include <ogc/lwp_watchdog.h>   // Needed for gettime and ticks_to_millisecs
 #include "wpad.h"
 #include "wbfs.h"
 #include "wdvd.h"
@@ -96,7 +97,6 @@ typedef struct{
 	int animate_slide_x;
 	
 } s_self;
-
 
 void initVars();
 

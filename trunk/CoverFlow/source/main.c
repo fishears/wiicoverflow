@@ -2,6 +2,7 @@
 
 //static char prozent[MAX_CHARACTERS + 16];
 static char timet[MAX_CHARACTERS + 16];
+static u8 CalculateFrameRate();
 
 // Language selection config
 char languages[11][22] =
@@ -1258,6 +1259,8 @@ int main( int argc, char **argv )
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
 	
+	u8 FPS = 0; // frames per second counter
+	
 	initVars();
 	
     loader_main_texture = GRRLIB_LoadTexture(loading_main_png);
@@ -1622,11 +1625,18 @@ int main( int argc, char **argv )
 			Button_Theme_Paint(&settingsButton, SETTING_theme);
 		}
 
+#ifdef DEBUG
+		// spit the FPS
+		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build--");
+		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
+#endif
 		// Draw the pointing hand
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 
         GRRLIB_Render();
 
+        FPS = CalculateFrameRate();
+		
 		Sleep(1);
 	}
 	
@@ -1636,3 +1646,25 @@ int main( int argc, char **argv )
 	
 	return 0;
 } 
+
+
+/**
+ * This function calculates the number of frames we render each second.
+ * It must be called right after GRRLIB_Render.
+ * @return The number of frames per second.
+ */
+static u8 CalculateFrameRate() {
+    static u8 frameCount = 0;
+    static u32 lastTime;
+    static u8 FPS = 0;
+    u32 currentTime = ticks_to_millisecs(gettime());
+	
+    frameCount++;
+    if(currentTime - lastTime > 1000) {
+        lastTime = currentTime;
+        FPS = frameCount;
+        frameCount = 0;
+    }
+    return FPS;
+}
+
