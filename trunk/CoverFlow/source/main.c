@@ -335,7 +335,7 @@ void DragSlider(int xPos)
 	int min_loc = 126;
 	int max_loc = 439;
 		
-	self.shift = change_scale(xPos, min_loc, max_loc, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0);
+	self.shift = -1*(change_scale(xPos, min_loc, max_loc, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0));
 }
 
 int DiscWait()
@@ -1445,22 +1445,22 @@ int main( int argc, char **argv )
 			}
 		}
 		
-		if(dragging)
+		if(dragging) // if the user is dragging the slider
 		{
-			if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A)
+			if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) //with the A button
 			{
 				DragSlider(pointer.p_x);
 			}
 			else
 			{
-				dragging = false;
+				dragging = false; // they let go
 			}
 		}
-				
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A ||
-			PAD_ButtonsDown(0) & PAD_BUTTON_A)
+		
+		// Check for the A button action
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A || PAD_ButtonsDown(0) & PAD_BUTTON_A)
 		{
-			//First Check Buttons
+			//First Check if any UI buttons or slider are selected
 			if(Button_Select(&addButton, pointer.p_x, pointer.p_y))
 			{
 				AddGame();
@@ -1473,38 +1473,40 @@ int main( int argc, char **argv )
 			{
 				dragging = true;
 			}
-			else
+			else // user clicked A somewhere on the screen
 			{
-				if(self.gameCnt)
+				if(self.gameCnt) // any games?
 				{
 					if(!self.selected && self.animate_flip <= 0.0)
 					{
-						if(pointer.p_x < 400 && pointer.p_x > 200 &&
-							pointer.p_y > 60 && pointer.p_y < 380)
+						// nothing yet selected and nothing animating
+						if(pointer.p_x < 400 && pointer.p_x > 200 && pointer.p_y > 60 && pointer.p_y < 380)
 						{
+							// pointer is in the center cover target area
 							if(select_ready && self.select_shift == 0.0)
 							{
+								// center cover seleted, load the game details
 								self.selected = true;
 								LoadCurrentCover(self.gameSelected);
 							}
 						}
-						else if(pointer.p_x < 200 &&
-							pointer.p_y > 60 && pointer.p_y < 380)
+						else if(pointer.p_x < 200 && pointer.p_y > 60 && pointer.p_y < 380)
 						{
-							self.select_shift = (-4)*((200-pointer.p_x)/200.0);
+							// the pointer is within the left set of covers, start to scroll
+							self.select_shift = (-4)*((200-pointer.p_x)/200.0); // range is -4 to 0 rouhgly
 						}
-						else if(pointer.p_x > 400 &&
-							pointer.p_y > 60 && pointer.p_y < 380)
+						else if(pointer.p_x > 400 && pointer.p_y > 60 && pointer.p_y < 380)
 						{
-							self.select_shift = 5*(pointer.p_x-345.0)/280.0;
+							// the pointer is within the right set of covers, start to scroll
+							self.select_shift = 5*(pointer.p_x-345.0)/280.0; // range is 1 to 5 roughly
 						}
 					}
-					
+					// Game is selected and finished animating the detail dialog
 					if(self.selected && self.animate_flip == 1.0)
 					{
 						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y))
 						{
-							
+							// User clicked on the load game, so save settings before launchin
 							SETTINGS_Save();
 							
 							#ifdef ANIMATE_TEST
@@ -1512,6 +1514,7 @@ int main( int argc, char **argv )
 								return 0;
 							#else
 							//TODO Prompt to boot game...
+
 							if(!Menu_Boot())
 							{
 								self.selected = false;
@@ -1525,11 +1528,13 @@ int main( int argc, char **argv )
 						}
 						else if(Button_Select(&deleteButton, pointer.p_x, pointer.p_y))
 						{
+							// User clicked delete button
 							Menu_Delete();
 							self.selected = false;
 						}
 						else if(Button_Select(&backButton, pointer.p_x, pointer.p_y))
 						{
+							// User clicked back button
 							self.selected = false;
 						}
 					}
@@ -1537,24 +1542,41 @@ int main( int argc, char **argv )
 			}
 		}
 
+		// Check for non-A activity
+		// Nothing is selected and nothing is flipped
 		if(!self.selected && self.animate_flip == 0)
 		{
-			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT  ||
-				PAD_ButtonsDown(0) & PAD_BUTTON_LEFT)
-			
+			// Check for Left pad
+			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsDown(0) & PAD_BUTTON_LEFT)
 			{	
 				select_ready = false;
-					
 				if(!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0)))
-					self.shift -= SCROLL_SPEED;
-			}
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||
-				PAD_ButtonsDown(0) & PAD_BUTTON_RIGHT)
+				{
+					self.shift += SCROLL_SPEED; // real Apple like flow direction ;-)
+				}
+			} // now check for right
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsDown(0) & PAD_BUTTON_RIGHT)
 			{
 				select_ready = false;
-					
 				if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
-					self.shift += SCROLL_SPEED;
+				{
+					self.shift -= SCROLL_SPEED; // real Apple like flow direction ;-)
+				}
+			} // Check for UP for zoom in
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsDown(0) & PAD_BUTTON_UP)
+			{	
+				if (SETTING_coverZoom > .99)
+				{
+					SETTING_coverZoom = .99;
+				}
+				else
+				{
+					SETTING_coverZoom += 0.03;
+				}
+			} // Check for DOWN for zoom out
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_DOWN || PAD_ButtonsDown(0) & PAD_BUTTON_DOWN)
+			{	
+				SETTING_coverZoom -= 0.03;
 			}
 			else
 			{
@@ -1565,13 +1587,17 @@ int main( int argc, char **argv )
 					{
 						self.select_shift -= mult*SCROLL_SPEED;
 						if(!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0)))
+						{
 							self.shift -= mult*SCROLL_SPEED;
+						}
 					}
 					else
 					{
 						self.select_shift += mult*SCROLL_SPEED;
 						if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
+						{
 							self.shift += mult*SCROLL_SPEED;
+						}
 					}
 					
 				}
@@ -1595,8 +1621,9 @@ int main( int argc, char **argv )
 				
 					// Draw Game Title
 					if(SETTING_coverText)
-					{
-						draw_game_title(self.gameSelected, gameList);
+					{	
+						float t = 1.0; // add a configurable text size later
+						draw_game_title(self.gameSelected, t , gameList);
 					}
 				}
 					
@@ -1624,11 +1651,13 @@ int main( int argc, char **argv )
 			Button_Theme_Paint(&addButton, SETTING_theme);
 			Button_Theme_Paint(&settingsButton, SETTING_theme);
 		}
-
+	
 #ifdef DEBUG
 		// spit the FPS
 		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build--");
 		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
+//		GRRLIB_Printf(500, 40, font_texture, 0x808080FF, 1, "screen: %d, %d", SCR_WIDTH, SCR_HEIGHT);
+//		GRRLIB_Printf(500, 60, font_texture, 0x808080FF, 1, "shift: %d", self.shift);
 #endif
 		// Draw the pointing hand
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
