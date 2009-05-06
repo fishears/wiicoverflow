@@ -1,5 +1,7 @@
 #include "coverflow.h"
 
+#include "version.h"
+
 //static char prozent[MAX_CHARACTERS + 16];
 static char timet[MAX_CHARACTERS + 16];
 static u8 CalculateFrameRate();
@@ -1675,7 +1677,7 @@ int main( int argc, char **argv )
 	
 #ifdef DEBUG
 		// spit the FPS
-		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build--");
+		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
 //		GRRLIB_Printf(500, 40, font_texture, 0x808080FF, 1, "screen: %d, %d", SCR_WIDTH, SCR_HEIGHT);
 //		GRRLIB_Printf(500, 60, font_texture, 0x808080FF, 1, "shift: %d", self.shift);

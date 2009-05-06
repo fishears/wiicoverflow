@@ -98,11 +98,18 @@ export OUTPUT	:=	$(CURDIR)/$(TARGET)
 .PHONY: $(BUILD) clean
 
 #---------------------------------------------------------------------------------
-$(BUILD):
+$(BUILD): version
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
-#---------------------------------------------------------------------------------
+version:
+	@echo Generating Version.h file...
+	@echo "#pragma once" > include/version.h
+	@echo -n "#define SVN_VERSION " >> include/version.h
+	@echo `cat .svn/entries | head -4 | tail -1` >> include/version.h
+
+
+#-------------------------------------------------------------------------------
 clean:
 	@echo clean ...
 	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).dol
