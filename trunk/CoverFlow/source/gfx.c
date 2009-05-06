@@ -13,11 +13,12 @@ void LoadTextures()
 	cover_texture		= GRRLIB_LoadTexture(no_cover_png);
 	back_texture		= GRRLIB_LoadTexture(back_cover_png);
 	no_disc_texture		= GRRLIB_LoadTexture(no_disc_png);
-	slide_bar_texture	= GRRLIB_LoadTexture(slide_bar_png);
+	slide_bar_texture_w = GRRLIB_LoadTexture(slide_bar_white_png);
+	slide_bar_texture_b = GRRLIB_LoadTexture(slide_bar_black_png);
 	load_bg_texture		= GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
-	text_BMfont5		= GRRLIB_LoadTexture(BMfont5_png);
+	font_texture        = GRRLIB_LoadTexture(BMfont5_png);
 	
-	GRRLIB_InitTileSet(&text_BMfont5, 8, 16, 0);
+	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
 }
 
 void DrawBufferedCover(int i, float loc, float angle)
@@ -68,7 +69,7 @@ void Paint_Progress(float v, char* msg)
 	
 	#ifdef DEBUG
 	if(msg != NULL)
-		GRRLIB_Printf(160, 255, text_BMfont5,  0x444444FF, 1, "%s", msg);
+		GRRLIB_Printf(160, 255, font_texture,  0x444444FF, 1, "%s", msg);
     #endif
     
 	GRRLIB_Render();
@@ -78,7 +79,7 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 {
 	float percent = (float)v/(float)max;
 	int count = percent*28;
-	int i, x;
+	int i;
 
 	DrawBackground(SETTING_theme);
 
@@ -91,7 +92,7 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 	
 	#ifdef DEBUG
 	if(msg != NULL)
-		GRRLIB_Printf(160, 255, text_BMfont5,  0x444444FF, 1, "%s", msg);
+		GRRLIB_Printf(160, 255, font_texture,  0x444444FF, 1, "%s", msg);
     #endif
     
 	GRRLIB_Render();
@@ -191,21 +192,33 @@ void Hover_Buttons()
 
 }
 
-void DrawSlider()
+void DrawSlider(int theme_id)
 {
 	int min_loc = 0;
 	int max_loc = 313;
-	
-	GRRLIB_DrawImg(120, 410, slide_bar_texture, 0, 1, 1, 0xFFFFFFFF);
-	
 	int x = change_scale(self.shift, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0, min_loc, max_loc);
 	
 	slideButton.x = 126+x;
 	slideButton.y = 426;
 	
-	//GRRLIB_DrawImg(126+x, 426, slide_texture, 0, 1, 1, 0xFFFFFFFF);
+	switch (theme_id)
+	{
+		case 0: // black theme
+			GRRLIB_DrawImg(120, 410, slide_bar_texture_b, 0, 1, 1, 0xFFFFFFFF);
+			Button_Theme_Paint(&slideButton, SETTING_theme);
+			break;
+		case 1: // white theme
+			GRRLIB_DrawImg(120, 410, slide_bar_texture_w, 0, 1, 1, 0xFFFFFFFF);
+			Button_Theme_Paint(&slideButton, SETTING_theme);
+			break;
+		default:
+			GRRLIB_DrawImg(120, 410, slide_bar_texture_b, 0, 1, 1, 0xFFFFFFFF);
+			Button_Theme_Paint(&slideButton, SETTING_theme);
+			break;
+	}
 	
-	Button_Paint(&slideButton);
+	
+	
 }
 
 void GRRLIB_Cover(float pos, int texture_id)
@@ -311,8 +324,21 @@ void draw_game_title(int index, struct discHdr *gameList)
 		{
 			offset = 240;
 		}
-			
-		GRRLIB_Printf(340 - offset, 400, text_BMfont5, 0xFFFFFFFF, tsize, "%s", header->title);
+
+		GRRLIB_Printf(340 - offset, 400, font_texture, SETTING_fontColor, tsize, "%s", header->title);
+
+/*
+		if (SETTING_theme)
+		{
+			// draw white text
+			GRRLIB_Printf(340 - offset, 400, font_texture, 0x000000FF, tsize, "%s", header->title);
+		}
+		else
+		{
+			// draw black text
+			GRRLIB_Printf(340 - offset, 400, font_texture, 0xFFFFFFFF, tsize, "%s", header->title);
+		}
+*/
 	}
 }
 
@@ -414,13 +440,13 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		/* Get game size */
 		WBFS_GameSize(header->id, &size);
 
-		GRRLIB_Printf(280, 180, text_BMfont5, 0x999999FF, 1, "%s", header->title);
-		GRRLIB_Printf(290, 210, text_BMfont5, 0x888888FF, .8, " Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
-		GRRLIB_Printf(290, 230, text_BMfont5, 0x888888FF, .8, " Size:    %.2fGB", size);
+		GRRLIB_Printf(280, 180, font_texture, SETTING_fontColor, 1, "%s", header->title);
+		GRRLIB_Printf(290, 210, font_texture, SETTING_fontColor, .8, " Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
+		GRRLIB_Printf(290, 230, font_texture, SETTING_fontColor, .8, " Size:    %.2fGB", size);
 		#else
-		GRRLIB_Printf(280, 180, text_BMfont5, 0x999999FF, 1, "%s", "Test Game Id Goes Here");
-		GRRLIB_Printf(290, 210, text_BMfont5, 0x888888FF, .8, "%s", " Game ID: TEST");
-		GRRLIB_Printf(290, 230, text_BMfont5, 0x888888FF, .8, "%s", " Size:    2.0GB");
+		GRRLIB_Printf(280, 180, font_texture, SETTING_fontColor, 1, "%s", "Test Game Id Goes Here");
+		GRRLIB_Printf(290, 210, font_texture, SETTING_fontColor, .8, "%s", " Game ID: TEST");
+		GRRLIB_Printf(290, 230, font_texture, SETTING_fontColor, .8, "%s", " Size:    2.0GB");
 		#endif
 		
 		GRRLIB_DrawImg(102+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, 1, 1, 0xFFFFFFFF);
@@ -542,11 +568,11 @@ void draw_selected(struct discHdr *gameList)
 			if(offset > 240)
 				offset = 240;
 			
-			GRRLIB_Printf(300 - offset, 10, text_BMfont5, 0XFFFFFFFF, tsize, "%s", name);
-			GRRLIB_Printf(210, 50, text_BMfont5, 0XFFFFFFFF, .4, "(%c%c%c%c) (%.2fGB)", header->id[0], header->id[1], header->id[2], header->id[3], size);
+			GRRLIB_Printf(300 - offset, 10, font_texture, SETTING_fontColor, tsize, "%s", name);
+			GRRLIB_Printf(210, 50, font_texture, SETTING_fontColor, .4, "(%c%c%c%c) (%.2fGB)", header->id[0], header->id[1], header->id[2], header->id[3], size);
 			#else
-			GRRLIB_Printf(90, 10, text_BMfont5, 0XFFFFFFFF, .8, "%s", "JUSTINS GAME");
-			GRRLIB_Printf(180, 50, text_BMfont5, 0XFFFFFFFF, .5, "%s", "JUSTINS GAME");
+			GRRLIB_Printf(90, 10, font_texture, SETTING_fontColor, .8, "%s", "JUSTINS GAME");
+			GRRLIB_Printf(180, 50, font_texture, SETTING_fontColor, .5, "%s", "JUSTINS GAME");
 			#endif
 		}
   }
@@ -677,8 +703,8 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		}
 		
 		/*Draw Text*/
-        GRRLIB_Printf(140, 70, text_BMfont5,  0xFFFFFFFF, 1.5, "%s", title);
-        GRRLIB_Printf(160, 110, text_BMfont5, 0xFFFFFFFF, 1, "%s", txt);
+        GRRLIB_Printf(140, 70, font_texture,  SETTING_fontColor, 1.5, "%s", title);
+        GRRLIB_Printf(160, 110, font_texture, SETTING_fontColor, 1, "%s", txt);
 		
 		if(doloop)
 		{
@@ -691,3 +717,5 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 	
 	return false;
 }
+
+
