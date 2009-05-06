@@ -107,13 +107,12 @@ void Paint_Progress_Generic(int v, int max, char* msg);
 void Init_Buttons();
 void Hover_Buttons();
 void GRRLIB_Cover(float pos, int texture_id);
-//void draw_game_title(int index);
 
 void DrawBackground(int theme_id); // takes a SETTING_theme, but defaults to black
 void DrawSlider(int theme_id);	   // takes a SETTING_theme, but defaults to black
 
 void draw_covers();
-void draw_game_title(int index, struct discHdr *gameList);
+void draw_game_title(int index, float textSize, struct discHdr *gameList);
 void draw_selected(struct discHdr *gameList);
 
 //Work for new Load Animation

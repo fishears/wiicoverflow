@@ -1,7 +1,6 @@
 #include "gfx.h"
 #include "settings.h"
 
-
 extern s_self self;
 extern s_pointer pointer;
 
@@ -199,7 +198,7 @@ void DrawSlider(int theme_id)
 	int max_loc = 313;
 	int x = change_scale(self.shift, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0, min_loc, max_loc);
 	
-	slideButton.x = 126+x;
+	slideButton.x = 439-x; // fix for Apple-likeflow direction
 	slideButton.y = 426;
 	
 	switch (theme_id)
@@ -217,9 +216,6 @@ void DrawSlider(int theme_id)
 			Button_Theme_Paint(&slideButton, SETTING_theme);
 			break;
 	}
-	
-	
-	
 }
 
 void GRRLIB_Cover(float pos, int texture_id)
@@ -308,11 +304,10 @@ void draw_covers()
 
 
 
-void draw_game_title(int index, struct discHdr *gameList)
+void draw_game_title(int index, float textSize, struct discHdr *gameList)
 {
 	if(index != -1)
 	{
-		float tsize = 1;
 		int len = 0;
 		struct discHdr *header = NULL;
 		
@@ -325,21 +320,8 @@ void draw_game_title(int index, struct discHdr *gameList)
 		{
 			offset = 240;
 		}
-
-		GRRLIB_Printf(340 - offset, 400, font_texture, SETTING_fontColor, tsize, "%s", header->title);
-
-/*
-		if (SETTING_theme)
-		{
-			// draw white text
-			GRRLIB_Printf(340 - offset, 400, font_texture, 0x000000FF, tsize, "%s", header->title);
-		}
-		else
-		{
-			// draw black text
-			GRRLIB_Printf(340 - offset, 400, font_texture, 0xFFFFFFFF, tsize, "%s", header->title);
-		}
-*/
+		
+		GRRLIB_Printf(340 - offset, 400, font_texture, SETTING_fontColor, textSize, "%s", header->title);
 	}
 }
 

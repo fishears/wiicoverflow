@@ -67,6 +67,8 @@ GRRLIB_texImg covers[MAX_COVERS];
 GRRLIB_texImg pointer_texture;
 
 int COVER_COUNT;
+int SCR_WIDTH;
+int SCR_HEIGHT;
 WPADData *wd;
 
 typedef struct{

@@ -14,7 +14,6 @@ Download and Help Forum : http://grrlib.santo.fr
 #include "pngu/pngu.h"
 #include "GRRLIB.h"
 #include <fat.h> 
-
 #include "settings.h"
 
 #include "video.h"
@@ -27,6 +26,7 @@ GXRModeObj *rmode;
 void *gp_fifo = NULL;
 
 Mtx view;
+
 /**
  * Clear screen with a specific color.
  * @param color the color to use to fill the screen.
@@ -910,6 +910,9 @@ void GRRLIB_Init() {
     rmode = VIDEO_GetPreferredMode(NULL);
     if(rmode == NULL)
         return;
+	
+	SCR_WIDTH=rmode->fbWidth;
+    SCR_HEIGHT=rmode->efbHeight;
 
     /* Widescreen patch by CashMan's Productions (http://www.CashMan-Productions.fr.nf) */
     if (CONF_GetAspectRatio() == CONF_ASPECT_16_9) 
