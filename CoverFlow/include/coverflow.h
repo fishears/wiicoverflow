@@ -11,24 +11,37 @@
 #include <wiiuse/wpad.h>
 #include <sys/dir.h>
 #include <ogc/lwp_watchdog.h>   // Needed for gettime and ticks_to_millisecs
-#include "core/wpad.h"
-#include "core/wbfs.h"
-#include "core/wdvd.h"
+#include "wpad.h"
+#include "wbfs.h"
+#include "wdvd.h"
 #include "libwbfs/libwbfs.h"
-#include "core/disc.h"
-#include "core/cfg.h"
+#include "disc.h"
+#include "cfg.h"
 #include "network.h"
 #include "sys/errno.h"
 #include "sys/unistd.h"
 #include "http.h"
 #include "GRRLIB.h"
 #include "pngu/pngu.h"
-#include "core/fat.h"
-#include "core/sys.h"
+#include "fat.h"
+#include "sys.h"
 #include "buffer.h"
 #include "gfx.h"
 #include "mxml.h"
  
+
+/*DOL TEST*/
+// To test dol, build the bootloader, then copy
+// the bootloader to the Coverflow/bootloader/ folder
+// Uncomment the code below and then run make.
+// You also will want to remove .init=0x80a00100 from this make file
+/*
+#include "dol.h" 
+#define DOL_TEST 1
+extern const u8 bootloader_dol[];
+*/
+/*DOL TEST END*/
+
 #include "settings.h"
  
 #define COVER_WIDTH    160
