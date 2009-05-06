@@ -946,9 +946,11 @@ bool Menu_Boot(void)
 	//TODO No really sure how args need to be set up...
 	struct __argv args[10];
 	args[0].argc = 1;
+	args[0].argv[0] = (char*) malloc(strlen("bootloader") * sizeof(char));
 	memcpy(args[0].argv[0], "bootloader", strlen("bootloader"));
 	
 	args[1].argc = 1;
+	args[1].argv[0] = (char*) malloc(6 * sizeof(u8));
 	memcpy(args[1].argv[0], header->id, 6*sizeof(u8));
 	
 	run_dol(bootloader_dol, args);
