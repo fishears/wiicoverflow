@@ -89,3 +89,18 @@ void Button_Theme_Paint(struct Button* btn, int theme_id)
 		
 	}	
 }
+
+// When passed two buttons and a toggle int, 0=draw the first , 1=draws the second
+void Button_Toggle_Paint(struct Button* btn1, struct Button* btn2, int toggle_state)
+{
+	if (toggle_state >=1)
+	{
+		GRRLIB_DrawImg(btn2->x, btn2->y, btn2->texture, 0, 1, 1, 0xFFFFFFFF);
+	}
+	else
+	{
+		GRRLIB_DrawImg(btn1->x, btn1->y, btn1->texture, 0, 1, 1, 0xFFFFFFFF);
+	}
+	
+	
+}

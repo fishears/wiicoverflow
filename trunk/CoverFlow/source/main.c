@@ -461,31 +461,27 @@ void Graphic_Settings_Menu(void)
 			doloop = false;
 		}
 		
-		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 		{
-			if(Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
+			if (Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
 			{
 				doloop = false;
 			}
-			else if(Button_Select(&resetButton, pointer.p_x, pointer.p_y))
+			else if (Button_Select(&resetButton, pointer.p_x, pointer.p_y))
 			{
 				SETTINGS_Init();
 			}
-			else if(Button_Select(&windowdownButton, pointer.p_x, pointer.p_y))
+			else if (Button_Select(&windowdownButton, pointer.p_x, pointer.p_y))
 			{
-				if(SETTING_drawWindow > 1)
-				{
+				if (SETTING_drawWindow > 1)
 					SETTING_drawWindow -= 1;
-				}
 			}
-			else if(Button_Select(&windowupButton, pointer.p_x, pointer.p_y))
+			else if (Button_Select(&windowupButton, pointer.p_x, pointer.p_y))
 			{
-				if(SETTING_drawWindow < 100) // Allow for user to shoot self in foot
-				{
+				if (SETTING_drawWindow < 100) // Allow for user to shoot self in foot
 					SETTING_drawWindow += 1;
-				}
 			}
-			else if(Button_Select(&coverTextOnButton, pointer.p_x, pointer.p_y) || Button_Select(&coverTextOffButton, pointer.p_x, pointer.p_y))
+			else if (Button_Select(&coverTextOnButton, pointer.p_x, pointer.p_y) || Button_Select(&coverTextOffButton, pointer.p_x, pointer.p_y))
 			{
 				SETTING_coverText = (SETTING_coverText) ? 0 : 1;
 			}
@@ -524,7 +520,7 @@ void Graphic_Settings_Menu(void)
 		/*Draw Covers*/ //PREVIEW
 		draw_covers();
 		
-		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1.4, 0xFFFFFFFF);
 		
         GRRLIB_Printf(190, 63, font_texture, SETTING_fontColor, 1, "Coverflow Settings (GFX)");
 		
@@ -577,11 +573,9 @@ void Settings_Menu(void)
 
 	/*Render and control Settings*/
 	do{
-
 		WPAD_ScanPads();
 		
 		ir_t ir; // The struct for infrared
-		
 		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
 		wd = WPAD_Data(WPAD_CHAN_0);
 
@@ -589,67 +583,66 @@ void Settings_Menu(void)
 		pointer.p_y = ir.sy-250;
 		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
-		Hover_Buttons();
+		// Check for button-pointer intersections
+		Hover_Buttons();  
 
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
+		// Handle button events
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME || WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
 		{
 			doloop = false;
 		}
-		
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 		{
-			doloop = false;
-		}
-		
-		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
-		{
-			if(Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
+			if (Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
 			{
-				doloop = false;
+				doloop = false; // Clicked the setting button, exit to main screen
 			}
-			else if(Button_Select(&cheatonButton, pointer.p_x, pointer.p_y) || Button_Select(&cheatoffButton, pointer.p_x, pointer.p_y))
+			else if (Button_Select(&cheatonButton, pointer.p_x, pointer.p_y) || Button_Select(&cheatoffButton, pointer.p_x, pointer.p_y))
 			{
-				CFG.ocarina = (CFG.ocarina) ? 0 : 1;
+				CFG.ocarina = (CFG.ocarina) ? 0 : 1; // Clicked the Ocarina button, toggle state
 			}
-			else if(Button_Select(&vidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&vidtvoffButton, pointer.p_x, pointer.p_y))
+			else if (Button_Select(&vidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&vidtvoffButton, pointer.p_x, pointer.p_y))
 			{
-				CFG.vipatch = (CFG.vipatch) ? 0 : 1;
+				CFG.vipatch = (CFG.vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
 			}
-			else if(Button_Select(&graphicsButton, pointer.p_x, pointer.p_y))
+			else if (Button_Select(&graphicsButton, pointer.p_x, pointer.p_y))
 			{
-				Graphic_Settings_Menu();
+				Graphic_Settings_Menu(); // Clicked the Graphics Setting button, launch menu routine
 			}
-			else if(Button_Select(&langdownButton, pointer.p_x, pointer.p_y))
-			{
-				if(CFG.language > 0)
+			else if (Button_Select(&langdownButton, pointer.p_x, pointer.p_y))
+			{ // Clicked on the language buttons
+				if (CFG.language > 0)
 				{
 					CFG.language --;
 				}
 				else
 				{
-					CFG.language = (CFG_LANG_COUNT -1);
+					CFG.language = (CFG_LANG_COUNT - 1);
 				}
 			}
-			else if(Button_Select(&langupButton, pointer.p_x, pointer.p_y))
+			else if (Button_Select(&langupButton, pointer.p_x, pointer.p_y))
 			{
-				if(CFG.language <(CFG_LANG_COUNT -1))
+				if (CFG.language < (CFG_LANG_COUNT - 1))
 				{
 					CFG.language ++;
 				}
 				else
 				{
-                                        CFG.language = 0;
+					CFG.language = 0;
 				}
 			}
-			else if(Button_Select(&downloadButton, pointer.p_x, pointer.p_y)){
-				if(WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton)){
+			else if (Button_Select(&downloadButton, pointer.p_x, pointer.p_y))
+			{
+				// Clicked on the Download Covers button
+				if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
+				{
 					batchDownloadCover();
-					//Init_Covers();
 				}
 			}
-                        else if(Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
-                        {
-                            if(CFG.video > 0)
+			else if (Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
+			{
+				// Clicked on the video down button
+				if (CFG.video > 0)
 				{
 					CFG.video --;
 				}
@@ -657,10 +650,11 @@ void Settings_Menu(void)
 				{
 					CFG.video = (CFG_VIDEO_COUNT -1);
 				}
-                        }
-                        else if(Button_Select(&vidupButton, pointer.p_x,pointer.p_y))
-                        {
-                            if(CFG.video <(CFG_VIDEO_COUNT -1))
+			}
+			else if (Button_Select(&vidupButton, pointer.p_x,pointer.p_y))
+			{
+				// Clicked on the video up button
+				if (CFG.video <(CFG_VIDEO_COUNT -1))
 				{
 					CFG.video ++;
 				}
@@ -668,10 +662,10 @@ void Settings_Menu(void)
 				{
 					CFG.video = 0;
 				}
-                        }
-
-			else if(Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y) || Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
+			}
+			else if (Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y) || Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
 			{
+				// Clicked on the Theme button, toggle state
 				SETTING_theme = (SETTING_theme) ? 0 : 1;
 				if (SETTING_theme)
 				{	// black fonts for white theme
@@ -685,59 +679,42 @@ void Settings_Menu(void)
 			}
 		}
 		
-		Hover_Buttons();
-		
+		// Black the background
 		GRRLIB_FillScreen(0x000000FF);
+		// Draw screen background
 		DrawBackground(SETTING_theme);
-		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-
-		GRRLIB_Printf(190, 63, font_texture, SETTING_fontColor, 1, "Coverflow Settings");
-		
-		Button_Theme_Paint(&settingsButton, SETTING_theme);
+		// Draw menu dialog background
+		GRRLIB_DrawImg(115, 105, menu_bg_texture, 0, 1, 1.4, 0xFFFFFFFF);
+		// Draw text
+		GRRLIB_Printf(204, 60,  font_texture, SETTING_fontColor, 1.3, "Coverflow Settings");
+		GRRLIB_Printf(145, 93,  font_texture, SETTING_fontColor, 1, "Ocarina:");
+		GRRLIB_Printf(145, 128, font_texture, SETTING_fontColor, 1, "Language:");
+		GRRLIB_Printf(330, 128, font_texture, SETTING_fontColor, 1, "%s",languages[CFG.language]);
+		GRRLIB_Printf(145, 157, font_texture, SETTING_fontColor, 1, "Video mode:");
+		GRRLIB_Printf(365, 155, font_texture, SETTING_fontColor, 1, "%s",vidmodes[CFG.video]);
+		GRRLIB_Printf(145, 189, font_texture, SETTING_fontColor, 1, "VIDTV patch:");
+		GRRLIB_Printf(145, 221, font_texture, SETTING_fontColor, 1, "Graphics:");
+		GRRLIB_Printf(145, 260, font_texture, SETTING_fontColor, 1, "Missing Covers?:");
+		GRRLIB_Printf(145, 300, font_texture, SETTING_fontColor, 1, "Theme:");
+		GRRLIB_Printf(218, 340, font_texture, SETTING_fontColor, 1.15, "Press B to Cancel");
+		// Draw stateless buttons
 		Button_Paint(&langupButton);
 		Button_Paint(&langdownButton);
 		Button_Paint(&vidupButton);
 		Button_Paint(&viddownButton);
-
 		Button_Paint(&graphicsButton);
-	
-		GRRLIB_Printf(145, 93, font_texture, SETTING_fontColor, 1, "Ocarina:");
-
-		GRRLIB_Printf(145, 128, font_texture, SETTING_fontColor, 1, "Language:");
-		GRRLIB_Printf(330, 128, font_texture, SETTING_fontColor, 1, "%s",languages[CFG.language]);
-		GRRLIB_Printf(145, 223, font_texture, SETTING_fontColor, 1, "Graphics:");
-		GRRLIB_Printf(145, 253, font_texture, SETTING_fontColor, 1, "Download missing covers");
-		GRRLIB_Printf(145, 180, font_texture, SETTING_fontColor, 1, "VIDTV patch:");
-		GRRLIB_Printf(145, 155, font_texture, SETTING_fontColor, 1, "Video mode:");
-		GRRLIB_Printf(365, 155, font_texture, SETTING_fontColor, 1, "%s",vidmodes[CFG.video]);
-		GRRLIB_Printf(145, 303, font_texture, SETTING_fontColor, 1, "Theme:");
-		
-		/*Draw Menu*/
-		if (CFG.ocarina)
-		{
-			Button_Paint(&cheatonButton);
-		}
-		else Button_Paint(&cheatoffButton);
-
-		if (CFG.vipatch)
-		{
-			Button_Paint(&vidtvonButton);
-		}
-		else Button_Paint(&vidtvoffButton);
-
-		if (SETTING_theme==1) 
-		{
-			Button_Paint(&themeWhiteButton);
-		}
-		else Button_Paint(&themeBlackButton);
-		
 		Button_Paint(&graphicsButton);
 		Button_Paint(&downloadButton);
-		
+		// Draw stateful buttons
+		Button_Toggle_Paint(&cheatoffButton, &cheatonButton, CFG.ocarina);
+		Button_Toggle_Paint(&vidtvoffButton, &vidtvonButton, CFG.vipatch);
+		Button_Toggle_Paint(&themeBlackButton, &themeWhiteButton, SETTING_theme);
+		Button_Theme_Paint(&settingsButton, SETTING_theme);
+		// Draw the pointer hand
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
-		
+		// Spit it out
 		GRRLIB_Render();
-		
+
 	}while(doloop);
 }
 
@@ -1577,7 +1554,7 @@ int main( int argc, char **argv )
 
 		// Check for non-A activity
 		// Nothing is selected and nothing is flipped
-		if(!self.selected && self.animate_flip == 0)
+		if (!self.selected && self.animate_flip == 0)
 		{
 			// Check for Left pad
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsDown(0) & PAD_BUTTON_LEFT)
@@ -1598,12 +1575,14 @@ int main( int argc, char **argv )
 			} // Check for UP for zoom in
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsDown(0) & PAD_BUTTON_UP)
 			{	
-				if (SETTING_coverZoom > .99)
+				if (SETTING_coverZoom > .69) // seriously, that the number ;-)
 				{
-					SETTING_coverZoom = .99;
+					// limit how far we can zoom in
+					SETTING_coverZoom = .69;
 				}
 				else
 				{
+					// no limit to zooming out, you can go really far out
 					SETTING_coverZoom += 0.03;
 				}
 			} // Check for DOWN for zoom out

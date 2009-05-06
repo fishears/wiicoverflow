@@ -19,6 +19,7 @@ bool Button_Hover(struct Button* btn, int x, int y);
 bool Button_Select(struct Button* btn, int x, int y);
 void Button_Paint(struct Button* btn);
 void Button_Theme_Paint(struct Button* btn, int theme_id);
+void Button_Toggle_Paint(struct Button* btn1, struct Button* btn2, int toggle_state);
 
 #endif //_BUTTON_H_
 
