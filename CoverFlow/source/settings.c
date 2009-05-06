@@ -37,6 +37,7 @@ inline void SETTINGS_Init()
 	SETTING_drawWindow   = 7;
 	SETTING_coverText    = 1;
 	SETTING_theme		 = 0; // default to black
+	SETTING_fontColor    = 0xFFFFFFFF; // default to white
 }
 
 inline int SETTINGS_Load()
@@ -78,6 +79,15 @@ inline int SETTINGS_Load()
 			  SETTING_coverText    = atoi(mxmlElementGetAttr(next_n,"coverText"));
 		  if(mxmlElementGetAttr(next_n,"theme"))
 			  SETTING_theme		   = atoi(mxmlElementGetAttr(next_n,"theme"));
+		  
+		  if (SETTING_theme)
+		  {
+			  SETTING_fontColor = 0x000000FF;
+		  }
+		  else
+		  {
+			  SETTING_fontColor = 0xFFFFFFFF;
+		  }
 	  }
 	  else
 	  {

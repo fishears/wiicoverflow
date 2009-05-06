@@ -517,9 +517,9 @@ void Graphic_Settings_Menu(void)
 		
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
-        GRRLIB_Printf(190, 63, text_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings (GFX)");
+        GRRLIB_Printf(190, 63, font_texture, SETTING_fontColor, 1, "Coverflow Settings (GFX)");
 		
-		Button_Paint(&settingsButton);
+		Button_Theme_Paint(&settingsButton, SETTING_theme);
 		Button_Paint(&spacingupButton);
 		Button_Paint(&spacingdownButton);
 	
@@ -540,19 +540,19 @@ void Graphic_Settings_Menu(void)
 		
 		Button_Paint(&resetButton);
 	
-		GRRLIB_Printf(145, 95, text_BMfont5, 0xFFFFFFFF, 1, "Zoom:");
-		GRRLIB_Printf(330, 95, text_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverZoom);
+		GRRLIB_Printf(145, 95, font_texture, SETTING_fontColor, 1, "Zoom:");
+		GRRLIB_Printf(330, 95, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverZoom);
 
-		GRRLIB_Printf(145, 143, text_BMfont5, 0xFFFFFFFF, 1, "Spacing:");
-		GRRLIB_Printf(330, 143, text_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverSpacing);
+		GRRLIB_Printf(145, 143, font_texture, SETTING_fontColor, 1, "Spacing:");
+		GRRLIB_Printf(330, 143, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverSpacing);
 		
-		GRRLIB_Printf(145, 191, text_BMfont5, 0xFFFFFFFF, 1, "Angle:");
-		GRRLIB_Printf(330, 191, text_BMfont5, 0xFFFFFFFF, 1, "%f", SETTING_coverAngle);
+		GRRLIB_Printf(145, 191, font_texture, SETTING_fontColor, 1, "Angle:");
+		GRRLIB_Printf(330, 191, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverAngle);
 		
-		GRRLIB_Printf(145, 239, text_BMfont5, 0xFFFFFFFF, 1, "Draw Window:");
-		GRRLIB_Printf(330, 239, text_BMfont5, 0xFFFFFFFF, 1, "%d", SETTING_drawWindow);
+		GRRLIB_Printf(145, 239, font_texture, SETTING_fontColor, 1, "Draw Window:");
+		GRRLIB_Printf(330, 239, font_texture, SETTING_fontColor, 1, "%d", SETTING_drawWindow);
 		
-		GRRLIB_Printf(145, 287, text_BMfont5, 0xFFFFFFFF, 1, "Game Title:");
+		GRRLIB_Printf(145, 287, font_texture, SETTING_fontColor, 1, "Game Title:");
 		
 		/*Draw Menu*/
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
@@ -664,6 +664,15 @@ void Settings_Menu(void)
 			else if(Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y) || Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
 			{
 				SETTING_theme = (SETTING_theme) ? 0 : 1;
+				if (SETTING_theme)
+				{	// black fonts for white theme
+					SETTING_fontColor = 0x000000FF;
+				}
+				else
+				{   // white fonts for black theme
+					SETTING_fontColor = 0xFFFFFFFF;
+				}
+				
 			}
 		}
 		
@@ -673,9 +682,9 @@ void Settings_Menu(void)
 		DrawBackground(SETTING_theme);
 		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 
-		GRRLIB_Printf(190, 63, text_BMfont5, 0xFFFFFFFF, 1, "Coverflow Settings");
+		GRRLIB_Printf(190, 63, font_texture, SETTING_fontColor, 1, "Coverflow Settings");
 		
-		Button_Paint(&settingsButton);
+		Button_Theme_Paint(&settingsButton, SETTING_theme);
 		Button_Paint(&langupButton);
 		Button_Paint(&langdownButton);
 		Button_Paint(&vidupButton);
@@ -683,16 +692,16 @@ void Settings_Menu(void)
 
 		Button_Paint(&graphicsButton);
 	
-		GRRLIB_Printf(145, 93, text_BMfont5, 0xFFFFFFFF, 1, "Ocarina:");
+		GRRLIB_Printf(145, 93, font_texture, SETTING_fontColor, 1, "Ocarina:");
 
-		GRRLIB_Printf(145, 128, text_BMfont5, 0xFFFFFFFF, 1, "Language:");
-		GRRLIB_Printf(330, 128, text_BMfont5, 0xFFFFFFFF, 1, "%s",languages[CFG.language]);
-		GRRLIB_Printf(145, 223, text_BMfont5, 0xFFFFFFFF, 1, "Graphics:");
-		GRRLIB_Printf(145, 253, text_BMfont5, 0xFFFFFFFF, 1, "Download missing covers");
-		GRRLIB_Printf(145, 180, text_BMfont5, 0xFFFFFFFF, 1, "VIDTV patch:");
-		GRRLIB_Printf(145, 155, text_BMfont5, 0xFFFFFFFF, 1, "Video mode:");
-		GRRLIB_Printf(365, 155, text_BMfont5, 0xFFFFFFFF, 1, "%s",vidmodes[CFG.video]);
-		GRRLIB_Printf(145, 303, text_BMfont5, 0xFFFFFFFF, 1, "Theme:");
+		GRRLIB_Printf(145, 128, font_texture, SETTING_fontColor, 1, "Language:");
+		GRRLIB_Printf(330, 128, font_texture, SETTING_fontColor, 1, "%s",languages[CFG.language]);
+		GRRLIB_Printf(145, 223, font_texture, SETTING_fontColor, 1, "Graphics:");
+		GRRLIB_Printf(145, 253, font_texture, SETTING_fontColor, 1, "Download missing covers");
+		GRRLIB_Printf(145, 180, font_texture, SETTING_fontColor, 1, "VIDTV patch:");
+		GRRLIB_Printf(145, 155, font_texture, SETTING_fontColor, 1, "Video mode:");
+		GRRLIB_Printf(365, 155, font_texture, SETTING_fontColor, 1, "%s",vidmodes[CFG.video]);
+		GRRLIB_Printf(145, 303, font_texture, SETTING_fontColor, 1, "Theme:");
 		
 		/*Draw Menu*/
 		if (CFG.ocarina)
@@ -905,7 +914,7 @@ bool Menu_Boot(void)
 	free(empty_texture.data);
 	free(no_disc_texture.data);
 	free(current_cover_texture.data);
-	free(text_BMfont5.data);
+	free(font_texture.data);
 
 	BUFFER_ClearCovers();
 	BUFFER_KillBuffer();
@@ -1224,19 +1233,21 @@ bool LaunchGame()
 	
 	return false;
 }
-
 //---------------------------------------------------------------------------------
-int main( int argc, char **argv ){
+//---------------------------------------------------------------------------------
+int main( int argc, char **argv )
+{
+//---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 	#ifndef TEST_MODE
 	
 	/* Load Custom IOS */
 	int ret = IOS_ReloadIOS(249);
 	/* Check if Custom IOS is loaded */
-	if (ret < 0) {
+	if (ret < 0)
+	{
 		printf("[+] ERROR:\n");
 		printf("    Custom IOS could not be loaded! (ret = %d)\n", ret);
-
 		return 0;
 	}
 	#endif
@@ -1244,7 +1255,6 @@ int main( int argc, char **argv ){
 	SETTINGS_Init();
 	
 	GRRLIB_Init();
-
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
 	
@@ -1295,8 +1305,8 @@ int main( int argc, char **argv ){
 		{
 			WPAD_ScanPads();
 			GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 100, text_BMfont5, 0xFFFFFFFF, 1, "USB Error - Drive not found");
-			GRRLIB_Printf(190, 120, text_BMfont5, 0xFFFFFFFF, 1, "Press A to Retry, B to Exit");
+			GRRLIB_Printf(190, 100, font_texture, SETTING_fontColor, 1, "USB Error - Drive not found");
+			GRRLIB_Printf(190, 120, font_texture, SETTING_fontColor, 1, "Press A to Retry, B to Exit");
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
@@ -1320,8 +1330,8 @@ int main( int argc, char **argv ){
 		{
 			WPAD_ScanPads();
 			GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 100, text_BMfont5, 0xFFFFFFFF, 1, "USB Error - Drive not found");
-			GRRLIB_Printf(190, 120, text_BMfont5, 0xFFFFFFFF, 1, "Press A to Retry, B to Exit");
+			GRRLIB_Printf(190, 100, font_texture, SETTING_fontColor, 1, "USB Error - Drive not found");
+			GRRLIB_Printf(190, 120, font_texture, SETTING_fontColor, 1, "Press A to Retry, B to Exit");
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
@@ -1580,9 +1590,11 @@ int main( int argc, char **argv ){
 					self.shift = (int)self.shift;
 					select_ready = true;
 				
-					/*Draw Game Title*/
+					// Draw Game Title
 					if(SETTING_coverText)
+					{
 						draw_game_title(self.gameSelected, gameList);
+					}
 				}
 					
 			}
@@ -1590,8 +1602,10 @@ int main( int argc, char **argv ){
 	
 		UpdateBufferedImages();
 		
+		// This is the main routine to draw the covers
 		draw_covers();
 
+		// Draw the selected game art
 		if(self.selected || self.animate_flip != 0)
 		{
 			#ifndef ANIMATE_TEST
@@ -1602,12 +1616,15 @@ int main( int argc, char **argv ){
 		}
 		else
 		{
-			DrawSlider();
-			Button_Paint(&addButton);
-			Button_Paint(&settingsButton);
+			// Draw the slider and corner buttons
+			DrawSlider(SETTING_theme);
+			Button_Theme_Paint(&addButton, SETTING_theme);
+			Button_Theme_Paint(&settingsButton, SETTING_theme);
 		}
 
+		// Draw the pointing hand
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+
         GRRLIB_Render();
 
 		Sleep(1);

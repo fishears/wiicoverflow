@@ -52,8 +52,9 @@ GRRLIB_texImg current_cover_texture;
 GRRLIB_texImg loader_main_texture;
 GRRLIB_texImg progress_texture;
 GRRLIB_texImg menu_bg_texture;
-GRRLIB_texImg slide_bar_texture;
-GRRLIB_texImg text_BMfont5;		// main font
+GRRLIB_texImg slide_bar_texture_w; //white slider
+GRRLIB_texImg slide_bar_texture_b; //black slider
+GRRLIB_texImg font_texture;		   //main font
 GRRLIB_texImg load_bg_texture;
 
 GRRLIB_texImg gradient_bg_strip_w; //white background
@@ -105,11 +106,11 @@ void Paint_Progress(float v, char* msg);
 void Paint_Progress_Generic(int v, int max, char* msg);
 void Init_Buttons();
 void Hover_Buttons();
-void DrawSlider();
 void GRRLIB_Cover(float pos, int texture_id);
 //void draw_game_title(int index);
 
 void DrawBackground(int theme_id); // takes a SETTING_theme, but defaults to black
+void DrawSlider(int theme_id);	   // takes a SETTING_theme, but defaults to black
 
 void draw_covers();
 void draw_game_title(int index, struct discHdr *gameList);
@@ -121,6 +122,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover);
 float change_scale_without_containing(float val, float in_min, float in_max, float out_min, float out_max);
 float change_scale(float val, float in_min, float in_max, float out_min, float out_max);
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
+
 
 #endif
 

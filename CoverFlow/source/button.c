@@ -54,3 +54,38 @@ void Button_Paint(struct Button* btn)
 		GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
 	}	
 }
+
+void Button_Theme_Paint(struct Button* btn, int theme_id)
+{
+	if(btn->hovering)
+	{
+		switch (theme_id)
+		{
+			case 0: // black theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+			case 1: // white theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+			default:
+				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+		}
+	}
+	else
+	{
+		switch (theme_id)
+		{
+			case 0: // black theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+			case 1: // white theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+			default:
+				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+		}
+		
+	}	
+}
