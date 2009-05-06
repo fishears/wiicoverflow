@@ -6,7 +6,7 @@
 #include <ctype.h>
 #include <ogcsys.h>
 
-#include "core/cfg.h"
+#include "cfg.h"
 
 char *cfg_path = "SD:/apps/usbloader/";
 //char *setting_path = "SD:/apps/usbloader/settings.cfg";

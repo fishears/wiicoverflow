@@ -3,14 +3,14 @@
 #include <ogcsys.h>
 #include <unistd.h>
 
-#include "core/usbstorage.h"
-#include "core/utils.h"
-#include "core/video.h"
-#include "core/wdvd.h"
-#include "core/disc.h"
-#include "core/sdhc.h"
-#include "core/wbfs.h"
-#include "libwbfs/libwbfs.h"
+#include "usbstorage.h"
+#include "utils.h"
+#include "video.h"
+#include "wdvd.h"
+#include "disc.h"
+#include "sdhc.h"
+#include "wbfs.h"
+#include "libwbfs.h"
 
 /* Constants */
 #define MAX_NB_SECTORS	32

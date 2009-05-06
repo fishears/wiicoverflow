@@ -23,11 +23,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gccore.h>
-#include "core/geckomenu.h"
-#include "core/apploader.h"
-#include "core/patchcode.h"
-#include "core/fwrite_patch.h"
-#include "core/cfg.h"
+#include "geckomenu.h"
+#include "apploader.h"
+#include "patchcode.h"
+#include "fwrite_patch.h"
+#include "cfg.h"
 
 extern struct CFG;
 

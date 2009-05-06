@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <ogcsys.h>
 
-#include "core/sys.h"
-#include "core/wpad.h"
-#include "core/video.h"
+#include "sys.h"
+#include "wpad.h"
+#include "video.h"
 
 void Restart(void)
 {

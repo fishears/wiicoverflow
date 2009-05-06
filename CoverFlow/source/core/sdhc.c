@@ -3,7 +3,7 @@
 #include <ogcsys.h>
 #include <sdcard/wiisd_io.h>
 
-#include "core/sdhc.h"
+#include "sdhc.h"
 
 /* IOCTL comamnds */
 #define IOCTL_SDHC_INIT		0x01

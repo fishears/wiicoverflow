@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <ogcsys.h>
 
-#include "core/fat.h"
-#include "core/wpad.h"
+#include "fat.h"
+#include "wpad.h"
 
 
 void Subsystem_Init(void)

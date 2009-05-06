@@ -17,9 +17,9 @@ include $(DEVKITPPC)/wii_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	source source/pngu images source/libwbfs
-DATA		:=	data 
-INCLUDES	:=  include include/pngu include/libwbfs
+SOURCES		:=	source ../CoverFlow/source/libwbfs ../CoverFlow/source/core
+DATA		:=	 
+INCLUDES	:=  include ../CoverFlow/include/libwbfs ../CoverFlow/include/core
 
 #---------------------------------------------------------------------------------
 # options for code generation
