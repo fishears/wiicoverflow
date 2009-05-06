@@ -383,19 +383,6 @@ s32 WBFS_RemoveGame(u8 *discid)
 
 	return 0;
 }
-
-s32 WBFS_SetOptions(u8 *discid, u8 *options)
-{
-	/* No USB device open */
-	if (!hdd)
-		return -1;
-
-	int ret = wbfs_setopt_disc(hdd, discid, options, sizeof(struct discHdr)-4, 4);
-	if (ret < 0)
-		return ret;
-
-	return 0;
-}
 	
 s32 WBFS_GameSize(u8 *discid, f32 *size)
 {

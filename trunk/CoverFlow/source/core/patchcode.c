@@ -29,7 +29,7 @@
 #include "fwrite_patch.h"
 #include "cfg.h"
 
-extern struct CFG;
+//extern struct CFG;
 
 extern void patchhook(u32 address, u32 len);
 extern void patchhook2(u32 address, u32 len);

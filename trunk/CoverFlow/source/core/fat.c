@@ -11,6 +11,10 @@
 extern const DISC_INTERFACE __io_sdhc;
 
 
+extern bool fatMountSimple (const char* name, const DISC_INTERFACE* interface);
+
+extern void fatUnmount (const char* name);
+
 s32 Fat_MountSDHC(void)
 {
 	s32 ret;

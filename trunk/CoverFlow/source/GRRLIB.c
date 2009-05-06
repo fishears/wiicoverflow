@@ -27,6 +27,8 @@ void *gp_fifo = NULL;
 
 Mtx view;
 
+extern bool fatInitDefault (void);
+
 /**
  * Clear screen with a specific color.
  * @param color the color to use to fill the screen.
@@ -157,7 +159,7 @@ GRRLIB_texImg GRRLIB_LoadTexturePNG(const unsigned char my_png[]) {
  * @param width
  * @param height
 */
-static void RawTo4x4RGBA(const unsigned char *src, void *dst, const unsigned int width, const unsigned int height) {
+void GRRLIB_RawTo4x4RGBA(const unsigned char *src, void *dst, const unsigned int width, const unsigned int height) {
     unsigned int block;
     unsigned int i;
     unsigned int c;
