@@ -252,7 +252,7 @@ s32 Apploader_Run(entry_point *entry)
 		memset((void*)0x80001800,0,kenobiwii_size);
 		memcpy((void*)0x80001800,kenobiwii,kenobiwii_size);
 		DCFlushRange((void*)0x80001800,kenobiwii_size);
-		hooktype = 1;
+                CFG.hooktype = 1;   //prep for adding hooktype to improve ocarina compatibility
 		memcpy((void*)0x80001800, (char*)0x80000000, 6);	// For WiiRD
 //	}
 	for (;;) {

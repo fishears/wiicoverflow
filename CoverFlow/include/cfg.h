@@ -59,6 +59,7 @@ struct CFG
 	short video;
 	short language;
 	short ocarina;
+        short hooktype;
 	short vipatch;
 	short home;
 	short download;
