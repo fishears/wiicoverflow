@@ -157,61 +157,62 @@ void dogamehooks(void *addr, u32 len)
 	while(addr_start < addr_end)
 	{
 		
-		switch(hooktype)
+		switch(CFG.hooktype) //prep for adding hooktype to improve ocarina compatibility
 		{
 		
 			case 0:
 					
 			break;
 			
-			case 1:
+			case 1: //VI
 				if(memcmp(addr_start, viwiihooks, sizeof(viwiihooks))==0){
-				//	printf("\n\n\n");
-				//	printf("found at address %x\n", addr_start);
-				//	sleep(2);
 					patchhook((u32)addr_start, len);
-					patched = 1;
-					hooktype = 1;
 				}
 			break;
 
-/*
-			case 2:
-				if(memcmp(addr_start, kpadhooks, sizeof(kpadhooks))==0){
-					patchhook((u32)addr_start, len);
-					patched = 1;
-				}
-
-				if(memcmp(addr_start, kpadoldhooks, sizeof(kpadoldhooks))==0){
-					patchhook((u32)addr_start, len);
-					patched = 1;
-				}
-			break;
-		
-			case 3:
-				if(memcmp(addr_start, joypadhooks, sizeof(joypadhooks))==0){
-					patchhook((u32)addr_start, len);
-					patched = 1;
-				}
-			break;
-
-			case 4:
-				if(memcmp(addr_start, recoveryhooks, sizeof(recoveryhooks))==0){
-						patchhook3((u32)addr_start, len);
-					}
-			break;
-*/
-			case 2:
-
+			case 2: //Wii Pad
 				if(memcmp(addr_start, viwiihooks, sizeof(viwiihooks))==0){
-						patchhook2((u32)addr_start, len);
+					patchhook2((u32)addr_start, len);
 				}
 				
 			break;
 
+			case 3: //GC Pad
+				if(memcmp(addr_start, kpadhooks, sizeof(kpadhooks))==0){
+					patchhook((u32)addr_start, len);
+				}
+
+				if(memcmp(addr_start, kpadoldhooks, sizeof(kpadoldhooks))==0){
+					patchhook((u32)addr_start, len);
+				}
+			break;
+
+			case 4:
+				if(memcmp(addr_start, joypadhooks, sizeof(joypadhooks))==0){
+					patchhook((u32)addr_start, len);
+				}
+			break;
+
+			case 5:
+				if(memcmp(addr_start, recoveryhooks, sizeof(recoveryhooks))==0){
+						patchhook3((u32)addr_start, len);
+					}
+			break;
+
+			// multidol
+			case 6:
+
+				if(memcmp(addr_start, multidolpatch1, sizeof(multidolpatch1))==0){
+						multidolpatchone((u32)addr_start, len);
+				}
+				if(memcmp(addr_start, multidolpatch2, sizeof(multidolpatch2))==0){
+						multidolpatchtwo((u32)addr_start, len);
+				}
+                        break;
+
 /*
 			case 6:
-				// jap region free	
+				// jap region free
 				if(memcmp(addr_start, regionfreehooks, sizeof(regionfreehooks))==0){
 						regionfreejap((u32)addr_start, len);
 					}
@@ -245,8 +246,8 @@ void dogamehooks(void *addr, u32 len)
 				if(memcmp(addr_start, nocopyflag5, sizeof(nocopyflag5))==0){
 					copyflagcheck5((u32)addr_start, len);
 				}
-			
-			
+
+
 				if(memcmp(addr_start, nocopyflag1, sizeof(nocopyflag1))==0){
 					copyflagcheck1((u32)addr_start, len);
 				}
@@ -254,7 +255,7 @@ void dogamehooks(void *addr, u32 len)
 				if(memcmp(addr_start, nocopyflag2, sizeof(nocopyflag2))==0){
 					copyflagcheck2((u32)addr_start, len);
 				}
-				
+
 				// no VC and GH3 save
 				if(memcmp(addr_start, nocopyflag3, sizeof(nocopyflag2))==0){
 					copyflagcheck3((u32)addr_start, len);
@@ -263,7 +264,7 @@ void dogamehooks(void *addr, u32 len)
 				if(memcmp(addr_start, nocopyflag4, sizeof(nocopyflag4))==0){
 					copyflagcheck4((u32)addr_start, len);
 				}
-				
+
 			break;
 
 			case 9:
@@ -272,16 +273,7 @@ void dogamehooks(void *addr, u32 len)
 				}
 			break;
 */
-			// multidol
-			case 3:
 
-				if(memcmp(addr_start, multidolpatch1, sizeof(multidolpatch1))==0){
-						multidolpatchone((u32)addr_start, len);
-				}
-				if(memcmp(addr_start, multidolpatch2, sizeof(multidolpatch2))==0){
-						multidolpatchtwo((u32)addr_start, len);
-				}
-                        break;
                 }
 		addr_start += 4;
         }

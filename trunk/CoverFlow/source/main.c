@@ -26,6 +26,12 @@ char vidmodes[6][10] =
 { " ntsc ", },
 { "system"}};
 
+//hook types for ocarina
+char hooks[3][13] =
+{{"VI (Default)"},
+{"Wii Pad"},
+{"GC Pad"}};
+
 /* Gamelist buffer */
 static struct discHdr *gameList = NULL;
 
