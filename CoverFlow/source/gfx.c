@@ -621,25 +621,6 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		if(choice_b != 0)
 			Button_Paint(choice_b);
 		
-		if(choice_a != 0 && choice_b != 0)
-		{
-			Button_Paint(choice_a);
-			Button_Paint(choice_b);
-		}
-		else if(choice_a  == 0)
-		{
-			if(choice_b != 0)
-			{
-				choice_b->x = 320-40;
-				Button_Paint(choice_b);
-			}
-		}
-		else
-		{
-			choice_a->x = 320-40;
-			Button_Paint(choice_a);
-		}
-
 		// Draw text
         GRRLIB_Printf(160, 120, font_texture,  SETTING_fontColor, 1.5, "%s", title);
         GRRLIB_Printf(150, 140, font_texture, SETTING_fontColor, 1, "%s", txt);
