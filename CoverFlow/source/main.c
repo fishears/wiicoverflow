@@ -1274,6 +1274,18 @@ int main( int argc, char **argv )
 					
 			}
 		}
+		
+		// Check for parental lock button combo A + B + 1 + 2
+		if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) &&
+			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_B) &&
+			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_1) &&
+			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
+		{
+			if (WindowPrompt("Parental Control","Do you want to disable ability to delete?", &yesButton, &noButton))
+				SETTING_parentalLock = 1;
+			else
+				SETTING_parentalLock = 0;
+		}
 	
 		UpdateBufferedImages();
 		
