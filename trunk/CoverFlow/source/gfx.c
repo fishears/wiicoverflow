@@ -368,7 +368,9 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		
 		Button_Paint(&loadButton);
 		Button_Paint(&backButton);
-		Button_Paint(&deleteButton);
+		
+		if(!SETTING_parentalLock)
+			Button_Paint(&deleteButton);
 		
 		#ifndef TEST_MODE
 		struct discHdr *header = NULL;

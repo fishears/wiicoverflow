@@ -14,7 +14,8 @@ whitespace_cb(mxml_node_t *node,
 	{
 			return ("\n");
 	}
-	else if (!strcmp(name, "graphics"))
+	else if (!strcmp(name, "graphics") ||
+			 !strcmp(name, "general"))
 	{
 		if (where == MXML_WS_BEFORE_OPEN)
 			return ("\t");
@@ -31,6 +32,7 @@ whitespace_cb(mxml_node_t *node,
 
 inline void SETTINGS_Init()
 {
+	//Graphics
 	SETTING_coverZoom    = -2.0;
 	SETTING_coverAngle   = 90;
 	SETTING_coverSpacing = 3.1;
@@ -38,6 +40,11 @@ inline void SETTINGS_Init()
 	SETTING_coverText    = 1;
 	SETTING_theme		 = 0; // default to black
 	SETTING_fontColor    = 0xFFFFFFFF; // default to white
+	
+	//General
+	SETTING_rumble       = 1;
+	SETTING_parentalLock = 0;
+	SETTING_sound        = 1;
 }
 
 inline int SETTINGS_Load()
@@ -62,7 +69,6 @@ inline int SETTINGS_Load()
 	  node = mxmlFindElement(xml,xml, "wiicoverflow", NULL, NULL, MXML_DESCEND); 
 	  if(node == NULL) return -1;
 	  
-	  //Add cake
 	  next_n = mxmlFindElement(node, node, "graphics", NULL, NULL, MXML_DESCEND); 
 	  
 	  if(next_n != NULL)
@@ -94,6 +100,22 @@ inline int SETTINGS_Load()
 		 return -1;
 	  }
 	  
+	  next_n = mxmlFindElement(node, node, "general", NULL, NULL, MXML_DESCEND); 
+	  
+	  if(next_n != NULL)
+	  {
+		  if(mxmlElementGetAttr(next_n,"sound"))
+			  SETTING_sound = atoi(mxmlElementGetAttr(next_n,"sound"));
+		  if(mxmlElementGetAttr(next_n,"rumble"))
+			  SETTING_rumble   = atof(mxmlElementGetAttr(next_n,"rumble"));
+		  if(mxmlElementGetAttr(next_n,"lock"))
+			  SETTING_parentalLock   = atof(mxmlElementGetAttr(next_n,"lock"));
+	  }
+	  else
+	  {
+		 return -1;
+	  }
+	  
 	  return 1;
   }
   else
@@ -117,6 +139,7 @@ inline int SETTINGS_Save()
 	
 	tree = mxmlNewElement(xml, "wiicoverflow");
 	
+	//GRAPHIC SETTINGS
 	node = mxmlNewElement(tree, "graphics");
 		
 	sprintf(buffer, "%f", SETTING_coverSpacing);
@@ -136,6 +159,18 @@ inline int SETTINGS_Save()
 
 	sprintf(buffer, "%d", SETTING_theme);
 	mxmlElementSetAttr(node, "theme", buffer);
+
+    //GENERAL SETTINGS
+	node = mxmlNewElement(tree, "general");
+	sprintf(buffer, "%d", SETTING_sound);
+	mxmlElementSetAttr(node, "sound", buffer);
+	
+	sprintf(buffer, "%d", SETTING_rumble);
+	mxmlElementSetAttr(node, "rumble", buffer);
+	
+	sprintf(buffer, "%d", SETTING_parentalLock);
+	mxmlElementSetAttr(node, "lock", buffer);
+	
 
 	FILE *fp;
 
