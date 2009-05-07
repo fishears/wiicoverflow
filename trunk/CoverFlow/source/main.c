@@ -2,6 +2,8 @@
 
 #include "version.h"
 
+#include "partition.h"
+
 //static char prozent[MAX_CHARACTERS + 16];
 //static char timet[MAX_CHARACTERS + 16];
 static u8 CalculateFrameRate();
@@ -981,6 +983,7 @@ int main( int argc, char **argv )
 				
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 			{
+				reinit_usbfs();
 				goto INIT_RETRY;
 			}
 			
@@ -992,6 +995,8 @@ int main( int argc, char **argv )
 		}
 	}
 	
+	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+	
 	//bool flip = true;
   USB_RETRY:
 	if(!Init_Game_List())
@@ -1000,12 +1005,78 @@ int main( int argc, char **argv )
 		{
 			WPAD_ScanPads();
 			GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "USB Error - Drive not found");
-			GRRLIB_Printf(190, 160, font_texture, SETTING_fontColor, 1, "Press A to Retry, B to Exit");
+			GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "USB Error - NO WBFS Parition.");
+			GRRLIB_Printf(190, 160, font_texture, SETTING_fontColor, 1, "Hold 1 And 2 to Format, B to Exit");
 			GRRLIB_Render();
 				
-			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_1 && WPAD_ButtonsHeld(0) & WPAD_BUTTON_2)
 			{
+				//TODO ADD WBFS Format code
+				WPAD_ScanPads();
+				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "Finding Partitions...");
+				GRRLIB_Render();
+				
+				sleep(1);
+				
+				partitionEntry partitions[MAX_PARTITIONS];
+				u32 cnt, sector_size = 2000;
+				char txtBuff[MAX_PARTITIONS][256];
+				bool valid[MAX_PARTITIONS];
+				u32 retv;
+				
+				retv = Partition_GetEntries(partitions, &sector_size);
+				
+				for(cnt = 0; cnt < MAX_PARTITIONS; cnt++)
+				{
+					partitionEntry *entry = &partitions[cnt];
+					
+					f32 size = entry->size * (sector_size / GB_SIZE);
+					
+					if(size) {
+						sprintf(txtBuff[cnt], "Partition %d: %.2fGB", cnt+1, size);
+						valid[cnt] = true;
+					}
+					else
+					{
+						sprintf(txtBuff[cnt], "Partition %d: (Can't be formatted)", cnt+1);
+						valid[cnt] = false;
+					}
+				}
+				
+				for(cnt = 0; cnt < MAX_PARTITIONS; cnt++)
+				{
+					if(valid[cnt])
+					{
+						partitionEntry *entry = &partitions[cnt];
+						
+						if(entry->size) 
+						{
+							if(WindowPrompt("Do you want to format:", txtBuff[cnt], &okButton, &noButton))
+							{
+								WPAD_ScanPads();
+								GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+								GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "Formatting Partition %s", txtBuff[cnt]);
+								GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "Please Wait...");
+								GRRLIB_Render();
+								
+								ret = WBFS_Format(entry->sector, entry->size); 
+							
+								if(ret < 0)
+								{
+									WindowPrompt("Error:", "Failed formatting!", &okButton, 0);
+								}
+								else
+								{
+									WindowPrompt("Success:", "Format Complete.", &okButton, 0);
+								}
+								
+								goto USB_RETRY;
+							}
+						}
+					}
+				}			
+						
 				goto USB_RETRY;
 			}
 			
@@ -1054,7 +1125,6 @@ int main( int argc, char **argv )
 	self.selected = false;
 	
 	bool select_ready = false;
-	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 	
 	#ifdef TEST_MODE
 	PAD_Init();
