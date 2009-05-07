@@ -53,7 +53,7 @@ extern const u8 bootloader_dol[];
 /* Constants */
 #define ENTRIES_PER_PAGE 	 12
 #define MAX_CHARACTERS	 	 30
-#define BUFFER_WINDOW        9
+#define BUFFER_WINDOW        15
 #define BUFFER_THREAD_COUNT  1
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           19

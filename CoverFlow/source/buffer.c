@@ -11,6 +11,7 @@
 #define USBLOADER_PATH		"SD:/usb-loader"
 
 extern const u8		back_cover_png[];
+int loadedCovers=0;
 
 #include <unistd.h>
 void Sleep(unsigned long milliseconds)
@@ -37,7 +38,7 @@ void BUFFER_InitBuffer(int thread_count)
 	}
 	
 	BUFFER_ClearCovers();
-	
+	loadedCovers=0;
 	pthread_mutex_lock(&quit_mutex);
 	_requestQuit = false;
 	pthread_mutex_unlock(&quit_mutex);
@@ -57,10 +58,7 @@ void BUFFER_RequestCover(int index, struct discHdr *header)
 	{
 		pthread_mutex_lock(&queue_mutex);
 		_cq.request[index]   = true;
-		//for(i = 0; i < 6; i++)
-		//{
 		_cq.requestId[index] = header;
-		//}
 		pthread_mutex_unlock(&queue_mutex);
 	}
 }
@@ -105,42 +103,7 @@ void BUFFER_RemoveCover(int index)
 	}
 }
 
-bool BUFFER_LockTexture(int index, GRRLIB_texImg* tex)
-{
-	if(index >= MAX_BUFFERED_COVERS || index < 0)
-		return false;
-		
-	pthread_mutex_lock(&queue_mutex);
-	if(_cq.ready[index])
-	{
-		pthread_mutex_unlock(&queue_mutex);
-		
-		pthread_mutex_lock(&buffer_mutex[index]);
-		tex = &_texture_data[index];
-		
-		if(tex->data == 0)
-		{
-			pthread_mutex_unlock(&buffer_mutex[index]);
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
-	else
-	{
-		pthread_mutex_unlock(&queue_mutex);
-	}
-	
-	return false;
-}
 
-void BUFFER_ReleaseTexture(int index)
-{
-	if(index < MAX_BUFFERED_COVERS)
-		pthread_mutex_unlock(&buffer_mutex[index]);
-}
 
 void BUFFER_KillBuffer()
 {
@@ -154,9 +117,6 @@ void BUFFER_ClearCovers()
 {
 	int i;
 	
-	pthread_mutex_lock(&count_mutex);
-	_cover_count = 0;
-	pthread_mutex_unlock(&count_mutex);
 
 	pthread_mutex_lock(&queue_mutex);
 	for(i = 0; i < MAX_BUFFERED_COVERS; i++)
@@ -167,7 +127,10 @@ void BUFFER_ClearCovers()
 		
 		pthread_mutex_lock(&buffer_mutex[i]);
 		if(_texture_data[i].data)
+		{
 			free(_texture_data[i].data);
+			_texture_data[i].data=0;
+		}
 		pthread_mutex_unlock(&buffer_mutex[i]);
 			
 	}
@@ -185,9 +148,31 @@ void* process(void *arg)
 	{
 		for(i = 0; i < MAX_BUFFERED_COVERS; i++)
 		{
+
+			/*Handle Remove Requests*/
+			pthread_mutex_lock(&queue_mutex);
+			b = _cq.remove[i];
+		
+			if(b)
+			{
+				pthread_mutex_lock(&buffer_mutex[i]);
+				if(_texture_data[i].data != 0)
+					free(_texture_data[i].data);
+					
+				_texture_data[i].data = 0;
+				pthread_mutex_unlock(&buffer_mutex[i]);
+				_cq.request[i] = false;
+				_cq.remove[i]  = false;
+				_cq.ready[i]   = false;
+				loadedCovers--;
+				
+			}
+			pthread_mutex_unlock(&queue_mutex);
+
 			/*Handle Load Requests*/
 			pthread_mutex_lock(&queue_mutex);
-			b = _cq.request[i];
+			b = _cq.request[i] && !_cq.remove[i]&&!_cq.ready[i]&&loadedCovers<25;
+			if (b) _cq.request[i]=false;
 			pthread_mutex_unlock(&queue_mutex);
 		
 			if(b)
@@ -198,7 +183,7 @@ void* process(void *arg)
 				if(!(_texture_data[i].data))
 				{
 					
-					void *imgData;
+					void *imgData=0;
 
 					char filepath[128];
 					s32  ret;
@@ -208,9 +193,12 @@ void* process(void *arg)
 					ret = Fat_ReadFile(filepath, &imgData);
 					
 					if (ret > 0) {
+
 						_texture_data[i] = GRRLIB_LoadTexture((const unsigned char*)imgData);
-						
+						free(imgData);
+
 						pthread_mutex_lock(&queue_mutex);
+						loadedCovers++;
 						_cq.ready[i]   = true;
 						pthread_mutex_unlock(&queue_mutex);
 					}
@@ -219,34 +207,16 @@ void* process(void *arg)
 						pthread_mutex_lock(&queue_mutex);
 						_cq.ready[i]   = false;
 						pthread_mutex_unlock(&queue_mutex);
+						if(_texture_data[i].data != 0)
+							free(_texture_data[i].data);
+							
 						_texture_data[i].data = 0;
 					}
 				
-				}	
+				}
 				pthread_mutex_unlock(&buffer_mutex[i]);
 			}
 			
-			/*Handle Remove Requests*/
-			pthread_mutex_lock(&queue_mutex);
-			_cq.request[i] = false;
-			b = _cq.remove[i];
-			pthread_mutex_unlock(&queue_mutex);
-		
-			if(b)
-			{
-				pthread_mutex_lock(&buffer_mutex[i]);
-				if(_texture_data[i].data != 0)
-					free(_texture_data[i].data);
-					
-				_texture_data[i].data = 0;
-				pthread_mutex_unlock(&buffer_mutex[i]);
-			
-				pthread_mutex_lock(&queue_mutex);
-				_cq.remove[i]  = false;
-				_cq.ready[i]   = false;
-				pthread_mutex_unlock(&queue_mutex);
-				
-			}
 			Sleep(1);
 		}
 		
