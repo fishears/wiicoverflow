@@ -609,10 +609,11 @@ void Settings_Menu(void)
 bool Menu_Install(void)
 {
 
+    static struct discHdr headerdisc ATTRIBUTE_ALIGN(32);
+	
 	if(!WindowPrompt ("Install new Game?", "Place disk in drive and hit ok.",&okButton,&cancelButton))
 		return false;
-	
-    static struct discHdr headerdisc ATTRIBUTE_ALIGN(32);
+		
 	
 	WindowPrompt ("Initializing DVD Drive", "Please Wait...",0,0);
 	
