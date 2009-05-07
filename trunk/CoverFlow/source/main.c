@@ -3,7 +3,7 @@
 #include "version.h"
 
 //static char prozent[MAX_CHARACTERS + 16];
-static char timet[MAX_CHARACTERS + 16];
+//static char timet[MAX_CHARACTERS + 16];
 static u8 CalculateFrameRate();
 
 // Language selection config
@@ -54,12 +54,10 @@ int COVER_COUNT = 0;
 
 float SCROLL_SPEED = 0.050;
 
-bool firstTimeDownload = true;
-bool inetOk = false;
 bool imageNotFound = false;
 
-char* _title;
-char* _msg;
+//char* _title;
+//char* _msg;
 
 /*--------------------------------------*/
 #include "settings.h"
@@ -70,8 +68,8 @@ Mtx GXmodelView2D;
 //int self.array_size = 0;
 
 
-void Download_Cover(struct discHdr *header, int v, int max);
-void batchDownloadCover();
+//void Download_Cover(struct discHdr *header, int v, int max);
+//void batchDownloadCover();
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
 
 int buffer_window_min = 0;
@@ -125,81 +123,6 @@ void quit()
 	//we should free all allocated textures (SCO);
 	GRRLIB_Exit();
 	exit(0);
-}
-
-void LoadCurrentCover(int id)
-{
-
-	#ifndef TEST_MODE
-	void *imgData;// = (void *)no_cover_png;
-
-	char filepath[128];
-	s32  ret;
-
-	struct discHdr *header = &gameList[id];
-	
-//		substr
-	
-	//sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c.png", header->id[0],header->id[1],header->id[2]);
-	sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c%c.png", header->id[0],header->id[1],header->id[2],header->id[3]);
-
-	ret = Fat_ReadFile(filepath, &imgData);
-	
-	
-	if (ret > 0) {
-		current_cover_texture = GRRLIB_LoadTexture((const unsigned char*)imgData);
-	}
-	else
-	{
-		sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c.png", header->id[0],header->id[1],header->id[2]);
-		ret = Fat_ReadFile(filepath, &imgData);
-
-		if (ret > 0) {
-			current_cover_texture = GRRLIB_LoadTexture((const unsigned char*)imgData);
-		}
-		else
-			current_cover_texture = no_disc_texture;
-	}
-	
-	#else
-	current_cover_texture = no_disc_texture;
-	#endif
-	
-}
-
-void AddCover(GRRLIB_texImg tex)
-{
-	if(self.array_size < MAX_COVERS)
-	{
-		covers[self.array_size] = tex;
-		self.array_size++;
-	}
-}
-
-void ClearCovers()
-{
-	BUFFER_ClearCovers();
-}
-
-void Init_Covers()
-{
-	#ifdef TEST_MODE
-	self.progress+=0.05;
-	Paint_Progress(self.progress, NULL);
-	
-	int i;
-	int CoverCount = COVER_COUNT;
-	float max_progress = 1.7;
-	float per_game_prog = max_progress/self.gameCnt;
-	
-	for(i = 0; i < CoverCount; i++)
-	{
-		AddCover( GRRLIB_LoadTexture(no_cover_png) );
-		self.progress+=per_game_prog;
-		Paint_Progress(self.progress, NULL);
-	}
-	
-	#endif
 }
 
 s32 __Menu_EntryCmp(const void *a, const void *b)
@@ -298,8 +221,6 @@ bool Init_Game_List(void)
 	}
 }
 
-
-
 void DragSlider(int xPos)
 {
 
@@ -324,73 +245,6 @@ int DiscWait()
 	}
 
 	return ret;
-}
-
-/****************************************************************************
- * ShowProgress
- *
- * Updates the variables used by the progress window for drawing a progress
- * bar. Also resumes the progress window thread if it is suspended.
- ***************************************************************************/
-void
-ShowProgress (s32 done, s32 total)
-{
-
-    static time_t start;
-	static u32 expected;
-
-    f32 percent; //, size;
-	u32 d, h, m, s;
-
-	//first time
-	if (!done) {
-		start    = time(0);
-		expected = 300;
-	}
-
-	//Elapsed time
-	d = time(0) - start;
-
-	if (done != total) {
-		//Expected time
-		if (d)
-			expected = (expected * 3 + d * total / done) / 4;
-
-		//Remaining time
-		d = (expected > d) ? (expected - d) : 0;
-	}
-
-	//Calculate time values
-	h =  d / 3600;
-	m = (d / 60) % 60;
-	s =  d % 60;
-
-	//Calculate percentage/size
-	percent = (done * 100.0) / total;
-
-	//sprintf(prozent, "%s%0.2f%%", "Installing Game...", percent);
-
-    sprintf(timet,"Installing Game (%0.2f%%) Time left: %d:%02d:%02d",percent, h,m,s);
-
-	/*Update and Draw Progress Window Here*/
-	//WindowPrompt(prozent, timet, 0, 0);
-	
-	Paint_Progress_Generic(done, total, timet); 
-}
-
-
-int ProgressWindow(char* title, char* msg)
-{
-	/*TODO Draw Window*/
-	_title = title;
-	_msg   = msg;
-	
-	int ret = wbfs_add_disc(hdd, __WBFS_ReadDVD, NULL, ShowProgress, ONLY_GAME_PARTITION, 0);
-	
-	self.progress = 0.0;
-	
-	return ret;
-
 }
 
 void Graphic_Settings_Menu(void)
@@ -610,7 +464,7 @@ void Settings_Menu(void)
 				// Clicked on the Download Covers button
 				if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
 				{
-					batchDownloadCover();
+					batchDownloadCover(gameList);
 				}
 			}
 			else if (Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
@@ -807,7 +661,7 @@ bool Menu_Install(void)
 			return false;
 		}
 		else {
-			ret = ProgressWindow(gametxt, name);
+			ret = ProgressWindow(hdd, gametxt, name);
 			if (ret != 0) {
 				WindowPrompt ("Install error!",0,&cancelButton,0);
 				return false;
@@ -966,192 +820,6 @@ int Net_Init(char *ip){
 	return true;
 }
 
-void saveFile(char* imgPath, struct block file){
-			
-	/* save png to sd card for future use*/
-			
-	FILE *f;
-	f = fopen(imgPath, "wb");
-	if (f)
-	{
-		fwrite(file.data,1,file.size,f);
-		fclose (f);
-	}
-}
-
-
-void Download_Cover(struct discHdr *header, int v, int max)
-{
-	char imgPath[100];
-
-	if (!header)
-		return;
-
-	if(firstTimeDownload == true){
-		
-		char myIP[16];
-		
-		sprintf(self.debugMsg, "Initializing Network");
-		Paint_Progress_Generic(v, max, self.debugMsg);
-		
-		if(!Net_Init(myIP))
-		{
-			sprintf(self.debugMsg, "Error Initializing Network");
-			Paint_Progress_Generic(v, max, self.debugMsg);
-			WindowPrompt ("ERROR!","Error initializing network", &okButton, 0);
-		}
-		else
-		{
-			sprintf(self.debugMsg, "Network Initialized");
-			Paint_Progress_Generic(v, max, self.debugMsg);
-			inetOk = true;
-		}
-
-		firstTimeDownload = false;
-	}
-
-	if(inetOk) {
-		//printf("\n    Network connection established.");
-		/*try to download image */
-			
-		char url[100];
-		struct block file;
-	
-		char region[4];
-		switch(header->id[3]){
-	
-		case 'E':
-			sprintf(region,"ntsc");
-			break;
-
-		case 'J':
-			sprintf(region,"ntscj");
-			break;
-
-		case 'P':
-			sprintf(region,"pal");
-			break;
-		}
-
-		snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", CFG.images_path, header->id);
-		
-		sprintf(self.debugMsg, "Checking presence of %s", imgPath);
-		Paint_Progress_Generic(v, max,self.debugMsg);
-		
-		FILE *fp;
-		fp = fopen(imgPath, "rb");
-		if (fp)
-		{
-			fclose (fp);
-			sprintf(self.debugMsg, "%s present, not downloading", imgPath);
-			Paint_Progress_Generic(v, max,self.debugMsg);
-		}
-		else{
-			
-			/*
-			if (CFG.widescreen)
-				sprintf(url, "http://www.theotherzone.com/wii/widescreen/%s/%s.png", region, header->id);
-			else
-				sprintf(url, "http://www.theotherzone.com/wii/%s/%s.png", region, header->id);
-			*/
-			
-			sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, header->id);
-			sprintf(self.debugMsg, "Getting %s", url);
-			Paint_Progress_Generic(v, max,self.debugMsg);
-		
-			file = downloadfile(url);
-			
-			if(file.data != NULL){
-				saveFile(imgPath, file);
-				free(file.data);
-				sprintf(self.debugMsg, "done");
-			    Paint_Progress_Generic(v, max,self.debugMsg);
-				//else
-					//donotdownload = true;
-			}
-			else {
-				sprintf(self.debugMsg, "some error occurred");
-				Paint_Progress_Generic(v, max,self.debugMsg);
-			}
-		}
-		
-		snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c%c.png", CFG.images_path,  header->id[0], header->id[1], header->id[2], header->id[3]);
-		sprintf(self.debugMsg, "Checking presence of %s", imgPath);
-		Paint_Progress_Generic(v, max,self.debugMsg);
-		
-		fp = fopen(imgPath, "rb");
-		if (fp)
-		{
-			fclose (fp);
-			sprintf(self.debugMsg, "%s present, not downloading", imgPath);
-			Paint_Progress_Generic(v, max,self.debugMsg);
-		}
-		else{
-			sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c%c.png", header->id[0], header->id[1], header->id[2], header->id[3]);
-			sprintf(self.debugMsg, "Getting %s", url);
-			Paint_Progress_Generic(v, max,self.debugMsg);
-			
-			file = downloadfile(url);
-			
-			if(file.data != NULL){
-				saveFile(imgPath, file);
-				free(file.data);
-				sprintf(self.debugMsg, "done");
-			    Paint_Progress_Generic(v, max,self.debugMsg);
-				//else
-					//donotdownload = true;
-			}
-			else { //TRY WITH 3 DIGIT COVER
-				
-				snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c.png", CFG.images_path,  header->id[0], header->id[1], header->id[2]);
-				sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c.png", header->id[0], header->id[1], header->id[2]);
-				sprintf(self.debugMsg, "Getting %s", url);
-				Paint_Progress_Generic(v, max,self.debugMsg);
-				
-				file = downloadfile(url);
-			
-				if(file.data != NULL){
-					saveFile(imgPath, file);
-					free(file.data);
-					sprintf(self.debugMsg, "done");
-					Paint_Progress_Generic(v, max,self.debugMsg);
-				}
-				else {
-					sprintf(self.debugMsg, "some error occurred");
-					Paint_Progress_Generic(v, max,self.debugMsg);
-				}
-			}
-		//else
-			//donotdownload = true;
-		}
-	}
-	//refresh = true;				
-} /* end download */
-
-
-void batchDownloadCover(){
-
-	int i;
-	
-	for(i = 0; i < self.gameCnt; i++)
-	{
-		struct discHdr *header = &gameList[i];
-		
-		if(self.array_size < MAX_COVERS)
-		{
-			sprintf(self.debugMsg, "Checking next cover...%s", header->id);
-			Paint_Progress_Generic(i, self.gameCnt, self.debugMsg);
-			Download_Cover(header, i, self.gameCnt);
-			//sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
-		}
-	}
-	BUFFER_ClearCovers();
-	Sleep(300);
-	UpdateBufferedImages();
-	Sleep(100);
-	WindowPrompt ("Operation finished!","Press A to continue", &okButton, 0);
-}
-
 void initVars(){
 
 	pointer.p_x = 0;
@@ -1169,60 +837,8 @@ void initVars(){
 	self.array_size = 0;
 	self.rumbleAmt = 0;
 	self.progress = 0.0;
-}
-
-void checkDirs(){
-	
-	int result = 0;
-	
-	DIR_ITER* dir = diropen(USBLOADER_PATH);
-	if (dir == NULL) {
-		
-		mkdir(USBLOADER_PATH, S_ISVTX);
-		//int result = chdir("SD:/usb-loader/");
-		result = chdir(USBLOADER_PATH);
-		
-		if(result == 0){
-			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
-			mkdir("disks", S_ISVTX);
-			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
-			mkdir("covers", S_ISVTX);
-		}
-		else{
-			WindowPrompt("ERROR!","Can't create directories. Covers will not be saved.", &okButton, NULL);
-		}
-	}
-	else{
-	
-	//	WindowPrompt("Cover download","Closing dir", &okButton, NULL);
-		dirclose(dir);
-		
-		result = chdir(USBLOADER_PATH);
-		
-		if(result == 0){
-			dir = diropen("disks");
-	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);
-			if(dir == NULL) {
-				mkdir("disks", S_ISVTX);
-			}
-			else{
-				dirclose(dir);
-			}
-			
-			dir = diropen("covers");
-	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);	
-			if(dir == NULL) {
-				mkdir("covers", S_ISVTX);
-			}
-			else{
-				dirclose(dir);
-			}
-		}
-		
-		else{
-			WindowPrompt("ERROR!","Can't create directories. Covers will not be saved.", &okButton, NULL);
-		}
-	}
+	self.firstTimeDownload = true;
+	self.inetOk = false;
 }
 
 bool LaunchGame()
@@ -1498,7 +1114,7 @@ int main( int argc, char **argv )
 							{
 								// center cover seleted, load the game details
 								self.selected = true;
-								LoadCurrentCover(self.gameSelected);
+								LoadCurrentCover(self.gameSelected, gameList);
 							}
 						}
 						else if(pointer.p_x < 200 && pointer.p_y > 60 && pointer.p_y < 380)
