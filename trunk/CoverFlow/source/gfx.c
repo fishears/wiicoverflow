@@ -405,12 +405,19 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 				pthread_mutex_lock(&buffer_mutex[self.gameSelected]);
 				if(_texture_data[self.gameSelected].data)
 				{
-					GRRLIB_DrawImg(102, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+						GRRLIB_DrawImg(102, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+					else
+						GRRLIB_DrawImg(102, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
 				}
 				else
 				{
-					GRRLIB_DrawImg(102, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+						GRRLIB_DrawImg(102, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+					else
+						GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 				}
+					
 				pthread_mutex_unlock(&buffer_mutex[self.gameSelected]);
 			}
 			else
@@ -419,8 +426,11 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 			}	
 		}
 		else
-		{
-			GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+		{	
+			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+				GRRLIB_DrawImg(102, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+			else
+				GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 		}	
 		
   }

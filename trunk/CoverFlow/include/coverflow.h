@@ -48,6 +48,10 @@
 #define COVER_WIDTH    160
 #define COVER_HEIGHT   224
 #define DEFAULT_FIFO_SIZE  (256*1024)
+
+/* Aspect ratio fix for some image*/
+#define AR_16_9 0.85F
+
 //#define TEST_MODE 1
 #define DEBUG 1
 
@@ -60,18 +64,21 @@
 #define MAX_COVERS           19
 
 #define ANIMATE_TEST 1
-
 #define ANIMATE_SPEED 0
 
-//Sound stuff
+/* Sound stuff */
 #define OGG_FORMAT 0
 #define RAW_FORMAT 1
 
 #define MAX_SOUNDS   4
-#define FX_BG_MUSIC     0
-#define FX_COVER_FLIP   1
-#define FX_COVER_SCROLL 2
-#define FX_BUTTON_CLICK 3
+
+enum {
+	FX_BG_MUSIC = 0,
+	FX_COVER_FLIP,
+	FX_COVER_SCROLL,
+	FX_BUTTON_CLICK
+};
+
 
 
 extern const u8 no_cover_png[];
