@@ -100,6 +100,7 @@ typedef struct{
 	s32 gameStart;
 	bool selected;
 	int array_size;
+	int rumbleAmt;
 	
 	/*Animate Parameters*/
 	float animate_flip;

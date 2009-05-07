@@ -60,7 +60,7 @@ void Paint_Progress(float v, char* msg)
 
 	GRRLIB_2D_Init();
 	
-	DrawBackground(SETTING_theme);
+	//DrawBackground(SETTING_theme);
 
 	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
 
@@ -85,7 +85,7 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 
 	GRRLIB_2D_Init();
 	
-	DrawBackground(SETTING_theme);
+//	DrawBackground(SETTING_theme);
 
 	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
 	
@@ -137,63 +137,6 @@ void Init_Buttons()
 	windowdownButton	= Button_Init(minus_button_png, minus_button_hover_png, 300,239);
 	themeWhiteButton	= Button_Init(theme_white_png, theme_white_png, 350, 290);
 	themeBlackButton	= Button_Init(theme_black_png, theme_black_png, 350, 290);
-}
-
-void Hover_Buttons()
-{
-	Button_Hover(&addButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&okButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&slideButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&loadButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&backButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&cancelButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&yesButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&noButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&resetButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&settingsButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&langupButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&langdownButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&downloadButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&graphicsButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&vidupButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&viddownButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&spacingupButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&spacingdownButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&zoomupButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&zoomdownButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&angleupButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&angledownButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&windowupButton, pointer.p_x, pointer.p_y);
-	Button_Hover(&windowdownButton, pointer.p_x, pointer.p_y);
-	
-	if(CFG.ocarina)
-	{
-		Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y);
-	}
-	else
-	{
-		Button_Hover(&cheatoffButton, pointer.p_x, pointer.p_y);
-	}
-		
-	if(SETTING_coverText)
-	{
-		Button_Hover(&coverTextOnButton, pointer.p_x, pointer.p_y);
-	}
-	else
-	{
-		Button_Hover(&coverTextOffButton, pointer.p_x, pointer.p_y);
-	}
-		
-	if(CFG.vipatch)
-	{	
-		Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y);
-	}
-	else
-	{
-		Button_Hover(&vidtvoffButton, pointer.p_x, pointer.p_y);
-	}
-
 }
 
 void DrawSlider(int theme_id)
@@ -249,25 +192,30 @@ void GRRLIB_Cover(float pos, int texture_id)
 
 void DrawBackground(int theme_id)
 {
+	// This method on hold until we can figure out how to draw a background behind the 3D stuff
+	
 	// draw the backgound gradient strip over and over to create solid bg
 	// need to add code to check for widescreen and adjust accordingly
-	int x;
-	for(x=0;x<=637;x=x+4)
-	{
+//	int x;
+//	for(x=0;x<=637;x=x+4)
+//	{
 		switch (theme_id)
 		{
 			case 0: // black theme
 				//GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
 				//TODO look into drawing a 3D object instead of a 2D one
+//				GRRLIB_FillScreen(0x000000FF);
 				break;
 			case 1: // white theme
 				//GRRLIB_DrawImg(x, 0, gradient_bg_strip_w, 0, 1, 1, 0xFFFFFFFF);
+//				GRRLIB_FillScreen(0xFFFFFFFF);
 				break;
 			default:
+//				GRRLIB_FillScreen(0x000000FF);
 				//GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
 				break;
 		}
-	}
+//	}
 	
 	
 }
@@ -596,8 +544,6 @@ float change_scale(float val, float in_min, float in_max, float out_min, float o
 
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
 {
-	/*TODO Create Graphical Prompt*/
-		
 	bool doloop = true;
 	
 	if(choice_a == 0 && choice_b == 0)
@@ -610,10 +556,8 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		GRRLIB_FillScreen(0x000000FF);
 		GRRLIB_Render();
 	}
-	
-	
+		
 	do{
-
 		WPAD_ScanPads();
 		
 		ir_t ir; // The struct for infrared
@@ -625,54 +569,36 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		pointer.p_y = ir.sy-250;
 		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
-		Hover_Buttons();
-
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
-		{
-			//quit();
 			exit(0);
-		}
 		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
-		{
 			return false;
-		}
 		
 		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 		{
 			if(choice_a != 0)
 			{
 				if(Button_Select(choice_a, pointer.p_x, pointer.p_y))
-				{
 					return true;
-				}
 			}
 			
 			if(choice_b != 0)
 			{
 				if(Button_Select(choice_b, pointer.p_x, pointer.p_y))
-				{
 					return false;
-				}
 			}
 		}
 		
-		Hover_Buttons();
-		
 		GRRLIB_FillScreen(0x000000FF);
-		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-		
-		
+		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+
+		// Draw buttons
 		if(choice_a != 0)
-		{
 			Button_Paint(choice_a);
-		}
 		
 		if(choice_b != 0)
-		{
 			Button_Paint(choice_b);
-		}
-		
 		
 		if(choice_a != 0 && choice_b != 0)
 		{
@@ -689,15 +615,29 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			choice_a->x = 320-40;
 			Button_Paint(choice_a);
 		}
-		
-		/*Draw Text*/
-        GRRLIB_Printf(140, 70, font_texture,  SETTING_fontColor, 1.5, "%s", title);
-        GRRLIB_Printf(160, 110, font_texture, SETTING_fontColor, 1, "%s", txt);
-		
-		if(doloop)
+
+		// Draw text
+        GRRLIB_Printf(160, 120, font_texture,  SETTING_fontColor, 1.5, "%s", title);
+        GRRLIB_Printf(150, 140, font_texture, SETTING_fontColor, 1, "%s", txt);
+
+		// Check for button-pointer intersections, and rumble
+		if (Button_Hover(choice_a, pointer.p_x, pointer.p_y) ||
+			Button_Hover(choice_b, pointer.p_x, pointer.p_y))
 		{
-			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+			// Should we be rumbling?
+			if (--self.rumbleAmt > 0)
+				WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			else 
+				WPAD_Rumble(0,0); // Kill the rumble
 		}
+		else
+		{ // If no button is being hovered, kill the rumble
+			WPAD_Rumble(0,0);
+			self.rumbleAmt = 5;
+		}
+		// Draw the pointer hand
+		if(doloop)
+			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		
 		GRRLIB_Render();
 		
