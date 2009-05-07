@@ -176,6 +176,9 @@ void DrawSlider(int theme_id)
 
 void GRRLIB_Cover(float pos, int texture_id)
 {
+	if(texture_id >= self.gameCnt)
+		return;
+
 	if(pos == 0)
 		self.gameSelected = texture_id;
 
