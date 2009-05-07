@@ -9,6 +9,7 @@ extern int SETTING_theme; // 0=black, 1=white
 extern int SETTING_fontColor; // 0x000000FF=black, 0xFFFFFFFF=white
 
 extern int SETTING_sound; //0=OFF, 1=ON
+extern int SETTING_music; //0=OFF, 1=ON
 extern int SETTING_parentalLock; //0=OFF, 1=ON
 extern int SETTING_rumble; //0=OFF, 1=ON
 
@@ -23,6 +24,7 @@ int SETTING_theme;
 int SETTING_fontColor; // stores the hex val of the theme
 
 int SETTING_sound;
+int SETTING_music;
 int SETTING_parentalLock;
 int SETTING_rumble;
 #endif /* _SYMBOL */

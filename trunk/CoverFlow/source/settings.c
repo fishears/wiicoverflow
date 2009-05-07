@@ -45,6 +45,7 @@ inline void SETTINGS_Init()
 	SETTING_rumble       = 1;
 	SETTING_parentalLock = 0;
 	SETTING_sound        = 1;
+	SETTING_music        = 1;
 }
 
 inline int SETTINGS_Load()
@@ -106,6 +107,8 @@ inline int SETTINGS_Load()
 	  {
 		  if(mxmlElementGetAttr(next_n,"sound"))
 			  SETTING_sound = atoi(mxmlElementGetAttr(next_n,"sound"));
+		  if(mxmlElementGetAttr(next_n,"music"))
+			  SETTING_sound = atoi(mxmlElementGetAttr(next_n,"music"));
 		  if(mxmlElementGetAttr(next_n,"rumble"))
 			  SETTING_rumble   = atof(mxmlElementGetAttr(next_n,"rumble"));
 		  if(mxmlElementGetAttr(next_n,"lock"))
@@ -164,6 +167,9 @@ inline int SETTINGS_Save()
 	node = mxmlNewElement(tree, "general");
 	sprintf(buffer, "%d", SETTING_sound);
 	mxmlElementSetAttr(node, "sound", buffer);
+	
+	sprintf(buffer, "%d", SETTING_music);
+	mxmlElementSetAttr(node, "music", buffer);
 	
 	sprintf(buffer, "%d", SETTING_rumble);
 	mxmlElementSetAttr(node, "rumble", buffer);

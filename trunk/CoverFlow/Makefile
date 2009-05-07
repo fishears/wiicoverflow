@@ -18,7 +18,7 @@ include $(DEVKITPPC)/wii_rules
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source source/pngu images source/libwbfs source/core
-DATA		:=	data bootloader
+DATA		:=	data bootloader sounds
 INCLUDES	:=  include include/pngu include/libwbfs include/core
 
 #---------------------------------------------------------------------------------
@@ -34,13 +34,13 @@ LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	-lmxml -lpng -lz -lfat -lwiiuse -lbte -logc -lm
+LIBS	:=	-lsnd -lmxml -lpng -lz -lfat -lwiiuse -lbte -logc -lm -ltremor
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(CURDIR)/libs/png $(CURDIR)/libs/mxml
+LIBDIRS	:= $(CURDIR)/libs/png $(CURDIR)/libs/mxml $(CURDIR)/libs/sndlib
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
@@ -138,6 +138,14 @@ $(OUTPUT).elf: $(OFILES)
 	$(bin2o)
 	
 %.dol.o : %.dol
+	@echo $(notdir $<)
+	$(bin2o)
+	
+%.raw.o : %.raw
+	@echo $(notdir $<)
+	$(bin2o)
+	
+%.ogg.o : %.ogg
 	@echo $(notdir $<)
 	$(bin2o)
 	
