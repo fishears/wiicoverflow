@@ -105,7 +105,6 @@ void DrawBufferedCover(int i, float loc, float angle);
 void Paint_Progress(float v, char* msg);
 void Paint_Progress_Generic(int v, int max, char* msg);
 void Init_Buttons();
-void Hover_Buttons();
 void GRRLIB_Cover(float pos, int texture_id);
 
 void DrawBackground(int theme_id); // takes a SETTING_theme, but defaults to black

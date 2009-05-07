@@ -449,8 +449,6 @@ void Graphic_Settings_Menu(void)
 		pointer.p_y = ir.sy-250;
 		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
-		Hover_Buttons();
-
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
 			doloop = false;
@@ -515,53 +513,68 @@ void Graphic_Settings_Menu(void)
 			}
 		}
 		
-		Hover_Buttons();
-		
 		/*Draw Covers*/ //PREVIEW
 		draw_covers();
+		// Draw menu dialog background
+		GRRLIB_2D_Init();
+		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.4, 0xFFFFFFFF);
+		// Draw text
+		GRRLIB_Printf(204, 60,  font_texture, SETTING_fontColor, 1.3, "Coverflow Settings (GFX)");
+		GRRLIB_Printf(145, 95, font_texture, SETTING_fontColor, 1, "Zoom:");
+		GRRLIB_Printf(330, 95, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverZoom);
+		GRRLIB_Printf(145, 143, font_texture, SETTING_fontColor, 1, "Spacing:");
+		GRRLIB_Printf(330, 143, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverSpacing);
+		GRRLIB_Printf(145, 191, font_texture, SETTING_fontColor, 1, "Angle:");
+		GRRLIB_Printf(330, 191, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverAngle);
+		GRRLIB_Printf(145, 239, font_texture, SETTING_fontColor, 1, "Draw Window:");
+		GRRLIB_Printf(330, 239, font_texture, SETTING_fontColor, 1, "%d", SETTING_drawWindow);
+		GRRLIB_Printf(145, 287, font_texture, SETTING_fontColor, 1, "Game Title:");
 		
-		GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1.4, 0xFFFFFFFF);
-		
-        GRRLIB_Printf(190, 63, font_texture, SETTING_fontColor, 1, "Coverflow Settings (GFX)");
-		
-		Button_Theme_Paint(&settingsButton, SETTING_theme);
+		//Button_Theme_Paint(&settingsButton, SETTING_theme);
 		Button_Paint(&spacingupButton);
 		Button_Paint(&spacingdownButton);
-	
 		Button_Paint(&zoomupButton);
 		Button_Paint(&zoomdownButton);
-	
 		Button_Paint(&angleupButton);
 		Button_Paint(&angledownButton);
-	
 		Button_Paint(&windowupButton);
 		Button_Paint(&windowdownButton);
-	
 		if (SETTING_coverText)
 		{
 			Button_Paint(&coverTextOnButton);
 		}
 		else Button_Paint(&coverTextOffButton);
-		
 		Button_Paint(&resetButton);
 	
-		GRRLIB_Printf(145, 95, font_texture, SETTING_fontColor, 1, "Zoom:");
-		GRRLIB_Printf(330, 95, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverZoom);
+		// Check for button-pointer intersections, and rumble
+		if (Button_Hover(&spacingupButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&spacingdownButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&zoomupButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&zoomdownButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&windowupButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&windowdownButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&windowupButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&coverTextOnButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&coverTextOffButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&resetButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&angleupButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&angledownButton, pointer.p_x, pointer.p_y))
+		{
+			// Should we be rumbling?
+			if (--self.rumbleAmt > 0)
+				WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			else 
+				WPAD_Rumble(0,0); // Kill the rumble
+		}
+		else
+		{ // If no button is being hovered, kill the rumble
+			WPAD_Rumble(0,0);
+			self.rumbleAmt = 5;
+		}
 
-		GRRLIB_Printf(145, 143, font_texture, SETTING_fontColor, 1, "Spacing:");
-		GRRLIB_Printf(330, 143, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverSpacing);
-		
-		GRRLIB_Printf(145, 191, font_texture, SETTING_fontColor, 1, "Angle:");
-		GRRLIB_Printf(330, 191, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverAngle);
-		
-		GRRLIB_Printf(145, 239, font_texture, SETTING_fontColor, 1, "Draw Window:");
-		GRRLIB_Printf(330, 239, font_texture, SETTING_fontColor, 1, "%d", SETTING_drawWindow);
-		
-		GRRLIB_Printf(145, 287, font_texture, SETTING_fontColor, 1, "Game Title:");
-		
-		/*Draw Menu*/
+		// Draw the pointer hand
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
-		
+		// Spit it out
 		GRRLIB_Render();
 		
 	}while(doloop);
@@ -583,8 +596,6 @@ void Settings_Menu(void)
 		pointer.p_y = ir.sy-250;
 		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
-		// Check for button-pointer intersections
-		Hover_Buttons();  
 
 		// Handle button events
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME || WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
@@ -679,12 +690,11 @@ void Settings_Menu(void)
 			}
 		}
 		
-		// Black the background
-		GRRLIB_FillScreen(0x000000FF);
 		// Draw screen background
-		DrawBackground(SETTING_theme);
+		draw_covers();
 		// Draw menu dialog background
-		GRRLIB_DrawImg(115, 105, menu_bg_texture, 0, 1, 1.4, 0xFFFFFFFF);
+		GRRLIB_2D_Init();
+		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.4, 0xFFFFFFFF);
 		// Draw text
 		GRRLIB_Printf(204, 60,  font_texture, SETTING_fontColor, 1.3, "Coverflow Settings");
 		GRRLIB_Printf(145, 93,  font_texture, SETTING_fontColor, 1, "Ocarina:");
@@ -697,24 +707,51 @@ void Settings_Menu(void)
 		GRRLIB_Printf(145, 260, font_texture, SETTING_fontColor, 1, "Missing Covers?:");
 		GRRLIB_Printf(145, 300, font_texture, SETTING_fontColor, 1, "Theme:");
 		GRRLIB_Printf(218, 340, font_texture, SETTING_fontColor, 1.15, "Press B to Cancel");
+
 		// Draw stateless buttons
 		Button_Paint(&langupButton);
 		Button_Paint(&langdownButton);
 		Button_Paint(&vidupButton);
 		Button_Paint(&viddownButton);
 		Button_Paint(&graphicsButton);
-		Button_Paint(&graphicsButton);
 		Button_Paint(&downloadButton);
 		// Draw stateful buttons
 		Button_Toggle_Paint(&cheatoffButton, &cheatonButton, CFG.ocarina);
 		Button_Toggle_Paint(&vidtvoffButton, &vidtvonButton, CFG.vipatch);
 		Button_Toggle_Paint(&themeBlackButton, &themeWhiteButton, SETTING_theme);
-		Button_Theme_Paint(&settingsButton, SETTING_theme);
+//		Button_Theme_Paint(&settingsButton, SETTING_theme);
+		
+		// Check for button-pointer intersections, and rumble
+		if (Button_Hover(&langupButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&langdownButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&vidupButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&viddownButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&cheatoffButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&vidtvoffButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&themeBlackButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&themeWhiteButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&graphicsButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&downloadButton, pointer.p_x, pointer.p_y))
+		{
+			// Should we be rumbling?
+			if (--self.rumbleAmt > 0)
+				WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			else 
+				WPAD_Rumble(0,0); // Kill the rumble
+		}
+		else
+		{ // If no button is being hovered, kill the rumble
+			WPAD_Rumble(0,0);
+			self.rumbleAmt = 5;
+		}
+		
 		// Draw the pointer hand
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		// Spit it out
 		GRRLIB_Render();
-
+		
 	}while(doloop);
 }
 
@@ -1167,6 +1204,7 @@ void initVars(){
 	self.animate_flip = 0.0;
 	self.animate_rotate = 0.0;
 	self.array_size = 0;
+	self.rumbleAmt = 0;
 }
 
 void checkDirs(){
@@ -1317,9 +1355,9 @@ int main( int argc, char **argv )
 		while(1)
 		{
 			WPAD_ScanPads();
-			GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 100, font_texture, SETTING_fontColor, 1, "USB Error - Drive not found");
-			GRRLIB_Printf(190, 120, font_texture, SETTING_fontColor, 1, "Press A to Retry, B to Exit");
+			GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "USB Error - Drive not found");
+			GRRLIB_Printf(190, 160, font_texture, SETTING_fontColor, 1, "Press A to Retry, B to Exit");
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
@@ -1342,9 +1380,9 @@ int main( int argc, char **argv )
 		while(1)
 		{
 			WPAD_ScanPads();
-			GRRLIB_DrawImg(120, 60, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 100, font_texture, SETTING_fontColor, 1, "USB Error - Drive not found");
-			GRRLIB_Printf(190, 120, font_texture, SETTING_fontColor, 1, "Press A to Retry, B to Exit");
+			GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "USB Error - Drive not found");
+			GRRLIB_Printf(190, 160, font_texture, SETTING_fontColor, 1, "Press A to Retry, B to Exit");
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
@@ -1430,8 +1468,7 @@ int main( int argc, char **argv )
 		pointer.p_y = ir.sy-250;
 		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
-		DrawBackground(SETTING_theme);
-		Hover_Buttons();
+		//DrawBackground(SETTING_theme);
 
 		// Check for 'HOME' button press
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
@@ -1663,22 +1700,38 @@ int main( int argc, char **argv )
 			Button_Theme_Paint(&addButton, SETTING_theme);
 			Button_Theme_Paint(&settingsButton, SETTING_theme);
 		}
+		
+		// Check for button-pointer intersections, and rumble
+		if (Button_Hover(&addButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&settingsButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&slideButton, pointer.p_x, pointer.p_y))
+		{
+			// Should we be rumbling?
+			if (--self.rumbleAmt > 0)
+				WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			else 
+				WPAD_Rumble(0,0); // Kill the rumble
+		}
+		else
+		{ // If no button is being hovered, kill the rumble
+			WPAD_Rumble(0,0);
+			self.rumbleAmt = 5;
+		}
+		
 	
 #ifdef DEBUG
 		// spit the FPS
 		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
-//		GRRLIB_Printf(500, 40, font_texture, 0x808080FF, 1, "screen: %d, %d", SCR_WIDTH, SCR_HEIGHT);
-//		GRRLIB_Printf(500, 60, font_texture, 0x808080FF, 1, "shift: %d", self.shift);
+//		GRRLIB_Printf(500, 40, font_texture, 0x808080FF, 1, "Pointer: %d, %d", ir.sx, ir.sy);
 #endif
 		// Draw the pointing hand
 		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
-
         GRRLIB_Render();
 
         FPS = CalculateFrameRate();
 		
-		Sleep(1);
+		//Sleep(1);
 	}
 	
     GRRLIB_Exit(); 
