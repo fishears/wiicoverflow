@@ -1,8 +1,7 @@
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
-#include <stdio.h>
-#include <ogcsys.h>
+#include "coverflow.h"
 
 /* Constants */
 #define KB_SIZE         1024.0
