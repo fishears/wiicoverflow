@@ -58,6 +58,8 @@ void Paint_Progress(float v, char* msg)
 	if(count > 40)
 		count = 40;
 
+	GRRLIB_2D_Init();
+	
 	DrawBackground(SETTING_theme);
 
 	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
@@ -81,6 +83,8 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 	int count = percent*28;
 	int i;
 
+	GRRLIB_2D_Init();
+	
 	DrawBackground(SETTING_theme);
 
 	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
@@ -253,13 +257,14 @@ void DrawBackground(int theme_id)
 		switch (theme_id)
 		{
 			case 0: // black theme
-				GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
+				//GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
+				//TODO look into drawing a 3D object instead of a 2D one
 				break;
 			case 1: // white theme
-				GRRLIB_DrawImg(x, 0, gradient_bg_strip_w, 0, 1, 1, 0xFFFFFFFF);
+				//GRRLIB_DrawImg(x, 0, gradient_bg_strip_w, 0, 1, 1, 0xFFFFFFFF);
 				break;
 			default:
-				GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
+				//GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
 				break;
 		}
 	}

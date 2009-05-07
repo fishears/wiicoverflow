@@ -1035,9 +1035,7 @@ void GRRLIB_Render() {
     GX_DrawDone ();
 
     fb ^= 1;        // flip framebuffer
-	// afour98: I need help with the next line
-    GX_SetZMode(GX_TRUE, GX_ALWAYS, GX_TRUE); // I changed the 2nd var from GX_LEQUAL to GX_ALWAYS, but it messes up the right hand side
-//    GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE); // I changed the first var from GX_TRUE to GX_FALSE, but it messes up the right hand side
+    GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GX_SetColorUpdate(GX_TRUE);
     GX_CopyDisp(xfb[fb], GX_TRUE);
     VIDEO_SetNextFramebuffer(xfb[fb]);
