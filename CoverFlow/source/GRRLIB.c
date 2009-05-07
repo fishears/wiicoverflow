@@ -498,19 +498,19 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
 	
 	GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
     GX_Position3f32(-width, -height-height*2.05, 0);
-    GX_Color1u32(0xFFFFFFA0);
+    GX_Color1u32(0xFFFFFF00);
     GX_TexCoord2f32(1, 0);
 
     GX_Position3f32(width, -height-height*2.05, 0);
-    GX_Color1u32(0xFFFFFFA0);
+    GX_Color1u32(0xFFFFFF00);
     GX_TexCoord2f32(0, 0);
 
     GX_Position3f32(width, height-height*2.05, 0);
-    GX_Color1u32(0xFFFFFF00);
+    GX_Color1u32(0xFFFFFF70);
     GX_TexCoord2f32(0, 1);
 
     GX_Position3f32(-width, height-height*2.05, 0);
-    GX_Color1u32(0xFFFFFF00);
+    GX_Color1u32(0xFFFFFF70);
     GX_TexCoord2f32(1, 1);
     GX_End();
 	
