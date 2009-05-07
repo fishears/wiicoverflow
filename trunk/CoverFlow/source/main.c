@@ -42,8 +42,6 @@ static wbfs_t *hdd = NULL;
 /* WBFS device */
 static s32 my_wbfsDev = WBFS_DEVICE_USB;
 
-float progress = 0.0;
-
 s_self self;
 s_pointer pointer;
 
@@ -186,8 +184,8 @@ void ClearCovers()
 void Init_Covers()
 {
 	#ifdef TEST_MODE
-	progress+=0.05;
-	Paint_Progress(progress, NULL);
+	self.progress+=0.05;
+	Paint_Progress(self.progress, NULL);
 	
 	int i;
 	int CoverCount = COVER_COUNT;
@@ -197,8 +195,8 @@ void Init_Covers()
 	for(i = 0; i < CoverCount; i++)
 	{
 		AddCover( GRRLIB_LoadTexture(no_cover_png) );
-		progress+=per_game_prog;
-		Paint_Progress(progress, NULL);
+		self.progress+=per_game_prog;
+		Paint_Progress(self.progress, NULL);
 	}
 	
 	#endif
@@ -236,22 +234,22 @@ s32 GetEntries(void)
 	/* Clear buffer */
 	memset(buffer, 0, len);
 
-	progress+=0.05;
-	Paint_Progress(progress, NULL);
+	self.progress+=0.05;
+	Paint_Progress(self.progress, NULL);
 	
 	/* Get header list */
 	ret = WBFS_GetHeaders(buffer, cnt, sizeof(struct discHdr));
 	if (ret < 0)
 		goto err;
 
-	progress+=0.05;
-	Paint_Progress(progress, NULL);
+	self.progress+=0.05;
+	Paint_Progress(self.progress, NULL);
 	
 	/* Sort entries */
 	qsort(buffer, cnt, sizeof(struct discHdr), __Menu_EntryCmp);
 
-	progress+=0.05;
-	Paint_Progress(progress, NULL);
+	self.progress+=0.05;
+	Paint_Progress(self.progress, NULL);
 	
 	/* Free memory */
 	if (gameList)
@@ -264,8 +262,8 @@ s32 GetEntries(void)
 	
 	Init_Covers();
 
-	progress+=0.05;
-	Paint_Progress(progress, NULL);
+	self.progress+=0.05;
+	Paint_Progress(self.progress, NULL);
 	
 	/* Reset variables */
 	self.gameSelected = self.gameStart = 0;
@@ -280,52 +278,17 @@ err:
 	return ret;
 }
 
-bool init_usbfs()
-{    
-   // __Disc_SetLowMem();
-
-	s32 ret;
-
-	
-	/* Initialize system */
-	Sys_Init();
-
-	///* Initialize subsystems */
-	Wpad_Init();
-
-	/* Mount SDHC */
-	Fat_MountSDHC();
-	
-	progress+=0.05;
-	Paint_Progress(progress, NULL);
-	
-
-	/* Initialize DIP module */
-	ret = Disc_Init();
-	progress+=0.05;
-	Paint_Progress(progress, NULL);
-	
-	if (ret < 0) {
-		printf("[+] ERROR:\n");
-		printf("    Could not initialize DIP module! (ret = %d)\n", ret);
-
-		return false;
-	}
-
-	return true;
-}
-
 bool Init_Game_List(void)
 {
 
-	Paint_Progress(progress, NULL);
+	Paint_Progress(self.progress, NULL);
 	
 	/* Try to open device */
 	if (WBFS_Open() >= 0) {
 		/* Get game list */
 		
-		progress+=0.05;
-		Paint_Progress(progress, NULL);
+		self.progress+=0.05;
+		Paint_Progress(self.progress, NULL);
 		GetEntries();
 		return true;
 	}
@@ -424,7 +387,7 @@ int ProgressWindow(char* title, char* msg)
 	
 	int ret = wbfs_add_disc(hdd, __WBFS_ReadDVD, NULL, ShowProgress, ONLY_GAME_PARTITION, 0);
 	
-	progress = 0.0;
+	self.progress = 0.0;
 	
 	return ret;
 
@@ -1205,6 +1168,7 @@ void initVars(){
 	self.animate_rotate = 0.0;
 	self.array_size = 0;
 	self.rumbleAmt = 0;
+	self.progress = 0.0;
 }
 
 void checkDirs(){
@@ -1314,18 +1278,18 @@ int main( int argc, char **argv )
     loader_main_texture = GRRLIB_LoadTexture(loading_main_png);
     progress_texture    = GRRLIB_LoadTexture(progress_png);
 
-	progress += .1;
+	self.progress += .1;
 
 	sprintf(self.debugMsg, "Loading textures");
-	Paint_Progress(progress,self.debugMsg);
+	Paint_Progress(self.progress,self.debugMsg);
 	
 	LoadTextures();		// load textures
 	Init_Buttons();		// load buttons so they can be used for error msgs
 
-	progress += .1;
+	self.progress += .1;
 
 	sprintf(self.debugMsg, "Init USB");
-	Paint_Progress(progress,self.debugMsg);
+	Paint_Progress(self.progress,self.debugMsg);
 	
 	#ifndef TEST_MODE
 	if(!init_usbfs()){
@@ -1340,7 +1304,7 @@ int main( int argc, char **argv )
 	CFG.download = 1;
 	
 	sprintf(self.debugMsg, "Initializing WBFS");
-	Paint_Progress(progress,self.debugMsg);
+	Paint_Progress(self.progress,self.debugMsg);
 	
 	my_wbfsDev = WBFS_DEVICE_USB;
 	
@@ -1415,8 +1379,8 @@ int main( int argc, char **argv )
 	while(wait > 0)
 	{
 		wait--;
-		progress += prog;
-		Paint_Progress(progress, self.debugMsg);
+		self.progress += prog;
+		Paint_Progress(self.progress, self.debugMsg);
 		Sleep(1);
 	}
 	
@@ -1424,11 +1388,11 @@ int main( int argc, char **argv )
 
 	// set the background
 	sprintf(self.debugMsg, "Setting background theme...");
-	Paint_Progress(progress,self.debugMsg);
+	Paint_Progress(self.progress,self.debugMsg);
 	Sleep(300);
 
 	sprintf(self.debugMsg, "Freeing unused textures...");
-	Paint_Progress(progress,self.debugMsg);
+	Paint_Progress(self.progress,self.debugMsg);
 	free(progress_texture.data);
 	Sleep(300);
 	

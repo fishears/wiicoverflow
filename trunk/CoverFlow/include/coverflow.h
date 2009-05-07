@@ -28,6 +28,7 @@
 #include "buffer.h"
 #include "gfx.h"
 #include "mxml.h"
+#include "storage.h"
  
 
 /*DOL TEST*/
@@ -101,6 +102,7 @@ typedef struct{
 	bool selected;
 	int array_size;
 	int rumbleAmt;
+	float progress;
 	
 	/*Animate Parameters*/
 	float animate_flip;
