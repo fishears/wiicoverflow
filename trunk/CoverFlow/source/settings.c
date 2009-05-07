@@ -46,6 +46,7 @@ inline void SETTINGS_Init()
 	SETTING_parentalLock = 0;
 	SETTING_sound        = 1;
 	SETTING_music        = 1;
+	SETTING_quickstart   = 0;
 }
 
 inline int SETTINGS_Load()
@@ -113,6 +114,8 @@ inline int SETTINGS_Load()
 			  SETTING_rumble   = atof(mxmlElementGetAttr(next_n,"rumble"));
 		  if(mxmlElementGetAttr(next_n,"lock"))
 			  SETTING_parentalLock   = atof(mxmlElementGetAttr(next_n,"lock"));
+		  if(mxmlElementGetAttr(next_n,"quickstart"))
+			  SETTING_quickstart     = atof(mxmlElementGetAttr(next_n,"quickstart"));
 	  }
 	  else
 	  {
@@ -176,7 +179,9 @@ inline int SETTINGS_Save()
 	
 	sprintf(buffer, "%d", SETTING_parentalLock);
 	mxmlElementSetAttr(node, "lock", buffer);
-	
+
+	sprintf(buffer, "%d", SETTING_quickstart);
+	mxmlElementSetAttr(node, "quickstart", buffer);
 
 	FILE *fp;
 

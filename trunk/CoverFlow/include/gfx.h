@@ -92,6 +92,12 @@ Button downloadButton;
 Button graphicsButton;
 Button themeWhiteButton;
 Button themeBlackButton;
+Button quickstartOnButton;
+Button quickstartOffButton;
+Button rumbleOnButton;
+Button rumbleOffButton;
+Button musicOnButton;
+Button musicOffButton;
 
 /*gfx buttons*/
 Button spacingupButton;
