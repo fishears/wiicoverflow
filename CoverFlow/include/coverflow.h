@@ -29,7 +29,7 @@
 #include "gfx.h"
 #include "mxml.h"
 #include "storage.h"
- 
+#include "cover.h" 
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -114,8 +114,13 @@ typedef struct{
 	int animate_count;
 	int animate_slide_x;
 	
+	bool firstTimeDownload;
+	bool inetOk;
+	
 } s_self;
 
 void initVars();
+int Net_Init(char *ip);
+void UpdateBufferedImages();
 
 #endif

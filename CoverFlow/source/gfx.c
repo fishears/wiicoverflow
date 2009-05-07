@@ -4,6 +4,8 @@
 extern s_self self;
 extern s_pointer pointer;
 
+static char timet[MAX_CHARACTERS + 16];
+
 void LoadTextures()
 {
 	gradient_bg_strip_w = GRRLIB_LoadTexture(gradient_bg_strip_w_png);
@@ -644,4 +646,71 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 	}while(doloop);
 	
 	return false;
+}
+
+/****************************************************************************
+ * ShowProgress
+ *
+ * Updates the variables used by the progress window for drawing a progress
+ * bar. Also resumes the progress window thread if it is suspended.
+ ***************************************************************************/
+
+void ShowProgress (s32 done, s32 total)
+{
+
+    static time_t start;
+	static u32 expected;
+
+    f32 percent; //, size;
+	u32 d, h, m, s;
+
+	//first time
+	if (!done) {
+		start    = time(0);
+		expected = 300;
+	}
+
+	//Elapsed time
+	d = time(0) - start;
+
+	if (done != total) {
+		//Expected time
+		if (d)
+			expected = (expected * 3 + d * total / done) / 4;
+
+		//Remaining time
+		d = (expected > d) ? (expected - d) : 0;
+	}
+
+	//Calculate time values
+	h =  d / 3600;
+	m = (d / 60) % 60;
+	s =  d % 60;
+
+	//Calculate percentage/size
+	percent = (done * 100.0) / total;
+
+	//sprintf(prozent, "%s%0.2f%%", "Installing Game...", percent);
+
+    sprintf(timet,"Installing Game (%0.2f%%) Time left: %d:%02d:%02d",percent, h,m,s);
+
+	/*Update and Draw Progress Window Here*/
+	//WindowPrompt(prozent, timet, 0, 0);
+	
+	Paint_Progress_Generic(done, total, timet); 
+}
+
+
+int ProgressWindow(wbfs_t *hdd, char* title, char* msg)
+{
+	/*TODO Draw Window*/
+	_title = title;
+	_msg   = msg;
+	
+	int ret = wbfs_add_disc(hdd, __WBFS_ReadDVD, NULL, ShowProgress, ONLY_GAME_PARTITION, 0);
+	
+	self.progress = 0.0;
+	
+	return ret;
+
 }

@@ -6,6 +6,9 @@
 
 #define FLIP_SPEED  0.016
 
+char* _title;
+char* _msg;
+
 extern const u8 add_button_png[];
 extern const u8 add_button_hover_png[];
 extern const u8 slide_png[];
@@ -120,6 +123,9 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover);
 float change_scale_without_containing(float val, float in_min, float in_max, float out_min, float out_max);
 float change_scale(float val, float in_min, float in_max, float out_min, float out_max);
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
+
+void ShowProgress (s32 done, s32 total);
+int ProgressWindow(wbfs_t *hdd, char* title, char* msg);
 
 #endif
 

@@ -34,3 +34,70 @@ bool init_usbfs()
 
 	return true;
 }
+
+void saveFile(char* imgPath, struct block file){
+			
+	/* save png to sd card for future use*/
+			
+	FILE *f;
+	f = fopen(imgPath, "wb");
+	if (f)
+	{
+		fwrite(file.data,1,file.size,f);
+		fclose (f);
+	}
+}
+
+void checkDirs(){
+	
+	int result = 0;
+	
+	DIR_ITER* dir = diropen(USBLOADER_PATH);
+	if (dir == NULL) {
+		
+		mkdir(USBLOADER_PATH, S_ISVTX);
+		//int result = chdir("SD:/usb-loader/");
+		result = chdir(USBLOADER_PATH);
+		
+		if(result == 0){
+			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
+			mkdir("disks", S_ISVTX);
+			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
+			mkdir("covers", S_ISVTX);
+		}
+		else{
+			WindowPrompt("ERROR!","Can't create directories. Covers will not be saved.", &okButton, NULL);
+		}
+	}
+	else{
+	
+	//	WindowPrompt("Cover download","Closing dir", &okButton, NULL);
+		dirclose(dir);
+		
+		result = chdir(USBLOADER_PATH);
+		
+		if(result == 0){
+			dir = diropen("disks");
+	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);
+			if(dir == NULL) {
+				mkdir("disks", S_ISVTX);
+			}
+			else{
+				dirclose(dir);
+			}
+			
+			dir = diropen("covers");
+	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);	
+			if(dir == NULL) {
+				mkdir("covers", S_ISVTX);
+			}
+			else{
+				dirclose(dir);
+			}
+		}
+		
+		else{
+			WindowPrompt("ERROR!","Can't create directories. Covers will not be saved.", &okButton, NULL);
+		}
+	}
+}
