@@ -379,7 +379,10 @@ void Graphic_Settings_Menu(void)
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
-				WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			{
+				if(SETTING_rumble)
+					WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			}
 			else 
 				WPAD_Rumble(0,0); // Kill the rumble
 		}
@@ -554,7 +557,12 @@ void Settings_Menu(void)
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
-				WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			{
+				if(SETTING_rumble)
+				{
+					WPAD_Rumble(0,1); // Turn on Wiimote rumble
+				}
+			}
 			else 
 				WPAD_Rumble(0,0); // Kill the rumble
 		}
@@ -1156,7 +1164,8 @@ int main( int argc, char **argv )
 						else if(Button_Select(&deleteButton, pointer.p_x, pointer.p_y))
 						{
 							// User clicked delete button
-							Menu_Delete();
+							if(!SETTING_parentalLock)
+								Menu_Delete();
 							self.selected = false;
 						}
 						else if(Button_Select(&backButton, pointer.p_x, pointer.p_y))
@@ -1288,7 +1297,10 @@ int main( int argc, char **argv )
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
-				WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			{
+				if(SETTING_rumble)
+					WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			}
 			else 
 				WPAD_Rumble(0,0); // Kill the rumble
 		}
