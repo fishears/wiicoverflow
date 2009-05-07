@@ -700,7 +700,6 @@ bool Menu_Install(void)
 				BUFFER_ClearCovers();
 				Sleep(300);
 				GetEntries();
-				Sleep(300);
 				UpdateBufferedImages();
 				Sleep(100);
 				

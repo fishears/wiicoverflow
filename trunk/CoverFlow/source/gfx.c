@@ -4,7 +4,7 @@
 extern s_self self;
 extern s_pointer pointer;
 
-static char timet[MAX_CHARACTERS + 16];
+static char timet[256];
 
 void LoadTextures()
 {
@@ -711,7 +711,7 @@ void ShowProgress (s32 done, s32 total)
 
 	//sprintf(prozent, "%s%0.2f%%", "Installing Game...", percent);
 
-    sprintf(timet,"Installing Game (%0.2f%%) Time left: %d:%02d:%02d",percent, h,m,s);
+    sprintf(timet,"Installing... (%0.2f%%) Time left: %d:%02d:%02d",percent, h,m,s);
 
 	/*Update and Draw Progress Window Here*/
 	//WindowPrompt(prozent, timet, 0, 0);
