@@ -89,6 +89,7 @@ void checkDirs(){
 			mkdir("disks", S_ISVTX);
 			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
 			mkdir("covers", S_ISVTX);
+			mkdir("games", S_ISVTX);
 		}
 		else{
 			WindowPrompt("ERROR!","Can't create directories. Covers will not be saved.", &okButton, NULL);
@@ -115,6 +116,15 @@ void checkDirs(){
 	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);	
 			if(dir == NULL) {
 				mkdir("covers", S_ISVTX);
+			}
+			else{
+				dirclose(dir);
+			}
+			
+			dir = diropen("games");
+	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);	
+			if(dir == NULL) {
+				mkdir("games", S_ISVTX);
 			}
 			else{
 				dirclose(dir);

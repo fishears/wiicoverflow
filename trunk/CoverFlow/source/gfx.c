@@ -402,7 +402,10 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		GRRLIB_Printf(290, 230, font_texture, SETTING_fontColor, .8, "%s", " Size:    2.0GB");
 		#endif
 		
-		GRRLIB_DrawImg(102+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, 1, 1, 0xFFFFFFFF);
+		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+			GRRLIB_DrawImg(102+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
+		else
+			GRRLIB_DrawImg(102+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
 		
 		if(self.gameSelected < MAX_BUFFERED_COVERS || self.gameSelected >= 0)
 		{
@@ -412,14 +415,14 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 				if(_texture_data[self.gameSelected].data)
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-						GRRLIB_DrawImg(102, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(88, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
 					else
 						GRRLIB_DrawImg(102, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
 				}
 				else
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-						GRRLIB_DrawImg(102, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(88, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 					else
 						GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 				}
@@ -434,7 +437,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		else
 		{	
 			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-				GRRLIB_DrawImg(102, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(88, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 			else
 				GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 		}	
