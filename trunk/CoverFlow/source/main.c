@@ -508,40 +508,25 @@ void Settings_Menu(void)
 				}
 				
 			}
-			else if (Button_Select(&quickstartOnButton, pointer.p_x, pointer.p_y) || Button_Select(&quickstartOffButton, pointer.p_x, pointer.p_y))
-			{
-				SETTING_quickstart = (SETTING_quickstart) ? 0 : 1; // Clicked the "1-Click Launch" button, toggle state
-			}
-			else if (Button_Select(&rumbleOnButton, pointer.p_x, pointer.p_y) || Button_Select(&rumbleOffButton, pointer.p_x, pointer.p_y))
-			{
-				SETTING_rumble = (SETTING_rumble) ? 0 : 1; // Clicked the Rumble button, toggle state
-			}
-			else if (Button_Select(&musicOnButton, pointer.p_x, pointer.p_y) || Button_Select(&musicOffButton, pointer.p_x, pointer.p_y))
-			{
-				SETTING_music = (SETTING_music) ? 0 : 1; // Clicked the music button, toggle state
-			}
 		}
 		
 		// Draw screen background
 		draw_covers();
 		// Draw menu dialog background
 		GRRLIB_2D_Init();
-		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFFF);
+		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.4, 0xFFFFFFFF);
 		// Draw text
 		GRRLIB_Printf(204, 60,  font_texture, SETTING_fontColor, 1.3, "Coverflow Settings");
-		GRRLIB_Printf(145, 93,  font_texture, SETTING_fontColor, 1, "Ocarina Cheats:");
+		GRRLIB_Printf(145, 93,  font_texture, SETTING_fontColor, 1, "Ocarina:");
 		GRRLIB_Printf(145, 128, font_texture, SETTING_fontColor, 1, "Language:");
 		GRRLIB_Printf(330, 128, font_texture, SETTING_fontColor, 1, "%s",languages[CFG.language]);
 		GRRLIB_Printf(145, 157, font_texture, SETTING_fontColor, 1, "Video mode:");
 		GRRLIB_Printf(365, 155, font_texture, SETTING_fontColor, 1, "%s",vidmodes[CFG.video]);
 		GRRLIB_Printf(145, 189, font_texture, SETTING_fontColor, 1, "VIDTV patch:");
-		GRRLIB_Printf(145, 221, font_texture, SETTING_fontColor, 1, "Graphics Settings:");
+		GRRLIB_Printf(145, 221, font_texture, SETTING_fontColor, 1, "Graphics:");
 		GRRLIB_Printf(145, 260, font_texture, SETTING_fontColor, 1, "Missing Covers?:");
 		GRRLIB_Printf(145, 300, font_texture, SETTING_fontColor, 1, "Theme:");
-		GRRLIB_Printf(145, 340, font_texture, SETTING_fontColor, 1, "1-Click Launch:");
-		GRRLIB_Printf(145, 380, font_texture, SETTING_fontColor, 1, "Rumble:");
-		GRRLIB_Printf(145, 420, font_texture, SETTING_fontColor, 1, "Music:");
-		GRRLIB_Printf(218, 446, font_texture, SETTING_fontColor, 1.15, "Press B to Cancel");
+		GRRLIB_Printf(218, 340, font_texture, SETTING_fontColor, 1.15, "Press B to Cancel");
 
 		// Draw stateless buttons
 		Button_Paint(&langupButton);
@@ -554,9 +539,7 @@ void Settings_Menu(void)
 		Button_Toggle_Paint(&cheatoffButton, &cheatonButton, CFG.ocarina);
 		Button_Toggle_Paint(&vidtvoffButton, &vidtvonButton, CFG.vipatch);
 		Button_Toggle_Paint(&themeBlackButton, &themeWhiteButton, SETTING_theme);
-		Button_Toggle_Paint(&quickstartOffButton, &quickstartOnButton, SETTING_quickstart);
-		Button_Toggle_Paint(&rumbleOffButton, &rumbleOnButton, SETTING_rumble);
-		Button_Toggle_Paint(&musicOffButton, &musicOnButton, SETTING_music);
+//		Button_Theme_Paint(&settingsButton, SETTING_theme);
 		
 		// Check for button-pointer intersections, and rumble
 		if (Button_Hover(&langupButton, pointer.p_x, pointer.p_y) ||
@@ -569,12 +552,6 @@ void Settings_Menu(void)
 			Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&themeBlackButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&themeWhiteButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&quickstartOnButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&quickstartOffButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&rumbleOnButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&rumbleOffButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&musicOnButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&musicOffButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&graphicsButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&downloadButton, pointer.p_x, pointer.p_y))
 		{
@@ -874,23 +851,25 @@ void initVars(){
 
 bool LaunchGame()
 {
+	bool done = false;
+	while(!done)
+	{
+		draw_covers();
+		
+		done = draw_selected_two(gameList, true, false);
+		
+		GRRLIB_Render();
+	}
+	
+	/*Fade to black*/
 	//TODO Fade to black instead of just drawing black
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
 	
-	if(!Menu_Boot())
-	{
-		self.selected = false;
-		self.animate_flip = 0;
-	}
-	else
-	{
-		return 0;
-	}
+	Menu_Boot();
 	
 	return false;
 }
-
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv )
@@ -1141,7 +1120,7 @@ int main( int argc, char **argv )
 							// pointer is in the center cover target area
 							if(select_ready && self.select_shift == 0.0)
 							{
-								// the center cover was selected so set the flag and load the game texture into buffer
+								// center cover seleted, load the game details
 								self.selected = true;
 								LoadCurrentCover(self.gameSelected, gameList);
 							}
@@ -1157,25 +1136,39 @@ int main( int argc, char **argv )
 							self.select_shift = 5*(pointer.p_x-345.0)/280.0; // range is 1 to 5 roughly
 						}
 					}
-					// Game is selected and finished animating the launch game dialog
+					// Game is selected and finished animating the detail dialog
 					if(self.selected && self.animate_flip == 1.0)
 					{
-						// Check the buttons
-						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y)) // load
+						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y))
 						{
-							// User clicked on the load game, so save settings before launching
+							// User clicked on the load game, so save settings before launchin
 							SETTINGS_Save();
+							
+							#ifdef ANIMATE_TEST
 							if(!LaunchGame())
 								return 0;
+							#else
+							//TODO Prompt to boot game...
+
+							if(!Menu_Boot())
+							{
+								self.selected = false;
+								self.animate_flip = 0;
+							}
+							else
+							{
+								return 0;
+							}
+							#endif
 						}
-						else if(Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
+						else if(Button_Select(&deleteButton, pointer.p_x, pointer.p_y))
 						{
 							// User clicked delete button
 							if(!SETTING_parentalLock)
 								Menu_Delete();
 							self.selected = false;
 						}
-						else if(Button_Select(&backButton, pointer.p_x, pointer.p_y)) // back
+						else if(Button_Select(&backButton, pointer.p_x, pointer.p_y))
 						{
 							// User clicked back button
 							self.selected = false;
@@ -1274,40 +1267,20 @@ int main( int argc, char **argv )
 					
 			}
 		}
-		
-		// Check for parental lock button combo A + B + 1 + 2
-		if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) &&
-			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_B) &&
-			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_1) &&
-			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
-		{
-			if (WindowPrompt("Parental Control","Do you want to disable ability to delete?", &yesButton, &noButton))
-				SETTING_parentalLock = 1;
-			else
-				SETTING_parentalLock = 0;
-		}
 	
 		UpdateBufferedImages();
 		
 		// This is the main routine to draw the covers
 		draw_covers();
 
-		// Check to see if it's time to draw the game launch dialog panel
+		// Draw the selected game art
 		if(self.selected || self.animate_flip != 0)
 		{
-
-			if (SETTING_quickstart)
-			{
-				LaunchGame();
-			}
-			else
-			{
-				#ifndef ANIMATE_TEST
-				draw_selected(gameList);
-				#else
-				draw_selected_two(gameList, false, Button_Hover(&loadButton, pointer.p_x, pointer.p_y));
-				#endif
-			}
+			#ifndef ANIMATE_TEST
+			draw_selected(gameList);
+			#else
+			draw_selected_two(gameList, false, Button_Hover(&loadButton, pointer.p_x, pointer.p_y));
+			#endif
 		}
 		else
 		{
@@ -1339,8 +1312,8 @@ int main( int argc, char **argv )
 		
 	
 #ifdef DEBUG
-		//display loaded IOS with revision number
-		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
+                //display loaded IOS with revision number
+                GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 		// spit the FPS
 		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
