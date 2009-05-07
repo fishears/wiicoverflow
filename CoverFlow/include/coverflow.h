@@ -63,6 +63,17 @@
 
 #define ANIMATE_SPEED 0
 
+//Sound stuff
+#define OGG_FORMAT 0
+#define RAW_FORMAT 1
+
+#define MAX_SOUNDS   4
+#define FX_BG_MUSIC     0
+#define FX_COVER_FLIP   1
+#define FX_COVER_SCROLL 2
+#define FX_BUTTON_CLICK 3
+
+
 extern const u8 no_cover_png[];
 extern const u8 back_cover_png[];
 extern const u8 no_disc_png[];
