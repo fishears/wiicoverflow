@@ -1309,6 +1309,11 @@ int main( int argc, char **argv )
 			{	
 				SETTING_coverZoom -= 0.03;
 			}
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_1)
+			{
+				sysdate();
+			}
+				
 			else
 			{
 				if(abs(self.select_shift) > SCROLL_SPEED)

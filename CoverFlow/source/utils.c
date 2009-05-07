@@ -19,51 +19,72 @@ void sysdate(){
 	
 	switch(ts->tm_wday){
 	
-		case 1:
+		case 0:
 			sprintf(dow, "Sunday");
-		case 2:
+			break;
+		case 1:
 			sprintf(dow, "Monday");
-		case 3:
+			break;
+		case 2:
 			sprintf(dow, "Tuesday");
-		case 4:
+			break;
+		case 3:
 			sprintf(dow, "Wednesday");
-		case 5:
+			break;
+		case 4:
 			sprintf(dow, "Thursday");
-		case 6:
+			break;
+		case 5:
 			sprintf(dow, "Friday");
-		case 7:
+			break;
+		case 6:
 			sprintf(dow, "Saturday");
+			break;
 	}
 	
 	switch(ts->tm_mon){
 		
 		case 0:
 			sprintf(month, "January");
+			break;
 		case 1:
 			sprintf(month, "February");
+			break;
 		case 2:
 			sprintf(month, "March");
+			break;
 		case 3:
 			sprintf(month, "April");
+			break;
 		case 4:
 			sprintf(month, "May");
+			break;
 		case 5:
 			sprintf(month, "June");
+			break;
 		case 6:
 			sprintf(month, "July");
+			break;
 		case 7:
 			sprintf(month, "August");
+			break;
 		case 8:
 			sprintf(month, "September");
+			break;
 		case 9:
 			sprintf(month, "October");
+			break;
 		case 10:
 			sprintf(month, "November");
+			break;
 		case 11:
 			sprintf(month, "Dicember");
+			break;
+		//default:
+		//	sprintf(month, "xxx: %d", ts->tm_mon);
 		
 	}
-	sprintf(string, "Sysdate: %s %d %s %d at %d:%d", dow, ts->tm_mday, month, 1900+ts->tm_year, ts->tm_hour, ts->tm_min);
+	sprintf(string, "Sysdate: %s %d %s %d at %02d:%02d", dow, ts->tm_mday, month, 1900+ts->tm_year, ts->tm_hour, ts->tm_min);
 	
 	WindowPrompt("Message", string, &okButton, NULL);
 	
