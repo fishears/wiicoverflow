@@ -35,6 +35,31 @@ bool init_usbfs()
 	return true;
 }
 
+bool reinit_usbfs()
+{
+	u32 ret;
+	
+	/* UnMount SDHC */
+	Fat_UnmountSDHC();
+	
+	sleep(1);
+	
+	/* Mount SDHC */
+	Fat_MountSDHC();
+				
+	/* Initialize DIP module */
+	ret = Disc_Init();
+	
+	if (ret < 0) {
+		printf("[+] ERROR:\n");
+		printf("    Could not initialize DIP module! (ret = %d)\n", ret);
+
+		return false;
+	}
+
+	return true;
+}
+
 void saveFile(char* imgPath, struct block file){
 			
 	/* save png to sd card for future use*/

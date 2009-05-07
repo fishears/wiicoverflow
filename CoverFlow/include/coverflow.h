@@ -55,6 +55,12 @@
 //#define TEST_MODE 1
 #define DEBUG 1
 
+
+#define KB_SIZE         1024.0
+#define MB_SIZE         1048576.0
+#define GB_SIZE         1073741824.0
+
+
 /* Constants */
 #define ENTRIES_PER_PAGE 	 12
 #define MAX_CHARACTERS	 	 30

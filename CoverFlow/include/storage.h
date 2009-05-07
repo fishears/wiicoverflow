@@ -4,6 +4,7 @@
 #include "coverflow.h"
 
 bool init_usbfs();
+bool reinit_usbfs();
 void saveFile(char* imgPath, struct block file);
 void checkDirs();
 
