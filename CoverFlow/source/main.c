@@ -1426,10 +1426,10 @@ int main( int argc, char **argv )
 	
 #ifdef DEBUG
 		//display loaded IOS with revision number
-		//GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
+		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 		// spit the FPS
-		//GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
-		//GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
+		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
+		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
 //		GRRLIB_Printf(500, 40, font_texture, 0x808080FF, 1, "Pointer: %d, %d", ir.sx, ir.sy);
 #endif
 		// Draw the pointing hand
