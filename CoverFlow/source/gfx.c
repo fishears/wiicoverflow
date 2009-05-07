@@ -139,6 +139,13 @@ void Init_Buttons()
 	windowdownButton	= Button_Init(minus_button_png, minus_button_hover_png, 300,239);
 	themeWhiteButton	= Button_Init(theme_white_png, theme_white_png, 350, 290);
 	themeBlackButton	= Button_Init(theme_black_png, theme_black_png, 350, 290);
+	quickstartOnButton	= Button_Init(toggle_on_png, toggle_on_png, 350, 330);
+	quickstartOffButton	= Button_Init(toggle_off_png, toggle_off_png, 350, 330);
+	rumbleOnButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 370);
+	rumbleOffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 370);
+	musicOnButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 410);
+	musicOffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 410);
+
 }
 
 void DrawSlider(int theme_id)

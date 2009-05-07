@@ -12,6 +12,7 @@ extern int SETTING_sound; //0=OFF, 1=ON
 extern int SETTING_music; //0=OFF, 1=ON
 extern int SETTING_parentalLock; //0=OFF, 1=ON
 extern int SETTING_rumble; //0=OFF, 1=ON
+extern int SETTING_quickstart; //0=OFF, 1=ON skip the load disc dialog
 
 #ifndef _SETTINGS_
 #define _SETTINGS_
@@ -27,6 +28,7 @@ int SETTING_sound;
 int SETTING_music;
 int SETTING_parentalLock;
 int SETTING_rumble;
+int SETTING_quickstart;
 #endif /* _SYMBOL */
 
 inline void SETTINGS_Init(void);
