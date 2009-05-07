@@ -1014,7 +1014,10 @@ void GRRLIB_3D_Init()
     //f32 w = rmode->viWidth;
     //f32 h = rmode->viHeight;
 	//guPerspective(perspective, 45, 1.0, 0.1F, 300.0F);
-	guPerspective(perspective, 45, 1.0, 0.1F, 300.0F);
+	if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+		guPerspective(perspective, 45, 1.15F, 0.1F, 300.0F);
+	else
+		guPerspective(perspective, 45, 1.0, 0.1F, 300.0F);
 	GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
 
