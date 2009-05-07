@@ -628,8 +628,11 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		}
 		else if(choice_a  == 0)
 		{
-			choice_b->x = 320-40;
-			Button_Paint(choice_b);
+			if(choice_b != 0)
+			{
+				choice_b->x = 320-40;
+				Button_Paint(choice_b);
+			}
 		}
 		else
 		{
@@ -640,7 +643,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		// Draw text
         GRRLIB_Printf(160, 120, font_texture,  SETTING_fontColor, 1.5, "%s", title);
         GRRLIB_Printf(150, 140, font_texture, SETTING_fontColor, 1, "%s", txt);
-
+	
 		// Check for button-pointer intersections, and rumble
 		if (Button_Hover(choice_a, pointer.p_x, pointer.p_y) ||
 			Button_Hover(choice_b, pointer.p_x, pointer.p_y))

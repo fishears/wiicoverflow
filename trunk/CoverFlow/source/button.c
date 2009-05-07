@@ -15,6 +15,10 @@ Button Button_Init(const unsigned char normal_img[], const unsigned char hover_i
 
 bool Button_Hover(struct Button* btn, int x, int y)
 {
+
+	if(btn == 0)
+		return false;
+		
 	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) &&
 		y > (btn->y) && y < (btn->texture.h + (btn->y)))
 	{
@@ -30,6 +34,9 @@ bool Button_Hover(struct Button* btn, int x, int y)
 
 bool Button_Select(struct Button* btn, int x, int y)
 {
+	if(btn == 0)
+		return false;
+		
 	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) &&
 		y > (btn->y) && y < (btn->texture.h + (btn->y)))
 	{
@@ -45,6 +52,9 @@ bool Button_Select(struct Button* btn, int x, int y)
 
 void Button_Paint(struct Button* btn)
 {
+	if(btn == 0)
+		return;
+		
 	if(btn->hovering)
 	{
 		GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
