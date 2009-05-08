@@ -13,6 +13,7 @@ extern int SETTING_music; //0=OFF, 1=ON
 extern int SETTING_parentalLock; //0=OFF, 1=ON
 extern int SETTING_rumble; //0=OFF, 1=ON
 extern int SETTING_quickstart; //0=OFF, 1=ON skip the load disc dialog
+extern int SETTING_enablepitch; //0=OFF, 1=ON pitch to zoom using B key
 
 #ifndef _SETTINGS_
 #define _SETTINGS_
@@ -29,6 +30,7 @@ int SETTING_music;
 int SETTING_parentalLock;
 int SETTING_rumble;
 int SETTING_quickstart;
+int SETTING_enablepitch; //0=OFF, 1=ON skip the load disc dialog
 #endif /* _SYMBOL */
 
 inline void SETTINGS_Init(void);

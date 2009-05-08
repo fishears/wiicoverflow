@@ -1330,39 +1330,35 @@ int main( int argc, char **argv )
 						}
 					}
 				}
-				if ((self.orient.pitch > 5.0) || (self.orient.pitch < -5.0)) // check for movement out of the -20.0 to -30.0 deg range (dead soze)
+				if (SETTING_enablepitch)
 				{
-					if (self.orient.pitch < -5.0)
+
+					if ((self.orient.pitch > 5.0) || (self.orient.pitch < -5.0)) // check for movement out of the -20.0 to -30.0 deg range (dead soze)
 					{
-						// pitch back (zoom out)
-						if (SETTING_coverZoom < -6.0) // seriously, that the number ;-)
+						if (self.orient.pitch < -5.0)
 						{
-							// limit how far we can zoom out
-							SETTING_coverZoom = -6.0;
+							if (SETTING_coverZoom < -6.0) // pitch back (zoom out)
+								SETTING_coverZoom = -6.0; // limit how far we can zoom out
+							else
+								SETTING_coverZoom -= change_scale(self.orient.pitch, -180.0, -5.0, -0.06, 0.06);
 						}
-						else
+						if (self.orient.pitch > 5.0)
 						{
-							SETTING_coverZoom -= change_scale(self.orient.pitch, -180.0, -5.0
-															  , -0.06, 0.06);
+							if (SETTING_coverZoom > 0.69) // pitch forward (zoom in)
+							{
+								if (SETTING_enablepitch) // limit how far we can zoom in
+									SETTING_coverZoom = 0.69;
+							}
+							else
+							{
+								if (SETTING_enablepitch)
+									SETTING_coverZoom -= change_scale(self.orient.pitch, 5, 180.0, -0.06, 0.06);
+							}
 						}
 					}
-					if (self.orient.pitch > 5.0)
-					{
-						// pitch forward (zoom in)
-						if (SETTING_coverZoom > 0.69) // seriously, that the number ;-)
-						{
-							// limit how far we can zoom in
-							SETTING_coverZoom = 0.69;
-						}
-						else
-						{
-							SETTING_coverZoom -= change_scale(self.orient.pitch, 5, 180.0, -0.06, 0.06);
-						}
-					}
-					
 				}
-			}// Check for button 1 hold
-			else if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1)
+			}
+			else if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1) // Check for button 1 hold
 			{
 				sysdate();
 			}
