@@ -20,3 +20,4 @@ This file is auto-generated upon first use, be can be hand edited.
 || drawWindow   || || 7    || Limits the number of covers on either side of center ||
 || coverText    || 0,1 || 1    || Enable Title text on main screen ||
 || theme        || 0,1 || 0    || Choose between 0-Black(default) and 1-White(not working) ||
+|| enablepitch  || 0,1 || 0 || allow to pitch zoom in/out when B is held. you must hand edit XML config to enable this||
