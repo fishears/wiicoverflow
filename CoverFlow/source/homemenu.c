@@ -13,6 +13,38 @@ inline void HomeMenu_Init()
 }
 
 
+void launchTitle(u64 titleID, int need_sys)
+{
+	//int retval;
+	//if(need_sys)
+	//	SystemMenuAuth();
+
+	u32 cnt ATTRIBUTE_ALIGN(32);
+	if(ES_GetNumTicketViews(titleID, &cnt)<0)
+		return;
+
+	tikview *views = (tikview *)memalign( 32, sizeof(tikview)*cnt );
+
+	if(ES_GetTicketViews(titleID, views, cnt)<0)
+	{
+		free(views);
+		return;
+	}
+
+	if(ES_LaunchTitle(titleID, &views[0])<0)
+	{
+		free(views);
+		return;
+	}
+}
+
+void exitToSystemMenu() 
+{
+	WPAD_Shutdown();
+	usleep(500); 
+	SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);	
+}
+
 inline void HomeMenu_Show()
 {
 
@@ -96,12 +128,15 @@ inline void HomeMenu_Show()
 			else if (Button_Select(&wiiMenuButton, pointer.p_x, pointer.p_y))
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
-				SYS_ResetSystem(SYS_RETURNTOMENU,0,0);
+				//launchTitle(0x0000000100000003LL, 0); //launch system menu
+				exitToSystemMenu() ;
+				//SYS_ResetSystem(SYS_RETURNTOMENU,0,0);%48%41%58%58
 			}
 			else if (Button_Select(&loaderButton, pointer.p_x, pointer.p_y))
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
-				exit(1);        // eventually, return a value.
+				launchTitle(0x0001000148415858LL, 0); //launch system menu
+				//exit(1);        // eventually, return a value.
 			}
 			else if (Button_Select(&homeMenuBottomButton, pointer.p_x, pointer.p_y))
 			{
