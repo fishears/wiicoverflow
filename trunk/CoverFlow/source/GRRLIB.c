@@ -913,9 +913,6 @@ void GRRLIB_Init() {
     if(rmode == NULL)
         return;
 	
-	SCR_WIDTH=rmode->fbWidth;
-    SCR_HEIGHT=rmode->efbHeight;
-
     /* Widescreen patch by CashMan's Productions (http://www.CashMan-Productions.fr.nf) */
     if (CONF_GetAspectRatio() == CONF_ASPECT_16_9) 
     {

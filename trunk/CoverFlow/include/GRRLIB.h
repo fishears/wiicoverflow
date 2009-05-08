@@ -61,9 +61,6 @@ typedef struct GRRLIB_bytemapFont{
     GRRLIB_bytemapChar *charDef;    /**< List of bitmap character definitions. */
 } GRRLIB_bytemapFont;
 
-int SCR_WIDTH;
-int SCR_HEIGHT;
-
 extern Mtx GXmodelView2D;
 
 void GRRLIB_2D_Init();
