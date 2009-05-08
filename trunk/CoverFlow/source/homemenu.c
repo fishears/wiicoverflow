@@ -5,6 +5,8 @@
 extern s_self self;
 extern s_pointer pointer;
 
+extern u8 shutdown;
+extern u8 reset;
 inline void HomeMenu_Init()
 {
 	//Nothing to do
@@ -167,6 +169,14 @@ inline void HomeMenu_Show()
 		// Spit it out
 		GRRLIB_Render();
 		
+		if(shutdown == 1)
+		{
+			Sys_Shutdown();
+		}
+		else if(reset == 1)
+		{
+			Sys_Reboot(); 
+		}
 	}while(doloop);
 	
 	for(i = 0; i <= 10; i++)

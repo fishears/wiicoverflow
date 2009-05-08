@@ -10,6 +10,9 @@
 //static char timet[MAX_CHARACTERS + 16];
 static u8 CalculateFrameRate();
 
+extern u8 shutdown;
+extern u8 reset;
+
 // Language selection config
 char languages[11][22] =
 {{"Console Default"},
@@ -397,6 +400,14 @@ void Graphic_Settings_Menu(void)
 		// Spit it out
 		GRRLIB_Render();
 		
+		if(shutdown == 1)
+		{
+			Sys_Shutdown();
+		}
+		else if(reset == 1)
+		{
+			Sys_Reboot(); 
+		}
 	}while(doloop);
 }
 
@@ -628,6 +639,14 @@ void Settings_Menu(void)
 		// Spit it out
 		GRRLIB_Render();
 		
+		if(shutdown == 1)
+		{
+			Sys_Shutdown();
+		}
+		else if(reset == 1)
+		{
+			Sys_Reboot(); 
+		}
 	}while(doloop);
 }
 
@@ -998,6 +1017,7 @@ int main( int argc, char **argv )
 	my_wbfsDev = WBFS_DEVICE_USB;
 	
 	checkDirs();
+	Sys_Init();
 
   INIT_RETRY:
 	/* Initialize WBFS */
@@ -1513,13 +1533,13 @@ int main( int argc, char **argv )
 #ifdef DEBUG
 		//display loaded IOS with revision number
 
-		GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "Pitch: %f", self.orient.pitch);
-		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "adjPitch: %f", (change_scale(self.orient.pitch, -90, 90, -0.5, 0.5)) );
-		GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "adjRoll: %f", (change_scale(self.orient.roll, -90, 90, -0.5, 0.5)) );
+		//GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "Pitch: %f", self.orient.pitch);
+		//GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "adjPitch: %f", (change_scale(self.orient.pitch, -90, 90, -0.5, 0.5)) );
+		//GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "adjRoll: %f", (change_scale(self.orient.roll, -90, 90, -0.5, 0.5)) );
 //		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 		// spit the FPS
-		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
-		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
+		//GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
+		//GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
 //		GRRLIB_Printf(500, 40, font_texture, 0x808080FF, 1, "Pointer: %d, %d", ir.sx, ir.sy);
 #endif
 		// Draw the pointing hand
@@ -1529,6 +1549,14 @@ int main( int argc, char **argv )
         FPS = CalculateFrameRate();
 		
 		//Sleep(1);
+		if(shutdown == 1)
+		{
+			Sys_Shutdown();
+		}
+		else if(reset == 1)
+		{
+			Sys_Reboot(); 
+		}
 	}
 	
     GRRLIB_Exit(); 
