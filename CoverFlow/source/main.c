@@ -1229,7 +1229,7 @@ int main( int argc, char **argv )
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A || PAD_ButtonsDown(0) & PAD_BUTTON_A)
 		{
 			//First Check if any UI buttons or slider are selected
-			if(Button_Select(&addButton, pointer.p_x, pointer.p_y))
+			if((!SETTING_parentalLock) && Button_Select(&addButton, pointer.p_x, pointer.p_y))
 			{
 				AddGame();
 			}
@@ -1478,12 +1478,13 @@ int main( int argc, char **argv )
 		{
 			// Draw the slider and corner buttons
 			DrawSlider(SETTING_theme);
-			Button_Theme_Paint(&addButton, SETTING_theme);
+                        if(!SETTING_parentalLock)
+                            Button_Theme_Paint(&addButton, SETTING_theme);
 			Button_Theme_Paint(&settingsButton, SETTING_theme);
 		}
 		
 		// Check for button-pointer intersections, and rumble
-		if (Button_Hover(&addButton, pointer.p_x, pointer.p_y) ||
+		if (((!SETTING_parentalLock) && Button_Hover(&addButton, pointer.p_x, pointer.p_y)) ||
 			Button_Hover(&settingsButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&slideButton, pointer.p_x, pointer.p_y))
 		{
