@@ -44,7 +44,7 @@ static wbfs_t *hdd = NULL;
 /* WBFS device */
 static s32 my_wbfsDev = WBFS_DEVICE_USB;
 
-s_self self;
+s_self self; // Create this struct
 s_pointer pointer;
 
 #ifdef TEST_MODE
@@ -258,15 +258,13 @@ void Graphic_Settings_Menu(void)
 	do{
 
 		WPAD_ScanPads();
-		
-		ir_t ir; // The struct for infrared
-		
-		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
+		WPAD_IR(WPAD_CHAN_0, &self.ir); // Let's get our infrared data
+		WPAD_Orientation(WPAD_CHAN_0, &self.orient);
 		wd = WPAD_Data(WPAD_CHAN_0);
 
-		pointer.p_x = ir.sx-200;
-		pointer.p_y = ir.sy-250;
-		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
+		pointer.p_x = self.ir.sx-200;
+		pointer.p_y = self.ir.sy-250;
+		pointer.p_ang = self.ir.angle/2; // Set angle/2 to translate correctly
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
@@ -410,13 +408,13 @@ void Settings_Menu(void)
 	do{
 		WPAD_ScanPads();
 		
-		ir_t ir; // The struct for infrared
-		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
-		wd = WPAD_Data(WPAD_CHAN_0);
+//		ir_t ir; // The struct for infrared
+		WPAD_IR(WPAD_CHAN_0, &self.ir); // Let's get our infrared data
+//		wd = WPAD_Data(WPAD_CHAN_0);
 
-		pointer.p_x = ir.sx-200;
-		pointer.p_y = ir.sy-250;
-		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
+		pointer.p_x = self.ir.sx-200;
+		pointer.p_y = self.ir.sy-250;
+		pointer.p_ang = self.ir.angle/2; // Set angle/2 to translate correctly
 
 
 		// Handle button events
@@ -1144,7 +1142,7 @@ int main( int argc, char **argv )
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
 
-	// gui loop
+	// Main coverflow screen gui loop
 	while(1) 
 	{
 
@@ -1154,14 +1152,16 @@ int main( int argc, char **argv )
 		PAD_ScanPads();
 		#endif
 		
-		ir_t ir; // The struct for infrared
+//		ir_t ir; // The struct for infrared
 		
-		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
-		wd = WPAD_Data(WPAD_CHAN_0);
+		WPAD_IR(WPAD_CHAN_0, &self.ir); // Let's get our infrared data
+		WPAD_Orientation(WPAD_CHAN_0, &self.orient);
+		
+		//		wd = WPAD_Data(WPAD_CHAN_0);
 
-		pointer.p_x = ir.sx-200;
-		pointer.p_y = ir.sy-250;
-		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
+		pointer.p_x = self.ir.sx-200;
+		pointer.p_y = self.ir.sy-250;
+		pointer.p_ang = self.ir.angle/2; // Set angle/2 to translate correctly
 
 		//DrawBackground(SETTING_theme);
 
@@ -1279,7 +1279,7 @@ int main( int argc, char **argv )
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsDown(0) & PAD_BUTTON_LEFT)
 			{	
 				select_ready = false;
-                                if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
+				if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
 				{
 					self.shift += SCROLL_SPEED; // real Apple like flow direction ;-)
 				}
@@ -1287,7 +1287,7 @@ int main( int argc, char **argv )
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsDown(0) & PAD_BUTTON_RIGHT)
 			{
 				select_ready = false;
-                                if(!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0)))
+                if(!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0)))
 				{
 					self.shift -= SCROLL_SPEED; // real Apple like flow direction ;-)
 				}
@@ -1308,12 +1308,64 @@ int main( int argc, char **argv )
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_DOWN || PAD_ButtonsDown(0) & PAD_BUTTON_DOWN)
 			{	
 				SETTING_coverZoom -= 0.03;
-			}
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_1)
+			} // Check for B to control flow with wrist twist
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_DOWN)
+			{	
+				if ((self.orient.roll < -10.0) || (self.orient.roll > 10.0)) // check for movement out of the -10.0 to 10.0 deg range (dead soze)
+				{
+					if (self.orient.roll > 0)
+					{
+						// flow right
+						if (!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0))) // watch for the end of the stack
+						{
+							self.shift -= change_scale(self.orient.roll, -90.0, 90.0, -0.3, 0.3);
+						}
+					}
+					else
+					{
+						// flow left
+						if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
+						{
+							self.shift -= change_scale(self.orient.roll, -90.0, 90.0, -0.3, 0.3);
+						}
+					}
+				}
+				if ((self.orient.pitch > 5.0) || (self.orient.pitch < -5.0)) // check for movement out of the -20.0 to -30.0 deg range (dead soze)
+				{
+					if (self.orient.pitch < -5.0)
+					{
+						// pitch back (zoom out)
+						if (SETTING_coverZoom < -6.0) // seriously, that the number ;-)
+						{
+							// limit how far we can zoom out
+							SETTING_coverZoom = -6.0;
+						}
+						else
+						{
+							SETTING_coverZoom -= change_scale(self.orient.pitch, -180.0, -5.0
+															  , -0.06, 0.06);
+						}
+					}
+					if (self.orient.pitch > 5.0)
+					{
+						// pitch forward (zoom in)
+						if (SETTING_coverZoom > 0.69) // seriously, that the number ;-)
+						{
+							// limit how far we can zoom in
+							SETTING_coverZoom = 0.69;
+						}
+						else
+						{
+							SETTING_coverZoom -= change_scale(self.orient.pitch, 5, 180.0, -0.06, 0.06);
+						}
+					}
+					
+				}
+			}// Check for button 1 hold
+			else if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1)
 			{
 				sysdate();
 			}
-				
 			else
 			{
 				if(abs(self.select_shift) > SCROLL_SPEED)
@@ -1372,7 +1424,7 @@ int main( int argc, char **argv )
 			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_1) &&
 			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
 		{
-			if (WindowPrompt("Parental Control","Do you want to disable ability to delete?", &yesButton, &noButton))
+			if (WindowPrompt("Parental Control","Would you like to enable parental controls?", &yesButton, &noButton))
 				SETTING_parentalLock = 1;
 			else
 				SETTING_parentalLock = 0;
@@ -1431,7 +1483,11 @@ int main( int argc, char **argv )
 	
 #ifdef DEBUG
 		//display loaded IOS with revision number
-		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
+
+		GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "Pitch: %f", self.orient.pitch);
+		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "adjPitch: %f", (change_scale(self.orient.pitch, -90, 90, -0.5, 0.5)) );
+		GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "adjRoll: %f", (change_scale(self.orient.roll, -90, 90, -0.5, 0.5)) );
+//		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 		// spit the FPS
 		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);

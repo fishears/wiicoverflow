@@ -142,6 +142,10 @@ typedef struct{
 	bool firstTimeDownload;
 	bool inetOk;
 	
+	//Wiimote data
+	ir_t ir;
+	orient_t orient;
+
 } s_self;
 
 void initVars();
