@@ -80,6 +80,7 @@ inline void HomeMenu_Show()
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
+			WPAD_Rumble(0,0); // Kill the rumble
 			doloop = false;
 		}
 			
@@ -87,14 +88,17 @@ inline void HomeMenu_Show()
 		{
 			if (Button_Select(&homeMenuTopButton, pointer.p_x, pointer.p_y))
 			{
+				WPAD_Rumble(0,0); // Kill the rumble
 				doloop = false;
 			}
 			else if (Button_Select(&wiiMenuButton, pointer.p_x, pointer.p_y))
 			{
+				WPAD_Rumble(0,0); // Kill the rumble
 				SYS_ResetSystem(SYS_RETURNTOMENU,0,0);
 			}
 			else if (Button_Select(&loaderButton, pointer.p_x, pointer.p_y))
 			{
+				WPAD_Rumble(0,0); // Kill the rumble
 				exit(1);        // eventually, return a value.
 			}
 			else if (Button_Select(&homeMenuBottomButton, pointer.p_x, pointer.p_y))
