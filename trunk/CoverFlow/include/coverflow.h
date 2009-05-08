@@ -31,6 +31,7 @@
 #include "storage.h"
 #include "cover.h" 
 #include "utils.h"
+#include "gameSettings.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
