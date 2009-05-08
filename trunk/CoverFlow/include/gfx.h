@@ -46,6 +46,8 @@ extern const u8 download_hover_png[];
 extern const u8 theme_white_png[];
 extern const u8 theme_black_png[];
 extern const u8 bg_options_screen_no_transparency_png[];
+extern const u8 star_on_png[];
+extern const u8 star_off_png[];
 
 /*Home Menu Images*/
 extern const u8 wiiMenu_png[];
@@ -111,6 +113,8 @@ Button rumbleOnButton;
 Button rumbleOffButton;
 Button musicOnButton;
 Button musicOffButton;
+Button bookmarkOnButton;
+Button bookmarkOffButton;
 
 /*gfx buttons*/
 Button spacingupButton;

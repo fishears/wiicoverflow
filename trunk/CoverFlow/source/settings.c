@@ -50,12 +50,12 @@ inline void SETTINGS_Init()
 	SETTING_quickstart   = 0;
 	SETTING_enablepitch  = 0;
 
-        //Game
-        SETTING_ocarina      = 0;
-        SETTING_hooktype     = 0;
-        SETTING_language     = 0;
-        SETTING_video        = 0;
-        SETTING_vipatch      = 0;
+	//Game
+	SETTING_ocarina      = 0;
+	SETTING_hooktype     = 0;
+	SETTING_language     = 0;
+	SETTING_video        = 0;
+	SETTING_vipatch      = 0;
 }
 
 inline int SETTINGS_Load()

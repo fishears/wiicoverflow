@@ -917,6 +917,8 @@ void initVars(){
 	self.progress = 0.0;
 	self.firstTimeDownload = true;
 	self.inetOk = false;
+	
+	self.dummy = 0;
 }
 
 bool LaunchGame()
@@ -924,11 +926,15 @@ bool LaunchGame()
 	bool done = false;
 	while(!done)
 	{
+		//self.dummy = false;
+	
 		draw_covers();
 		
 		done = draw_selected_two(gameList, true, false);
 		
 		GRRLIB_Render();
+		
+		//self.dummy = false;
 	}
 	
 	/*Fade to black*/
@@ -1318,6 +1324,8 @@ int main( int argc, char **argv )
 							// User clicked back button
 							self.selected = false;
 						}
+						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
+							self.dummy ^= 1;
 					}
 				}
 			}
@@ -1504,8 +1512,8 @@ int main( int argc, char **argv )
 		{
 			// Draw the slider and corner buttons
 			DrawSlider(SETTING_theme);
-                        if(!SETTING_parentalLock)
-                            Button_Theme_Paint(&addButton, SETTING_theme);
+            if(!SETTING_parentalLock)
+                Button_Theme_Paint(&addButton, SETTING_theme);
 			Button_Theme_Paint(&settingsButton, SETTING_theme);
 		}
 		

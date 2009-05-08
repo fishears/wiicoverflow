@@ -147,6 +147,8 @@ typedef struct{
 	//Wiimote data
 	ir_t ir;
 	orient_t orient;
+	
+	int dummy;
 
 } s_self;
 
