@@ -30,8 +30,8 @@ inline void HomeMenu_Show()
 		homeMenuTopButton.y += 4;
 		homeMenuBottomButton.y -= 4;
 		
-		//draw_covers();
-		//GRRLIB_2D_Init();
+		draw_covers();
+		GRRLIB_2D_Init();
 
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
@@ -51,8 +51,8 @@ inline void HomeMenu_Show()
 		loaderButton.x  += 20;
 		wiimoteButton.y -= 20;
 		
-		//draw_covers();
-		//GRRLIB_2D_Init();
+		draw_covers();
+		GRRLIB_2D_Init();
 		
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
@@ -104,7 +104,7 @@ inline void HomeMenu_Show()
 		}
 		
 		/*Draw Covers*/ //PREVIEW
-		//draw_covers();
+		draw_covers();
 		// Draw menu dialog background
 		GRRLIB_2D_Init();
 
@@ -166,7 +166,10 @@ inline void HomeMenu_Show()
 		loaderButton.x  -= 20;
 		wiimoteButton.y += 20;
 		
-		//draw_covers();
+		draw_covers();
+		
+		GRRLIB_2D_Init();
+		
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
 		
@@ -183,7 +186,12 @@ inline void HomeMenu_Show()
 		homeMenuTopButton.y -= 4;
 		homeMenuBottomButton.y += 4;
 		
-		//draw_covers();
+		draw_covers();
+		
+		GRRLIB_2D_Init();
+
+		Button_Paint(&homeMenuTopButton);
+		Button_Paint(&homeMenuBottomButton);
 		GRRLIB_Render();
 	}
 	
