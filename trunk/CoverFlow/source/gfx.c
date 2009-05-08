@@ -148,6 +148,12 @@ void Init_Buttons()
 	musicOnButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 410);
 	musicOffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 410);
 
+	homeMenuTopButton	 = Button_Init(homeTop_png, homeTop_hover_png, 0, 0);
+	homeMenuBottomButton = Button_Init(homeBottom_png, homeBottom_hover_png, 0, 368);
+	wiiMenuButton		 = Button_Init(wiiMenu_png, wiiMenu_hover_png, 34, 180);
+	loaderButton		 = Button_Init(loader_png, loader_hover_png, 174, 180);
+	wiimoteButton		 = Button_Init(wiimote_png, wiimote_png, 64, 400);
+	
 }
 
 void DrawSlider(int theme_id)

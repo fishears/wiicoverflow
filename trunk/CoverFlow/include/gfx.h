@@ -47,6 +47,17 @@ extern const u8 theme_white_png[];
 extern const u8 theme_black_png[];
 extern const u8 bg_options_screen_no_transparency_png[];
 
+/*Home Menu Images*/
+extern const u8 wiiMenu_png[];
+extern const u8 wiiMenu_hover_png[];
+extern const u8 loader_png[];
+extern const u8 loader_hover_png[];
+extern const u8 wiimote_png[];
+extern const u8 homeTop_png[];
+extern const u8 homeTop_hover_png[];
+extern const u8 homeBottom_png[];
+extern const u8 homeBottom_hover_png[];
+
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg back_texture;
 GRRLIB_texImg empty_texture;
@@ -110,6 +121,13 @@ Button zoomupButton;
 Button zoomdownButton;
 Button windowupButton;
 Button windowdownButton;
+
+/*Home Menu Buttons*/
+Button homeMenuTopButton;
+Button homeMenuBottomButton;
+Button wiimoteButton;
+Button loaderButton;
+Button wiiMenuButton;
 
 void LoadTextures();
 void DrawBufferedCover(int i, float loc, float angle);
