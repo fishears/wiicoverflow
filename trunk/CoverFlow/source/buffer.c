@@ -130,6 +130,7 @@ void BUFFER_ClearCovers()
 		{
 			free(_texture_data[i].data);
 			_texture_data[i].data=0;
+			loadedCovers--;
 		}
 		pthread_mutex_unlock(&buffer_mutex[i]);
 			
