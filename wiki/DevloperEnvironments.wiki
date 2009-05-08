@@ -8,6 +8,7 @@ The following environment configs are being used to develop/test:
 || ||PAL-UK||4.0E||cIOS 10||less than 32 of 32 (variable)||Multi-sync 16:9 LCD||Component||F1SHE4RS||
 || ||PAL-DUT||4.0E||cIOS 10||31 of 31||-||-||gitkua||
 ||r107||PAL-IT||3.2E||cIOS 10||10 of 10||LCD 32''||Component||Scognito||
+|| ||PAL-GER||3.2E||cIOS 10||10 of 10||26" TV (4:3)||composite||loudbob||
 
 
 Please post additional configurations.
