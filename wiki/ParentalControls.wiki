@@ -3,4 +3,4 @@ To enable Parental Control in Cover Floader, press the following at the same tim
 
 == A + B + 1 + 2 ==
 
-When selected, it will prevent users from deleting games from the gui.
+When enabled, it will prevent users from deleting games from the gui.
