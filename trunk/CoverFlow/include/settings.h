@@ -15,6 +15,12 @@ extern int SETTING_rumble; //0=OFF, 1=ON
 extern int SETTING_quickstart; //0=OFF, 1=ON skip the load disc dialog
 extern int SETTING_enablepitch; //0=OFF, 1=ON pitch to zoom using B key
 
+extern int SETTING_ocarina;
+extern int SETTING_hooktype;
+extern int SETTING_language;
+extern int SETTING_video;
+extern int SETTING_vipatch;
+
 #ifndef _SETTINGS_
 #define _SETTINGS_
 float SETTING_coverZoom;
@@ -31,6 +37,12 @@ int SETTING_parentalLock;
 int SETTING_rumble;
 int SETTING_quickstart;
 int SETTING_enablepitch; //0=OFF, 1=ON skip the load disc dialog
+
+int SETTING_ocarina;
+int SETTING_hooktype;
+int SETTING_language;
+int SETTING_video;
+int SETTING_vipatch;
 #endif /* _SYMBOL */
 
 inline void SETTINGS_Init(void);

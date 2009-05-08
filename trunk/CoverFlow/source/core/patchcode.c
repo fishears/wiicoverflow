@@ -28,6 +28,7 @@
 #include "patchcode.h"
 #include "fwrite_patch.h"
 #include "cfg.h"
+#include "settings.h"
 
 //extern struct CFG;
 
@@ -157,7 +158,7 @@ void dogamehooks(void *addr, u32 len)
 	while(addr_start < addr_end)
 	{
 		
-		switch(CFG.hooktype) //prep for adding hooktype to improve ocarina compatibility
+		switch(SETTING_hooktype) //prep for adding hooktype to improve ocarina compatibility
 		{
 		
 			case 0: //VI
@@ -302,7 +303,7 @@ void langpatcher(void *addr, u32 len)
 	void *addr_start = addr;
 	void *addr_end = addr+len;
 
-        switch(CFG.language)
+        switch(SETTING_language)
                 {
                         case 0:
                                 configbytes[0] = 0xCD;
