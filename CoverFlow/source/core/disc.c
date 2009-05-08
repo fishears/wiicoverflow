@@ -12,6 +12,7 @@
 #include "fst.h"
 #include "cfg.h"
 #include "subsystem.h"
+#include "settings.h"
 
 /* Constants */
 #define PTABLE_OFFSET	0x40000
@@ -66,9 +67,8 @@ void __Disc_SetVMode(void)
 		break;
 	}
 
-	switch (CFG.video) {
-	case 5:
-		break;
+	switch (SETTING_video) {
+
 	case 0:
 	{
 		/* Select video mode */
@@ -120,6 +120,8 @@ void __Disc_SetVMode(void)
 	/* Set video mode */
 	if (vmode)
 		Video_Configure(vmode);
+     case 5:
+         break;
 }
 
 void __Disc_SetTime(void)
@@ -263,7 +265,7 @@ s32 Disc_BootPartition(u64 offset)
 	__Disc_SetTime();
 
 	/* OCARINA STUFF - FISHEARS*/
-	if (CFG.ocarina)
+	if (SETTING_ocarina)
 	{
 		memset(gameid, 0, 8);
 		memcpy(gameid, (char*)0x80000000, 6);

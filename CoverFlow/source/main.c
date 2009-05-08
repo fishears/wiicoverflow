@@ -428,11 +428,11 @@ void Settings_Menu(void)
 			}
 			else if (Button_Select(&cheatonButton, pointer.p_x, pointer.p_y) || Button_Select(&cheatoffButton, pointer.p_x, pointer.p_y))
 			{
-				CFG.ocarina = (CFG.ocarina) ? 0 : 1; // Clicked the Ocarina button, toggle state
+				SETTING_ocarina = (SETTING_ocarina) ? 0 : 1; // Clicked the Ocarina button, toggle state
 			}
 			else if (Button_Select(&vidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&vidtvoffButton, pointer.p_x, pointer.p_y))
 			{
-				CFG.vipatch = (CFG.vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
+				SETTING_vipatch = (SETTING_vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
 			}
 			else if (Button_Select(&graphicsButton, pointer.p_x, pointer.p_y))
 			{
@@ -440,46 +440,46 @@ void Settings_Menu(void)
 			}
 			else if (Button_Select(&langdownButton, pointer.p_x, pointer.p_y))
 			{ // Clicked on the language buttons
-				if (CFG.language > 0)
+				if (SETTING_language > 0)
 				{
-					CFG.language --;
+					SETTING_language --;
 				}
 				else
 				{
-					CFG.language = (CFG_LANG_COUNT - 1);
+					SETTING_language = (CFG_LANG_COUNT - 1);
 				}
 			}
 			else if (Button_Select(&langupButton, pointer.p_x, pointer.p_y))
 			{
-				if (CFG.language < (CFG_LANG_COUNT - 1))
+				if (SETTING_language < (CFG_LANG_COUNT - 1))
 				{
-					CFG.language ++;
+					SETTING_language ++;
 				}
 				else
 				{
-					CFG.language = 0;
+					SETTING_language = 0;
 				}
 			}
                         else if (Button_Select(&hookdownButton, pointer.p_x, pointer.p_y))
 			{ // Clicked on the hooktype buttons
-				if (CFG.hooktype > 0)
+				if (SETTING_hooktype > 0)
 				{
-					CFG.hooktype --;
+					SETTING_hooktype --;
 				}
 				else
 				{
-					CFG.hooktype = (CFG_HOOK_COUNT - 1);
+					SETTING_hooktype = (CFG_HOOK_COUNT - 1);
 				}
 			}
 			else if (Button_Select(&hookupButton, pointer.p_x, pointer.p_y))
 			{
-				if (CFG.hooktype < (CFG_HOOK_COUNT - 1))
+				if (SETTING_hooktype < (CFG_HOOK_COUNT - 1))
 				{
-					CFG.hooktype ++;
+					SETTING_hooktype ++;
 				}
 				else
 				{
-					CFG.hooktype = 0;
+					SETTING_hooktype = 0;
 				}
 			}
 			else if (Button_Select(&downloadButton, pointer.p_x, pointer.p_y))
@@ -493,25 +493,25 @@ void Settings_Menu(void)
 			else if (Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
 			{
 				// Clicked on the video down button
-				if (CFG.video > 0)
+				if (SETTING_video > 0)
 				{
-					CFG.video --;
+					SETTING_video --;
 				}
 				else
 				{
-					CFG.video = (CFG_VIDEO_COUNT -1);
+					SETTING_video = (CFG_VIDEO_COUNT -1);
 				}
 			}
 			else if (Button_Select(&vidupButton, pointer.p_x,pointer.p_y))
 			{
 				// Clicked on the video up button
-				if (CFG.video <(CFG_VIDEO_COUNT -1))
+				if (SETTING_video <(CFG_VIDEO_COUNT -1))
 				{
-					CFG.video ++;
+					SETTING_video ++;
 				}
 				else
 				{
-					CFG.video = 0;
+					SETTING_video = 0;
 				}
 			}
 			else if (Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y) || Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
@@ -551,11 +551,11 @@ void Settings_Menu(void)
 		GRRLIB_Printf(204, 60,  font_texture, SETTING_fontColor, 1.3, "Coverflow Settings");
 		GRRLIB_Printf(145, 93,  font_texture, SETTING_fontColor, 1, "Ocarina:");
                 GRRLIB_Printf(310, 93,  font_texture, SETTING_fontColor, 1, "Hook:");
-                GRRLIB_Printf(385, 93, font_texture, SETTING_fontColor, 1, "%s",hooks[CFG.hooktype]);
+                GRRLIB_Printf(385, 93, font_texture, SETTING_fontColor, 1, "%s",hooks[SETTING_hooktype]);
 		GRRLIB_Printf(145, 128, font_texture, SETTING_fontColor, 1, "Language:");
-		GRRLIB_Printf(330, 128, font_texture, SETTING_fontColor, 1, "%s",languages[CFG.language]);
+		GRRLIB_Printf(330, 128, font_texture, SETTING_fontColor, 1, "%s",languages[SETTING_language]);
 		GRRLIB_Printf(145, 157, font_texture, SETTING_fontColor, 1, "Video mode:");
-		GRRLIB_Printf(330, 155, font_texture, SETTING_fontColor, 1, "%s",vidmodes[CFG.video]);
+		GRRLIB_Printf(330, 155, font_texture, SETTING_fontColor, 1, "%s",vidmodes[SETTING_video]);
 		GRRLIB_Printf(145, 189, font_texture, SETTING_fontColor, 1, "VIDTV patch:");
 		GRRLIB_Printf(145, 221, font_texture, SETTING_fontColor, 1, "Graphics:");
 		GRRLIB_Printf(145, 260, font_texture, SETTING_fontColor, 1, "Missing Covers?:");
@@ -575,8 +575,8 @@ void Settings_Menu(void)
 		Button_Paint(&graphicsButton);
 		Button_Paint(&downloadButton);
 		// Draw stateful buttons
-		Button_Toggle_Paint(&cheatoffButton, &cheatonButton, CFG.ocarina);
-		Button_Toggle_Paint(&vidtvoffButton, &vidtvonButton, CFG.vipatch);
+		Button_Toggle_Paint(&cheatoffButton, &cheatonButton, SETTING_ocarina);
+		Button_Toggle_Paint(&vidtvoffButton, &vidtvonButton, SETTING_vipatch);
 		Button_Toggle_Paint(&themeBlackButton, &themeWhiteButton, SETTING_theme);
 		Button_Toggle_Paint(&quickstartOffButton, &quickstartOnButton, SETTING_quickstart);
 		Button_Toggle_Paint(&rumbleOffButton, &rumbleOnButton, SETTING_rumble);

@@ -7,6 +7,7 @@
 #include "patchcode.h" /*FISHEARS*/
 #include "kenobiwii.h" /*FISHEARS*/
 #include "cfg.h"
+#include "settings.h"
 
 /*KENOBI! - FISHEARS*/
 extern const unsigned char kenobiwii[];
@@ -268,7 +269,7 @@ s32 Apploader_Run(entry_point *entry)
 		/* Read data from DVD */
 		WDVD_Read(dst, len, (u64)(offset << 2));
 
-		if (CFG.video == 1) // patch
+		if (SETTING_video == 1) // patch
 
 		{
 			switch(CONF_GetVideo())
@@ -300,7 +301,7 @@ s32 Apploader_Run(entry_point *entry)
 		
 		dogamehooks(dst,len);
 
-		if (CFG.vipatch)
+		if (SETTING_vipatch)
 			vidolpatcher(dst,len);
 
 		langpatcher(dst,len);

@@ -15,7 +15,8 @@ whitespace_cb(mxml_node_t *node,
 			return ("\n");
 	}
 	else if (!strcmp(name, "graphics") ||
-			 !strcmp(name, "general"))
+			 !strcmp(name, "general") ||
+			 !strcmp(name, "game"))
 	{
 		if (where == MXML_WS_BEFORE_OPEN)
 			return ("\t");
@@ -48,6 +49,13 @@ inline void SETTINGS_Init()
 	SETTING_music        = 1;
 	SETTING_quickstart   = 0;
 	SETTING_enablepitch  = 0;
+
+        //Game
+        SETTING_ocarina      = 0;
+        SETTING_hooktype     = 0;
+        SETTING_language     = 0;
+        SETTING_video        = 0;
+        SETTING_vipatch      = 0;
 }
 
 inline int SETTINGS_Load()
@@ -125,6 +133,25 @@ inline int SETTINGS_Load()
 	  {
 		 return -1;
 	  }
+	  next_n = mxmlFindElement(node, node, "game", NULL, NULL, MXML_DESCEND);
+
+	  if(next_n != NULL)
+	  {
+		  if(mxmlElementGetAttr(next_n,"ocarina"))
+			  SETTING_ocarina = atoi(mxmlElementGetAttr(next_n,"ocarina"));
+		  if(mxmlElementGetAttr(next_n,"hooktype"))
+			  SETTING_hooktype = atoi(mxmlElementGetAttr(next_n,"hooktype"));
+		  if(mxmlElementGetAttr(next_n,"language"))
+			  SETTING_language   = atof(mxmlElementGetAttr(next_n,"language"));
+		  if(mxmlElementGetAttr(next_n,"video"))
+			  SETTING_video   = atof(mxmlElementGetAttr(next_n,"video"));
+		  if(mxmlElementGetAttr(next_n,"vipatch"))
+			  SETTING_vipatch     = atof(mxmlElementGetAttr(next_n,"vipatch"));
+	  }
+	  else
+	  {
+		 return -1;
+	  }
 	  
 	  return 1;
   }
@@ -189,6 +216,23 @@ inline int SETTINGS_Save()
 
 	sprintf(buffer, "%d", SETTING_enablepitch);
 	mxmlElementSetAttr(node, "enablepitch", buffer);
+
+    //GAME SETTINGS
+	node = mxmlNewElement(tree, "game");
+	sprintf(buffer, "%d", SETTING_ocarina);
+	mxmlElementSetAttr(node, "ocarina", buffer);
+
+	sprintf(buffer, "%d", SETTING_hooktype);
+	mxmlElementSetAttr(node, "hooktype", buffer);
+
+	sprintf(buffer, "%d", SETTING_language);
+	mxmlElementSetAttr(node, "language", buffer);
+
+	sprintf(buffer, "%d", SETTING_video);
+	mxmlElementSetAttr(node, "video", buffer);
+
+	sprintf(buffer, "%d", SETTING_vipatch);
+	mxmlElementSetAttr(node, "vipatch", buffer);
 
 	FILE *fp;
 
