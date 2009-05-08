@@ -38,18 +38,18 @@ inline void HomeMenu_Show()
 		GRRLIB_Render();
 	}
 	
-	wiiMenuButton.x = 34-400;
+	wiiMenuButton.x = 28-400;
 	wiiMenuButton.y = 180;
-	loaderButton.x  = 174-400;
-	loaderButton.y = 180;
+	loaderButton.x  = 355+400;
+	loaderButton.y = 170;
 	
 	wiimoteButton.x = 64;
 	wiimoteButton.y = 400 + 400;
-	for(i = 0; i <= 20; i++)
+	for(i = 0; i <= 10; i++)
 	{
-		wiiMenuButton.x += 20;
-		loaderButton.x  += 20;
-		wiimoteButton.y -= 20;
+		wiiMenuButton.x += 40;
+		loaderButton.x  -= 40;
+		wiimoteButton.y -= 40;
 		
 		draw_covers();
 		GRRLIB_2D_Init();
@@ -118,7 +118,12 @@ inline void HomeMenu_Show()
 		Button_Paint(&wiiMenuButton);
 		Button_Paint(&loaderButton);
 		Button_Paint(&wiimoteButton);
-	
+		
+		Button_Hover(&homeMenuTopButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&homeMenuBottomButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&wiiMenuButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&loaderButton, pointer.p_x, pointer.p_y);
+			
 		// Check for button-pointer intersections, and rumble
 		if (Button_Hover(&homeMenuTopButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&homeMenuBottomButton, pointer.p_x, pointer.p_y) ||
@@ -164,11 +169,11 @@ inline void HomeMenu_Show()
 		
 	}while(doloop);
 	
-	for(i = 0; i <= 20; i++)
+	for(i = 0; i <= 10; i++)
 	{
-		wiiMenuButton.x -= 20;
-		loaderButton.x  -= 20;
-		wiimoteButton.y += 20;
+		wiiMenuButton.x -= 40;
+		loaderButton.x  += 40;
+		wiimoteButton.y += 40;
 		
 		draw_covers();
 		

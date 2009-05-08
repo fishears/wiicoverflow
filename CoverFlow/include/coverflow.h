@@ -57,7 +57,7 @@
 #define DEBUG 1
 
 //Experimental Home Menu
-//#define USE_HOME_MENU 1
+#define USE_HOME_MENU 1
 
 #define KB_SIZE         1024.0
 #define MB_SIZE         1048576.0
@@ -67,10 +67,10 @@
 /* Constants */
 #define ENTRIES_PER_PAGE 	 12
 #define MAX_CHARACTERS	 	 30
-#define BUFFER_WINDOW        9
+#define BUFFER_WINDOW        7
 #define BUFFER_THREAD_COUNT  1
 #define USBLOADER_PATH       "SD:/usb-loader"
-#define MAX_COVERS           19
+#define MAX_COVERS           15
 
 #define ANIMATE_TEST 1
 #define ANIMATE_SPEED 0
