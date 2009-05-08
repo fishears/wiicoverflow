@@ -171,7 +171,7 @@ void* process(void *arg)
 
 			/*Handle Load Requests*/
 			pthread_mutex_lock(&queue_mutex);
-			b = _cq.request[i] && !_cq.remove[i]&&!_cq.ready[i]&&loadedCovers<25;
+			b = _cq.request[i] && !_cq.remove[i]&&!_cq.ready[i]&&loadedCovers<15;
 			if (b) _cq.request[i]=false;
 			pthread_mutex_unlock(&queue_mutex);
 		
