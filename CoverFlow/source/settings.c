@@ -47,6 +47,7 @@ inline void SETTINGS_Init()
 	SETTING_sound        = 1;
 	SETTING_music        = 1;
 	SETTING_quickstart   = 0;
+	SETTING_enablepitch  = 0;
 }
 
 inline int SETTINGS_Load()
@@ -87,7 +88,8 @@ inline int SETTINGS_Load()
 			  SETTING_coverText    = atoi(mxmlElementGetAttr(next_n,"coverText"));
 		  if(mxmlElementGetAttr(next_n,"theme"))
 			  SETTING_theme		   = atoi(mxmlElementGetAttr(next_n,"theme"));
-		  
+		  if(mxmlElementGetAttr(next_n,"enablepitch"))
+			  SETTING_enablepitch  = atoi(mxmlElementGetAttr(next_n,"enablepitch"));
 		  if (SETTING_theme)
 		  {
 			  SETTING_fontColor = 0x000000FF;
@@ -116,6 +118,8 @@ inline int SETTINGS_Load()
 			  SETTING_parentalLock   = atof(mxmlElementGetAttr(next_n,"lock"));
 		  if(mxmlElementGetAttr(next_n,"quickstart"))
 			  SETTING_quickstart     = atof(mxmlElementGetAttr(next_n,"quickstart"));
+		  if(mxmlElementGetAttr(next_n,"enablepitch"))
+			  SETTING_enablepitch     = atof(mxmlElementGetAttr(next_n,"enablepitch"));
 	  }
 	  else
 	  {
@@ -182,6 +186,9 @@ inline int SETTINGS_Save()
 
 	sprintf(buffer, "%d", SETTING_quickstart);
 	mxmlElementSetAttr(node, "quickstart", buffer);
+
+	sprintf(buffer, "%d", SETTING_enablepitch);
+	mxmlElementSetAttr(node, "enablepitch", buffer);
 
 	FILE *fp;
 
