@@ -563,7 +563,7 @@ void Settings_Menu(void)
 		GRRLIB_Printf(145, 340, font_texture, SETTING_fontColor, 1, "1-Click Launch:");
 		GRRLIB_Printf(145, 380, font_texture, SETTING_fontColor, 1, "Rumble:");
 		GRRLIB_Printf(145, 420, font_texture, SETTING_fontColor, 1, "Music:");
-		GRRLIB_Printf(218, 446, font_texture, SETTING_fontColor, 1.15, "Press B to Cancel");
+		GRRLIB_Printf(218, 446, font_texture, SETTING_fontColor, 1.15, "Press B to return");
 
 		// Draw stateless buttons
 		Button_Paint(&langupButton);
