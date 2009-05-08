@@ -34,6 +34,8 @@ extern int COVER_YCOORD;
 #define CFG_VIDEO_NTSC	5  // force NTSC
 #define CFG_VIDEO_COUNT 6
 
+#define CFG_HOOK_COUNT 3
+
 #define CFG_LANG_CONSOLE  0
 #define CFG_LANG_JAPANESE 1
 #define CFG_LANG_ENGLISH  2

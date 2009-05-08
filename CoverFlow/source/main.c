@@ -22,20 +22,18 @@ char languages[11][22] =
 {"   T. Chinese"},
 {"    Korean"}};
 //video mode text
-char vidmodes[6][10] =
-{{ " game " },
-{ " auto ", },
-{ " pal50", },
-{ " pal60", },
-{ " ntsc ", },
-{ "system"}};
-
+char vidmodes[6][22] =
+{{ "  Game Default" },
+{ "   Automatic", },
+{ "  Force PAL50", },
+{ "  Force PAL60", },
+{ "  Force NTSC", },
+{ "Console Default"}};
 //hook types for ocarina
-char hooks[3][13] =
-{{"VI (Default)"},
-{"Wii Pad"},
-{"GC Pad"}};
-
+char hooks[3][9] =
+{{"   VI"},
+{" Wii Pad"},
+{" GC Pad"}};
 /* Gamelist buffer */
 static struct discHdr *gameList = NULL;
 
@@ -462,6 +460,28 @@ void Settings_Menu(void)
 					CFG.language = 0;
 				}
 			}
+                        else if (Button_Select(&hookdownButton, pointer.p_x, pointer.p_y))
+			{ // Clicked on the hooktype buttons
+				if (CFG.hooktype > 0)
+				{
+					CFG.hooktype --;
+				}
+				else
+				{
+					CFG.hooktype = (CFG_HOOK_COUNT - 1);
+				}
+			}
+			else if (Button_Select(&hookupButton, pointer.p_x, pointer.p_y))
+			{
+				if (CFG.hooktype < (CFG_HOOK_COUNT - 1))
+				{
+					CFG.hooktype ++;
+				}
+				else
+				{
+					CFG.hooktype = 0;
+				}
+			}
 			else if (Button_Select(&downloadButton, pointer.p_x, pointer.p_y))
 			{
 				// Clicked on the Download Covers button
@@ -530,10 +550,12 @@ void Settings_Menu(void)
 		// Draw text
 		GRRLIB_Printf(204, 60,  font_texture, SETTING_fontColor, 1.3, "Coverflow Settings");
 		GRRLIB_Printf(145, 93,  font_texture, SETTING_fontColor, 1, "Ocarina:");
+                GRRLIB_Printf(310, 93,  font_texture, SETTING_fontColor, 1, "Hook:");
+                GRRLIB_Printf(385, 93, font_texture, SETTING_fontColor, 1, "%s",hooks[CFG.hooktype]);
 		GRRLIB_Printf(145, 128, font_texture, SETTING_fontColor, 1, "Language:");
 		GRRLIB_Printf(330, 128, font_texture, SETTING_fontColor, 1, "%s",languages[CFG.language]);
 		GRRLIB_Printf(145, 157, font_texture, SETTING_fontColor, 1, "Video mode:");
-		GRRLIB_Printf(365, 155, font_texture, SETTING_fontColor, 1, "%s",vidmodes[CFG.video]);
+		GRRLIB_Printf(330, 155, font_texture, SETTING_fontColor, 1, "%s",vidmodes[CFG.video]);
 		GRRLIB_Printf(145, 189, font_texture, SETTING_fontColor, 1, "VIDTV patch:");
 		GRRLIB_Printf(145, 221, font_texture, SETTING_fontColor, 1, "Graphics:");
 		GRRLIB_Printf(145, 260, font_texture, SETTING_fontColor, 1, "Missing Covers?:");
@@ -548,6 +570,8 @@ void Settings_Menu(void)
 		Button_Paint(&langdownButton);
 		Button_Paint(&vidupButton);
 		Button_Paint(&viddownButton);
+                Button_Paint(&hookupButton);
+		Button_Paint(&hookdownButton);
 		Button_Paint(&graphicsButton);
 		Button_Paint(&downloadButton);
 		// Draw stateful buttons
@@ -576,7 +600,9 @@ void Settings_Menu(void)
 			Button_Hover(&musicOnButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&musicOffButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&graphicsButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&downloadButton, pointer.p_x, pointer.p_y))
+			Button_Hover(&downloadButton, pointer.p_x, pointer.p_y) ||
+                        Button_Hover(&hookupButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&hookdownButton, pointer.p_x, pointer.p_y))
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
