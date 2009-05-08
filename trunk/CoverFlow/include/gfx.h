@@ -86,6 +86,8 @@ Button langupButton;
 Button langdownButton;
 Button vidupButton;
 Button viddownButton;
+Button hookupButton;
+Button hookdownButton;
 Button vidtvonButton;
 Button vidtvoffButton;
 Button downloadButton;

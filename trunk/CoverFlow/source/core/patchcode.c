@@ -160,24 +160,20 @@ void dogamehooks(void *addr, u32 len)
 		switch(CFG.hooktype) //prep for adding hooktype to improve ocarina compatibility
 		{
 		
-			case 0:
-					
-			break;
-			
-			case 1: //VI
+			case 0: //VI
 				if(memcmp(addr_start, viwiihooks, sizeof(viwiihooks))==0){
 					patchhook((u32)addr_start, len);
 				}
 			break;
 
-			case 2: //Wii Pad
+			case 1: //Wii Pad
 				if(memcmp(addr_start, viwiihooks, sizeof(viwiihooks))==0){
 					patchhook2((u32)addr_start, len);
 				}
 				
 			break;
 
-			case 3: //GC Pad
+			case 2: //GC Pad
 				if(memcmp(addr_start, kpadhooks, sizeof(kpadhooks))==0){
 					patchhook((u32)addr_start, len);
 				}
