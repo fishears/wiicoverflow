@@ -97,7 +97,7 @@ void __Disc_SetVMode(void)
 	}
 	break;
 	
-	case 2: // Force PAL50
+    case 2: // Force PAL50
         vmode_reg = 1;
         progressive = (CONF_GetProgressiveScan() > 0) && VIDEO_HaveComponentCable();
         vmode     = (progressive) ? &TVNtsc480Prog : &TVPal528IntDf;
@@ -112,6 +112,9 @@ void __Disc_SetVMode(void)
         progressive = (CONF_GetProgressiveScan() > 0) && VIDEO_HaveComponentCable();
         vmode     = (progressive) ? &TVNtsc480Prog : &TVNtsc480IntDf;
         break;
+
+    case 5:
+         break;
 	}
 	
 	/* Set video mode register */
@@ -120,8 +123,7 @@ void __Disc_SetVMode(void)
 	/* Set video mode */
 	if (vmode)
 		Video_Configure(vmode);
-     case 5:
-         break;
+
 }
 
 void __Disc_SetTime(void)
