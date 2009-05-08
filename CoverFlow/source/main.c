@@ -4,6 +4,8 @@
 
 #include "partition.h"
 
+#include "homemenu.h"
+
 //static char prozent[MAX_CHARACTERS + 16];
 //static char timet[MAX_CHARACTERS + 16];
 static u8 CalculateFrameRate();
@@ -1196,6 +1198,9 @@ int main( int argc, char **argv )
 		{
 			SETTINGS_Save();
 			
+			#ifdef USE_HOME_MENU
+			HomeMenu_Show();
+			#else
 			GRRLIB_FillScreen(0x000000FF);
 			GRRLIB_Render();
 			
@@ -1203,6 +1208,7 @@ int main( int argc, char **argv )
 			BUFFER_KillBuffer();
 			Sleep(500);
 			quit();
+			#endif
 		}
 		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_B)
