@@ -107,28 +107,28 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 void Init_Buttons()
 {
     addButton			= Button_Init(add_button_png, add_button_hover_png, 580, 417);
-	slideButton		= Button_Init(slide_png, slide_hover_png, 580, 400);
-	okButton		= Button_Init(ok_png, ok_hover_png, 220, 250);
-	loadButton		= Button_Init(load_png, load_hover_png, 220, 300);
+	slideButton	    	= Button_Init(slide_png, slide_hover_png, 580, 400);
+	okButton	    	= Button_Init(ok_png, ok_hover_png, 220, 250);
+	loadButton	    	= Button_Init(load_png, load_hover_png, 220, 300);
 	deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
-	resetButton		= Button_Init(reset_png, reset_hover_png, 285, 320);
-	backButton		= Button_Init(back_png, back_hover_png, 340, 300);
+	resetButton		    = Button_Init(reset_png, reset_hover_png, 285, 320);
+	backButton	    	= Button_Init(back_png, back_hover_png, 340, 300);
 	cancelButton		= Button_Init(cancel_png, cancel_hover_png, 360, 250);
 	cheatonButton		= Button_Init(toggle_on_png, toggle_on_png, 215,85);
 	cheatoffButton		= Button_Init(toggle_off_png, toggle_off_png, 215,85);
 	langupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,123);
 	langdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,123);
-        vidupButton		= Button_Init(plus_button_png, plus_button_hover_png, 456,150);
-        viddownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,150);
+    vidupButton         = Button_Init(plus_button_png, plus_button_hover_png, 456,150);
+    viddownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,150);
 	vidtvonButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 175);
 	vidtvoffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 175);
-        hookupButton		= Button_Init(plus_button_png, plus_button_hover_png, 456,87);
-        hookdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 360,87);
-        coverTextOnButton	= Button_Init(toggle_on_png, toggle_on_png, 390, 287);
-        coverTextOffButton	= Button_Init(toggle_off_png, toggle_off_png, 390, 287);
-        graphicsButton		= Button_Init(ok_png, ok_hover_png, 350, 210);
-	yesButton		= Button_Init(yes_png, yes_hover_png, 220, 250);
-	noButton		= Button_Init(no_png, no_hover_png, 340, 250);
+    hookupButton		= Button_Init(plus_button_png, plus_button_hover_png, 456,87);
+    hookdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 360,87);
+    coverTextOnButton	= Button_Init(toggle_on_png, toggle_on_png, 390, 287);
+    coverTextOffButton	= Button_Init(toggle_off_png, toggle_off_png, 390, 287);
+    graphicsButton		= Button_Init(ok_png, ok_hover_png, 350, 210);
+	yesButton		    = Button_Init(yes_png, yes_hover_png, 220, 250);
+	noButton	        = Button_Init(no_png, no_hover_png, 340, 250);
 	settingsButton		= Button_Init(settings_png, settings_hover_png, 30, 420);
 	downloadButton		= Button_Init(download_png, download_hover_png, 350, 250);
 	spacingupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,138);
@@ -147,6 +147,8 @@ void Init_Buttons()
 	rumbleOffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 370);
 	musicOnButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 410);
 	musicOffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 410);
+	bookmarkOnButton    = Button_Init(star_on_png, star_on_png, 520, 130);
+	bookmarkOffButton   = Button_Init(star_off_png, star_on_png, 520, 130);
 
 	homeMenuTopButton	 = Button_Init(homeTop_png, homeTop_hover_png, 0, 0);
 	homeMenuBottomButton = Button_Init(homeBottom_png, homeBottom_hover_png, 0, 368);
@@ -387,6 +389,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		Button_Paint(&loadButton);
 		Button_Paint(&backButton);
 		
+		Button_Toggle_Paint(&bookmarkOffButton, &bookmarkOnButton, self.dummy);
 		Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
 		
@@ -439,7 +442,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 			}
 			else
 			{
-					GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 			}	
 		}
 		else
@@ -456,7 +459,6 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 	DrawBufferedCover(self.gameSelected, loc, angle);
   }
   
-			
   return 0;
 }
 
