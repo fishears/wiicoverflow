@@ -32,6 +32,7 @@
 #include "cover.h" 
 #include "utils.h"
 #include "gameSettings.h"
+#include "mxml.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy

@@ -14,7 +14,7 @@ typedef struct{
 	
 } s_gameSettings;
 
-void getSettings(char* gameCode, s_gameSettings* gs);
+void getGameSettings(char* gameCode, s_gameSettings* gs);
 void setGameSettings(char* gameCode, s_gameSettings* gs);
 
 #endif
