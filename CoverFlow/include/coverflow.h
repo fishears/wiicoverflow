@@ -59,7 +59,7 @@
 #define DEBUG 1
 
 //Experimental Home Menu
-#define USE_HOME_MENU 1
+//#define USE_HOME_MENU 1
 
 #define KB_SIZE         1024.0
 #define MB_SIZE         1048576.0

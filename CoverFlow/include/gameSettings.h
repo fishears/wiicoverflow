@@ -10,11 +10,12 @@ typedef struct{
 	int language;
 	int video;
 	int vipatch;
-	char fuffa[256];
+	char lastPlayed[256];
 	
 } s_gameSettings;
 
-void getGameSettings(char* gameCode, s_gameSettings* gs);
+bool getGameSettings(char* gameCode, s_gameSettings* gs);
 void setGameSettings(char* gameCode, s_gameSettings* gs);
+void setLastPlayed(char* gameCode);
 
 #endif
