@@ -605,15 +605,6 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		
 		GetWiimoteData();
 
-//		ir_t ir; // The struct for infrared
-		
-//		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
-//		wd = WPAD_Data(WPAD_CHAN_0);
-
-//		pointer.p_x = ir.sx-200;
-//		pointer.p_y = ir.sy-250;
-//		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
-
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 			exit(0);
 		
