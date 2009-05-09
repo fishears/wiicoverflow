@@ -10,6 +10,12 @@
 
 #define USBLOADER_PATH		"SD:/usb-loader"
 
+#define MEM2_START_ADDRESS 0x91000000
+#define TEXTURE_DATA_SIZE 225*160*4
+
+//this is just over 32MB Hope it works
+#define NUMBER_OF_MEM2_TEST_COVERS 250
+
 extern const u8		back_cover_png[];
 int loadedCovers=0;
 
@@ -49,6 +55,21 @@ void BUFFER_InitBuffer(int thread_count)
 			pthread_create(&thread[i], 0, process, (void *)i);
 	}
 }
+
+void FreeTextureData(int index)
+{
+	if (index>=NUMBER_OF_MEM2_TEST_COVERS)
+	{
+		pthread_mutex_lock(&buffer_mutex[index]);
+		if(_texture_data[index].data != 0)
+			free(_texture_data[index].data);
+			
+		_texture_data[index].data = 0;
+		pthread_mutex_unlock(&buffer_mutex[index]);
+		loadedCovers--;
+	}
+}
+
 
 void BUFFER_RequestCover(int index, struct discHdr *header)
 {
@@ -95,11 +116,15 @@ void BUFFER_RemoveCover(int index)
 {
 	if(index < MAX_BUFFERED_COVERS)
 	{
-		pthread_mutex_lock(&queue_mutex);
-		_cq.ready[index]   = false;
-		_cq.request[index] = false;
-		_cq.remove[index]  = true;
-		pthread_mutex_unlock(&queue_mutex);
+		if (index>=NUMBER_OF_MEM2_TEST_COVERS)
+		{
+			pthread_mutex_lock(&queue_mutex);
+			FreeTextureData(index);
+			_cq.request[index] = false;
+			_cq.remove[index]  = false;
+			_cq.ready[index]   = false;
+			pthread_mutex_unlock(&queue_mutex);
+		}
 	}
 }
 
@@ -121,18 +146,7 @@ void BUFFER_ClearCovers()
 	pthread_mutex_lock(&queue_mutex);
 	for(i = 0; i < MAX_BUFFERED_COVERS; i++)
 	{
-		_cq.ready[i]   = false;
-		_cq.request[i] = false;
-		_cq.remove[i]  = false;
-		
-		pthread_mutex_lock(&buffer_mutex[i]);
-		if(_texture_data[i].data)
-		{
-			free(_texture_data[i].data);
-			_texture_data[i].data=0;
-			loadedCovers--;
-		}
-		pthread_mutex_unlock(&buffer_mutex[i]);
+		BUFFER_RemoveCover(i);
 			
 	}
 	pthread_mutex_unlock(&queue_mutex);
@@ -149,26 +163,6 @@ void* process(void *arg)
 	{
 		for(i = 0; i < MAX_BUFFERED_COVERS; i++)
 		{
-
-			/*Handle Remove Requests*/
-			pthread_mutex_lock(&queue_mutex);
-			b = _cq.remove[i];
-		
-			if(b)
-			{
-				pthread_mutex_lock(&buffer_mutex[i]);
-				if(_texture_data[i].data != 0)
-					free(_texture_data[i].data);
-					
-				_texture_data[i].data = 0;
-				pthread_mutex_unlock(&buffer_mutex[i]);
-				_cq.request[i] = false;
-				_cq.remove[i]  = false;
-				_cq.ready[i]   = false;
-				loadedCovers--;
-				
-			}
-			pthread_mutex_unlock(&queue_mutex);
 
 			/*Handle Load Requests*/
 			pthread_mutex_lock(&queue_mutex);
@@ -197,6 +191,16 @@ void* process(void *arg)
 
 						_texture_data[i] = GRRLIB_LoadTexture((const unsigned char*)imgData);
 						free(imgData);
+						// MEM2 test
+						if (i<NUMBER_OF_MEM2_TEST_COVERS)
+						{
+							int thisDataMem2Address=MEM2_START_ADDRESS + TEXTURE_DATA_SIZE * i;
+							memcpy((void*) thisDataMem2Address,_texture_data[i].data,TEXTURE_DATA_SIZE);
+							free(_texture_data[i].data);
+							_texture_data[i].data = (void*) thisDataMem2Address;
+							loadedCovers--; //don't count this one ;-)
+						}
+						// END MEM2 Test removecover and free texture have code too
 
 						pthread_mutex_lock(&queue_mutex);
 						loadedCovers++;
@@ -208,10 +212,7 @@ void* process(void *arg)
 						pthread_mutex_lock(&queue_mutex);
 						_cq.ready[i]   = false;
 						pthread_mutex_unlock(&queue_mutex);
-						if(_texture_data[i].data != 0)
-							free(_texture_data[i].data);
-							
-						_texture_data[i].data = 0;
+						FreeTextureData(i);
 					}
 				
 				}
