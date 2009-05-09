@@ -50,6 +50,7 @@ static s32 my_wbfsDev = WBFS_DEVICE_USB;
 
 s_self self; // Create this struct
 s_pointer pointer;
+s_gameSettings gameSetting;
 
 #ifdef TEST_MODE
 int COVER_COUNT = 29;
@@ -127,6 +128,19 @@ void UpdateBufferedImages()
 void quit()
 {
 	//we should free all allocated textures (SCO);
+
+	BUFFER_KillBuffer();
+	
+	/*
+	free(cover_texture.data);
+	free(back_texture.data);
+	free(empty_texture.data);
+	free(no_disc_texture.data);
+	free(current_cover_texture.data);
+	free(font_texture.data);
+	*/
+	//BUFFER_ClearCovers();
+	
 	GRRLIB_Exit();
 	exit(0);
 }
@@ -1207,7 +1221,7 @@ int main( int argc, char **argv )
 			GRRLIB_Render();
 			
 			//BUFFER_ClearCovers();
-			BUFFER_KillBuffer();
+			//BUFFER_KillBuffer();
 			Sleep(500);
 			quit();
 			#endif
@@ -1311,7 +1325,19 @@ int main( int argc, char **argv )
 							self.selected = false;
 						}
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
+						{	
 							self.dummy ^= 1;
+							//getGameSettings(, &gameSetting);
+							struct discHdr *header = &gameList[self.gameSelected];
+							char titleID[7];
+							sprintf(titleID, "%s", header->id);
+							//WindowPrompt("TITOLO", titleID, 0, &cancelButton);
+							if(getGameSettings(titleID, &gameSetting))
+								WindowPrompt("Settings found for", titleID, 0, &cancelButton);
+							else
+								WindowPrompt("Settings NOT FOUND", titleID, 0, &cancelButton);
+							
+						}
 					}
 				}
 			}
@@ -1550,7 +1576,8 @@ int main( int argc, char **argv )
 			Sys_Reboot(); 
 		}
 	}
-	
+
+	WindowPrompt("TEST", "Quitting test", 0, &cancelButton);
     GRRLIB_Exit(); 
 	
 	SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
