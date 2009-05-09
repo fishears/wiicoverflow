@@ -6,6 +6,8 @@
 
 #include "homemenu.h"
 
+#include "subsystem.h"
+
 //static char prozent[MAX_CHARACTERS + 16];
 //static char timet[MAX_CHARACTERS + 16];
 static u8 CalculateFrameRate();
@@ -1022,6 +1024,8 @@ int main( int argc, char **argv )
 	checkDirs();
 	Sys_Init();
 
+	//giving it a bit or a retry
+	int retries=3;
   INIT_RETRY:
 	/* Initialize WBFS */
 	ret = WBFS_Init(my_wbfsDev);
@@ -1031,14 +1035,22 @@ int main( int argc, char **argv )
 		while(1)
 		{
 			WPAD_ScanPads();
-			GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "USB Error - Drive not found");
-			GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, "Press A to Retry, B to Exit");
-			GRRLIB_Render();
-				
-			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+			if (retries==0)
 			{
-				reinit_usbfs();
+				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "USB Error - Drive not found");
+				GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, "Press A to Retry, B to Exit");
+				GRRLIB_Render();
+			}
+				
+			if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||retries)
+			{
+				retries--;
+				Subsystem_Close();
+				WDVD_Close();
+				ret = IOS_ReloadIOS(249);
+				Subsystem_Init();
+				WDVD_Init();
 				goto INIT_RETRY;
 			}
 			
