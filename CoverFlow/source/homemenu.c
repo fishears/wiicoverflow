@@ -104,13 +104,16 @@ inline void HomeMenu_Show()
 	do{
 
 		WPAD_ScanPads();
-		WPAD_IR(WPAD_CHAN_0, &self.ir); // Let's get our infrared data
-		WPAD_Orientation(WPAD_CHAN_0, &self.orient);
-		wd = WPAD_Data(WPAD_CHAN_0);
+		
+		GetWiimoteData();
 
-		pointer.p_x = self.ir.sx-200;
-		pointer.p_y = self.ir.sy-250;
-		pointer.p_ang = self.ir.angle/2; // Set angle/2 to translate correctly
+//		WPAD_IR(WPAD_CHAN_0, &self.ir); // Let's get our infrared data
+//		WPAD_Orientation(WPAD_CHAN_0, &self.orient);
+//		wd = WPAD_Data(WPAD_CHAN_0);
+
+//		pointer.p_x = self.ir.sx-160;
+//		pointer.p_y = self.ir.sy-220;
+//		pointer.p_ang = self.ir.angle/2; // Set angle/2 to translate correctly
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
@@ -199,8 +202,8 @@ inline void HomeMenu_Show()
 			}
 		}
 
-		// Draw the pointer hand
-		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		// Draw the default pointer hand
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		// Spit it out
 		GRRLIB_Render();
 		

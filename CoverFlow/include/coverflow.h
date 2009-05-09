@@ -102,12 +102,14 @@ extern const u8 gradient_bg_png[];
 extern const u8 slide_bar_white_png[];
 extern const u8 slide_bar_black_png[];
 extern const u8 generic_point_png[];
+extern const u8 turning_point_png[];
 extern const u8 menu_bg_png[];
 extern const u8 gradient_bg_strip_w_png[];
 extern const u8 gradient_bg_strip_b_png[];
 
 GRRLIB_texImg covers[MAX_COVERS];
 GRRLIB_texImg pointer_texture;
+GRRLIB_texImg turn_point_texture;
 
 int COVER_COUNT;
 WPADData *wd;
@@ -116,6 +118,7 @@ typedef struct{
 	float p_x;
     float p_y;
 	float p_ang;
+	int   p_type; // holds the current pointer type 0=default, 1=turning
 } s_pointer;
 
 typedef struct{

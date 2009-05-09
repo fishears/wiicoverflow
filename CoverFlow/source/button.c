@@ -15,37 +15,32 @@ Button Button_Init(const unsigned char normal_img[], const unsigned char hover_i
 
 bool Button_Hover(struct Button* btn, int x, int y)
 {
-
+	x += 40; // adjusts to the tip of the cursor fingertip
+	y += 37; // same
+	
 	if(btn == 0)
 		return false;
 		
-	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) &&
-		y > (btn->y) && y < (btn->texture.h + (btn->y)))
-	{
+	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) && y > (btn->y) && y < (btn->texture.h + (btn->y)))
 		btn->hovering = true;
-	}
 	else
-	{
 		btn->hovering = false;
-	}
 	
 	return btn->hovering;
 }
 
 bool Button_Select(struct Button* btn, int x, int y)
 {
+	x += 40; // adjusts to the tip of the cursor fingertip
+	y += 37; // same
+	
 	if(btn == 0)
 		return false;
 		
-	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) &&
-		y > (btn->y) && y < (btn->texture.h + (btn->y)))
-	{
+	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) && y > (btn->y) && y < (btn->texture.h + (btn->y)))
 		btn->hovering = true;
-	}
 	else
-	{
 		btn->hovering = false;
-	}
 	
 	return btn->hovering;
 }
