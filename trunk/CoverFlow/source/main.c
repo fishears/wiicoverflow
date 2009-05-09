@@ -1284,11 +1284,10 @@ int main( int argc, char **argv )
 							if(!LaunchGame())
 								return 0;
 						}
-						else if(Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
+						else if((!SETTING_parentalLock) && Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
 						{
 							// User clicked delete button
-							if(!SETTING_parentalLock)
-								Menu_Delete();
+							Menu_Delete();
 							self.selected = false;
 						}
 						else if(Button_Select(&backButton, pointer.p_x, pointer.p_y)) // back
