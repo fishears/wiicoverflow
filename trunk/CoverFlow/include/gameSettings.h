@@ -16,6 +16,6 @@ typedef struct{
 
 bool getGameSettings(char* gameCode, s_gameSettings* gs);
 void setGameSettings(char* gameCode, s_gameSettings* gs);
-void setLastPlayed(char* gameCode);
+void setLastPlayed(char* gameCode, s_gameSettings* gs);
 
 #endif
