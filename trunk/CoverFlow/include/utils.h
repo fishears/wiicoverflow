@@ -8,11 +8,14 @@
 #define MB_SIZE         1048576.0
 #define GB_SIZE         1073741824.0
 
+#define REQUIRED_IOS_REV 10 //this is the minimum cIOS Revision required for full loader support
+
 /* Macros */
 #define round_up(x,n)   (-(-(x) & -(n)))
 
 /* Prototypes */
 u32 swap32(u32);
 void sysdate();
+void ios_version_check();
 
 #endif

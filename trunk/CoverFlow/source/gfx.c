@@ -860,3 +860,4 @@ void game_settings_menu(struct discHdr *gameList)
 
   return;
 }
+
