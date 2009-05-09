@@ -30,7 +30,7 @@
 #include "cfg.h"
 #include "settings.h"
 
-//extern struct CFG;
+extern s_settings settings;
 
 extern void patchhook(u32 address, u32 len);
 extern void patchhook2(u32 address, u32 len);
@@ -158,7 +158,7 @@ void dogamehooks(void *addr, u32 len)
 	while(addr_start < addr_end)
 	{
 		
-		switch(SETTING_hooktype) //prep for adding hooktype to improve ocarina compatibility
+		switch(settings.hooktype) //prep for adding hooktype to improve ocarina compatibility
 		{
 		
 			case 0: //VI
@@ -303,7 +303,7 @@ void langpatcher(void *addr, u32 len)
 	void *addr_start = addr;
 	void *addr_end = addr+len;
 
-        switch(SETTING_language)
+        switch(settings.language)
                 {
                         case 0:
                                 configbytes[0] = 0xCD;

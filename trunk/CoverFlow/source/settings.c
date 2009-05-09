@@ -1,6 +1,8 @@
 #include "settings.h"
 #include "mxml.h"
 
+
+s_settings settings;
 /* my save callback */
 const char *
 whitespace_cb(mxml_node_t *node,
@@ -34,29 +36,29 @@ whitespace_cb(mxml_node_t *node,
 inline void SETTINGS_Init()
 {
 	//Graphics
-	SETTING_coverZoom    = -2.0;
-	SETTING_coverAngle   = 90;
-	SETTING_coverSpacing = 3.1;
-	SETTING_drawWindow   = 7;
-	SETTING_coverText    = 1;
-	SETTING_theme		 = 0; // default to black
-	SETTING_fontColor    = 0xFFFFFFFF; // default to white
+	settings.coverZoom    = -2.0;
+	settings.coverAngle   = 90;
+	settings.coverSpacing = 3.1;
+	settings.drawWindow   = 7;
+	settings.coverText    = 1;
+	settings.theme		 = 0; // default to black
+	settings.fontColor    = 0xFFFFFFFF; // default to white
 	
 	//General
-	SETTING_rumble       = 1;
-	SETTING_parentalLock = 0;
-	SETTING_sound        = 1;
-	SETTING_music        = 1;
-	SETTING_quickstart   = 0;
-	SETTING_enablepitch  = 0;
+	settings.rumble       = 1;
+	settings.parentalLock = 0;
+	settings.sound        = 1;
+	settings.music        = 1;
+	settings.quickstart   = 0;
+	settings.enablepitch  = 0;
 
 	//Game
-	SETTING_ocarina      = 0;
-	SETTING_hooktype     = 0;
-	SETTING_language     = 0;
-	SETTING_video        = 0;
-	SETTING_vipatch      = 0;
-}
+	settings.ocarina      = 0;
+	settings.hooktype     = 0;
+	settings.language     = 0;
+	settings.video        = 0;
+	settings.vipatch      = 0;
+};
 
 inline int SETTINGS_Load()
 {
@@ -85,26 +87,26 @@ inline int SETTINGS_Load()
 	  if(next_n != NULL)
 	  {
 		  if(mxmlElementGetAttr(next_n,"spacing"))
-			  SETTING_coverSpacing = atof(mxmlElementGetAttr(next_n,"spacing"));
+			  settings.coverSpacing = atof(mxmlElementGetAttr(next_n,"spacing"));
 		  if(mxmlElementGetAttr(next_n,"angle"))
-			  SETTING_coverAngle   = atof(mxmlElementGetAttr(next_n,"angle"));
+			  settings.coverAngle   = atof(mxmlElementGetAttr(next_n,"angle"));
 		  if(mxmlElementGetAttr(next_n,"zoom"))
-			  SETTING_coverZoom    = atof(mxmlElementGetAttr(next_n,"zoom"));
+			  settings.coverZoom    = atof(mxmlElementGetAttr(next_n,"zoom"));
 		  if(mxmlElementGetAttr(next_n,"drawWindow"))
-			  SETTING_drawWindow   = atoi(mxmlElementGetAttr(next_n,"drawWindow"));
+			  settings.drawWindow   = atoi(mxmlElementGetAttr(next_n,"drawWindow"));
 		  if(mxmlElementGetAttr(next_n,"coverText"))
-			  SETTING_coverText    = atoi(mxmlElementGetAttr(next_n,"coverText"));
+			  settings.coverText    = atoi(mxmlElementGetAttr(next_n,"coverText"));
 		  if(mxmlElementGetAttr(next_n,"theme"))
-			  SETTING_theme		   = atoi(mxmlElementGetAttr(next_n,"theme"));
+			  settings.theme		   = atoi(mxmlElementGetAttr(next_n,"theme"));
 		  if(mxmlElementGetAttr(next_n,"enablepitch"))
-			  SETTING_enablepitch  = atoi(mxmlElementGetAttr(next_n,"enablepitch"));
-		  if (SETTING_theme)
+			  settings.enablepitch  = atoi(mxmlElementGetAttr(next_n,"enablepitch"));
+		  if (settings.theme)
 		  {
-			  SETTING_fontColor = 0x000000FF;
+			  settings.fontColor = 0x000000FF;
 		  }
 		  else
 		  {
-			  SETTING_fontColor = 0xFFFFFFFF;
+			  settings.fontColor = 0xFFFFFFFF;
 		  }
 	  }
 	  else
@@ -117,17 +119,17 @@ inline int SETTINGS_Load()
 	  if(next_n != NULL)
 	  {
 		  if(mxmlElementGetAttr(next_n,"sound"))
-			  SETTING_sound = atoi(mxmlElementGetAttr(next_n,"sound"));
+			  settings.sound = atoi(mxmlElementGetAttr(next_n,"sound"));
 		  if(mxmlElementGetAttr(next_n,"music"))
-			  SETTING_sound = atoi(mxmlElementGetAttr(next_n,"music"));
+			  settings.sound = atoi(mxmlElementGetAttr(next_n,"music"));
 		  if(mxmlElementGetAttr(next_n,"rumble"))
-			  SETTING_rumble   = atof(mxmlElementGetAttr(next_n,"rumble"));
+			  settings.rumble   = atof(mxmlElementGetAttr(next_n,"rumble"));
 		  if(mxmlElementGetAttr(next_n,"lock"))
-			  SETTING_parentalLock   = atof(mxmlElementGetAttr(next_n,"lock"));
+			  settings.parentalLock   = atof(mxmlElementGetAttr(next_n,"lock"));
 		  if(mxmlElementGetAttr(next_n,"quickstart"))
-			  SETTING_quickstart     = atof(mxmlElementGetAttr(next_n,"quickstart"));
+			  settings.quickstart     = atof(mxmlElementGetAttr(next_n,"quickstart"));
 		  if(mxmlElementGetAttr(next_n,"enablepitch"))
-			  SETTING_enablepitch     = atof(mxmlElementGetAttr(next_n,"enablepitch"));
+			  settings.enablepitch     = atof(mxmlElementGetAttr(next_n,"enablepitch"));
 	  }
 	  else
 	  {
@@ -138,15 +140,15 @@ inline int SETTINGS_Load()
 	  if(next_n != NULL)
 	  {
 		  if(mxmlElementGetAttr(next_n,"ocarina"))
-			  SETTING_ocarina = atoi(mxmlElementGetAttr(next_n,"ocarina"));
+			  settings.ocarina = atoi(mxmlElementGetAttr(next_n,"ocarina"));
 		  if(mxmlElementGetAttr(next_n,"hooktype"))
-			  SETTING_hooktype = atoi(mxmlElementGetAttr(next_n,"hooktype"));
+			  settings.hooktype = atoi(mxmlElementGetAttr(next_n,"hooktype"));
 		  if(mxmlElementGetAttr(next_n,"language"))
-			  SETTING_language   = atof(mxmlElementGetAttr(next_n,"language"));
+			  settings.language   = atof(mxmlElementGetAttr(next_n,"language"));
 		  if(mxmlElementGetAttr(next_n,"video"))
-			  SETTING_video   = atof(mxmlElementGetAttr(next_n,"video"));
+			  settings.video   = atof(mxmlElementGetAttr(next_n,"video"));
 		  if(mxmlElementGetAttr(next_n,"vipatch"))
-			  SETTING_vipatch     = atof(mxmlElementGetAttr(next_n,"vipatch"));
+			  settings.vipatch     = atof(mxmlElementGetAttr(next_n,"vipatch"));
 	  }
 	  else
 	  {
@@ -179,59 +181,59 @@ inline int SETTINGS_Save()
 	//GRAPHIC SETTINGS
 	node = mxmlNewElement(tree, "graphics");
 		
-	sprintf(buffer, "%f", SETTING_coverSpacing);
+	sprintf(buffer, "%f", settings.coverSpacing);
 	mxmlElementSetAttr(node, "spacing", buffer);
 		
-	sprintf(buffer, "%f", SETTING_coverAngle);
+	sprintf(buffer, "%f", settings.coverAngle);
 	mxmlElementSetAttr(node, "angle", buffer);
 	
-	sprintf(buffer, "%f", SETTING_coverZoom);
+	sprintf(buffer, "%f", settings.coverZoom);
 	mxmlElementSetAttr(node, "zoom", buffer);
 	
-	sprintf(buffer, "%d", SETTING_drawWindow);
+	sprintf(buffer, "%d", settings.drawWindow);
 	mxmlElementSetAttr(node, "drawWindow", buffer);
 	
-	sprintf(buffer, "%d", SETTING_coverText);
+	sprintf(buffer, "%d", settings.coverText);
 	mxmlElementSetAttr(node, "coverText", buffer);
 
-	sprintf(buffer, "%d", SETTING_theme);
+	sprintf(buffer, "%d", settings.theme);
 	mxmlElementSetAttr(node, "theme", buffer);
 
     //GENERAL SETTINGS
 	node = mxmlNewElement(tree, "general");
-	sprintf(buffer, "%d", SETTING_sound);
+	sprintf(buffer, "%d", settings.sound);
 	mxmlElementSetAttr(node, "sound", buffer);
 	
-	sprintf(buffer, "%d", SETTING_music);
+	sprintf(buffer, "%d", settings.music);
 	mxmlElementSetAttr(node, "music", buffer);
 	
-	sprintf(buffer, "%d", SETTING_rumble);
+	sprintf(buffer, "%d", settings.rumble);
 	mxmlElementSetAttr(node, "rumble", buffer);
 	
-	sprintf(buffer, "%d", SETTING_parentalLock);
+	sprintf(buffer, "%d", settings.parentalLock);
 	mxmlElementSetAttr(node, "lock", buffer);
 
-	sprintf(buffer, "%d", SETTING_quickstart);
+	sprintf(buffer, "%d", settings.quickstart);
 	mxmlElementSetAttr(node, "quickstart", buffer);
 
-	sprintf(buffer, "%d", SETTING_enablepitch);
+	sprintf(buffer, "%d", settings.enablepitch);
 	mxmlElementSetAttr(node, "enablepitch", buffer);
 
     //GAME SETTINGS
 	node = mxmlNewElement(tree, "game");
-	sprintf(buffer, "%d", SETTING_ocarina);
+	sprintf(buffer, "%d", settings.ocarina);
 	mxmlElementSetAttr(node, "ocarina", buffer);
 
-	sprintf(buffer, "%d", SETTING_hooktype);
+	sprintf(buffer, "%d", settings.hooktype);
 	mxmlElementSetAttr(node, "hooktype", buffer);
 
-	sprintf(buffer, "%d", SETTING_language);
+	sprintf(buffer, "%d", settings.language);
 	mxmlElementSetAttr(node, "language", buffer);
 
-	sprintf(buffer, "%d", SETTING_video);
+	sprintf(buffer, "%d", settings.video);
 	mxmlElementSetAttr(node, "video", buffer);
 
-	sprintf(buffer, "%d", SETTING_vipatch);
+	sprintf(buffer, "%d", settings.vipatch);
 	mxmlElementSetAttr(node, "vipatch", buffer);
 
 	FILE *fp;

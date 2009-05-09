@@ -14,6 +14,7 @@
 #include "subsystem.h"
 #include "settings.h"
 
+extern s_settings settings;
 /* Constants */
 #define PTABLE_OFFSET	0x40000
 #define WII_MAGIC	0x5D1C9EA3
@@ -67,7 +68,7 @@ void __Disc_SetVMode(void)
 		break;
 	}
 
-	switch (SETTING_video) {
+	switch (settings.video) {
 
 	case 0:
 	{
@@ -267,7 +268,7 @@ s32 Disc_BootPartition(u64 offset)
 	__Disc_SetTime();
 
 	/* OCARINA STUFF - FISHEARS*/
-	if (SETTING_ocarina)
+	if (settings.ocarina)
 	{
 		memset(gameid, 0, 8);
 		memcpy(gameid, (char*)0x80000000, 6);
