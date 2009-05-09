@@ -146,7 +146,17 @@ void BUFFER_ClearCovers()
 	pthread_mutex_lock(&queue_mutex);
 	for(i = 0; i < MAX_BUFFERED_COVERS; i++)
 	{
-		BUFFER_RemoveCover(i);
+		BUFFER_RemoveCover(i); //this is to free any allocated memory
+		//special code to stop showing if covers change incorrect covers
+			pthread_mutex_lock(&buffer_mutex[i]);
+
+			_cq.request[i] = false;
+			_cq.remove[i]  = false;
+			_cq.ready[i]   = false;
+			_texture_data[i].data = 0; //don't need to check as it hasn't actually had memory allocated in mem2
+
+			pthread_mutex_unlock(&buffer_mutex[i]);
+			
 			
 	}
 	pthread_mutex_unlock(&queue_mutex);
