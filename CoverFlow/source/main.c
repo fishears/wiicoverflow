@@ -1178,7 +1178,7 @@ int main( int argc, char **argv )
 	
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
-
+        ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
 	// Main coverflow screen gui loop
 	while(1) 
 	{

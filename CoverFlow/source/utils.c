@@ -89,3 +89,13 @@ void sysdate(){
 	WindowPrompt("Message", string, &okButton, NULL);
 	
 }
+void ios_version_check()
+{
+    u32 iosrev = IOS_GetRevision();
+    if(iosrev <REQUIRED_IOS_REV)
+    {
+        char string[80];
+        sprintf(string, "Current: cIOS Rev%d  Required: cIOS Rev%d",iosrev, REQUIRED_IOS_REV);
+        WindowPrompt("cIOS Upgrade Required",string, &okButton, 0);
+    }
+}
