@@ -20,6 +20,8 @@ Download and Help Forum : http://grrlib.santo.fr
 
 #define DEFAULT_FIFO_SIZE (256 * 1024)
 
+extern s_settings settings;
+
 u32 fb = 0;
 static void *xfb[2] = { NULL, NULL};
 GXRModeObj *rmode;
@@ -1000,7 +1002,7 @@ void GRRLIB_3D_Init()
 {
     Mtx44 perspective;
 	
-	Vector cam = {0.0F, 0.0F, SETTING_coverZoom},
+	Vector cam = {0.0F, 0.0F, settings.coverZoom},
 			up = {0.0F, 1.0F, 0.0F},
 		  look = {0.0F, 0.0F, 1.0F};
 	guLookAt(view, &cam, &up, &look);

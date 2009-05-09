@@ -7,6 +7,7 @@ extern s_pointer pointer;
 
 extern u8 shutdown;
 extern u8 reset;
+extern s_settings settings;
 inline void HomeMenu_Init()
 {
 	//Nothing to do
@@ -173,7 +174,7 @@ inline void HomeMenu_Show()
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
 			{
-				if(SETTING_rumble)
+				if(settings.rumble)
 					WPAD_Rumble(0,1); // Turn on Wiimote rumble
 			}
 			else 

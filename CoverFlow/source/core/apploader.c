@@ -9,6 +9,7 @@
 #include "cfg.h"
 #include "settings.h"
 
+extern s_settings settings;
 /*KENOBI! - FISHEARS*/
 extern const unsigned char kenobiwii[];
 extern const int kenobiwii_size;
@@ -269,7 +270,7 @@ s32 Apploader_Run(entry_point *entry)
 		/* Read data from DVD */
 		WDVD_Read(dst, len, (u64)(offset << 2));
 
-		if (SETTING_video == 1) // patch
+		if (settings.video == 1) // patch
 
 		{
 			switch(CONF_GetVideo())
@@ -301,7 +302,7 @@ s32 Apploader_Run(entry_point *entry)
 		
 		dogamehooks(dst,len);
 
-		if (SETTING_vipatch)
+		if (settings.vipatch)
 			vidolpatcher(dst,len);
 
 		langpatcher(dst,len);

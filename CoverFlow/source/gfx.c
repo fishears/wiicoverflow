@@ -3,6 +3,7 @@
 
 extern s_self self;
 extern s_pointer pointer;
+extern s_settings settings;
 
 static char timet[256];
 
@@ -63,7 +64,7 @@ void Paint_Progress(float v, char* msg)
 
 	GRRLIB_2D_Init();
 	
-	//DrawBackground(SETTING_theme);
+	//DrawBackground(settings.theme);
 
 	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
 
@@ -88,7 +89,7 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 
 	GRRLIB_2D_Init();
 	
-//	DrawBackground(SETTING_theme);
+//	DrawBackground(settings.theme);
 
 	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
 	
@@ -172,15 +173,15 @@ void DrawSlider(int theme_id)
 	{
 		case 0: // black theme
 			GRRLIB_DrawImg(120, 410, slide_bar_texture_b, 0, 1, 1, 0xFFFFFFFF);
-			Button_Theme_Paint(&slideButton, SETTING_theme);
+			Button_Theme_Paint(&slideButton, settings.theme);
 			break;
 		case 1: // white theme
 			GRRLIB_DrawImg(120, 410, slide_bar_texture_w, 0, 1, 1, 0xFFFFFFFF);
-			Button_Theme_Paint(&slideButton, SETTING_theme);
+			Button_Theme_Paint(&slideButton, settings.theme);
 			break;
 		default:
 			GRRLIB_DrawImg(120, 410, slide_bar_texture_b, 0, 1, 1, 0xFFFFFFFF);
-			Button_Theme_Paint(&slideButton, SETTING_theme);
+			Button_Theme_Paint(&slideButton, settings.theme);
 			break;
 	}
 }
@@ -205,9 +206,9 @@ void GRRLIB_Cover(float pos, int texture_id)
 		pos *= -1;
 	}
 
-	loc = SETTING_coverSpacing * dir * (pow(pos + 1, -1) - 1);
+	loc = settings.coverSpacing * dir * (pow(pos + 1, -1) - 1);
 	scale = pow(pos + 1, -2);
-	angle = -1 * dir * change_scale(scale, 0, 1, SETTING_coverAngle, 0);
+	angle = -1 * dir * change_scale(scale, 0, 1, settings.coverAngle, 0);
 
 	DrawBufferedCover(texture_id, loc, angle);
 }
@@ -252,7 +253,7 @@ void draw_covers()
 	for(i = (-1*(COVER_COUNT/2.0)); i < (COVER_COUNT/2.0); i++)
 	{
 		//Some logic to avoid drawing everything
-		if(abs(self.shift+i) < SETTING_drawWindow)
+		if(abs(self.shift+i) < settings.drawWindow)
 			GRRLIB_Cover(i+self.shift, i+(COVER_COUNT/2.0));
 	}
 }
@@ -265,14 +266,14 @@ void draw_covers()
 	for(i = (-1*(COVER_COUNT/2.0)); i < 0; i++)
 	{
 		//Some logic to avoid drawing everything
-		if(abs(self.shift+i) < SETTING_drawWindow)
+		if(abs(self.shift+i) < settings.drawWindow)
 			GRRLIB_Cover(i+self.shift, i+(COVER_COUNT/2.0));
 	}
 	
 	for(i = ((COVER_COUNT/2.0)); i >= 0; i--)
 	{
 		// Some logic to avoid drawing everything
-		if(abs(self.shift+i) < SETTING_drawWindow)
+		if(abs(self.shift+i) < settings.drawWindow)
 			GRRLIB_Cover(i+self.shift, i+(COVER_COUNT/2.0));
 	}
 	
@@ -297,7 +298,7 @@ void draw_game_title(int index, float textSize, struct discHdr *gameList)
 			offset = 240;
 		}
 		
-		GRRLIB_Printf(340 - offset, 400, font_texture, SETTING_fontColor, textSize, "%s", header->title);
+		GRRLIB_Printf(340 - offset, 400, font_texture, settings.fontColor, textSize, "%s", header->title);
 	}
 }
 
@@ -332,7 +333,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 	float dir = 1;
 	float loc, scale, angle;
 
-	loc = SETTING_coverSpacing * dir * (pow(1, -1) - 1);
+	loc = settings.coverSpacing * dir * (pow(1, -1) - 1);
 	scale = change_scale(self.animate_flip, 0, 1, 0, 270);
 	angle = -1 * dir * scale;
 
@@ -391,13 +392,13 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		Button_Paint(&backButton);
 		
 		Button_Toggle_Paint(&bookmarkOffButton, &bookmarkOnButton, self.dummy);
-                if(!SETTING_parentalLock)
+                if(!settings.parentalLock)
                     Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
 //		Button_Hover(&bookmarkOnButton, pointer.p_x, pointer.p_y);
 //		Button_Hover(&bookmarkOffButton, pointer.p_x, pointer.p_y);
 		
-		if(!SETTING_parentalLock)
+		if(!settings.parentalLock)
 			Button_Paint(&deleteButton);
 		
 		#ifndef TEST_MODE
@@ -408,13 +409,13 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		/* Get game size */
 		WBFS_GameSize(header->id, &size);
 
-		GRRLIB_Printf(280, 180, font_texture, SETTING_fontColor, 1, "%s", header->title);
-		GRRLIB_Printf(290, 210, font_texture, SETTING_fontColor, .8, " Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
-		GRRLIB_Printf(290, 230, font_texture, SETTING_fontColor, .8, " Size:    %.2fGB", size);
+		GRRLIB_Printf(280, 180, font_texture, settings.fontColor, 1, "%s", header->title);
+		GRRLIB_Printf(290, 210, font_texture, settings.fontColor, .8, " Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
+		GRRLIB_Printf(290, 230, font_texture, settings.fontColor, .8, " Size:    %.2fGB", size);
 		#else
-		GRRLIB_Printf(280, 180, font_texture, SETTING_fontColor, 1, "%s", "Test Game Id Goes Here");
-		GRRLIB_Printf(290, 210, font_texture, SETTING_fontColor, .8, "%s", " Game ID: TEST");
-		GRRLIB_Printf(290, 230, font_texture, SETTING_fontColor, .8, "%s", " Size:    2.0GB");
+		GRRLIB_Printf(280, 180, font_texture, settings.fontColor, 1, "%s", "Test Game Id Goes Here");
+		GRRLIB_Printf(290, 210, font_texture, settings.fontColor, .8, "%s", " Game ID: TEST");
+		GRRLIB_Printf(290, 230, font_texture, settings.fontColor, .8, "%s", " Size:    2.0GB");
 		#endif
 		
 		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
@@ -494,7 +495,7 @@ void draw_selected(struct discHdr *gameList)
 	float dir = 1;
 	float loc, scale, angle;
 
-	loc = SETTING_coverSpacing * dir * (pow(1, -1) - 1);
+	loc = settings.coverSpacing * dir * (pow(1, -1) - 1);
 	scale = change_scale(self.animate_flip, 0, 1, 0, 360);
 	angle = -1 * dir * scale;
 	
@@ -548,11 +549,11 @@ void draw_selected(struct discHdr *gameList)
 			if(offset > 240)
 				offset = 240;
 			
-			GRRLIB_Printf(300 - offset, 10, font_texture, SETTING_fontColor, tsize, "%s", name);
-			GRRLIB_Printf(210, 50, font_texture, SETTING_fontColor, .4, "(%c%c%c%c) (%.2fGB)", header->id[0], header->id[1], header->id[2], header->id[3], size);
+			GRRLIB_Printf(300 - offset, 10, font_texture, settings.fontColor, tsize, "%s", name);
+			GRRLIB_Printf(210, 50, font_texture, settings.fontColor, .4, "(%c%c%c%c) (%.2fGB)", header->id[0], header->id[1], header->id[2], header->id[3], size);
 			#else
-			GRRLIB_Printf(90, 10, font_texture, SETTING_fontColor, .8, "%s", "JUSTINS GAME");
-			GRRLIB_Printf(180, 50, font_texture, SETTING_fontColor, .5, "%s", "JUSTINS GAME");
+			GRRLIB_Printf(90, 10, font_texture, settings.fontColor, .8, "%s", "JUSTINS GAME");
+			GRRLIB_Printf(180, 50, font_texture, settings.fontColor, .5, "%s", "JUSTINS GAME");
 			#endif
 		}
   }
@@ -638,8 +639,8 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			Button_Paint(choice_b);
 		
 		// Draw text
-        GRRLIB_Printf(160, 120, font_texture,  SETTING_fontColor, 1.5, "%s", title);
-        GRRLIB_Printf(150, 140, font_texture, SETTING_fontColor, 1, "%s", txt);
+        GRRLIB_Printf(160, 120, font_texture,  settings.fontColor, 1.5, "%s", title);
+        GRRLIB_Printf(150, 140, font_texture, settings.fontColor, 1, "%s", txt);
 	
 		// Check for button-pointer intersections, and rumble
 		if (Button_Hover(choice_a, pointer.p_x, pointer.p_y) ||

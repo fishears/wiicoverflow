@@ -12,6 +12,7 @@ static u8 CalculateFrameRate();
 
 extern u8 shutdown;
 extern u8 reset;
+extern s_settings settings;
 
 // Language selection config
 char languages[11][22] =
@@ -280,17 +281,17 @@ void Graphic_Settings_Menu(void)
 			}
 			else if (Button_Select(&windowdownButton, pointer.p_x, pointer.p_y))
 			{
-				if (SETTING_drawWindow > 1)
-					SETTING_drawWindow -= 1;
+				if (settings.drawWindow > 1)
+					settings.drawWindow -= 1;
 			}
 			else if (Button_Select(&windowupButton, pointer.p_x, pointer.p_y))
 			{
-				if (SETTING_drawWindow < 100) // Allow for user to shoot self in foot
-					SETTING_drawWindow += 1;
+				if (settings.drawWindow < 100) // Allow for user to shoot self in foot
+					settings.drawWindow += 1;
 			}
 			else if (Button_Select(&coverTextOnButton, pointer.p_x, pointer.p_y) || Button_Select(&coverTextOffButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_coverText = (SETTING_coverText) ? 0 : 1;
+				settings.coverText = (settings.coverText) ? 0 : 1;
 			}
 		}
 		
@@ -298,27 +299,27 @@ void Graphic_Settings_Menu(void)
 		{
 			if(Button_Select(&spacingdownButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_coverSpacing -= 0.05;
+				settings.coverSpacing -= 0.05;
 			}
 			else if(Button_Select(&spacingupButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_coverSpacing += 0.05;
+				settings.coverSpacing += 0.05;
 			}
 			else if(Button_Select(&angledownButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_coverAngle -= 1;
+				settings.coverAngle -= 1;
 			}
 			else if(Button_Select(&angleupButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_coverAngle += 1;
+				settings.coverAngle += 1;
 			}
 			else if(Button_Select(&zoomdownButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_coverZoom -= 0.01;
+				settings.coverZoom -= 0.01;
 			}
 			else if(Button_Select(&zoomupButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_coverZoom += 0.01;
+				settings.coverZoom += 0.01;
 			}
 		}
 		
@@ -328,18 +329,18 @@ void Graphic_Settings_Menu(void)
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.4, 0xFFFFFFFF);
 		// Draw text
-		GRRLIB_Printf(204, 60,  font_texture, SETTING_fontColor, 1.3, "Coverflow Settings (GFX)");
-		GRRLIB_Printf(145, 95, font_texture, SETTING_fontColor, 1, "Zoom:");
-		GRRLIB_Printf(330, 95, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverZoom);
-		GRRLIB_Printf(145, 143, font_texture, SETTING_fontColor, 1, "Spacing:");
-		GRRLIB_Printf(330, 143, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverSpacing);
-		GRRLIB_Printf(145, 191, font_texture, SETTING_fontColor, 1, "Angle:");
-		GRRLIB_Printf(330, 191, font_texture, SETTING_fontColor, 1, "%f", SETTING_coverAngle);
-		GRRLIB_Printf(145, 239, font_texture, SETTING_fontColor, 1, "Draw Window:");
-		GRRLIB_Printf(330, 239, font_texture, SETTING_fontColor, 1, "%d", SETTING_drawWindow);
-		GRRLIB_Printf(145, 287, font_texture, SETTING_fontColor, 1, "Game Title:");
+		GRRLIB_Printf(204, 60,  font_texture, settings.fontColor, 1.3, "Coverflow Settings (GFX)");
+		GRRLIB_Printf(145, 95, font_texture, settings.fontColor, 1, "Zoom:");
+		GRRLIB_Printf(330, 95, font_texture, settings.fontColor, 1, "%f", settings.coverZoom);
+		GRRLIB_Printf(145, 143, font_texture, settings.fontColor, 1, "Spacing:");
+		GRRLIB_Printf(330, 143, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
+		GRRLIB_Printf(145, 191, font_texture, settings.fontColor, 1, "Angle:");
+		GRRLIB_Printf(330, 191, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
+		GRRLIB_Printf(145, 239, font_texture, settings.fontColor, 1, "Draw Window:");
+		GRRLIB_Printf(330, 239, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
+		GRRLIB_Printf(145, 287, font_texture, settings.fontColor, 1, "Game Title:");
 		
-		//Button_Theme_Paint(&settingsButton, SETTING_theme);
+		//Button_Theme_Paint(&settingsButton, settings.theme);
 		Button_Paint(&spacingupButton);
 		Button_Paint(&spacingdownButton);
 		Button_Paint(&zoomupButton);
@@ -348,7 +349,7 @@ void Graphic_Settings_Menu(void)
 		Button_Paint(&angledownButton);
 		Button_Paint(&windowupButton);
 		Button_Paint(&windowdownButton);
-		if (SETTING_coverText)
+		if (settings.coverText)
 		{
 			Button_Paint(&coverTextOnButton);
 		}
@@ -372,7 +373,7 @@ void Graphic_Settings_Menu(void)
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
 			{
-				if(SETTING_rumble)
+				if(settings.rumble)
 					WPAD_Rumble(0,1); // Turn on Wiimote rumble
 			}
 			else 
@@ -422,11 +423,11 @@ void Settings_Menu(void)
 			}
 			else if (Button_Select(&cheatonButton, pointer.p_x, pointer.p_y) || Button_Select(&cheatoffButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_ocarina = (SETTING_ocarina) ? 0 : 1; // Clicked the Ocarina button, toggle state
+				settings.ocarina = (settings.ocarina) ? 0 : 1; // Clicked the Ocarina button, toggle state
 			}
 			else if (Button_Select(&vidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&vidtvoffButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_vipatch = (SETTING_vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
+				settings.vipatch = (settings.vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
 			}
 			else if (Button_Select(&graphicsButton, pointer.p_x, pointer.p_y))
 			{
@@ -434,46 +435,46 @@ void Settings_Menu(void)
 			}
 			else if (Button_Select(&langdownButton, pointer.p_x, pointer.p_y))
 			{ // Clicked on the language buttons
-				if (SETTING_language > 0)
+				if (settings.language > 0)
 				{
-					SETTING_language --;
+					settings.language --;
 				}
 				else
 				{
-					SETTING_language = (CFG_LANG_COUNT - 1);
+					settings.language = (CFG_LANG_COUNT - 1);
 				}
 			}
 			else if (Button_Select(&langupButton, pointer.p_x, pointer.p_y))
 			{
-				if (SETTING_language < (CFG_LANG_COUNT - 1))
+				if (settings.language < (CFG_LANG_COUNT - 1))
 				{
-					SETTING_language ++;
+					settings.language ++;
 				}
 				else
 				{
-					SETTING_language = 0;
+					settings.language = 0;
 				}
 			}
                         else if (Button_Select(&hookdownButton, pointer.p_x, pointer.p_y))
 			{ // Clicked on the hooktype buttons
-				if (SETTING_hooktype > 0)
+				if (settings.hooktype > 0)
 				{
-					SETTING_hooktype --;
+					settings.hooktype --;
 				}
 				else
 				{
-					SETTING_hooktype = (CFG_HOOK_COUNT - 1);
+					settings.hooktype = (CFG_HOOK_COUNT - 1);
 				}
 			}
 			else if (Button_Select(&hookupButton, pointer.p_x, pointer.p_y))
 			{
-				if (SETTING_hooktype < (CFG_HOOK_COUNT - 1))
+				if (settings.hooktype < (CFG_HOOK_COUNT - 1))
 				{
-					SETTING_hooktype ++;
+					settings.hooktype ++;
 				}
 				else
 				{
-					SETTING_hooktype = 0;
+					settings.hooktype = 0;
 				}
 			}
 			else if (Button_Select(&downloadButton, pointer.p_x, pointer.p_y))
@@ -487,52 +488,52 @@ void Settings_Menu(void)
 			else if (Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
 			{
 				// Clicked on the video down button
-				if (SETTING_video > 0)
+				if (settings.video > 0)
 				{
-					SETTING_video --;
+					settings.video --;
 				}
 				else
 				{
-					SETTING_video = (CFG_VIDEO_COUNT -1);
+					settings.video = (CFG_VIDEO_COUNT -1);
 				}
 			}
 			else if (Button_Select(&vidupButton, pointer.p_x,pointer.p_y))
 			{
 				// Clicked on the video up button
-				if (SETTING_video <(CFG_VIDEO_COUNT -1))
+				if (settings.video <(CFG_VIDEO_COUNT -1))
 				{
-					SETTING_video ++;
+					settings.video ++;
 				}
 				else
 				{
-					SETTING_video = 0;
+					settings.video = 0;
 				}
 			}
 			else if (Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y) || Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
 			{
 				// Clicked on the Theme button, toggle state
-				SETTING_theme = (SETTING_theme) ? 0 : 1;
-				if (SETTING_theme)
+				settings.theme = (settings.theme) ? 0 : 1;
+				if (settings.theme)
 				{	// black fonts for white theme
-					SETTING_fontColor = 0x000000FF;
+					settings.fontColor = 0x000000FF;
 				}
 				else
 				{   // white fonts for black theme
-					SETTING_fontColor = 0xFFFFFFFF;
+					settings.fontColor = 0xFFFFFFFF;
 				}
 				
 			}
 			else if (Button_Select(&quickstartOnButton, pointer.p_x, pointer.p_y) || Button_Select(&quickstartOffButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_quickstart = (SETTING_quickstart) ? 0 : 1; // Clicked the "1-Click Launch" button, toggle state
+				settings.quickstart = (settings.quickstart) ? 0 : 1; // Clicked the "1-Click Launch" button, toggle state
 			}
 			else if (Button_Select(&rumbleOnButton, pointer.p_x, pointer.p_y) || Button_Select(&rumbleOffButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_rumble = (SETTING_rumble) ? 0 : 1; // Clicked the Rumble button, toggle state
+				settings.rumble = (settings.rumble) ? 0 : 1; // Clicked the Rumble button, toggle state
 			}
 			else if (Button_Select(&musicOnButton, pointer.p_x, pointer.p_y) || Button_Select(&musicOffButton, pointer.p_x, pointer.p_y))
 			{
-				SETTING_music = (SETTING_music) ? 0 : 1; // Clicked the music button, toggle state
+				settings.music = (settings.music) ? 0 : 1; // Clicked the music button, toggle state
 			}
 		}
 		
@@ -542,22 +543,22 @@ void Settings_Menu(void)
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFFF);
 		// Draw text
-		GRRLIB_Printf(204, 60,  font_texture, SETTING_fontColor, 1.3, "Coverflow Settings");
-		GRRLIB_Printf(145, 93,  font_texture, SETTING_fontColor, 1, "Ocarina:");
-		GRRLIB_Printf(310, 93,  font_texture, SETTING_fontColor, 1, "Hook:");
-		GRRLIB_Printf(385, 93, font_texture, SETTING_fontColor, 1, "%s",hooks[SETTING_hooktype]);
-		GRRLIB_Printf(145, 128, font_texture, SETTING_fontColor, 1, "Language:");
-		GRRLIB_Printf(330, 128, font_texture, SETTING_fontColor, 1, "%s",languages[SETTING_language]);
-		GRRLIB_Printf(145, 157, font_texture, SETTING_fontColor, 1, "Video mode:");
-		GRRLIB_Printf(330, 155, font_texture, SETTING_fontColor, 1, "%s",vidmodes[SETTING_video]);
-		GRRLIB_Printf(145, 189, font_texture, SETTING_fontColor, 1, "VIDTV patch:");
-		GRRLIB_Printf(145, 221, font_texture, SETTING_fontColor, 1, "Graphics:");
-		GRRLIB_Printf(145, 260, font_texture, SETTING_fontColor, 1, "Missing Covers?:");
-		GRRLIB_Printf(145, 300, font_texture, SETTING_fontColor, 1, "Theme:");
-		GRRLIB_Printf(145, 340, font_texture, SETTING_fontColor, 1, "1-Click Launch:");
-		GRRLIB_Printf(145, 380, font_texture, SETTING_fontColor, 1, "Rumble:");
-		GRRLIB_Printf(145, 420, font_texture, SETTING_fontColor, 1, "Music:");
-		GRRLIB_Printf(218, 446, font_texture, SETTING_fontColor, 1.15, "Press B to return");
+		GRRLIB_Printf(204, 60,  font_texture, settings.fontColor, 1.3, "Coverflow Settings");
+		GRRLIB_Printf(145, 93,  font_texture, settings.fontColor, 1, "Ocarina:");
+		GRRLIB_Printf(310, 93,  font_texture, settings.fontColor, 1, "Hook:");
+		GRRLIB_Printf(385, 93, font_texture, settings.fontColor, 1, "%s",hooks[settings.hooktype]);
+		GRRLIB_Printf(145, 128, font_texture, settings.fontColor, 1, "Language:");
+		GRRLIB_Printf(330, 128, font_texture, settings.fontColor, 1, "%s",languages[settings.language]);
+		GRRLIB_Printf(145, 157, font_texture, settings.fontColor, 1, "Video mode:");
+		GRRLIB_Printf(330, 155, font_texture, settings.fontColor, 1, "%s",vidmodes[settings.video]);
+		GRRLIB_Printf(145, 189, font_texture, settings.fontColor, 1, "VIDTV patch:");
+		GRRLIB_Printf(145, 221, font_texture, settings.fontColor, 1, "Graphics:");
+		GRRLIB_Printf(145, 260, font_texture, settings.fontColor, 1, "Missing Covers?:");
+		GRRLIB_Printf(145, 300, font_texture, settings.fontColor, 1, "Theme:");
+		GRRLIB_Printf(145, 340, font_texture, settings.fontColor, 1, "1-Click Launch:");
+		GRRLIB_Printf(145, 380, font_texture, settings.fontColor, 1, "Rumble:");
+		GRRLIB_Printf(145, 420, font_texture, settings.fontColor, 1, "Music:");
+		GRRLIB_Printf(218, 446, font_texture, settings.fontColor, 1.15, "Press B to return");
 
 		// Draw stateless buttons
 		Button_Paint(&langupButton);
@@ -569,12 +570,12 @@ void Settings_Menu(void)
 		Button_Paint(&graphicsButton);
 		Button_Paint(&downloadButton);
 		// Draw stateful buttons
-		Button_Toggle_Paint(&cheatoffButton, &cheatonButton, SETTING_ocarina);
-		Button_Toggle_Paint(&vidtvoffButton, &vidtvonButton, SETTING_vipatch);
-		Button_Toggle_Paint(&themeBlackButton, &themeWhiteButton, SETTING_theme);
-		Button_Toggle_Paint(&quickstartOffButton, &quickstartOnButton, SETTING_quickstart);
-		Button_Toggle_Paint(&rumbleOffButton, &rumbleOnButton, SETTING_rumble);
-		Button_Toggle_Paint(&musicOffButton, &musicOnButton, SETTING_music);
+		Button_Toggle_Paint(&cheatoffButton, &cheatonButton, settings.ocarina);
+		Button_Toggle_Paint(&vidtvoffButton, &vidtvonButton, settings.vipatch);
+		Button_Toggle_Paint(&themeBlackButton, &themeWhiteButton, settings.theme);
+		Button_Toggle_Paint(&quickstartOffButton, &quickstartOnButton, settings.quickstart);
+		Button_Toggle_Paint(&rumbleOffButton, &rumbleOnButton, settings.rumble);
+		Button_Toggle_Paint(&musicOffButton, &musicOnButton, settings.music);
 		
 		// Check for button-pointer intersections, and rumble
 		if (Button_Hover(&langupButton, pointer.p_x, pointer.p_y) ||
@@ -601,7 +602,7 @@ void Settings_Menu(void)
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
 			{
-				if(SETTING_rumble)
+				if(settings.rumble)
 				{
 					WPAD_Rumble(0,1); // Turn on Wiimote rumble
 				}
@@ -1017,8 +1018,8 @@ int main( int argc, char **argv )
 		{
 			WPAD_ScanPads();
 			GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "USB Error - Drive not found");
-			GRRLIB_Printf(190, 160, font_texture, SETTING_fontColor, 1, "Press A to Retry, B to Exit");
+			GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "USB Error - Drive not found");
+			GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, "Press A to Retry, B to Exit");
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
@@ -1045,8 +1046,8 @@ int main( int argc, char **argv )
 		{
 			WPAD_ScanPads();
 			GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "USB Error - NO WBFS Parition.");
-			GRRLIB_Printf(190, 160, font_texture, SETTING_fontColor, 1, "Hold 1 And 2 to Format, B to Exit");
+			GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "USB Error - NO WBFS Parition.");
+			GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, "Hold 1 And 2 to Format, B to Exit");
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_1 && WPAD_ButtonsHeld(0) & WPAD_BUTTON_2)
@@ -1054,7 +1055,7 @@ int main( int argc, char **argv )
 				//TODO ADD WBFS Format code
 				WPAD_ScanPads();
 				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-				GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "Finding Partitions...");
+				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "Finding Partitions...");
 				GRRLIB_Render();
 				
 				sleep(1);
@@ -1096,8 +1097,8 @@ int main( int argc, char **argv )
 							{
 								WPAD_ScanPads();
 								GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-								GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "Formatting Partition %s", txtBuff[cnt]);
-								GRRLIB_Printf(190, 140, font_texture, SETTING_fontColor, 1, "Please Wait...");
+								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "Formatting Partition %s", txtBuff[cnt]);
+								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "Please Wait...");
 								GRRLIB_Render();
 								
 								ret = WBFS_Format(entry->sector, entry->size); 
@@ -1189,7 +1190,7 @@ int main( int argc, char **argv )
 		#endif
 
 		GetWiimoteData();
-		//DrawBackground(SETTING_theme);
+		//DrawBackground(settings.theme);
 
 		// Check for 'HOME' button press
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
@@ -1233,7 +1234,7 @@ int main( int argc, char **argv )
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A || PAD_ButtonsDown(0) & PAD_BUTTON_A)
 		{
 			//First Check if any UI buttons or slider are selected
-			if((!SETTING_parentalLock) && Button_Select(&addButton, pointer.p_x, pointer.p_y))
+			if((!settings.parentalLock) && Button_Select(&addButton, pointer.p_x, pointer.p_y))
 			{
 				AddGame();
 			}
@@ -1284,7 +1285,7 @@ int main( int argc, char **argv )
 							if(!LaunchGame())
 								return 0;
 						}
-						else if((!SETTING_parentalLock) && Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
+						else if((!settings.parentalLock) && Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
 						{
 							// User clicked delete button
 							Menu_Delete();
@@ -1325,20 +1326,20 @@ int main( int argc, char **argv )
 			} // Check for UP for zoom in
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsDown(0) & PAD_BUTTON_UP)
 			{	
-				if (SETTING_coverZoom > .69) // seriously, that the number ;-)
+				if (settings.coverZoom > .69) // seriously, that the number ;-)
 				{
 					// limit how far we can zoom in
-					SETTING_coverZoom = .69;
+					settings.coverZoom = .69;
 				}
 				else
 				{
 					// no limit to zooming out, you can go really far out
-					SETTING_coverZoom += 0.03;
+					settings.coverZoom += 0.03;
 				}
 			} // Check for DOWN for zoom out
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_DOWN || PAD_ButtonsDown(0) & PAD_BUTTON_DOWN)
 			{	
-				SETTING_coverZoom -= 0.03;
+				settings.coverZoom -= 0.03;
 			} // Check for B to control flow with wrist twist
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_DOWN)
 			{	
@@ -1359,29 +1360,29 @@ int main( int argc, char **argv )
 							self.shift -= change_scale(self.orient.roll, -90.0, 90.0, -0.3, 0.3);
 					}
 				}
-				if (SETTING_enablepitch)
+				if (settings.enablepitch)
 				{
 
 					if ((self.orient.pitch > 5.0) || (self.orient.pitch < -5.0)) // check for movement out of the -20.0 to -30.0 deg range (dead soze)
 					{
 						if (self.orient.pitch < -5.0)
 						{
-							if (SETTING_coverZoom < -6.0) // pitch back (zoom out)
-								SETTING_coverZoom = -6.0; // limit how far we can zoom out
+							if (settings.coverZoom < -6.0) // pitch back (zoom out)
+								settings.coverZoom = -6.0; // limit how far we can zoom out
 							else
-								SETTING_coverZoom -= change_scale(self.orient.pitch, -180.0, -5.0, -0.06, 0.06);
+								settings.coverZoom -= change_scale(self.orient.pitch, -180.0, -5.0, -0.06, 0.06);
 						}
 						if (self.orient.pitch > 5.0)
 						{
-							if (SETTING_coverZoom > 0.69) // pitch forward (zoom in)
+							if (settings.coverZoom > 0.69) // pitch forward (zoom in)
 							{
-								if (SETTING_enablepitch) // limit how far we can zoom in
-									SETTING_coverZoom = 0.69;
+								if (settings.enablepitch) // limit how far we can zoom in
+									settings.coverZoom = 0.69;
 							}
 							else
 							{
-								if (SETTING_enablepitch)
-									SETTING_coverZoom -= change_scale(self.orient.pitch, 5, 180.0, -0.06, 0.06);
+								if (settings.enablepitch)
+									settings.coverZoom -= change_scale(self.orient.pitch, 5, 180.0, -0.06, 0.06);
 							}
 						}
 					}
@@ -1433,7 +1434,7 @@ int main( int argc, char **argv )
 					select_ready = true;
 				
 					// Draw Game Title
-					if(SETTING_coverText)
+					if(settings.coverText)
 					{	
 						float t = 1.0; // add a configurable text size later
 						draw_game_title(self.gameSelected, t , gameList);
@@ -1450,9 +1451,9 @@ int main( int argc, char **argv )
 			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
 		{
 			if (WindowPrompt("Parental Control","Would you like to enable parental controls?", &yesButton, &noButton))
-				SETTING_parentalLock = 1;
+				settings.parentalLock = 1;
 			else
-				SETTING_parentalLock = 0;
+				settings.parentalLock = 0;
 		}
 	
 		UpdateBufferedImages();
@@ -1464,7 +1465,7 @@ int main( int argc, char **argv )
 		if(self.selected || self.animate_flip != 0)
 		{
 
-			if (SETTING_quickstart)
+			if (settings.quickstart)
 			{
 				LaunchGame();
 			}
@@ -1480,21 +1481,21 @@ int main( int argc, char **argv )
 		else
 		{
 			// Draw the slider and corner buttons
-			DrawSlider(SETTING_theme);
-            if(!SETTING_parentalLock)
-                Button_Theme_Paint(&addButton, SETTING_theme);
-			Button_Theme_Paint(&settingsButton, SETTING_theme);
+			DrawSlider(settings.theme);
+            if(!settings.parentalLock)
+                Button_Theme_Paint(&addButton, settings.theme);
+			Button_Theme_Paint(&settingsButton, settings.theme);
 		}
 		
 		// Check for button-pointer intersections, and rumble
-		if (((!SETTING_parentalLock) && Button_Hover(&addButton, pointer.p_x, pointer.p_y)) ||
+		if (((!settings.parentalLock) && Button_Hover(&addButton, pointer.p_x, pointer.p_y)) ||
 			Button_Hover(&settingsButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&slideButton, pointer.p_x, pointer.p_y))
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
 			{
-				if(SETTING_rumble)
+				if(settings.rumble)
 					WPAD_Rumble(0,1); // Turn on Wiimote rumble
 			}
 			else 

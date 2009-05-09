@@ -1,4 +1,5 @@
 #include "soundmanager.h"
+extern s_settings settings;
 
 extern u8 bgMusic_ogg[];
 extern u32 bgMusic_ogg_size;
@@ -32,7 +33,7 @@ inline int SOUND_PlaySound(int sound_id, int loops)
 			switch(_sounds[sound_id].format)
 			{
 					case OGG_FORMAT:
-							if(SETTING_music)
+							if(settings.music)
 							{
 								if(loops == 0)
 								{
@@ -51,7 +52,7 @@ inline int SOUND_PlaySound(int sound_id, int loops)
 							return 1;
 							break;
 					case RAW_FORMAT:
-							if(SETTING_sound)
+							if(settings.sound)
 							{
 								SND_SetVoice(SND_GetFirstUnusedVoice(), VOICE_MONO_8BIT, 8000, 0, (char*)_sounds[sound_id].data, _sounds[sound_id].size, 30, 30, NULL);
 							}
