@@ -259,26 +259,15 @@ void Graphic_Settings_Menu(void)
 
 	/*Render and control Settings*/
 	do{
-
 		WPAD_ScanPads();
-		WPAD_IR(WPAD_CHAN_0, &self.ir); // Let's get our infrared data
-		WPAD_Orientation(WPAD_CHAN_0, &self.orient);
-		wd = WPAD_Data(WPAD_CHAN_0);
-
-		pointer.p_x = self.ir.sx-200;
-		pointer.p_y = self.ir.sy-250;
-		pointer.p_ang = self.ir.angle/2; // Set angle/2 to translate correctly
+		GetWiimoteData();
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
-		{
 			doloop = false;
-		}
 		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
-		{
 			doloop = false;
-		}
-		
+
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 		{
 			if (Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
@@ -396,7 +385,7 @@ void Graphic_Settings_Menu(void)
 		}
 
 		// Draw the pointer hand
-		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		// Spit it out
 		GRRLIB_Render();
 		
@@ -418,15 +407,7 @@ void Settings_Menu(void)
 	/*Render and control Settings*/
 	do{
 		WPAD_ScanPads();
-		
-//		ir_t ir; // The struct for infrared
-		WPAD_IR(WPAD_CHAN_0, &self.ir); // Let's get our infrared data
-//		wd = WPAD_Data(WPAD_CHAN_0);
-
-		pointer.p_x = self.ir.sx-200;
-		pointer.p_y = self.ir.sy-250;
-		pointer.p_ang = self.ir.angle/2; // Set angle/2 to translate correctly
-
+		GetWiimoteData();
 
 		// Handle button events
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME || WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
@@ -563,8 +544,8 @@ void Settings_Menu(void)
 		// Draw text
 		GRRLIB_Printf(204, 60,  font_texture, SETTING_fontColor, 1.3, "Coverflow Settings");
 		GRRLIB_Printf(145, 93,  font_texture, SETTING_fontColor, 1, "Ocarina:");
-                GRRLIB_Printf(310, 93,  font_texture, SETTING_fontColor, 1, "Hook:");
-                GRRLIB_Printf(385, 93, font_texture, SETTING_fontColor, 1, "%s",hooks[SETTING_hooktype]);
+		GRRLIB_Printf(310, 93,  font_texture, SETTING_fontColor, 1, "Hook:");
+		GRRLIB_Printf(385, 93, font_texture, SETTING_fontColor, 1, "%s",hooks[SETTING_hooktype]);
 		GRRLIB_Printf(145, 128, font_texture, SETTING_fontColor, 1, "Language:");
 		GRRLIB_Printf(330, 128, font_texture, SETTING_fontColor, 1, "%s",languages[SETTING_language]);
 		GRRLIB_Printf(145, 157, font_texture, SETTING_fontColor, 1, "Video mode:");
@@ -583,7 +564,7 @@ void Settings_Menu(void)
 		Button_Paint(&langdownButton);
 		Button_Paint(&vidupButton);
 		Button_Paint(&viddownButton);
-                Button_Paint(&hookupButton);
+		Button_Paint(&hookupButton);
 		Button_Paint(&hookdownButton);
 		Button_Paint(&graphicsButton);
 		Button_Paint(&downloadButton);
@@ -614,7 +595,7 @@ void Settings_Menu(void)
 			Button_Hover(&musicOffButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&graphicsButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&downloadButton, pointer.p_x, pointer.p_y) ||
-                        Button_Hover(&hookupButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&hookupButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&hookdownButton, pointer.p_x, pointer.p_y))
 		{
 			// Should we be rumbling?
@@ -634,8 +615,8 @@ void Settings_Menu(void)
 			self.rumbleAmt = 5;
 		}
 		
-		// Draw the pointer hand
-		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		// Draw the default pointer hand
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		// Spit it out
 		GRRLIB_Render();
 		
@@ -903,6 +884,7 @@ void initVars(){
 	pointer.p_x = 0;
 	pointer.p_y = 0;
 	pointer.p_ang = 0;
+	pointer.p_type = 0;
 	
 	self.shift = 0;
 	self.select_shift = 0;
@@ -1205,18 +1187,8 @@ int main( int argc, char **argv )
 		#ifdef TEST_MODE
 		PAD_ScanPads();
 		#endif
-		
-//		ir_t ir; // The struct for infrared
-		
-		WPAD_IR(WPAD_CHAN_0, &self.ir); // Let's get our infrared data
-		WPAD_Orientation(WPAD_CHAN_0, &self.orient);
-		
-		//		wd = WPAD_Data(WPAD_CHAN_0);
 
-		pointer.p_x = self.ir.sx-200;
-		pointer.p_y = self.ir.sy-250;
-		pointer.p_ang = self.ir.angle/2; // Set angle/2 to translate correctly
-
+		GetWiimoteData();
 		//DrawBackground(SETTING_theme);
 
 		// Check for 'HOME' button press
@@ -1371,23 +1343,21 @@ int main( int argc, char **argv )
 			} // Check for B to control flow with wrist twist
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_DOWN)
 			{	
+				pointer.p_type = 1; //set cursor to rotating hand
+
 				if ((self.orient.roll < -10.0) || (self.orient.roll > 10.0)) // check for movement out of the -10.0 to 10.0 deg range (dead soze)
 				{
 					if (self.orient.roll > 0)
 					{
 						// flow right
 						if (!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0))) // watch for the end of the stack
-						{
 							self.shift -= change_scale(self.orient.roll, -90.0, 90.0, -0.3, 0.3);
-						}
 					}
 					else
 					{
 						// flow left
 						if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
-						{
 							self.shift -= change_scale(self.orient.roll, -90.0, 90.0, -0.3, 0.3);
-						}
 					}
 				}
 				if (SETTING_enablepitch)
@@ -1539,19 +1509,19 @@ int main( int argc, char **argv )
 		
 	
 #ifdef DEBUG
-		//display loaded IOS with revision number
 
-		//GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "Pitch: %f", self.orient.pitch);
-		//GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "adjPitch: %f", (change_scale(self.orient.pitch, -90, 90, -0.5, 0.5)) );
-		//GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "adjRoll: %f", (change_scale(self.orient.roll, -90, 90, -0.5, 0.5)) );
+//		GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "Pitch: %f", self.orient.pitch);
+//		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "adjPitch: %f", (change_scale(self.orient.pitch, -90, 90, -0.5, 0.5)) );
+//		GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "adjRoll: %f", (change_scale(self.orient.roll, -90, 90, -0.5, 0.5)) );
 //		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
-		// spit the FPS
-		//GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
-		//GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
-//		GRRLIB_Printf(500, 40, font_texture, 0x808080FF, 1, "Pointer: %d, %d", ir.sx, ir.sy);
+//		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
+//		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
+//		GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "IR     : %f, %f", self.ir.sx, self.ir.sy);
+//		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "Pointer: %f, %f", pointer.p_x, pointer.p_y);
 #endif
 		// Draw the pointing hand
-		GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		// Main loop Render()
         GRRLIB_Render();
 
         FPS = CalculateFrameRate();

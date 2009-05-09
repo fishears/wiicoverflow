@@ -11,6 +11,7 @@ void LoadTextures()
 	gradient_bg_strip_w = GRRLIB_LoadTexture(gradient_bg_strip_w_png);
 	gradient_bg_strip_b = GRRLIB_LoadTexture(gradient_bg_strip_b_png);
 	pointer_texture     = GRRLIB_LoadTexture(generic_point_png);
+	turn_point_texture  = GRRLIB_LoadTexture(turning_point_png);
 	menu_bg_texture		= GRRLIB_LoadTexture(menu_bg_png);
 	cover_texture		= GRRLIB_LoadTexture(no_cover_png);
 	back_texture		= GRRLIB_LoadTexture(back_cover_png);
@@ -392,6 +393,8 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		Button_Toggle_Paint(&bookmarkOffButton, &bookmarkOnButton, self.dummy);
 		Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
+//		Button_Hover(&bookmarkOnButton, pointer.p_x, pointer.p_y);
+//		Button_Hover(&bookmarkOffButton, pointer.p_x, pointer.p_y);
 		
 		if(!SETTING_parentalLock)
 			Button_Paint(&deleteButton);
@@ -600,14 +603,16 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 	do{
 		WPAD_ScanPads();
 		
-		ir_t ir; // The struct for infrared
-		
-		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
-		wd = WPAD_Data(WPAD_CHAN_0);
+		GetWiimoteData();
 
-		pointer.p_x = ir.sx-200;
-		pointer.p_y = ir.sy-250;
-		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
+//		ir_t ir; // The struct for infrared
+		
+//		WPAD_IR(WPAD_CHAN_0, &ir); // Let's get our infrared data
+//		wd = WPAD_Data(WPAD_CHAN_0);
+
+//		pointer.p_x = ir.sx-200;
+//		pointer.p_y = ir.sy-250;
+//		pointer.p_ang = ir.angle/2; // Set angle/2 to translate correctly
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 			exit(0);
@@ -659,9 +664,9 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			WPAD_Rumble(0,0);
 			self.rumbleAmt = 5;
 		}
-		// Draw the pointer hand
+		// Draw the default pointer hand
 		if(doloop)
-			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+			DrawCursor(0, pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		
 		GRRLIB_Render();
 		
@@ -735,4 +740,33 @@ int ProgressWindow(wbfs_t *hdd, char* title, char* msg)
 	
 	return ret;
 
+}
+
+void GetWiimoteData()
+{
+	WPAD_IR(WPAD_CHAN_0, &self.ir); // Let's get our infrared data
+	WPAD_Orientation(WPAD_CHAN_0, &self.orient);
+	
+	pointer.p_x = self.ir.sx-160; // This is to adjust to overscan
+	pointer.p_y = self.ir.sy-220; // Same
+	pointer.p_ang = self.ir.angle/2; // Set angle/2 to translate correctly
+	pointer.p_type = 0;
+}
+
+
+void DrawCursor(int type, f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color )
+{
+	switch (type)
+	{
+		case 0: // default cursor
+			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+			break;
+		case 1: // turning hand cursor
+			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, turn_point_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+			break;
+		default:
+			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+			break;
+	}
+	
 }
