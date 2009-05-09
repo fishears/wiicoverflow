@@ -5,6 +5,8 @@
 #include "button.h"
 
 #define FLIP_SPEED  0.016
+//testing
+//#define GAMESET
 
 char* _title;
 char* _msg;
@@ -91,6 +93,8 @@ Button resetButton;
 Button settingsButton;
 Button toggleOnButton;
 Button toggleOffButton;
+Button gamesettingsButton;
+Button gamebackButton;
 
 Button coverTextOnButton;
 Button coverTextOffButton;
@@ -158,6 +162,8 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 
 void ShowProgress (s32 done, s32 total);
 int ProgressWindow(wbfs_t *hdd, char* title, char* msg);
+
+void game_settings_menu(struct discHdr *gameList);
 
 #endif
 
