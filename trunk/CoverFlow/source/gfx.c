@@ -1,6 +1,7 @@
 #include "gfx.h"
 #include "settings.h"
 
+
 extern s_self self;
 extern s_pointer pointer;
 extern s_settings settings;
@@ -21,8 +22,10 @@ void LoadTextures()
 	slide_bar_texture_b = GRRLIB_LoadTexture(slide_bar_black_png);
 	load_bg_texture		= GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
 	font_texture        = GRRLIB_LoadTexture(BMfont5_png);
+	font_title           = GRRLIB_LoadTexture(font_w14_h20_png);
 	
 	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
+    GRRLIB_InitTileSet(&font_title, 14, 20, 32);
 }
 
 void DrawBufferedCover(int i, float loc, float angle)
@@ -113,7 +116,7 @@ void Init_Buttons()
 	okButton	    	= Button_Init(ok_png, ok_hover_png, 220, 250);
 	loadButton	    	= Button_Init(load_png, load_hover_png, 220, 300);
 	deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
-	resetButton		    = Button_Init(reset_png, reset_hover_png, 285, 320);
+	resetButton		    = Button_Init(reset_png, reset_hover_png, 350, 330);
 	backButton	    	= Button_Init(back_png, back_hover_png, 340, 300);
         gamebackButton	    	= Button_Init(back_png, back_hover_png, 340, 300);
         gamesettingsButton		= Button_Init(settings_png, settings_hover_png, 30, 420);
@@ -128,8 +131,8 @@ void Init_Buttons()
 	vidtvoffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 175);
     hookupButton		= Button_Init(plus_button_png, plus_button_hover_png, 456,87);
     hookdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 360,87);
-    coverTextOnButton	= Button_Init(toggle_on_png, toggle_on_png, 390, 287);
-    coverTextOffButton	= Button_Init(toggle_off_png, toggle_off_png, 390, 287);
+    coverTextOnButton	= Button_Init(toggle_on_png, toggle_on_png, 350, 291);
+    coverTextOffButton	= Button_Init(toggle_off_png, toggle_off_png, 350, 291);
     graphicsButton		= Button_Init(ok_png, ok_hover_png, 350, 210);
 	yesButton		    = Button_Init(yes_png, yes_hover_png, 220, 250);
 	noButton	        = Button_Init(no_png, no_hover_png, 340, 250);
@@ -143,8 +146,8 @@ void Init_Buttons()
 	angledownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,191);
 	windowupButton		= Button_Init(plus_button_png, plus_button_hover_png,456, 239);
 	windowdownButton	= Button_Init(minus_button_png, minus_button_hover_png, 300,239);
-	themeWhiteButton	= Button_Init(theme_white_png, theme_white_png, 350, 290);
-	themeBlackButton	= Button_Init(theme_black_png, theme_black_png, 350, 290);
+	themeWhiteButton	= Button_Init(theme_white_png, theme_white_png, 350, 291);
+	themeBlackButton	= Button_Init(theme_black_png, theme_black_png, 350, 291);
 	quickstartOnButton	= Button_Init(toggle_on_png, toggle_on_png, 350, 330);
 	quickstartOffButton	= Button_Init(toggle_off_png, toggle_off_png, 350, 330);
 	rumbleOnButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 370);
@@ -293,14 +296,12 @@ void draw_game_title(int index, float textSize, struct discHdr *gameList)
 		header = &gameList[index];
 		len = strlen(header->title);
 		
-		int offset = (len*5);
+		float offset = (len*7.9); // calc a font scaled offset from title length
 		
-		if(offset > 240)
-		{
-			offset = 240;
-		}
+		if((int)offset > 260)
+			offset = 260.0; // dont draw on top of the setting button
 		
-		GRRLIB_Printf(340 - offset, 400, font_texture, settings.fontColor, textSize, "%s", header->title);
+		GRRLIB_Printf(340 - (int)offset, 400, font_title, 0xFFFFFFFF, textSize, "%s", header->title);
 	}
 }
 
@@ -394,18 +395,15 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		
 		Button_Paint(&loadButton);
 		Button_Paint(&backButton);
-		
 		Button_Toggle_Paint(&bookmarkOffButton, &bookmarkOnButton, self.dummy);
-                if(!settings.parentalLock)
-                    Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
+		if(!settings.parentalLock)
+			Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
-                #ifdef GAMESET
-                Button_Paint(&gamesettingsButton);
-                Button_Hover(&gamesettingsButton, pointer.p_x, pointer.p_y);
-                #endif
-//		Button_Hover(&bookmarkOnButton, pointer.p_x, pointer.p_y);
-//		Button_Hover(&bookmarkOffButton, pointer.p_x, pointer.p_y);
 
+		#ifdef GAMESET
+		Button_Paint(&gamesettingsButton);
+		Button_Hover(&gamesettingsButton, pointer.p_x, pointer.p_y);
+		#endif
 
 		if(!settings.parentalLock)
 			Button_Paint(&deleteButton);
@@ -414,13 +412,26 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		struct discHdr *header = NULL;
 		header = &gameList[self.gameSelected];
 		f32 size = 0.0;
+		char gameName[21]; 
 
-		/* Get game size */
+		// chomp the title to fit
+		if(strlen(header->title) < 20)
+		{
+			sprintf(gameName, "%s", (header->title));
+		}
+		else
+		{
+			strncpy(gameName, header->title, 17);
+			gameName[17] = '\0';
+			strncat(gameName, "...", 3);
+		}
+		
+		// get game size
 		WBFS_GameSize(header->id, &size);
 
-		GRRLIB_Printf(280, 180, font_texture, settings.fontColor, 1, "%s", header->title);
-		GRRLIB_Printf(290, 210, font_texture, settings.fontColor, .8, " Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
-		GRRLIB_Printf(290, 230, font_texture, settings.fontColor, .8, " Size:    %.2fGB", size);
+		GRRLIB_Printf(280, 184, font_title, 0xFFFFFFFF, 1, "%s", gameName);
+		GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
+		GRRLIB_Printf(290, 230, font_title, 0xFFFFFFFF, .8, "Size:    %.2fGB", size);
 		#else
 		GRRLIB_Printf(280, 180, font_texture, settings.fontColor, 1, "%s", "Test Game Id Goes Here");
 		GRRLIB_Printf(290, 210, font_texture, settings.fontColor, .8, "%s", " Game ID: TEST");
@@ -648,8 +659,8 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			Button_Paint(choice_b);
 		
 		// Draw text
-        GRRLIB_Printf(160, 120, font_texture,  settings.fontColor, 1.5, "%s", title);
-        GRRLIB_Printf(150, 140, font_texture, settings.fontColor, 1, "%s", txt);
+        GRRLIB_Printf(145, 120, font_title, 0xFFFFFFFF, 1, "%s", title);
+        GRRLIB_Printf(150, 150, font_texture, settings.fontColor, 1, "%s", txt);
 	
 		// Check for button-pointer intersections, and rumble
 		if (Button_Hover(choice_a, pointer.p_x, pointer.p_y) ||
