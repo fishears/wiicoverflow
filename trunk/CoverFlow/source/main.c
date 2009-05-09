@@ -1131,7 +1131,6 @@ int main( int argc, char **argv )
 	
 	#else
 	self.gameCnt = 29;
-	Init_Covers();
 	#endif
 	
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
@@ -1151,7 +1150,9 @@ int main( int argc, char **argv )
 		Sleep(1);
 	}
 	
+	#ifndef TEST_MODE
 	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
+	#endif
 
 	// set the background
 	sprintf(self.debugMsg, "Setting background theme...");
@@ -1178,7 +1179,9 @@ int main( int argc, char **argv )
 	
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
-        ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
+	#ifndef TEST_MODE
+    ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
+	#endif
 	// Main coverflow screen gui loop
 	while(1) 
 	{
@@ -1524,8 +1527,8 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "Pitch: %f", self.orient.pitch);
 //		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "adjPitch: %f", (change_scale(self.orient.pitch, -90, 90, -0.5, 0.5)) );
 //		GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "adjRoll: %f", (change_scale(self.orient.roll, -90, 90, -0.5, 0.5)) );
-//		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
-//		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
+		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
+		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 //		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
 //		GRRLIB_Printf(50, 20, font_title, 0x808080FF, 1, "IR     : %f, %f", self.ir.sx, self.ir.sy);
 //		GRRLIB_Printf(50, 40, font_title, 0x808080FF, 1, "Pointer: %f, %f", pointer.p_x, pointer.p_y);
