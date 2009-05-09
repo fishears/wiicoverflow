@@ -327,18 +327,18 @@ void Graphic_Settings_Menu(void)
 		draw_covers();
 		// Draw menu dialog background
 		GRRLIB_2D_Init();
-		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.4, 0xFFFFFFFF);
+		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFFF);
 		// Draw text
-		GRRLIB_Printf(204, 60,  font_texture, settings.fontColor, 1.3, "Coverflow Settings (GFX)");
-		GRRLIB_Printf(145, 95, font_texture, settings.fontColor, 1, "Zoom:");
-		GRRLIB_Printf(330, 95, font_texture, settings.fontColor, 1, "%f", settings.coverZoom);
-		GRRLIB_Printf(145, 143, font_texture, settings.fontColor, 1, "Spacing:");
-		GRRLIB_Printf(330, 143, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
-		GRRLIB_Printf(145, 191, font_texture, settings.fontColor, 1, "Angle:");
-		GRRLIB_Printf(330, 191, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
-		GRRLIB_Printf(145, 239, font_texture, settings.fontColor, 1, "Draw Window:");
-		GRRLIB_Printf(330, 239, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
-		GRRLIB_Printf(145, 287, font_texture, settings.fontColor, 1, "Game Title:");
+		GRRLIB_Printf(190, 55,  font_title, 0xFFFFFFFF, 1, "Graphics Settings");
+		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, "Zoom:");
+		GRRLIB_Printf(350, 100, font_texture, 0x000000FF, 1, "%f", settings.coverZoom);
+		GRRLIB_Printf(145, 148, font_texture, settings.fontColor, 1, "Spacing:");
+		GRRLIB_Printf(350, 148, font_texture, 0x000000FF, 1, "%f", settings.coverSpacing);
+		GRRLIB_Printf(145, 197, font_texture, settings.fontColor, 1, "Angle:");
+		GRRLIB_Printf(350, 197, font_texture, 0x000000FF, 1, "%f", settings.coverAngle);
+		GRRLIB_Printf(145, 245, font_texture, settings.fontColor, 1, "Draw Window:");
+		GRRLIB_Printf(350, 245, font_texture, 0x000000FF, 1, "%d", settings.drawWindow);
+		GRRLIB_Printf(145, 292, font_texture, settings.fontColor, 1, "Game Title:");
 		
 		//Button_Theme_Paint(&settingsButton, settings.theme);
 		Button_Paint(&spacingupButton);
@@ -543,14 +543,14 @@ void Settings_Menu(void)
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFFF);
 		// Draw text
-		GRRLIB_Printf(204, 60,  font_texture, settings.fontColor, 1.3, "Coverflow Settings");
+		GRRLIB_Printf(184, 55,  font_title, 0xFFFFFFFF, 1, "Coverflow Settings");
 		GRRLIB_Printf(145, 93,  font_texture, settings.fontColor, 1, "Ocarina:");
 		GRRLIB_Printf(310, 93,  font_texture, settings.fontColor, 1, "Hook:");
-		GRRLIB_Printf(385, 93, font_texture, settings.fontColor, 1, "%s",hooks[settings.hooktype]);
+		GRRLIB_Printf(385, 93,  font_texture, 0x000000FF, 1, "%s",hooks[settings.hooktype]);
 		GRRLIB_Printf(145, 128, font_texture, settings.fontColor, 1, "Language:");
-		GRRLIB_Printf(330, 128, font_texture, settings.fontColor, 1, "%s",languages[settings.language]);
+		GRRLIB_Printf(330, 128, font_texture, 0x000000FF, 1, "%s",languages[settings.language]);
 		GRRLIB_Printf(145, 157, font_texture, settings.fontColor, 1, "Video mode:");
-		GRRLIB_Printf(330, 155, font_texture, settings.fontColor, 1, "%s",vidmodes[settings.video]);
+		GRRLIB_Printf(330, 155, font_texture, 0x000000FF, 1, "%s",vidmodes[settings.video]);
 		GRRLIB_Printf(145, 189, font_texture, settings.fontColor, 1, "VIDTV patch:");
 		GRRLIB_Printf(145, 221, font_texture, settings.fontColor, 1, "Graphics:");
 		GRRLIB_Printf(145, 260, font_texture, settings.fontColor, 1, "Missing Covers?:");
@@ -558,7 +558,7 @@ void Settings_Menu(void)
 		GRRLIB_Printf(145, 340, font_texture, settings.fontColor, 1, "1-Click Launch:");
 		GRRLIB_Printf(145, 380, font_texture, settings.fontColor, 1, "Rumble:");
 		GRRLIB_Printf(145, 420, font_texture, settings.fontColor, 1, "Music:");
-		GRRLIB_Printf(218, 446, font_texture, settings.fontColor, 1.15, "Press B to return");
+		//GRRLIB_Printf(218, 446, font_texture, settings.fontColor, 1.15, "Press B to return");
 
 		// Draw stateless buttons
 		Button_Paint(&langupButton);
@@ -1443,15 +1443,7 @@ int main( int argc, char **argv )
 					self.select_shift = 0;
 					self.shift = (int)self.shift;
 					select_ready = true;
-				
-					// Draw Game Title
-					if(settings.coverText)
-					{	
-						float t = 1.0; // add a configurable text size later
-						draw_game_title(self.gameSelected, t , gameList);
-					}
 				}
-					
 			}
 		}
 		
@@ -1496,6 +1488,14 @@ int main( int argc, char **argv )
             if(!settings.parentalLock)
                 Button_Theme_Paint(&addButton, settings.theme);
 			Button_Theme_Paint(&settingsButton, settings.theme);
+			
+			// Draw Game Title
+			if(settings.coverText)
+			{	
+				float t = 1.0; // add a configurable text size later
+				draw_game_title(self.gameSelected, t , gameList);
+			}
+			
 		}
 		
 		// Check for button-pointer intersections, and rumble
@@ -1527,8 +1527,8 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 //		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 //		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
-//		GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "IR     : %f, %f", self.ir.sx, self.ir.sy);
-//		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "Pointer: %f, %f", pointer.p_x, pointer.p_y);
+//		GRRLIB_Printf(50, 20, font_title, 0x808080FF, 1, "IR     : %f, %f", self.ir.sx, self.ir.sy);
+//		GRRLIB_Printf(50, 40, font_title, 0x808080FF, 1, "Pointer: %f, %f", pointer.p_x, pointer.p_y);
 #endif
 		// Draw the pointing hand
 		DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
