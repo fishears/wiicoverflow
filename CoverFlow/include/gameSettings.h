@@ -17,7 +17,7 @@ typedef struct{
 void initGameSettings(s_gameSettings* gs);
 bool getGameSettings(char* gameCode, s_gameSettings* gs);
 void succa(s_gameSettings* gs);
-void setGameSettings(char* gameCode, s_gameSettings* gs);
+void setGameSettings(char* gameCode, s_gameSettings* gs, int date);
 void createEmptyGameSettingsFile();
 
 #endif

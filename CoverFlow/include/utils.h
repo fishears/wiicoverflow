@@ -17,5 +17,6 @@
 u32 swap32(u32);
 void sysdate();
 void ios_version_check();
+u8 CalculateFrameRate();
 
 #endif

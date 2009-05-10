@@ -1,37 +1,34 @@
 #include "cover.h"
 
 extern s_self self;
+extern s_gameSettings gameSetting;
 
 void LoadCurrentCover(int id, struct discHdr *gameList)
 {
-
 	#ifndef TEST_MODE
 	void *imgData;// = (void *)no_cover_png;
 
 	char filepath[128];
-	s32  ret;
+	char titleID[7];
 
+	s32  ret;
 	struct discHdr *header = &gameList[id];
-	
-//		substr
-	
-	//sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c.png", header->id[0],header->id[1],header->id[2]);
+
 	sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c%c.png", header->id[0],header->id[1],header->id[2],header->id[3]);
 
 	ret = Fat_ReadFile(filepath, &imgData);
 	
+	sprintf(titleID, "%s", header->id);
+	getGameSettings(titleID, &gameSetting);
 	
-	if (ret > 0) {
+	if (ret > 0)
 		current_cover_texture = GRRLIB_LoadTexture((const unsigned char*)imgData);
-	}
-	else
-	{
+	else{
 		sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c.png", header->id[0],header->id[1],header->id[2]);
 		ret = Fat_ReadFile(filepath, &imgData);
-
-		if (ret > 0) {
+		
+		if (ret > 0)
 			current_cover_texture = GRRLIB_LoadTexture((const unsigned char*)imgData);
-		}
 		else
 			current_cover_texture = no_disc_texture;
 	}
@@ -39,7 +36,6 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 	#else
 	current_cover_texture = no_disc_texture;
 	#endif
-	
 }
 
 void AddCover(GRRLIB_texImg tex)

@@ -1,14 +1,5 @@
 #include "coverflow.h"
-
-#include "version.h"
-
 #include "partition.h"
-
-#include "homemenu.h"
-
-#include "subsystem.h"
-
-static u8 CalculateFrameRate();
 
 extern u8 shutdown;
 extern u8 reset;
@@ -41,8 +32,8 @@ char hooks[3][9] =
 {" Wii Pad"},
 {" GC Pad"}};
 /* Gamelist buffer */
-static struct discHdr *gameList = NULL;
 
+static struct discHdr *gameList = NULL;
 static wbfs_t *hdd = NULL;
 
 /* WBFS device */
@@ -60,17 +51,7 @@ int COVER_COUNT = 0;
 
 
 float SCROLL_SPEED = 0.050;
-
 bool imageNotFound = false;
-
-/*--------------------------------------*/
-#include "settings.h"
-
-
-Mtx GXmodelView2D;
-
-int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
-
 int buffer_window_min = 0;
 int buffer_window_max = 0;
 int oldmin = 0;
@@ -800,7 +781,6 @@ bool Menu_Delete(void)
 	
 	return false;
 }
-		
 
 bool Menu_Boot(void)
 {
@@ -814,7 +794,11 @@ bool Menu_Boot(void)
 
 	/* Selected game */
 	header = &gameList[self.gameSelected];
-
+	
+	char titleID[7];
+	sprintf(titleID, "%s", header->id);
+	setGameSettings(titleID,  &gameSetting, 1); // so we store last played setting ;)
+	
     GRRLIB_Exit();
 	
 	free(cover_texture.data);
@@ -1207,7 +1191,6 @@ int main( int argc, char **argv )
 	// Main coverflow screen gui loop
 	while(1) 
 	{
-
 		WPAD_ScanPads();
 		
 		#ifdef TEST_MODE
@@ -1221,7 +1204,6 @@ int main( int argc, char **argv )
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
 			SETTINGS_Save();
-			
 			HomeMenu_Show();
 		}
 		
@@ -1498,7 +1480,7 @@ int main( int argc, char **argv )
 		// Check to see if it's time to draw the game launch dialog panel
 		if(self.selected || self.animate_flip != 0)
 		{
-
+			
 			if (settings.quickstart)
 			{
 				LaunchGame();
@@ -1587,24 +1569,4 @@ int main( int argc, char **argv )
 	return 0;
 } 
 
-
-/**
- * This function calculates the number of frames we render each second.
- * It must be called right after GRRLIB_Render.
- * @return The number of frames per second.
- */
-static u8 CalculateFrameRate() {
-    static u8 frameCount = 0;
-    static u32 lastTime;
-    static u8 FPS = 0;
-    u32 currentTime = ticks_to_millisecs(gettime());
-	
-    frameCount++;
-    if(currentTime - lastTime > 1000) {
-        lastTime = currentTime;
-        FPS = frameCount;
-        frameCount = 0;
-    }
-    return FPS;
-}
 
