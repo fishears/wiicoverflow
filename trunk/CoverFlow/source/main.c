@@ -123,6 +123,9 @@ void quit()
 
 	BUFFER_KillBuffer();
 	
+	free(pointer_texture.data);
+	free(pointer_shadow_texture.data);
+	
 	/*
 	free(cover_texture.data);
 	free(back_texture.data);
@@ -908,6 +911,8 @@ void initVars(){
 	self.inetOk = false;
 	
 	self.dummy = 0;
+	
+	initGameSettings(&gameSetting);
 }
 
 bool LaunchGame()
@@ -1012,6 +1017,7 @@ int main( int argc, char **argv )
 	my_wbfsDev = WBFS_DEVICE_USB;
 	
 	checkDirs();
+	checkFiles();
 	Sys_Init();
 
 	//giving it a bit or a retry
@@ -1319,16 +1325,20 @@ int main( int argc, char **argv )
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
 						{	
 							self.dummy ^= 1;
-							//getGameSettings(, &gameSetting);
+							
+							/*
 							struct discHdr *header = &gameList[self.gameSelected];
 							char titleID[7];
 							sprintf(titleID, "%s", header->id);
-							//WindowPrompt("TITOLO", titleID, 0, &cancelButton);
+							
 							if(getGameSettings(titleID, &gameSetting))
-								WindowPrompt("Settings found for", titleID, 0, &cancelButton);
+								WindowPrompt(titleID, gameSetting.lastPlayed, 0, &cancelButton);
 							else
 								WindowPrompt("Settings NOT FOUND", titleID, 0, &cancelButton);
 							
+							succa(&gameSetting);
+							setGameSettings(titleID, &gameSetting);
+							*/
 						}
 					}
 				}

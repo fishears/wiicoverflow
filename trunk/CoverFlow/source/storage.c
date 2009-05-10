@@ -136,3 +136,15 @@ void checkDirs(){
 		}
 	}
 }
+
+void checkFiles(){
+	
+	FILE* fp;
+	
+	fp = fopen(USBLOADER_PATH "/gamelist.xml", "r");
+	
+	if(fp == NULL)
+		createEmptyGameSettingsFile();
+	else
+		fclose(fp);
+}

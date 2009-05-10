@@ -17,8 +17,8 @@ whitespace_cb(mxml_node_t *node,
 			return ("\n");
 	}
 	else if (!strcmp(name, "graphics") ||
-			 !strcmp(name, "general") ||
-			 !strcmp(name, "game"))
+			 !strcmp(name, "general"))// ||
+			 //!strcmp(name, "game"))
 	{
 		if (where == MXML_WS_BEFORE_OPEN)
 			return ("\t");
@@ -170,7 +170,7 @@ inline int SETTINGS_Load()
 inline int SETTINGS_Save()
 {
 
-	return 1; // REMOVE IT
+	//return 1; // REMOVE IT
 	
 	mxml_node_t *xml;
 	mxml_node_t *tree;

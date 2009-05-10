@@ -6,11 +6,11 @@ u32 swap32(u32 x)
 }
 
 
-void sysdate(){
+void sysdate(char* ret_string){
 
 	time_t now;
 	struct tm  *ts;
-	char string[128];
+	//char string[128];
 	char dow[12];
 	char month[12];
    
@@ -84,9 +84,9 @@ void sysdate(){
 		//	sprintf(month, "xxx: %d", ts->tm_mon);
 		
 	}
-	sprintf(string, "Sysdate: %s %d %s %d at %02d:%02d", dow, ts->tm_mday, month, 1900+ts->tm_year, ts->tm_hour, ts->tm_min);
-	
-	WindowPrompt("Message", string, &okButton, NULL);
+	sprintf(ret_string, "%s %d %s %d at %02d:%02d", dow, ts->tm_mday, month, 1900+ts->tm_year, ts->tm_hour, ts->tm_min);
+	//sprintf(ret_string, string);
+	//WindowPrompt("Message", string, &okButton, NULL);
 	
 }
 void ios_version_check()
