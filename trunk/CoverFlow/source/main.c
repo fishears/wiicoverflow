@@ -8,8 +8,6 @@
 
 #include "subsystem.h"
 
-//static char prozent[MAX_CHARACTERS + 16];
-//static char timet[MAX_CHARACTERS + 16];
 static u8 CalculateFrameRate();
 
 extern u8 shutdown;
@@ -65,20 +63,12 @@ float SCROLL_SPEED = 0.050;
 
 bool imageNotFound = false;
 
-//char* _title;
-//char* _msg;
-
 /*--------------------------------------*/
 #include "settings.h"
 
 
 Mtx GXmodelView2D;
 
-//int self.array_size = 0;
-
-
-//void Download_Cover(struct discHdr *header, int v, int max);
-//void batchDownloadCover();
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
 
 int buffer_window_min = 0;
@@ -1226,17 +1216,7 @@ int main( int argc, char **argv )
 		{
 			SETTINGS_Save();
 			
-			#ifdef USE_HOME_MENU
 			HomeMenu_Show();
-			#else
-			GRRLIB_FillScreen(0x000000FF);
-			GRRLIB_Render();
-			
-			//BUFFER_ClearCovers();
-			//BUFFER_KillBuffer();
-			Sleep(500);
-			quit();
-			#endif
 		}
 		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_B)

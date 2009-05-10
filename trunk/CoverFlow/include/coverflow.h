@@ -58,9 +58,6 @@
 //#define TEST_MODE 1
 #define DEBUG 1
 
-//Experimental Home Menu
-//#define USE_HOME_MENU 1
-
 #define KB_SIZE         1024.0
 #define MB_SIZE         1048576.0
 #define GB_SIZE         1073741824.0
