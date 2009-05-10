@@ -204,7 +204,7 @@ inline void HomeMenu_Show()
 		}
 
 		// Draw the default pointer hand
-		DrawCursor(0, pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		// Spit it out
 		GRRLIB_Render();
 		

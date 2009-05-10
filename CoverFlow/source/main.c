@@ -402,7 +402,7 @@ void Graphic_Settings_Menu(void)
 		}
 
 		// Draw the pointer hand
-		DrawCursor(0, pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		// Spit it out
 		GRRLIB_Render();
 		
@@ -633,7 +633,7 @@ void Settings_Menu(void)
 		}
 		
 		// Draw the default pointer hand
-		DrawCursor(0, pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		// Spit it out
 		GRRLIB_Render();
 		
@@ -1572,7 +1572,7 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(50, 40, font_title, 0x808080FF, 1, "Pointer: %f, %f", pointer.p_x, pointer.p_y);
 #endif
 		// Draw the pointing hand
-		DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		// Main loop Render()
         GRRLIB_Render();
 

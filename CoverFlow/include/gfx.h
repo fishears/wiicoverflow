@@ -146,7 +146,7 @@ void Paint_Progress_Generic(int v, int max, char* msg);
 void Init_Buttons();
 void GRRLIB_Cover(float pos, int texture_id);
 void GetWiimoteData();
-void DrawCursor(int type, f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color);
+void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 scaleY, u32 color);
 
 void DrawBackground(int theme_id); // takes a SETTING_theme, but defaults to black
 void DrawSlider(int theme_id);	   // takes a SETTING_theme, but defaults to black
