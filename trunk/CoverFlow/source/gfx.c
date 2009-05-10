@@ -10,19 +10,20 @@ static char timet[256];
 
 void LoadTextures()
 {
-	gradient_bg_strip_w = GRRLIB_LoadTexture(gradient_bg_strip_w_png);
-	gradient_bg_strip_b = GRRLIB_LoadTexture(gradient_bg_strip_b_png);
-	pointer_texture     = GRRLIB_LoadTexture(generic_point_png);
-	turn_point_texture  = GRRLIB_LoadTexture(turning_point_png);
-	menu_bg_texture		= GRRLIB_LoadTexture(menu_bg_png);
-	cover_texture		= GRRLIB_LoadTexture(no_cover_png);
-	back_texture		= GRRLIB_LoadTexture(back_cover_png);
-	no_disc_texture		= GRRLIB_LoadTexture(no_disc_png);
-	slide_bar_texture_w = GRRLIB_LoadTexture(slide_bar_white_png);
-	slide_bar_texture_b = GRRLIB_LoadTexture(slide_bar_black_png);
-	load_bg_texture		= GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
-	font_texture        = GRRLIB_LoadTexture(BMfont5_png);
-	font_title           = GRRLIB_LoadTexture(font_w14_h20_png);
+	gradient_bg_strip_w    = GRRLIB_LoadTexture(gradient_bg_strip_w_png);
+	gradient_bg_strip_b    = GRRLIB_LoadTexture(gradient_bg_strip_b_png);
+	pointer_texture        = GRRLIB_LoadTexture(generic_point_png);
+	pointer_shadow_texture = GRRLIB_LoadTexture(pointer_shadow_png);
+	turn_point_texture     = GRRLIB_LoadTexture(turning_point_png);
+	menu_bg_texture		   = GRRLIB_LoadTexture(menu_bg_png);
+	cover_texture		   = GRRLIB_LoadTexture(no_cover_png);
+	back_texture		   = GRRLIB_LoadTexture(back_cover_png);
+	no_disc_texture		   = GRRLIB_LoadTexture(no_disc_png);
+	slide_bar_texture_w    = GRRLIB_LoadTexture(slide_bar_white_png);
+	slide_bar_texture_b    = GRRLIB_LoadTexture(slide_bar_black_png);
+	load_bg_texture		   = GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
+	font_texture           = GRRLIB_LoadTexture(BMfont5_png);
+	font_title             = GRRLIB_LoadTexture(font_w14_h20_png);
 	
 	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
     GRRLIB_InitTileSet(&font_title, 14, 20, 32);
@@ -679,7 +680,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		}
 		// Draw the default pointer hand
 		if(doloop)
-			DrawCursor(0, pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+			DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		
 		GRRLIB_Render();
 		
@@ -767,8 +768,10 @@ void GetWiimoteData()
 }
 
 
-void DrawCursor(int type, f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color )
+void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 scaleY, u32 color )
 {
+	// draw the pointer shadow
+	GRRLIB_DrawImg(pointer.p_x+4, pointer.p_y+4, pointer_shadow_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 	switch (type)
 	{
 		case 0: // default cursor

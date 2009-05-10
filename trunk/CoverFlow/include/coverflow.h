@@ -102,6 +102,7 @@ extern const u8 gradient_bg_png[];
 extern const u8 slide_bar_white_png[];
 extern const u8 slide_bar_black_png[];
 extern const u8 generic_point_png[];
+extern const u8 pointer_shadow_png[];
 extern const u8 turning_point_png[];
 extern const u8 menu_bg_png[];
 extern const u8 gradient_bg_strip_w_png[];
@@ -110,6 +111,7 @@ extern const u8 font_w14_h20_png[]; // title font
 
 GRRLIB_texImg covers[MAX_COVERS];
 GRRLIB_texImg pointer_texture;
+GRRLIB_texImg pointer_shadow_texture;
 GRRLIB_texImg turn_point_texture;
 
 int COVER_COUNT;
