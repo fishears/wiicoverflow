@@ -20,20 +20,14 @@ pthread_mutex_t queue_mutex;
 
 extern pthread_mutex_t buffer_mutex[];
 
+//Cache that can be cleared
+int FloatingCacheCovers[MAX_BUFFERED_COVERS];
+
 /*Protect each buffer*/
 pthread_mutex_t buffer_mutex[MAX_BUFFERED_COVERS];
 	
 /*Protect quit*/
 pthread_mutex_t quit_mutex;
-
-typedef struct COVERQUEUE {
-	bool ready[MAX_BUFFERED_COVERS];
-	bool request[MAX_BUFFERED_COVERS];
-	struct discHdr *requestId[MAX_BUFFERED_COVERS];
-	bool remove[MAX_BUFFERED_COVERS];
-} COVERQUEUE;
-
-COVERQUEUE _cq;
 
 bool _requestQuit;
 
