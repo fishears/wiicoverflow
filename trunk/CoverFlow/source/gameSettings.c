@@ -108,6 +108,8 @@ bool getGameSettings(char* gameCode, s_gameSettings* gs){
 			}
 		}
 	}
+	
+	initGameSettings(gs); // put -1 everywhere if game is not found
 
 	return false;
 }
@@ -121,7 +123,7 @@ void succa(s_gameSettings* gs){
 	gs->vipatch = 5;
 }
 
-void setGameSettings(char* gameCode, s_gameSettings* gs){
+void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 	
 	FILE *fp;
 	mxml_node_t *xml;
@@ -179,8 +181,10 @@ void setGameSettings(char* gameCode, s_gameSettings* gs){
 								mxmlElementSetAttr(next_n, "vipatch", temp);
 							}
 							
-							sysdate(temp);
-							mxmlElementSetAttr(next_n, "lastplayed", temp);
+							if(date == 1){
+								sysdate(temp);
+								mxmlElementSetAttr(next_n, "lastplayed", temp);
+							}
 						}
 					}
 					
@@ -197,7 +201,6 @@ void setGameSettings(char* gameCode, s_gameSettings* gs){
 						mxmlElementSetAttr(new_node, "lastplayed", temp);
 						
 					}
-					
 					
 					fp = fopen(USBLOADER_PATH "/gamelist.xml", "w");
 					

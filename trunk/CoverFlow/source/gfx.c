@@ -1,10 +1,10 @@
 #include "gfx.h"
 #include "settings.h"
 
-
 extern s_self self;
 extern s_pointer pointer;
 extern s_settings settings;
+extern s_gameSettings gameSetting;
 
 static char timet[256];
 
@@ -119,8 +119,8 @@ void Init_Buttons()
 	deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
 	resetButton		    = Button_Init(reset_png, reset_hover_png, 350, 330);
 	backButton	    	= Button_Init(back_png, back_hover_png, 340, 300);
-        gamebackButton	    	= Button_Init(back_png, back_hover_png, 340, 300);
-        gamesettingsButton		= Button_Init(settings_png, settings_hover_png, 30, 420);
+    gamebackButton	    = Button_Init(back_png, back_hover_png, 340, 300);
+    gamesettingsButton	= Button_Init(settings_png, settings_hover_png, 30, 420);
 	cancelButton		= Button_Init(cancel_png, cancel_hover_png, 360, 250);
 	cheatonButton		= Button_Init(toggle_on_png, toggle_on_png, 215,85);
 	cheatoffButton		= Button_Init(toggle_off_png, toggle_off_png, 215,85);
@@ -364,7 +364,6 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		
 		if(self.animate_load < 15)
 			self.animate_load+=1;
-			
 	}
 	else if(hover)
 	{
@@ -391,8 +390,8 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		backButton.y = 260;
 		deleteButton.x = 450;
 		deleteButton.y = 260;
-                gamesettingsButton.x = 520;
-                gamesettingsButton.y = 320;
+		gamesettingsButton.x = 520;
+		gamesettingsButton.y = 320;
 		
 		Button_Paint(&loadButton);
 		Button_Paint(&backButton);
@@ -430,13 +429,17 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		// get game size
 		WBFS_GameSize(header->id, &size);
 
-		GRRLIB_Printf(280, 184, font_title, 0xFFFFFFFF, 1, "%s", gameName);
-		GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
+		GRRLIB_Printf(280, 174, font_title, 0xFFFFFFFF, 1, "%s", gameName);
+		//GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
+		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
+			GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Never played before");
+		else
+			GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Played %s",gameSetting.lastPlayed);
 		GRRLIB_Printf(290, 230, font_title, 0xFFFFFFFF, .8, "Size:    %.2fGB", size);
 		#else
-		GRRLIB_Printf(280, 180, font_texture, settings.fontColor, 1, "%s", "Test Game Id Goes Here");
-		GRRLIB_Printf(290, 210, font_texture, settings.fontColor, .8, "%s", " Game ID: TEST");
-		GRRLIB_Printf(290, 230, font_texture, settings.fontColor, .8, "%s", " Size:    2.0GB");
+		GRRLIB_Printf(280, 180, font_title, 0xFFFFFFFF, 1, "%s", "Test Game Id Goes Here");
+		GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "%s", " Game ID: TEST");
+		GRRLIB_Printf(290, 230, font_title, 0xFFFFFFFF, .8, "%s", " Size:    2.0GB");
 		#endif
 		
 		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
@@ -599,13 +602,13 @@ float change_scale_without_containing(float val, float in_min, float in_max, flo
 
 float change_scale(float val, float in_min, float in_max, float out_min, float out_max)
 {
-  if(val > in_max)
-	val = in_max;
+	if(val > in_max)
+		val = in_max;
   
-  if(val < in_min)
-	val = in_min;
+	if(val < in_min)
+		val = in_min;
   
-  return change_scale_without_containing(val, in_min, in_max, out_min, out_max);
+	return change_scale_without_containing(val, in_min, in_max, out_min, out_max);
 }
 
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b)

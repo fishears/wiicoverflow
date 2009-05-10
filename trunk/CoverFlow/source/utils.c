@@ -84,11 +84,13 @@ void sysdate(char* ret_string){
 		//	sprintf(month, "xxx: %d", ts->tm_mon);
 		
 	}
-	sprintf(ret_string, "%s %d %s %d at %02d:%02d", dow, ts->tm_mday, month, 1900+ts->tm_year, ts->tm_hour, ts->tm_min);
+	sprintf(ret_string, "%s %d %s %02d:%02d", dow, ts->tm_mday, month, ts->tm_hour, ts->tm_min);
+	//sprintf(ret_string, "%s %d %s %d at %02d:%02d", dow, ts->tm_mday, month, 1900+ts->tm_year, ts->tm_hour, ts->tm_min);
 	//sprintf(ret_string, string);
 	//WindowPrompt("Message", string, &okButton, NULL);
 	
 }
+
 void ios_version_check()
 {
     u32 iosrev = IOS_GetRevision();
@@ -98,4 +100,26 @@ void ios_version_check()
         sprintf(string, "Current: cIOS Rev%d  Required: cIOS Rev%d",iosrev, REQUIRED_IOS_REV);
         WindowPrompt("cIOS Upgrade Required",string, &okButton, 0);
     }
+}
+
+/**
+ * This function calculates the number of frames we render each second.
+ * It must be called right after GRRLIB_Render.
+ * @return The number of frames per second.
+ */
+u8 CalculateFrameRate()
+{
+
+    static u8 frameCount = 0;
+    static u32 lastTime;
+    static u8 FPS = 0;
+    u32 currentTime = ticks_to_millisecs(gettime());
+	
+    frameCount++;
+    if(currentTime - lastTime > 1000) {
+        lastTime = currentTime;
+        FPS = frameCount;
+        frameCount = 0;
+    }
+    return FPS;
 }

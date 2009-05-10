@@ -33,6 +33,11 @@
 #include "utils.h"
 #include "gameSettings.h"
 #include "mxml.h"
+#include "version.h"
+#include "homemenu.h"
+#include "subsystem.h"
+#include "settings.h"
+
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -87,8 +92,6 @@ enum {
 	FX_BUTTON_CLICK
 };
 
-
-
 extern const u8 no_cover_png[];
 extern const u8 back_cover_png[];
 extern const u8 no_disc_png[];
@@ -113,6 +116,7 @@ GRRLIB_texImg turn_point_texture;
 
 int COVER_COUNT;
 WPADData *wd;
+Mtx GXmodelView2D;
 
 typedef struct{
 	float p_x;

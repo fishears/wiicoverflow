@@ -4,18 +4,13 @@
 
 s_settings settings;
 /* my save callback */
-const char *
-whitespace_cb(mxml_node_t *node,
-			  int where)
+const char* whitespace_cb(mxml_node_t *node, int where)
 {
 	const char *name;
-
 	name = node->value.element.name;
 
 	if (!strcmp(name, "wiicoverflow"))
-	{
-			return ("\n");
-	}
+		return ("\n");	
 	else if (!strcmp(name, "graphics") ||
 			 !strcmp(name, "general"))// ||
 			 //!strcmp(name, "game"))
@@ -33,7 +28,7 @@ whitespace_cb(mxml_node_t *node,
 	return (NULL);
 }
 
-inline void SETTINGS_Init()
+void SETTINGS_Init()
 {
 	//Graphics
 	settings.coverZoom    = -2.0;
@@ -60,7 +55,7 @@ inline void SETTINGS_Init()
 	settings.vipatch      = 0;
 };
 
-inline int SETTINGS_Load()
+int SETTINGS_Load()
 {
   FILE *fp;
   mxml_node_t *xml;
@@ -167,11 +162,8 @@ inline int SETTINGS_Load()
   
 }
 
-inline int SETTINGS_Save()
+int SETTINGS_Save()
 {
-
-	//return 1; // REMOVE IT
-	
 	mxml_node_t *xml;
 	mxml_node_t *tree;
 	mxml_node_t *node;
