@@ -1271,12 +1271,6 @@ int main( int argc, char **argv )
 			{
 				Settings_Menu();
 			}
-                        #ifdef GAMESET
-                        else if(Button_Select(&gamesettingsButton, pointer.p_x, pointer.p_y))
-			{
-				game_settings_menu(gameList);
-			}
-                        #endif
 			else if(Button_Select(&slideButton, pointer.p_x, pointer.p_y))
 			{
 				dragging = true;
@@ -1331,11 +1325,17 @@ int main( int argc, char **argv )
 							// User clicked back button
 							self.selected = false;
 						}
+                                                #ifdef GAMESET
                                                 else if(Button_Select(&gamebackButton, pointer.p_x, pointer.p_y)) // back
 						{
 							// User clicked game back button
 							self.selected = false;
 						}
+                                                else if(Button_Select(&gamesettingsButton, pointer.p_x, pointer.p_y))
+                                                {
+                                                        game_settings_menu(gameList);
+                                                }
+                                                #endif
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
 						{	
 							self.dummy ^= 1;

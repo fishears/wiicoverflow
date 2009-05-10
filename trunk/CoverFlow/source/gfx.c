@@ -788,79 +788,22 @@ void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 s
 }
 void game_settings_menu(struct discHdr *gameList)
 {
-	float dir = 1;
-	float loc, scale, angle;
+    //this needs to be a loop, checking its own buttons and returning to load menu when done, OK
+    #ifdef GAMESET
+    GRRLIB_DrawImg(80, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 
-	loc = settings.coverSpacing * dir * (pow(1, -1) - 1);
-	scale = change_scale(self.animate_flip, 0, 1, 0, 270);
-	angle = -1 * dir * scale;
+    gamebackButton.x = 370;
+    gamebackButton.y = 260;
 
-	if(scale >= 250)
-	{
-		GRRLIB_DrawImg(80, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+    Button_Paint(&gamebackButton);
 
-		gamebackButton.x = 370;
-		gamebackButton.y = 260;
+    Button_Hover(&gamebackButton, pointer.p_x, pointer.p_y);
 
-		Button_Paint(&gamebackButton);
-
-                #ifdef GAMESET
-		Button_Hover(&gamebackButton, pointer.p_x, pointer.p_y);
-                #endif
-//		Button_Hover(&bookmarkOnButton, pointer.p_x, pointer.p_y);
-//		Button_Hover(&bookmarkOffButton, pointer.p_x, pointer.p_y);
-
-		struct discHdr *header = NULL;
-		header = &gameList[self.gameSelected];
-                GRRLIB_Printf(280, 160, font_texture, settings.fontColor, 1, "Game Settings");
-		GRRLIB_Printf(280, 180, font_texture, settings.fontColor, 1, "%s", header->title);
-
-		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-			GRRLIB_DrawImg(102+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
-		else
-			GRRLIB_DrawImg(102+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
-
-		if(self.gameSelected < MAX_BUFFERED_COVERS || self.gameSelected >= 0)
-		{
-			if(BUFFER_IsCoverReady(self.gameSelected))
-			{
-				pthread_mutex_lock(&buffer_mutex[self.gameSelected]);
-				if(_texture_data[self.gameSelected].data)
-				{
-					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-						GRRLIB_DrawImg(88, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
-					else
-						GRRLIB_DrawImg(102, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
-				}
-				else
-				{
-					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-						GRRLIB_DrawImg(88, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
-					else
-						GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-				}
-
-				pthread_mutex_unlock(&buffer_mutex[self.gameSelected]);
-			}
-			else
-			{
-				GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-			}
-		}
-		else
-		{
-			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-				GRRLIB_DrawImg(88, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
-			else
-				GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-		}
-
-  }
-  else
-  {
-	DrawBufferedCover(self.gameSelected, loc, angle);
-  }
-
-  return;
+    struct discHdr *header = NULL;
+    header = &gameList[self.gameSelected];
+    GRRLIB_Printf(280, 160, font_texture, settings.fontColor, 1, "Game Settings");
+    GRRLIB_Printf(280, 180, font_texture, settings.fontColor, 1, "%s", header->title);
+    #endif
+    return;
 }
 
