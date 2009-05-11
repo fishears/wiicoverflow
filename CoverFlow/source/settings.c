@@ -62,7 +62,7 @@ int SETTINGS_Load()
   FILE *fp;
   mxml_node_t *xml;
 
-  fp = fopen("wiicoverflow.xml", "r");
+  fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
   
   if(fp == NULL)
      return -1;
@@ -237,7 +237,7 @@ int SETTINGS_Save()
 	
 	FILE *fp;
 
-	fp = fopen("wiicoverflow.xml", "w");
+	fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "w");
         
 	if(fp != NULL)
 	{
