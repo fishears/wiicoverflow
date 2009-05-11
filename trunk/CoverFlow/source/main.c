@@ -622,12 +622,18 @@ void Settings_Menu(void)
 			Sys_Reboot(); 
 		}
 	}while(doloop);
+	
+	WPAD_Rumble(0,0);
+	self.rumbleAmt = 0;
 }
 
 
 bool Menu_Install(void)
 {
 
+	WPAD_Rumble(0,0);
+	self.rumbleAmt = 0;
+	
     static struct discHdr headerdisc ATTRIBUTE_ALIGN(32);
 	
 	if(!WindowPrompt ("Install new Game?", "Place disk in drive and hit ok.",&okButton,&cancelButton))
@@ -741,6 +747,10 @@ void AddGame(void)
 
 bool Menu_Delete(void)
 {
+
+	WPAD_Rumble(0,0);
+	self.rumbleAmt = 0;
+	
 	struct discHdr *header = NULL;
  	char gameName[31]; 
 	
@@ -786,6 +796,10 @@ bool Menu_Delete(void)
 
 bool Menu_Boot(void)
 {
+
+	WPAD_Rumble(0,0);
+	self.rumbleAmt = 0;
+	
 	#ifndef TEST_MODE
 	struct discHdr *header = NULL;
 	//int i = 0;
@@ -1022,6 +1036,8 @@ int main( int argc, char **argv )
 				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "USB Error - Drive not found");
 				GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, "Press A to Retry, B to Exit");
+				
+				GRRLIB_Printf(190,190, font_texture, settings.fontColor, 1, "Retries Left: %d", retries);
 				GRRLIB_Render();
 			}
 				
@@ -1212,6 +1228,9 @@ int main( int argc, char **argv )
 			SOUND_PlaySound(FX_COVER_FLIP, 0);
 			SETTINGS_Save();
 			HomeMenu_Show();
+					
+			WPAD_Rumble(0,0);
+			self.rumbleAmt = 0;
 		}
 		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_B)
