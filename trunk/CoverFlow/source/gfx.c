@@ -5,6 +5,32 @@ extern s_self self;
 extern s_pointer pointer;
 extern s_settings settings;
 extern s_gameSettings gameSetting;
+// Language selection config
+char glanguages[11][22] =
+{{"Console Default"},
+{"   Japanese"},
+{"    English"},
+{"    German"},
+{"    French"},
+{"    Spanish"},
+{"    Italian"},
+{"     Dutch"},
+{"   S. Chinese"},
+{"   T. Chinese"},
+{"    Korean"}};
+//video mode text
+char gvidmodes[6][22] =
+{{ "  Game Default" },
+{ "   Automatic", },
+{ "  Force PAL50", },
+{ "  Force PAL60", },
+{ "  Force NTSC", },
+{ "Console Default"}};
+//hook types for ocarina
+char ghooks[3][9] =
+{{"   VI"},
+{" Wii Pad"},
+{" GC Pad"}};
 
 static char timet[256];
 
@@ -113,56 +139,66 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 void Init_Buttons()
 {
     addButton			= Button_Init(add_button_png, add_button_hover_png, 580, 417);
-	slideButton	    	= Button_Init(slide_png, slide_hover_png, 580, 400);
-	okButton	    	= Button_Init(ok_png, ok_hover_png, 220, 250);
-	loadButton	    	= Button_Init(load_png, load_hover_png, 220, 300);
-	deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
-	resetButton		    = Button_Init(reset_png, reset_hover_png, 350, 330);
-	backButton	    	= Button_Init(back_png, back_hover_png, 340, 300);
-    gamebackButton	    = Button_Init(back_png, back_hover_png, 340, 300);
-    gamesettingsButton	= Button_Init(settings_png, settings_hover_png, 30, 420);
-	cancelButton		= Button_Init(cancel_png, cancel_hover_png, 360, 250);
-	cheatonButton		= Button_Init(toggle_on_png, toggle_on_png, 215,85);
-	cheatoffButton		= Button_Init(toggle_off_png, toggle_off_png, 215,85);
-	langupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,123);
-	langdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,123);
-    vidupButton         = Button_Init(plus_button_png, plus_button_hover_png, 456,150);
+    slideButton             = Button_Init(slide_png, slide_hover_png, 580, 400);
+    okButton                = Button_Init(ok_png, ok_hover_png, 220, 250);
+    loadButton              = Button_Init(load_png, load_hover_png, 220, 300);
+    deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
+    resetButton		    = Button_Init(reset_png, reset_hover_png, 350, 330);
+    backButton              = Button_Init(back_png, back_hover_png, 340, 300);
+    gbackButton             = Button_Init(back_png, back_hover_png, 340, 300);
+    gsettingsButton         = Button_Init(settings_png, settings_hover_png, 30, 420);
+    cancelButton		= Button_Init(cancel_png, cancel_hover_png, 360, 250);
+    cheatonButton		= Button_Init(toggle_on_png, toggle_on_png, 215,85);
+    cheatoffButton		= Button_Init(toggle_off_png, toggle_off_png, 215,85);
+    langupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,123);
+    langdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,123);
+    vidupButton             = Button_Init(plus_button_png, plus_button_hover_png, 456,150);
     viddownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,150);
-	vidtvonButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 175);
-	vidtvoffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 175);
+    vidtvonButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 175);
+    vidtvoffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 175);
     hookupButton		= Button_Init(plus_button_png, plus_button_hover_png, 456,87);
     hookdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 360,87);
-    coverTextOnButton	= Button_Init(toggle_on_png, toggle_on_png, 350, 291);
-    coverTextOffButton	= Button_Init(toggle_off_png, toggle_off_png, 350, 291);
-    graphicsButton		= Button_Init(ok_png, ok_hover_png, 350, 210);
-	yesButton		    = Button_Init(yes_png, yes_hover_png, 220, 250);
-	noButton	        = Button_Init(no_png, no_hover_png, 340, 250);
-	settingsButton		= Button_Init(settings_png, settings_hover_png, 30, 420);
-	downloadButton		= Button_Init(download_png, download_hover_png, 350, 250);
-	spacingupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,138);
-	spacingdownButton	= Button_Init(minus_button_png, minus_button_hover_png, 300,138);
-	zoomupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,95);
-	zoomdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,95);
-	angleupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,191);
-	angledownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,191);
-	windowupButton		= Button_Init(plus_button_png, plus_button_hover_png,456, 239);
-	windowdownButton	= Button_Init(minus_button_png, minus_button_hover_png, 300,239);
-	themeWhiteButton	= Button_Init(theme_white_png, theme_white_png, 350, 291);
-	themeBlackButton	= Button_Init(theme_black_png, theme_black_png, 350, 291);
-	quickstartOnButton	= Button_Init(toggle_on_png, toggle_on_png, 350, 330);
-	quickstartOffButton	= Button_Init(toggle_off_png, toggle_off_png, 350, 330);
-	rumbleOnButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 370);
-	rumbleOffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 370);
-	musicOnButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 410);
-	musicOffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 410);
-	bookmarkOnButton    = Button_Init(star_on_png, star_on_png, 520, 130);
-	bookmarkOffButton   = Button_Init(star_off_png, star_on_png, 520, 130);
+    gcheatonButton          = Button_Init(toggle_on_png, toggle_on_png, 255,185);
+    gcheatoffButton         = Button_Init(toggle_off_png, toggle_off_png, 255,185);
+    glangupButton           = Button_Init(plus_button_png, plus_button_hover_png,496,223);
+    glangdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 340,223);
+    gvidupButton            = Button_Init(plus_button_png, plus_button_hover_png, 496,250);
+    gviddownButton          = Button_Init(minus_button_png, minus_button_hover_png, 340,250);
+    gvidtvonButton          = Button_Init(toggle_on_png, toggle_on_png, 390, 275);
+    gvidtvoffButton         = Button_Init(toggle_off_png, toggle_off_png, 390, 275);
+    ghookupButton           = Button_Init(plus_button_png, plus_button_hover_png, 496,187);
+    ghookdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 400,187);
+    coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 291);
+    coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 291);
+    graphicsButton          = Button_Init(ok_png, ok_hover_png, 350, 210);
+    yesButton		    = Button_Init(yes_png, yes_hover_png, 220, 250);
+    noButton                = Button_Init(no_png, no_hover_png, 340, 250);
+    settingsButton		= Button_Init(settings_png, settings_hover_png, 30, 420);
+    downloadButton		= Button_Init(download_png, download_hover_png, 350, 250);
+    spacingupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,138);
+    spacingdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,138);
+    zoomupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,95);
+    zoomdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,95);
+    angleupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,191);
+    angledownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,191);
+    windowupButton		= Button_Init(plus_button_png, plus_button_hover_png,456, 239);
+    windowdownButton        = Button_Init(minus_button_png, minus_button_hover_png, 300,239);
+    themeWhiteButton        = Button_Init(theme_white_png, theme_white_png, 350, 291);
+    themeBlackButton        = Button_Init(theme_black_png, theme_black_png, 350, 291);
+    quickstartOnButton      = Button_Init(toggle_on_png, toggle_on_png, 350, 330);
+    quickstartOffButton     = Button_Init(toggle_off_png, toggle_off_png, 350, 330);
+    rumbleOnButton          = Button_Init(toggle_on_png, toggle_on_png, 350, 370);
+    rumbleOffButton         = Button_Init(toggle_off_png, toggle_off_png, 350, 370);
+    musicOnButton           = Button_Init(toggle_on_png, toggle_on_png, 350, 410);
+    musicOffButton          = Button_Init(toggle_off_png, toggle_off_png, 350, 410);
+    bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 520, 130);
+    bookmarkOffButton       = Button_Init(star_off_png, star_on_png, 520, 130);
 
-	homeMenuTopButton	 = Button_Init(homeTop_png, homeTop_hover_png, 0, 0);
-	homeMenuBottomButton = Button_Init(homeBottom_png, homeBottom_hover_png, 0, 368);
-	wiiMenuButton		 = Button_Init(wiiMenu_png, wiiMenu_hover_png, 34, 180);
-	loaderButton		 = Button_Init(loader_png, loader_hover_png, 174, 180);
-	wiimoteButton		 = Button_Init(wiimote_png, wiimote_png, 64, 400);
+    homeMenuTopButton       = Button_Init(homeTop_png, homeTop_hover_png, 0, 0);
+    homeMenuBottomButton    = Button_Init(homeBottom_png, homeBottom_hover_png, 0, 368);
+    wiiMenuButton           = Button_Init(wiiMenu_png, wiiMenu_hover_png, 34, 180);
+    loaderButton            = Button_Init(loader_png, loader_hover_png, 174, 180);
+    wiimoteButton           = Button_Init(wiimote_png, wiimote_png, 64, 400);
 	
 }
 
@@ -310,7 +346,7 @@ void draw_game_title(int index, float textSize, struct discHdr *gameList)
 
 int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 {
-	/*Animate fliping cover*/
+        /*Animate fliping cover*/
 	if(self.selected && self.animate_flip < 1.0)
 	{
 		self.animate_rotate = 0.0;
@@ -392,8 +428,8 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		backButton.y = 260;
 		deleteButton.x = 450;
 		deleteButton.y = 260;
-		gamesettingsButton.x = 520;
-		gamesettingsButton.y = 320;
+		gsettingsButton.x = 525;
+		gsettingsButton.y = 320;
 		
 		Button_Paint(&loadButton);
 		Button_Paint(&backButton);
@@ -401,12 +437,10 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		if(!settings.parentalLock)
 			Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
-
-		#ifdef GAMESET
-		Button_Paint(&gamesettingsButton);
-		Button_Hover(&gamesettingsButton, pointer.p_x, pointer.p_y);
-		#endif
-
+                #ifdef GAMESET
+		Button_Paint(&gsettingsButton);
+		Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y);
+                #endif
 		if(!settings.parentalLock)
 			Button_Paint(&deleteButton);
 		
@@ -794,21 +828,171 @@ void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 s
 void game_settings_menu(struct discHdr *gameList)
 {
     //this needs to be a loop, checking its own buttons and returning to load menu when done, OK
-    #ifdef GAMESET
-    GRRLIB_DrawImg(80, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 
-    gamebackButton.x = 370;
-    gamebackButton.y = 260;
-
-    Button_Paint(&gamebackButton);
-
-    Button_Hover(&gamebackButton, pointer.p_x, pointer.p_y);
-
+    //get/set per-game settings
     struct discHdr *header = NULL;
     header = &gameList[self.gameSelected];
-    GRRLIB_Printf(280, 160, font_texture, settings.fontColor, 1, "Game Settings");
-    GRRLIB_Printf(280, 180, font_texture, settings.fontColor, 1, "%s", header->title);
-    #endif
+    char titleID[7];
+    sprintf(titleID, "%s", header->id);
+
+    //if no game settings found then set defaults to values of global game settings
+    if(!getGameSettings(titleID, &gameSetting))
+    {
+        gameSetting.ocarina = settings.ocarina;
+        gameSetting.hooktype = settings.hooktype;
+        gameSetting.language = settings.language;
+        gameSetting.video = settings.video;
+        gameSetting.vipatch = settings.vipatch;
+    }
+
+    //succa(&gameSetting);
+
+    bool doloop = true;
+    do{
+		WPAD_ScanPads();
+
+		GetWiimoteData();
+
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
+                    setGameSettings(titleID, &gameSetting,-1);
+                    return;
+
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+                        setGameSettings(titleID, &gameSetting,-1);
+			return;
+
+		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+		{
+                    if(Button_Select(&gbackButton, pointer.p_x, pointer.p_y))
+                    {
+                        setGameSettings(titleID, &gameSetting,-1);
+                        return;
+                    }
+                    else if (Button_Select(&gcheatonButton, pointer.p_x, pointer.p_y) || Button_Select(&gcheatoffButton, pointer.p_x, pointer.p_y))
+                    {
+                            gameSetting.ocarina = (gameSetting.ocarina) ? 0 : 1; // Clicked the Ocarina button, toggle state
+                    }
+                    else if (Button_Select(&gvidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&gvidtvoffButton, pointer.p_x, pointer.p_y))
+                    {
+                        gameSetting.vipatch = (gameSetting.vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
+                    }
+                    else if (Button_Select(&glangdownButton, pointer.p_x, pointer.p_y))
+                    { // Clicked on the language buttons
+                            if (gameSetting.language > 0)
+                            {
+                                    gameSetting.language --;
+                            }
+                            else
+                            {
+                                    gameSetting.language = (CFG_LANG_COUNT - 1);
+                            }
+                    }
+                    else if (Button_Select(&glangupButton, pointer.p_x, pointer.p_y))
+                    {
+                            if (gameSetting.language < (CFG_LANG_COUNT - 1))
+                            {
+                                    gameSetting.language ++;
+                            }
+                            else
+                            {
+                                    gameSetting.language = 0;
+                            }
+                    }
+                    else if (Button_Select(&ghookdownButton, pointer.p_x, pointer.p_y))
+                    { // Clicked on the hooktype buttons
+                            if (gameSetting.hooktype > 0)
+                            {
+                                    gameSetting.hooktype --;
+                            }
+                            else
+                            {
+                                    gameSetting.hooktype = (CFG_HOOK_COUNT - 1);
+                            }
+                    }
+                    else if (Button_Select(&ghookupButton, pointer.p_x, pointer.p_y))
+                    {
+                            if (gameSetting.hooktype < (CFG_HOOK_COUNT - 1))
+                            {
+                                    gameSetting.hooktype ++;
+                            }
+                            else
+                            {
+                                    gameSetting.hooktype = 0;
+                            }
+                    }
+                    else if (Button_Select(&gviddownButton, pointer.p_x,pointer.p_y))
+                    {
+                            // Clicked on the video down button
+                            if (gameSetting.video > 0)
+                            {
+                                    gameSetting.video --;
+                            }
+                            else
+                            {
+                                    gameSetting.video = (CFG_VIDEO_COUNT -1);
+                            }
+                    }
+                    else if (Button_Select(&gvidupButton, pointer.p_x,pointer.p_y))
+                    {
+                            // Clicked on the video up button
+                            if (gameSetting.video <(CFG_VIDEO_COUNT -1))
+                            {
+                                    gameSetting.video ++;
+                            }
+                            else
+                            {
+                                    gameSetting.video = 0;
+                            }
+                    }
+		}
+
+                //GRRLIB_FillScreen(0x000000FF);
+                GRRLIB_DrawImg(80, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+
+                gbackButton.x = 490;
+                gbackButton.y = 320;
+
+                Button_Paint(&gbackButton);
+                Button_Paint(&glangupButton);
+		Button_Paint(&glangdownButton);
+		Button_Paint(&gvidupButton);
+		Button_Paint(&gviddownButton);
+		Button_Paint(&ghookupButton);
+		Button_Paint(&ghookdownButton);
+                Button_Toggle_Paint(&gcheatoffButton, &cheatonButton, gameSetting.ocarina);
+		Button_Toggle_Paint(&gvidtvoffButton, &vidtvonButton, gameSetting.vipatch);
+
+                Button_Hover(&gbackButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&glangupButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&glangdownButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&gvidupButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&gviddownButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&gcheatoffButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&gcheatonButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&gvidtvoffButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&gvidtvonButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&ghookupButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
+
+                //BUTTON TEXT
+		GRRLIB_Printf(185, 145,  font_title, settings.fontColor, 1, "%s: settings", header->title);
+		GRRLIB_Printf(185, 193,  font_texture, settings.fontColor, 1, "Ocarina:");
+		GRRLIB_Printf(350, 193,  font_texture, settings.fontColor, 1, "Hook:");
+		GRRLIB_Printf(425, 193,  font_texture, 0x000000FF, 1, "%s",ghooks[gameSetting.hooktype]);
+		GRRLIB_Printf(185, 228, font_texture, settings.fontColor, 1, "Language:");
+		GRRLIB_Printf(370, 228, font_texture, 0x000000FF, 1, "%s",glanguages[gameSetting.language]);
+		GRRLIB_Printf(185, 257, font_texture, settings.fontColor, 1, "Video mode:");
+		GRRLIB_Printf(370, 255, font_texture, 0x000000FF, 1, "%s",gvidmodes[gameSetting.video]);
+		GRRLIB_Printf(185, 289, font_texture, settings.fontColor, 1, "VIDTV patch:");
+
+		// Draw the default pointer hand
+		if(doloop)
+			DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+
+		GRRLIB_Render();
+
+	}while(doloop);
+
     return;
 }
 

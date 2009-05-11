@@ -49,7 +49,7 @@ void SETTINGS_Init()
 	settings.quickstart   = 0;
 	settings.enablepitch  = 0;
 
-	//Game
+	//Global Game
 	settings.ocarina      = 0;
 	settings.hooktype     = 0;
 	settings.language     = 0;
@@ -132,7 +132,7 @@ int SETTINGS_Load()
 	  {
 		 return -1;
 	  }
-	  /*
+	  
 	  next_n = mxmlFindElement(node, node, "game", NULL, NULL, MXML_DESCEND);
 
 	  if(next_n != NULL)
@@ -152,7 +152,7 @@ int SETTINGS_Load()
 	  {
 		 return -1;
 	  }
-	  */
+	 
 	  return 1;
   }
   else
@@ -217,8 +217,8 @@ int SETTINGS_Save()
 	sprintf(buffer, "%d", settings.enablepitch);
 	mxmlElementSetAttr(node, "enablepitch", buffer);
 
-    //GAME SETTINGS
-	/*
+    //GLOBAL GAME SETTINGS
+	
 	node = mxmlNewElement(tree, "game");
 	sprintf(buffer, "%d", settings.ocarina);
 	mxmlElementSetAttr(node, "ocarina", buffer);
@@ -234,7 +234,7 @@ int SETTINGS_Save()
 
 	sprintf(buffer, "%d", settings.vipatch);
 	mxmlElementSetAttr(node, "vipatch", buffer);
-	*/
+	
 	FILE *fp;
 
 	fp = fopen("wiicoverflow.xml", "w");
