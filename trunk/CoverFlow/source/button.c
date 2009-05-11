@@ -1,6 +1,8 @@
 
 #include "button.h"
 
+#include "soundmanager.h"
+
 Button Button_Init(const unsigned char normal_img[], const unsigned char hover_img[], int x, int y)
 {
 	Button new_button;
@@ -41,6 +43,11 @@ bool Button_Select(struct Button* btn, int x, int y)
 		btn->hovering = true;
 	else
 		btn->hovering = false;
+	
+	if(btn->hovering)
+	{
+		SOUND_PlaySound(FX_BUTTON_CLICK, 0);
+	}
 	
 	return btn->hovering;
 }

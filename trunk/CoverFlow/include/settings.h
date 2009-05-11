@@ -9,6 +9,8 @@ typedef struct {
     int theme;
     int fontColor; // stores the hex val of the theme
 
+	int volume;
+
     int sound;
     int music;
     int parentalLock;

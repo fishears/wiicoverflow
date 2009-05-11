@@ -1,6 +1,8 @@
 #include "coverflow.h"
 #include "partition.h"
 
+#include "soundmanager.h"
+
 extern u8 shutdown;
 extern u8 reset;
 extern s_settings settings;
@@ -547,7 +549,7 @@ void Settings_Menu(void)
 		GRRLIB_Printf(145, 300, font_texture, settings.fontColor, 1, "Theme:");
 		GRRLIB_Printf(145, 340, font_texture, settings.fontColor, 1, "1-Click Launch:");
 		GRRLIB_Printf(145, 380, font_texture, settings.fontColor, 1, "Rumble:");
-		GRRLIB_Printf(145, 420, font_texture, settings.fontColor, 1, "Music:");
+		GRRLIB_Printf(145, 420, font_texture, settings.fontColor, 1, "Sound:");
 		//GRRLIB_Printf(218, 446, font_texture, settings.fontColor, 1.15, "Press B to return");
 
 		// Draw stateless buttons
@@ -1188,6 +1190,10 @@ int main( int argc, char **argv )
 	#ifndef TEST_MODE
     ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
 	#endif
+	
+	SOUND_Init();
+	
+	
 	// Main coverflow screen gui loop
 	while(1) 
 	{
@@ -1203,6 +1209,7 @@ int main( int argc, char **argv )
 		// Check for 'HOME' button press
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 		{
+			SOUND_PlaySound(FX_COVER_FLIP, 0);
 			SETTINGS_Save();
 			HomeMenu_Show();
 		}
@@ -1256,6 +1263,7 @@ int main( int argc, char **argv )
 							if(select_ready && self.select_shift == 0.0)
 							{
 								// the center cover was selected so set the flag and load the game texture into buffer
+								SOUND_PlaySound(FX_COVER_FLIP, 0);
 								self.selected = true;
 								LoadCurrentCover(self.gameSelected, gameList);
 							}
@@ -1414,7 +1422,8 @@ int main( int argc, char **argv )
 			}
 			else if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1) // Check for button 1 hold
 			{
-				sysdate();
+				/*Hitting 1 causes crash right now...*/
+				//sysdate();
 			}
 			else
 			{
@@ -1476,6 +1485,13 @@ int main( int argc, char **argv )
 		
 		// This is the main routine to draw the covers
 		draw_covers();
+
+		//Play flip sound if needed
+		if((int)self.shift != self.lastGameSelected)
+		{
+			self.lastGameSelected = (int)self.shift;
+			SOUND_PlaySound(FX_COVER_SCROLL, 0);
+		}
 
 		// Check to see if it's time to draw the game launch dialog panel
 		if(self.selected || self.animate_flip != 0)

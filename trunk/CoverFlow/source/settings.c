@@ -39,6 +39,8 @@ void SETTINGS_Init()
 	settings.theme		 = 0; // default to black
 	settings.fontColor    = 0xFFFFFFFF; // default to white
 	
+	settings.volume = 100;
+	
 	//General
 	settings.rumble       = 1;
 	settings.parentalLock = 0;
