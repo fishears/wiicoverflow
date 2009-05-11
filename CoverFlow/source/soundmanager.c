@@ -28,40 +28,44 @@ inline void SOUND_Init()
 
 inline int SOUND_PlaySound(int sound_id, int loops)
 {
-	if(sound_id < MAX_SOUNDS)
+
+	if(settings.music)
 	{
-			switch(_sounds[sound_id].format)
-			{
-					case OGG_FORMAT:
-							if(settings.music)
-							{
-								if(loops == 0)
+		if(sound_id < MAX_SOUNDS)
+		{
+				switch(_sounds[sound_id].format)
+				{
+						case OGG_FORMAT:
+								if(settings.music)
 								{
-									  StopOgg();
-									  PlayOgg(mem_open((char*)_sounds[sound_id].data, _sounds[sound_id].size), 0, OGG_ONE_TIME);
-									  return 1;
+									if(loops == 0)
+									{
+										  StopOgg();
+										  PlayOgg(mem_open((char*)_sounds[sound_id].data, _sounds[sound_id].size), 0, OGG_ONE_TIME);
+										  return 1;
+									}
+									else
+									{
+										  StopOgg();
+										  PlayOgg(mem_open((char*)_sounds[sound_id].data, _sounds[sound_id].size), 0, OGG_INFINITE_TIME);
+										  return 1;
+									}
 								}
-								else
+								
+								return 1;
+								break;
+						case RAW_FORMAT:
+								if(settings.sound)
 								{
-									  StopOgg();
-									  PlayOgg(mem_open((char*)_sounds[sound_id].data, _sounds[sound_id].size), 0, OGG_INFINITE_TIME);
-									  return 1;
+									SND_SetVoice(SND_GetFirstUnusedVoice(), VOICE_STEREO_16BIT, 48000, 0, (char*)_sounds[sound_id].data, _sounds[sound_id].size, settings.volume, settings.volume, NULL);
 								}
-							}
-							
-							return 1;
-							break;
-					case RAW_FORMAT:
-							if(settings.sound)
-							{
-								SND_SetVoice(SND_GetFirstUnusedVoice(), VOICE_MONO_8BIT, 8000, 0, (char*)_sounds[sound_id].data, _sounds[sound_id].size, 30, 30, NULL);
-							}
-							return 1;
-							break;
-					default:
-							return 0;
-							break;
-			}
+								return 1;
+								break;
+						default:
+								return 0;
+								break;
+				}
+		}
 	}
 	
 	return 0;

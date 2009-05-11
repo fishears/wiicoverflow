@@ -198,8 +198,10 @@ void GRRLIB_Cover(float pos, int texture_id)
 		return;
 
 	if(pos == 0)
+	{
 		self.gameSelected = texture_id;
-
+	}
+	
 	if((self.selected || self.animate_flip > 0) && pos == 0)
 		return;
 

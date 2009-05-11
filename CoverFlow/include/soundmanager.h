@@ -9,8 +9,6 @@
 
 #include "settings.h"
 
-#include "snd.h"       // sound library
-
 #include "coverflow.h"
 
 SoundFile _sounds[MAX_SOUNDS];

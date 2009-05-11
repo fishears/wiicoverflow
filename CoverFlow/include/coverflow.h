@@ -71,7 +71,7 @@
 /* Constants */
 #define ENTRIES_PER_PAGE 	 12
 #define MAX_CHARACTERS	 	 30
-#define BUFFER_WINDOW        7
+#define BUFFER_WINDOW        15
 #define BUFFER_THREAD_COUNT  1
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           15
@@ -132,6 +132,7 @@ typedef struct{
     float select_shift;
     s32 gameCnt;
 	s32 gameSelected;
+	s32 lastGameSelected;
 	s32 gameStart;
 	bool selected;
 	int array_size;
