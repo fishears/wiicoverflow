@@ -1,5 +1,11 @@
 #pragma once
 
+#ifndef USBLOADER_PATH
+#define USBLOADER_PATH       "SD:/usb-loader"
+#endif
+
+
+
 typedef struct {
     float coverZoom;
     float coverAngle;
