@@ -863,118 +863,118 @@ void game_settings_menu(struct discHdr *gameList)
 
 		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 		{
-                    if(Button_Select(&gbackButton, pointer.p_x, pointer.p_y))
-                    {
-                        setGameSettings(titleID, &gameSetting,-1);
-                        return;
-                    }
-                    else if (Button_Select(&gcheatonButton, pointer.p_x, pointer.p_y) || Button_Select(&gcheatoffButton, pointer.p_x, pointer.p_y))
-                    {
-                            gameSetting.ocarina = (gameSetting.ocarina) ? 0 : 1; // Clicked the Ocarina button, toggle state
-                    }
-                    else if (Button_Select(&gvidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&gvidtvoffButton, pointer.p_x, pointer.p_y))
-                    {
-                        gameSetting.vipatch = (gameSetting.vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
-                    }
-                    else if (Button_Select(&glangdownButton, pointer.p_x, pointer.p_y))
-                    { // Clicked on the language buttons
-                            if (gameSetting.language > 0)
-                            {
-                                    gameSetting.language --;
-                            }
-                            else
-                            {
-                                    gameSetting.language = (CFG_LANG_COUNT - 1);
-                            }
-                    }
-                    else if (Button_Select(&glangupButton, pointer.p_x, pointer.p_y))
-                    {
-                            if (gameSetting.language < (CFG_LANG_COUNT - 1))
-                            {
-                                    gameSetting.language ++;
-                            }
-                            else
-                            {
-                                    gameSetting.language = 0;
-                            }
-                    }
-                    else if (Button_Select(&ghookdownButton, pointer.p_x, pointer.p_y))
-                    { // Clicked on the hooktype buttons
-                            if (gameSetting.hooktype > 0)
-                            {
-                                    gameSetting.hooktype --;
-                            }
-                            else
-                            {
-                                    gameSetting.hooktype = (CFG_HOOK_COUNT - 1);
-                            }
-                    }
-                    else if (Button_Select(&ghookupButton, pointer.p_x, pointer.p_y))
-                    {
-                            if (gameSetting.hooktype < (CFG_HOOK_COUNT - 1))
-                            {
-                                    gameSetting.hooktype ++;
-                            }
-                            else
-                            {
-                                    gameSetting.hooktype = 0;
-                            }
-                    }
-                    else if (Button_Select(&gviddownButton, pointer.p_x,pointer.p_y))
-                    {
-                            // Clicked on the video down button
-                            if (gameSetting.video > 0)
-                            {
-                                    gameSetting.video --;
-                            }
-                            else
-                            {
-                                    gameSetting.video = (CFG_VIDEO_COUNT -1);
-                            }
-                    }
-                    else if (Button_Select(&gvidupButton, pointer.p_x,pointer.p_y))
-                    {
-                            // Clicked on the video up button
-                            if (gameSetting.video <(CFG_VIDEO_COUNT -1))
-                            {
-                                    gameSetting.video ++;
-                            }
-                            else
-                            {
-                                    gameSetting.video = 0;
-                            }
-                    }
+			if(Button_Select(&gbackButton, pointer.p_x, pointer.p_y))
+			{
+				setGameSettings(titleID, &gameSetting,-1);
+				return;
+			}
+			else if (Button_Select(&gcheatonButton, pointer.p_x, pointer.p_y) || Button_Select(&gcheatoffButton, pointer.p_x, pointer.p_y))
+			{
+				gameSetting.ocarina = (gameSetting.ocarina) ? 0 : 1; // Clicked the Ocarina button, toggle state
+			}
+			else if (Button_Select(&gvidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&gvidtvoffButton, pointer.p_x, pointer.p_y))
+			{
+				gameSetting.vipatch = (gameSetting.vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
+			}
+			else if (Button_Select(&glangdownButton, pointer.p_x, pointer.p_y))
+			{ // Clicked on the language buttons
+				if (gameSetting.language > 0)
+				{
+					gameSetting.language --;
+				}
+				else
+				{
+					gameSetting.language = (CFG_LANG_COUNT - 1);
+				}
+			}
+			else if (Button_Select(&glangupButton, pointer.p_x, pointer.p_y))
+			{
+				if (gameSetting.language < (CFG_LANG_COUNT - 1))
+				{
+					gameSetting.language ++;
+				}
+				else
+				{
+					gameSetting.language = 0;
+				}
+			}
+			else if (Button_Select(&ghookdownButton, pointer.p_x, pointer.p_y))
+			{ // Clicked on the hooktype buttons
+				if (gameSetting.hooktype > 0)
+				{
+					gameSetting.hooktype --;
+				}
+				else
+				{
+					gameSetting.hooktype = (CFG_HOOK_COUNT - 1);
+				}
+			}
+			else if (Button_Select(&ghookupButton, pointer.p_x, pointer.p_y))
+			{
+				if (gameSetting.hooktype < (CFG_HOOK_COUNT - 1))
+				{
+					gameSetting.hooktype ++;
+				}
+				else
+				{
+					gameSetting.hooktype = 0;
+				}
+			}
+			else if (Button_Select(&gviddownButton, pointer.p_x,pointer.p_y))
+			{
+				// Clicked on the video down button
+				if (gameSetting.video > 0)
+				{
+					gameSetting.video --;
+				}
+				else
+				{
+					gameSetting.video = (CFG_VIDEO_COUNT -1);
+				}
+			}
+			else if (Button_Select(&gvidupButton, pointer.p_x,pointer.p_y))
+			{
+				// Clicked on the video up button
+				if (gameSetting.video <(CFG_VIDEO_COUNT -1))
+				{
+					gameSetting.video ++;
+				}
+				else
+				{
+					gameSetting.video = 0;
+				}
+			}
 		}
 
-                //GRRLIB_FillScreen(0x000000FF);
-                GRRLIB_DrawImg(80, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+		//GRRLIB_FillScreen(0x000000FF);
+		GRRLIB_DrawImg(80, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 
-                gbackButton.x = 490;
-                gbackButton.y = 320;
+		gbackButton.x = 490;
+		gbackButton.y = 320;
 
-                Button_Paint(&gbackButton);
-                Button_Paint(&glangupButton);
+		Button_Paint(&gbackButton);
+		Button_Paint(&glangupButton);
 		Button_Paint(&glangdownButton);
 		Button_Paint(&gvidupButton);
 		Button_Paint(&gviddownButton);
 		Button_Paint(&ghookupButton);
 		Button_Paint(&ghookdownButton);
-                Button_Toggle_Paint(&gcheatoffButton, &cheatonButton, gameSetting.ocarina);
+        Button_Toggle_Paint(&gcheatoffButton, &cheatonButton, gameSetting.ocarina);
 		Button_Toggle_Paint(&gvidtvoffButton, &vidtvonButton, gameSetting.vipatch);
 
-                Button_Hover(&gbackButton, pointer.p_x, pointer.p_y);
-                Button_Hover(&glangupButton, pointer.p_x, pointer.p_y);
-                Button_Hover(&glangdownButton, pointer.p_x, pointer.p_y);
-                Button_Hover(&gvidupButton, pointer.p_x, pointer.p_y);
-                Button_Hover(&gviddownButton, pointer.p_x, pointer.p_y);
-                Button_Hover(&gcheatoffButton, pointer.p_x, pointer.p_y);
-                Button_Hover(&gcheatonButton, pointer.p_x, pointer.p_y);
-                Button_Hover(&gvidtvoffButton, pointer.p_x, pointer.p_y);
-                Button_Hover(&gvidtvonButton, pointer.p_x, pointer.p_y);
-                Button_Hover(&ghookupButton, pointer.p_x, pointer.p_y);
-                Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&gbackButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&glangupButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&glangdownButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&gvidupButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&gviddownButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&gcheatoffButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&gcheatonButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&gvidtvoffButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&gvidtvonButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&ghookupButton, pointer.p_x, pointer.p_y);
+		Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
 
-                //BUTTON TEXT
+        //BUTTON TEXT
 		GRRLIB_Printf(185, 145,  font_title, settings.fontColor, 1, "%s: settings", header->title);
 		GRRLIB_Printf(185, 193,  font_texture, settings.fontColor, 1, "Ocarina:");
 		GRRLIB_Printf(350, 193,  font_texture, settings.fontColor, 1, "Hook:");
@@ -996,3 +996,19 @@ void game_settings_menu(struct discHdr *gameList)
     return;
 }
 
+void freeResources(){
+
+	free(pointer_texture.data);
+	free(pointer_shadow_texture.data);
+	free(cover_texture.data);
+	free(back_texture.data);
+	free(empty_texture.data);
+	free(no_disc_texture.data);
+	free(current_cover_texture.data);
+	free(font_texture.data);
+	free(progress_texture.data);
+	
+	GRRLIB_FillScreen(0x000000FF);
+	GRRLIB_Render();
+	GRRLIB_Exit();
+}

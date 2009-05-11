@@ -123,3 +123,4 @@ u8 CalculateFrameRate()
     }
     return FPS;
 }
+

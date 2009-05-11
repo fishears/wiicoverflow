@@ -106,8 +106,7 @@ void quit()
 
 	BUFFER_KillBuffer();
 	
-	free(pointer_texture.data);
-	free(pointer_shadow_texture.data);
+	freeResources();
 	
 	/*
 	free(cover_texture.data);
@@ -119,7 +118,7 @@ void quit()
 	*/
 	//BUFFER_ClearCovers();
 	
-	GRRLIB_Exit();
+	//GRRLIB_Exit();
 	exit(0);
 }
 
@@ -639,7 +638,6 @@ bool Menu_Install(void)
 	if(!WindowPrompt ("Install new Game?", "Place disk in drive and hit ok.",&okButton,&cancelButton))
 		return false;
 		
-	
 	WindowPrompt ("Initializing DVD Drive", "Please Wait...",0,0);
 	
 	/* Disable WBFS mode */
@@ -709,7 +707,6 @@ bool Menu_Install(void)
 	char tsize[50];
 	sprintf(ttext, "Install %s?", name);
 	sprintf(tsize, "Game Size: %.2fGB", gamesize);
-	
 	
 	if(WindowPrompt (ttext,tsize,&okButton,&cancelButton))
 	{
@@ -817,12 +814,7 @@ bool Menu_Boot(void)
 	
     GRRLIB_Exit();
 	
-	free(cover_texture.data);
-	free(back_texture.data);
-	free(empty_texture.data);
-	free(no_disc_texture.data);
-	free(current_cover_texture.data);
-	free(font_texture.data);
+	freeResources();
 
 	BUFFER_ClearCovers();
 	BUFFER_KillBuffer();
@@ -1007,9 +999,9 @@ int main( int argc, char **argv )
 		
 	//LOAD CONFIG
 	// need to clean up CFG and move to the XML based settings
-	strcpy(CFG.images_path, USBLOADER_PATH);
-	CFG.widescreen = 0;
-	CFG.download = 1;
+	//strcpy(CFG.images_path, USBLOADER_PATH);
+	//CFG.widescreen = 0;
+	//CFG.download = 1;
 	
 	sprintf(self.debugMsg, "Initializing WBFS");
 	Paint_Progress(self.progress,self.debugMsg);
@@ -1185,7 +1177,7 @@ int main( int argc, char **argv )
 
 	sprintf(self.debugMsg, "Freeing unused textures...");
 	Paint_Progress(self.progress,self.debugMsg);
-	free(progress_texture.data);
+	//free(progress_texture.data);
 	Sleep(300);
 	
 	self.selected = false;
@@ -1438,6 +1430,7 @@ int main( int argc, char **argv )
 			{
 				/*Hitting 1 causes crash right now...*/
 				//sysdate();
+				//quit();
 			}
 			else
 			{

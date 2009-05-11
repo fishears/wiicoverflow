@@ -126,7 +126,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			break;
 		}
 
-		snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", CFG.images_path, header->id);
+		snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, header->id);
 		
 		sprintf(self.debugMsg, "Checking presence of %s", imgPath);
 		Paint_Progress_Generic(v, max,self.debugMsg);
@@ -168,7 +168,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			}
 		}
 		
-		snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c%c.png", CFG.images_path,  header->id[0], header->id[1], header->id[2], header->id[3]);
+		snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c%c.png", USBLOADER_PATH,  header->id[0], header->id[1], header->id[2], header->id[3]);
 		sprintf(self.debugMsg, "Checking presence of %s", imgPath);
 		Paint_Progress_Generic(v, max,self.debugMsg);
 		
@@ -196,7 +196,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			}
 			else { //TRY WITH 3 DIGIT COVER
 				
-				snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c.png", CFG.images_path,  header->id[0], header->id[1], header->id[2]);
+				snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c.png", USBLOADER_PATH,  header->id[0], header->id[1], header->id[2]);
 				sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c.png", header->id[0], header->id[1], header->id[2]);
 				sprintf(self.debugMsg, "Getting %s", url);
 				Paint_Progress_Generic(v, max,self.debugMsg);
