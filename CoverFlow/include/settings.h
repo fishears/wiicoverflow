@@ -26,8 +26,8 @@ typedef struct {
 } s_settings;
 
 
-inline void SETTINGS_Init(void);
+void SETTINGS_Init(void);
 
-inline int SETTINGS_Load();
+int SETTINGS_Load();
 
-inline int SETTINGS_Save();
+int SETTINGS_Save();
