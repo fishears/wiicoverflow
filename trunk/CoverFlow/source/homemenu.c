@@ -46,7 +46,7 @@ void exitToSystemMenu()
 	SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);	
 }
 
-inline void HomeMenu_Show()
+void HomeMenu_Show()
 {
 
 	bool doloop = true;
@@ -133,12 +133,14 @@ inline void HomeMenu_Show()
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
 				//launchTitle(0x0000000100000003LL, 0); //launch system menu
+				HomeMenu_Destroy();
 				exitToSystemMenu() ;
 				//SYS_ResetSystem(SYS_RETURNTOMENU,0,0);%48%41%58%58
 			}
 			else if (Button_Select(&loaderButton, pointer.p_x, pointer.p_y))
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
+				HomeMenu_Destroy();
 				launchTitle(0x0001000148415858LL, 0); //launch system menu
 				//exit(1);        // eventually, return a value.
 			}
@@ -255,7 +257,17 @@ inline void HomeMenu_Show()
 	
 }
 
-inline void HomeMenu_Destroy()
+void HomeMenu_Destroy()
 {
-	//Nothing to do...
+	free(homeMenuTopButton.texture.data);
+	free(homeMenuBottomButton.texture.data);
+	free(wiiMenuButton.texture.data);
+	free(loaderButton.texture.data);
+	free(homeMenuTopButton.hoverTexture.data);
+	free(homeMenuBottomButton.hoverTexture.data);
+	free(wiiMenuButton.hoverTexture.data);
+	free(loaderButton.hoverTexture.data);
+	free(wiimoteButton.texture.data);
+	
+	freeResources();
 }
