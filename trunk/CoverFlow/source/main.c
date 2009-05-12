@@ -1028,12 +1028,20 @@ int main( int argc, char **argv )
 				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "USB Error - Drive not found");
 				GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, "Press A to Retry, B to Exit");
 				
-				GRRLIB_Printf(190,190, font_texture, settings.fontColor, 1, "Retries Left: %d", retries);
 				GRRLIB_Render();
 			}
 				
 			if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||retries)
 			{
+				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A))
+				{
+					GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+					GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "Attempt to connect to USB Drive");
+					GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, "Please Wait...");
+					GRRLIB_Render();
+					Sleep(1000);
+				}
+				
 				retries--;
 				Subsystem_Close();
 				WDVD_Close();
