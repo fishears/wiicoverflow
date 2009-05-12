@@ -344,7 +344,8 @@ void GRRLIB_FreeBMF(GRRLIB_bytemapFont bmf)
 GRRLIB_texImg GRRLIB_LoadTexture(const unsigned char my_img[]) {
 
     if(my_img[0]==0xFF && my_img[1]==0xD8 && my_img[2]==0xFF) {
-        return(GRRLIB_LoadTexturePNG(my_img));
+	    /*Invalid PNG... return empty texture*/
+        return(GRRLIB_CreateEmptyTexture(12,12));
     }
     else {
         return(GRRLIB_LoadTexturePNG(my_img));
