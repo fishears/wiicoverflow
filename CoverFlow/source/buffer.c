@@ -20,7 +20,6 @@
 #define NUMBER_OF_MEM2_TEST_COVERS 250
 
 extern const u8		back_cover_png[];
-int loadedCovers=0;
 
 	// private cars
 	typedef struct COVERQUEUE 
@@ -64,7 +63,6 @@ void BUFFER_InitBuffer(int thread_count)
 	}
 		
 	BUFFER_ClearCovers();
-	loadedCovers=0;
 	pthread_mutex_lock(&quit_mutex);
 	_requestQuit = false;
 	pthread_mutex_unlock(&quit_mutex);
@@ -86,7 +84,6 @@ void FreeTextureData(int index)
 			
 		_texture_data[index].data = 0;
 		pthread_mutex_unlock(&buffer_mutex[index]);
-		loadedCovers--;
 	}
 }
 
@@ -198,7 +195,7 @@ void* process(void *arg)
 	
 			/*Handle Load Requests*/
 			pthread_mutex_lock(&queue_mutex);
-			b = _cq.request[i] && !_cq.remove[i]&&!_cq.ready[i]&&loadedCovers<15;
+			b = _cq.request[i] && !_cq.remove[i]&&!_cq.ready[i];
 			if (b) _cq.request[i]=false;
 			pthread_mutex_unlock(&queue_mutex);
 		
@@ -221,21 +218,11 @@ void* process(void *arg)
 					
 					if (ret > 0) {
 
-						_texture_data[i] = GRRLIB_LoadTexture((const unsigned char*)imgData);
+						uint thisDataMem2Address=MEM2_START_ADDRESS + TEXTURE_DATA_SIZE * i;
+						_texture_data[i] = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgData, (void *)thisDataMem2Address);
 						free(imgData);
-						// MEM2 test
-						if (i<NUMBER_OF_MEM2_TEST_COVERS)
-						{
-							int thisDataMem2Address=MEM2_START_ADDRESS + TEXTURE_DATA_SIZE * i;
-							memcpy((void*) thisDataMem2Address,_texture_data[i].data,TEXTURE_DATA_SIZE);
-							free(_texture_data[i].data);
-							_texture_data[i].data = (void*) thisDataMem2Address;
-							loadedCovers--; //don't count this one ;-)
-						}
-						// END MEM2 Test removecover and free texture have code too
 
 						pthread_mutex_lock(&queue_mutex);
-						loadedCovers++;
 						_cq.ready[i]   = true;
 						pthread_mutex_unlock(&queue_mutex);
 					}
@@ -278,6 +265,7 @@ void* process(void *arg)
 	}
 
 
+}
 
 	int BufferMethod;
 	double Density;
@@ -287,6 +275,94 @@ void* process(void *arg)
 	struct discHdr *CoverList;
 	int nCovers;
 	int nCoversInWindow;
+
+void RemoveFromCache(int index)
+ {
+	 if (_cq.floatingQueuePosition[index] != -1)
+	 {
+		 _cq.ready[index] = false;
+	 }
+	
+ }
+  
+  //already locked
+void SetFloatingCacheItem(int selection, int newCacheItem)
+ {
+		 int i=0;
+		 bool spaceFound = false;
+		 int maxDistance=0;
+		 int maxIndex=-1;
+		 for (i=0;i<FloatingCacheSize;i++)
+		 {
+			 if (FloatingCacheCovers[i] == -1)
+			 {
+				 spaceFound = true;
+				 FloatingCacheCovers[i] = newCacheItem;
+				 break;
+			 }
+				 if (FloatingCacheCovers[i]!=-1)
+				 {
+					 if (abs(FloatingCacheCovers[i] - selection) > maxDistance)
+						 {
+							 maxDistance = abs(FloatingCacheCovers[i] - selection) - maxDistance;
+								 maxIndex=i;
+						 }
+				 }
+		 }
+		 if (!spaceFound)
+		 {
+			 RemoveFromCache(maxIndex);
+			 FloatingCacheCovers[maxIndex] = newCacheItem;
+		 }
+ }
+
+ void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
+ {
+		 int i=0;
+		 int extra = 0;
+		 if (doNotRemoveFromFloating) extra = 1;
+		 int searchSize=nCoversInWindow*(2+extra);
+		 //this'll do for now - a more elegant algrorithm would be better
+		 for (i=index-searchSize/2;i<index+searchSize/2;i++)
+		 {
+			 if (i >= 0 && i < nCovers)
+			 {
+				 if (!_cq.ready[i] && !_cq.request[i])
+				 {
+					 _cq.request[i] = true;
+					 // this one isn't permenantly cached make a space for it in the floating cache
+					 if (_cq.permaBufferPosition[i] == -1 && !doNotRemoveFromFloating) SetFloatingCacheItem(index,i);
+
+				 }
+			 }
+		 }
+ }
+ 
+ void SetSelectedCover(int index)
+ {
+	 iSetSelectedCover(index,false);
+ }
+
+
+ // internal only - no need to lock (already locked)
+ void ResetQueueItem(int index)
+ {
+	 _cq.ready[index]=false;
+	 _cq.request[index]=false;
+	 _cq.requestId[index]=0;
+	 _cq.remove[index]=false;
+	 _cq.permaBufferPosition[index]=-1;
+	 _cq.coverMissing[index]=false;
+	 _cq.floatingQueuePosition[index]=-1;
+ }
+ 
+ // internal only - no need to lock (already locked)
+ void RequestForCache(int index)
+ {
+	 _cq.request[index]=true;
+	 _cq.requestId[index]=&CoverList[index];
+ }
+
 
 	void RemoveFarthestFloatingCacheItem()
 	{
@@ -307,122 +383,90 @@ void* process(void *arg)
 		FloatingCacheCovers[maxIndex]=-1;
 	}
 
-	void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
-	{
-		int i=0;
-		int searchSize=nCoversInWindow*(2+doNotRemoveFromFloating);
-		//this'll do for now - a more elegant algrorithm would be better
-		for (i=index-searchSize/2;i<index+searchSize/2;i++)
-		{
-			if (!_cq.ready[i] && !_cq.request[i])
-			{
-				// this one isn't permenantly cached make a space for it in the floating cache
-				if (_cq.permaBufferPosition[i]==-1 && !doNotRemoveFromFloating) RemoveFarthestFloatingCacheItem();
-				_cq.request[i]=true;
-			}
-		}
-	}
 
-	void SetSelectedCover(int index)
-	{
-		iSetSelectedCover(index,false);
-	}
+ // call at start, on add or on delete
+ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection)
+ {
+	initialSelection+=gameCount/2.0;
+	 int i=0;
+	 CoverList=gameList;
+	 nCovers=gameCount;
+	 nCoversInWindow=numberOfCoversToBeShown;
+//	 pthread_mutex_lock(&queue_mutex);
+	 //start from a clear point
+	 for (i=0;i<gameCount;i++) ResetQueueItem(i);
+//	 pthread_mutex_unlock(&queue_mutex);
 
+	 
+	 int maxSlots=MEM2_EXTENT/TEXTURE_DATA_SIZE;
+	 //decide on buffering method
+	 if (gameCount<=maxSlots)
+	 {
+		 BufferMethod=ALL_CACHED;
+		 MainCacheSize=gameCount;
+	 }
+	 else
+	 {
+		 Density = ((float)maxSlots) / ((float)(gameCount));
+		 FloatingCacheSize=(int)(((1-Density)*numberOfCoversToBeShown+1)*4);
+		 MainCacheSize = maxSlots - FloatingCacheSize;
+		 //FloatingCacheCovers = new int[FloatingCacheSize];// may be in .h
+	  }
+	 if (BufferMethod==ALL_CACHED)
+	 {
+		 for (i=0;i<gameCount;i++)
+		 {
+			 _cq.permaBufferPosition[i]=i;
+		 }
+	 }
+	 else
+	 {
+		 int lastValue=-1;
+		 double dPosition=0;
+		 for (i=0;i<gameCount;i++)
+		 {
+			 dPosition+=Density;
+			 if ((int)dPosition!=lastValue)
+			 {
+				 _cq.permaBufferPosition[i]=(int)dPosition;
+			 }
+			 else
+			 {
+				 _cq.permaBufferPosition[i]=-1;
+			 }
+			 lastValue = (int)dPosition;
 
-	void ResetQueueItem(int index)
-	{
-		_cq.ready[index]=false;
-		_cq.request[index]=false;
-		_cq.requestId[index]=0;
-		_cq.remove[index]=false;
-		_cq.permaBufferPosition[index]=-1;
-		_cq.coverMissing[index]=false;
-		_cq.floatingQueuePosition[index]=-1;
-	}
+		 }
+	 }
 
-	void RequestForCache(int index)
-	{
-		_cq.request[index]=true;
-		_cq.requestId[index]=&CoverList[index];
-	}
-
-	// call at start, on add or on delete
-	void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection)
-	{
-		int i=0;
-		CoverList=gameList;
-		nCovers=gameCount;
-		nCoversInWindow=numberOfCoversToBeShown;
-		//start from a clear point
-		for (i=0;i<gameCount;i++) ResetQueueItem(i);
-		//decide on buffering method
-		if (gameCount<=MEM2_EXTENT/TEXTURE_DATA_SIZE)
-		{
-			BufferMethod=ALL_CACHED;
-			MainCacheSize=gameCount;
-		}
-		else
-		{
-			BufferMethod=DENSITY_METHOD;
-			Density = ((float)gameCount)/((float)MAX_BUFFERED_COVERS);
-			FloatingCacheSize=(1-Density)*numberOfCoversToBeShown*5;
-			MainCacheSize=MEM2_EXTENT/TEXTURE_DATA_SIZE-FloatingCacheSize;
-		}
-		if (BufferMethod==ALL_CACHED)
-		{
-			for (i=0;i<gameCount;i++)
-			{
-				_cq.permaBufferPosition[i]=i;
-			}
-		}
-		else
-		{
-			int lastValue=-1;
-			double dPosition=0;
-			for (i=0;i<gameCount;i++)
-			{
-				dPosition+=Density;
-				if ((int)dPosition!=lastValue)
-				{
-					_cq.permaBufferPosition[i]=(int)dPosition;
-				}
-				else
-				{
-					_cq.permaBufferPosition[i]=-1;
-				}
-				
-			}
-		}
-		iSetSelectedCover(initialSelection,true);
-		//the the visible ones get cached
-		Sleep(1);
-		//now request all the permenant covers
-		for (i=0;i<gameCount;i++) 
-		{
-			if (_cq.permaBufferPosition[i]!=-1)
-			{
-				RequestForCache(i);
-			}
-		}
-		
-	}
-	
-	void CoversDownloaded()
-	{
-		int i;
-		//recheck all the missing covers
-		for (i=0;i<nCovers;i++)
-		{
-			if (_cq.coverMissing[i])
-			{
-				_cq.coverMissing[i]=false;
-				if (_cq.permaBufferPosition[i]!=-1)
-				{
-					RequestForCache(i);
-				}
-			}
-		}
-	}
-		
-}
+	 iSetSelectedCover(initialSelection,true);
+	 //now request all the permenant covers
+	 for (i=0;i<gameCount;i++) 
+	 {
+		 if (_cq.permaBufferPosition[i]!=-1)
+		 {
+			RequestForCache(i);
+		 }
+	 }
+		 
+ }
+         
+ void CoversDownloaded()
+ {
+	 int i;
+	 //recheck all the missing covers
+	 for (i=0;i<nCovers;i++)
+	 {
+		 pthread_mutex_lock(&queue_mutex);
+		 if (_cq.coverMissing[i])
+		 {
+			 _cq.coverMissing[i]=false;
+			 if (_cq.permaBufferPosition[i]!=-1)
+			 {
+					 RequestForCache(i);
+			 }
+		 }
+		 pthread_mutex_unlock(&queue_mutex);
+	 }
+ }
 

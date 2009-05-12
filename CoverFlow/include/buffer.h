@@ -4,7 +4,7 @@
 
 #include "GRRLIB.h"
 
-#define MAX_BUFFERED_COVERS  500
+#define MAX_BUFFERED_COVERS  349
 
 #define MAX_THREADS 5
 
