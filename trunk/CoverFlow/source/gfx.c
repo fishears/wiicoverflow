@@ -46,7 +46,8 @@ void LoadTextures()
 	back_texture		   = GRRLIB_LoadTexture(back_cover_png);
 	no_disc_texture		   = GRRLIB_LoadTexture(no_disc_png);
 	slide_bar_texture_w    = GRRLIB_LoadTexture(slide_bar_white_png);
-	slide_bar_texture_b    = GRRLIB_LoadTexture(slide_bar_black_png);
+//	slide_bar_texture_b    = GRRLIB_LoadTexture(slide_bar_black_png);
+	slide_bar_texture_b    = GRRLIB_LoadTexture(slide_bar_grey_png);
 	load_bg_texture		   = GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
 	font_texture           = GRRLIB_LoadTexture(BMfont5_png);
 	font_title             = GRRLIB_LoadTexture(font_w14_h20_png);
@@ -139,7 +140,7 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 void Init_Buttons()
 {
     addButton			= Button_Init(add_button_png, add_button_hover_png, 580, 417);
-    slideButton             = Button_Init(slide_png, slide_hover_png, 580, 400);
+    slideButton             = Button_Init(slide_png, slide_hover_png, 260, 426);
     okButton                = Button_Init(ok_png, ok_hover_png, 220, 250);
     loadButton              = Button_Init(load_png, load_hover_png, 220, 300);
     deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
@@ -205,10 +206,10 @@ void Init_Buttons()
 void DrawSlider(int theme_id)
 {
 	int min_loc = 0;
-	int max_loc = 313;
+	int max_loc = 309;
 	int x = change_scale(self.shift, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0, min_loc, max_loc);
 	
-	slideButton.x = 439-x; // fix for Apple-likeflow direction
+	slideButton.x = 446 - x; // fix for Apple-likeflow direction
 	slideButton.y = 426;
 	
 	switch (theme_id)
