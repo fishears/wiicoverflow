@@ -3,10 +3,10 @@
 
 #include "coverflow.h"
 
-inline void HomeMenu_Init();
+void HomeMenu_Init();
 
-inline void HomeMenu_Show();
+void HomeMenu_Show();
 
-inline void HomeMenu_Destroy();
+void HomeMenu_Destroy();
 
 #endif //_HomeMenu_H_
