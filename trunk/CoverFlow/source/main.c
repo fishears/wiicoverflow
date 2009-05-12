@@ -811,14 +811,13 @@ bool Menu_Boot(void)
 	char titleID[7];
 	sprintf(titleID, "%s", header->id);
 	setGameSettings(titleID,  &gameSetting, 1); // so we store last played setting ;)
-	
-    GRRLIB_Exit();
-	
-	freeResources();
-
+		
 	BUFFER_ClearCovers();
 	BUFFER_KillBuffer();
 	Sleep(300);
+	
+	freeResources();
+
 	
 	#ifndef DOL_TEST
 	/* Set WBFS mode */
