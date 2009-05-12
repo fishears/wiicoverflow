@@ -55,13 +55,14 @@ void BUFFER_InitBuffer(int thread_count)
 	pthread_mutex_init(&count_mutex, 0);
 	pthread_mutex_init(&queue_mutex, 0);
 	pthread_mutex_init(&quit_mutex, 0);
+	pthread_mutex_init(&lock_thread_mutex, 0);
 	
 	for(i = 0; i < MAX_BUFFERED_COVERS; i++)
 	{
 		pthread_mutex_init(&buffer_mutex[i], 0);
 		_texture_data[i].data=0;
 	}
-	
+		
 	BUFFER_ClearCovers();
 	loadedCovers=0;
 	pthread_mutex_lock(&quit_mutex);
@@ -193,6 +194,8 @@ void* process(void *arg)
 		for(i = 0; i < MAX_BUFFERED_COVERS; i++)
 		{
 
+			pthread_mutex_lock(&lock_thread_mutex);
+	
 			/*Handle Load Requests*/
 			pthread_mutex_lock(&queue_mutex);
 			b = _cq.request[i] && !_cq.remove[i]&&!_cq.ready[i]&&loadedCovers<15;
@@ -247,6 +250,8 @@ void* process(void *arg)
 				}
 				pthread_mutex_unlock(&buffer_mutex[i]);
 			}
+			
+			pthread_mutex_unlock(&lock_thread_mutex);
 			
 			Sleep(1);
 		}

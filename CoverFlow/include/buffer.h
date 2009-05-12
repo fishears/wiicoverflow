@@ -18,6 +18,10 @@ pthread_mutex_t count_mutex;
 /*Protect the Ready Queue*/
 pthread_mutex_t queue_mutex;
 
+/*Protect the Thread Lock*/
+extern pthread_mutex_t lock_thread_mutex;
+pthread_mutex_t lock_thread_mutex;
+
 extern pthread_mutex_t buffer_mutex[];
 
 //Cache that can be cleared
