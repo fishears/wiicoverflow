@@ -52,7 +52,6 @@
 
 /*DOL TEST END*/
 
-#include "settings.h"
  
 #define COVER_WIDTH    160
 #define COVER_HEIGHT   224
