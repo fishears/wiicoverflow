@@ -6,9 +6,6 @@
 
 #define FLIP_SPEED  0.016
 
-//testing
-//#define GAMESET
-
 char* _title;
 char* _msg;
 
