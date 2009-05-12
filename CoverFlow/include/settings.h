@@ -1,10 +1,7 @@
-#pragma once
+#ifndef _SETTINGS_H_
+#define _SETTINGS_H_
 
-#ifndef USBLOADER_PATH
-#define USBLOADER_PATH       "SD:/usb-loader"
-#endif
-
-
+#include "coverflow.h"
 
 typedef struct {
     float coverZoom;
@@ -37,3 +34,5 @@ void SETTINGS_Init(void);
 int SETTINGS_Load();
 
 int SETTINGS_Save();
+
+#endif

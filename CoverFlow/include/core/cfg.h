@@ -1,3 +1,6 @@
+#ifndef __CFG_H__
+#define __CFG_H__
+
 #include <gctypes.h>
 #include "disc.h"
 
@@ -101,3 +104,4 @@ u8 get_block(struct discHdr *header);
 
 void CFG_Cleanup(void);
 
+#endif

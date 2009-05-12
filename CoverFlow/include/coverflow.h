@@ -37,6 +37,7 @@
 #include "homemenu.h"
 #include "subsystem.h"
 #include "settings.h"
+#include "cfg.h"
 
 
 /*DOL TEST*/
@@ -55,7 +56,7 @@
  
 #define COVER_WIDTH    160
 #define COVER_HEIGHT   224
-#define DEFAULT_FIFO_SIZE  (256*1024)
+//#define DEFAULT_FIFO_SIZE  (256*1024)
 
 /* Aspect ratio fix for some image*/
 #define AR_16_9 0.85F
