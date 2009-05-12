@@ -309,27 +309,27 @@ void Graphic_Settings_Menu(void)
 		
 		if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A)
 		{
-			if(Button_Select_Mute(&spacingdownButton, pointer.p_x, pointer.p_y))
+			if(Button_Select(&spacingdownButton, pointer.p_x, pointer.p_y))
 			{
 				settings.coverSpacing -= 0.05;
 			}
-			else if(Button_Select_Mute(&spacingupButton, pointer.p_x, pointer.p_y))
+			else if(Button_Select(&spacingupButton, pointer.p_x, pointer.p_y))
 			{
 				settings.coverSpacing += 0.05;
 			}
-			else if(Button_Select_Mute(&angledownButton, pointer.p_x, pointer.p_y))
+			else if(Button_Select(&angledownButton, pointer.p_x, pointer.p_y))
 			{
 				settings.coverAngle -= 1;
 			}
-			else if(Button_Select_Mute(&angleupButton, pointer.p_x, pointer.p_y))
+			else if(Button_Select(&angleupButton, pointer.p_x, pointer.p_y))
 			{
 				settings.coverAngle += 1;
 			}
-			else if(Button_Select_Mute(&zoomdownButton, pointer.p_x, pointer.p_y))
+			else if(Button_Select(&zoomdownButton, pointer.p_x, pointer.p_y))
 			{
 				settings.coverZoom -= 0.01;
 			}
-			else if(Button_Select_Mute(&zoomupButton, pointer.p_x, pointer.p_y))
+			else if(Button_Select(&zoomupButton, pointer.p_x, pointer.p_y))
 			{
 				settings.coverZoom += 0.01;
 			}

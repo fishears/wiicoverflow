@@ -48,7 +48,6 @@ void exitToSystemMenu()
 
 void HomeMenu_Show()
 {
-
 	bool doloop = true;
 
 	int slide_wiimote = 0;
@@ -60,6 +59,8 @@ void HomeMenu_Show()
 	homeMenuBottomButton.y = 480;
 	
 	int i = 0;
+	int fade = 0x00;
+	
 	for(i = 0; i <= 28; i++)
 	{
 		homeMenuTopButton.y += 4;
@@ -67,7 +68,10 @@ void HomeMenu_Show()
 		
 		draw_covers();
 		GRRLIB_2D_Init();
-
+		GRRLIB_FillScreen(0x00000000|fade);
+		
+		fade+=7;
+        
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
 		GRRLIB_Render();
@@ -88,6 +92,7 @@ void HomeMenu_Show()
 		
 		draw_covers();
 		GRRLIB_2D_Init();
+		GRRLIB_FillScreen(0x000000CC);
 		
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
@@ -154,6 +159,7 @@ void HomeMenu_Show()
 		draw_covers();
 		// Draw menu dialog background
 		GRRLIB_2D_Init();
+		GRRLIB_FillScreen(0x000000CC);
 
 		//Button_Theme_Paint(&settingsButton, SETTING_theme);
 		Button_Paint(&homeMenuTopButton);
@@ -229,6 +235,7 @@ void HomeMenu_Show()
 		draw_covers();
 		
 		GRRLIB_2D_Init();
+		GRRLIB_FillScreen(0x000000CC);
 		
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
@@ -249,6 +256,7 @@ void HomeMenu_Show()
 		draw_covers();
 		
 		GRRLIB_2D_Init();
+		GRRLIB_FillScreen(0x00000000|fade);
 
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
@@ -259,6 +267,26 @@ void HomeMenu_Show()
 
 void HomeMenu_Destroy()
 {
+	int i;
+
+	for(i=0xff;i>=0;i-=8){
+		GRRLIB_FillScreen(0x000000FF);
+		
+		draw_covers();
+		//GRRLIB_2D_Init();
+		GRRLIB_FillScreen(0x000000CC);
+		
+		GRRLIB_DrawImg(homeMenuTopButton.x, homeMenuTopButton.y, homeMenuTopButton.texture, 0, 1, 1, 0xFFFFFF00|i);
+		GRRLIB_DrawImg(homeMenuBottomButton.x, homeMenuBottomButton.y, homeMenuBottomButton.texture, 0, 1, 1, 0xFFFFFF00|i);
+		GRRLIB_DrawImg(wiiMenuButton.x, wiiMenuButton.y, wiiMenuButton.texture, 0, 1, 1, 0xFFFFFF00|i);
+		GRRLIB_DrawImg(loaderButton.x, loaderButton.y, loaderButton.texture, 0, 1, 1, 0xFFFFFF00|i);
+		GRRLIB_DrawImg(wiimoteButton.x, wiimoteButton.y, wiimoteButton.texture, 0, 1, 1, 0xFFFFFF00|i);
+		
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFF00|i);
+		
+		GRRLIB_Render();
+	}
+
 	free(homeMenuTopButton.texture.data);
 	free(homeMenuBottomButton.texture.data);
 	free(wiiMenuButton.texture.data);
