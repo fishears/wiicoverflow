@@ -649,6 +649,7 @@ float change_scale(float val, float in_min, float in_max, float out_min, float o
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
 {
 	bool doloop = true;
+	char* pch;
 	
 	if(choice_a == 0 && choice_b == 0)
 	{
@@ -697,10 +698,25 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		if(choice_b != 0)
 			Button_Paint(choice_b);
 		
+		int y = 150;
+		int sp = 0;
+		
 		// Draw text
-        GRRLIB_Printf(145, 120, font_title, 0xFFFFFFFF, 1, "%s", title);
-        GRRLIB_Printf(150, 150, font_texture, settings.fontColor, 1, "%s", txt);
-	
+		GRRLIB_Printf(145, 120, font_title, 0xFFFFFFFF, 1, "%s", title);
+		//GRRLIB_Printf(150, y+sp, font_texture, settings.fontColor, 1, "%s", txt);
+		
+		char* msg = malloc(strlen(txt)*sizeof(char));
+		sprintf(msg, txt);
+		
+		pch = strtok(msg, "\n");
+		while (pch != NULL){
+			
+			GRRLIB_Printf(150, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
+			pch = strtok(NULL, "\n");
+			sp+=20;
+		}
+		free(msg);
+        
 		// Check for button-pointer intersections, and rumble
 		if (Button_Hover(choice_a, pointer.p_x, pointer.p_y) ||
 			Button_Hover(choice_b, pointer.p_x, pointer.p_y))
@@ -1012,6 +1028,11 @@ void game_settings_menu(struct discHdr *gameList)
 
 void freeResources(){
 
+	GRRLIB_FillScreen(0x000000FF);
+	GRRLIB_Render();
+	
+	GRRLIB_Exit();
+	
 	free(pointer_texture.data);
 	free(pointer_shadow_texture.data);
 	free(cover_texture.data);
@@ -1021,8 +1042,4 @@ void freeResources(){
 	free(current_cover_texture.data);
 	free(font_texture.data);
 	free(progress_texture.data);
-	
-	GRRLIB_FillScreen(0x000000FF);
-	GRRLIB_Render();
-	GRRLIB_Exit();
 }

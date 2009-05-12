@@ -103,22 +103,21 @@ void UpdateBufferedImages()
 void quit()
 {
 	//we should free all allocated textures (SCO);
-
+	
+	
 	BUFFER_KillBuffer();
 	
-	freeResources();
-	
 	/*
-	free(cover_texture.data);
-	free(back_texture.data);
-	free(empty_texture.data);
-	free(no_disc_texture.data);
-	free(current_cover_texture.data);
-	free(font_texture.data);
+	int i;
+	for(i=0xff;i>=0;i-=2){
+        //GRRLIB_FillScreen(0x000000FF);
+		GRRLIB_Printf(145, 120, font_title, 0xFFFFFF00|i, 1, "piero");
+        GRRLIB_Render();
+    }
 	*/
-	//BUFFER_ClearCovers();
 	
-	//GRRLIB_Exit();
+	freeResources();
+
 	exit(0);
 }
 
@@ -1476,6 +1475,7 @@ int main( int argc, char **argv )
 				/*Hitting 1 causes crash right now...*/
 				//sysdate();
 				//quit();
+				//WindowPrompt("Titolo", "Messaggio\nslashato", 0, &cancelButton);
 			}
 			else
 			{

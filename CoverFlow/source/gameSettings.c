@@ -203,25 +203,25 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 						mxmlElementSetAttr(new_node, "id", temp);
 						sprintf(temp, "%d", gs->ocarina);
 						mxmlElementSetAttr(next_n, "ocarina", temp);
-                                                sprintf(temp, "%d", gs->hooktype);
+						sprintf(temp, "%d", gs->hooktype);
 						mxmlElementSetAttr(next_n, "hooktype", temp);
 						sprintf(temp, "%d", gs->language);
 						mxmlElementSetAttr(next_n, "language", temp);
-                                                sprintf(temp, "%d", gs->video);
+						sprintf(temp, "%d", gs->video);
 						mxmlElementSetAttr(next_n, "video", temp);
-                                                sprintf(temp, "%d", gs->vipatch);
+						sprintf(temp, "%d", gs->vipatch);
 						mxmlElementSetAttr(next_n, "vipatch", temp);
-                                                if(date == 1)
-                                                {
-                                                    sysdate(temp);
-                                                    mxmlElementSetAttr(next_n, "lastplayed", temp);
+						
+						if(date == 1)
+						{
+							sysdate(temp);
+							mxmlElementSetAttr(next_n, "lastplayed", temp);
 						}
-                                                else
-                                                {
-                                                   mxmlElementSetAttr(next_n, "lastplayed", -1);
-                                                }
-						
-						
+						else
+						{	
+							sprintf(temp, "-1");
+							mxmlElementSetAttr(next_n, "lastplayed", temp);
+						}
 					}
 					
 					fp = fopen(USBLOADER_PATH "/gamelist.xml", "w");
