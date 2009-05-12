@@ -335,13 +335,28 @@ void draw_game_title(int index, float textSize, struct discHdr *gameList)
 		
 		header = &gameList[index];
 		len = strlen(header->title);
+
+		char gameName[36]; 
 		
+		// chomp the title to fit
+		if(len <= 35) //the length of the max title is 35 fixed width chars
+		{
+			sprintf(gameName, "%s", (header->title));
+		}
+		else
+		{
+			strncpy(gameName, header->title, 32);
+			gameName[32] = '\0';
+			strncat(gameName, "...", 3);
+			len = 35;
+		}
+
 		float offset = (len*7.9); // calc a font scaled offset from title length
 		
 		if((int)offset > 260)
 			offset = 260.0; // dont draw on top of the setting button
 		
-		GRRLIB_Printf(340 - (int)offset, 400, font_title, 0xFFFFFFFF, textSize, "%s", header->title);
+		GRRLIB_Printf(340 - (int)offset, 400, font_title, 0xFFFFFFFF, textSize, "%s", gameName);
 	}
 }
 
