@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+  <app version="1.0">
+    <name>CoverFloader</name>
+    <coder>Many Talented People</coder>
+    <version>Release X.X</version>
+    <release_date>N/A</release_date>
+    <short_description>USB ISO Loader</short_description>
+    <long_description>Many thanks to the developers:
+Scognito
+AFour98
+F1SHE4S
+GC@Blackbird
+and I suppose thanks to myself, beardface.
+
+Other thanks to:
+Gitkua (images)
+brwest85 (HBC Icon)
+
+Possible thanks to:
+LoudBob11 --Pending a useful commit ;)
+
+wiicoverflow.googlecode.com
+</long_description>
+  </app>
+
