@@ -329,6 +329,7 @@ void SetFloatingCacheItem(int selection, int newCacheItem)
 			 {
 				 if (!_cq.ready[i] && !_cq.request[i])
 				 {
+					 _cq.requestId[index]=&CoverList[index];
 					 _cq.request[i] = true;
 					 // this one isn't permenantly cached make a space for it in the floating cache
 					 if (_cq.permaBufferPosition[i] == -1 && !doNotRemoveFromFloating) SetFloatingCacheItem(index,i);
@@ -359,8 +360,8 @@ void SetFloatingCacheItem(int selection, int newCacheItem)
  // internal only - no need to lock (already locked)
  void RequestForCache(int index)
  {
-	 _cq.request[index]=true;
 	 _cq.requestId[index]=&CoverList[index];
+	 _cq.request[index]=true;
  }
 
 

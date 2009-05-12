@@ -1180,6 +1180,7 @@ int main( int argc, char **argv )
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 
 	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
+	InitializeBuffer(gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 	UpdateBufferedImages();
 	
 	float wait = 120; //ms
