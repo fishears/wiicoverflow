@@ -798,6 +798,9 @@ void ShowProgress (s32 done, s32 total)
 
 int ProgressWindow(wbfs_t *hdd, char* title, char* msg)
 {
+	//Freeze Buffer thread during install
+	pthread_mutex_lock(&lock_thread_mutex);
+	
 	/*TODO Draw Window*/
 	_title = title;
 	_msg   = msg;
@@ -805,6 +808,10 @@ int ProgressWindow(wbfs_t *hdd, char* title, char* msg)
 	int ret = wbfs_add_disc(hdd, __WBFS_ReadDVD, NULL, ShowProgress, ONLY_GAME_PARTITION, 0);
 	
 	self.progress = 0.0;
+	
+	//Resume Buffer Thread
+	pthread_mutex_unlock(&lock_thread_mutex);
+	Sleep(1);
 	
 	return ret;
 
