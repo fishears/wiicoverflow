@@ -490,14 +490,14 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 				if(_texture_data[self.gameSelected].data)
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-						GRRLIB_DrawImg(88, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(80, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
 					else
 						GRRLIB_DrawImg(102, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
 				}
 				else
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-						GRRLIB_DrawImg(88, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(80, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 					else
 						GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 				}
@@ -512,7 +512,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		else
 		{	
 			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-				GRRLIB_DrawImg(88, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(80, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 			else
 				GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 		}	
@@ -825,17 +825,17 @@ void GetWiimoteData()
 void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 scaleY, u32 color )
 {
 	// draw the pointer shadow
-	GRRLIB_DrawImg(pointer.p_x+4, pointer.p_y+4, pointer_shadow_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+	GRRLIB_DrawImg(pointer.p_x+4, pointer.p_y+4, pointer_shadow_texture, pointer.p_ang, 1, 1, color);
 	switch (type)
 	{
 		case 0: // default cursor
-			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, color);
 			break;
 		case 1: // turning hand cursor
-			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, turn_point_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, turn_point_texture, pointer.p_ang, 1, 1, color);
 			break;
 		default:
-			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(pointer.p_x, pointer.p_y, pointer_texture, pointer.p_ang, 1, 1, color);
 			break;
 	}
 	
@@ -1037,6 +1037,15 @@ void freeResources(){
 	free(current_cover_texture.data);
 	free(font_texture.data);
 	free(progress_texture.data);
+	
+	GRRLIB_FillScreen(0x000000FF);
+	GRRLIB_Render();
+	
+	GRRLIB_FillScreen(0x000000FF);
+	GRRLIB_Render();
+	
+	GRRLIB_FillScreen(0x000000FF);
+	GRRLIB_Render();
 	
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
