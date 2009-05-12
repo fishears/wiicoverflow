@@ -1161,8 +1161,8 @@ int main( int argc, char **argv )
 	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
 	UpdateBufferedImages();
 	
-	int wait = 300; //ms
-	float prog = 2.1/300.0;
+	float wait = 120; //ms
+	float prog = 2.1/wait;
 	
 	sprintf(self.debugMsg, "Initializing Threaded Image Buffer...");
 	while(wait > 0)
