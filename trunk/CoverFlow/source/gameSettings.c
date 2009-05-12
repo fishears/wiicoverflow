@@ -1,4 +1,7 @@
 #include "gameSettings.h"
+#include "settings.h"
+
+extern s_settings settings;
 
 void initGameSettings(s_gameSettings* gs){
 	
@@ -6,6 +9,7 @@ void initGameSettings(s_gameSettings* gs){
 	gs->hooktype = -1;
 	gs->language = -1;
 	gs->video = -1;
+        gs->vipatch = -1;
 	sprintf(gs->lastPlayed, "%s", "-1");
 }
 
@@ -102,6 +106,7 @@ bool getGameSettings(char* gameCode, s_gameSettings* gs){
 							
 							return true;
 						}
+                                                
 					}
 				}
 				
@@ -109,7 +114,7 @@ bool getGameSettings(char* gameCode, s_gameSettings* gs){
 		}
 	}
 	
-	initGameSettings(gs); // put -1 everywhere if game is not found
+	initGameSettings(gs); // put defaults everywhere if game is not found
 
 	return false;
 }
@@ -160,26 +165,26 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 							
 							found = true;
 							
-							if(gs->ocarina != -1){
+							//if(gs->ocarina != -1){
 								sprintf(temp, "%d", gs->ocarina);
 								mxmlElementSetAttr(next_n, "ocarina", temp);
-							}
-							if(gs->hooktype != -1){
+							//}
+							//if(gs->hooktype != -1){
 								sprintf(temp, "%d", gs->hooktype);
 								mxmlElementSetAttr(next_n, "hooktype", temp);
-							}
-							if(gs->language != -1){
+							//}
+							//if(gs->language != -1){
 								sprintf(temp, "%d", gs->language);
 								mxmlElementSetAttr(next_n, "language", temp);
-							}	
-							if(gs->video != -1){
+							//}
+							//if(gs->video != -1){
 								sprintf(temp, "%d", gs->video);
 								mxmlElementSetAttr(next_n, "video", temp);
-							}	
-							if(gs->vipatch != -1){
+							//}
+							//if(gs->vipatch != -1){
 								sprintf(temp, "%d", gs->vipatch);
 								mxmlElementSetAttr(next_n, "vipatch", temp);
-							}
+							//}
 							
 							if(date == 1){
 								sysdate(temp);
@@ -196,9 +201,26 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 						
 						sprintf(temp, "%s", gameCode);
 						mxmlElementSetAttr(new_node, "id", temp);
+						sprintf(temp, "%d", gs->ocarina);
+						mxmlElementSetAttr(next_n, "ocarina", temp);
+                                                sprintf(temp, "%d", gs->hooktype);
+						mxmlElementSetAttr(next_n, "hooktype", temp);
+						sprintf(temp, "%d", gs->language);
+						mxmlElementSetAttr(next_n, "language", temp);
+                                                sprintf(temp, "%d", gs->video);
+						mxmlElementSetAttr(next_n, "video", temp);
+                                                sprintf(temp, "%d", gs->vipatch);
+						mxmlElementSetAttr(next_n, "vipatch", temp);
+                                                if(date == 1)
+                                                {
+                                                    sysdate(temp);
+                                                    mxmlElementSetAttr(next_n, "lastplayed", temp);
+						}
+                                                else
+                                                {
+                                                   mxmlElementSetAttr(next_n, "lastplayed", -1);
+                                                }
 						
-						sysdate(temp);
-						mxmlElementSetAttr(new_node, "lastplayed", temp);
 						
 					}
 					

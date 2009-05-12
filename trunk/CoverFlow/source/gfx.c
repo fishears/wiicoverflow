@@ -429,7 +429,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		backButton.y = 260;
 		deleteButton.x = 450;
 		deleteButton.y = 260;
-		gsettingsButton.x = 525;
+		gsettingsButton.x = 530;
 		gsettingsButton.y = 320;
 		
 		Button_Paint(&loadButton);
@@ -438,10 +438,8 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		if(!settings.parentalLock)
 			Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
-                #ifdef GAMESET
 		Button_Paint(&gsettingsButton);
 		Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y);
-                #endif
 		if(!settings.parentalLock)
 			Button_Paint(&deleteButton);
 		
@@ -828,25 +826,38 @@ void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 s
 }
 void game_settings_menu(struct discHdr *gameList)
 {
-    //this needs to be a loop, checking its own buttons and returning to load menu when done, OK
-
     //get/set per-game settings
     struct discHdr *header = NULL;
     header = &gameList[self.gameSelected];
     char titleID[7];
-    sprintf(titleID, "%s", header->id);
+    char gameName[21];
 
-    //if no game settings found then set defaults to values of global game settings
-    if(!getGameSettings(titleID, &gameSetting))
+    // chomp the title to fit
+    if(strlen(header->title) < 20)
     {
-        gameSetting.ocarina = settings.ocarina;
-        gameSetting.hooktype = settings.hooktype;
-        gameSetting.language = settings.language;
-        gameSetting.video = settings.video;
-        gameSetting.vipatch = settings.vipatch;
+            sprintf(gameName, "%s", (header->title));
     }
-
-    //succa(&gameSetting);
+    else
+    {
+            strncpy(gameName, header->title, 17);
+            gameName[17] = '\0';
+            strncat(gameName, "...", 3);
+    }
+    sprintf(titleID, "%s", header->id);
+    if(!getGameSettings(titleID, &gameSetting));
+    {
+        setGameSettings(titleID, &gameSetting,-1);
+        getGameSettings(titleID, &gameSetting);
+    }
+    // ocarina will be -1 if we never been into game settings before
+    if(gameSetting.ocarina == -1)
+    {
+        gameSetting.ocarina = 0;
+        gameSetting.hooktype = 0;
+        gameSetting.language = 0;
+        gameSetting.video = 0;
+        gameSetting.vipatch = 0;
+    }
 
     bool doloop = true;
     do{
@@ -855,13 +866,15 @@ void game_settings_menu(struct discHdr *gameList)
 		GetWiimoteData();
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
+                {
                     setGameSettings(titleID, &gameSetting,-1);
                     return;
-
+                }
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
-                        setGameSettings(titleID, &gameSetting,-1);
-			return;
-
+                {
+                    setGameSettings(titleID, &gameSetting,-1);
+                    return;
+                }
 		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 		{
 			if(Button_Select(&gbackButton, pointer.p_x, pointer.p_y))
@@ -947,7 +960,7 @@ void game_settings_menu(struct discHdr *gameList)
 			}
 		}
 
-		//GRRLIB_FillScreen(0x000000FF);
+		GRRLIB_FillScreen(0x000000FF);
 		GRRLIB_DrawImg(80, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 
 		gbackButton.x = 490;
@@ -960,8 +973,8 @@ void game_settings_menu(struct discHdr *gameList)
 		Button_Paint(&gviddownButton);
 		Button_Paint(&ghookupButton);
 		Button_Paint(&ghookdownButton);
-        Button_Toggle_Paint(&gcheatoffButton, &cheatonButton, gameSetting.ocarina);
-		Button_Toggle_Paint(&gvidtvoffButton, &vidtvonButton, gameSetting.vipatch);
+                Button_Toggle_Paint(&gcheatoffButton, &gcheatonButton, gameSetting.ocarina);
+		Button_Toggle_Paint(&gvidtvoffButton, &gvidtvonButton, gameSetting.vipatch);
 
 		Button_Hover(&gbackButton, pointer.p_x, pointer.p_y);
 		Button_Hover(&glangupButton, pointer.p_x, pointer.p_y);
@@ -976,7 +989,7 @@ void game_settings_menu(struct discHdr *gameList)
 		Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
 
         //BUTTON TEXT
-		GRRLIB_Printf(185, 145,  font_title, settings.fontColor, 1, "%s: settings", header->title);
+		GRRLIB_Printf(105, 145,  font_title, settings.fontColor, 1, "%s: settings", gameName);
 		GRRLIB_Printf(185, 193,  font_texture, settings.fontColor, 1, "Ocarina:");
 		GRRLIB_Printf(350, 193,  font_texture, settings.fontColor, 1, "Hook:");
 		GRRLIB_Printf(425, 193,  font_texture, 0x000000FF, 1, "%s",ghooks[gameSetting.hooktype]);

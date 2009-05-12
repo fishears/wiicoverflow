@@ -1329,8 +1329,17 @@ int main( int argc, char **argv )
 						{
 							// User clicked on the load game, so save settings before launching
 							SETTINGS_Save();
+                                                        struct discHdr *header = &gameList[self.gameSelected];
+							char titleID[7];
+							sprintf(titleID, "%s", header->id);
+                                                        if(getGameSettings(titleID, &gameSetting))
+                                                            apply_settings();
+                                                        setGameSettings(titleID, &gameSetting,1);
 							if(!LaunchGame())
-								return 0;
+                                                        {
+                                                            SETTINGS_Load(); //failed to launch so get the globals back
+                                                            return 0;
+                                                        }
 						}
 						else if((!settings.parentalLock) && Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
 						{
@@ -1343,12 +1352,11 @@ int main( int argc, char **argv )
 							// User clicked back button
 							self.selected = false;
 						}
-                                                #ifdef GAMESET
                                                 else if(Button_Select(&gsettingsButton, pointer.p_x, pointer.p_y))
                                                 {
+                                                    //clicked settings button on launch screen
                                                     game_settings_menu(gameList);
                                                 }
-                                                #endif
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
 						{	
 							self.dummy ^= 1;
@@ -1364,7 +1372,7 @@ int main( int argc, char **argv )
 								WindowPrompt("Settings NOT FOUND", titleID, 0, &cancelButton);
 							
 							succa(&gameSetting);
-							setGameSettings(titleID, &gameSetting);
+							setGameSettings(titleID, &gameSetting, date);
 							*/
 						}
 					}
