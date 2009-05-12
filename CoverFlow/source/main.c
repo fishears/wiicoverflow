@@ -218,13 +218,35 @@ bool Init_Game_List(void)
 	}
 }
 
+
 void DragSlider(int xPos)
 {
 
-	int min_loc = 126;
-	int max_loc = 439;
+	int min_loc = 125; // slider range
+	int max_loc = 440;
+	int max_cover;
+	int min_cover;
 
-	self.shift = -1*(change_scale(xPos, min_loc, max_loc, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0));
+	if (xPos >= max_loc)
+		xPos = max_loc;
+	else if (xPos <= min_loc)
+		xPos = min_loc;
+	
+	if ( ((int)((COVER_COUNT/2.0) + 0.5)) - (COVER_COUNT/2.0) == 0) // even # of covers
+		max_cover = (int)(COVER_COUNT/2.0);
+	else // odd # of covers
+		max_cover = (int)((COVER_COUNT/2.0) - 0.5);
+	
+	min_cover = (-1*((int)((COVER_COUNT/2.0) + 0.5)) +1);
+	
+	float fx = change_scale(xPos, min_loc, max_loc, max_cover, min_cover);
+
+	if ((fx > min_cover) && (fx < max_cover))
+		self.shift = fx;
+	else if (fx >= max_cover)
+		self.shift = max_cover;
+	else if (fx <= min_cover)
+		self.shift = min_cover;
 }
 
 int DiscWait()
@@ -1196,6 +1218,7 @@ int main( int argc, char **argv )
 	#endif
 	
 	bool dragging = false;
+	bool twisting = false;
 	
 	self.animate_count = 50;
 	self.animate_slide_x = 0;
@@ -1220,6 +1243,7 @@ int main( int argc, char **argv )
 
 		GetWiimoteData();
 		//DrawBackground(settings.theme);
+		twisting = false;
 
 		// Check for 'HOME' button press
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
@@ -1252,8 +1276,8 @@ int main( int argc, char **argv )
 			}
 		}
 		
-		// Check for the A button action
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A || PAD_ButtonsDown(0) & PAD_BUTTON_A)
+	 	// Check for the A button action
+		else if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A || PAD_ButtonsDown(0) & PAD_BUTTON_A)
 		{
 			//First Check if any UI buttons or slider are selected
 			if((!settings.parentalLock) && Button_Select(&addButton, pointer.p_x, pointer.p_y))
@@ -1350,7 +1374,7 @@ int main( int argc, char **argv )
 
 		// Check for non-A activity
 		// Nothing is selected and nothing is flipped
-		if (!self.selected && self.animate_flip == 0)
+		else if (!self.selected && self.animate_flip == 0)
 		{
 			// Check for Left pad
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsDown(0) & PAD_BUTTON_LEFT)
@@ -1396,13 +1420,19 @@ int main( int argc, char **argv )
 					{
 						// flow right
 						if (!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0))) // watch for the end of the stack
+						{
 							self.shift -= change_scale(self.orient.roll, -90.0, 90.0, -0.3, 0.3);
+							twisting = true;
+						}
 					}
 					else
 					{
 						// flow left
 						if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
+						{
 							self.shift -= change_scale(self.orient.roll, -90.0, 90.0, -0.3, 0.3);
+							twisting = true;
+						}
 					}
 				}
 				if (settings.enablepitch)
@@ -1533,7 +1563,7 @@ int main( int argc, char **argv )
 			Button_Theme_Paint(&settingsButton, settings.theme);
 			
 			// Draw Game Title
-			if(settings.coverText)
+			if(settings.coverText && (!dragging && !twisting))
 			{	
 				float t = 1.0; // add a configurable text size later
 				draw_game_title(self.gameSelected, t , gameList);
@@ -1570,8 +1600,8 @@ int main( int argc, char **argv )
 		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 //		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
-//		GRRLIB_Printf(50, 20, font_title, 0x808080FF, 1, "IR     : %f, %f", self.ir.sx, self.ir.sy);
-//		GRRLIB_Printf(50, 40, font_title, 0x808080FF, 1, "Pointer: %f, %f", pointer.p_x, pointer.p_y);
+//		GRRLIB_Printf(50, 20, font_title, 0x808080FF, .5, "shift     : %f", self.shift);
+//		GRRLIB_Printf(50, 40, font_title, 0x808080FF, .5, "Pointer: %f, %f", pointer.p_x, pointer.p_y);
 #endif
 		// Draw the pointing hand
 		DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
