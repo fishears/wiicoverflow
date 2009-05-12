@@ -1475,7 +1475,7 @@ int main( int argc, char **argv )
 				/*Hitting 1 causes crash right now...*/
 				//sysdate();
 				//quit();
-				//WindowPrompt("Titolo", "Messaggio\nslashato", 0, &cancelButton);
+				//WindowPrompt("Titolo", "Messaggio\nslashato\n3volte", 0, &cancelButton);
 			}
 			else
 			{

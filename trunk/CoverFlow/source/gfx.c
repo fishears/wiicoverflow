@@ -1028,11 +1028,6 @@ void game_settings_menu(struct discHdr *gameList)
 
 void freeResources(){
 
-	GRRLIB_FillScreen(0x000000FF);
-	GRRLIB_Render();
-	
-	GRRLIB_Exit();
-	
 	free(pointer_texture.data);
 	free(pointer_shadow_texture.data);
 	free(cover_texture.data);
@@ -1042,4 +1037,10 @@ void freeResources(){
 	free(current_cover_texture.data);
 	free(font_texture.data);
 	free(progress_texture.data);
+	
+	GRRLIB_FillScreen(0x000000FF);
+	GRRLIB_Render();
+	
+	GRRLIB_Exit();
+	
 }
