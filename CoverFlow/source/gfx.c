@@ -1076,3 +1076,78 @@ void freeResources(){
 	GRRLIB_Exit();
 	
 }
+
+bool CoverHoverCenter()
+{
+	float fx_min, fx_max, fy_min, fy_max;    // these will hold our calculated edge coords at the appropriate zoom level
+	float cur_zoom     = settings.coverZoom; // our current zoom level
+	float zoom_in      = 0.69;  // max zoom in value
+	float zoom_out     = -8.0;  // max zoom out value
+	float xmin_zoomin  = 172.0; // the follow can be fine tuned... or probably calculated from the texture size... TODO
+	float xmin_zoomout = 231.0;
+	float xmax_zoomin  = 386.0;
+	float xmax_zoomout = 329.0;
+	float ymin_zoomin  = 40.0;
+	float ymin_zoomout = 127.0;
+	float ymax_zoomin  = 360.0;
+	float ymax_zoomout = 270.0;
+	
+	fx_min = change_scale(cur_zoom, zoom_out, zoom_in, xmin_zoomout, xmin_zoomin);
+	fx_max = change_scale(cur_zoom, zoom_out, zoom_in, xmax_zoomout, xmax_zoomin);
+	fy_min = change_scale(cur_zoom, zoom_out, zoom_in, ymin_zoomout, ymin_zoomin);
+	fy_max = change_scale(cur_zoom, zoom_out, zoom_in, ymax_zoomout, ymax_zoomin);
+	
+	if (pointer.p_x > fx_min && pointer.p_x < fx_max && pointer.p_y > fy_min && pointer.p_y < fy_max)
+		return true;
+	else
+		return false;
+}
+
+bool CoverHoverLeft()
+{
+	float fx_l_edge, fy_min, fy_max;    // these will hold our calculated edge coords at the appropriate zoom level
+	float cur_zoom     = settings.coverZoom; // our current zoom level
+	float zoom_out     = -8.0;  // max zoom in value
+	float zoom_in      = 0.69;  // max zoom out value
+	float xedge_zoomin  = 130.0; // the follow can be fine tuned... or probably calculated from the texture size... TODO
+	float xedge_zoomout = 206.0;
+	float ymin_zoomin  = 40.0;
+	float ymin_zoomout = 127.0;
+	float ymax_zoomin  = 360.0;
+	float ymax_zoomout = 270.0;
+	
+	fx_l_edge = change_scale(cur_zoom, zoom_out, zoom_in, xedge_zoomout, xedge_zoomin);
+	fy_min    = change_scale(cur_zoom, zoom_out, zoom_in, ymin_zoomout, ymin_zoomin);
+	fy_max    = change_scale(cur_zoom, zoom_out, zoom_in, ymax_zoomout, ymax_zoomin);
+	
+	if (pointer.p_x < fx_l_edge && pointer.p_y > fy_min && pointer.p_y < fy_max)
+		return true;
+	else
+		return false;
+}
+
+bool CoverHoverRight()
+{
+	
+	float fx_r_edge, fy_min, fy_max;    // these will hold our calculated edge coords at the appropriate zoom level
+	float cur_zoom     = settings.coverZoom; // our current zoom level
+	float zoom_out     = -8.0;  // max zoom in value
+	float zoom_in      = 0.69;  // max zoom out value
+	float xedge_zoomin  = 430.0; // the follow can be fine tuned... or probably calculated from the texture size... TODO
+	float xedge_zoomout = 350.0;
+	float ymin_zoomin  = 40.0;
+	float ymin_zoomout = 127.0;
+	float ymax_zoomin  = 360.0;
+	float ymax_zoomout = 270.0;
+	
+	fx_r_edge = change_scale(cur_zoom, zoom_out, zoom_in, xedge_zoomout, xedge_zoomin);
+	fy_min    = change_scale(cur_zoom, zoom_out, zoom_in, ymin_zoomout, ymin_zoomin);
+	fy_max    = change_scale(cur_zoom, zoom_out, zoom_in, ymax_zoomout, ymax_zoomin);
+	
+	if (pointer.p_x > fx_r_edge && pointer.p_y > fy_min && pointer.p_y < fy_max)
+		return true;
+	else
+		return false;
+}
+
+

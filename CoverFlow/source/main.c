@@ -1231,8 +1231,9 @@ int main( int argc, char **argv )
 	
 	SOUND_Init();
 	
-	
-	// Main coverflow screen gui loop
+	//////////////////////////
+	// main screen gui loop //
+	//////////////////////////
 	while(1) 
 	{
 		WPAD_ScanPads();
@@ -1299,9 +1300,9 @@ int main( int argc, char **argv )
 					if(!self.selected && self.animate_flip <= 0.0)
 					{
 						// nothing yet selected and nothing animating
-						if(pointer.p_x < 400 && pointer.p_x > 200 && pointer.p_y > 60 && pointer.p_y < 380)
+						// Check to see if in the cover area
+						if(CoverHoverCenter())
 						{
-							// pointer is in the center cover target area
 							if(select_ready && self.select_shift == 0.0)
 							{
 								// the center cover was selected so set the flag and load the game texture into buffer
@@ -1310,15 +1311,21 @@ int main( int argc, char **argv )
 								LoadCurrentCover(self.gameSelected, gameList);
 							}
 						}
-						else if(pointer.p_x < 200 && pointer.p_y > 60 && pointer.p_y < 380)
+						else if(CoverHoverLeft())
 						{
 							// the pointer is within the left set of covers, start to scroll
-							self.select_shift = (-4)*((200-pointer.p_x)/200.0); // range is -4 to 0 rouhgly
+							// TODO this still needs work, un-hard code and take cover spacing into account
+							float fx_l_edge  = change_scale(settings.coverZoom, -8.0, 0.69, 206.0, 130.0);
+							float shift_move = change_scale(pointer.p_x, -100, fx_l_edge, 5.0, 1.0); 
+							self.select_shift = (-1)*(shift_move);
 						}
-						else if(pointer.p_x > 400 && pointer.p_y > 60 && pointer.p_y < 380)
+						else if(CoverHoverRight())
 						{
 							// the pointer is within the right set of covers, start to scroll
-							self.select_shift = 5*(pointer.p_x-345.0)/280.0; // range is 1 to 5 roughly
+							// TODO this still needs work, un-hard code and take cover spacing into account
+							float fx_r_edge  = change_scale(settings.coverZoom, -8.0, 0.69, 350.0, 430.0);
+							float shift_move = change_scale(pointer.p_x, fx_r_edge, 660, 1.0, 5.0); 
+							self.select_shift = shift_move;
 						}
 					}
 					// Game is selected and finished animating the launch game dialog
@@ -1329,17 +1336,17 @@ int main( int argc, char **argv )
 						{
 							// User clicked on the load game, so save settings before launching
 							SETTINGS_Save();
-                                                        struct discHdr *header = &gameList[self.gameSelected];
+							struct discHdr *header = &gameList[self.gameSelected];
 							char titleID[7];
 							sprintf(titleID, "%s", header->id);
-                                                        if(getGameSettings(titleID, &gameSetting))
-                                                            apply_settings();
-                                                        setGameSettings(titleID, &gameSetting,1);
+							if(getGameSettings(titleID, &gameSetting))
+								apply_settings();
+							setGameSettings(titleID, &gameSetting,1);
 							if(!LaunchGame())
-                                                        {
-                                                            SETTINGS_Load(); //failed to launch so get the globals back
-                                                            return 0;
-                                                        }
+							{
+								SETTINGS_Load(); //failed to launch so get the globals back
+								return 0;
+							}
 						}
 						else if((!settings.parentalLock) && Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
 						{
@@ -1352,11 +1359,11 @@ int main( int argc, char **argv )
 							// User clicked back button
 							self.selected = false;
 						}
-                                                else if(Button_Select(&gsettingsButton, pointer.p_x, pointer.p_y))
-                                                {
-                                                    //clicked settings button on launch screen
-                                                    game_settings_menu(gameList);
-                                                }
+						else if(Button_Select(&gsettingsButton, pointer.p_x, pointer.p_y))
+                        {
+							//clicked settings button on launch screen
+                            game_settings_menu(gameList);
+                        }
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
 						{	
 							self.dummy ^= 1;
@@ -1384,41 +1391,34 @@ int main( int argc, char **argv )
 		// Nothing is selected and nothing is flipped
 		else if (!self.selected && self.animate_flip == 0)
 		{
-			// Check for Left pad
+			// Check for Left pad, flip cover left
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsDown(0) & PAD_BUTTON_LEFT)
 			{	
 				select_ready = false;
 				if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
-				{
-					self.shift += SCROLL_SPEED; // real Apple like flow direction ;-)
-				}
-			} // now check for right
+					self.shift += SCROLL_SPEED;
+			} // now check for right, flip cover right
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsDown(0) & PAD_BUTTON_RIGHT)
 			{
 				select_ready = false;
                 if(!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0)))
-				{
-					self.shift -= SCROLL_SPEED; // real Apple like flow direction ;-)
-				}
-			} // Check for UP for zoom in
+					self.shift -= SCROLL_SPEED;
+			} // Check for UP button held to zoom in
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsDown(0) & PAD_BUTTON_UP)
 			{	
-				if (settings.coverZoom > .69) // seriously, that the number ;-)
-				{
-					// limit how far we can zoom in
-					settings.coverZoom = .69;
-				}
+				if (settings.coverZoom > .69)
+					settings.coverZoom = .69; // limit how far we can zoom in
 				else
-				{
-					// no limit to zooming out, you can go really far out
-					settings.coverZoom += 0.03;
-				}
-			} // Check for DOWN for zoom out
+					settings.coverZoom += 0.03; // zoom in
+			} // Check for DOWN button held to zoom out
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_DOWN || PAD_ButtonsDown(0) & PAD_BUTTON_DOWN)
 			{	
-				settings.coverZoom -= 0.03;
+				if (settings.coverZoom < -8.0)
+					settings.coverZoom = -8.0; // limit how far we can zoom out
+				else
+					settings.coverZoom -= 0.03; // zoom out
 			} // Check for B to control flow with wrist twist
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_DOWN)
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_B)
 			{	
 				pointer.p_type = 1; //set cursor to rotating hand
 
@@ -1610,8 +1610,10 @@ int main( int argc, char **argv )
 		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 //		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
-//		GRRLIB_Printf(50, 20, font_title, 0x808080FF, .5, "shift     : %f", self.shift);
-//		GRRLIB_Printf(50, 40, font_title, 0x808080FF, .5, "Pointer: %f, %f", pointer.p_x, pointer.p_y);
+//		GRRLIB_Printf(50, 20, font_title, 0x808080FF, .5, "shift     : %f", settings.coverZoom);
+//		GRRLIB_Printf(50, 40, font_title, 0x808080FF, 1, "Pointer: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
+//		GRRLIB_Printf(50, 60, font_title, 0x808080FF, 1, "X: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
+
 #endif
 		// Draw the pointing hand
 		DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
