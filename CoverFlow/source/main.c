@@ -61,44 +61,7 @@ int oldmax = 0;
 
 void UpdateBufferedImages()
 {
-	int i;
-	int index = 0;
-//	InitializeBuffer(gameList, self.gameCnt, BUFFER_WINDOW,self.shift);
-SetSelectedCover(self.shift);
-/*	for(i = (-1*(COVER_COUNT/2.0)); i < (COVER_COUNT/2.0); i++)
-	{
-		index = i+(COVER_COUNT/2.0);
-		if(index < self.gameCnt)
-		{
-			//Some logic to avoid drawing everything
-			if(abs(self.shift+i) <= BUFFER_WINDOW)
-			{
-				//Is this cover already loaded?
-				if(!BUFFER_IsCoverReady(index))
-				{
-					//Is this cover already queued up?
-					if(!BUFFER_IsCoverQueued(index))
-					{
-						//Request this cover
-						struct discHdr *header = &gameList[index];
-		
-						BUFFER_RequestCover(index, header);
-					}
-				}
-			}
-			else
-			{
-				if(BUFFER_IsCoverReady(index))
-				{
-					//TODO Fix this
-					//calling this fixes the fuked up graphics when you load
-					//too many covers, but it causes a code dump eventually... HELP
-					BUFFER_RemoveCover(index);
-				}
-			}
-		}
-	}*/
-	
+	SetSelectedCover(self.shift);
 }
 
 void quit()
@@ -800,8 +763,6 @@ bool Menu_Delete(void)
 		}
 		else
 		{
-//			BUFFER_ClearCovers();
-			Sleep(300);
 			GetEntries();
 			Sleep(300);
 			InitializeBuffer(gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
@@ -836,7 +797,6 @@ bool Menu_Boot(void)
 	sprintf(titleID, "%s", header->id);
 	setGameSettings(titleID,  &gameSetting, 1); // so we store last played setting ;)
 		
-	BUFFER_ClearCovers();
 	BUFFER_KillBuffer();
 	Sleep(300);
 	

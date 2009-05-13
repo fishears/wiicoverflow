@@ -1,6 +1,7 @@
 #include "buffer.h"
  #include "core/disc.h"
  #include "core/fat.h"
+ #include "coverflow.h"
  
  #include <stdio.h>
  #include <ctype.h>
@@ -8,7 +9,6 @@
  #include <string.h>
  #include <malloc.h>
  
- #define USBLOADER_PATH          "SD:/usb-loader"
  
  #define MEM2_START_ADDRESS 0x91000000
  #define MEM2_EXTENT 0x3000000
@@ -17,7 +17,6 @@
  #define ALL_CACHED 2
  
  //this is just over 32MB Hope it works
- #define NUMBER_OF_MEM2_TEST_COVERS 250
  
  extern const u8         back_cover_png[];
  
@@ -70,7 +69,6 @@ int BufferMethod;
                  _texture_data[i].data=0;
          }
                  
-         BUFFER_ClearCovers();
          pthread_mutex_lock(&quit_mutex);
          _requestQuit = false;
          pthread_mutex_unlock(&quit_mutex);
@@ -82,34 +80,7 @@ int BufferMethod;
          }
  }
  
- void FreeTextureData(int index)
- {
-	 return;
-         if (index>=NUMBER_OF_MEM2_TEST_COVERS)
-         {
-                 pthread_mutex_lock(&buffer_mutex[index]);
-                 if(_texture_data[index].data != 0)
-                         free(_texture_data[index].data);
-                         
-                 _texture_data[index].data = 0;
-                 pthread_mutex_unlock(&buffer_mutex[index]);
-         }
- }
- 
- 
- void BUFFER_RequestCover(int index, struct discHdr *header)
- {
-         //int i;
-         
-         if(index < MAX_BUFFERED_COVERS)
-         {
-                 pthread_mutex_lock(&queue_mutex);
-                 _cq.request[index]   = true;
-                 _cq.requestId[index] = header;
-                 pthread_mutex_unlock(&queue_mutex);
-         }
- }
- 
+
  bool BUFFER_IsCoverReady(int index)
  {
          bool retval = false;
@@ -138,24 +109,6 @@ int BufferMethod;
          return retval;
  }
  
- void BUFFER_RemoveCover(int index)
- {
-	 return;
-         if(index < MAX_BUFFERED_COVERS)
-         {
-                 if (index>=NUMBER_OF_MEM2_TEST_COVERS)
-                 {
-                         pthread_mutex_lock(&queue_mutex);
-                         FreeTextureData(index);
-                         _cq.request[index] = false;
-                         _cq.remove[index]  = false;
-                         _cq.ready[index]   = false;
-                         pthread_mutex_unlock(&queue_mutex);
-                 }
-         }
- }
- 
- 
  
  void BUFFER_KillBuffer()
  {
@@ -163,30 +116,6 @@ int BufferMethod;
          pthread_mutex_lock(&quit_mutex);
          _requestQuit = true;
          pthread_mutex_unlock(&quit_mutex);
- }
- 
- void BUFFER_ClearCovers()
- {
-	 int i;
-	 return;
-
-	 pthread_mutex_lock(&queue_mutex);
-	 for(i = 0; i < MAX_BUFFERED_COVERS; i++)
-	 {
-		 BUFFER_RemoveCover(i); //this is to free any allocated memory
-		 //special code to stop showing if covers change incorrect covers
-		 pthread_mutex_lock(&buffer_mutex[i]);
-
-		 _cq.request[i] = false;
-		 _cq.remove[i]  = false;
-		 _cq.ready[i]   = false;
-		 _texture_data[i].data = 0; //don't need to check as it hasn't actually had memory allocated in mem2
- 
-	pthread_mutex_unlock(&buffer_mutex[i]);
- 
- 
-	}
- pthread_mutex_unlock(&queue_mutex);
  }
  
  int GetFLoatingQueuePosition(int index)
@@ -252,7 +181,6 @@ int BufferMethod;
 			_cq.coverMissing[index]=true;
 			_cq.ready[index]   = false;
 			pthread_mutex_unlock(&queue_mutex);
-			FreeTextureData(index);
 		 }
 	 
 	}
@@ -293,10 +221,11 @@ int BufferMethod;
 		}
 	 
                  
-		Sleep(1);
+			sleep(10);
 		pthread_mutex_lock(&quit_mutex);
 		if(_requestQuit)
 		{
+			Sleep(1);
 			pthread_mutex_unlock(&quit_mutex);
 			 
 			int m = 0;
