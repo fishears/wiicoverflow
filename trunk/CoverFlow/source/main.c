@@ -63,13 +63,14 @@ void UpdateBufferedImages()
 {
 	int i;
 	int index = 0;
-	
-	for(i = (-1*(COVER_COUNT/2.0)); i < (COVER_COUNT/2.0); i++)
+//	InitializeBuffer(gameList, self.gameCnt, BUFFER_WINDOW,self.shift);
+SetSelectedCover(self.shift);
+/*	for(i = (-1*(COVER_COUNT/2.0)); i < (COVER_COUNT/2.0); i++)
 	{
 		index = i+(COVER_COUNT/2.0);
 		if(index < self.gameCnt)
 		{
-			/*Some logic to avoid drawing everything*/
+			//Some logic to avoid drawing everything
 			if(abs(self.shift+i) <= BUFFER_WINDOW)
 			{
 				//Is this cover already loaded?
@@ -96,7 +97,7 @@ void UpdateBufferedImages()
 				}
 			}
 		}
-	}
+	}*/
 	
 }
 
@@ -496,6 +497,7 @@ void Settings_Menu(void)
 				if (WindowPrompt(localStr("M001", "Cover download"),localStr("M002", "This operation can't be canceled, continue?"), &okButton, &cancelButton))
 				{
 					batchDownloadCover(gameList);
+					CoversDownloaded();
 				}
 			}
 			else if (Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
@@ -744,7 +746,7 @@ bool Menu_Install(void)
 				WindowPrompt ("Install error!",0,&cancelButton,0);
 				return false;
 			} else {
-				BUFFER_ClearCovers();
+				InitializeBuffer(gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 				Sleep(300);
 				GetEntries();
 				UpdateBufferedImages();
@@ -798,11 +800,11 @@ bool Menu_Delete(void)
 		}
 		else
 		{
-			BUFFER_ClearCovers();
+//			BUFFER_ClearCovers();
 			Sleep(300);
 			GetEntries();
 			Sleep(300);
-			UpdateBufferedImages();
+			InitializeBuffer(gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 			Sleep(100);
 			
 			WindowPrompt("Successfully deleted.", "Press Ok to Continue.", &okButton, 0);

@@ -42,6 +42,9 @@ int _cover_count;
 inline void Sleep(unsigned long milliseconds);
 
 inline void BUFFER_InitBuffer(int thread_count);
+
+void CoversDownloaded();
+void SetSelectedCover(int index);
 void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection);
  
 inline void BUFFER_RequestCover(int index, struct discHdr *header);
