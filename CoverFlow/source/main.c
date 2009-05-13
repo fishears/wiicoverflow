@@ -492,7 +492,8 @@ void Settings_Menu(void)
 			else if (Button_Select(&downloadButton, pointer.p_x, pointer.p_y))
 			{
 				// Clicked on the Download Covers button
-				if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
+				//if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
+				if (WindowPrompt(localStr("M001", "Cover download"),localStr("M002", "This operation can't be canceled, continue?"), &okButton, &cancelButton))
 				{
 					batchDownloadCover(gameList);
 				}

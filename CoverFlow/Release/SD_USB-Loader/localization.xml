@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wiicoverflow>
+  <DE desc="Deutsch">
+    <M001 val="Cover runterladen" />
+    <M002 val="Diese Operation kann nicht abgebrochen werden! Weiter?" />
+  </DE>
+  <PT-BR desc="Português Brasil">
+	<M001 val="Download de Capas" />
+	<M002 val="Esta operação não pode ser cancelada, continuar ?" />
+  </PT-BR>
+</wiicoverflow>

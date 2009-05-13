@@ -26,6 +26,7 @@ typedef struct {
     int language;
     int video;
     int vipatch;
+	char localLanguage[5];
 } s_settings;
 
 
