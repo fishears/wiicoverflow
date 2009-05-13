@@ -718,20 +718,21 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		
 		// Draw text
 		GRRLIB_Printf(145, 120, font_title, 0xFFFFFFFF, 1, "%s", title);
-		//GRRLIB_Printf(150, y+sp, font_texture, settings.fontColor, 1, "%s", txt);
 		
-		char* msg = malloc(strlen(txt)*sizeof(char));
-		sprintf(msg, txt);
-		
-		pch = strtok(msg, "\n");
-		while (pch != NULL){
+		if(txt != NULL)
+		{
+			char* msg = malloc(strlen(txt)*sizeof(char));
+			sprintf(msg, txt);
 			
-			GRRLIB_Printf(150, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
-			pch = strtok(NULL, "\n");
-			sp+=20;
-		}
-		free(msg);
-        
+			pch = strtok(msg, "\n");
+			while (pch != NULL){
+				
+				GRRLIB_Printf(150, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
+				pch = strtok(NULL, "\n");
+				sp+=20;
+			}
+			free(msg);
+        }
 		// Check for button-pointer intersections, and rumble
 		if (Button_Hover(choice_a, pointer.p_x, pointer.p_y) ||
 			Button_Hover(choice_b, pointer.p_x, pointer.p_y))
