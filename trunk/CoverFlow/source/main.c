@@ -619,7 +619,8 @@ bool Menu_Install(void)
 
 	WPAD_Rumble(0,0);
 	self.rumbleAmt = 0;
-	
+	okButton.y = 290;
+	cancelButton.y = 290;
     static struct discHdr headerdisc ATTRIBUTE_ALIGN(32);
 	
 	if(!WindowPrompt ("Install new Game?", "Place disk in drive and hit ok.",&okButton,&cancelButton))
@@ -934,6 +935,9 @@ int main( int argc, char **argv )
 	SETTINGS_Init();
 	
 	GRRLIB_Init();
+    GRRLIB_FillScreen(0x000000FF);
+    GRRLIB_Render();
+	
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
 	
@@ -1588,8 +1592,8 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "Pitch: %f", self.orient.pitch);
 //		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "adjPitch: %f", (change_scale(self.orient.pitch, -90, 90, -0.5, 0.5)) );
 //		GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "adjRoll: %f", (change_scale(self.orient.roll, -90, 90, -0.5, 0.5)) );
-		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
-		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
+//		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
+//		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 //		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
 //		GRRLIB_Printf(50, 20, font_title, 0x808080FF, .5, "shift     : %f", settings.coverZoom);
 //		GRRLIB_Printf(50, 40, font_title, 0x808080FF, 1, "Pointer: %d, %d", (int)pointer.p_x, (int)pointer.p_y);

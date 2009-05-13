@@ -697,8 +697,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 				if(Button_Select(choice_a, pointer.p_x, pointer.p_y))
 					return true;
 			}
-			
-			if(choice_b != 0)
+			else if(choice_b != 0)
 			{
 				if(Button_Select(choice_b, pointer.p_x, pointer.p_y))
 					return false;
@@ -713,6 +712,9 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		if(choice_a != 0 && choice_b != 0){
 			choice_a->x = 320-5-80;
 			choice_b->x = 320+5;
+			
+			Button_Paint(choice_a);
+			Button_Paint(choice_b);
 		}
 		
 		else{
