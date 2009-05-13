@@ -1392,18 +1392,36 @@ int main( int argc, char **argv )
 		// Nothing is selected and nothing is flipped
 		else if (!self.selected && self.animate_flip == 0)
 		{
-			// Check for Left pad, flip cover left
+                    
+                // 2 cover check and fix
+                int max_cover;
+                int min_cover;
+                if(COVER_COUNT == 2)
+                {
+                    max_cover = 0;
+                    min_cover = 1;
+                }
+                else
+                {
+                    max_cover = (-1*(COVER_COUNT/2.0));
+                    min_cover = (COVER_COUNT/2.0);
+                }
+                        // Check for Left pad, flip cover left
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsDown(0) & PAD_BUTTON_LEFT)
 			{	
 				select_ready = false;
-				if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
+				if(!((int)self.shift+.5 >= min_cover))
 					self.shift += SCROLL_SPEED;
 			} // now check for right, flip cover right
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsDown(0) & PAD_BUTTON_RIGHT)
 			{
 				select_ready = false;
-                if(!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0)))
+
+                                if(!((int)self.shift-SCROLL_SPEED <= max_cover))
 					self.shift -= SCROLL_SPEED;
+                                else if(COVER_COUNT ==2 && self.shift >= 0)
+                                    self.shift -= SCROLL_SPEED;
+                                
 			} // Check for UP button held to zoom in
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsDown(0) & PAD_BUTTON_UP)
 			{	
