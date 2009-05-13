@@ -34,14 +34,13 @@ LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	-lsnd -lmxml -lpng -lz -lfat -lwiiuse -lbte -logc -lm -ltremor
+LIBS	:=	-lfreetype -lsnd -lmxml -lpng -lz -lfat -lwiiuse -lbte -logc -lm -ltremor
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(CURDIR)/libs/png $(CURDIR)/libs/mxml $(CURDIR)/libs/sndlib
-
+LIBDIRS	:= $(CURDIR)/libs/png $(CURDIR)/libs/mxml $(CURDIR)/libs/sndlib $(CURDIR)/libs/freetype
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
 # rules for different file extensions
