@@ -2,6 +2,7 @@
 
 extern s_settings settings;
 extern s_gameSettings gameSetting;
+extern s_self self;
 
 u32 swap32(u32 x)
 {
@@ -139,5 +140,22 @@ void apply_settings()
         settings.video = gameSetting.video;
         settings.vipatch = gameSetting.vipatch;
     }
+}
+
+int Net_Init(char *ip){
+        
+	s32 res;
+        
+	while ((res = net_init()) == -EAGAIN)
+		usleep(100 * 1000); //100ms
+        
+	if (if_config(ip, NULL, NULL, true) < 0) {
+		WindowPrompt ("ERROR!","Cannot get local IP address.", &okButton, 0);
+		usleep(1000 * 1000 * 1); //1 sec
+		
+		return false;
+	}
+	
+	return true;
 }
 

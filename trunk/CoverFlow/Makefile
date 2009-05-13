@@ -117,6 +117,7 @@ run:
 	wiiload $(OUTPUT).dol
 
 run-win:
+#	C:\\wiidev\\emu\\dolphin\\Dolphin.exe --elf=$(OUTPUT).elf
 	D:\\Dolphin_3089\\Dolphin.exe --elf=$(OUTPUT).elf
 	
 #---------------------------------------------------------------------------------

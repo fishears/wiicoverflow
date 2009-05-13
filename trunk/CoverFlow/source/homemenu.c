@@ -110,6 +110,7 @@ void HomeMenu_Show()
 	do{
 
 		WPAD_ScanPads();
+		PAD_ScanPads();
 		
 		GetWiimoteData();
 
@@ -121,14 +122,17 @@ void HomeMenu_Show()
 //		pointer.p_y = self.ir.sy-220;
 //		pointer.p_ang = self.ir.angle/2; // Set angle/2 to translate correctly
 
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
+		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)||(PAD_ButtonsDown(0) & PAD_TRIGGER_Z))
 		{
 			WPAD_Rumble(0,0); // Kill the rumble
 			doloop = false;
 		}
 			
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||((PAD_ButtonsDown(0) & PAD_BUTTON_B)))
 		{
+			#ifdef TEST_MODE
+				doloop = false;
+			#endif
 			if (Button_Select(&homeMenuTopButton, pointer.p_x, pointer.p_y))
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
