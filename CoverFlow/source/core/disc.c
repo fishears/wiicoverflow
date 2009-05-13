@@ -235,6 +235,9 @@ s32 Disc_IsWii(void)
 	if (ret < 0)
 		return ret;
 
+	if(header == 0)
+		return -1;
+
 	/* Check magic word */
 	if (header->magic != WII_MAGIC)
 		return -1;
