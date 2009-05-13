@@ -238,9 +238,9 @@ void batchDownloadCover(struct discHdr *gameList)
 			//sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
 		}
 	}
-	BUFFER_ClearCovers();
+//	BUFFER_ClearCovers();
 	Sleep(300);
-	UpdateBufferedImages();
+//	UpdateBufferedImages();
 	Sleep(100);
 	WindowPrompt ("Operation finished!","Press A to continue", &okButton, 0);
 }
