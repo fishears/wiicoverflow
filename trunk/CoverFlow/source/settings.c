@@ -48,7 +48,8 @@ void SETTINGS_Init()
 	settings.music        = 1;
 	settings.quickstart   = 0;
 	settings.enablepitch  = 0;
-
+	strcpy(settings.localLanguage, "EN-US"); //Localization
+ 
 	//Global Game
 	settings.ocarina      = 0;
 	settings.hooktype     = 0;
@@ -127,6 +128,8 @@ int SETTINGS_Load()
 			  settings.quickstart     = atof(mxmlElementGetAttr(next_n,"quickstart"));
 		  if(mxmlElementGetAttr(next_n,"enablepitch"))
 			  settings.enablepitch     = atof(mxmlElementGetAttr(next_n,"enablepitch"));
+		  if(mxmlElementGetAttr(next_n,"localizeLang"))
+			  strcpy(settings.localLanguage, mxmlElementGetAttr(next_n,"localizeLang"));
 	  }
 	  else
 	  {
@@ -217,6 +220,9 @@ int SETTINGS_Save()
 	sprintf(buffer, "%d", settings.enablepitch);
 	mxmlElementSetAttr(node, "enablepitch", buffer);
 
+	mxmlElementSetAttr(node, "localizeLang", settings.localLanguage);
+	
+	
     //GLOBAL GAME SETTINGS
 	
 	node = mxmlNewElement(tree, "game");

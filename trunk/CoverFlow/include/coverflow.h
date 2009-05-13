@@ -38,7 +38,7 @@
 #include "subsystem.h"
 #include "settings.h"
 #include "cfg.h"
-
+#include "localization.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy

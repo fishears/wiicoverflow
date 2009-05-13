@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wiicoverflow>
+  <graphics spacing="3.100000" angle="90.000000" zoom="-2.000000" drawWindow="7" coverText="1" theme="0" />
+  <general sound="1" music="1" rumble="1" lock="0" quickstart="0" enablepitch="0" localizeLang="EN-US" />
+  <game ocarina="0" hooktype="0" language="0" video="0" vipatch="0" />
+</wiicoverflow>
