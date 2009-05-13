@@ -47,10 +47,7 @@ void AddCover(GRRLIB_texImg tex)
 	}
 }
 
-void ClearCovers()
-{
-	BUFFER_ClearCovers();
-}
+
 
 void Init_Covers()
 {

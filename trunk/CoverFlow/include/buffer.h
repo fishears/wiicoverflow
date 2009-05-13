@@ -4,7 +4,7 @@
 
 #include "GRRLIB.h"
 
-#define MAX_BUFFERED_COVERS  349
+#define MAX_BUFFERED_COVERS  500
 
 #define MAX_THREADS 5
 
@@ -47,15 +47,9 @@ void CoversDownloaded();
 void SetSelectedCover(int index);
 void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection);
  
-inline void BUFFER_RequestCover(int index, struct discHdr *header);
 
 inline bool BUFFER_IsCoverReady(int index);
-inline bool BUFFER_IsCoverQueued(int index);
 
-inline void BUFFER_RemoveCover(int index);
-
-inline bool BUFFER_LockTexture(int index, GRRLIB_texImg* tex);
-inline void BUFFER_ReleaseTexture(int index);
 
 inline void BUFFER_KillBuffer();
 
