@@ -23,65 +23,65 @@ void sysdate(char* ret_string){
 	switch(ts->tm_wday){
 	
 		case 0:
-			sprintf(dow, "Sunday");
+			sprintf(dow, "Sun");
 			break;
 		case 1:
-			sprintf(dow, "Monday");
+			sprintf(dow, "Mon");
 			break;
 		case 2:
-			sprintf(dow, "Tuesday");
+			sprintf(dow, "Tue");
 			break;
 		case 3:
-			sprintf(dow, "Wednesday");
+			sprintf(dow, "Wed");
 			break;
 		case 4:
-			sprintf(dow, "Thursday");
+			sprintf(dow, "Thu");
 			break;
 		case 5:
-			sprintf(dow, "Friday");
+			sprintf(dow, "Fri");
 			break;
 		case 6:
-			sprintf(dow, "Saturday");
+			sprintf(dow, "Sat");
 			break;
 	}
 	
 	switch(ts->tm_mon){
 		
 		case 0:
-			sprintf(month, "January");
+			sprintf(month, "Jan");
 			break;
 		case 1:
-			sprintf(month, "February");
+			sprintf(month, "Feb");
 			break;
 		case 2:
-			sprintf(month, "March");
+			sprintf(month, "Mar");
 			break;
 		case 3:
-			sprintf(month, "April");
+			sprintf(month, "Apr");
 			break;
 		case 4:
 			sprintf(month, "May");
 			break;
 		case 5:
-			sprintf(month, "June");
+			sprintf(month, "Jun");
 			break;
 		case 6:
-			sprintf(month, "July");
+			sprintf(month, "Jul");
 			break;
 		case 7:
-			sprintf(month, "August");
+			sprintf(month, "Aug");
 			break;
 		case 8:
-			sprintf(month, "September");
+			sprintf(month, "Sep");
 			break;
 		case 9:
-			sprintf(month, "October");
+			sprintf(month, "Oct");
 			break;
 		case 10:
-			sprintf(month, "November");
+			sprintf(month, "Nov");
 			break;
 		case 11:
-			sprintf(month, "Dicember");
+			sprintf(month, "Dec");
 			break;
 		//default:
 		//	sprintf(month, "xxx: %d", ts->tm_mon);
