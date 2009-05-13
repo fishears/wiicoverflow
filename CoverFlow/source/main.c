@@ -1482,6 +1482,7 @@ int main( int argc, char **argv )
 			{
 				if(abs(self.select_shift) > SCROLL_SPEED)
 				{
+					select_ready = false;
 					int mult = abs((int)self.select_shift);
 					if(self.select_shift > 0)
 					{
@@ -1572,7 +1573,7 @@ int main( int argc, char **argv )
 			Button_Theme_Paint(&settingsButton, settings.theme);
 			
 			// Draw Game Title
-			if(settings.coverText && (!dragging && !twisting))
+			if(settings.coverText && (!dragging && !twisting && select_ready))
 			{	
 				float t = 1.0; // add a configurable text size later
 				draw_game_title(self.gameSelected, t , gameList);
