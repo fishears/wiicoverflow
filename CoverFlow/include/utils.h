@@ -19,5 +19,6 @@ void sysdate();
 void ios_version_check();
 u8 CalculateFrameRate();
 void apply_settings();
+int Net_Init(char *ip);
 
 #endif

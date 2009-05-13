@@ -138,6 +138,7 @@ typedef struct{
 	bool selected;
 	int array_size;
 	int rumbleAmt;
+	f32 gsize;
 	float progress;
 	
 	/*Animate Parameters*/

@@ -140,15 +140,15 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 void Init_Buttons()
 {
     addButton			= Button_Init(add_button_png, add_button_hover_png, 580, 417);
-    slideButton             = Button_Init(slide_png, slide_hover_png, 260, 426);
-    okButton                = Button_Init(ok_png, ok_hover_png, 220, 250);
-    loadButton              = Button_Init(load_png, load_hover_png, 220, 300);
+    slideButton         = Button_Init(slide_png, slide_hover_png, 260, 426);
+    okButton            = Button_Init(ok_png, ok_hover_png, 220, 290);
+	cancelButton		= Button_Init(cancel_png, cancel_hover_png, 360, 290);
+    loadButton          = Button_Init(load_png, load_hover_png, 220, 300);
     deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
     resetButton		    = Button_Init(reset_png, reset_hover_png, 350, 330);
     backButton              = Button_Init(back_png, back_hover_png, 340, 300);
     gbackButton             = Button_Init(back_png, back_hover_png, 340, 300);
     gsettingsButton         = Button_Init(settings_png, settings_hover_png, 30, 420);
-    cancelButton		= Button_Init(cancel_png, cancel_hover_png, 360, 250);
     cheatonButton		= Button_Init(toggle_on_png, toggle_on_png, 215,85);
     cheatoffButton		= Button_Init(toggle_off_png, toggle_off_png, 215,85);
     langupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,123);
@@ -356,7 +356,11 @@ void draw_game_title(int index, float textSize, struct discHdr *gameList)
 		if((int)offset > 260)
 			offset = 260.0; // dont draw on top of the setting button
 		
+		#ifndef TEST_MODE
 		GRRLIB_Printf(340 - (int)offset, 400, font_title, 0xFFFFFFFF, textSize, "%s", gameName);
+		#else
+		GRRLIB_Printf(340 - (int)offset, 400, font_title, 0xFFFFFFFF, textSize, "%s", "Game Title");
+		#endif
 	}
 }
 
@@ -461,7 +465,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		#ifndef TEST_MODE
 		struct discHdr *header = NULL;
 		header = &gameList[self.gameSelected];
-		f32 size = 0.0;
+		//f32 size = 0.0;
 		char gameName[21]; 
 
 		// chomp the title to fit
@@ -476,26 +480,24 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 			strncat(gameName, "...", 3);
 		}
 		
-		// get game size
-		WBFS_GameSize(header->id, &size);
-
 		GRRLIB_Printf(280, 174, font_title, 0xFFFFFFFF, 1, "%s", gameName);
 		//GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
 		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
 			GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Never played before");
 		else
 			GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Played %s",gameSetting.lastPlayed);
-		GRRLIB_Printf(290, 230, font_title, 0xFFFFFFFF, .8, "Size:    %.2fGB", size);
+		GRRLIB_Printf(290, 230, font_title, 0xFFFFFFFF, .8, "Size:    %.2fGB", self.gsize);
 		#else
-		GRRLIB_Printf(280, 180, font_title, 0xFFFFFFFF, 1, "%s", "Test Game Id Goes Here");
-		GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "%s", " Game ID: TEST");
-		GRRLIB_Printf(290, 230, font_title, 0xFFFFFFFF, .8, "%s", " Size:    2.0GB");
+		
+		GRRLIB_Printf(280, 174, font_title, 0xFFFFFFFF, 1, "%s", "Best game");
+		GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "%s", " Game ID: KBGSUX");
+		GRRLIB_Printf(290, 230, font_title, 0xFFFFFFFF, .8, "Size:    %.2fGB", self.gsize);
 		#endif
 		
 		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 			GRRLIB_DrawImg(102+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
 		else
-			GRRLIB_DrawImg(102+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
+			GRRLIB_DrawImg(132+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
 		
 		if(self.gameSelected < MAX_BUFFERED_COVERS || self.gameSelected >= 0)
 		{
@@ -679,16 +681,16 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		
 	do{
 		WPAD_ScanPads();
-		
+		PAD_ScanPads();
 		GetWiimoteData();
 
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
 			exit(0);
 		
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)|| (PAD_ButtonsDown(0) & PAD_BUTTON_B))
 			return false;
 		
-		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
 		{
 			if(choice_a != 0)
 			{
@@ -704,20 +706,32 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		}
 		
 		GRRLIB_FillScreen(0x000000FF);
-		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(128, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 
 		// Draw buttons
-		if(choice_a != 0)
-			Button_Paint(choice_a);
 		
-		if(choice_b != 0)
-			Button_Paint(choice_b);
+		if(choice_a != 0 && choice_b != 0){
+			choice_a->x = 320-5-80;
+			choice_b->x = 320+5;
+		}
 		
-		int y = 150;
+		else{
+			if(choice_a != 0){
+				choice_a->x = 320-40;
+				Button_Paint(choice_a);
+			}
+			
+			if(choice_b != 0){
+				choice_b->x = 320-40;
+				Button_Paint(choice_b);
+			}
+		}
+		
+		int y = 140;
 		int sp = 0;
 		
 		// Draw text
-		GRRLIB_Printf(145, 120, font_title, 0xFFFFFFFF, 1, "%s", title);
+		GRRLIB_Printf(138, 105, font_title, 0xFFFFFFFF, 1, "%s", title);
 		
 		if(txt != NULL)
 		{
@@ -727,9 +741,9 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			pch = strtok(msg, "\n");
 			while (pch != NULL){
 				
-				GRRLIB_Printf(150, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
+				GRRLIB_Printf(138, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
 				pch = strtok(NULL, "\n");
-				sp+=20;
+				sp+=16;
 			}
 			free(msg);
         }
@@ -1096,6 +1110,10 @@ bool CoverHoverCenter()
 	fx_max = change_scale(cur_zoom, zoom_out, zoom_in, xmax_zoomout, xmax_zoomin);
 	fy_min = change_scale(cur_zoom, zoom_out, zoom_in, ymin_zoomout, ymin_zoomin);
 	fy_max = change_scale(cur_zoom, zoom_out, zoom_in, ymax_zoomout, ymax_zoomin);
+	
+	#ifdef TEST_MODE
+	return true;
+	#endif
 	
 	if (pointer.p_x > fx_min && pointer.p_x < fx_max && pointer.p_y > fy_min && pointer.p_y < fy_max)
 		return true;
