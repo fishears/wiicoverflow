@@ -848,22 +848,6 @@ bool Menu_Boot(void)
 	return true;
 }
 
-
-int Net_Init(char *ip){
-	
-	s32 res;
-	
-    while ((res = net_init()) == -EAGAIN)
-		usleep(100 * 1000); //100ms
-	
-    if (if_config(ip, NULL, NULL, true) < 0) {
-		WindowPrompt ("ERROR!","Cannot get local IP address.", &okButton, 0);
-		usleep(1000 * 1000 * 1); //1 sec
-		return false;
-	}
-	return true;
-}
-
 void initVars(){
 
 	pointer.p_x = 0;
@@ -886,6 +870,7 @@ void initVars(){
 	self.inetOk = false;
 	
 	self.dummy = 0;
+	self.gsize = 0;
 	
 	initGameSettings(&gameSetting);
 }
@@ -896,9 +881,7 @@ bool LaunchGame()
 	while(!done)
 	{
 		//self.dummy = false;
-	
 		draw_covers();
-		
 		done = draw_selected_two(gameList, true, false);
 		
 		GRRLIB_Render();
@@ -1200,17 +1183,14 @@ int main( int argc, char **argv )
 	while(1) 
 	{
 		WPAD_ScanPads();
-		
-		#ifdef TEST_MODE
 		PAD_ScanPads();
-		#endif
 
 		GetWiimoteData();
 		//DrawBackground(settings.theme);
 		twisting = false;
 
 		// Check for 'HOME' button press
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME) || (PAD_ButtonsDown(0) & PAD_TRIGGER_Z))
 		{
 			SOUND_PlaySound(FX_COVER_FLIP, 0);
 			SETTINGS_Save();
@@ -1271,6 +1251,14 @@ int main( int argc, char **argv )
 								// the center cover was selected so set the flag and load the game texture into buffer
 								SOUND_PlaySound(FX_COVER_FLIP, 0);
 								self.selected = true;
+								
+								f32 size;
+								struct discHdr *header = NULL;
+								
+								header = &gameList[self.gameSelected];
+								WBFS_GameSize(header->id, &size);
+								self.gsize = size;
+								
 								LoadCurrentCover(self.gameSelected, gameList);
 							}
 						}
@@ -1369,13 +1357,13 @@ int main( int argc, char **argv )
                     min_cover = (COVER_COUNT/2.0);
                 }
                         // Check for Left pad, flip cover left
-			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsDown(0) & PAD_BUTTON_LEFT)
+			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT)
 			{	
 				select_ready = false;
 				if(!((int)self.shift+.5 >= min_cover))
 					self.shift += SCROLL_SPEED;
 			} // now check for right, flip cover right
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsDown(0) & PAD_BUTTON_RIGHT)
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT)
 			{
 				select_ready = false;
 
@@ -1385,14 +1373,14 @@ int main( int argc, char **argv )
                                     self.shift -= SCROLL_SPEED;
                                 
 			} // Check for UP button held to zoom in
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsDown(0) & PAD_BUTTON_UP)
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsHeld(0) & PAD_BUTTON_UP)
 			{	
 				if (settings.coverZoom > .69)
 					settings.coverZoom = .69; // limit how far we can zoom in
 				else
 					settings.coverZoom += 0.03; // zoom in
 			} // Check for DOWN button held to zoom out
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_DOWN || PAD_ButtonsDown(0) & PAD_BUTTON_DOWN)
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_DOWN || PAD_ButtonsHeld(0) & PAD_BUTTON_DOWN)
 			{	
 				if (settings.coverZoom < -8.0)
 					settings.coverZoom = -8.0; // limit how far we can zoom out
@@ -1452,12 +1440,24 @@ int main( int argc, char **argv )
 					}
 				}
 			}
-			else if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1) // Check for button 1 hold
+			else if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for button 1 hold
 			{
+				//
+				// SCOGNITO'S TRASH TEST CORNER
+				//
+				//LoadCurrentCover(self.gameSelected, gameList);
+				/*
+				self.gsize = getGameSize(gameList);
+				char sss[70];
+				float gsize = 2.4;
+				sprintf(sss, "Size:    %.2fGB", gsize);
+				WindowPrompt("TITOLO", sss, 0, &cancelButton);
+				*/
+				//PAD_BUTTON
 				/*Hitting 1 causes crash right now...*/
 				//sysdate();
 				//quit();
-				//WindowPrompt("Titolo", "Messaggio\nslashato\n3volte", 0, &cancelButton);
+				//WindowPrompt("Titolo", "This is a long message using\n\the character \\n as escape sequence.\nAlso now buttons title and message are\naligned now. :)", &okButton, &cancelButton);
 			}
 			else
 			{
