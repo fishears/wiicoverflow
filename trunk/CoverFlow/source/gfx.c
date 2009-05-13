@@ -115,7 +115,7 @@ void Paint_Progress(float v, char* msg)
 void Paint_Progress_Generic(int v, int max, char* msg)
 {
 	float percent = (float)v/(float)max;
-	int count = percent*28;
+	int count = percent*26;
 	int i;
 
 	GRRLIB_2D_Init();
