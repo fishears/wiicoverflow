@@ -174,5 +174,10 @@ int ProgressWindow(wbfs_t *hdd, char* title, char* msg);
 void game_settings_menu(struct discHdr *gameList);
 void freeResources();
 
+// Cover rollover event handlers
+bool CoverHoverCenter();
+bool CoverHoverRight();
+bool CoverHoverLeft();
+
 #endif
 
