@@ -1045,11 +1045,11 @@ void game_settings_menu(struct discHdr *gameList)
 		GRRLIB_Printf(105, 145,  font_title, settings.fontColor, 1, "%s: settings", gameName);
 		GRRLIB_Printf(185, 193,  font_texture, settings.fontColor, 1, "Ocarina:");
 		GRRLIB_Printf(350, 193,  font_texture, settings.fontColor, 1, "Hook:");
-		GRRLIB_Printf(425, 193,  font_texture, 0x000000FF, 1, "%s",ghooks[gameSetting.hooktype]);
+		GRRLIB_Printf(425, 193,  font_texture, 0xFFFFFFFF, 1, "%s",ghooks[gameSetting.hooktype]);
 		GRRLIB_Printf(185, 228, font_texture, settings.fontColor, 1, "Language:");
-		GRRLIB_Printf(370, 228, font_texture, 0x000000FF, 1, "%s",glanguages[gameSetting.language]);
+		GRRLIB_Printf(370, 228, font_texture, 0xFFFFFFFF, 1, "%s",glanguages[gameSetting.language]);
 		GRRLIB_Printf(185, 257, font_texture, settings.fontColor, 1, "Video mode:");
-		GRRLIB_Printf(370, 255, font_texture, 0x000000FF, 1, "%s",gvidmodes[gameSetting.video]);
+		GRRLIB_Printf(370, 255, font_texture, 0xFFFFFFFF, 1, "%s",gvidmodes[gameSetting.video]);
 		GRRLIB_Printf(185, 289, font_texture, settings.fontColor, 1, "VIDTV patch:");
 
 		// Draw the default pointer hand
