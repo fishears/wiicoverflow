@@ -1,11 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <wiicoverflow>
+  <languages>
+    <lang id="EN-US" />
+    <lang id="DE" />
+    <lang id="PT-BR" />
+    <lang id="FR" />
+  </languages>
+  <EN-US desc="default">
+    <!--M001 - Cover download-->
+    <!--M002 - This operation can't be canceled, continue?-->
+  </EN-US>
   <DE desc="Deutsch">
     <M001 val="Cover runterladen" />
     <M002 val="Diese Operation kann nicht abgebrochen werden! Weiter?" />
   </DE>
   <PT-BR desc="Português Brasil">
-	<M001 val="Download de Capas" />
-	<M002 val="Esta operação não pode ser cancelada, continuar ?" />
+    <M001 val="Download de Capas" />
+    <M002 val="Esta operação não pode ser cancelada, continuar ?" />
   </PT-BR>
+  <FR desc="Français">
+    <M001 val="Téléchargement" />
+    <M002 val="continuer?" />
+  </FR>
 </wiicoverflow>
