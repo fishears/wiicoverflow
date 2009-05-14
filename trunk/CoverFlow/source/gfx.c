@@ -52,6 +52,8 @@ void LoadTextures()
 	load_bg_texture		   = GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
 	font_texture           = GRRLIB_LoadTexture(BMfont5_png);
 	font_title             = GRRLIB_LoadTexture(font_w14_h20_png);
+	ambientlightr_texture  = GRRLIB_LoadTexture(ambientlightr_png);
+	ambientlightl_texture  = GRRLIB_LoadTexture(ambientlightl_png);
 	
 	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
     GRRLIB_InitTileSet(&font_title, 14, 20, 32);
@@ -323,6 +325,8 @@ void draw_covers()
 			GRRLIB_Cover(i+self.shift, i+(COVER_COUNT/2.0));
 	}
 	
+	GRRLIB_DrawImg(0, 0, ambientlightl_texture, 0, 1, 1, 0xFFFFFFFF);
+	GRRLIB_DrawImg(400, 0, ambientlightr_texture, 0, 1, 1, 0xFFFFFFFF);
 }
 
 
@@ -457,7 +461,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		
 		Button_Paint(&loadButton);
 		Button_Paint(&backButton);
-		Button_Toggle_Paint(&bookmarkOffButton, &bookmarkOnButton, self.dummy);
+		//Button_Toggle_Paint(&bookmarkOffButton, &bookmarkOnButton, self.dummy);
 		
 		if(!settings.parentalLock)
 			Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
@@ -516,21 +520,21 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 						GRRLIB_DrawImg(64, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
 					else
-						GRRLIB_DrawImg(86, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(76, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
 				}
 				else
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 						GRRLIB_DrawImg(64, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 					else
-						GRRLIB_DrawImg(86, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(76, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 				}
 					
 				pthread_mutex_unlock(&buffer_mutex[self.gameSelected]);
 			}
 			else
 			{
-				GRRLIB_DrawImg(86, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(76, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 			}	
 		}
 		else
@@ -538,7 +542,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 				GRRLIB_DrawImg(64, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 			else
-				GRRLIB_DrawImg(86, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(76, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 		}	
 		
   }
