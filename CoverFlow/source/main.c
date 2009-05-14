@@ -1357,9 +1357,16 @@ int main( int argc, char **argv )
                 }
                 else
                 {
-                    max_cover = (-1*(COVER_COUNT/2.0));
-                    min_cover = (COVER_COUNT/2.0);
+                    if ( ((int)((COVER_COUNT/2.0) + 0.5)) - (COVER_COUNT/2.0) == 0) // odd # of covers
+                        max_cover = ((int)(-1*((COVER_COUNT/2.0)-1)));
+                    else // even # of covers
+                        max_cover = (int)(-1*((COVER_COUNT/2.0)));
+
+                    min_cover = (int)(COVER_COUNT/2.0);
                 }
+//for debugging this painful section
+//GRRLIB_Printf(50, 40, font_title, 0x808080FF, 1, "min/max: %d, %d", min_cover, max_cover);
+//GRRLIB_Printf(50, 60, font_title, 0x808080FF, 1, "self.shift: %d", (int)self.shift);
                         // Check for Left pad, flip cover left
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT)
 			{	
