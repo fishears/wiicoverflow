@@ -119,7 +119,7 @@
 	<M107 val="Parental Control" />
 	<M108 val="Would you like to enable parental controls?" />
 	<M109 val="    Could not initialize DIP module! (ret = %d)\n" />
-	<M110 val="Can't create directories. Covers will not be saved." />
+	<M110 val="Can't read directories. Covers will not be saved." />
 	<M111 val="Can't create directories. Covers will not be saved." />
 	<M112 val="Sun" />
 	<M113 val="Mon" />
@@ -142,6 +142,8 @@
 	<M130 val="Dec" />
 	<M131 val="Current: cIOS Rev%d  Required: cIOS Rev%d" />
 	<M132 val="cIOS Upgrade Required" />
+	<M133 val="Not enough free space!" />
+        <M134 val="Formatting Partition %s" />
 -->
   </EN-US>
 
@@ -683,6 +685,8 @@
 	<M130 val="Dez" />
 	<M131 val="Atual: cIOS Rev%d  Requerido: cIOS Rev%d" />
 	<M132 val="Uma atualização de cIOS é necessária." />
+	<M133 val="Espa�o em disco insuficiente !" />
+	<M134 val="Formatando Parti��o %s" />
 </PT-BR>
 
 <ZH-TW desc="繁體中文">
