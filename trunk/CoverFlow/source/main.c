@@ -1533,9 +1533,9 @@ int main( int argc, char **argv )
 		draw_covers();
 
 		//Play flip sound if needed
-		if((int)self.shift != self.lastGameSelected)
+		if((int)abs(self.shift) != self.lastGameSelected)
 		{
-			self.lastGameSelected = (int)self.shift;
+			self.lastGameSelected = (int)abs(self.shift);
 			SOUND_PlaySound(FX_COVER_SCROLL, 0);
 		}
 
