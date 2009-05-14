@@ -1594,6 +1594,12 @@ int main( int argc, char **argv )
 			self.rumbleAmt = 5;
 		}
 		
+		
+		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
+		{
+			GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
+			GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "CoverFloader r%d",SVN_VERSION);		
+		}
 	
 #ifdef DEBUG
 
