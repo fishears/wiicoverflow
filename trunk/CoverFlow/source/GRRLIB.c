@@ -1102,7 +1102,8 @@ bool GRRLIB_ScrShot(const char* File)
     IMGCTX pngContext;
     int ErrorCode = -1;
 
-    if(fatInitDefault() && (pngContext = PNGU_SelectImageFromDevice(File)))
+    //if(fatInitDefault() && (pngContext = PNGU_SelectImageFromDevice(File)))
+	if((pngContext = PNGU_SelectImageFromDevice(File)))
     {
         ErrorCode = PNGU_EncodeFromYCbYCr(pngContext, 640, 480, xfb[fb], 0);
         PNGU_ReleaseImageContext(pngContext);

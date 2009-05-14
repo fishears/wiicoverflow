@@ -106,6 +106,7 @@ extern const u8 generic_point_png[];
 extern const u8 pointer_shadow_png[];
 extern const u8 turning_point_png[];
 extern const u8 menu_bg_png[];
+extern const u8 menu_bg2_png[];
 extern const u8 gradient_bg_strip_w_png[];
 extern const u8 gradient_bg_strip_b_png[];
 extern const u8 font_w14_h20_png[]; // title font

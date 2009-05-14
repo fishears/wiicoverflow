@@ -42,6 +42,7 @@ void LoadTextures()
 	pointer_shadow_texture = GRRLIB_LoadTexture(pointer_shadow_png);
 	turn_point_texture     = GRRLIB_LoadTexture(turning_point_png);
 	menu_bg_texture		   = GRRLIB_LoadTexture(menu_bg_png);
+	menu_bg2_texture	   = GRRLIB_LoadTexture(menu_bg2_png);
 	cover_texture		   = GRRLIB_LoadTexture(no_cover_png);
 	back_texture		   = GRRLIB_LoadTexture(back_cover_png);
 	no_disc_texture		   = GRRLIB_LoadTexture(no_disc_png);
@@ -146,9 +147,9 @@ void Init_Buttons()
     loadButton          = Button_Init(load_png, load_hover_png, 220, 300);
     deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
     resetButton		    = Button_Init(reset_png, reset_hover_png, 350, 330);
-    backButton              = Button_Init(back_png, back_hover_png, 340, 300);
-    gbackButton             = Button_Init(back_png, back_hover_png, 340, 300);
-    gsettingsButton         = Button_Init(settings_png, settings_hover_png, 30, 420);
+    backButton          = Button_Init(back_png, back_hover_png, 340, 300);
+    gbackButton         = Button_Init(back_png, back_hover_png, 340, 300);
+    gsettingsButton     = Button_Init(settings_png, settings_hover_png, 30, 420);
     cheatonButton		= Button_Init(toggle_on_png, toggle_on_png, 215,85);
     cheatoffButton		= Button_Init(toggle_off_png, toggle_off_png, 215,85);
     langupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,123);
@@ -159,30 +160,30 @@ void Init_Buttons()
     vidtvoffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 175);
     hookupButton		= Button_Init(plus_button_png, plus_button_hover_png, 456,87);
     hookdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 360,87);
-    gcheatonButton          = Button_Init(toggle_on_png, toggle_on_png, 255,185);
-    gcheatoffButton         = Button_Init(toggle_off_png, toggle_off_png, 255,185);
-    glangupButton           = Button_Init(plus_button_png, plus_button_hover_png,496,223);
-    glangdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 340,223);
-    gvidupButton            = Button_Init(plus_button_png, plus_button_hover_png, 496,250);
-    gviddownButton          = Button_Init(minus_button_png, minus_button_hover_png, 340,250);
-    gvidtvonButton          = Button_Init(toggle_on_png, toggle_on_png, 390, 275);
-    gvidtvoffButton         = Button_Init(toggle_off_png, toggle_off_png, 390, 275);
-    ghookupButton           = Button_Init(plus_button_png, plus_button_hover_png, 496,187);
-    ghookdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 400,187);
+    gcheatonButton          = Button_Init(toggle_on_png, toggle_on_png, 239,185); //
+    gcheatoffButton         = Button_Init(toggle_off_png, toggle_off_png, 239,185); //
+    glangupButton           = Button_Init(plus_button_png, plus_button_hover_png,480,223);
+    glangdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 324,223);
+    gvidupButton            = Button_Init(plus_button_png, plus_button_hover_png, 480,250);
+    gviddownButton          = Button_Init(minus_button_png, minus_button_hover_png, 324,250);
+    gvidtvonButton          = Button_Init(toggle_on_png, toggle_on_png, 374, 275);
+    gvidtvoffButton         = Button_Init(toggle_off_png, toggle_off_png, 374, 275);
+    ghookupButton           = Button_Init(plus_button_png, plus_button_hover_png, 480,187);
+    ghookdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 384,187);
     coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 291);
     coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 291);
     graphicsButton          = Button_Init(ok_png, ok_hover_png, 350, 210);
-    yesButton		    = Button_Init(yes_png, yes_hover_png, 220, 250);
+    yesButton               = Button_Init(yes_png, yes_hover_png, 220, 250);
     noButton                = Button_Init(no_png, no_hover_png, 340, 250);
-    settingsButton		= Button_Init(settings_png, settings_hover_png, 30, 420);
-    downloadButton		= Button_Init(download_png, download_hover_png, 350, 250);
-    spacingupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,138);
+    settingsButton	    	= Button_Init(settings_png, settings_hover_png, 30, 420);
+    downloadButton		    = Button_Init(download_png, download_hover_png, 350, 250);
+    spacingupButton		    = Button_Init(plus_button_png, plus_button_hover_png,456,138);
     spacingdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,138);
-    zoomupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,95);
-    zoomdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,95);
-    angleupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,191);
-    angledownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,191);
-    windowupButton		= Button_Init(plus_button_png, plus_button_hover_png,456, 239);
+    zoomupButton		    = Button_Init(plus_button_png, plus_button_hover_png,456,95);
+    zoomdownButton          = Button_Init(minus_button_png, minus_button_hover_png, 300,95);
+    angleupButton           = Button_Init(plus_button_png, plus_button_hover_png,456,191);
+    angledownButton         = Button_Init(minus_button_png, minus_button_hover_png, 300,191);
+    windowupButton          = Button_Init(plus_button_png, plus_button_hover_png,456, 239);
     windowdownButton        = Button_Init(minus_button_png, minus_button_hover_png, 300,239);
     themeWhiteButton        = Button_Init(theme_white_png, theme_white_png, 350, 291);
     themeBlackButton        = Button_Init(theme_black_png, theme_black_png, 350, 291);
@@ -192,8 +193,8 @@ void Init_Buttons()
     rumbleOffButton         = Button_Init(toggle_off_png, toggle_off_png, 350, 370);
     musicOnButton           = Button_Init(toggle_on_png, toggle_on_png, 350, 410);
     musicOffButton          = Button_Init(toggle_off_png, toggle_off_png, 350, 410);
-    bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 520, 130);
-    bookmarkOffButton       = Button_Init(star_off_png, star_on_png, 520, 130);
+    bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 515, 140);
+    bookmarkOffButton       = Button_Init(star_off_png, star_on_png, 515, 140);
 
     homeMenuTopButton       = Button_Init(homeTop_png, homeTop_hover_png, 0, 0);
     homeMenuBottomButton    = Button_Init(homeBottom_png, homeBottom_hover_png, 0, 368);
@@ -438,27 +439,33 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 	}
 	
 		
-	if(scale >= 250)
+	if(scale >= 250)//-16
 	{
-		GRRLIB_DrawImg(80, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(64, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
-		loadButton.x = 290;
-		loadButton.y = 260;
-		backButton.x = 370;
-		backButton.y = 260;
-		deleteButton.x = 450;
-		deleteButton.y = 260;
-		gsettingsButton.x = 530;
-		gsettingsButton.y = 320;
+		loadButton.x = 245;
+		loadButton.y = 316;
+		
+		backButton.x = 335;
+		backButton.y = 316;
+		
+		deleteButton.x = 425;
+		deleteButton.y = 316;
+		
+		gsettingsButton.x = 515;
+		gsettingsButton.y = 314;
 		
 		Button_Paint(&loadButton);
 		Button_Paint(&backButton);
 		Button_Toggle_Paint(&bookmarkOffButton, &bookmarkOnButton, self.dummy);
+		
 		if(!settings.parentalLock)
 			Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
+			
 		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
 		Button_Paint(&gsettingsButton);
 		Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y);
+		
 		if(!settings.parentalLock)
 			Button_Paint(&deleteButton);
 		
@@ -480,22 +487,22 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 			strncat(gameName, "...", 3);
 		}
 		
-		GRRLIB_Printf(280, 174, font_title, 0xFFFFFFFF, 1, "%s", gameName);
+		GRRLIB_Printf(260, 174, font_title, 0xFFFFFFFF, 1, "%s", gameName);
 		//GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
 		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
-			GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Never played before");
+			GRRLIB_Printf(270, 220, font_title, 0xFFFFFFFF, .8, "Never played before");
 		else
-			GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Played %s",gameSetting.lastPlayed);
-		GRRLIB_Printf(290, 230, font_title, 0xFFFFFFFF, .8, "Size:    %.2fGB", self.gsize);
+			GRRLIB_Printf(270, 220, font_title, 0xFFFFFFFF, .8, "Played %s",gameSetting.lastPlayed);
+		GRRLIB_Printf(270, 250, font_title, 0xFFFFFFFF, .8, "Size  %.2fGB", self.gsize);
 		#else
 		
-		GRRLIB_Printf(280, 174, font_title, 0xFFFFFFFF, 1, "%s", "Best game");
-		GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "%s", " Game ID: KBGSUX");
-		GRRLIB_Printf(290, 230, font_title, 0xFFFFFFFF, .8, "Size:    %.2fGB", self.gsize);
+		GRRLIB_Printf(270, 174, font_title, 0xFFFFFFFF, 1, "%s", "Best game");
+		GRRLIB_Printf(280, 210, font_title, 0xFFFFFFFF, .8, "%s", " Game ID: KBGSUX");
+		GRRLIB_Printf(280, 230, font_title, 0xFFFFFFFF, .8, "Size:    %.2fGB", self.gsize);
 		#endif
 		
 		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-			GRRLIB_DrawImg(102+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
+			GRRLIB_DrawImg(86+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
 		else
 			GRRLIB_DrawImg(132+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
 		
@@ -507,31 +514,31 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 				if(_texture_data[self.gameSelected].data)
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-						GRRLIB_DrawImg(80, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(64, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
 					else
-						GRRLIB_DrawImg(102, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(86, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
 				}
 				else
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-						GRRLIB_DrawImg(80, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(64, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 					else
-						GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(86, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 				}
 					
 				pthread_mutex_unlock(&buffer_mutex[self.gameSelected]);
 			}
 			else
 			{
-				GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(86, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 			}	
 		}
 		else
 		{	
 			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-				GRRLIB_DrawImg(80, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(64, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 			else
-				GRRLIB_DrawImg(102, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(86, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 		}	
 		
   }
@@ -705,7 +712,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		}
 		
 		GRRLIB_FillScreen(0x000000FF);
-		GRRLIB_DrawImg(128, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(128, 95, menu_bg2_texture, 0, 1, 1, 0xFFFFFFFF);
 
 		// Draw buttons
 		
@@ -890,13 +897,13 @@ void game_settings_menu(struct discHdr *gameList)
     // chomp the title to fit
     if(strlen(header->title) < 20)
     {
-            sprintf(gameName, "%s", (header->title));
+		sprintf(gameName, "%s", (header->title));
     }
     else
     {
-            strncpy(gameName, header->title, 17);
-            gameName[17] = '\0';
-            strncat(gameName, "...", 3);
+		strncpy(gameName, header->title, 17);
+		gameName[17] = '\0';
+		strncat(gameName, "...", 3);
     }
     sprintf(titleID, "%s", header->id);
     if(!getGameSettings(titleID, &gameSetting));
@@ -1016,9 +1023,9 @@ void game_settings_menu(struct discHdr *gameList)
 		}
 
 		GRRLIB_FillScreen(0x000000FF);
-		GRRLIB_DrawImg(80, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(64, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 
-		gbackButton.x = 490;
+		gbackButton.x = 474;
 		gbackButton.y = 320;
 
 		Button_Paint(&gbackButton);
@@ -1028,7 +1035,7 @@ void game_settings_menu(struct discHdr *gameList)
 		Button_Paint(&gviddownButton);
 		Button_Paint(&ghookupButton);
 		Button_Paint(&ghookdownButton);
-                Button_Toggle_Paint(&gcheatoffButton, &gcheatonButton, gameSetting.ocarina);
+		Button_Toggle_Paint(&gcheatoffButton, &gcheatonButton, gameSetting.ocarina);
 		Button_Toggle_Paint(&gvidtvoffButton, &gvidtvonButton, gameSetting.vipatch);
 
 		Button_Hover(&gbackButton, pointer.p_x, pointer.p_y);
@@ -1044,15 +1051,15 @@ void game_settings_menu(struct discHdr *gameList)
 		Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
 
         //BUTTON TEXT
-		GRRLIB_Printf(105, 145,  font_title, settings.fontColor, 1, "%s: settings", gameName);
-		GRRLIB_Printf(185, 193,  font_texture, settings.fontColor, 1, "Ocarina:");
-		GRRLIB_Printf(350, 193,  font_texture, settings.fontColor, 1, "Hook:");
-		GRRLIB_Printf(425, 193,  font_texture, 0xFFFFFFFF, 1, "%s",ghooks[gameSetting.hooktype]);
-		GRRLIB_Printf(185, 228, font_texture, settings.fontColor, 1, "Language:");
-		GRRLIB_Printf(370, 228, font_texture, 0xFFFFFFFF, 1, "%s",glanguages[gameSetting.language]);
-		GRRLIB_Printf(185, 257, font_texture, settings.fontColor, 1, "Video mode:");
-		GRRLIB_Printf(370, 255, font_texture, 0xFFFFFFFF, 1, "%s",gvidmodes[gameSetting.video]);
-		GRRLIB_Printf(185, 289, font_texture, settings.fontColor, 1, "VIDTV patch:");
+		GRRLIB_Printf(89, 145,  font_title, settings.fontColor, 1, "%s: settings", gameName);
+		GRRLIB_Printf(169, 193,  font_texture, settings.fontColor, 1, "Ocarina:");
+		GRRLIB_Printf(334, 193,  font_texture, settings.fontColor, 1, "Hook:");
+		GRRLIB_Printf(409, 193,  font_texture, 0xFFFFFFFF, 1, "%s",ghooks[gameSetting.hooktype]);
+		GRRLIB_Printf(169, 228, font_texture, settings.fontColor, 1, "Language:");
+		GRRLIB_Printf(354, 228, font_texture, 0xFFFFFFFF, 1, "%s",glanguages[gameSetting.language]);
+		GRRLIB_Printf(169, 257, font_texture, settings.fontColor, 1, "Video mode:");
+		GRRLIB_Printf(354, 255, font_texture, 0xFFFFFFFF, 1, "%s",gvidmodes[gameSetting.video]);
+		GRRLIB_Printf(169, 289, font_texture, settings.fontColor, 1, "VIDTV patch:");
 
 		// Draw the default pointer hand
 		if(doloop)
