@@ -253,7 +253,7 @@ void Graphic_Settings_Menu(void)
 			}
 			else if (Button_Select(&resetButton, pointer.p_x, pointer.p_y))
 			{
-				SETTINGS_Init();
+				graphics_SETTINGS_Init();
 			}
 			else if (Button_Select(&windowdownButton, pointer.p_x, pointer.p_y))
 			{

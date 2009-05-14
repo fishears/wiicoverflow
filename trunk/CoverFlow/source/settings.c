@@ -42,8 +42,7 @@ void SETTINGS_Init()
 	settings.volume = 100;
 	
 	//General
-	settings.rumble       = 1;
-	settings.parentalLock = 0;
+        settings.parentalLock = 0;
 	settings.sound        = 1;
 	settings.music        = 1;
 	settings.quickstart   = 0;
@@ -57,6 +56,16 @@ void SETTINGS_Init()
 	settings.video        = 0;
 	settings.vipatch      = 0;
 };
+//called by reset button on graphics settings screen
+//button used to reset EVERYTHING including parental lock & kids found out
+void graphics_SETTINGS_Init()
+{
+    	settings.coverZoom    = -2.0;
+	settings.coverAngle   = 90;
+	settings.coverSpacing = 3.1;
+	settings.drawWindow   = 7;
+	settings.coverText    = 1;
+}
 
 int SETTINGS_Load()
 {
