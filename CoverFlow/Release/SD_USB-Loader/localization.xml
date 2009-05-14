@@ -4,7 +4,8 @@
     <lang id="EN-US" />
     <lang id="DA" />
     <lang id="DE" />
-	<lang id="FR" />
+    <lang id="FR" />
+    <lang id="ITA" />
     <lang id="PT-BR" />
     <lang id="ZH-TW" />
   </languages>
@@ -823,7 +824,152 @@
 	<M131 val="目前: cIOS Rev%d  需求: cIOS Rev%d" />
 	<M132 val="cIOS 必須升級" />
   	<M133 val="剩餘空間不足!" />
-    <M134 val="磁區格式化中 %s" />
+   	<M134 val="磁區格式化中 %s" />
   </ZH-TW>
+
+  <ITA desc="Italiano">
+        <M001 val="Inizializzazione Network" />
+        <M002 val="Errore inizializzazione Network" />
+        <M003 val="ERRORE!" />
+        <M004 val="Network inizializzata" />
+        <M005 val="Verifica presenza di %s" />
+        <M006 val="%s presente, non scarico" />
+        <M007 val="Prendo %s" />
+        <M008 val="Fatto" />
+        <M009 val="Si e' verificato un errore" />
+        <M010 val="Verifica cover successiva...%s" />
+        <M011 val="Operazione finita!" />
+        <M012 val="Premi A per continuare" />
+        <M013 val="Errore di configurazione, MAX_DNS_ENTRIES ricercati 
+mentre la list e' vuota\n" />
+        <M014 val="Impossibile salvare gamelist.xml" />
+        <M015 val="Impossibile creare il file gamelist.xml!" />
+        <M016 val="Console Predefinita" />
+        <M017 val="   Giapponese" />
+        <M018 val="    inglese" />
+        <M019 val="    tedesco" />
+        <M020 val="    Francese" />
+        <M021 val="    Spagnolo" />
+        <M022 val="    Italiano" />
+        <M023 val="     Tedesco" />
+        <M024 val="   S. Cinese" />
+        <M025 val="   T. Cinese" />
+        <M026 val="    Koreano" />
+        <M027 val="  Game Default" />
+        <M028 val="   Automatico" />
+        <M029 val="  Forza PAL50" />
+        <M030 val="  Forza PAL60" />
+        <M031 val="  Forza NTSC" />
+        <M032 val="Mai giocato prima" />
+        <M033 val="Giocato %s" />
+        <M034 val="Dimenzioni:    %.2fGB" />
+        <M035 val="Installazione... (%0.2f%%) Tempo rimanente : 
+%d:%02d:%02d" />
+        <M036 val="%s: impostazioni" />
+        <M037 val="Hook:" />
+        <M038 val="Linguaggio:" />
+        <M039 val="Modalit� Video:" />
+        <M040 val="VIDTV patch:" />
+        <M041 val="Errore di connessione da net_read()  codice d'errore: 
+%i\n" />
+        <M042 val="URL '%s' non parte con 'http://'\n />
+        <M043 val="URL '%s' non ha PATH\n" />
+        <M044 val="Manca il dominio nella URL '%s'\n" />
+        <M045 val="\nDominio %s non viene risolto" />
+        <M046 val="Errore nello stabilire la connessione" />
+        <M047 val="HTTP ha risposto senza il file\n" />
+        <M048 val="Non piu' memoria per copiare il file dalla risposta 
+HTTP\n" />
+        <M049 val="Settaggi grafici" />
+        <M050 val="Zoom:" />
+        <M051 val="Spazio:" />
+        <M052 val="Angolo:" />
+        <M053 val="Finestra di disegno:" />
+        <M054 val="Titlo del gioco:" />
+        <M055 val="Scarico copertine" />
+        <M056 val="Questa operazione e' impossibile cancellarla, 
+contiunare?" />
+        <M057 val="Settaggi Coverflow" />
+        <M058 val="Grafici:" />
+        <M059 val="Coprtina mancante?:" />
+        <M060 val="Temi:" />
+        <M061 val="Avvio in 1-Click:" />
+        <M062 val="vibrazione:" />
+        <M063 val="Suono:" />
+        <M064 val="Installare nuovo Gioco?" />
+        <M065 val="Inscerisci disco e premi ok." />
+        <M066 val="Inizializzo lettore DVD" />
+        <M067 val="Attendere prego..." />
+        <M068 val="Errore di lettura Disco" />
+        <M069 val="Impossibile aprire Disco" />
+        <M070 val="Non e' un Disco Wii" />
+        <M071 val="Inserire un Disco Wii!" />
+        <M072 val="il Gioco e' gia' installato:" />
+        <M073 val="HDD non trovato!" />
+        <M074 val="Installazione del Gioco %.2fGB:" />
+        <M075 val="Installare %s?" />
+        <M076 val="Dimensione del Gioco: %.2fGB" />
+        <M077 val="Dimensione del Gioco: %.2fGB, Spazio libero: %.2fGB" />
+        <M078 val="Errore d'installazione!" />
+        <M079 val="Installato con successo:" />
+        <M080 val="Vuoi cancellare:" />
+        <M081 val="Cancellazione fallita." />
+        <M082 val="Impossibile cancellare Gioco." />
+        <M083 val="Cancellato con successo." />
+        <M084 val="Premere OK per continuare." />
+        <M085 val="Impossibile ottenere indirizzo IP." />
+        <M086 val="[+] ERRORE:" />
+        <M087 val="    Custom IOS impossibile da caricare! (ret = %d)\n" />
+        <M088 val="Caricamento Texture" />
+        <M089 val="avvio USB" />
+        <M090 val="impossibile inizializzare USBFS, uscita." />
+        <M091 val="Inizializzare WBFS" />
+        <M092 val="Errore USB - Disco non trovato" />
+        <M093 val="Premere A per continuare, B per uscire" />
+        <M094 val="Tentativo di connettere al Disco USB" />
+        <M095 val="Errore USB - Nessuna partizione WBFS." />
+        <M096 val="premere 1 e 2 per formattare, B per uscire" />
+        <M097 val="Ricerca Partizioni..." />
+        <M098 val="Partizione %d: %.2fGB" />
+        <M099 val="Partizione %d: (impossibile formattarla)" />
+        <M100 val="Vuoi formattare:" />
+        <M101 val="Formattazione fallita!" />
+        <M102 val="Successo:" />
+        <M103 val="Formattazione Completa." />
+        <M104 val="Inizializzazione archivio imaggini ..." />
+        <M105 val="Impostazione del tema di fondo..." />
+        <M106 val="Rilascio delle texture non usate..." />
+        <M107 val="Controllo Parentale" />
+        <M108 val="Si vuole abilitare il controllo parentale?" />
+        <M109 val="    Impossibile inizializzare il modulo DIP! (ret = 
+%d)\n" />
+        <M110 val="Impossibile leggere cartella. Le copertine potrebbero 
+non essere salvate." />
+        <M111 val="Impossibile creare cartelle. Le copertine potrebbero non 
+essere salvate." />
+        <M112 val="Dom" />
+        <M113 val="Lun" />
+        <M114 val="Mar" />
+        <M115 val="Mer" />
+        <M116 val="Gio" />
+        <M117 val="Ven" />
+        <M118 val="Sab" />
+        <M119 val="Gen" />
+        <M120 val="Feb" />
+        <M121 val="Mar" />
+        <M122 val="Apr" />
+        <M123 val="Mag" />
+        <M124 val="Giu" />
+        <M125 val="Lug" />
+        <M126 val="Ago" />
+        <M127 val="Set" />
+        <M128 val="Ott" />
+        <M129 val="Nov" />
+        <M130 val="Dic" />
+        <M131 val="Corrente: cIOS Rev%d  Richiesto: cIOS Rev%d" />
+        <M132 val="Aggiornamento cIOS  Richiesto" />
+        <M133 val="Spazio insufficiente!" />
+        <M134 val="Formattazione partizione %s" />
+  </ITA>  
 </wiicoverflow>
 
