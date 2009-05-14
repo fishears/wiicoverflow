@@ -685,8 +685,8 @@
 	<M130 val="Dez" />
 	<M131 val="Atual: cIOS Rev%d  Requerido: cIOS Rev%d" />
 	<M132 val="Uma atualização de cIOS é necessária." />
-	<M133 val="Espa�o em disco insuficiente !" />
-	<M134 val="Formatando Parti��o %s" />
+	<M133 val="Espaço em disco insuficiente !" />
+	<M134 val="Formatando Partição %s" />
 </PT-BR>
 
 <ZH-TW desc="繁體中文">
