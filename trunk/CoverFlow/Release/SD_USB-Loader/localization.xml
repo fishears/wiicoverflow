@@ -528,7 +528,7 @@
 	<M107 val="Eltern-Kontrolle" />
 	<M108 val="Eltern-Kontrolle einschalten?" />
 	<M109 val="    DIP-Modul konnte nicht initialisiert werden! (ret = %d)\n" />
-	<M110 val="Verzeichnisse konnten nicht erstellt werden. Cover werden nicht gespeichert werden." />
+	<M110 val="Verzeichnisse konnten nicht gelesen werden. Cover werden nicht gespeichert werden." />
 	<M111 val="Verzeichnisse konnten nicht erstellt werden. Cover werden nicht gespeichert werden." />
 	<M112 val="So" />
 	<M113 val="Mo" />
@@ -551,6 +551,8 @@
 	<M130 val="Dez" />
 	<M131 val="Aktuell: cIOS Rev%d  Erforderlich: cIOS Rev%d" />
 	<M132 val="Ein cIOS-Upgrade ist erforderlich." />
+	<M133 val="Nicht genügend freier Seicherplatz!" />
+	<M134 val="Formatiere Partition %s" />
 </DE>
 
 <PT-BR desc="Português Brasil">
@@ -840,8 +842,7 @@
         <M010 val="Verifica cover successiva...%s" />
         <M011 val="Operazione finita!" />
         <M012 val="Premi A per continuare" />
-        <M013 val="Errore di configurazione, MAX_DNS_ENTRIES ricercati 
-mentre la list e' vuota\n" />
+        <M013 val="Errore di configurazione, MAX_DNS_ENTRIES ricercati mentre la list e' vuota\n" />
         <M014 val="Impossibile salvare gamelist.xml" />
         <M015 val="Impossibile creare il file gamelist.xml!" />
         <M016 val="Console Predefinita" />
@@ -863,23 +864,20 @@ mentre la list e' vuota\n" />
         <M032 val="Mai giocato prima" />
         <M033 val="Giocato %s" />
         <M034 val="Dimenzioni:    %.2fGB" />
-        <M035 val="Installazione... (%0.2f%%) Tempo rimanente : 
-%d:%02d:%02d" />
+        <M035 val="Installazione... (%0.2f%%) Tempo rimanente : %d:%02d:%02d" />
         <M036 val="%s: impostazioni" />
         <M037 val="Hook:" />
         <M038 val="Linguaggio:" />
-        <M039 val="Modalit� Video:" />
+        <M039 val="Modalitvideo:" />
         <M040 val="VIDTV patch:" />
-        <M041 val="Errore di connessione da net_read()  codice d'errore: 
-%i\n" />
-        <M042 val="URL '%s' non parte con 'http://'\n />
+        <M041 val="Errore di connessione da net_read()  codice d'errore: %i\n" />
+        <M042 val="URL '%s' non parte con 'http://'\n" />
         <M043 val="URL '%s' non ha PATH\n" />
         <M044 val="Manca il dominio nella URL '%s'\n" />
         <M045 val="\nDominio %s non viene risolto" />
         <M046 val="Errore nello stabilire la connessione" />
         <M047 val="HTTP ha risposto senza il file\n" />
-        <M048 val="Non piu' memoria per copiare il file dalla risposta 
-HTTP\n" />
+        <M048 val="Non piu' memoria per copiare il file dalla risposta HTTP\n" />
         <M049 val="Settaggi grafici" />
         <M050 val="Zoom:" />
         <M051 val="Spazio:" />
@@ -887,8 +885,7 @@ HTTP\n" />
         <M053 val="Finestra di disegno:" />
         <M054 val="Titlo del gioco:" />
         <M055 val="Scarico copertine" />
-        <M056 val="Questa operazione e' impossibile cancellarla, 
-contiunare?" />
+        <M056 val="Questa operazione e' impossibile cancellarla, contiunare?" />
         <M057 val="Settaggi Coverflow" />
         <M058 val="Grafici:" />
         <M059 val="Coprtina mancante?:" />
@@ -941,12 +938,9 @@ contiunare?" />
         <M106 val="Rilascio delle texture non usate..." />
         <M107 val="Controllo Parentale" />
         <M108 val="Si vuole abilitare il controllo parentale?" />
-        <M109 val="    Impossibile inizializzare il modulo DIP! (ret = 
-%d)\n" />
-        <M110 val="Impossibile leggere cartella. Le copertine potrebbero 
-non essere salvate." />
-        <M111 val="Impossibile creare cartelle. Le copertine potrebbero non 
-essere salvate." />
+        <M109 val="    Impossibile inizializzare il modulo DIP! (ret = %d)\n" />
+        <M110 val="Impossibile leggere cartella. Le copertine potrebbero non essere salvate." />
+        <M111 val="Impossibile creare cartelle. Le copertine potrebbero non essere salvate." />
         <M112 val="Dom" />
         <M113 val="Lun" />
         <M114 val="Mar" />
