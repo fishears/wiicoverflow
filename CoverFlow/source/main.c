@@ -519,23 +519,23 @@ void Settings_Menu(void)
 		draw_covers();
 		// Draw menu dialog background
 		GRRLIB_2D_Init();
-		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFFF);
+		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFCC);//old one bg renamed to _old
 		// Draw text
 		GRRLIB_Printf(184, 55,  font_title, 0xFFFFFFFF, 1, "Coverflow Settings");
-		GRRLIB_Printf(145, 93,  font_texture, settings.fontColor, 1, "Ocarina:");
-		GRRLIB_Printf(310, 93,  font_texture, settings.fontColor, 1, "Hook:");
-		GRRLIB_Printf(385, 93,  font_texture, 0x000000FF, 1, "%s",hooks[settings.hooktype]);
-		GRRLIB_Printf(145, 128, font_texture, settings.fontColor, 1, "Language:");
-		GRRLIB_Printf(330, 128, font_texture, 0x000000FF, 1, "%s",languages[settings.language]);
-		GRRLIB_Printf(145, 157, font_texture, settings.fontColor, 1, "Video mode:");
-		GRRLIB_Printf(330, 155, font_texture, 0x000000FF, 1, "%s",vidmodes[settings.video]);
-		GRRLIB_Printf(145, 189, font_texture, settings.fontColor, 1, "VIDTV patch:");
-		GRRLIB_Printf(145, 221, font_texture, settings.fontColor, 1, "Graphics:");
-		GRRLIB_Printf(145, 260, font_texture, settings.fontColor, 1, "Missing Covers?:");
-		GRRLIB_Printf(145, 300, font_texture, settings.fontColor, 1, "Theme:");
-		GRRLIB_Printf(145, 340, font_texture, settings.fontColor, 1, "1-Click Launch:");
-		GRRLIB_Printf(145, 380, font_texture, settings.fontColor, 1, "Rumble:");
-		GRRLIB_Printf(145, 420, font_texture, settings.fontColor, 1, "Sound:");
+		GRRLIB_Printf(145, 93,  font_texture, settings.fontColor, 1, "Ocarina");
+		GRRLIB_Printf(310, 93,  font_texture, settings.fontColor, 1, "Hook");
+		GRRLIB_Printf(385, 93,  font_texture, 0xFFFFFFFF, 1, "%s",hooks[settings.hooktype]);
+		GRRLIB_Printf(145, 128, font_texture, settings.fontColor, 1, "Language");
+		GRRLIB_Printf(330, 128, font_texture, 0xFFFFFFFF, 1, "%s",languages[settings.language]);
+		GRRLIB_Printf(145, 157, font_texture, settings.fontColor, 1, "Video mode");
+		GRRLIB_Printf(330, 155, font_texture, 0xFFFFFFFF, 1, "%s",vidmodes[settings.video]);
+		GRRLIB_Printf(145, 189, font_texture, settings.fontColor, 1, "VIDTV patch");
+		GRRLIB_Printf(145, 221, font_texture, settings.fontColor, 1, "Graphics");
+		GRRLIB_Printf(145, 260, font_texture, settings.fontColor, 1, "Get Missing Covers");
+		GRRLIB_Printf(145, 300, font_texture, settings.fontColor, 1, "Theme");
+		GRRLIB_Printf(145, 340, font_texture, settings.fontColor, 1, "1-Click Launch");
+		GRRLIB_Printf(145, 380, font_texture, settings.fontColor, 1, "Rumble");
+		GRRLIB_Printf(145, 420, font_texture, settings.fontColor, 1, "Sound");
 		//GRRLIB_Printf(218, 446, font_texture, settings.fontColor, 1.15, "Press B to return");
 
 		// Draw stateless buttons
@@ -1456,6 +1456,7 @@ int main( int argc, char **argv )
 				//
 				// SCOGNITO'S TRASH TEST CORNER
 				//
+				GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 				//LoadCurrentCover(self.gameSelected, gameList);
 				/*
 				self.gsize = getGameSize(gameList);

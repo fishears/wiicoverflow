@@ -120,7 +120,7 @@ void checkDirs(){
 			else{
 				dirclose(dir);
 			}
-			
+			/*
 			dir = diropen("games");
 	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);	
 			if(dir == NULL) {
@@ -129,6 +129,7 @@ void checkDirs(){
 			else{
 				dirclose(dir);
 			}
+			*/
 		}
 		
 		else{
