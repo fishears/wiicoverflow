@@ -697,7 +697,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 				if(Button_Select(choice_a, pointer.p_x, pointer.p_y))
 					return true;
 			}
-			else if(choice_b != 0)
+			if(choice_b != 0)
 			{
 				if(Button_Select(choice_b, pointer.p_x, pointer.p_y))
 					return false;

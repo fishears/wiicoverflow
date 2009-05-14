@@ -31,6 +31,7 @@ typedef struct {
 
 
 void SETTINGS_Init(void);
+void graphics_SETTINGS_Init(void);
 
 int SETTINGS_Load();
 
