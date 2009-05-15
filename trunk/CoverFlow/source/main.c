@@ -457,7 +457,7 @@ void Settings_Menu(void)
 			{
 				// Clicked on the Download Covers button
 				//if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
-				if (WindowPrompt(localStr("M001", "Cover download"),localStr("M002", "This operation can't be canceled, continue?"), &okButton, &cancelButton))
+				if (WindowPrompt(localStr("M055", "Cover download"),localStr("M056", "This operation can't be canceled, continue?"), &okButton, &cancelButton))
 				{
 					batchDownloadCover(gameList);
 					CoversDownloaded();
@@ -623,10 +623,10 @@ bool Menu_Install(void)
 	cancelButton.y = 290;
     static struct discHdr headerdisc ATTRIBUTE_ALIGN(32);
 	
-	if(!WindowPrompt ("Install new Game?", "Place disk in drive and hit ok.",&okButton,&cancelButton))
+	if(!WindowPrompt (localStr("M064", "Install new Game?"), localStr("M065", "Place disk in drive and hit ok."),&okButton,&cancelButton))
 		return false;
 		
-	WindowPrompt ("Initializing DVD Drive", "Please Wait...",0,0);
+	WindowPrompt (localStr("M066", "Initializing DVD Drive") , localStr("M067", "Please Wait..."),0,0);
 	
 	/* Disable WBFS mode */
 	Disc_SetWBFS(0, NULL);
@@ -637,19 +637,19 @@ bool Menu_Install(void)
 
 	ret = Disc_Wait();
 	if (ret < 0) {
-		WindowPrompt ("Error reading Disc",0,&cancelButton,0);
+		WindowPrompt (localStr("M068", "Error reading Disc"),0,&cancelButton,0);
 		return false;
 	}
 	ret = Disc_Open();
 	if (ret < 0) {
-		WindowPrompt ("Could not open Disc",0,&cancelButton,0);
+		WindowPrompt (localStr("M069", "Could not open Disc"),0,&cancelButton,0);
 		return false;
 	}
 
 	ret = Disc_IsWii();
 	
 	if (ret < 0) {
-		choice = WindowPrompt ("Not a Wii Disc","Insert a Wii Disc!",&okButton,&cancelButton);
+		choice = WindowPrompt (localStr("M070", "Not a Wii Disc"), localStr("M071", "Insert a Wii Disc!"),&okButton,&cancelButton);
 
 		if (!choice) {
 			return false;
@@ -933,7 +933,8 @@ int main( int argc, char **argv )
 	#endif
 	
 	SETTINGS_Init();
-	
+
+ 	
 	GRRLIB_Init();
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
@@ -950,7 +951,7 @@ int main( int argc, char **argv )
 
 	self.progress += .1;
 
-	sprintf(self.debugMsg, "Loading textures");
+	sprintf(self.debugMsg, localStr("M088", "Loading textures") );
 	Paint_Progress(self.progress,self.debugMsg);
 	
 	LoadTextures();		// load textures
@@ -958,12 +959,12 @@ int main( int argc, char **argv )
 
 	self.progress += .1;
 
-	sprintf(self.debugMsg, "Init USB");
+	sprintf(self.debugMsg, localStr("M089", "Init USB") );
 	Paint_Progress(self.progress,self.debugMsg);
 	
 	#ifndef TEST_MODE
 	if(!init_usbfs()){
-		WindowPrompt ("ERROR!","Cannot init USBFS, quitting.", &okButton, 0);
+		WindowPrompt (localStr("M003", "ERROR!"), localStr("M090", "Cannot init USBFS, quitting."), &okButton, 0);
 		return 0;
 	}
 		
@@ -973,7 +974,7 @@ int main( int argc, char **argv )
 	//CFG.widescreen = 0;
 	//CFG.download = 1;
 	
-	sprintf(self.debugMsg, "Initializing WBFS");
+	sprintf(self.debugMsg, localStr("M091", "Initializing WBFS") );
 	Paint_Progress(self.progress,self.debugMsg);
 	
 	my_wbfsDev = WBFS_DEVICE_USB;
@@ -1136,7 +1137,7 @@ int main( int argc, char **argv )
 	float wait = 120; //ms
 	float prog = 2.1/wait;
 	
-	sprintf(self.debugMsg, "Initializing Threaded Image Buffer...");
+	sprintf(self.debugMsg, localStr("M104", "Initializing Threaded Image Buffer...") );	
 	while(wait > 0)
 	{
 		wait--;
@@ -1150,11 +1151,11 @@ int main( int argc, char **argv )
 	#endif
 
 	// set the background
-	sprintf(self.debugMsg, "Setting background theme...");
+	sprintf(self.debugMsg, localStr("M105", "Setting background theme...") );
 	Paint_Progress(self.progress,self.debugMsg);
 	Sleep(300);
 
-	sprintf(self.debugMsg, "Freeing unused textures...");
+	sprintf(self.debugMsg, localStr("M106", "Freeing unused textures...") );
 	Paint_Progress(self.progress,self.debugMsg);
 	//free(progress_texture.data);
 	Sleep(300);
