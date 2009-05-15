@@ -490,13 +490,16 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 			strncat(gameName, "...", 3);
 		}
 		
-		GRRLIB_Printf(260, 174, font_title, 0xFFFFFFFF, 1, "%s", gameName);
+		GRRLIB_Printf(245, 174, font_title, 0xFFFFFFFF, 1, "%s", gameName);
 		//GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
 		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
-			GRRLIB_Printf(270, 220, font_title, 0xFFFFFFFF, .8, "Never played before");
+			GRRLIB_Printf(255, 220, font_title, 0xFFFFFFFF, .8, "Never played before");
 		else
-			GRRLIB_Printf(270, 220, font_title, 0xFFFFFFFF, .8, "Played %s",gameSetting.lastPlayed);
-		GRRLIB_Printf(270, 250, font_title, 0xFFFFFFFF, .8, "Size  %.2fGB", self.gsize);
+			GRRLIB_Printf(255, 220, font_title, 0xFFFFFFFF, .8, "Played %s",gameSetting.lastPlayed);
+			
+		GRRLIB_Printf(265, 250, font_title, 0xFFFFFFFF, .8, "Id  (%c%c%c%c)", header->id[0], header->id[1], header->id[2], header->id[3]);
+		GRRLIB_Printf(265, 280, font_title, 0xFFFFFFFF, .8, "Size  %.2fGB", self.gsize);
+		
 		#else
 		
 		GRRLIB_Printf(270, 174, font_title, 0xFFFFFFFF, 1, "%s", "Best game");
