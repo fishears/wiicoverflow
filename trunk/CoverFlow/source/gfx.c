@@ -52,8 +52,7 @@ void LoadTextures()
 	load_bg_texture		   = GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
 	font_texture           = GRRLIB_LoadTexture(BMfont5_png);
 	font_title             = GRRLIB_LoadTexture(font_w14_h20_png);
-	ambientlightr_texture  = GRRLIB_LoadTexture(ambientlightr_png);
-	ambientlightl_texture  = GRRLIB_LoadTexture(ambientlightl_png);
+	ambientlight_texture   = GRRLIB_LoadTexture(ambientlight_png);
 	
 	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
     GRRLIB_InitTileSet(&font_title, 14, 20, 32);
@@ -325,8 +324,8 @@ void draw_covers()
 			GRRLIB_Cover(i+self.shift, i+(COVER_COUNT/2.0));
 	}
 	
-	GRRLIB_DrawImg(0, 0, ambientlightl_texture, 0, 1, 1, 0xFFFFFFFF);
-	GRRLIB_DrawImg(400, 0, ambientlightr_texture, 0, 1, 1, 0xFFFFFFFF);
+	GRRLIB_DrawImg(-30, 0, ambientlight_texture, 0, 1, 1, 0xFFFFFFFF);   // draw the left side fade
+	GRRLIB_DrawImg(430, 0, ambientlight_texture, 180, 1, 1, 0xFFFFFFFF); // flip the graphic horizontally for the right side
 }
 
 
