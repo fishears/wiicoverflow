@@ -53,7 +53,7 @@ void LoadTextures()
 	font_texture           = GRRLIB_LoadTexture(BMfont5_png);
 	font_title             = GRRLIB_LoadTexture(font_w14_h20_png);
 	ambientlight_texture   = GRRLIB_LoadTexture(ambientlight_png);
-	
+
 	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
     GRRLIB_InitTileSet(&font_title, 14, 20, 32);
 }
