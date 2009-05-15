@@ -11,7 +11,12 @@ typedef struct{
 	int video;
 	int vipatch;
 	char lastPlayed[128];
+	int category;
+	int favorite;
 	
+	/*Used for lookup and saving game setting*/
+	char titleID[7];
+	bool changed;
 } s_gameSettings;
 
 void initGameSettings(s_gameSettings* gs);
