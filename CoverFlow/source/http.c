@@ -1,4 +1,5 @@
 #include "http.h"
+#include "localization.h"
 
 /**
  * Emptyblock is a statically defined variable for functions to return if they are unable
@@ -90,7 +91,7 @@ struct block read_message(s32 connection)
 		//Anything below 0 is an error in the connection
 		if(bytes_read < 0)
 		{
-			printf("Connection error from net_read()  Errorcode: %i\n", bytes_read);
+			printf(localStr("M041", "Connection error from net_read()  Errorcode: %i\n"), bytes_read);
 			return emptyblock;
 		}
 		
@@ -135,7 +136,7 @@ struct block downloadfile(const char *url)
 	//Check if the url starts with "http://", if not it is not considered a valid url
 	if(strncmp(url, "http://", strlen("http://")) != 0)
 	{
-		printf("URL '%s' doesn't start with 'http://'\n", url);
+		printf(localStr("M042", "URL '%s' doesn't start with 'http://'\n"), url);
 		return emptyblock;
 	}
 	
@@ -145,7 +146,7 @@ struct block downloadfile(const char *url)
 	//At the very least the url has to end with '/', ending with just a domain is invalid
 	if(path == NULL)
 	{
-		printf("URL '%s' has no PATH part\n", url);
+		printf(localStr("M043", "URL '%s' has no PATH part\n"), url);
 		return emptyblock;
 	}
 	
@@ -154,7 +155,7 @@ struct block downloadfile(const char *url)
 	
 	if(domainlength == 0)
 	{
-		printf("No domain part in URL '%s'\n", url);
+		printf(localStr("M044", "No domain part in URL '%s'\n"), url);
 		return emptyblock;
 	}
 	
@@ -167,7 +168,7 @@ struct block downloadfile(const char *url)
 	
 	if(ipaddress == 0)
 	{
-		printf("\ndomain %s could not be resolved", domain);
+		printf(localStr("M045", "\ndomain %s could not be resolved"), domain);
 		return emptyblock;
 	}
 
@@ -175,7 +176,7 @@ struct block downloadfile(const char *url)
 	s32 connection = server_connect(ipaddress, 80);
 	
 	if(connection < 0) {
-		printf("Error establishing connection");
+		printf(localStr("M046", "Error establishing connection") );
 		return emptyblock;
 	}
 	
@@ -208,7 +209,7 @@ struct block downloadfile(const char *url)
 	
 	if(filestart == NULL)
 	{
-		printf("HTTP Response was without a file\n");
+		printf(localStr("M047", "HTTP Response was without a file\n") );
 		free(response.data);
 		return emptyblock;
 	}
@@ -220,7 +221,7 @@ struct block downloadfile(const char *url)
 	
 	if(file.data == NULL)
 	{
-		printf("No more memory to copy file from HTTP response\n");
+		printf(localStr("M048", "No more memory to copy file from HTTP response\n") );
 		free(response.data);
 		return emptyblock;
 	}
