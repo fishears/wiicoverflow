@@ -8,6 +8,7 @@ extern s_pointer pointer;
 extern u8 shutdown;
 extern u8 reset;
 extern s_settings settings;
+
 inline void HomeMenu_Init()
 {
 	//Nothing to do
@@ -302,4 +303,51 @@ void HomeMenu_Destroy()
 	free(wiimoteButton.texture.data);
 	
 	freeResources();
+}
+
+void Battery_Info()
+{
+#ifdef BATTMAN
+    	WPAD_ScanPads();
+        int i;
+	for(i=3; i >= 0; i--)
+	{
+		memcpy(&user_remote[i].wpad, WPAD_Data(i), sizeof(WPADData));
+		user_remote[i].chan = i;
+	}
+
+
+        int level = 0;
+        int battinfo[4];
+
+        for(i=0; i < 4; i++)
+                    {
+                if(WPAD_Probe(i, NULL) == WPAD_ERR_NONE)
+                    //found a wiimote
+                    {
+                    
+                        level = (user_remote[i]->battery_level / 100.0) * 4;
+                        if(level > 4) level = 4;
+                        battinfo[i] = level;
+                        //batteryImg[i]->SetTile(level);
+
+                        if(level == 0)
+                             battinfo[i] = 0;
+                            //batteryBarImg[i]->SetImage(&battery_dead);
+                        //else
+                                //batteryBarImg[i]->SetImage(&battery_bar);
+
+                       // batteryBtn[i]->SetAlpha(255);
+                       }
+                else
+                    //didn't find a wiimote
+                {
+                    battinfo[i] = 999;
+                    //batteryImg[i]->SetTile(0);
+                        //batteryImg[i]->SetImage(&battery);
+                        //batteryBtn[i]->SetAlpha(70);
+                }
+                GRRLIB_Printf(145+(i*50), 120, font_title, 0xFFFFFF00, 1, "%i",battinfo[i]);
+        }
+#endif
 }
