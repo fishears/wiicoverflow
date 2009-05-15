@@ -36,8 +36,6 @@ static char timet[256];
 
 void LoadTextures()
 {
-	gradient_bg_strip_w    = GRRLIB_LoadTexture(gradient_bg_strip_w_png);
-	gradient_bg_strip_b    = GRRLIB_LoadTexture(gradient_bg_strip_b_png);
 	pointer_texture        = GRRLIB_LoadTexture(generic_point_png);
 	pointer_shadow_texture = GRRLIB_LoadTexture(pointer_shadow_png);
 	turn_point_texture     = GRRLIB_LoadTexture(turning_point_png);
@@ -53,6 +51,8 @@ void LoadTextures()
 	font_texture           = GRRLIB_LoadTexture(BMfont5_png);
 	font_title             = GRRLIB_LoadTexture(font_w14_h20_png);
 	ambientlight_texture   = GRRLIB_LoadTexture(ambientlight_png);
+	ambientlight_white_texture = GRRLIB_CreateEmptyTexture(ambientlight_texture.w, ambientlight_texture.h);
+	GRRLIB_BMFX_Invert(ambientlight_texture, ambientlight_white_texture); //invert the fade from black to white
 
 	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
     GRRLIB_InitTileSet(&font_title, 14, 20, 32);
@@ -96,8 +96,6 @@ void Paint_Progress(float v, char* msg)
 		count = 40;
 
 	GRRLIB_2D_Init();
-	
-	//DrawBackground(settings.theme);
 
 	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
 
@@ -122,8 +120,6 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 
 	GRRLIB_2D_Init();
 	
-//	DrawBackground(settings.theme);
-
 	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
 	
 	for(i = 0; i < count; i++)
@@ -261,51 +257,6 @@ void GRRLIB_Cover(float pos, int texture_id)
 }
 
 
-void DrawBackground(int theme_id)
-{
-	// This method on hold until we can figure out how to draw a background behind the 3D stuff
-	
-	// draw the backgound gradient strip over and over to create solid bg
-	// need to add code to check for widescreen and adjust accordingly
-//	int x;
-//	for(x=0;x<=637;x=x+4)
-//	{
-		switch (theme_id)
-		{
-			case 0: // black theme
-				//GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
-				//TODO look into drawing a 3D object instead of a 2D one
-//				GRRLIB_FillScreen(0x000000FF);
-				break;
-			case 1: // white theme
-				//GRRLIB_DrawImg(x, 0, gradient_bg_strip_w, 0, 1, 1, 0xFFFFFFFF);
-//				GRRLIB_FillScreen(0xFFFFFFFF);
-				break;
-			default:
-//				GRRLIB_FillScreen(0x000000FF);
-				//GRRLIB_DrawImg(x, 0, gradient_bg_strip_b, 0, 1, 1, 0xFFFFFFFF);
-				break;
-		}
-//	}
-	
-	
-}
-
-// This is wha needs fixin' to draw the sequence order properly
-/*
-void draw_covers()
-{
-	int i;
-	
-	for(i = (-1*(COVER_COUNT/2.0)); i < (COVER_COUNT/2.0); i++)
-	{
-		//Some logic to avoid drawing everything
-		if(abs(self.shift+i) < settings.drawWindow)
-			GRRLIB_Cover(i+self.shift, i+(COVER_COUNT/2.0));
-	}
-}
-*/
-
 void draw_covers()
 {
 	int i;
@@ -324,8 +275,16 @@ void draw_covers()
 			GRRLIB_Cover(i+self.shift, i+(COVER_COUNT/2.0));
 	}
 	
-	GRRLIB_DrawImg(-30, 0, ambientlight_texture, 0, 1, 1, 0xFFFFFFFF);   // draw the left side fade
-	GRRLIB_DrawImg(430, 0, ambientlight_texture, 180, 1, 1, 0xFFFFFFFF); // flip the graphic horizontally for the right side
+	if (settings.theme) //white
+	{
+		GRRLIB_DrawImg(-30, 0, ambientlight_white_texture, 0, 1, 1, 0xFFFFFFFF);   // draw the left side fade
+		GRRLIB_DrawImg(430, 0, ambientlight_white_texture, 180, 1, 1, 0xFFFFFFFF); // flip the graphic horizontally for the right side
+	}
+	else //default black
+	{
+		GRRLIB_DrawImg(-30, 0, ambientlight_texture, 0, 1, 1, 0xFFFFFFFF);   // draw the left side fade
+		GRRLIB_DrawImg(430, 0, ambientlight_texture, 180, 1, 1, 0xFFFFFFFF); // flip the graphic horizontally for the right side
+	}
 }
 
 
@@ -691,8 +650,6 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 	else
 	{
 		doloop = true;
-		GRRLIB_FillScreen(0x000000FF);
-		GRRLIB_Render();
 	}
 		
 	do{
@@ -719,12 +676,11 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 					return false;
 			}
 		}
-		
-		GRRLIB_FillScreen(0x000000FF);
+
+		// Draw the dialog panel
 		GRRLIB_DrawImg(128, 95, menu_bg2_texture, 0, 1, 1, 0xFFFFFFFF);
 
 		// Draw buttons
-		
 		if(choice_a != 0 && choice_b != 0){
 			choice_a->x = 320-5-80;
 			choice_b->x = 320+5;
