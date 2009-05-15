@@ -15,7 +15,6 @@ typedef struct{
 	int favorite;
 	
 	/*Used for lookup and saving game setting*/
-	char titleID[7];
 	bool changed;
 } s_gameSettings;
 
