@@ -782,7 +782,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		GRRLIB_Render();
 		
 	}while(doloop);
-	
+
 	return false;
 }
 
@@ -1069,6 +1069,34 @@ void game_settings_menu(struct discHdr *gameList)
 		if(doloop)
 			DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 
+		// Check for button-pointer intersections, and rumble
+		if ((Button_Hover(&gbackButton, pointer.p_x, pointer.p_y) ||
+			   Button_Hover(&glangupButton, pointer.p_x, pointer.p_y) ||
+			   Button_Hover(&glangdownButton, pointer.p_x, pointer.p_y) ||
+			   Button_Hover(&gvidupButton, pointer.p_x, pointer.p_y) ||
+			   Button_Hover(&gviddownButton, pointer.p_x, pointer.p_y) ||
+			   Button_Hover(&gcheatoffButton, pointer.p_x, pointer.p_y) ||
+			   Button_Hover(&gcheatonButton, pointer.p_x, pointer.p_y) ||
+			   Button_Hover(&gvidtvoffButton, pointer.p_x, pointer.p_y) ||
+			   Button_Hover(&gvidtvonButton, pointer.p_x, pointer.p_y) ||
+			   Button_Hover(&ghookupButton, pointer.p_x, pointer.p_y) ||
+			   Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y)))
+		{
+			// Should we be rumbling?
+			if (--self.rumbleAmt > 0)
+			{
+				if(settings.rumble)
+					WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			}
+			else 
+				WPAD_Rumble(0,0); // Kill the rumble
+		}
+		else
+		{ // If no button is being hovered, kill the rumble
+			WPAD_Rumble(0,0);
+			self.rumbleAmt = 5;
+		}
+		
 		GRRLIB_Render();
 
 	}while(doloop);
