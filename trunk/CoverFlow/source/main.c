@@ -305,15 +305,15 @@ void Graphic_Settings_Menu(void)
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFFF);
 		// Draw text
-		GRRLIB_Printf(190, 55,  font_title, 0xFFFFFFFF, 1, "Graphics Settings");
+		GRRLIB_Printf(190, 55,  font_title, settings.fontColor, 1, "Graphics Settings");
 		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, "Zoom:");
-		GRRLIB_Printf(350, 100, font_texture, 0x000000FF, 1, "%f", settings.coverZoom);
+		GRRLIB_Printf(350, 100, font_texture, settings.fontColor, 1, "%f", settings.coverZoom);
 		GRRLIB_Printf(145, 148, font_texture, settings.fontColor, 1, "Spacing:");
-		GRRLIB_Printf(350, 148, font_texture, 0x000000FF, 1, "%f", settings.coverSpacing);
+		GRRLIB_Printf(350, 148, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
 		GRRLIB_Printf(145, 197, font_texture, settings.fontColor, 1, "Angle:");
-		GRRLIB_Printf(350, 197, font_texture, 0x000000FF, 1, "%f", settings.coverAngle);
+		GRRLIB_Printf(350, 197, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
 		GRRLIB_Printf(145, 245, font_texture, settings.fontColor, 1, "Draw Window:");
-		GRRLIB_Printf(350, 245, font_texture, 0x000000FF, 1, "%d", settings.drawWindow);
+		GRRLIB_Printf(350, 245, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
 		GRRLIB_Printf(145, 292, font_texture, settings.fontColor, 1, "Game Title:");
 		
 		//Button_Theme_Paint(&settingsButton, settings.theme);
@@ -1575,9 +1575,19 @@ int main( int argc, char **argv )
 		}
 		
 		// Check for button-pointer intersections, and rumble
-		if (((!settings.parentalLock) && Button_Hover(&addButton, pointer.p_x, pointer.p_y)) ||
+		if (
+			(!self.selected && // main screen button only
+			(((!settings.parentalLock) && Button_Hover(&addButton, pointer.p_x, pointer.p_y)) ||
 			Button_Hover(&settingsButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&slideButton, pointer.p_x, pointer.p_y))
+			Button_Hover(&slideButton, pointer.p_x, pointer.p_y))) 
+			||
+			(self.selected && // game load panel is showing
+			(((!settings.parentalLock) && Button_Hover(&deleteButton, pointer.p_x, pointer.p_y)) ||
+			Button_Hover(&loadButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&backButton, pointer.p_x, pointer.p_y)))
+			
+			)
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
