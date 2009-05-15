@@ -3,6 +3,8 @@
 
 #include "soundmanager.h"
 
+#include "filter.h"
+
 extern u8 shutdown;
 extern u8 reset;
 extern s_settings settings;
@@ -36,6 +38,7 @@ char hooks[3][9] =
 /* Gamelist buffer */
 
 static struct discHdr *gameList = NULL;
+static s_Filter gameFilter;
 static wbfs_t *hdd = NULL;
 
 /* WBFS device */
@@ -150,6 +153,9 @@ s32 GetEntries(void)
 	
 	/* Reset variables */
 	self.gameSelected = self.gameStart = 0;
+
+	//Init Filter
+	//InitFilter(&gameFilter, gameList);
 
 	return 0;
 
