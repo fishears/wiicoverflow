@@ -7,6 +7,7 @@
 #include "localization.h"
 
 extern s_settings settings;
+static mxml_node_t *MSGs = NULL;
 
 char *localStr ( char *CODE, char * defaultStr )
 {
@@ -14,22 +15,26 @@ char *localStr ( char *CODE, char * defaultStr )
    mxml_node_t *node;
    mxml_node_t *lang_n;
    mxml_node_t *msg_n;
-   FILE *fp;
 
-   fp = fopen(USBLOADER_PATH "/localization.xml", "r");
+   if (MSGs == NULL) {
+	   FILE *fp;
 
-   if(fp == NULL)
-     	return defaultStr;
+	   fp = fopen(USBLOADER_PATH "/localization.xml", "r");
 
-   root = mxmlLoadFile(NULL, fp, MXML_NO_CALLBACK);
-   fclose(fp);
+	   if(fp == NULL)
+		return defaultStr;
+
+	   MSGs = mxmlLoadFile(NULL, fp, MXML_NO_CALLBACK);
+	   fclose(fp);
+   }
+      
    // If root is null, then return defaultStr
-   if (root == NULL)
+   if (MSGs == NULL)
 		return defaultStr;
 
    // else, search inside the XML three for the message asked.
    // Return default message if it did not found either.
-   node = mxmlFindElement(root,root, "wiicoverflow", NULL, NULL, MXML_DESCEND); 
+   node = mxmlFindElement(MSGs,MSGs, "wiicoverflow", NULL, NULL, MXML_DESCEND); 
    if(node == NULL)
 		return defaultStr;
 		
