@@ -4,12 +4,16 @@
 extern s_settings settings;
 
 void initGameSettings(s_gameSettings* gs){
-	
-	gs->ocarina = -1;
+	gs->ocarina  = -1;
 	gs->hooktype = -1;
 	gs->language = -1;
-	gs->video = -1;
-        gs->vipatch = -1;
+	gs->video    = -1;
+    gs->vipatch  = -1;
+	gs->category = -1;
+	gs->favorite = 0;
+	
+	gs->changed  = false;
+	
 	sprintf(gs->lastPlayed, "%s", "-1");
 }
 
@@ -103,6 +107,14 @@ bool getGameSettings(char* gameCode, s_gameSettings* gs){
 								sprintf(gs->lastPlayed, "%s", mxmlElementGetAttr(next_n,"lastplayed"));
 							else
 								sprintf(gs->lastPlayed, "%s", "-1");
+							if(mxmlElementGetAttr(next_n,"category"))
+								gs->category = atoi(mxmlElementGetAttr(next_n,"category"));
+							else
+								gs->category = -1;
+							if(mxmlElementGetAttr(next_n,"favorite"))
+								gs->favorite = atoi(mxmlElementGetAttr(next_n,"favorite"));
+							else
+								gs->favorite = 0;
 							
 							return true;
 						}
@@ -186,6 +198,12 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 								mxmlElementSetAttr(next_n, "vipatch", temp);
 							//}
 							
+								sprintf(temp, "%d", gs->category);
+								mxmlElementSetAttr(next_n, "category", temp);
+								
+								sprintf(temp, "%d", gs->favorite);
+								mxmlElementSetAttr(next_n, "favorite", temp);
+								
 							if(date == 1){
 								sysdate(temp);
 								mxmlElementSetAttr(next_n, "lastplayed", temp);
@@ -211,11 +229,19 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 						mxmlElementSetAttr(next_n, "video", temp);
 						sprintf(temp, "%d", gs->vipatch);
 						mxmlElementSetAttr(next_n, "vipatch", temp);
+						sprintf(temp, "%d", gs->category);
+						mxmlElementSetAttr(next_n, "category", temp);
+						sprintf(temp, "%d", gs->favorite);
+						mxmlElementSetAttr(next_n, "favorite", temp);
 						
 						if(date == 1)
 						{
 							sysdate(temp);
 							mxmlElementSetAttr(next_n, "lastplayed", temp);
+						}
+						else if(date == 2)
+						{
+							mxmlElementSetAttr(next_n, "lastplayed", gs->lastPlayed);
 						}
 						else
 						{	

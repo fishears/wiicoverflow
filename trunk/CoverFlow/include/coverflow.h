@@ -51,7 +51,6 @@
 //extern const u8 bootloader_dol[];
 
 /*DOL TEST END*/
-
  
 #define COVER_WIDTH    160
 #define COVER_HEIGHT   224
