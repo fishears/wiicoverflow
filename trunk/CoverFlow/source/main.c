@@ -1170,9 +1170,9 @@ int main( int argc, char **argv )
 	
 	bool select_ready = false;
 	
-	#ifdef TEST_MODE
+	//#ifdef TEST_MODE
 	PAD_Init();
-	#endif
+	//#endif
 	
 	bool dragging = false;
 	bool twisting = false;
