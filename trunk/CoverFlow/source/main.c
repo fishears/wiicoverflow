@@ -1541,12 +1541,13 @@ int main( int argc, char **argv )
 		draw_covers();
 
 		//Play flip sound if needed
-		if((int)abs(self.shift) != self.lastGameSelected)
+
+		if((int)(self.shift+1000.5) != self.lastGameSelected)
 		{
-			self.lastGameSelected = (int)abs(self.shift);
+			self.lastGameSelected = (int)(self.shift+1000.5);
 			SOUND_PlaySound(FX_COVER_SCROLL, 0);
 		}
-
+		
 		// Check to see if it's time to draw the game launch dialog panel
 		if(self.selected || self.animate_flip != 0)
 		{
@@ -1649,7 +1650,7 @@ int main( int argc, char **argv )
 		}
 	}
 
-	WindowPrompt("TEST", "Quitting test", 0, &cancelButton);
+	//WindowPrompt("TEST", "Quitting test", 0, &cancelButton);
     GRRLIB_Exit(); 
 	
 	SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
