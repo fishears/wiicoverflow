@@ -493,12 +493,12 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		GRRLIB_Printf(245, 174, font_title, 0xFFFFFFFF, 1, "%s", gameName);
 		//GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
 		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
-			GRRLIB_Printf(255, 220, font_title, 0xFFFFFFFF, .8, "Never played before");
+			GRRLIB_Printf(255, 220, font_title, 0xFFFFFFFF, .8, localStr("M032", "Never played before"));
 		else
-			GRRLIB_Printf(255, 220, font_title, 0xFFFFFFFF, .8, "Played %s",gameSetting.lastPlayed);
+			GRRLIB_Printf(255, 220, font_title, 0xFFFFFFFF, .8, localStr("M033", "Played %s"),gameSetting.lastPlayed);
 			
 		GRRLIB_Printf(265, 250, font_title, 0xFFFFFFFF, .8, "Id  (%c%c%c%c)", header->id[0], header->id[1], header->id[2], header->id[3]);
-		GRRLIB_Printf(265, 280, font_title, 0xFFFFFFFF, .8, "Size  %.2fGB", self.gsize);
+		GRRLIB_Printf(265, 280, font_title, 0xFFFFFFFF, .8, localStr("M034", "Size:    %.2fGB"), self.gsize);
 		
 		#else
 		
@@ -832,7 +832,7 @@ void ShowProgress (s32 done, s32 total)
 
 	//sprintf(prozent, "%s%0.2f%%", "Installing Game...", percent);
 
-    sprintf(timet,"Installing... (%0.2f%%) Time left: %d:%02d:%02d",percent, h,m,s);
+    sprintf(timet,localStr("M035", "Installing... (%0.2f%%) Time left: %d:%02d:%02d"),percent, h,m,s);
 
 	/*Update and Draw Progress Window Here*/
 	//WindowPrompt(prozent, timet, 0, 0);
@@ -1057,15 +1057,15 @@ void game_settings_menu(struct discHdr *gameList)
 		Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
 
         //BUTTON TEXT
-		GRRLIB_Printf(89, 145,  font_title, settings.fontColor, 1, "%s: settings", gameName);
-		GRRLIB_Printf(169, 193,  font_texture, settings.fontColor, 1, "Ocarina:");
-		GRRLIB_Printf(334, 193,  font_texture, settings.fontColor, 1, "Hook:");
+		GRRLIB_Printf(89, 145,  font_title, settings.fontColor, 1, localStr("M036", "%s: settings"), gameName);
+		GRRLIB_Printf(169, 193,  font_texture, settings.fontColor, 1, localStr("M135", "Ocarina:"));
+		GRRLIB_Printf(334, 193,  font_texture, settings.fontColor, 1, localStr("M037", "Hook:"));
 		GRRLIB_Printf(409, 193,  font_texture, 0xFFFFFFFF, 1, "%s",ghooks[gameSetting.hooktype]);
-		GRRLIB_Printf(169, 228, font_texture, settings.fontColor, 1, "Language:");
+		GRRLIB_Printf(169, 228, font_texture, settings.fontColor, 1, localStr("M038", "Language:"));
 		GRRLIB_Printf(354, 228, font_texture, 0xFFFFFFFF, 1, "%s",glanguages[gameSetting.language]);
-		GRRLIB_Printf(169, 257, font_texture, settings.fontColor, 1, "Video mode:");
+		GRRLIB_Printf(169, 257, font_texture, settings.fontColor, 1, localStr("M039", "Video mode:"));
 		GRRLIB_Printf(354, 255, font_texture, 0xFFFFFFFF, 1, "%s",gvidmodes[gameSetting.video]);
-		GRRLIB_Printf(169, 289, font_texture, settings.fontColor, 1, "VIDTV patch:");
+		GRRLIB_Printf(169, 289, font_texture, settings.fontColor, 1, localStr("M040", "VIDTV patch:"));
 
 		// Draw the default pointer hand
 		if(doloop)
