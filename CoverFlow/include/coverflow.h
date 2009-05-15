@@ -110,8 +110,7 @@ extern const u8 menu_bg2_png[];
 extern const u8 gradient_bg_strip_w_png[];
 extern const u8 gradient_bg_strip_b_png[];
 extern const u8 font_w14_h20_png[]; // title font
-extern const u8 ambientlightr_png[];
-extern const u8 ambientlightl_png[];
+extern const u8 ambientlight_png[];
 
 GRRLIB_texImg covers[MAX_COVERS];
 GRRLIB_texImg pointer_texture;

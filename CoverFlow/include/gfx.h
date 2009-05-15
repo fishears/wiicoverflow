@@ -74,8 +74,7 @@ GRRLIB_texImg slide_bar_texture_b; // black slider
 GRRLIB_texImg font_texture;		   // little old font
 GRRLIB_texImg font_title;          // title font
 GRRLIB_texImg load_bg_texture;
-GRRLIB_texImg ambientlightl_texture;
-GRRLIB_texImg ambientlightr_texture;
+GRRLIB_texImg ambientlight_texture;
 
 GRRLIB_texImg gradient_bg_strip_w; //white background
 GRRLIB_texImg gradient_bg_strip_b; //black background
