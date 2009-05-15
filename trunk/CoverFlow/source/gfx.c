@@ -40,7 +40,6 @@ void LoadTextures()
 	pointer_shadow_texture = GRRLIB_LoadTexture(pointer_shadow_png);
 	turn_point_texture     = GRRLIB_LoadTexture(turning_point_png);
 	menu_bg_texture		   = GRRLIB_LoadTexture(menu_bg_png);
-	menu_bg2_texture	   = GRRLIB_LoadTexture(menu_bg2_png);
 	cover_texture		   = GRRLIB_LoadTexture(no_cover_png);
 	back_texture		   = GRRLIB_LoadTexture(back_cover_png);
 	no_disc_texture		   = GRRLIB_LoadTexture(no_disc_png);
@@ -678,7 +677,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		}
 
 		// Draw the dialog panel
-		GRRLIB_DrawImg(128, 95, menu_bg2_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(50, 80, load_bg_texture, 0, 1, 1.25, 0xFFFFFFFF);
 
 		// Draw buttons
 		if(choice_a != 0 && choice_b != 0){
@@ -705,7 +704,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		int sp = 0;
 		
 		// Draw text
-		GRRLIB_Printf(138, 105, font_title, 0xFFFFFFFF, 1, "%s", title);
+		GRRLIB_Printf(100, 105, font_title, 0xFFFFFFFF, 1, "%s", title);
 		
 		if(txt != NULL)
 		{

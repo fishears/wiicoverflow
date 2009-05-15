@@ -463,7 +463,7 @@ void Settings_Menu(void)
 			{
 				// Clicked on the Download Covers button
 				//if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
-				if (WindowPrompt(localStr("M055", "Cover download"),localStr("M056", "This operation can't be canceled, continue?"), &okButton, &cancelButton))
+				if (WindowPrompt(localStr("M055", "Cover Download"),localStr("M056", "This operation can't be canceled, continue?"), &okButton, &cancelButton))
 				{
 					batchDownloadCover(gameList);
 					CoversDownloaded();
@@ -968,7 +968,7 @@ int main( int argc, char **argv )
 	
 	#ifndef TEST_MODE
 	if(!init_usbfs()){
-		WindowPrompt (localStr("M003", "ERROR!"), localStr("M090", "Cannot init USBFS, quitting."), &okButton, 0);
+		WindowPrompt(localStr("M003", "ERROR!"), localStr("M090", "Cannot init USBFS, quitting."), &okButton, 0);
 		return 0;
 	}
 		
