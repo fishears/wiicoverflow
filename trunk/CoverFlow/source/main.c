@@ -499,17 +499,14 @@ void Settings_Menu(void)
 				settings.theme = (settings.theme) ? 0 : 1;
 				if (settings.theme)
 				{	// black fonts for white theme
-					settings.fontColor = 0x000000FF;
-/////////////////////////////////////////
-// afour's test area for white theme
-// disabled until I updated the rest of the code
-//					GRRLIB_SetBGColor(1);
+					settings.fontColor = 0xFFFFFFFF; //temp until I fix the dialogs for the white theme
+//					settings.fontColor = 0x000000FF;
+					GRRLIB_SetBGColor(1); // set BG to white
 				}
 				else
 				{   // white fonts for black theme
 					settings.fontColor = 0xFFFFFFFF;
-//					GRRLIB_SetBGColor(0);
-/////////////////////////////////////////
+					GRRLIB_SetBGColor(0);  // set BG to black
 				}
 				
 			}
@@ -898,7 +895,6 @@ bool LaunchGame()
 		done = draw_selected_two(gameList, true, false);
 		
 		GRRLIB_Render();
-		
 		//self.dummy = false;
 	}
 	
@@ -907,11 +903,7 @@ bool LaunchGame()
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
 	
-	/*Fade to black*/
-	//TODO Fade to black instead of just drawing black
-	GRRLIB_FillScreen(0x000000FF);
-	GRRLIB_Render();
-	
+
 	if(!Menu_Boot())
 	{
 		self.selected = false;
@@ -1162,18 +1154,28 @@ int main( int argc, char **argv )
 	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
 	#endif
 
-	// set the background
-	sprintf(self.debugMsg, localStr("M105", "Setting background theme...") );
-	Paint_Progress(self.progress,self.debugMsg);
-	Sleep(300);
-
 	sprintf(self.debugMsg, localStr("M106", "Freeing unused textures...") );
 	Paint_Progress(self.progress,self.debugMsg);
 	//free(progress_texture.data);
 	Sleep(300);
 	
+	// set the background
+	sprintf(self.debugMsg, localStr("M105", "Setting background theme...") );
+	Paint_Progress(self.progress,self.debugMsg);
+	if (settings.theme)
+	{	// black fonts for white theme
+		settings.fontColor = 0xFFFFFFFF; //temp until I fix the dialogs for the white theme
+//		settings.fontColor = 0x000000FF;
+		GRRLIB_SetBGColor(1); // set BG to white
+	}
+	else
+	{   // white fonts for black theme
+		settings.fontColor = 0xFFFFFFFF;
+		GRRLIB_SetBGColor(0);  // set BG to black
+	}
+	Sleep(300);
+
 	self.selected = false;
-	
 	bool select_ready = false;
 	
 	//#ifdef TEST_MODE
@@ -1201,9 +1203,7 @@ int main( int argc, char **argv )
 	{
 		WPAD_ScanPads();
 		PAD_ScanPads();
-
 		GetWiimoteData();
-		//DrawBackground(settings.theme);
 		twisting = false;
 
 		// Check for 'HOME' button press

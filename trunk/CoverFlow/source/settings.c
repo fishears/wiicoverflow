@@ -109,7 +109,9 @@ int SETTINGS_Load()
 			  settings.enablepitch  = atoi(mxmlElementGetAttr(next_n,"enablepitch"));
 		  if (settings.theme)
 		  {
-			  settings.fontColor = 0x000000FF;
+//			  settings.fontColor = 0x000000FF;
+			  settings.fontColor = 0xFFFFFFFF; //temp until I fix the dialogs for the white theme
+
 		  }
 		  else
 		  {

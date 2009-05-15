@@ -78,9 +78,7 @@ GRRLIB_texImg font_texture;		   // little old font
 GRRLIB_texImg font_title;          // title font
 GRRLIB_texImg load_bg_texture;
 GRRLIB_texImg ambientlight_texture;
-
-GRRLIB_texImg gradient_bg_strip_w; //white background
-GRRLIB_texImg gradient_bg_strip_b; //black background
+GRRLIB_texImg ambientlight_white_texture;
 
 Button addButton;
 Button slideButton;
@@ -159,8 +157,6 @@ void Init_Buttons();
 void GRRLIB_Cover(float pos, int texture_id);
 void GetWiimoteData();
 void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 scaleY, u32 color);
-
-void DrawBackground(int theme_id); // takes a SETTING_theme, but defaults to black
 void DrawSlider(int theme_id);	   // takes a SETTING_theme, but defaults to black
 
 void draw_covers();
