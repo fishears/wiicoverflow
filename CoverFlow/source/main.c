@@ -1469,6 +1469,12 @@ int main( int argc, char **argv )
 				//
 				// SCOGNITO'S TRASH TEST CORNER
 				//
+				/*
+				if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+					WindowPrompt("Titolo", "16:9", 0, &cancelButton);
+				else
+					WindowPrompt("Titolo", "4:3", 0, &cancelButton);
+				*/
 				GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 				//LoadCurrentCover(self.gameSelected, gameList);
 				/*

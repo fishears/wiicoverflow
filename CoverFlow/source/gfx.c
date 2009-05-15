@@ -497,8 +497,8 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		else
 			GRRLIB_Printf(255, 220, font_title, 0xFFFFFFFF, .8, localStr("M033", "Played %s"),gameSetting.lastPlayed);
 			
-		GRRLIB_Printf(265, 250, font_title, 0xFFFFFFFF, .8, "Id  (%c%c%c%c)", header->id[0], header->id[1], header->id[2], header->id[3]);
-		GRRLIB_Printf(265, 280, font_title, 0xFFFFFFFF, .8, localStr("M034", "Size:    %.2fGB"), self.gsize);
+		//GRRLIB_Printf(265, 250, font_title, 0xFFFFFFFF, .8, "Id  (%c%c%c%c)", header->id[0], header->id[1], header->id[2], header->id[3]);
+		GRRLIB_Printf(255, 250, font_title, 0xFFFFFFFF, .8, localStr("M034", "Size:    %.2fGB"), self.gsize);
 		
 		#else
 		
@@ -507,10 +507,11 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		GRRLIB_Printf(280, 230, font_title, 0xFFFFFFFF, .8, "Size:    %.2fGB", self.gsize);
 		#endif
 		
+		// DISC IMAGE
 		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 			GRRLIB_DrawImg(86+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
 		else
-			GRRLIB_DrawImg(132+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
+			GRRLIB_DrawImg(76+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, 1, 1, 0xFFFFFFFF);
 		
 		if(self.gameSelected < MAX_BUFFERED_COVERS || self.gameSelected >= 0)
 		{
@@ -520,31 +521,33 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 				if(_texture_data[self.gameSelected].data)
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-						GRRLIB_DrawImg(64, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
 					else
-						GRRLIB_DrawImg(76, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
 				}
 				else
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-						GRRLIB_DrawImg(64, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 					else
-						GRRLIB_DrawImg(76, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+						GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 				}
 					
 				pthread_mutex_unlock(&buffer_mutex[self.gameSelected]);
 			}
 			else
-			{
-				GRRLIB_DrawImg(76, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+			{	if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
+				else
+					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 			}	
 		}
 		else
 		{	
 			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-				GRRLIB_DrawImg(64, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 			else
-				GRRLIB_DrawImg(76, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 		}	
 		
   }
