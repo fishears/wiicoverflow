@@ -231,7 +231,7 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 						fclose(fp);
 					}
 					else
-						WindowPrompt ("Error", "Can't save gamelist.xml", 0, &cancelButton);
+						WindowPrompt ( localStr("M003", "Error"), localStr("M014", "Can't save gamelist.xml"), 0, &cancelButton);
 				}
 			}
 		}
@@ -257,6 +257,6 @@ void createEmptyGameSettingsFile(){
 		fclose(fp);
 	}
 	else
-		WindowPrompt("ERROR", "Cannot create gamelist file!", 0, &okButton);
+		WindowPrompt(localStr("M003", "ERROR"), localStr("M015", "Cannot create gamelist file!"), 0, &okButton);
 }
 

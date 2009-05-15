@@ -26,8 +26,8 @@ bool init_usbfs()
 	Paint_Progress(self.progress, NULL);
 	
 	if (ret < 0) {
-		printf("[+] ERROR:\n");
-		printf("    Could not initialize DIP module! (ret = %d)\n", ret);
+		printf(localStr("M086", "[+] ERROR:\n"));
+		printf(localStr("M109", "    Could not initialize DIP module! (ret = %d)\n"), ret);
 
 		return false;
 	}
@@ -51,8 +51,8 @@ bool reinit_usbfs()
 	ret = Disc_Init();
 	
 	if (ret < 0) {
-		printf("[+] ERROR:\n");
-		printf("    Could not initialize DIP module! (ret = %d)\n", ret);
+		printf(localStr("M086", "[+] ERROR:\n"));
+		printf(localStr("M109", "    Could not initialize DIP module! (ret = %d)\n"), ret);
 
 		return false;
 	}
@@ -92,7 +92,7 @@ void checkDirs(){
 			mkdir("games", S_ISVTX);
 		}
 		else{
-			WindowPrompt("ERROR!","Can't create directories. Covers will not be saved.", &okButton, NULL);
+			WindowPrompt(localStr("M003", "ERROR!"), localStr("M110", "Can't read directories. Covers will not be saved."), &okButton, NULL);
 		}
 	}
 	else{
@@ -133,7 +133,7 @@ void checkDirs(){
 		}
 		
 		else{
-			WindowPrompt("ERROR!","Can't create directories. Covers will not be saved.", &okButton, NULL);
+			WindowPrompt(localStr("M003", "ERROR!"), localStr("M111", "Can't create directories. Covers will not be saved."), &okButton, NULL);
 		}
 	}
 }
