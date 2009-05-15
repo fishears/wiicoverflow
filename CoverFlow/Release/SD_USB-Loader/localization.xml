@@ -281,6 +281,8 @@
 	<M130 val="Dec" />
 	<M131 val="Actuel : cIOS Rev%d  Nécessaire : cIOS Rev%d" />
 	<M132 val="cIOS Mise à jour Nécessaire" />
+	<M133 val="Pas assez d'espace libre!" />
+	<M134 val="Formatage de la partition %s" />
   </FR>
   
   <DA desc="Dansk">
@@ -868,7 +870,7 @@
         <M036 val="%s: impostazioni" />
         <M037 val="Hook:" />
         <M038 val="Linguaggio:" />
-        <M039 val="Modalitvideo:" />
+        <M039 val="Modalità Video:" />
         <M040 val="VIDTV patch:" />
         <M041 val="Errore di connessione da net_read()  codice d'errore: %i\n" />
         <M042 val="URL '%s' non parte con 'http://'\n" />
