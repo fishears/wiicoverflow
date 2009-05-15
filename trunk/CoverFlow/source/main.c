@@ -303,7 +303,7 @@ void Graphic_Settings_Menu(void)
 		draw_covers();
 		// Draw menu dialog background
 		GRRLIB_2D_Init();
-		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFFF);
+		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFCC);
 		// Draw text
 		GRRLIB_Printf(190, 55,  font_title, settings.fontColor, 1, "Graphics Settings");
 		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, "Zoom:");
@@ -1616,7 +1616,7 @@ int main( int argc, char **argv )
 		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
 		{
 			GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
-			GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "CoverFloader r%d",SVN_VERSION);		
+			GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "CoverFloader r%d RC1",SVN_VERSION);		
 		}
 	
 #ifdef DEBUG
