@@ -11,7 +11,7 @@ static mxml_node_t *MSGs = NULL;
 
 char *localStr ( char *CODE, char * defaultStr )
 {
-   mxml_node_t *root;
+   //mxml_node_t *root;
    mxml_node_t *node;
    mxml_node_t *lang_n;
    mxml_node_t *msg_n;
