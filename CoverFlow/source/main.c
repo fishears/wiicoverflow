@@ -679,12 +679,12 @@ bool Menu_Install(void)
 
 	ret = WBFS_CheckGame(headerdisc.id);
 	if (ret) {
-		WindowPrompt ("Game is already installed:",name,&cancelButton,0);
+		WindowPrompt (localStr("M072", "Game is already installed:"),name,&cancelButton,0);
 		return false;
 	}
 	hdd = GetHddInfo();
 	if (!hdd) {
-		WindowPrompt ("No HDD found!","Error!!",&cancelButton,0);
+		WindowPrompt (localStr("M073", "No HDD found!"), localStr("M003", "Error!!"),&cancelButton,0);
 		return false;
 		}
 
@@ -695,25 +695,25 @@ bool Menu_Install(void)
 	f32 gamesize = ((f32) estimation)/1073741824;
 	char gametxt[50];
 	
-	sprintf(gametxt, "Installing game %.2fGB:", gamesize);
+	sprintf(gametxt, localStr("M074", "Installing game %.2fGB:"), gamesize);
 	
 	char ttext[50];
 	char tsize[50];
-	sprintf(ttext, "Install %s?", name);
-	sprintf(tsize, "Game Size: %.2fGB", gamesize);
+	sprintf(ttext, localStr("M075", "Install %s?"), name);
+	sprintf(tsize, localStr("M076", "Game Size: %.2fGB"), gamesize);
 	
 	if(WindowPrompt (ttext,tsize,&okButton,&cancelButton))
 	{
 		if (gamesize > freespace) {
 			char errortxt[50];
-			sprintf(errortxt, "Game Size: %.2fGB, Free Space: %.2fGB", gamesize, freespace);
-			WindowPrompt("Not enough free space!",errortxt,&cancelButton, 0);
+			sprintf(errortxt, localStr("M077", "Game Size: %.2fGB, Free Space: %.2fGB"), gamesize, freespace);
+			WindowPrompt(localStr("M133", "Not enough free space!"),errortxt,&cancelButton, 0);
 			return false;
 		}
 		else {
 			ret = ProgressWindow(hdd, gametxt, name);
 			if (ret != 0) {
-				WindowPrompt ("Install error!",0,&cancelButton,0);
+				WindowPrompt (localStr("M078", "Install error!"),0,&cancelButton,0);
 				return false;
 			} else {
 				InitializeBuffer(gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
@@ -722,7 +722,7 @@ bool Menu_Install(void)
 				UpdateBufferedImages();
 				Sleep(100);
 				
-				WindowPrompt ("Successfully installed:",name,&okButton,0);
+				WindowPrompt (localStr("M079", "Successfully installed:"),name,&okButton,0);
 				return true;
 			}
 		}
@@ -762,11 +762,11 @@ bool Menu_Delete(void)
 		strncat(gameName, "...", 3);
 	}
 
-	if(WindowPrompt("Do you want to delete:", gameName, &yesButton, &noButton))
+	if(WindowPrompt(localStr("M080", "Do you want to delete:"), gameName, &yesButton, &noButton))
 	{
 		if(0 > WBFS_RemoveGame(header->id))
 		{
-			WindowPrompt("Delete Failed.", "Could not delete game.", &okButton, 0);
+			WindowPrompt(localStr("M081", "Delete Failed."), localStr("M082", "Could not delete game."), &okButton, 0);
 		}
 		else
 		{
@@ -775,7 +775,7 @@ bool Menu_Delete(void)
 			InitializeBuffer(gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 			Sleep(100);
 			
-			WindowPrompt("Successfully deleted.", "Press Ok to Continue.", &okButton, 0);
+			WindowPrompt(localStr("M083", "Successfully deleted."), localStr("M084", "Press Ok to Continue."), &okButton, 0);
 			return true;
 		}
 	}
@@ -932,8 +932,8 @@ int main( int argc, char **argv )
 	/* Check if Custom IOS is loaded */
 	if (ret < 0)
 	{
-		printf("[+] ERROR:\n");
-		printf("    Custom IOS could not be loaded! (ret = %d)\n", ret);
+		printf(localStr("M086", "[+] ERROR:\n"));
+		printf(localStr("M087", "    Custom IOS could not be loaded! (ret = %d)\n"), ret);
 		return 0;
 	}
 	#endif
@@ -1003,8 +1003,8 @@ int main( int argc, char **argv )
 			if (retries==0)
 			{
 				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "USB Error - Drive not found");
-				GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, "Press A to Retry, B to Exit");
+				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M092", "USB Error - Drive not found"));
+				GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, localStr("M093", "Press A to Retry, B to Exit"));
 				
 				GRRLIB_Render();
 			}
@@ -1014,8 +1014,8 @@ int main( int argc, char **argv )
 				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A))
 				{
 					GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-					GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "Attempt to connect to USB Drive");
-					GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, "Please Wait...");
+					GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M094", "Attempt to connect to USB Drive"));
+					GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, localStr("M067", "Please Wait..."));
 					GRRLIB_Render();
 					Sleep(1000);
 				}
@@ -1047,8 +1047,8 @@ int main( int argc, char **argv )
 		{
 			WPAD_ScanPads();
 			GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "USB Error - NO WBFS Parition.");
-			GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, "Hold 1 And 2 to Format, B to Exit");
+			GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M095", "USB Error - NO WBFS Parition.") );
+			GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, localStr("M096", "Hold 1 And 2 to Format, B to Exit"));
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_1 && WPAD_ButtonsHeld(0) & WPAD_BUTTON_2)
@@ -1056,7 +1056,7 @@ int main( int argc, char **argv )
 				//TODO ADD WBFS Format code
 				WPAD_ScanPads();
 				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "Finding Partitions...");
+				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M097", "Finding Partitions..."));
 				GRRLIB_Render();
 				
 				sleep(1);
@@ -1076,12 +1076,12 @@ int main( int argc, char **argv )
 					f32 size = entry->size * (sector_size / GB_SIZE);
 					
 					if(size) {
-						sprintf(txtBuff[cnt], "Partition %d: %.2fGB", cnt+1, size);
+						sprintf(txtBuff[cnt], localStr("M098", "Partition %d: %.2fGB"), cnt+1, size);
 						valid[cnt] = true;
 					}
 					else
 					{
-						sprintf(txtBuff[cnt], "Partition %d: (Can't be formatted)", cnt+1);
+						sprintf(txtBuff[cnt], localStr("M099", "Partition %d: (Can't be formatted)"), cnt+1);
 						valid[cnt] = false;
 					}
 				}
@@ -1094,23 +1094,23 @@ int main( int argc, char **argv )
 						
 						if(entry->size) 
 						{
-							if(WindowPrompt("Do you want to format:", txtBuff[cnt], &okButton, &noButton))
+							if(WindowPrompt(localStr("M100", "Do you want to format:"), txtBuff[cnt], &okButton, &noButton))
 							{
 								WPAD_ScanPads();
 								GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "Formatting Partition %s", txtBuff[cnt]);
-								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, "Please Wait...");
+								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M134", "Formatting Partition %s"), txtBuff[cnt]);
+								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M067", "Please Wait...") );
 								GRRLIB_Render();
 								
 								ret = WBFS_Format(entry->sector, entry->size); 
 							
 								if(ret < 0)
 								{
-									WindowPrompt("Error:", "Failed formatting!", &okButton, 0);
+									WindowPrompt(localStr("M003", "Error:"), localStr("M101", "Failed formatting!"), &okButton, 0);
 								}
 								else
 								{
-									WindowPrompt("Success:", "Format Complete.", &okButton, 0);
+									WindowPrompt(localStr("M102", "Success:"), localStr("M103", "Format Complete."), &okButton, 0);
 								}
 								
 								goto USB_RETRY;
@@ -1529,7 +1529,7 @@ int main( int argc, char **argv )
 			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_1) &&
 			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
 		{
-			if (WindowPrompt("Parental Control","Would you like to enable parental controls?", &yesButton, &noButton))
+			if (WindowPrompt(localStr("M107", "Parental Control"),localStr("M108", "Would you like to enable parental controls?"), &yesButton, &noButton))
 				settings.parentalLock = 1;
 			else
 				settings.parentalLock = 0;
