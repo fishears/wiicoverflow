@@ -782,7 +782,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		GRRLIB_Render();
 		
 	}while(doloop);
-
+	self.rumbleAmt = 0;
 	return false;
 }
 

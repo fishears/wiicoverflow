@@ -964,10 +964,8 @@ void GRRLIB_Init() {
     memset(gp_fifo, 0, DEFAULT_FIFO_SIZE);
     GX_Init(gp_fifo, DEFAULT_FIFO_SIZE);
 
-    // clears the bg to color and clears the z buffer
-    GXColor background = { 0, 0, 0, 0xff };
-    GX_SetCopyClear (background, GX_MAX_Z24);
-
+	GRRLIB_SetBGColor(0); //default to black
+	
     // other gx setup
     yscale = GX_GetYScaleFactor(rmode->efbHeight, rmode->xfbHeight);
     xfbHeight = GX_SetDispCopyYScale(yscale);
@@ -1020,6 +1018,25 @@ void GRRLIB_Init() {
 
 }
 
+void GRRLIB_SetBGColor(int theme)
+{
+	if (theme) // white theme
+	{
+		// clears the bg to color and clears the z buffer
+		GXColor background = { 0xFF, 0xFF, 0xFF, 0xff };
+		GX_SetCopyClear (background, GX_MAX_Z24);
+		GRRLIB_Render();
+
+	}
+	else // black or default
+	{
+		// clears the bg to color and clears the z buffer
+		GXColor background = { 0x00, 0x00, 0x00, 0x00 };
+		GX_SetCopyClear (background, GX_MAX_Z24);
+		GRRLIB_Render();
+	}
+		
+}
 
 void GRRLIB_3D_Init()
 {
