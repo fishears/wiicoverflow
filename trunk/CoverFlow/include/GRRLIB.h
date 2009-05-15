@@ -65,6 +65,7 @@ extern Mtx GXmodelView2D;
 
 void GRRLIB_2D_Init();
 void GRRLIB_3D_Init();
+void GRRLIB_SetBGColor(int theme);
 
 inline void GRRLIB_FillScreen(u32 color);
 void GRRLIB_RawTo4x4RGBA(const unsigned char *src, void *dst, const unsigned int width, const unsigned int height);

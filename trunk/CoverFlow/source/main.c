@@ -494,10 +494,16 @@ void Settings_Menu(void)
 				if (settings.theme)
 				{	// black fonts for white theme
 					settings.fontColor = 0x000000FF;
+/////////////////////////////////////////
+// afour's test area for white theme
+// disabled until I updated the rest of the code
+//					GRRLIB_SetBGColor(1);
 				}
 				else
 				{   // white fonts for black theme
 					settings.fontColor = 0xFFFFFFFF;
+//					GRRLIB_SetBGColor(0);
+/////////////////////////////////////////
 				}
 				
 			}
