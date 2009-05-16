@@ -1,6 +1,4 @@
 #labels Featured
-#Feature page
-
 = FEATURES =
 
 Interface based on Coverflow with sleek graphic
@@ -14,11 +12,11 @@ Based on 1.5 waninkoko
 
 System wide settings like
 
- ocarina support
+  * ocarina support
 
- video mode patching
+  * video mode patching
 
- language mode selection
+  * language mode selection
 
 Per game settings
 
