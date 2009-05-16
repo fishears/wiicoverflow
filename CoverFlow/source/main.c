@@ -1245,7 +1245,7 @@ int main( int argc, char **argv )
 			{
 				AddGame();
 			}
-			else if(Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
+			else if((!settings.parentalLock) && Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
 			{
 				Settings_Menu();
 			}
@@ -1583,6 +1583,7 @@ int main( int argc, char **argv )
 			DrawSlider(settings.theme);
             if(!settings.parentalLock)
                 Button_Theme_Paint(&addButton, settings.theme);
+			if(!settings.parentalLock)
 			Button_Theme_Paint(&settingsButton, settings.theme);
 			
 			// Draw Game Title
@@ -1628,7 +1629,7 @@ int main( int argc, char **argv )
 		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
 		{
 			GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
-			GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "CoverFloader r%d RC1",SVN_VERSION);		
+			GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "CoverFloader r%d %s",SVN_VERSION, RELEASE);
 		}
 	
 #ifdef DEBUG

@@ -413,8 +413,8 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		deleteButton.x = 425;
 		deleteButton.y = 316;
 		
-		gsettingsButton.x = 515;
-		gsettingsButton.y = 314;
+		gsettingsButton.x = 520;
+		gsettingsButton.y = 312;
 		
 		Button_Paint(&loadButton);
 		Button_Paint(&backButton);
@@ -424,8 +424,11 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 			Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 			
 		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
-		Button_Paint(&gsettingsButton);
-		Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y);
+		
+		if(!settings.parentalLock){
+			Button_Paint(&gsettingsButton);
+			Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y);
+		}
 		
 		if(!settings.parentalLock)
 			Button_Paint(&deleteButton);
@@ -456,7 +459,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 			GRRLIB_Printf(255, 220, font_title, 0xFFFFFFFF, .8, localStr("M033", "Played %s"),gameSetting.lastPlayed);
 			
 		//GRRLIB_Printf(265, 250, font_title, 0xFFFFFFFF, .8, "Id  (%c%c%c%c)", header->id[0], header->id[1], header->id[2], header->id[3]);
-		GRRLIB_Printf(255, 250, font_title, 0xFFFFFFFF, .8, localStr("M034", "Size:    %.2fGB"), self.gsize);
+		GRRLIB_Printf(255, 250, font_title, 0xFFFFFFFF, .8, localStr("M034", "Size: %.2f GB"), self.gsize);
 		
 		#else
 		
