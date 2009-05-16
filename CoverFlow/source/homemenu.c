@@ -9,6 +9,9 @@ extern u8 shutdown;
 extern u8 reset;
 extern s_settings settings;
 
+#define MAX_WIIMOTES				4
+
+
 inline void HomeMenu_Init()
 {
 	//Nothing to do
@@ -215,6 +218,9 @@ void HomeMenu_Show()
 				wiimoteButton.y += 1;
 			}
 		}
+#ifdef BATTMAN
+                Battery_Info();
+#endif
 
 		// Draw the default pointer hand
 		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
@@ -308,46 +314,54 @@ void HomeMenu_Destroy()
 void Battery_Info()
 {
 #ifdef BATTMAN
-    	WPAD_ScanPads();
-        int i;
-	for(i=3; i >= 0; i--)
-	{
-		memcpy(&user_remote[i].wpad, WPAD_Data(i), sizeof(WPADData));
-		user_remote[i].chan = i;
+
+    	wiimote** wiimotes;
+	int found, connected;
+wiimotes =  wiiuse_init(MAX_WIIMOTES, 0);
+	found = wiiuse_find(wiimotes, MAX_WIIMOTES, 5);
+	if (!found) {
+		GRRLIB_Printf(145, 120, font_title, 0xFFFFFF00, 1, "No wiimotes found.");
+		return;
+	}
+	connected = wiiuse_connect(wiimotes, MAX_WIIMOTES);
+	if (connected)
+		GRRLIB_Printf(145, 120, font_title, 0xFFFFFF00, 1, "Connected to %i wiimotes (of %i found).\n", connected, found);
+	else {
+		GRRLIB_Printf(145, 140, font_title, 0xFFFFFF00, 1, "Failed to connect to any wiimote.\n");
+		return;
+	}
+while (1) {
+		if (wiiuse_poll(wiimotes, MAX_WIIMOTES)) {
+			/*
+			 *	This happens if something happened on any wiimote.
+			 *	So go through each one and check if anything happened.
+			 */
+			int i = 0;
+			for (; i < MAX_WIIMOTES; ++i) {
+				switch (wiimotes[i]->event) {
+					case WIIUSE_STATUS:
+						/* a status event occured */
+						handle_ctrl_status(wiimotes[i]);
+						break;
+
+					default:
+						break;
+				}
+			}
+		}
 	}
 
+	/*
+	 *	Disconnect the wiimotes
+	 */
+	wiiuse_cleanup(wiimotes, MAX_WIIMOTES);
 
-        int level = 0;
-        int battinfo[4];
+	return;
 
-        for(i=0; i < 4; i++)
-                    {
-                if(WPAD_Probe(i, NULL) == WPAD_ERR_NONE)
-                    //found a wiimote
-                    {
-                    
-                        level = (user_remote[i]->battery_level / 100.0) * 4;
-                        if(level > 4) level = 4;
-                        battinfo[i] = level;
-                        //batteryImg[i]->SetTile(level);
-
-                        if(level == 0)
-                             battinfo[i] = 0;
-                            //batteryBarImg[i]->SetImage(&battery_dead);
-                        //else
-                                //batteryBarImg[i]->SetImage(&battery_bar);
-
-                       // batteryBtn[i]->SetAlpha(255);
-                       }
-                else
-                    //didn't find a wiimote
-                {
-                    battinfo[i] = 999;
-                    //batteryImg[i]->SetTile(0);
-                        //batteryImg[i]->SetImage(&battery);
-                        //batteryBtn[i]->SetAlpha(70);
-                }
-                GRRLIB_Printf(145+(i*50), 120, font_title, 0xFFFFFF00, 1, "%i",battinfo[i]);
-        }
 #endif
 }
+void handle_ctrl_status(struct wiimote_t* wm) {
+
+	GRRLIB_Printf(145, 160, font_title, 0xFFFFFF00, 1, "%f %%\n", wm->battery_level);
+}
+
