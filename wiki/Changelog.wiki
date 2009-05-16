@@ -7,7 +7,6 @@
   * nothing I remember but there is still some bug opened (sco)
 [NEW]
   * Settings buttons hidden if parental control is enabled
-  * Wiimote Battery support in home menu
   * New slider and buttons graphics
 ----
 == RC1 update1 [15-may-09] ==
