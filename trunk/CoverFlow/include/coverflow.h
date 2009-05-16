@@ -74,6 +74,7 @@
 #define BUFFER_THREAD_COUNT  1
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           15
+#define RELEASE              "RC 2"
 
 #define ANIMATE_TEST 1
 #define ANIMATE_SPEED 0
