@@ -6,7 +6,7 @@
 #include "video.h"
 #include "patchcode.h" /*FISHEARS*/
 #include "kenobiwii.h" /*FISHEARS*/
-#include "cfg.h"
+//#include "cfg.h"
 #include "settings.h"
 
 extern s_settings settings;
@@ -254,7 +254,7 @@ s32 Apploader_Run(entry_point *entry)
 		memset((void*)0x80001800,0,kenobiwii_size);
 		memcpy((void*)0x80001800,kenobiwii,kenobiwii_size);
 		DCFlushRange((void*)0x80001800,kenobiwii_size);
-                CFG.hooktype = 1;   //prep for adding hooktype to improve ocarina compatibility
+                //SCO CFG.hooktype = 1;   //prep for adding hooktype to improve ocarina compatibility
 		memcpy((void*)0x80001800, (char*)0x80000000, 6);	// For WiiRD
 //	}
 	for (;;) {

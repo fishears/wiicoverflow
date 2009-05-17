@@ -17,12 +17,12 @@ bool Menu_Delete(){
 	/* Selected game */
 	header = &self.gameList[self.gameSelected];
 
-	if(strlen(get_title(header)) < 30) {
-		sprintf(gameName, "%s", get_title(header));
+	if(strlen(header->title) < 30) {
+		sprintf(gameName, "%s", header->title);
 	}
 	else
 	{
-		strncpy(gameName, get_title(header), 27);
+		strncpy(gameName, header->title, 27);
 		gameName[27] = '\0';
 		strncat(gameName, "...", 3);
 	}

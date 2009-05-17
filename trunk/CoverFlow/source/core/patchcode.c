@@ -27,7 +27,6 @@
 #include "apploader.h"
 #include "patchcode.h"
 #include "fwrite_patch.h"
-#include "cfg.h"
 #include "settings.h"
 
 extern s_settings settings;

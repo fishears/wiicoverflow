@@ -3,7 +3,6 @@
 
 #include "sys.h"
 #include "video.h"
-#include "cfg.h"
 
 /* Video variables */
 static void *framebuffer = NULL;
@@ -116,7 +115,7 @@ void Video_SetMode(void)
 	vmode = VIDEO_GetPreferredMode(NULL);
 
 	// widescreen fix	
-	if (CFG.widescreen)
+	if (CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 	{
 		vmode->viWidth = 678;
 		vmode->viXOrigin = ((VI_MAX_WIDTH_NTSC - 678) / 2);

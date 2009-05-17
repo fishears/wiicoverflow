@@ -309,6 +309,7 @@ void HomeMenu_Destroy()
 	free(wiimoteButton.texture.data);
 	
 	freeResources();
+	//quit();
 }
 
 void Battery_Info()

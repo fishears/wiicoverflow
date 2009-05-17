@@ -10,7 +10,7 @@
 #include "wdvd.h"
 #include "wpad.h"
 #include "fst.h"
-#include "cfg.h"
+//#include "cfg.h"
 #include "subsystem.h"
 #include "settings.h"
 

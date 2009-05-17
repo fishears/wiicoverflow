@@ -1,6 +1,9 @@
 #ifndef _VIDEO_H_
 #define _VIDEO_H_
 
+#define CONSOLE_FG_COLOR  15
+#define CONSOLE_BG_COLOR  0
+
 /* Prototypes */
 void Con_Init(u32, u32, u32, u32);
 void Con_Clear(void);
