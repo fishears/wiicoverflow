@@ -709,8 +709,8 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		PAD_ScanPads();
 		GetWiimoteData();
 
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
-			exit(0);
+		//if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
+		//	exit(0);
 		
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)|| (PAD_ButtonsDown(0) & PAD_BUTTON_B))
 			return false;

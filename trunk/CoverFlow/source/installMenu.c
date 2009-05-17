@@ -97,11 +97,11 @@ bool Menu_Install(){
 				WindowPrompt (localStr("M078", "Install error!"),0,&cancelButton,0);
 				return false;
 			} else {
-				InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
-				Sleep(300);
-				GetEntries();
-				UpdateBufferedImages();
 				Sleep(100);
+				GetEntries();
+				Sleep(300);
+				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+				Sleep(1000);
 				
 				WindowPrompt (localStr("M079", "Successfully installed:"),name,&okButton,0);
 				return true;
