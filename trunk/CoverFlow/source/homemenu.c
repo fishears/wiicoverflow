@@ -308,6 +308,7 @@ void HomeMenu_Destroy()
 	free(loaderButton.hoverTexture.data);
 	free(wiimoteButton.texture.data);
 	
+	BUFFER_KillBuffer();
 	freeResources();
 	//quit();
 }
