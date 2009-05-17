@@ -1,7 +1,11 @@
 #ifndef _Button_H_
 #define _Button_H_
 
+//comment out for Localization-Buttons
+#define LOCALBUTTON 
+
 #include "GRRLIB.h"
+
 
 typedef struct Button {
 	int x;
@@ -11,7 +15,9 @@ typedef struct Button {
 	struct GRRLIB_texImg hoverTexture;
 		
 	bool hovering;
-	
+#ifndef 	LOCALBUTTON
+	char label[15];  //add for Localization
+#endif	
 } Button;
 
 Button Button_Init(const unsigned char normal_img[], const unsigned char hover_img[], int x, int y);

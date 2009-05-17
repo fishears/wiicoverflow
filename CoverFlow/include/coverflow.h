@@ -16,7 +16,6 @@
 #include "wdvd.h"
 #include "libwbfs/libwbfs.h"
 #include "disc.h"
-#include "cfg.h"
 #include "network.h"
 #include "sys/errno.h"
 #include "sys/unistd.h"
