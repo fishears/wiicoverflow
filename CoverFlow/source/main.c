@@ -68,7 +68,6 @@ void quit()
 {
 	//we should free all allocated textures (SCO);
 	
-	
 	BUFFER_KillBuffer();
 	
 	/*
