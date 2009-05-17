@@ -1,7 +1,7 @@
 #include "storage.h"
 
-
 extern s_self self;
+extern s_settings settings;
 
 bool init_usbfs()
 {    
@@ -148,4 +148,69 @@ void checkFiles(){
 		createEmptyGameSettingsFile();
 	else
 		fclose(fp);
+}
+
+void initWBFS(){
+
+	int retries = 3;
+	int ret;
+	
+	self.progress += .1;
+	sprintf(self.debugMsg, localStr("M091", "Initializing WBFS") );
+	Paint_Progress(self.progress,self.debugMsg);
+
+  INIT_RETRY:
+	/* Initialize WBFS */
+	ret = WBFS_Init(self.my_wbfsDev);
+	
+	if(ret < 0)
+	{
+		while(1)
+		{
+			WPAD_ScanPads();
+			if (retries==0)
+			{
+				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M092", "USB Error - Drive not found"));
+				GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, localStr("M093", "Press A to Retry, B to Exit"));
+				
+				GRRLIB_Render();
+			}
+				
+			if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||retries)
+			{
+				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A))
+				{
+					GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+					GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M094", "Attempt to connect to USB Drive"));
+					GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, localStr("M067", "Please Wait..."));
+					GRRLIB_Render();
+					Sleep(1000);
+				}
+				
+				retries--;
+				Subsystem_Close();
+				WDVD_Close();
+				ret = IOS_ReloadIOS(249);
+				Subsystem_Init();
+				WDVD_Init();
+				goto INIT_RETRY;
+			}
+			
+			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+			{
+				GRRLIB_Exit();
+				SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
+			}
+		}
+	}
+}
+
+s32 __Menu_EntryCmp(const void *a, const void *b)
+{
+	struct discHdr *hdr1 = (struct discHdr *)a;
+	struct discHdr *hdr2 = (struct discHdr *)b;
+
+	/* Compare strings */
+	return strcmp(hdr1->title, hdr2->title);
 }
