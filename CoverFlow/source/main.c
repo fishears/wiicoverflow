@@ -1,6 +1,5 @@
 #include "coverflow.h"
 #include "soundmanager.h"
-//#include "partition.h"
 #include "filter.h"
 
 extern u8 shutdown;
@@ -35,9 +34,9 @@ char hooks[3][9] =
 {" GC Pad"}};
 /* Gamelist buffer */
 
-static struct discHdr *gameList = NULL;
+//static struct discHdr *gameList = NULL;
 static s_Filter gameFilter;
-static wbfs_t *hdd = NULL;
+//static wbfs_t *hdd = NULL;
 
 /* WBFS device */
 //static s32 my_wbfsDev = WBFS_DEVICE_USB;
@@ -86,98 +85,6 @@ void quit()
 	exit(0);
 }
 
-s32 GetEntries(void)
-{
-	struct discHdr *buffer = NULL;
-
-	u32 cnt, len;
-	s32 ret;
-
-	/* Get list length */
-	ret = WBFS_GetCount(&cnt);
-	if (ret < 0)
-		return ret;
-
-	/* Buffer length */
-	len = sizeof(struct discHdr) * cnt;
-
-	/* Allocate memory */
-	buffer = (struct discHdr *)memalign(32, len);
-	if (!buffer)
-		return -1;
-
-	/* Clear buffer */
-	memset(buffer, 0, len);
-
-	self.progress+=0.05;
-	sprintf(self.debugMsg, localStr("M998", "Getting game list") );
-	Paint_Progress(self.progress, NULL);
-	
-	/* Get header list */
-	ret = WBFS_GetHeaders(buffer, cnt, sizeof(struct discHdr));
-	if (ret < 0)
-		goto err;
-
-	self.progress+=0.05;
-	sprintf(self.debugMsg, localStr("M997", "Sorting game list") );
-	Paint_Progress(self.progress, NULL);
-	
-	/* Sort entries */
-	qsort(buffer, cnt, sizeof(struct discHdr), __Menu_EntryCmp);
-
-	self.progress+=0.05;
-	Paint_Progress(self.progress, NULL);
-	
-	/* Free memory */
-	if (gameList)
-		free(gameList);
-
-	/* Set values */
-	gameList = buffer;
-	self.gameCnt  = cnt;
-	COVER_COUNT = self.gameCnt;
-	
-	Init_Covers();
-
-	self.progress+=0.05;
-	Paint_Progress(self.progress, NULL);
-	
-	/* Reset variables */
-	self.gameSelected = self.gameStart = 0;
-
-	//Init Filter
-	//InitFilter(&gameFilter, gameList);
-
-	return 0;
-
-err:
-	/* Free memory */
-	if (buffer)
-		free(buffer);
-
-	return ret;
-}
-
-bool Init_Game_List(void)
-{
-
-	Paint_Progress(self.progress, NULL);
-	
-	/* Try to open device */
-	if (WBFS_Open() >= 0) {
-		/* Get game list */
-		
-		self.progress+=0.05;
-		Paint_Progress(self.progress, NULL);
-		GetEntries();
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
 void DragSlider(int xPos)
 {
 
@@ -208,6 +115,7 @@ void DragSlider(int xPos)
 		self.shift = min_cover;
 }
 
+/*
 int DiscWait()
 {
     u32 cover = 0;
@@ -224,629 +132,7 @@ int DiscWait()
 
 	return ret;
 }
-
-void Graphic_Settings_Menu(void)
-{
-	bool doloop = true;
-	//bool dummy = false;
-
-	/*Render and control Settings*/
-	do{
-		WPAD_ScanPads();
-		GetWiimoteData();
-
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
-			doloop = false;
-		
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
-			doloop = false;
-
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
-		{
-			if (Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
-			{
-				doloop = false;
-			}
-			else if (Button_Select(&resetButton, pointer.p_x, pointer.p_y))
-			{
-				graphics_SETTINGS_Init();
-			}
-			else if (Button_Select(&windowdownButton, pointer.p_x, pointer.p_y))
-			{
-				if (settings.drawWindow > 1)
-					settings.drawWindow -= 1;
-			}
-			else if (Button_Select(&windowupButton, pointer.p_x, pointer.p_y))
-			{
-				if (settings.drawWindow < 100) // Allow for user to shoot self in foot
-					settings.drawWindow += 1;
-			}
-			else if (Button_Select(&coverTextOnButton, pointer.p_x, pointer.p_y) || Button_Select(&coverTextOffButton, pointer.p_x, pointer.p_y))
-			{
-				settings.coverText = (settings.coverText) ? 0 : 1;
-			}
-		}
-		
-		if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A)
-		{
-			if(Button_Select(&spacingdownButton, pointer.p_x, pointer.p_y))
-			{
-				settings.coverSpacing -= 0.05;
-			}
-			else if(Button_Select(&spacingupButton, pointer.p_x, pointer.p_y))
-			{
-				settings.coverSpacing += 0.05;
-			}
-			else if(Button_Select(&angledownButton, pointer.p_x, pointer.p_y))
-			{
-				settings.coverAngle -= 1;
-			}
-			else if(Button_Select(&angleupButton, pointer.p_x, pointer.p_y))
-			{
-				settings.coverAngle += 1;
-			}
-			else if(Button_Select(&zoomdownButton, pointer.p_x, pointer.p_y))
-			{
-				settings.coverZoom -= 0.01;
-			}
-			else if(Button_Select(&zoomupButton, pointer.p_x, pointer.p_y))
-			{
-				settings.coverZoom += 0.01;
-			}
-		}
-		
-		/*Draw Covers*/ //PREVIEW
-		draw_covers();
-		// Draw menu dialog background
-		GRRLIB_2D_Init();
-		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFCC);
-		// Draw text
-		GRRLIB_Printf(190, 55,  font_title, settings.fontColor, 1, "Graphics Settings");
-		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, "Zoom:");
-		GRRLIB_Printf(350, 100, font_texture, settings.fontColor, 1, "%f", settings.coverZoom);
-		GRRLIB_Printf(145, 148, font_texture, settings.fontColor, 1, "Spacing:");
-		GRRLIB_Printf(350, 148, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
-		GRRLIB_Printf(145, 197, font_texture, settings.fontColor, 1, "Angle:");
-		GRRLIB_Printf(350, 197, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
-		GRRLIB_Printf(145, 245, font_texture, settings.fontColor, 1, "Draw Window:");
-		GRRLIB_Printf(350, 245, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
-		GRRLIB_Printf(145, 292, font_texture, settings.fontColor, 1, "Game Title:");
-		
-		//Button_Theme_Paint(&settingsButton, settings.theme);
-		Button_Paint(&spacingupButton);
-		Button_Paint(&spacingdownButton);
-		Button_Paint(&zoomupButton);
-		Button_Paint(&zoomdownButton);
-		Button_Paint(&angleupButton);
-		Button_Paint(&angledownButton);
-		Button_Paint(&windowupButton);
-		Button_Paint(&windowdownButton);
-		if (settings.coverText)
-		{
-			Button_Paint(&coverTextOnButton);
-		}
-		else Button_Paint(&coverTextOffButton);
-		Button_Paint(&resetButton);
-	
-		// Check for button-pointer intersections, and rumble
-		if (Button_Hover(&spacingupButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&spacingdownButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&zoomupButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&zoomdownButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&windowupButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&windowdownButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&windowupButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&coverTextOnButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&coverTextOffButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&resetButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&angleupButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&angledownButton, pointer.p_x, pointer.p_y))
-		{
-			// Should we be rumbling?
-			if (--self.rumbleAmt > 0)
-			{
-				if(settings.rumble)
-					WPAD_Rumble(0,1); // Turn on Wiimote rumble
-			}
-			else 
-				WPAD_Rumble(0,0); // Kill the rumble
-		}
-		else
-		{ // If no button is being hovered, kill the rumble
-			WPAD_Rumble(0,0);
-			self.rumbleAmt = 5;
-		}
-
-		// Draw the pointer hand
-		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
-		// Spit it out
-		GRRLIB_Render();
-		
-		if(shutdown == 1)
-		{
-			Sys_Shutdown();
-		}
-		else if(reset == 1)
-		{
-			Sys_Reboot(); 
-		}
-	}while(doloop);
-}
-
-void Settings_Menu(void)
-{
-	bool doloop = true;
-
-	/*Render and control Settings*/
-	do{
-		WPAD_ScanPads();
-		GetWiimoteData();
-
-		// Handle button events
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME || WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
-		{
-			doloop = false;
-		}
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
-		{
-			if (Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
-			{
-				doloop = false; // Clicked the setting button, exit to main screen
-			}
-			else if (Button_Select(&cheatonButton, pointer.p_x, pointer.p_y) || Button_Select(&cheatoffButton, pointer.p_x, pointer.p_y))
-			{
-				settings.ocarina = (settings.ocarina) ? 0 : 1; // Clicked the Ocarina button, toggle state
-			}
-			else if (Button_Select(&vidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&vidtvoffButton, pointer.p_x, pointer.p_y))
-			{
-				settings.vipatch = (settings.vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
-			}
-			else if (Button_Select(&graphicsButton, pointer.p_x, pointer.p_y))
-			{
-				Graphic_Settings_Menu(); // Clicked the Graphics Setting button, launch menu routine
-			}
-			else if (Button_Select(&langdownButton, pointer.p_x, pointer.p_y))
-			{ // Clicked on the language buttons
-				if (settings.language > 0)
-				{
-					settings.language --;
-				}
-				else
-				{
-					settings.language = (CFG_LANG_COUNT - 1);
-				}
-			}
-			else if (Button_Select(&langupButton, pointer.p_x, pointer.p_y))
-			{
-				if (settings.language < (CFG_LANG_COUNT - 1))
-				{
-					settings.language ++;
-				}
-				else
-				{
-					settings.language = 0;
-				}
-			}
-                        else if (Button_Select(&hookdownButton, pointer.p_x, pointer.p_y))
-			{ // Clicked on the hooktype buttons
-				if (settings.hooktype > 0)
-				{
-					settings.hooktype --;
-				}
-				else
-				{
-					settings.hooktype = (CFG_HOOK_COUNT - 1);
-				}
-			}
-			else if (Button_Select(&hookupButton, pointer.p_x, pointer.p_y))
-			{
-				if (settings.hooktype < (CFG_HOOK_COUNT - 1))
-				{
-					settings.hooktype ++;
-				}
-				else
-				{
-					settings.hooktype = 0;
-				}
-			}
-			else if (Button_Select(&downloadButton, pointer.p_x, pointer.p_y))
-			{
-				// Clicked on the Download Covers button
-				//if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
-				if (WindowPrompt(localStr("M055", "Cover Download"),localStr("M056", "This operation can't be canceled, continue?"), &okButton, &cancelButton))
-				{
-					batchDownloadCover(gameList);
-					CoversDownloaded();
-				}
-			}
-			else if (Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
-			{
-				// Clicked on the video down button
-				if (settings.video > 0)
-				{
-					settings.video --;
-				}
-				else
-				{
-					settings.video = (CFG_VIDEO_COUNT -1);
-				}
-			}
-			else if (Button_Select(&vidupButton, pointer.p_x,pointer.p_y))
-			{
-				// Clicked on the video up button
-				if (settings.video <(CFG_VIDEO_COUNT -1))
-				{
-					settings.video ++;
-				}
-				else
-				{
-					settings.video = 0;
-				}
-			}
-			else if (Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y) || Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
-			{
-				// Clicked on the Theme button, toggle state
-				settings.theme = (settings.theme) ? 0 : 1;
-				if (settings.theme)
-				{	// black fonts for white theme
-					settings.fontColor = 0xFFFFFFFF; //temp until I fix the dialogs for the white theme
-//					settings.fontColor = 0x000000FF;
-					GRRLIB_SetBGColor(1); // set BG to white
-				}
-				else
-				{   // white fonts for black theme
-					settings.fontColor = 0xFFFFFFFF;
-					GRRLIB_SetBGColor(0);  // set BG to black
-				}
-				
-			}
-			else if (Button_Select(&quickstartOnButton, pointer.p_x, pointer.p_y) || Button_Select(&quickstartOffButton, pointer.p_x, pointer.p_y))
-			{
-				settings.quickstart = (settings.quickstart) ? 0 : 1; // Clicked the "1-Click Launch" button, toggle state
-			}
-			else if (Button_Select(&rumbleOnButton, pointer.p_x, pointer.p_y) || Button_Select(&rumbleOffButton, pointer.p_x, pointer.p_y))
-			{
-				settings.rumble = (settings.rumble) ? 0 : 1; // Clicked the Rumble button, toggle state
-			}
-			else if (Button_Select(&musicOnButton, pointer.p_x, pointer.p_y) || Button_Select(&musicOffButton, pointer.p_x, pointer.p_y))
-			{
-				settings.music = (settings.music) ? 0 : 1; // Clicked the music button, toggle state
-			}
-		}
-		
-		// Draw screen background
-		draw_covers();
-		// Draw menu dialog background
-		GRRLIB_2D_Init();
-		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFCC);//old one bg renamed to _old
-		// Draw text
-		GRRLIB_Printf(184, 55,  font_title, 0xFFFFFFFF, 1, "Coverflow Settings");
-		GRRLIB_Printf(145, 93,  font_texture, settings.fontColor, 1, "Ocarina");
-		GRRLIB_Printf(310, 93,  font_texture, settings.fontColor, 1, "Hook");
-		GRRLIB_Printf(385, 93,  font_texture, 0xFFFFFFFF, 1, "%s",hooks[settings.hooktype]);
-		GRRLIB_Printf(145, 128, font_texture, settings.fontColor, 1, "Language");
-		GRRLIB_Printf(330, 128, font_texture, 0xFFFFFFFF, 1, "%s",languages[settings.language]);
-		GRRLIB_Printf(145, 157, font_texture, settings.fontColor, 1, "Video mode");
-		GRRLIB_Printf(330, 155, font_texture, 0xFFFFFFFF, 1, "%s",vidmodes[settings.video]);
-		GRRLIB_Printf(145, 189, font_texture, settings.fontColor, 1, "VIDTV patch");
-		GRRLIB_Printf(145, 221, font_texture, settings.fontColor, 1, "Graphics");
-		GRRLIB_Printf(145, 260, font_texture, settings.fontColor, 1, "Get Missing Covers");
-		GRRLIB_Printf(145, 300, font_texture, settings.fontColor, 1, "Theme");
-		GRRLIB_Printf(145, 340, font_texture, settings.fontColor, 1, "1-Click Launch");
-		GRRLIB_Printf(145, 380, font_texture, settings.fontColor, 1, "Rumble");
-		GRRLIB_Printf(145, 420, font_texture, settings.fontColor, 1, "Sound");
-		//GRRLIB_Printf(218, 446, font_texture, settings.fontColor, 1.15, "Press B to return");
-
-		// Draw stateless buttons
-		Button_Paint(&langupButton);
-		Button_Paint(&langdownButton);
-		Button_Paint(&vidupButton);
-		Button_Paint(&viddownButton);
-		Button_Paint(&hookupButton);
-		Button_Paint(&hookdownButton);
-		Button_Paint(&graphicsButton);
-		Button_Paint(&downloadButton);
-		// Draw stateful buttons
-		Button_Toggle_Paint(&cheatoffButton, &cheatonButton, settings.ocarina);
-		Button_Toggle_Paint(&vidtvoffButton, &vidtvonButton, settings.vipatch);
-		Button_Toggle_Paint(&themeBlackButton, &themeWhiteButton, settings.theme);
-		Button_Toggle_Paint(&quickstartOffButton, &quickstartOnButton, settings.quickstart);
-		Button_Toggle_Paint(&rumbleOffButton, &rumbleOnButton, settings.rumble);
-		Button_Toggle_Paint(&musicOffButton, &musicOnButton, settings.music);
-		
-		// Check for button-pointer intersections, and rumble
-		if (Button_Hover(&langupButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&langdownButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&vidupButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&viddownButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&cheatoffButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&vidtvoffButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&themeBlackButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&themeWhiteButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&quickstartOnButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&quickstartOffButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&rumbleOnButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&rumbleOffButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&musicOnButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&musicOffButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&graphicsButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&downloadButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&hookupButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&hookdownButton, pointer.p_x, pointer.p_y))
-		{
-			// Should we be rumbling?
-			if (--self.rumbleAmt > 0)
-			{
-				if(settings.rumble)
-				{
-					WPAD_Rumble(0,1); // Turn on Wiimote rumble
-				}
-			}
-			else 
-				WPAD_Rumble(0,0); // Kill the rumble
-		}
-		else
-		{ // If no button is being hovered, kill the rumble
-			WPAD_Rumble(0,0);
-			self.rumbleAmt = 5;
-		}
-		
-		// Draw the default pointer hand
-		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
-		// Spit it out
-		GRRLIB_Render();
-		
-		if(shutdown == 1)
-		{
-			Sys_Shutdown();
-		}
-		else if(reset == 1)
-		{
-			Sys_Reboot(); 
-		}
-	}while(doloop);
-	
-	WPAD_Rumble(0,0);
-	self.rumbleAmt = 0;
-}
-
-
-bool Menu_Install(void)
-{
-
-	WPAD_Rumble(0,0);
-	self.rumbleAmt = 0;
-	okButton.y = 290;
-	cancelButton.y = 290;
-    static struct discHdr headerdisc ATTRIBUTE_ALIGN(32);
-	
-	if(!WindowPrompt (localStr("M064", "Install new Game?"), localStr("M065", "Place disk in drive and hit ok."),&okButton,&cancelButton))
-		return false;
-		
-	WindowPrompt (localStr("M066", "Initializing DVD Drive") , localStr("M067", "Please Wait..."),0,0);
-	
-	/* Disable WBFS mode */
-	Disc_SetWBFS(0, NULL);
-	
-    int ret, choice = 0;
-	char *name;
-	static char buffer[MAX_CHARACTERS + 4];
-
-	ret = Disc_Wait();
-	if (ret < 0) {
-		WindowPrompt (localStr("M068", "Error reading Disc"),0,&cancelButton,0);
-		return false;
-	}
-	ret = Disc_Open();
-	if (ret < 0) {
-		WindowPrompt (localStr("M069", "Could not open Disc"),0,&cancelButton,0);
-		return false;
-	}
-
-	ret = Disc_IsWii();
-	
-	if (ret < 0) {
-		choice = WindowPrompt (localStr("M070", "Not a Wii Disc"), localStr("M071", "Insert a Wii Disc!"),&okButton,&cancelButton);
-
-		if (!choice) {
-			return false;
-		}
-		else
-		{
-			return Menu_Install();
-		}
-	}
-	
-	Disc_ReadHeader(&headerdisc);
-	name = headerdisc.title;
-	if (strlen(name) < (22 + 3)) {
-			memset(buffer, 0, sizeof(buffer));
-			sprintf(name, "%s", name);
-		} else {
-			strncpy(buffer, name,  MAX_CHARACTERS);
-			strncat(buffer, "...", 3);
-			sprintf(name, "%s", buffer);
-	}
-
-	ret = WBFS_CheckGame(headerdisc.id);
-	if (ret) {
-		WindowPrompt (localStr("M072", "Game is already installed:"),name,&cancelButton,0);
-		return false;
-	}
-	hdd = GetHddInfo();
-	if (!hdd) {
-		WindowPrompt (localStr("M073", "No HDD found!"), localStr("M003", "Error!!"),&cancelButton,0);
-		return false;
-		}
-
-	f32 freespace, used;
-
-	WBFS_DiskSpace(&used, &freespace);
-	u32 estimation = wbfs_estimate_disc(hdd, __WBFS_ReadDVD, NULL, ONLY_GAME_PARTITION);
-	f32 gamesize = ((f32) estimation)/1073741824;
-	char gametxt[50];
-	
-	sprintf(gametxt, localStr("M074", "Installing game %.2fGB:"), gamesize);
-	
-	char ttext[50];
-	char tsize[50];
-	sprintf(ttext, localStr("M075", "Install %s?"), name);
-	sprintf(tsize, localStr("M076", "Game Size: %.2fGB"), gamesize);
-	
-	if(WindowPrompt (ttext,tsize,&okButton,&cancelButton))
-	{
-		if (gamesize > freespace) {
-			char errortxt[50];
-			sprintf(errortxt, localStr("M077", "Game Size: %.2fGB, Free Space: %.2fGB"), gamesize, freespace);
-			WindowPrompt(localStr("M133", "Not enough free space!"),errortxt,&cancelButton, 0);
-			return false;
-		}
-		else {
-			ret = ProgressWindow(hdd, gametxt, name);
-			if (ret != 0) {
-				WindowPrompt (localStr("M078", "Install error!"),0,&cancelButton,0);
-				return false;
-			} else {
-				InitializeBuffer(gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
-				Sleep(300);
-				GetEntries();
-				UpdateBufferedImages();
-				Sleep(100);
-				
-				WindowPrompt (localStr("M079", "Successfully installed:"),name,&okButton,0);
-				return true;
-			}
-		}
-	}
-	
-	return false;
-}
-
-void AddGame(void)
-{
-	Menu_Install();
-}
-
-bool Menu_Delete(void)
-{
-
-	WPAD_Rumble(0,0);
-	self.rumbleAmt = 0;
-	
-	struct discHdr *header = NULL;
- 	char gameName[31]; 
-	
-	/* No game list */
-	if (!self.gameCnt)
-		return false;
-
-	/* Selected game */
-	header = &gameList[self.gameSelected];
-
-	if(strlen(get_title(header)) < 30) {
-		sprintf(gameName, "%s", get_title(header));
-	}
-	else
-	{
-		strncpy(gameName, get_title(header), 27);
-		gameName[27] = '\0';
-		strncat(gameName, "...", 3);
-	}
-
-	if(WindowPrompt(localStr("M080", "Do you want to delete:"), gameName, &yesButton, &noButton))
-	{
-		if(0 > WBFS_RemoveGame(header->id))
-		{
-			WindowPrompt(localStr("M081", "Delete Failed."), localStr("M082", "Could not delete game."), &okButton, 0);
-		}
-		else
-		{
-			GetEntries();
-			Sleep(300);
-			InitializeBuffer(gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
-			Sleep(100);
-			
-			WindowPrompt(localStr("M083", "Successfully deleted."), localStr("M084", "Press Ok to Continue."), &okButton, 0);
-			return true;
-		}
-	}
-	
-	return false;
-}
-
-bool Menu_Boot(void)
-{
-
-	WPAD_Rumble(0,0);
-	self.rumbleAmt = 0;
-	
-	#ifndef TEST_MODE
-	struct discHdr *header = NULL;
-	//int i = 0;
-
-	/* No game list */
-	if (!self.gameCnt)
-		return false;
-
-	/* Selected game */
-	header = &gameList[self.gameSelected];
-	
-	char titleID[7];
-	sprintf(titleID, "%s", header->id);
-	setGameSettings(titleID,  &gameSetting, 1); // so we store last played setting ;)
-		
-	BUFFER_KillBuffer();
-	Sleep(300);
-	
-	freeResources();
-
-	
-	#ifndef DOL_TEST
-	/* Set WBFS mode */
-	Disc_SetWBFS(WBFS_DEVICE_USB,header->id);
-		
-	s32 ret;
-	
-	/* Open disc */
-	ret = Disc_Open();
-	if (ret < 0) {
-		return false;
-	}
-
-	ret = Disc_WiiBoot();
-    if (ret < 0) {
-        SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
-    }
-
-	#else
-	//TODO No really sure how args need to be set up...
-	char* buffer;
-	buffer = malloc(strlen("bootloader.dol") + 1 + 6 + 1);
-	sprintf(buffer, "bootloader.dol%c%s%c", '\0', header->id, '\0');
-	
-	struct __argv argv;
-	bzero(&argv, sizeof(argv));
-	argv.argvMagic = ARGV_MAGIC;
-	//length is bootloader length + null + header length + null + null
-	argv.length = strlen(buffer) + 1;
-	argv.commandLine = malloc(argv.length);
-	strcpy(argv.commandLine, buffer);
-	
-	argv.commandLine[argv.length - 1] = '\x00';
-	argv.argc = 2;
-	argv.argv = & argv.commandLine;
-	
-	argv.endARGV = argv.argv + 1;
-			
-	run_dol(bootloader_dol, &argv);
-	#endif
-
-	#endif
-	
-	return true;
-}
+*/
 
 void initVars(){
 
@@ -872,41 +158,12 @@ void initVars(){
 	self.dummy = 0;
 	self.gsize = 0;
 	self.my_wbfsDev = WBFS_DEVICE_USB;
+	self.hdd = NULL;
+	self.gameList = NULL;
 	
 	initGameSettings(&gameSetting);
 }
 
-bool LaunchGame()
-{
-	bool done = false;
-	while(!done)
-	{
-		//self.dummy = false;
-		draw_covers();
-		done = draw_selected_two(gameList, true, false);
-		
-		GRRLIB_Render();
-		//self.dummy = false;
-	}
-	
-	/*Fade to black*/
-	//TODO Fade to black instead of just drawing black
-	GRRLIB_FillScreen(0x000000FF);
-	GRRLIB_Render();
-	
-
-	if(!Menu_Boot())
-	{
-		self.selected = false;
-		self.animate_flip = 0;
-	}
-	else
-	{
-		return 0;
-	}
-	
-	return false;
-}
 
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
@@ -975,111 +232,16 @@ int main( int argc, char **argv )
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 	//giving it a bit or a retry
 	//bool flip = true;
-//	initUSBFS();
-
-//void initUSBFS(){
-
-	//int ret;
-
-USB_RETRY:
-	if(!Init_Game_List())
-	{
-		while(1)
-		{
-			WPAD_ScanPads();
-			GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M095", "USB Error - NO WBFS Parition.") );
-			GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, localStr("M096", "Hold 1 And 2 to Format, B to Exit"));
-			GRRLIB_Render();
-				
-			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_1 && WPAD_ButtonsHeld(0) & WPAD_BUTTON_2)
-			{
-				//TODO ADD WBFS Format code
-				WPAD_ScanPads();
-				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M097", "Finding Partitions..."));
-				GRRLIB_Render();
-				
-				sleep(1);
-				
-				partitionEntry partitions[MAX_PARTITIONS];
-				u32 cnt, sector_size = 2000;
-				char txtBuff[MAX_PARTITIONS][256];
-				bool valid[MAX_PARTITIONS];
-				u32 retv;
-				
-				retv = Partition_GetEntries(partitions, &sector_size);
-				
-				for(cnt = 0; cnt < MAX_PARTITIONS; cnt++)
-				{
-					partitionEntry *entry = &partitions[cnt];
-					
-					f32 size = entry->size * (sector_size / GB_SIZE);
-					
-					if(size) {
-						sprintf(txtBuff[cnt], localStr("M098", "Partition %d: %.2fGB"), cnt+1, size);
-						valid[cnt] = true;
-					}
-					else
-					{
-						sprintf(txtBuff[cnt], localStr("M099", "Partition %d: (Can't be formatted)"), cnt+1);
-						valid[cnt] = false;
-					}
-				}
-				
-				for(cnt = 0; cnt < MAX_PARTITIONS; cnt++)
-				{
-					if(valid[cnt])
-					{
-						partitionEntry *entry = &partitions[cnt];
-						
-						if(entry->size) 
-						{
-							if(WindowPrompt(localStr("M100", "Do you want to format:"), txtBuff[cnt], &okButton, &noButton))
-							{
-								WPAD_ScanPads();
-								GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M134", "Formatting Partition %s"), txtBuff[cnt]);
-								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M067", "Please Wait...") );
-								GRRLIB_Render();
-								
-								ret = WBFS_Format(entry->sector, entry->size); 
-							
-								if(ret < 0)
-								{
-									WindowPrompt(localStr("M003", "Error:"), localStr("M101", "Failed formatting!"), &okButton, 0);
-								}
-								else
-								{
-									WindowPrompt(localStr("M102", "Success:"), localStr("M103", "Format Complete."), &okButton, 0);
-								}
-								
-								goto USB_RETRY;
-							}
-						}
-					}
-				}			
-						
-				goto USB_RETRY;
-			}
-			
-			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
-			{
-				GRRLIB_Exit();
-				SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
-			}
-		}
-	}
-
+	initUSBFS();
 	
 	#else
 	self.gameCnt = 29;
 	#endif
 	
-	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+	//WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 
 	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
-	InitializeBuffer(gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 	UpdateBufferedImages();
 	
 	float wait = 120; //ms
@@ -1187,7 +349,7 @@ USB_RETRY:
 			//First Check if any UI buttons or slider are selected
 			if((!settings.parentalLock) && Button_Select(&addButton, pointer.p_x, pointer.p_y))
 			{
-				AddGame();
+				Menu_Install();
 			}
 			else if((!settings.parentalLock) && Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
 			{
@@ -1216,11 +378,11 @@ USB_RETRY:
 								f32 size;
 								struct discHdr *header = NULL;
 								
-								header = &gameList[self.gameSelected];
+								header = &self.gameList[self.gameSelected];
 								WBFS_GameSize(header->id, &size);
 								self.gsize = size;
 								
-								LoadCurrentCover(self.gameSelected, gameList);
+								LoadCurrentCover(self.gameSelected, self.gameList);
 							}
 						}
 						else if(CoverHoverLeft())
@@ -1248,7 +410,7 @@ USB_RETRY:
 						{
 							// User clicked on the load game, so save settings before launching
 							SETTINGS_Save();
-							struct discHdr *header = &gameList[self.gameSelected];
+							struct discHdr *header = &self.gameList[self.gameSelected];
 							char titleID[7];
 							sprintf(titleID, "%s", header->id);
 							if(getGameSettings(titleID, &gameSetting))
@@ -1274,25 +436,11 @@ USB_RETRY:
 						else if(Button_Select(&gsettingsButton, pointer.p_x, pointer.p_y))
                         {
 							//clicked settings button on launch screen
-                            game_settings_menu(gameList);
+                            game_settings_menu(self.gameList);
                         }
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
 						{	
 							self.dummy ^= 1;
-							
-							/*
-							struct discHdr *header = &gameList[self.gameSelected];
-							char titleID[7];
-							sprintf(titleID, "%s", header->id);
-							
-							if(getGameSettings(titleID, &gameSetting))
-								WindowPrompt(titleID, gameSetting.lastPlayed, 0, &cancelButton);
-							else
-								WindowPrompt("Settings NOT FOUND", titleID, 0, &cancelButton);
-							
-							succa(&gameSetting);
-							setGameSettings(titleID, &gameSetting, date);
-							*/
 						}
 					}
 				}
@@ -1515,9 +663,9 @@ USB_RETRY:
 			else
 			{
 				#ifndef ANIMATE_TEST
-				draw_selected(gameList);
+				draw_selected(self.gameList);
 				#else
-				draw_selected_two(gameList, false, Button_Hover(&loadButton, pointer.p_x, pointer.p_y));
+				draw_selected_two(false, Button_Hover(&loadButton, pointer.p_x, pointer.p_y));
 				#endif
 			}
 		}
@@ -1534,7 +682,7 @@ USB_RETRY:
 			if(settings.coverText && (!dragging && !twisting && select_ready))
 			{	
 				float t = 1.0; // add a configurable text size later
-				draw_game_title(self.gameSelected, t , gameList);
+				draw_game_title(self.gameSelected, t);
 			}
 			
 		}
