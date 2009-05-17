@@ -1,13 +1,16 @@
 #labels Featured
 = CHANGELOG =
 
-== RC2 ==
+== RC2 [no date yet] ==
 
 [FIX]
-  * nothing I remember but there is still some bug opened (sco)
+  * Fixed crash after installing a game (issue110)
+  * Fixed a bug that may lead a crash when exiting to HBC (issue113)
 [NEW]
   * Settings buttons hidden if parental control is enabled
   * New slider and buttons graphics
+[OTHER]
+  * Reorganized code (splitting main.c in several files, removed unused ones)
 ----
 == RC1 update1 [15-may-09] ==
 
