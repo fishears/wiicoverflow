@@ -36,7 +36,7 @@
 #include "homemenu.h"
 #include "subsystem.h"
 #include "settings.h"
-#include "cfg.h"
+//#include "cfg.h"
 #include "localization.h"
 #include "partition.h"
 #include "settingsMenu.h"
@@ -70,7 +70,6 @@
 #define MB_SIZE         1048576.0
 #define GB_SIZE         1073741824.0
 
-
 /* Constants */
 #define ENTRIES_PER_PAGE 	 12
 #define MAX_CHARACTERS	 	 30
@@ -86,8 +85,12 @@
 /* Sound stuff */
 #define OGG_FORMAT 0
 #define RAW_FORMAT 1
-
 #define MAX_SOUNDS   4
+
+/* CFG stuff */
+#define CFG_VIDEO_COUNT  6
+#define CFG_HOOK_COUNT   3
+#define CFG_LANG_COUNT   11
 
 enum {
 	FX_BG_MUSIC = 0,

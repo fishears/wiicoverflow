@@ -64,26 +64,6 @@ void UpdateBufferedImages()
 	SetSelectedCover(self.shift);
 }
 
-void quit()
-{
-	//we should free all allocated textures (SCO);
-	
-	BUFFER_KillBuffer();
-	
-	/*
-	int i;
-	for(i=0xff;i>=0;i-=2){
-        //GRRLIB_FillScreen(0x000000FF);
-		GRRLIB_Printf(145, 120, font_title, 0xFFFFFF00|i, 1, "piero");
-        GRRLIB_Render();
-    }
-	*/
-	
-	freeResources();
-
-	exit(0);
-}
-
 void DragSlider(int xPos)
 {
 

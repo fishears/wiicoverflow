@@ -6,7 +6,7 @@ extern s_self self;
 
 u32 swap32(u32 x)
 {
-        return (x >> 24) | ((x << 8) & 0x00FF0000UL) | ((x >> 8) & 0x0000FF00UL) | (x << 24);
+	return (x >> 24) | ((x << 8) & 0x00FF0000UL) | ((x >> 8) & 0x0000FF00UL) | (x << 24);
 }
 
 
@@ -159,3 +159,22 @@ int Net_Init(char *ip){
 	return true;
 }
 
+void quit()
+{
+	//we should free all allocated textures (SCO);
+	
+	BUFFER_KillBuffer();
+	
+	freeResources();
+
+	exit(0);
+}
+
+/*
+char *get_title(struct discHdr *header){
+
+	char *title = cfg_get_title(header->id);
+	if (title) return title;
+	return header->title;
+}
+*/
