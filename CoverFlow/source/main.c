@@ -1,8 +1,6 @@
 #include "coverflow.h"
-#include "partition.h"
-
 #include "soundmanager.h"
-
+//#include "partition.h"
 #include "filter.h"
 
 extern u8 shutdown;
@@ -42,7 +40,7 @@ static s_Filter gameFilter;
 static wbfs_t *hdd = NULL;
 
 /* WBFS device */
-static s32 my_wbfsDev = WBFS_DEVICE_USB;
+//static s32 my_wbfsDev = WBFS_DEVICE_USB;
 
 s_self self; // Create this struct
 s_pointer pointer;
@@ -88,15 +86,6 @@ void quit()
 	exit(0);
 }
 
-s32 __Menu_EntryCmp(const void *a, const void *b)
-{
-	struct discHdr *hdr1 = (struct discHdr *)a;
-	struct discHdr *hdr2 = (struct discHdr *)b;
-
-	/* Compare strings */
-	return strcmp(hdr1->title, hdr2->title);
-}
-
 s32 GetEntries(void)
 {
 	struct discHdr *buffer = NULL;
@@ -121,6 +110,7 @@ s32 GetEntries(void)
 	memset(buffer, 0, len);
 
 	self.progress+=0.05;
+	sprintf(self.debugMsg, localStr("M998", "Getting game list") );
 	Paint_Progress(self.progress, NULL);
 	
 	/* Get header list */
@@ -129,6 +119,7 @@ s32 GetEntries(void)
 		goto err;
 
 	self.progress+=0.05;
+	sprintf(self.debugMsg, localStr("M997", "Sorting game list") );
 	Paint_Progress(self.progress, NULL);
 	
 	/* Sort entries */
@@ -186,7 +177,6 @@ bool Init_Game_List(void)
 		return false;
 	}
 }
-
 
 void DragSlider(int xPos)
 {
@@ -881,6 +871,7 @@ void initVars(){
 	
 	self.dummy = 0;
 	self.gsize = 0;
+	self.my_wbfsDev = WBFS_DEVICE_USB;
 	
 	initGameSettings(&gameSetting);
 }
@@ -937,7 +928,7 @@ int main( int argc, char **argv )
 	#endif
 	
 	SETTINGS_Init();
-
+	
  	
 	GRRLIB_Init();
     GRRLIB_FillScreen(0x000000FF);
@@ -954,7 +945,6 @@ int main( int argc, char **argv )
     progress_texture    = GRRLIB_LoadTexture(progress_png);
 
 	self.progress += .1;
-
 	sprintf(self.debugMsg, localStr("M088", "Loading textures") );
 	Paint_Progress(self.progress,self.debugMsg);
 	
@@ -962,7 +952,6 @@ int main( int argc, char **argv )
 	Init_Buttons();		// load buttons so they can be used for error msgs
 
 	self.progress += .1;
-
 	sprintf(self.debugMsg, localStr("M089", "Init USB") );
 	Paint_Progress(self.progress,self.debugMsg);
 	
@@ -971,74 +960,28 @@ int main( int argc, char **argv )
 		WindowPrompt(localStr("M003", "ERROR!"), localStr("M090", "Cannot init USBFS, quitting."), &okButton, 0);
 		return 0;
 	}
-		
-	//LOAD CONFIG
-	// need to clean up CFG and move to the XML based settings
-	//strcpy(CFG.images_path, USBLOADER_PATH);
-	//CFG.widescreen = 0;
-	//CFG.download = 1;
 	
-	sprintf(self.debugMsg, localStr("M091", "Initializing WBFS") );
+	//self.progress += .1;
+	sprintf(self.debugMsg, localStr("M999", "Initializing FileSystem") );
 	Paint_Progress(self.progress,self.debugMsg);
 	
-	my_wbfsDev = WBFS_DEVICE_USB;
+	self.my_wbfsDev = WBFS_DEVICE_USB;
 	
 	checkDirs();
 	checkFiles();
 	Sys_Init();
+	initWBFS();
 
-	//giving it a bit or a retry
-	int retries=3;
-  INIT_RETRY:
-	/* Initialize WBFS */
-	ret = WBFS_Init(my_wbfsDev);
-	
-	if(ret < 0)
-	{
-		while(1)
-		{
-			WPAD_ScanPads();
-			if (retries==0)
-			{
-				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M092", "USB Error - Drive not found"));
-				GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, localStr("M093", "Press A to Retry, B to Exit"));
-				
-				GRRLIB_Render();
-			}
-				
-			if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||retries)
-			{
-				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A))
-				{
-					GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-					GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M094", "Attempt to connect to USB Drive"));
-					GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, localStr("M067", "Please Wait..."));
-					GRRLIB_Render();
-					Sleep(1000);
-				}
-				
-				retries--;
-				Subsystem_Close();
-				WDVD_Close();
-				ret = IOS_ReloadIOS(249);
-				Subsystem_Init();
-				WDVD_Init();
-				goto INIT_RETRY;
-			}
-			
-			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
-			{
-				GRRLIB_Exit();
-				SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
-			}
-		}
-	}
-	
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
-	
+	//giving it a bit or a retry
 	//bool flip = true;
-  USB_RETRY:
+//	initUSBFS();
+
+//void initUSBFS(){
+
+	//int ret;
+
+USB_RETRY:
 	if(!Init_Game_List())
 	{
 		while(1)
@@ -1127,6 +1070,7 @@ int main( int argc, char **argv )
 			}
 		}
 	}
+
 	
 	#else
 	self.gameCnt = 29;

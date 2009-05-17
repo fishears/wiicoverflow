@@ -39,6 +39,9 @@
 #include "settings.h"
 #include "cfg.h"
 #include "localization.h"
+#include "partition.h"
+
+
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -157,6 +160,8 @@ typedef struct{
 	//Wiimote data
 	ir_t ir;
 	orient_t orient;
+	
+	s32 my_wbfsDev;
 	
 	int dummy;
 
