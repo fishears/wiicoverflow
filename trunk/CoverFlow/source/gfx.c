@@ -136,12 +136,15 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 
 void Init_Buttons()
 {
-    addButton			= Button_Init(add_button_png, add_button_hover_png, 580, 417);
+#ifndef 	LOCALBUTTON
+    char labelBuf[15]; //add for Localization
+#endif	
+	addButton			= Button_Init(add_button_png, add_button_hover_png, 580, 417);
     slideButton         = Button_Init(slide_png, slide_hover_png, 260, 426);
     okButton            = Button_Init(ok_png, ok_hover_png, 220, 290);
 	cancelButton		= Button_Init(cancel_png, cancel_hover_png, 360, 290);
-    loadButton          = Button_Init(load_png, load_hover_png, 220, 300);
-    deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
+	loadButton          = Button_Init(load_png, load_hover_png, 220, 300);
+	deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
     resetButton		    = Button_Init(reset_png, reset_hover_png, 350, 330);
     backButton          = Button_Init(back_png, back_hover_png, 340, 300);
     gbackButton         = Button_Init(back_png, back_hover_png, 340, 300);
@@ -150,7 +153,7 @@ void Init_Buttons()
     cheatoffButton		= Button_Init(toggle_off_png, toggle_off_png, 215,85);
     langupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,123);
     langdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,123);
-    vidupButton             = Button_Init(plus_button_png, plus_button_hover_png, 456,150);
+    vidupButton         = Button_Init(plus_button_png, plus_button_hover_png, 456,150);
     viddownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,150);
     vidtvonButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 175);
     vidtvoffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 175);
@@ -197,7 +200,54 @@ void Init_Buttons()
     wiiMenuButton           = Button_Init(wiiMenu_png, wiiMenu_hover_png, 34, 180);
     loaderButton            = Button_Init(loader_png, loader_hover_png, 174, 180);
     wiimoteButton           = Button_Init(wiimote_png, wiimote_png, 64, 400);
+
+#ifndef 	LOCALBUTTON
+	//add for Localization
+	sprintf(addButton.label, localStr("B01","")); 
+    sprintf(deleteButton.label, localStr("B02","")); 
+    sprintf(cancelButton.label, localStr("B03",""));
+ 
+	sprintf(yesButton.label, localStr("B04","")); 
+    sprintf(noButton.label, localStr("B05","")); 
 	
+	sprintf(labelBuf, localStr("B06",""));
+    sprintf(okButton.label, labelBuf); 
+	sprintf(graphicsButton.label, labelBuf);
+	
+    sprintf(resetButton.label, localStr("B07","")); 
+    sprintf(downloadButton.label, localStr("B09","")); 
+    sprintf(loadButton.label, localStr("B10","")); 
+	
+    sprintf(labelBuf, localStr("B11",""));
+	sprintf(backButton.label, labelBuf); 
+	sprintf(gbackButton.label, labelBuf); 
+    
+	sprintf(labelBuf, localStr("B12",""));
+	sprintf(cheatonButton.label, labelBuf); 
+	sprintf(vidtvonButton.label, labelBuf); 
+	sprintf(gcheatonButton.label, labelBuf); 
+	sprintf(gvidtvonButton.label, labelBuf); 
+	sprintf(coverTextOnButton.label, labelBuf); 
+	sprintf(quickstartOnButton.label, labelBuf); 
+	sprintf(rumbleOnButton.label, labelBuf); 
+	sprintf(musicOnButton.label, labelBuf); 
+
+	sprintf(labelBuf, localStr("B13",""));
+	sprintf(cheatoffButton.label, labelBuf); 
+	sprintf(vidtvoffButton.label, labelBuf); 
+	sprintf(gcheatoffButton.label, labelBuf); 
+	sprintf(gvidtvoffButton.label, labelBuf); 
+	sprintf(coverTextOffButton.label, labelBuf); 
+	sprintf(quickstartOffButton.label, labelBuf); 
+	sprintf(rumbleOffButton.label, labelBuf); 
+	sprintf(musicOffButton.label, labelBuf); 
+
+	sprintf(themeWhiteButton.label, localStr("B14",""));
+	sprintf(themeBlackButton.label, localStr("B15",""));
+	sprintf(homeMenuTopButton.label, localStr("B16",""));
+	sprintf(wiiMenuButton.label, localStr("B17",""));
+	sprintf(loaderButton.label, localStr("B18",""));
+#endif
 }
 
 void DrawSlider(int theme_id)

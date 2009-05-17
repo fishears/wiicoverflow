@@ -11,7 +11,9 @@ Button Button_Init(const unsigned char normal_img[], const unsigned char hover_i
 	new_button.x = x;
 	new_button.y = y;
 	new_button.hovering = false;
-	
+#ifndef 	LOCALBUTTON
+	strcpy(new_button.label, ""); //add for Localization
+#endif
 	return new_button;
 }
 
@@ -60,10 +62,16 @@ void Button_Paint(struct Button* btn)
 	if(btn->hovering)
 	{
 		GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+#ifndef 	LOCALBUTTON
+		//Draw Localized Button-Text, hover
+#endif
 	}
 	else
 	{
 		GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+#ifndef 	LOCALBUTTON
+		//Draw Localized Button-Text
+#endif
 	}	
 }
 
@@ -86,6 +94,9 @@ void Button_Theme_Paint(struct Button* btn, int theme_id)
 				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
 				break;
 		}
+#ifndef 	LOCALBUTTON
+		//Draw Localized Button-Text, hover
+#endif
 	}
 	else
 	{
@@ -102,6 +113,9 @@ void Button_Theme_Paint(struct Button* btn, int theme_id)
 				break;
 		}
 		
+#ifndef 	LOCALBUTTON
+		//Draw Localized Button-Text
+#endif
 	}	
 }
 
@@ -115,6 +129,9 @@ void Button_Toggle_Paint(struct Button* btn1, struct Button* btn2, int toggle_st
 			return;
 			
 		GRRLIB_DrawImg(btn2->x, btn2->y, btn2->texture, 0, 1, 1, 0xFFFFFFFF);
+#ifndef 	LOCALBUTTON
+		//Draw Localized Button-Text
+#endif
 	}
 	else
 	{
@@ -122,6 +139,9 @@ void Button_Toggle_Paint(struct Button* btn1, struct Button* btn2, int toggle_st
 			return;
 		
 		GRRLIB_DrawImg(btn1->x, btn1->y, btn1->texture, 0, 1, 1, 0xFFFFFFFF);
+#ifndef 	LOCALBUTTON
+		//Draw Localized Button-Text
+#endif
 	}
 	
 	
