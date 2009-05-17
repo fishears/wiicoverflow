@@ -40,8 +40,10 @@
 #include "cfg.h"
 #include "localization.h"
 #include "partition.h"
-
-
+#include "settingsMenu.h"
+#include "installMenu.h"
+#include "bootMenu.h"
+#include "deleteMenu.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -162,6 +164,8 @@ typedef struct{
 	orient_t orient;
 	
 	s32 my_wbfsDev;
+	wbfs_t *hdd;
+	struct discHdr *gameList;
 	
 	int dummy;
 

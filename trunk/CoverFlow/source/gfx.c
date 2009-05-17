@@ -169,8 +169,8 @@ void Init_Buttons()
     coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 291);
     coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 291);
     graphicsButton          = Button_Init(ok_png, ok_hover_png, 350, 210);
-    yesButton               = Button_Init(yes_png, yes_hover_png, 220, 250);
-    noButton                = Button_Init(no_png, no_hover_png, 340, 250);
+    yesButton               = Button_Init(yes_png, yes_hover_png, 220, 290);
+    noButton                = Button_Init(no_png, no_hover_png, 340, 290);
     settingsButton	    	= Button_Init(settings_png, settings_hover_png, 30, 420);
     downloadButton		    = Button_Init(download_png, download_hover_png, 350, 250);
     spacingupButton		    = Button_Init(plus_button_png, plus_button_hover_png,456,138);
@@ -288,14 +288,14 @@ void draw_covers()
 
 
 
-void draw_game_title(int index, float textSize, struct discHdr *gameList)
+void draw_game_title(int index, float textSize)
 {
 	if(index != -1)
 	{
 		int len = 0;
 		struct discHdr *header = NULL;
 		
-		header = &gameList[index];
+		header = &self.gameList[index];
 		len = strlen(header->title);
 
 		char gameName[36]; 
@@ -326,7 +326,7 @@ void draw_game_title(int index, float textSize, struct discHdr *gameList)
 	}
 }
 
-int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
+int draw_selected_two(bool load, bool hover)
 {
         /*Animate fliping cover*/
 	if(self.selected && self.animate_flip < 1.0)
@@ -435,7 +435,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
 		
 		#ifndef TEST_MODE
 		struct discHdr *header = NULL;
-		header = &gameList[self.gameSelected];
+		header = &self.gameList[self.gameSelected];
 		//f32 size = 0.0;
 		char gameName[21]; 
 
@@ -520,7 +520,7 @@ int draw_selected_two(struct discHdr *gameList, bool load, bool hover)
   return 0;
 }
 
-void draw_selected(struct discHdr *gameList)
+void draw_selected()
 {
 	
 	if(self.selected && self.animate_flip < 1.0)
@@ -574,7 +574,7 @@ void draw_selected(struct discHdr *gameList)
 			
 			#ifndef TEST_MODE
 			struct discHdr *header = NULL;
-			header = &gameList[self.gameSelected];
+			header = &self.gameList[self.gameSelected];
 			f32 size = 0.0;
 
 			/* Get game size */
@@ -853,11 +853,11 @@ void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 s
 	}
 	
 }
-void game_settings_menu(struct discHdr *gameList)
+void game_settings_menu()
 {
     //get/set per-game settings
     struct discHdr *header = NULL;
-    header = &gameList[self.gameSelected];
+    header = &self.gameList[self.gameSelected];
     char titleID[7];
     char gameName[21];
 

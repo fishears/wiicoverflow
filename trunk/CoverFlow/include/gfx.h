@@ -1,5 +1,5 @@
 #ifndef _GFX_H_
-#define _GFX_H
+#define _GFX_H_
 
 #include "coverflow.h"
 #include "button.h"
@@ -159,11 +159,11 @@ void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 s
 void DrawSlider(int theme_id);	   // takes a SETTING_theme, but defaults to black
 
 void draw_covers();
-void draw_game_title(int index, float textSize, struct discHdr *gameList);
-void draw_selected(struct discHdr *gameList);
+void draw_game_title(int index, float textSize);
+void draw_selected();
 
 //Work for new Load Animation
-int draw_selected_two(struct discHdr *gameList, bool load, bool hover);
+int draw_selected_two(bool load, bool hover);
 
 float change_scale_without_containing(float val, float in_min, float in_max, float out_min, float out_max);
 float change_scale(float val, float in_min, float in_max, float out_min, float out_max);
@@ -171,7 +171,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 
 void ShowProgress (s32 done, s32 total);
 int ProgressWindow(wbfs_t *hdd, char* title, char* msg);
-void game_settings_menu(struct discHdr *gameList);
+void game_settings_menu();
 void freeResources();
 
 // Cover rollover event handlers
