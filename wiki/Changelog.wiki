@@ -1,7 +1,7 @@
 #labels Featured
-= CHANGELOG =
+ = CHANGELOG =
 
-== RC2 [no date yet] ==
+== RC2 (no date yet) ==
 
 [FIX]
   * Fixed crash after installing a game (issue110)
@@ -12,7 +12,7 @@
 [OTHER]
   * Reorganized code (splitting main.c in several files, removed unused ones)
 ----
-== RC1 update1 [15-may-09] ==
+== RC1 update1 (15-may-09) ==
 
 [FIX]
   * Crash when a gamecube controller is connected
