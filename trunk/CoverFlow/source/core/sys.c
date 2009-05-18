@@ -2,7 +2,7 @@
 #include <ogcsys.h>
 
 #include "sys.h"
-#include "wpad.h"
+#include "wiipad.h"
 /* Constants */
 #define CERTS_LEN	0x280
 

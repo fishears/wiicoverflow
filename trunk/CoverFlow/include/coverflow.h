@@ -8,7 +8,7 @@
 #include <malloc.h>
 #include <math.h>
 #include <gccore.h>
-#include <wiiuse/wpad.h>
+#include <wiipad.h>
 #include <sys/dir.h>
 #include <ogc/lwp_watchdog.h>   // Needed for gettime and ticks_to_millisecs
 #include "wpad.h"

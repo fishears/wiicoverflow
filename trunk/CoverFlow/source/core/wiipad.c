@@ -2,7 +2,7 @@
 #include <ogcsys.h>
 
 #include "sys.h"
-#include "wpad.h"
+#include "wiipad.h"
 #include "subsystem.h"
 
 /* Constants */
