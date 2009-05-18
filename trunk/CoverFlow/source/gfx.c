@@ -52,9 +52,12 @@ void LoadTextures()
 	ambientlight_texture   = GRRLIB_LoadTexture(ambientlight_png);
 	ambientlight_white_texture = GRRLIB_CreateEmptyTexture(ambientlight_texture.w, ambientlight_texture.h);
 	GRRLIB_BMFX_Invert(ambientlight_texture, ambientlight_white_texture); //invert the fade from black to white
+        battery_bar             = GRRLIB_LoadTexture(battery_bar_png);
+        battery             = GRRLIB_LoadTexture(battery_png);
+        battery_dead             = GRRLIB_LoadTexture(battery_dead_png);
 
 	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
-    GRRLIB_InitTileSet(&font_title, 14, 20, 32);
+        GRRLIB_InitTileSet(&font_title, 14, 20, 32);
 }
 
 void DrawBufferedCover(int i, float loc, float angle)

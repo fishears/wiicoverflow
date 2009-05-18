@@ -131,7 +131,7 @@ void HomeMenu_Show()
 			WPAD_Rumble(0,0); // Kill the rumble
 			doloop = false;
 		}
-			
+
 		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||((PAD_ButtonsDown(0) & PAD_BUTTON_B)))
 		{
 			#ifdef TEST_MODE
@@ -180,6 +180,10 @@ void HomeMenu_Show()
 		Button_Hover(&homeMenuBottomButton, pointer.p_x, pointer.p_y);
 		Button_Hover(&wiiMenuButton, pointer.p_x, pointer.p_y);
 		Button_Hover(&loaderButton, pointer.p_x, pointer.p_y);
+
+                #ifdef BATTMAN
+                Do_Batteries();
+                #endif
 			
 		// Check for button-pointer intersections, and rumble
 		if (Button_Hover(&homeMenuTopButton, pointer.p_x, pointer.p_y) ||
@@ -218,9 +222,6 @@ void HomeMenu_Show()
 				wiimoteButton.y += 1;
 			}
 		}
-#ifdef BATTMAN
-                Battery_Info();
-#endif
 
 		// Draw the default pointer hand
 		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
@@ -313,57 +314,32 @@ void HomeMenu_Destroy()
 	//quit();
 }
 
-void Battery_Info()
+void Do_Batteries()
 {
-#ifdef BATTMAN
-
-    	wiimote** wiimotes;
+    	#ifdef BATTMAN
+        wiimote** wiimotes;
 	int found, connected;
-wiimotes =  wiiuse_init(MAX_WIIMOTES, 0);
-	found = wiiuse_find(wiimotes, MAX_WIIMOTES, 5);
-	if (!found) {
-		GRRLIB_Printf(145, 120, font_title, 0xFFFFFF00, 1, "No wiimotes found.");
-		return;
-	}
+        wiimotes =  wiiuse_init(MAX_WIIMOTES,5);
+     	found = wiiuse_find(wiimotes, MAX_WIIMOTES, 5);
 	connected = wiiuse_connect(wiimotes, MAX_WIIMOTES);
-	if (connected)
-		GRRLIB_Printf(145, 120, font_title, 0xFFFFFF00, 1, "Connected to %i wiimotes (of %i found).\n", connected, found);
-	else {
-		GRRLIB_Printf(145, 140, font_title, 0xFFFFFF00, 1, "Failed to connect to any wiimote.\n");
-		return;
-	}
-while (1) {
-		if (wiiuse_poll(wiimotes, MAX_WIIMOTES)) {
-			/*
-			 *	This happens if something happened on any wiimote.
-			 *	So go through each one and check if anything happened.
-			 */
-			int i = 0;
-			for (; i < MAX_WIIMOTES; ++i) {
-				switch (wiimotes[i]->event) {
-					case WIIUSE_STATUS:
-						/* a status event occured */
-						handle_ctrl_status(wiimotes[i]);
-						break;
 
-					default:
-						break;
-				}
-			}
-		}
-	}
+        if(connected!=0) //we have wiimotes, at least one
+        {
+                for(int x = 0; x < connected+1; x++)
+                {
+                        int level = (WPAD_BatteryLevel(x)/100)*4; //call only available in svn wiiuse
+                        if(level > 4) level = 4; //restrict to maximum bars
+                        if(level == 0)
+                                GRRLIB_DrawImg(165+(50*x), 231, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
+                        else
+                                GRRLIB_DrawImg(165+(50**x), 231, battery, 0, 1, 1, 0xFFFFFFFF); //draw battery container
 
-	/*
-	 *	Disconnect the wiimotes
-	 */
-	wiiuse_cleanup(wiimotes, MAX_WIIMOTES);
-
-	return;
-
-#endif
-}
-void handle_ctrl_status(struct wiimote_t* wm) {
-
-	GRRLIB_Printf(145, 160, font_title, 0xFFFFFF00, 1, "%f %%\n", wm->battery_level);
+                        for(int i = 0; i < (level+1); i++)
+                        {
+                                GRRLIB_DrawImg(165+(12*(i*x)), 231, battery_bar, 0, 1, 1, 0xFFFFFFFF); //draw the bars
+                        }
+                }
+        }
+        #endif
 }
 
