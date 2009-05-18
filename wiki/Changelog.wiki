@@ -8,6 +8,7 @@
   * Fixed a bug that may lead a crash when exiting to HBC (issue113)
   * Fixed a bug that caused swapping of wiimotes when entering loader (issue115)
 -NEW-
+  * Try to use IOS 222 (Enhanced USB). If it fails, use IOS 249. (issue112)
   * Settings buttons hidden if parental control is enabled
   * New slider and buttons graphics
   * Cover art is now anti-aliased for improved quality when zooming
