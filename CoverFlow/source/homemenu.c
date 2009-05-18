@@ -181,11 +181,7 @@ void HomeMenu_Show()
 		Button_Hover(&wiiMenuButton, pointer.p_x, pointer.p_y);
 		Button_Hover(&loaderButton, pointer.p_x, pointer.p_y);
 
-                #ifdef BATTMAN
-                Do_Batteries();
-                #endif
-			
-		// Check for button-pointer intersections, and rumble
+        	// Check for button-pointer intersections, and rumble
 		if (Button_Hover(&homeMenuTopButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&homeMenuBottomButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&wiiMenuButton, pointer.p_x, pointer.p_y) ||
@@ -222,7 +218,9 @@ void HomeMenu_Show()
 				wiimoteButton.y += 1;
 			}
 		}
-
+                #ifdef BATTMAN
+                Do_Batteries();
+                #endif
 		// Draw the default pointer hand
 		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		// Spit it out
@@ -318,28 +316,36 @@ void Do_Batteries()
 {
     	#ifdef BATTMAN
         wiimote** wiimotes;
-	int found, connected;
+	int found, connected,i,x;
+/*
         wiimotes =  wiiuse_init(MAX_WIIMOTES,5);
      	found = wiiuse_find(wiimotes, MAX_WIIMOTES, 5);
 	connected = wiiuse_connect(wiimotes, MAX_WIIMOTES);
+*/
 
+/*
         if(connected!=0) //we have wiimotes, at least one
-        {
-                for(int x = 0; x < connected+1; x++)
+*/
+
+                for(x = 0; x <= 3; x++)
                 {
                         int level = (WPAD_BatteryLevel(x)/100)*4; //call only available in svn wiiuse
                         if(level > 4) level = 4; //restrict to maximum bars
                         if(level == 0)
-                                GRRLIB_DrawImg(165+(50*x), 231, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
-                        else
-                                GRRLIB_DrawImg(165+(50**x), 231, battery, 0, 1, 1, 0xFFFFFFFF); //draw battery container
-
-                        for(int i = 0; i < (level+1); i++)
                         {
-                                GRRLIB_DrawImg(165+(12*(i*x)), 231, battery_bar, 0, 1, 1, 0xFFFFFFFF); //draw the bars
+                                GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
+                        }
+                        else
+                        {
+                                GRRLIB_DrawImg(216+(106*x), 373, battery, 0, 1, 1, 0xFFFFFFFF); //draw battery container
+
+                                for(i = 0; i <= level; i++)
+                                {
+                                        GRRLIB_DrawImg(216+((106*x)+(8*i)), 375, battery_bar, 0, 1, 1, 0xFFFFFFFF); //draw the bars
+                                }
                         }
                 }
-        }
+
         #endif
 }
 
