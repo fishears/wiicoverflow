@@ -9,6 +9,7 @@
 -NEW-
   * Settings buttons hidden if parental control is enabled
   * New slider and buttons graphics
+  * Cover art is now anti-aliased for improved quality when zooming
 -OTHER-
   * Reorganized code (splitting main.c in several files, removed unused ones)
 ----
