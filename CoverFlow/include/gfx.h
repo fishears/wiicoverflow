@@ -78,6 +78,9 @@ GRRLIB_texImg font_title;          // title font
 GRRLIB_texImg load_bg_texture;
 GRRLIB_texImg ambientlight_texture;
 GRRLIB_texImg ambientlight_white_texture;
+GRRLIB_texImg battery;
+GRRLIB_texImg battery_dead;
+GRRLIB_texImg battery_bar;
 
 Button addButton;
 Button slideButton;
