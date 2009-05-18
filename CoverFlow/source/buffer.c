@@ -9,7 +9,6 @@
  #include <string.h>
  #include <malloc.h>
  
- 
  #define MEM2_START_ADDRESS 0x91000000
  #define MEM2_EXTENT 0x3000000
  #define TEXTURE_DATA_SIZE 225*160*4
@@ -187,6 +186,23 @@ int BufferMethod;
 	pthread_mutex_unlock(&buffer_mutex[index]);
  }
  
+ int GetPrioritisedCover(int selection)
+ {
+	int i,j,ret=-1;
+	for(i = 0; i <= (nCoversInWindow+1)/2; i++)
+	{
+		for (j=0;j<2;j++)
+		{
+			int index = selection +i*(j*2-1); 
+			if (index>=0 && index<=nCovers)
+			{
+				if (_cq.request[index] && !_cq.remove[index]&&!_cq.ready[index]) return index;
+			}
+		}
+	}
+	return ret;
+ }
+ 
  
  void* process(void *arg)
  {
@@ -197,12 +213,14 @@ int BufferMethod;
 	 
 	while(1)
 	{
+
 		//Load Covers from the middle out
 		for(i = 0; i <= (nCovers+1)/2; i++)
 		{
 			for (j=0;j<2;j++)
 			{
-				int index = (nCovers+1)/2 +i*(j*2-1);
+				int index=GetPrioritisedCover(CurrentSelection);
+				if (index==-1) index= (nCovers+1)/2 +i*(j*2-1);
 				if (index>=0 && index<=nCovers)
 				{
 					pthread_mutex_lock(&lock_thread_mutex);
@@ -221,11 +239,11 @@ int BufferMethod;
 		}
 	 
                  
-			sleep(10);
+		sleep(5);// need to get the threads separated
 		pthread_mutex_lock(&quit_mutex);
 		if(_requestQuit)
 		{
-			Sleep(1);
+			Sleep(2);
 			pthread_mutex_unlock(&quit_mutex);
 			 
 			int m = 0;
@@ -292,19 +310,23 @@ int BufferMethod;
   {
 	  int i=0;
 	  int extra = 0;
+	  CurrentSelection=nCovers-index;
+//		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "Sel: %d", CurrentSelection);
+//       GRRLIB_Render();
+
 	  if (doNotRemoveFromFloating) extra = 1;
 	  int searchSize=nCoversInWindow*(2+extra);
 	  //this'll do for now - a more elegant algrorithm would be better
-	  for (i=index-searchSize/2;i<index+searchSize/2;i++)
+	  for (i=CurrentSelection-searchSize/2;i<CurrentSelection+searchSize/2;i++)
 	  {
 		  if (i >= 0 && i < nCovers)
 		  {
 			  if (!_cq.ready[i] && !_cq.request[i])
 			  {
-				  _cq.requestId[index]=&CoverList[index];
+				  _cq.requestId[i]=&CoverList[i];
 				  _cq.request[i] = true;
 				  // this one isn't permenantly cached make a space for it in the floating cache
-				  if (_cq.permaBufferPosition[i] == -1 && !doNotRemoveFromFloating) SetFloatingCacheItem(index,i);
+				  if (_cq.permaBufferPosition[i] == -1 && !doNotRemoveFromFloating) SetFloatingCacheItem(CurrentSelection,i);
 
 			  }
 		  }
@@ -364,7 +386,8 @@ int BufferMethod;
   void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection)
   {
 		pthread_mutex_lock(&lock_thread_mutex);
-       initialSelection+=gameCount/2.0;
+        initialSelection+=gameCount/2.0;
+		CurrentSelection=initialSelection;
         int i=0;
         CoverList=gameList;
         nCovers=gameCount;
