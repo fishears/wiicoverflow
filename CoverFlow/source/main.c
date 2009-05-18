@@ -205,7 +205,10 @@ int main( int argc, char **argv )
 	
 	checkDirs();
 	checkFiles();
+	
 	Sys_Init();
+	Subsystem_Init();
+	
 	initWBFS();
 
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);

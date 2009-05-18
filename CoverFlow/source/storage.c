@@ -12,7 +12,7 @@ bool init_usbfs()
 	Sys_Init();
 
 	///* Initialize subsystems */
-	Wpad_Init();
+	//Wpad_Init();
 
 	/* Mount SDHC */
 	Fat_MountSDHC();
