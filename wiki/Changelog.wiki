@@ -6,6 +6,7 @@
 -FIX-
   * Fixed crash after installing a game (issue110)
   * Fixed a bug that may lead a crash when exiting to HBC (issue113)
+  * Fixed a bug that caused swapping of wiimotes when entering CoverFlow (issue115)
 -NEW-
   * Settings buttons hidden if parental control is enabled
   * New slider and buttons graphics
