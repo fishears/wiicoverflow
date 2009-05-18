@@ -171,7 +171,16 @@ int BufferMethod;
 			free(imgData);
 
 			pthread_mutex_lock(&queue_mutex);
-			_cq.ready[index]   = true;
+			GRRLIB_texImg textureData=_texture_data[index];
+			if (!((textureData.h ==224 || textureData.h ==225) && textureData.w == 160))
+			{
+				_cq.coverMissing[index]=true; // bad image size
+				_cq.ready[index]   = false;
+			}
+			else
+			{
+				_cq.ready[index]   = true;
+			}
 			pthread_mutex_unlock(&queue_mutex);
 		 }
 		 else
