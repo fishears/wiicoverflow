@@ -9,6 +9,7 @@ The following environment configs are being used to develop/test:
 || ||PAL-DUT||4.0E||cIOS 10||31 of 31||-||-||gitkua||
 ||r107||PAL-IT||3.2E||cIOS 10||10 of 10||LCD 32''||Component||Scognito||
 || ||PAL-GER||3.2E||cIOS 10||10 of 10||26" TV (4:3)||composite||loudbob||
+||current||PAL-UK||3.2E||cIOS 10||10 of 10||28" TV||composite||Blackbird399||
 
 
 Please post additional configurations.
