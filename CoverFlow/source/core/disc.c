@@ -8,7 +8,7 @@
 #include "disc.h"
 #include "video.h"
 #include "wdvd.h"
-#include "wpad.h"
+#include "wiipad.h"
 #include "fst.h"
 //#include "cfg.h"
 #include "subsystem.h"

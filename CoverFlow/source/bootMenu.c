@@ -27,7 +27,6 @@ bool Menu_Boot(){
 	Sleep(300);
 	
 	freeResources();
-
 	
 	#ifndef DOL_TEST
 	/* Set WBFS mode */

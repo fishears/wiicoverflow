@@ -125,6 +125,7 @@ void GRRLIB_Exit();
 
 bool GRRLIB_ScrShot(const char*);
 
+
 #ifdef __cplusplus
    }
 #endif /* __cplusplus */

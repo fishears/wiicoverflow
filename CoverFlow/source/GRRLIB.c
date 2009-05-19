@@ -20,6 +20,23 @@ Download and Help Forum : http://grrlib.santo.fr
 
 #define DEFAULT_FIFO_SIZE (256 * 1024)
 
+
+#ifdef D3_COVERS
+extern const u8 case_left_png[];
+extern const u8 case_right_png[];
+extern const u8 no_back_png[];
+#endif
+
+#ifdef D3_COVERS
+   GRRLIB_texImg leftTexture;
+   GRRLIB_texImg rightTexture;
+   GRRLIB_texImg noBackTexture;
+   
+   GXTexObj leftSideTex;
+   GXTexObj rightSideTex;
+   GXTexObj backTex;
+#endif
+
 extern s_settings settings;
 
 u32 fb = 0;
@@ -475,10 +492,10 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
 
     GX_InitTexObj(&texObj, tex.data, tex.w, tex.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     //GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1); //removed to allow antialiasing
-    GX_LoadTexObj(&texObj, GX_TEXMAP0);
+    //GX_LoadTexObj(&texObj, GX_TEXMAP0);
 
-    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
-    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+    //GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+    //GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
 
     width = tex.w * 0.01 * scale;
     height = tex.h * 0.01 * scale;
@@ -499,7 +516,12 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
     guMtxConcat (view, m, mv);
 
 #ifdef D3_COVERS
-	float thickness = -0.1;
+    GX_LoadTexObj(&backTex, GX_TEXMAP0);
+
+    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+	
+	float thickness = 0.15;
     GX_LoadPosMtxImm (mv, GX_PNMTX0);
 
 	/*BACK COVER*/
@@ -521,50 +543,66 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
     GX_TexCoord2f32(1, 0);
     GX_End();
 	
+	GX_LoadTexObj(&rightSideTex, GX_TEXMAP0);
+
+    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
 	
     GX_LoadPosMtxImm (mv, GX_PNMTX0);
 	
 	/*Right Side*/	
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
-    GX_Position3f32(-width, -height, thickness);
+    GX_Position3f32(-width, -height, 0);
     GX_Color1u32(color);
-    GX_TexCoord2f32(1, 1);
-
-    GX_Position3f32(-width, height, thickness);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 0);
+    GX_TexCoord2f32(0, 0);
 	
     GX_Position3f32(-width, height, 0);
     GX_Color1u32(color);
-    GX_TexCoord2f32(1, 0);
+    GX_TexCoord2f32(0, 1);
 	
-    GX_Position3f32(-width, -height, 0);
+    GX_Position3f32(-width, height, thickness);
+    GX_Color1u32(color);
+    GX_TexCoord2f32(1, 1);
+	
+    GX_Position3f32(-width, -height, thickness);
     GX_Color1u32(color);
     GX_TexCoord2f32(1, 0);
+		
     GX_End();
+	
+	GX_LoadTexObj(&leftSideTex, GX_TEXMAP0);
+
+    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
 	
     GX_LoadPosMtxImm (mv, GX_PNMTX0);
 	
 	/*Left Side*/
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
-    GX_Position3f32(width, -height, 0);
+    GX_Position3f32(width, -height, thickness);
     GX_Color1u32(color);
-    GX_TexCoord2f32(1, 1);
-
+    GX_TexCoord2f32(0, 1);
+	
+    GX_Position3f32(width, height, thickness);
+    GX_Color1u32(color);
+    GX_TexCoord2f32(0, 0);
+	
     GX_Position3f32(width, height, 0);
     GX_Color1u32(color);
     GX_TexCoord2f32(1, 0);
 	
-    GX_Position3f32(width, height, thickness);
+    GX_Position3f32(width, -height, 0);
     GX_Color1u32(color);
-    GX_TexCoord2f32(1, 0);
+    GX_TexCoord2f32(1, 1);
 	
-    GX_Position3f32(width, -height, thickness);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 0);
     GX_End();
 #endif //D3_COVERS
+    
+	GX_LoadTexObj(&texObj, GX_TEXMAP0);
 
+    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+	
   /*Draw Front*/
     GX_LoadPosMtxImm (mv, GX_PNMTX0);
 
@@ -589,69 +627,92 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
 	
   //Reflection
 #ifdef D3_COVERS
+    GX_LoadTexObj(&backTex, GX_TEXMAP0);
+
+    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+	
     GX_LoadPosMtxImm (mv, GX_PNMTX0);
 
 	/*BACK COVER*/
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
     GX_Position3f32(-width, -height-height*2.05, thickness);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 1);
+    GX_Color1u32(0xFFFFFF00);
+    GX_TexCoord2f32(1, 0);
 
     GX_Position3f32(width, -height-height*2.05, thickness);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(0, 1);
-
-    GX_Position3f32(width, height-height*2.05, thickness);
-    GX_Color1u32(color);
+    GX_Color1u32(0xFFFFFF00);
     GX_TexCoord2f32(0, 0);
 
+    GX_Position3f32(width, height-height*2.05, thickness);
+    GX_Color1u32(0xFFFFFF70);
+    GX_TexCoord2f32(0, 1);
+
     GX_Position3f32(-width, height-height*2.05, thickness);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 0);
+    GX_Color1u32(0xFFFFFF70);
+    GX_TexCoord2f32(1, 1);
     GX_End();
 	
+	GX_LoadTexObj(&rightSideTex, GX_TEXMAP0);
+
+    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
 	
     GX_LoadPosMtxImm (mv, GX_PNMTX0);
 	
 	/*Right Side*/	
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
-    GX_Position3f32(-width, -height-height*2.05, thickness);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 1);
-
-    GX_Position3f32(-width, height-height*2.05, thickness);
-    GX_Color1u32(color);
+    GX_Position3f32(-width, -height-height*2.05, 0);
+    GX_Color1u32(0xFFFFFF00);
     GX_TexCoord2f32(1, 0);
 	
     GX_Position3f32(-width, height-height*2.05, 0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 0);
+    GX_Color1u32(0xFFFFFF00);
+    GX_TexCoord2f32(1, 1);
 	
-    GX_Position3f32(-width, -height-height*2.05, 0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 0);
+    GX_Position3f32(-width, height-height*2.05, thickness);
+    GX_Color1u32(0xFFFFFF70);
+    GX_TexCoord2f32(0, 1);
+	
+    GX_Position3f32(-width, -height-height*2.05, thickness);
+    GX_Color1u32(0xFFFFFF70);
+    GX_TexCoord2f32(0, 0);
+		
     GX_End();
+	
+	GX_LoadTexObj(&leftSideTex, GX_TEXMAP0);
+
+    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
 	
     GX_LoadPosMtxImm (mv, GX_PNMTX0);
 	
 	/*Left Side*/
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
-    GX_Position3f32(width, -height-height*2.05, 0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 1);
-
-    GX_Position3f32(width, height-height*2.05, 0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 0);
+    GX_Position3f32(width, -height-height*2.05, thickness);
+    GX_Color1u32(0xFFFFFF00);
+    GX_TexCoord2f32(0, 0);
 	
     GX_Position3f32(width, height-height*2.05, thickness);
-    GX_Color1u32(color);
+    GX_Color1u32(0xFFFFFF00);
+    GX_TexCoord2f32(0, 1);
+	
+    GX_Position3f32(width, height-height*2.05, 0);
+    GX_Color1u32(0xFFFFFF70);
+    GX_TexCoord2f32(1, 1);
+	
+    GX_Position3f32(width, -height-height*2.05, 0);
+    GX_Color1u32(0xFFFFFF70);
     GX_TexCoord2f32(1, 0);
 	
-    GX_Position3f32(width, -height-height*2.05, thickness);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 0);
     GX_End();
+	
+
+    GX_LoadTexObj(&texObj, GX_TEXMAP0);
+
+    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+	
 #endif //D3_COVERS
 
   //Front REFLECTION
@@ -1148,6 +1209,18 @@ void GRRLIB_Init() {
 	GX_SetAlphaUpdate(GX_TRUE);
 
 	GRRLIB_2D_Init();
+	
+	#ifdef D3_COVERS
+	//Load 3d covers
+	leftTexture  = GRRLIB_LoadTexture(case_left_png);
+	rightTexture = GRRLIB_LoadTexture(case_right_png);
+	noBackTexture = GRRLIB_LoadTexture(no_back_png);
+	
+    GX_InitTexObj(&leftSideTex, leftTexture.data, leftTexture.w, leftTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+	GX_InitTexObj(&rightSideTex, rightTexture.data, rightTexture.w, rightTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+	GX_InitTexObj(&backTex, noBackTexture.data, noBackTexture.w, noBackTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+	
+	#endif
 	
 	//Video_ManualSet(xfb[0], rmode);
 
