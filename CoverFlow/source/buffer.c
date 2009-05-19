@@ -244,35 +244,35 @@ int BufferMethod;
 					if(b) HandleLoadRequest(index);
 			 
 					pthread_mutex_unlock(&lock_thread_mutex);
+					
+					pthread_mutex_lock(&quit_mutex);
+					if(_requestQuit)
+					{
+						usleep(10);
+						pthread_mutex_unlock(&quit_mutex);
+						sleep(2);
+						int m = 0;
+						if (!bCleanedUp)
+						{
+							bCleanedUp=true;
+							/*destroy Mutexs*/
+							pthread_mutex_destroy(&count_mutex);
+							pthread_mutex_destroy(&queue_mutex);
+							pthread_mutex_destroy(&quit_mutex);
+							pthread_mutex_destroy(&lock_thread_mutex);
+							 
+							for(m = 0; m < MAX_BUFFERED_COVERS; m++)
+								pthread_mutex_destroy(&buffer_mutex[m]);
+						}
+						return 0;
+					}
+					pthread_mutex_unlock(&quit_mutex);
 				}
 			}	 
 		}
 	 
                  
 		usleep(10);// need to get the threads separated but this should free some processor
-		pthread_mutex_lock(&quit_mutex);
-		if(_requestQuit)
-		{
-			usleep(100);
-			pthread_mutex_unlock(&quit_mutex);
-			sleep(2);
-			int m = 0;
-			if (!bCleanedUp)
-			{
-				bCleanedUp=true;
-				/*destroy Mutexs*/
-				pthread_mutex_destroy(&count_mutex);
-				pthread_mutex_destroy(&queue_mutex);
-				pthread_mutex_destroy(&quit_mutex);
-				pthread_mutex_destroy(&lock_thread_mutex);
-				 
-				for(m = 0; m < MAX_BUFFERED_COVERS; m++)
-					pthread_mutex_destroy(&buffer_mutex[m]);
-			}
-			return 0;
-		}
-		pthread_mutex_unlock(&quit_mutex);
-
     }
  
  
