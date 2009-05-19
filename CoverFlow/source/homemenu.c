@@ -314,39 +314,37 @@ void HomeMenu_Destroy()
 	
 	//quit();
 }
-
 void Do_Batteries()
 {
     	#ifdef BATTMAN
-        wiimote** wiimotes;
-	int found, connected,i,x;
-/*
-        wiimotes =  wiiuse_init(MAX_WIIMOTES,5);
-     	found = wiiuse_find(wiimotes, MAX_WIIMOTES, 5);
-	connected = wiiuse_connect(wiimotes, MAX_WIIMOTES);
-*/
-
-/*
-        if(connected!=0) //we have wiimotes, at least one
-*/
+	int i,x;
+        u8 ret;
+        u8 level;
 
                 for(x = 0; x <= 3; x++)
                 {
-                        int level = (WPAD_BatteryLevel(x)/100)*4; //call only available in svn wiiuse
-                        if(level > 4) level = 4; //restrict to maximum bars
-                        if(level == 0)
-                        {
-                                GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
-                        }
-                        else
-                        {
-                                GRRLIB_DrawImg(216+(106*x), 373, battery, 0, 1, 1, 0xFFFFFFFF); //draw battery container
+                    ret = WPAD_BatteryLevel(x);
+                    level = (ret * 4)/100;
 
-                                for(i = 0; i <= level; i++)
-                                {
-                                        GRRLIB_DrawImg(216+((106*x)+(8*i)), 375, battery_bar, 0, 1, 1, 0xFFFFFFFF); //draw the bars
-                                }
-                        }
+                    if(level > 4) level = 4; //restrict to maximum bars
+                            if(ret!=0) //no wiimote here
+                            {
+                                    if(level == 0) //no power bars here
+                                    {
+                                                GRRLIB_Printf(185+(106*x), 375, font_title, 0x808080FF, 1, "P%d", x+1);
+                                                GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
+                                    }
+                                    else //we have power, but how much?
+                                    {
+                                            GRRLIB_Printf(185+(106*x), 375, font_title, 0x808080FF, 1, "P%d", x+1);
+                                            GRRLIB_DrawImg(216+(106*x), 373, battery, 0, 1, 1, 0xFFFFFFFF); //draw battery container
+
+                                        for(i = 0; i < level; i++)
+                                        {
+                                                GRRLIB_DrawImg(221+((107*x)+(8*i)), 377, battery_bar, 0, 1, 1, 0xFFFFFFFF); //draw the bars
+                                        }
+                                        }
+                            }
                 }
 
         #endif

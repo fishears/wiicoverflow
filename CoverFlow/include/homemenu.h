@@ -1,7 +1,7 @@
 #ifndef _HomeMenu_H_
 #define _HomeMenu_H_
 
-//#define BATTMAN
+#define BATTMAN
 
 #include "coverflow.h"
 

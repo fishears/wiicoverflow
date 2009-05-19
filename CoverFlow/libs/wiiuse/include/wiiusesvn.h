@@ -1,5 +1,5 @@
-#ifndef __WIIUSE_H__
-#define __WIIUSE_H__
+#ifndef __WIIUSESVN_H__
+#define __WIIUSESVN_H__
 
 #if defined(_WIN32)
 	/* windows */
