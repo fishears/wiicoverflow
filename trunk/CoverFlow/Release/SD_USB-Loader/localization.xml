@@ -727,6 +727,26 @@
 	<M132 val="Uma atualização de cIOS é necessária." />
 	<M133 val="Espaço em disco insuficiente !" />
 	<M134 val="Formatando Partição %s" />
+  <M135 val="Ocarina:" />
+
+	<B01 val="Novo" />
+	<B02 val="Remover" />
+	<B03 val="Adicionar" />
+	<B04 val="Sim" />
+	<B05 val="Não" />
+	<B06 val="Ok" />
+	<B07 val="Reiniciar" />
+	<B08 val="Baixar" />
+	<B09 val="Carregar" />
+	<B10 val="Voltar" />
+	<B11 val="Lig" />
+	<B12 val="    Desl" />
+	<B13 val="    Pr" />
+	<B14 val="Br" />
+	<B15 val="Início" />
+	<B16 val="Menu Wii" />
+	<B17 val="Loader" />
+
 </PT-BR>
 
 <ZH-TW desc="繁體中文">
