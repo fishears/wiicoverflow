@@ -31,7 +31,7 @@
 #include "ogc/ipc.h"
 #include "fst.h"
 #include "dvd_broadway.h"
-#include "wpad.h"
+#include "wiipad.h"
 #include "fat.h"
 
 

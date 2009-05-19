@@ -2,7 +2,7 @@
 #include <ogcsys.h>
 
 #include "fat.h"
-#include "wpad.h"
+#include "wiipad.h"
 
 
 void Subsystem_Init(void)
