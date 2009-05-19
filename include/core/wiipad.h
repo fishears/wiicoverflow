@@ -1,7 +1,7 @@
 #ifndef _WIIPAD_H_
 #define _WIIPAD_H_
 
-#include <wiiuse/wpad.h>
+#include <wpadsvn.h>
 
 /* Prototypes */
 s32  Wpad_Init(void);

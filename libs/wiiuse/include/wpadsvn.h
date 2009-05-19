@@ -28,11 +28,11 @@ distribution.
 
 -------------------------------------------------------------*/
 
-#ifndef __WPAD_H__
-#define __WPAD_H__
+#ifndef __WPADSVN_H__
+#define __WPADSVN_H__
 
 #include <gctypes.h>
-#include <wiiuse/wiiuse.h>
+#include <wiiusesvn.h>
 
 #define WPAD_MAX_IR_DOTS						4
 											
