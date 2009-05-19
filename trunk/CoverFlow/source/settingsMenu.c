@@ -88,16 +88,16 @@ void Graphic_Settings_Menu(){
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFCC);
 		// Draw text
-		GRRLIB_Printf(190, 55,  font_title, settings.fontColor, 1, "Graphics Settings");
-		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, "Zoom:");
+		GRRLIB_Printf(190, 55,  font_title, settings.fontColor, 1, localStr("M049", "Graphics Settings"));
+		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, localStr("M050", "Zoom:") );
 		GRRLIB_Printf(350, 100, font_texture, settings.fontColor, 1, "%f", settings.coverZoom);
-		GRRLIB_Printf(145, 148, font_texture, settings.fontColor, 1, "Spacing:");
+		GRRLIB_Printf(145, 148, font_texture, settings.fontColor, 1, localStr("Spacing:") );
 		GRRLIB_Printf(350, 148, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
-		GRRLIB_Printf(145, 197, font_texture, settings.fontColor, 1, "Angle:");
+		GRRLIB_Printf(145, 197, font_texture, settings.fontColor, 1, localStr("Angle:") );
 		GRRLIB_Printf(350, 197, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
-		GRRLIB_Printf(145, 245, font_texture, settings.fontColor, 1, "Draw Window:");
+		GRRLIB_Printf(145, 245, font_texture, settings.fontColor, 1, localStr("Draw Window:") );
 		GRRLIB_Printf(350, 245, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
-		GRRLIB_Printf(145, 292, font_texture, settings.fontColor, 1, "Game Title:");
+		GRRLIB_Printf(145, 292, font_texture, settings.fontColor, 1, localStr("Game Title:") );
 		
 		//Button_Theme_Paint(&settingsButton, settings.theme);
 		Button_Paint(&spacingupButton);
@@ -307,21 +307,21 @@ void Settings_Menu(){
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFCC);//old one bg renamed to _old
 		// Draw text
-		GRRLIB_Printf(184, 55,  font_title, 0xFFFFFFFF, 1, "Coverflow Settings");
-		GRRLIB_Printf(145, 93,  font_texture, settings.fontColor, 1, "Ocarina");
-		GRRLIB_Printf(310, 93,  font_texture, settings.fontColor, 1, "Hook");
+		GRRLIB_Printf(184, 55,  font_title, 0xFFFFFFFF, 1, localStr("M057", "Coverflow Settings") );
+		GRRLIB_Printf(145, 93,  font_texture, settings.fontColor, 1, localStr("M135", "Ocarina") );
+		GRRLIB_Printf(310, 93,  font_texture, settings.fontColor, 1, localStr("M037", "Hook") );
 		GRRLIB_Printf(385, 93,  font_texture, 0xFFFFFFFF, 1, "%s",hooks[settings.hooktype]);
-		GRRLIB_Printf(145, 128, font_texture, settings.fontColor, 1, "Language");
+		GRRLIB_Printf(145, 128, font_texture, settings.fontColor, 1, localStr("M038", "Language") );
 		GRRLIB_Printf(330, 128, font_texture, 0xFFFFFFFF, 1, "%s",languages[settings.language]);
-		GRRLIB_Printf(145, 157, font_texture, settings.fontColor, 1, "Video mode");
+		GRRLIB_Printf(145, 157, font_texture, settings.fontColor, 1, localStr("M039", "Video mode") );
 		GRRLIB_Printf(330, 155, font_texture, 0xFFFFFFFF, 1, "%s",vidmodes[settings.video]);
-		GRRLIB_Printf(145, 189, font_texture, settings.fontColor, 1, "VIDTV patch");
-		GRRLIB_Printf(145, 221, font_texture, settings.fontColor, 1, "Graphics");
-		GRRLIB_Printf(145, 260, font_texture, settings.fontColor, 1, "Get Missing Covers");
-		GRRLIB_Printf(145, 300, font_texture, settings.fontColor, 1, "Theme");
-		GRRLIB_Printf(145, 340, font_texture, settings.fontColor, 1, "1-Click Launch");
-		GRRLIB_Printf(145, 380, font_texture, settings.fontColor, 1, "Rumble");
-		GRRLIB_Printf(145, 420, font_texture, settings.fontColor, 1, "Sound");
+		GRRLIB_Printf(145, 189, font_texture, settings.fontColor, 1, localStr("M040", "VIDTV patch") );
+		GRRLIB_Printf(145, 221, font_texture, settings.fontColor, 1, localStr("M058", "Graphics") );
+		GRRLIB_Printf(145, 260, font_texture, settings.fontColor, 1, localStr("M059", "Get Missing Covers") );
+		GRRLIB_Printf(145, 300, font_texture, settings.fontColor, 1, localStr("M060", "Theme") );
+		GRRLIB_Printf(145, 340, font_texture, settings.fontColor, 1, localStr("M061", "1-Click Launch") );
+		GRRLIB_Printf(145, 380, font_texture, settings.fontColor, 1, localStr("M062", "Rumble") );
+		GRRLIB_Printf(145, 420, font_texture, settings.fontColor, 1, localStr("M063", "Sound") );
 		//GRRLIB_Printf(218, 446, font_texture, settings.fontColor, 1.15, "Press B to return");
 
 		// Draw stateless buttons
