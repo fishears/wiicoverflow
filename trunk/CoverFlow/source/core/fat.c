@@ -7,11 +7,13 @@
 
 /* Constants */
 #define SDHC_MOUNT	"SD"
+#define CACHE 4
+#define SECTORS 64
 /* Disc interfaces */
 extern const DISC_INTERFACE __io_sdhc;
 
 
-extern bool fatMountSimple (const char* name, const DISC_INTERFACE* interface);
+//extern bool fatMountSimple (const char* name, const DISC_INTERFACE* interface);
 
 extern void fatUnmount (const char* name);
 
@@ -25,7 +27,7 @@ s32 Fat_MountSDHC(void)
 		return -1;
 
 	/* Mount device */
-	ret = fatMountSimple(SDHC_MOUNT, &__io_sdhc);
+	ret = fatMount(SDHC_MOUNT, &__io_sdhc, 0, CACHE, SECTORS);
 	if (!ret)
 		return -2;
 

@@ -40,7 +40,7 @@ LIBS	:=	-lfreetype -lsnd -lmxml -lpng -lz -lfat -lwiiuse -lbte -logc -lm -ltremo
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(CURDIR)/libs/png $(CURDIR)/libs/mxml $(CURDIR)/libs/sndlib $(CURDIR)/libs/freetype  $(CURDIR)/libs/wiiuse
+LIBDIRS	:= $(CURDIR)/libs/png $(CURDIR)/libs/mxml $(CURDIR)/libs/sndlib $(CURDIR)/libs/freetype $(CURDIR)/libs/wiiuse $(CURDIR)/libs/libfat
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
 # rules for different file extensions
