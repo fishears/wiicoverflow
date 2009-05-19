@@ -7,7 +7,7 @@ The following environment configs are being used to develop/test:
 || ||NTSC-U||3.2U||cIOS 10||40 of 40||37" LCD (16:9 HDTV)||Component||beardface||
 ||current||PAL-UK||4.0E||cIOS 10||less than 32 of 32 (variable)||Multi-sync 16:9 LCD||Component||F1SHE4RS||
 || ||PAL-DUT||4.0E||cIOS 10||31 of 31||-||-||gitkua||
-||r107||PAL-IT||3.2E||cIOS 10||10 of 10||LCD 32''||Component||Scognito||
+||current||PAL-IT||3.2E||cIOS 10||10 of 10||LCD 32''||Component||Scognito||
 || ||PAL-GER||3.2E||cIOS 10||10 of 10||26" TV (4:3)||composite||loudbob||
 ||current||PAL-UK||3.2E||cIOS 10||10 of 10||28" TV||composite||Blackbird399||
 
