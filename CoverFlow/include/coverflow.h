@@ -36,7 +36,6 @@
 #include "homemenu.h"
 #include "subsystem.h"
 #include "settings.h"
-//#include "cfg.h"
 #include "localization.h"
 #include "partition.h"
 #include "settingsMenu.h"

@@ -13,7 +13,7 @@ Download and Help Forum : http://grrlib.santo.fr
 #include <string.h>
 #include "pngu/pngu.h"
 #include "GRRLIB.h"
-#include <fat.h> 
+#include <fatsvn.h>
 #include "settings.h"
 
 #include "core/video.h"
