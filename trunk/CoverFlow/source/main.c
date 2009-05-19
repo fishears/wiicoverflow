@@ -197,6 +197,9 @@ int main( int argc, char **argv )
 	sprintf(self.debugMsg, localStr("M089", "Init USB") );
 	Paint_Progress(self.progress,self.debugMsg);
 	
+	/* Initialize Wiimote subsystem */
+	Wpad_Init();
+	
 	#ifndef TEST_MODE
 	if(!init_usbfs()){
 		WindowPrompt(localStr("M003", "ERROR!"), localStr("M090", "Cannot init USBFS, quitting."), &okButton, 0);
@@ -216,6 +219,7 @@ int main( int argc, char **argv )
 	Subsystem_Init();
 	
 	initWBFS();
+
 
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 	//giving it a bit or a retry

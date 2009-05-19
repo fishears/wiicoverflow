@@ -147,6 +147,7 @@ void HomeMenu_Show()
 				WPAD_Rumble(0,0); // Kill the rumble
 				//launchTitle(0x0000000100000003LL, 0); //launch system menu
 				HomeMenu_Destroy();
+				
 				exitToSystemMenu() ;
 				//SYS_ResetSystem(SYS_RETURNTOMENU,0,0);%48%41%58%58
 			}
@@ -154,6 +155,7 @@ void HomeMenu_Show()
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
 				HomeMenu_Destroy();
+
 				launchTitle(0x0001000148415858LL, 0); //launch system menu
 				//exit(1);        // eventually, return a value.
 			}
@@ -309,6 +311,7 @@ void HomeMenu_Destroy()
 	
 	BUFFER_KillBuffer();
 	freeResources();
+	
 	//quit();
 }
 
