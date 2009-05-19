@@ -259,8 +259,8 @@ void Init_Buttons()
 
 void DrawSlider(int theme_id)
 {
-	int min_loc = 0;
-	int max_loc = 309;
+	int min_loc = 13;
+	int max_loc = 296;
 	int x = change_scale(self.shift, -1*(COVER_COUNT/2.0), COVER_COUNT/2.0, min_loc, max_loc);
 	
 	slideButton.x = 446 - x; // fix for Apple-likeflow direction
