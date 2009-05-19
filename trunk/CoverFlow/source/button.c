@@ -11,7 +11,7 @@ Button Button_Init(const unsigned char normal_img[], const unsigned char hover_i
 	new_button.x = x;
 	new_button.y = y;
 	new_button.hovering = false;
-#ifndef 	LOCALBUTTON
+#ifndef LOCALBUTTON_OFF
 	strcpy(new_button.label, ""); //add for Localization
 #endif
 	return new_button;
@@ -62,15 +62,15 @@ void Button_Paint(struct Button* btn)
 	if(btn->hovering)
 	{
 		GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
-#ifndef 	LOCALBUTTON
-		//Draw Localized Button-Text, hover
+#ifndef LOCALBUTTON_OFF
+		Button_Overlay_Text(btn->x, btn->y, BTN_NORMAL_HOV, btn->label);
 #endif
 	}
 	else
 	{
 		GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
-#ifndef 	LOCALBUTTON
-		//Draw Localized Button-Text
+#ifndef LOCALBUTTON_OFF
+		Button_Overlay_Text(btn->x, btn->y, BTN_NORMAL, btn->label);
 #endif
 	}	
 }
@@ -86,17 +86,23 @@ void Button_Theme_Paint(struct Button* btn, int theme_id)
 		{
 			case 0: // black theme
 				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+#ifndef LOCALBUTTON_OFF
+				Button_Overlay_Text(btn->x, btn->y, BTN_NORMAL_HOV, btn->label);
+#endif				
 				break;
 			case 1: // white theme
 				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+#ifndef LOCALBUTTON_OFF
+				Button_Overlay_Text(btn->x, btn->y, BTN_NORMAL, btn->label);
+#endif				
 				break;
 			default:
 				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+#ifndef LOCALBUTTON_OFF
+				Button_Overlay_Text(btn->x, btn->y, BTN_NORMAL_HOV, btn->label);
+#endif				
 				break;
 		}
-#ifndef 	LOCALBUTTON
-		//Draw Localized Button-Text, hover
-#endif
 	}
 	else
 	{
@@ -104,18 +110,24 @@ void Button_Theme_Paint(struct Button* btn, int theme_id)
 		{
 			case 0: // black theme
 				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+#ifndef LOCALBUTTON_OFF
+				Button_Overlay_Text(btn->x, btn->y, BTN_NORMAL, btn->label);
+#endif				
 				break;
 			case 1: // white theme
 				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+#ifndef LOCALBUTTON_OFF
+				Button_Overlay_Text(btn->x, btn->y, BTN_NORMAL_HOV, btn->label);
+#endif				
 				break;
 			default:
 				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+#ifndef LOCALBUTTON_OFF
+				Button_Overlay_Text(btn->x, btn->y, BTN_NORMAL, btn->label);
+#endif				
 				break;
 		}
 		
-#ifndef 	LOCALBUTTON
-		//Draw Localized Button-Text
-#endif
 	}	
 }
 
@@ -129,8 +141,9 @@ void Button_Toggle_Paint(struct Button* btn1, struct Button* btn2, int toggle_st
 			return;
 			
 		GRRLIB_DrawImg(btn2->x, btn2->y, btn2->texture, 0, 1, 1, 0xFFFFFFFF);
-#ifndef 	LOCALBUTTON
+#ifndef LOCALBUTTON_OFF
 		//Draw Localized Button-Text
+		Button_Overlay_Text(btn2->x, btn2->y, BTN_NORMAL_HOV, btn2->label);
 #endif
 	}
 	else
@@ -139,10 +152,60 @@ void Button_Toggle_Paint(struct Button* btn1, struct Button* btn2, int toggle_st
 			return;
 		
 		GRRLIB_DrawImg(btn1->x, btn1->y, btn1->texture, 0, 1, 1, 0xFFFFFFFF);
-#ifndef 	LOCALBUTTON
+#ifndef LOCALBUTTON_OFF
 		//Draw Localized Button-Text
+		Button_Overlay_Text(btn1->x, btn1->y, BTN_NORMAL_HOV, btn1->label);
 #endif
 	}
 	
 	
 }
+
+
+
+#ifndef LOCALBUTTON_OFF
+void Button_Overlay_Text(f32 xpos, f32 ypos, int btnType, char *text)
+{
+ u32 color;
+ 
+ if(strlen(text) > 0)
+   {
+	  switch (btnType)
+		{
+		  case  BTN_NORMAL:
+			xpos += 5;
+			ypos += 10;
+			color = 0xFFFFFFFF;
+			break;
+			
+		  case  BTN_NORMAL_HOV:
+			xpos += 5;
+			ypos += 10;
+			color = 0x000000FF;
+			break;
+			
+		  case  BTN_BIG:
+			xpos += 10;
+			ypos += 20;
+			color = 0xFFFFFFFF;
+			break;
+			
+		  case  BTN_BIG_HOV:
+			xpos += 10;
+			ypos += 20;
+			color = 0x000000FF;
+			break;
+			
+		  case  BTN_TOOLTIP:
+			xpos += 10;
+			ypos += 20;
+			color = 0x000000FF;
+			break;
+			
+		  default:
+			color = 0x000000FF;
+		}
+	  GRRLIB_Printf(xpos, ypos, font_texture, color, 1, "%s",text);
+   }
+}
+#endif

@@ -1,5 +1,6 @@
 #include "gfx.h"
 #include "settings.h"
+#include "localization.h"
 
 extern s_self self;
 extern s_pointer pointer;
@@ -139,7 +140,7 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 
 void Init_Buttons()
 {
-#ifndef 	LOCALBUTTON
+#ifndef 	LOCALBUTTON_OFF
     char labelBuf[15]; //add for Localization
 #endif	
 	addButton			= Button_Init(add_button_png, add_button_hover_png, 580, 417);
@@ -204,7 +205,7 @@ void Init_Buttons()
     loaderButton            = Button_Init(loader_png, loader_hover_png, 174, 180);
     wiimoteButton           = Button_Init(wiimote_png, wiimote_png, 64, 400);
 
-#ifndef 	LOCALBUTTON
+#ifndef 	LOCALBUTTON_OFF
 	//add for Localization
 	sprintf(addButton.label, localStr("B01","")); 
     sprintf(deleteButton.label, localStr("B02","")); 
@@ -218,14 +219,15 @@ void Init_Buttons()
 	sprintf(graphicsButton.label, labelBuf);
 	
     sprintf(resetButton.label, localStr("B07","")); 
-    sprintf(downloadButton.label, localStr("B09","")); 
-    sprintf(loadButton.label, localStr("B10","")); 
+    sprintf(downloadButton.label, localStr("B08","")); 
+    sprintf(loadButton.label, localStr("B09","")); 
 	
-    sprintf(labelBuf, localStr("B11",""));
+    sprintf(labelBuf, localStr("B10",""));
 	sprintf(backButton.label, labelBuf); 
 	sprintf(gbackButton.label, labelBuf); 
     
-	sprintf(labelBuf, localStr("B12",""));
+	//sprintf(labelBuf, "An"); //for testing
+	sprintf(labelBuf, localStr("B11",""));
 	sprintf(cheatonButton.label, labelBuf); 
 	sprintf(vidtvonButton.label, labelBuf); 
 	sprintf(gcheatonButton.label, labelBuf); 
@@ -235,7 +237,8 @@ void Init_Buttons()
 	sprintf(rumbleOnButton.label, labelBuf); 
 	sprintf(musicOnButton.label, labelBuf); 
 
-	sprintf(labelBuf, localStr("B13",""));
+	//sprintf(labelBuf, "      Aus");  //for testing
+	sprintf(labelBuf, localStr("B12",""));
 	sprintf(cheatoffButton.label, labelBuf); 
 	sprintf(vidtvoffButton.label, labelBuf); 
 	sprintf(gcheatoffButton.label, labelBuf); 
@@ -245,11 +248,12 @@ void Init_Buttons()
 	sprintf(rumbleOffButton.label, labelBuf); 
 	sprintf(musicOffButton.label, labelBuf); 
 
-	sprintf(themeWhiteButton.label, localStr("B14",""));
-	sprintf(themeBlackButton.label, localStr("B15",""));
-	sprintf(homeMenuTopButton.label, localStr("B16",""));
-	sprintf(wiiMenuButton.label, localStr("B17",""));
-	sprintf(loaderButton.label, localStr("B18",""));
+	sprintf(themeWhiteButton.label, localStr("B13",""));
+	sprintf(themeBlackButton.label, localStr("B14",""));
+	sprintf(homeMenuTopButton.label, localStr("B15",""));
+	sprintf(wiiMenuButton.label, localStr("B16",""));
+	sprintf(loaderButton.label, localStr("B17",""));
+	
 #endif
 }
 
