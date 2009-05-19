@@ -91,13 +91,13 @@ void Graphic_Settings_Menu(){
 		GRRLIB_Printf(190, 55,  font_title, settings.fontColor, 1, localStr("M049", "Graphics Settings"));
 		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, localStr("M050", "Zoom:") );
 		GRRLIB_Printf(350, 100, font_texture, settings.fontColor, 1, "%f", settings.coverZoom);
-		GRRLIB_Printf(145, 148, font_texture, settings.fontColor, 1, localStr("Spacing:") );
+		GRRLIB_Printf(145, 148, font_texture, settings.fontColor, 1, localStr("M051", "Spacing:") );
 		GRRLIB_Printf(350, 148, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
-		GRRLIB_Printf(145, 197, font_texture, settings.fontColor, 1, localStr("Angle:") );
+		GRRLIB_Printf(145, 197, font_texture, settings.fontColor, 1, localStr("M052", "Angle:") );
 		GRRLIB_Printf(350, 197, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
-		GRRLIB_Printf(145, 245, font_texture, settings.fontColor, 1, localStr("Draw Window:") );
+		GRRLIB_Printf(145, 245, font_texture, settings.fontColor, 1, localStr("M053", "Draw Window:") );
 		GRRLIB_Printf(350, 245, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
-		GRRLIB_Printf(145, 292, font_texture, settings.fontColor, 1, localStr("Game Title:") );
+		GRRLIB_Printf(145, 292, font_texture, settings.fontColor, 1, localStr("M054", "Game Title:") );
 		
 		//Button_Theme_Paint(&settingsButton, settings.theme);
 		Button_Paint(&spacingupButton);
