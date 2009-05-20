@@ -58,27 +58,45 @@ void Graphic_Settings_Menu(){
 		{
 			if(Button_Select(&spacingdownButton, pointer.p_x, pointer.p_y))
 			{
-				settings.coverSpacing -= 0.05;
+				if (settings.coverSpacing <= 2)
+					settings.coverSpacing = 2; // sanity check
+                                else
+                                        settings.coverSpacing -= 0.05;
 			}
 			else if(Button_Select(&spacingupButton, pointer.p_x, pointer.p_y))
 			{
-				settings.coverSpacing += 0.05;
+				if (settings.coverSpacing >= 9)
+					settings.coverSpacing = 9; // sanity check
+                                else
+                                        settings.coverSpacing += 0.05;
 			}
 			else if(Button_Select(&angledownButton, pointer.p_x, pointer.p_y))
 			{
-				settings.coverAngle -= 1;
+				if (settings.coverAngle <= 0)
+					settings.coverAngle = 0; // sanity check
+                                else
+                                        settings.coverAngle -= 1;
 			}
 			else if(Button_Select(&angleupButton, pointer.p_x, pointer.p_y))
 			{
-				settings.coverAngle += 1;
+				if (settings.coverAngle >= 140)
+					settings.coverAngle = 140; // sanity check
+                                else
+                                        settings.coverAngle += 1;
 			}
 			else if(Button_Select(&zoomdownButton, pointer.p_x, pointer.p_y))
 			{
-				settings.coverZoom -= 0.01;
+				if (settings.coverZoom <= -8.0)
+					settings.coverZoom = -8.0; // sanity check
+				else
+                                        settings.coverZoom -= 0.03;
 			}
 			else if(Button_Select(&zoomupButton, pointer.p_x, pointer.p_y))
 			{
-				settings.coverZoom += 0.01;
+                                if (settings.coverZoom >= .69)
+					settings.coverZoom  = .69; // sanity check
+				else
+					settings.coverZoom += 0.03;
 			}
 		}
 		
