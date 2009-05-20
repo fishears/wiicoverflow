@@ -1,7 +1,7 @@
 #labels Featured
  = CHANGELOG =
 
-== RC2 (no date yet) ==
+== RC2 (20 May 2009) ==
 
 -FIX-
   * Fixed crash after installing a game (issue110)
