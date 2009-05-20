@@ -21,7 +21,8 @@ u8 CalculateFrameRate();
 void apply_settings();
 int Net_Init(char *ip);
 void quit();
-//char *get_title(struct discHdr *header);
 void WiiLight(int enable);
+void UpdateBufferedImages();
+void DragSlider(int xPos);
 
 #endif

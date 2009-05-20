@@ -13,8 +13,8 @@ u32 swap32(u32 x)
 }
 
 
-void sysdate(char* ret_string){
-
+void sysdate(char* ret_string)
+{
 	time_t now;
 	struct tm  *ts;
 	//char string[128];
@@ -145,17 +145,16 @@ void apply_settings()
     }
 }
 
-int Net_Init(char *ip){
-        
+int Net_Init(char *ip)
+{
 	s32 res;
-        
 	while ((res = net_init()) == -EAGAIN)
 		usleep(100 * 1000); //100ms
         
-	if (if_config(ip, NULL, NULL, true) < 0) {
-		WindowPrompt (localStr("M003", "ERROR!"), localStr("M085", "Cannot get local IP address."), &okButton, 0);
+	if (if_config(ip, NULL, NULL, true) < 0)
+	{
+		WindowPrompt(localStr("M003", "ERROR!"), localStr("M085", "Cannot get local IP address."), &okButton, 0);
 		usleep(1000 * 1000 * 1); //1 sec
-		
 		return false;
 	}
 	
@@ -165,22 +164,10 @@ int Net_Init(char *ip){
 void quit()
 {
 	//we should free all allocated textures (SCO);
-	
 	BUFFER_KillBuffer();
-	
 	freeResources();
-
 	exit(0);
 }
-
-/*
-char *get_title(struct discHdr *header){
-
-	char *title = cfg_get_title(header->id);
-	if (title) return title;
-	return header->title;
-}
-*/
 
 void WiiLight(int enable)
 {             
@@ -190,5 +177,28 @@ void WiiLight(int enable)
     *_wiilight_reg=val;            
 }
 
+void UpdateBufferedImages()
+{
+	SetSelectedCover(self.shift);
+}
 
+void DragSlider(int xPos)
+{
+	int min_loc = 125; // slider range
+	int max_loc = 440;
+	
+	if (xPos >= max_loc)
+		xPos = max_loc;
+	else if (xPos <= min_loc)
+		xPos = min_loc;
+	
+	float fx = change_scale(xPos, min_loc, max_loc, self.max_cover, self.min_cover);
+	
+	if ((fx > self.min_cover) && (fx < self.max_cover))
+		self.shift = fx;
+	else if (fx >= self.max_cover)
+		self.shift = self.max_cover;
+	else if (fx <= self.min_cover)
+		self.shift = self.min_cover;
+}
 

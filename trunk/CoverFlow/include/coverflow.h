@@ -42,6 +42,7 @@
 #include "bootMenu.h"
 #include "deleteMenu.h"
 
+
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
 // the bootloader to the Coverflow/bootloader/ folder
@@ -71,7 +72,6 @@
 #define GB_SIZE         1073741824.0
 
 /* Constants */
-#define ENTRIES_PER_PAGE 	 12
 #define MAX_CHARACTERS	 	 30
 #define BUFFER_WINDOW        15
 #define BUFFER_THREAD_COUNT  1
@@ -176,7 +176,5 @@ typedef struct{
 } s_self;
 
 void initVars();
-int Net_Init(char *ip);
-void UpdateBufferedImages();
 
 #endif

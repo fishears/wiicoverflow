@@ -52,7 +52,6 @@ int COVER_COUNT = 29;
 int COVER_COUNT = 0;
 #endif
 
-
 float SCROLL_SPEED = 0.050;
 bool imageNotFound = false;
 int buffer_window_min = 0;
@@ -60,53 +59,8 @@ int buffer_window_max = 0;
 int oldmin = 0;
 int oldmax = 0;
 
-void UpdateBufferedImages()
+void initVars()
 {
-	SetSelectedCover(self.shift);
-}
-
-void DragSlider(int xPos)
-{
-
-	int min_loc = 125; // slider range
-	int max_loc = 440;
-
-	if (xPos >= max_loc)
-		xPos = max_loc;
-	else if (xPos <= min_loc)
-		xPos = min_loc;
-	
-	float fx = change_scale(xPos, min_loc, max_loc, self.max_cover, self.min_cover);
-
-	if ((fx > self.min_cover) && (fx < self.max_cover))
-		self.shift = fx;
-	else if (fx >= self.max_cover)
-		self.shift = self.max_cover;
-	else if (fx <= self.min_cover)
-		self.shift = self.min_cover;
-}
-
-/*
-int DiscWait()
-{
-    u32 cover = 0;
-	s32 ret = 0;
-
-	while(!(cover & 0x2))
-	{
-		//TODO Add GUI For Cancel Button
-		
-		ret = WDVD_GetCoverStatus(&cover);
-		if (ret < 0)
-			return ret;
-	}
-
-	return ret;
-}
-*/
-
-void initVars(){
-
 	pointer.p_x = 0;
 	pointer.p_y = 0;
 	pointer.p_ang = 0;
@@ -125,7 +79,6 @@ void initVars(){
 	self.progress = 0.0;
 	self.firstTimeDownload = true;
 	self.inetOk = false;
-	
 	self.dummy = 0;
 	self.gsize = 0;
 	self.my_wbfsDev = WBFS_DEVICE_USB;
@@ -145,16 +98,16 @@ int main( int argc, char **argv )
 {
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
-	#ifndef TEST_MODE
+#ifndef TEST_MODE
 	int ret;
 	
 	/* Load Custom IOS */
     //ret = IOS_ReloadIOS(222);
 	
     //if (ret < 0) 
-	{
+//	{
         ret = IOS_ReloadIOS(249);
-    }
+//    }
 
 	/* Check if Custom IOS is loaded */
 	if (ret < 0)
@@ -163,7 +116,7 @@ int main( int argc, char **argv )
 		printf(localStr("M087", "    Custom IOS could not be loaded! (ret = %d)\n"), ret);
 		return 0;
 	}
-	#endif
+#endif
 	
 	SETTINGS_Init();
 	
@@ -191,9 +144,12 @@ int main( int argc, char **argv )
 	
 	/* Initialize Wiimote subsystem */
 	Wpad_Init();
-	
-	#ifndef TEST_MODE
-	if(!init_usbfs()){
+	PAD_Init();
+	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+
+#ifndef TEST_MODE
+	if(!init_usbfs())
+	{
 		WindowPrompt(localStr("M003", "ERROR!"), localStr("M090", "Cannot init USBFS, quitting."), &okButton, 0);
 		return 0;
 	}
@@ -206,24 +162,16 @@ int main( int argc, char **argv )
 	
 	checkDirs();
 	checkFiles();
-	
 	Sys_Init();
 	Subsystem_Init();
-	
+	SOUND_Init();
 	initWBFS();
-
-
-	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
-	//giving it a bit or a retry
-	//bool flip = true;
 	initUSBFS();
 	
-	#else
+#else
 	self.gameCnt = 29;
-	#endif
+#endif
 	
-	//WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
-
 	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
 	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 	UpdateBufferedImages();
@@ -240,22 +188,17 @@ int main( int argc, char **argv )
 		Sleep(1);
 	}
 	
-	#ifndef TEST_MODE
+#ifndef TEST_MODE
 	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
-	#endif
+#endif
 
-	sprintf(self.debugMsg, localStr("M106", "Freeing unused textures...") );
-	Paint_Progress(self.progress,self.debugMsg);
-	//free(progress_texture.data);
-	Sleep(300);
-	
 	// set the background
 	sprintf(self.debugMsg, localStr("M105", "Setting background theme...") );
 	Paint_Progress(self.progress,self.debugMsg);
 	if (settings.theme)
 	{	// black fonts for white theme
 		settings.fontColor = 0xFFFFFFFF; //temp until I fix the dialogs for the white theme
-//		settings.fontColor = 0x000000FF;
+		//settings.fontColor = 0x000000FF;
 		GRRLIB_SetBGColor(1); // set BG to white
 	}
 	else
@@ -263,28 +206,20 @@ int main( int argc, char **argv )
 		settings.fontColor = 0xFFFFFFFF;
 		GRRLIB_SetBGColor(0);  // set BG to black
 	}
-	Sleep(300);
 
-	self.selected = false;
-	bool select_ready = false;
-	
-	//#ifdef TEST_MODE
-	PAD_Init();
-	//#endif
-	
-	bool dragging = false;
-	bool twisting = false;
-	
-	self.animate_count = 50;
+	self.selected        = false;
+	bool select_ready    = false;
+	bool dragging        = false;
+	bool twisting        = false;
+	self.animate_count   = 50;
 	self.animate_slide_x = 0;
 	
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
-	#ifndef TEST_MODE
+#ifndef TEST_MODE
     ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
-	#endif
+#endif
 	
-	SOUND_Init();
 
 	//////////////////////////
 	// main screen gui loop //
@@ -316,13 +251,9 @@ int main( int argc, char **argv )
 		if(dragging) // if the user is dragging the slider
 		{
 			if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) //with the A button
-			{
 				DragSlider(pointer.p_x);
-			}
 			else
-			{
 				dragging = false; // they let go
-			}
 		}
 		
 	 	// Check for the A button action
