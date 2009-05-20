@@ -3,6 +3,12 @@
 
 == RC3 (No Date) ==
 
+-FIX-
+
+-NEW-
+
+-OTHER-
+
 == RC2 (20 May 2009) ==
 
 -FIX-
