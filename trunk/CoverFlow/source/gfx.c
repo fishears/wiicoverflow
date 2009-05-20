@@ -47,6 +47,7 @@ void LoadTextures()
 	load_bg_texture		   = GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
 	font_texture           = GRRLIB_LoadTexture(BMfont5_png);
 	font_title             = GRRLIB_LoadTexture(font_w14_h20_png);
+	font_title_small       = GRRLIB_LoadTexture(font_w10_h14_png);
 	slidebar_texture       = GRRLIB_LoadTexture(slidebar_png);
 	slidebar_white_texture = GRRLIB_CreateEmptyTexture(slidebar_texture.w, slidebar_texture.h);
 	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white
@@ -59,6 +60,7 @@ void LoadTextures()
 
 	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
 	GRRLIB_InitTileSet(&font_title, 14, 20, 32);
+	GRRLIB_InitTileSet(&font_title_small, 10, 14, 32);
 }
 
 void DrawBufferedCover(int i, float loc, float angle)
@@ -764,9 +766,9 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			sprintf(msg, txt);
 			
 			pch = strtok(msg, "\n");
-			while (pch != NULL){
-				
-				GRRLIB_Printf(138, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
+			while (pch != NULL)
+			{
+				GRRLIB_Printf(138, y+sp, font_title_small, settings.fontColor, 1, "%s", pch);
 				pch = strtok(NULL, "\n");
 				sp+=16;
 			}

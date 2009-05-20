@@ -113,6 +113,7 @@ extern const u8 turning_point_png[];
 extern const u8 menu_bg_png[];
 extern const u8 menu_bg2_png[];
 extern const u8 font_w14_h20_png[]; // title font
+extern const u8 font_w10_h14_png[]; // title font
 extern const u8 ambientlight_png[];
 
 GRRLIB_texImg covers[MAX_COVERS];
