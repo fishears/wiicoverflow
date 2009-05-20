@@ -385,16 +385,16 @@ int main( int argc, char **argv )
 				else if ((int)self.shift <= self.min_cover)
 					self.shift = self.min_cover;
 			} // Check for UP button held to zoom in
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsHeld(0) & PAD_BUTTON_UP)
+			else if (!settings.parentalLock && (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsHeld(0) & PAD_BUTTON_UP))
 			{	
-				if (settings.coverZoom > .69)
+				if (settings.coverZoom >= .69)
 					settings.coverZoom = .69; // limit how far we can zoom in
 				else
 					settings.coverZoom += 0.03; // zoom in
 			} // Check for DOWN button held to zoom out
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_DOWN || PAD_ButtonsHeld(0) & PAD_BUTTON_DOWN)
+			else if (!settings.parentalLock && (WPAD_ButtonsHeld(0) & WPAD_BUTTON_DOWN || PAD_ButtonsHeld(0) & PAD_BUTTON_DOWN))
 			{	
-				if (settings.coverZoom < -8.0)
+				if (settings.coverZoom <= -8.0)
 					settings.coverZoom = -8.0; // limit how far we can zoom out
 				else
 					settings.coverZoom -= 0.03; // zoom out

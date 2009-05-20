@@ -97,8 +97,8 @@ void Paint_Progress(float v, char* msg)
 	int i;
 	int count = (int)(v*10);
 	
-	if(count > 40)
-		count = 40;
+	if(count > 26)
+		count = 26;
 
 	GRRLIB_2D_Init();
 
@@ -120,7 +120,9 @@ void Paint_Progress(float v, char* msg)
 void Paint_Progress_Generic(int v, int max, char* msg)
 {
 	float percent = (float)v/(float)max;
-	int count = percent*26;
+	int count = percent*27;
+        if(count > 26)
+                count = 26;
 	int i;
 
 	GRRLIB_2D_Init();
