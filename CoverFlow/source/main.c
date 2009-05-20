@@ -145,8 +145,6 @@ int main( int argc, char **argv )
 	
 	/* Initialize Wiimote subsystem */
 	Wpad_Init();
-	PAD_Init();
-	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 
 #ifndef TEST_MODE
 	if(!init_usbfs())
@@ -168,6 +166,9 @@ int main( int argc, char **argv )
 	SOUND_Init();
 	initWBFS();
 	initUSBFS();
+
+	PAD_Init();
+	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 	
 #else
 	self.gameCnt = 29;
