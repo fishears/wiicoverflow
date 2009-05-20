@@ -10,12 +10,14 @@
   * Fixed some issues with bad images (issue105, issue109) 
   * Fixed over scroll (issue108)
   * Finished White Theme (issue27)
+  * Fixed Cover Zoom available with Parental Lock on (Issue63)
+  * Fixed Progress Bar limit - sometimes exceeded container
 -NEW-
-  * Try to use IOS 222 (Enhanced USB). If it fails, use IOS 249. (issue112)
   * Settings buttons hidden if parental control is enabled
   * New slider and buttons graphics
   * Cover art is now anti-aliased for improved quality when zooming
   * Slot light glows when game is selected (issue95)
+  * Sensible limits added to Graphics Settings values
 -OTHER-
   * Reorganized code (splitting main.c in several files, removed unused ones)
 ----
