@@ -73,12 +73,32 @@ int BufferMethod;
          _requestQuit = false;
          pthread_mutex_unlock(&quit_mutex);
          
-         for(i = 0; i < thread_count; i++)
+         for(i = 0; i < MAX_THREADS; i++)
          {
                  if(i < MAX_THREADS)
                          pthread_create(&thread[i], 0, process, (void *)i);
          }
  }
+ 
+ void BUFFER_Shutdown()
+ {
+    int i,m;
+	
+	for(i = 0; i < MAX_THREADS; i++)
+	{
+		if (thread[i])
+			LWP_JoinThread(thread[i], NULL);
+	}
+	/*destroy Mutexs*/
+	pthread_mutex_destroy(&count_mutex);
+	pthread_mutex_destroy(&queue_mutex);
+	pthread_mutex_destroy(&quit_mutex);
+	pthread_mutex_destroy(&lock_thread_mutex);
+	 
+	for(m = 0; m < MAX_BUFFERED_COVERS; m++)
+		pthread_mutex_destroy(&buffer_mutex[m]);
+
+}
  
 
  bool BUFFER_IsCoverReady(int index)
@@ -116,6 +136,7 @@ int BufferMethod;
          pthread_mutex_lock(&quit_mutex);
          _requestQuit = true;
          pthread_mutex_unlock(&quit_mutex);
+		 BUFFER_Shutdown();
  }
  
  int GetFLoatingQueuePosition(int index)
@@ -248,22 +269,7 @@ int BufferMethod;
 					pthread_mutex_lock(&quit_mutex);
 					if(_requestQuit)
 					{
-						usleep(10);
 						pthread_mutex_unlock(&quit_mutex);
-						sleep(2);
-						int m = 0;
-						if (!bCleanedUp)
-						{
-							bCleanedUp=true;
-							/*destroy Mutexs*/
-							pthread_mutex_destroy(&count_mutex);
-							pthread_mutex_destroy(&queue_mutex);
-							pthread_mutex_destroy(&quit_mutex);
-							pthread_mutex_destroy(&lock_thread_mutex);
-							 
-							for(m = 0; m < MAX_BUFFERED_COVERS; m++)
-								pthread_mutex_destroy(&buffer_mutex[m]);
-						}
 						return 0;
 					}
 					pthread_mutex_unlock(&quit_mutex);
