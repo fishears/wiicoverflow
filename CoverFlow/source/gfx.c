@@ -109,10 +109,10 @@ void Paint_Progress(float v, char* msg)
 		GRRLIB_DrawImg(165+12*i, 231, progress_texture, 0, 1, 1, 0xFFFFFFFF);
 	}
 	
-	#ifdef DEBUG
+#ifdef DEBUG
 	if(msg != NULL)
-		GRRLIB_Printf(160, 255, font_texture,  0x444444FF, 1, "%s", msg);
-    #endif
+		GRRLIB_Printf(140, 255, font_title_small,  0x444444FF, 1, "%s", msg);
+#endif
     
 	GRRLIB_Render();
 }
@@ -134,7 +134,7 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 	
 	#ifdef DEBUG
 	if(msg != NULL)
-		GRRLIB_Printf(160, 255, font_texture,  0x444444FF, 1, "%s", msg);
+		GRRLIB_Printf(140, 255, font_title_small,  0x444444FF, 1, "%s", msg);
     #endif
     
 	GRRLIB_Render();
@@ -369,11 +369,11 @@ void draw_game_title(int index, float textSize)
 		if((int)offset > 260)
 			offset = 260.0; // dont draw on top of the setting button
 		
-		#ifndef TEST_MODE
+#ifndef TEST_MODE
 		GRRLIB_Printf(340 - (int)offset, 400, font_title, 0xFFFFFFFF, textSize, "%s", gameName);
-		#else
+#else
 		GRRLIB_Printf(340 - (int)offset, 400, font_title, 0xFFFFFFFF, textSize, "%s", "Game Title");
-		#endif
+#endif
 	}
 }
 
@@ -457,13 +457,10 @@ int draw_selected_two(bool load, bool hover)
 		
 		loadButton.x = 245;
 		loadButton.y = 316;
-		
 		backButton.x = 335;
 		backButton.y = 316;
-		
 		deleteButton.x = 425;
 		deleteButton.y = 316;
-		
 		gsettingsButton.x = 520;
 		gsettingsButton.y = 312;
 		
@@ -476,7 +473,8 @@ int draw_selected_two(bool load, bool hover)
 			
 		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
 		
-		if(!settings.parentalLock){
+		if(!settings.parentalLock)
+		{
 			Button_Paint(&gsettingsButton);
 			Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y);
 		}
@@ -484,10 +482,9 @@ int draw_selected_two(bool load, bool hover)
 		if(!settings.parentalLock)
 			Button_Paint(&deleteButton);
 		
-		#ifndef TEST_MODE
+#ifndef TEST_MODE
 		struct discHdr *header = NULL;
 		header = &self.gameList[self.gameSelected];
-		//f32 size = 0.0;
 		char gameName[21]; 
 
 		// chomp the title to fit
@@ -501,23 +498,19 @@ int draw_selected_two(bool load, bool hover)
 			gameName[17] = '\0';
 			strncat(gameName, "...", 3);
 		}
-		
+
+		// Display Title, Last Played, and Size
 		GRRLIB_Printf(245, 174, font_title, 0xFFFFFFFF, 1, "%s", gameName);
-		//GRRLIB_Printf(290, 210, font_title, 0xFFFFFFFF, .8, "Game ID: %c%c%c%c", header->id[0], header->id[1], header->id[2], header->id[3]);
 		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
-			GRRLIB_Printf(255, 220, font_title, 0xFFFFFFFF, .8, localStr("M032", "Never played before"));
+			GRRLIB_Printf(255, 220, font_title_small, 0xFFFFFFFF, 1, localStr("M032", "Never played before"));
 		else
-			GRRLIB_Printf(255, 220, font_title, 0xFFFFFFFF, .8, localStr("M033", "Played %s"),gameSetting.lastPlayed);
-			
-		//GRRLIB_Printf(265, 250, font_title, 0xFFFFFFFF, .8, "Id  (%c%c%c%c)", header->id[0], header->id[1], header->id[2], header->id[3]);
-		GRRLIB_Printf(255, 250, font_title, 0xFFFFFFFF, .8, localStr("M034", "Size: %.2f GB"), self.gsize);
-		
-		#else
-		
+			GRRLIB_Printf(255, 220, font_title_small, 0xFFFFFFFF, 1, localStr("M033", "Played %s"),gameSetting.lastPlayed);
+		GRRLIB_Printf(255, 240, font_title_small, 0xFFFFFFFF, 1, localStr("M034", "Size: %.2f GB"), self.gsize);
+#else
 		GRRLIB_Printf(270, 174, font_title, 0xFFFFFFFF, 1, "%s", "Best game");
-		GRRLIB_Printf(280, 210, font_title, 0xFFFFFFFF, .8, "%s", " Game ID: KBGSUX");
-		GRRLIB_Printf(280, 230, font_title, 0xFFFFFFFF, .8, "Size:    %.2fGB", self.gsize);
-		#endif
+		GRRLIB_Printf(280, 210, font_title_small, 0xFFFFFFFF, 1, "%s", " Game ID: KBGSUX");
+		GRRLIB_Printf(280, 230, font_title_small, 0xFFFFFFFF, 1, "Size:    %.2fGB", self.gsize);
+#endif
 		
 		// DISC IMAGE
 		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
@@ -594,8 +587,6 @@ void draw_selected()
 			self.animate_flip = 0;
 	}
 	
-	
-//	static const float SPACING = 2.8;
 	float dir = 1;
 	float loc, scale, angle;
 
@@ -623,7 +614,7 @@ void draw_selected()
 			Button_Paint(&backButton);
 			Button_Paint(&deleteButton);
 			
-			#ifndef TEST_MODE
+#ifndef TEST_MODE
 			struct discHdr *header = NULL;
 			header = &self.gameList[self.gameSelected];
 			f32 size = 0.0;
@@ -655,10 +646,10 @@ void draw_selected()
 			
 			GRRLIB_Printf(300 - offset, 10, font_texture, settings.fontColor, tsize, "%s", name);
 			GRRLIB_Printf(210, 50, font_texture, settings.fontColor, .4, "(%c%c%c%c) (%.2fGB)", header->id[0], header->id[1], header->id[2], header->id[3], size);
-			#else
+#else
 			GRRLIB_Printf(90, 10, font_texture, settings.fontColor, .8, "%s", "JUSTINS GAME");
 			GRRLIB_Printf(180, 50, font_texture, settings.fontColor, .5, "%s", "JUSTINS GAME");
-			#endif
+#endif
 		}
   }
   else

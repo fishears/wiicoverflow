@@ -240,7 +240,7 @@ void Settings_Menu(){
 			{
 				// Clicked on the Download Covers button
 				//if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
-				if (WindowPrompt(localStr("M055", "Cover Download"),localStr("M056", "This operation can't be canceled, continue?"), &okButton, &cancelButton))
+				if (WindowPrompt(localStr("M055", "Cover Download"),localStr("M056", "This operation can't be canceled,\ncontinue?"), &okButton, &cancelButton))
 				{
 					batchDownloadCover(self.gameList);
 					CoversDownloaded();

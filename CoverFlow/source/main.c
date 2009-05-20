@@ -596,7 +596,7 @@ int main( int argc, char **argv )
 			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_1) &&
 			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
 		{
-			if (WindowPrompt(localStr("M107", "Parental Control"),localStr("M108", "Would you like to enable parental controls?"), &yesButton, &noButton))
+			if (WindowPrompt(localStr("M107", "Parental Control"),localStr("M108", "Would you like to enable parental\ncontrols?"), &yesButton, &noButton))
 				settings.parentalLock = 1;
 			else
 				settings.parentalLock = 0;
