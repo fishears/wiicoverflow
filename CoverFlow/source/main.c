@@ -329,6 +329,7 @@ int main( int argc, char **argv )
 							if(getGameSettings(titleID, &gameSetting))
 								apply_settings();
 							setGameSettings(titleID, &gameSetting,1);
+                                                        WiiLight(0); // turn off the slot light
 							if(!LaunchGame())
 							{
 								SETTINGS_Load(); //failed to launch so get the globals back
