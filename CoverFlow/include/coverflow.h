@@ -31,7 +31,6 @@
 #include "cover.h" 
 #include "utils.h"
 #include "gameSettings.h"
-#include "mxml.h"
 #include "version.h"
 #include "homemenu.h"
 #include "subsystem.h"
@@ -148,6 +147,7 @@ typedef struct{
 	float progress;
 	int max_cover;
 	int min_cover;
+	int slot_glow;
 	
 	/*Animate Parameters*/
 	float animate_flip;

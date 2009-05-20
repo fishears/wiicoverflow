@@ -36,6 +36,7 @@ char hooks[3][9] =
 
 //static struct discHdr *gameList = NULL;
 static s_Filter gameFilter;
+
 //static wbfs_t *hdd = NULL;
 
 /* WBFS device */
@@ -132,6 +133,7 @@ void initVars(){
 	self.gameList = NULL;
 	self.max_cover = 0;
 	self.min_cover = 1;
+	self.slot_glow = 0;
 	
 	initGameSettings(&gameSetting);
 }
@@ -283,7 +285,7 @@ int main( int argc, char **argv )
 	#endif
 	
 	SOUND_Init();
-	
+
 	//////////////////////////
 	// main screen gui loop //
 	//////////////////////////
@@ -314,9 +316,13 @@ int main( int argc, char **argv )
 		if(dragging) // if the user is dragging the slider
 		{
 			if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) //with the A button
+			{
 				DragSlider(pointer.p_x);
+			}
 			else
+			{
 				dragging = false; // they let go
+			}
 		}
 		
 	 	// Check for the A button action
@@ -674,6 +680,24 @@ int main( int argc, char **argv )
 			self.rumbleAmt = 5;
 		}
 		
+		// Turn on Slot Glow if game launch window is showing
+		if (self.selected)
+		{
+			if (!self.slot_glow)
+			{
+				WiiLight(1); // turn on the slot light
+				self.slot_glow = 1;
+			}
+		}
+		else
+		{
+			if (self.slot_glow)
+			{
+				WiiLight(0); // turn off the slot light
+				self.slot_glow = 0;
+			}
+		}
+		
 		
 		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
 		{
@@ -719,5 +743,6 @@ int main( int argc, char **argv )
 	
 	return 0;
 } 
+
 
 

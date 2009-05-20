@@ -4,6 +4,9 @@ extern s_settings settings;
 extern s_gameSettings gameSetting;
 extern s_self self;
 
+// Slot light patch - from Bool's wiilight)
+static vu32 *_wiilight_reg = (u32*)0xCD0000C0;
+
 u32 swap32(u32 x)
 {
 	return (x >> 24) | ((x << 8) & 0x00FF0000UL) | ((x >> 8) & 0x0000FF00UL) | (x << 24);
@@ -178,3 +181,14 @@ char *get_title(struct discHdr *header){
 	return header->title;
 }
 */
+
+void WiiLight(int enable)
+{             
+	// Toggle wiilight (thanks Bool for wiilight source)
+    u32 val = (*_wiilight_reg&~0x20);        
+    if(enable) val |= 0x20;             
+    *_wiilight_reg=val;            
+}
+
+
+
