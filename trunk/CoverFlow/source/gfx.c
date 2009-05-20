@@ -261,6 +261,9 @@ void DrawSlider(int theme_id)
 	int max_loc = 296;
 	int x = change_scale(self.shift, self.min_cover, self.max_cover, min_loc, max_loc);
 	
+	if (self.gameCnt < 2)
+		x = 155;
+	
 	slideButton.x = 446 - x;
 	slideButton.y = 426;
 	
@@ -347,30 +350,36 @@ void draw_game_title(int index, float textSize)
 	{
 		int len = 0;
 		struct discHdr *header = NULL;
+		char gameName[36]; 
 		
 		header = &self.gameList[index];
 		len = strlen(header->title);
-
-		char gameName[36]; 
 		
-		// chomp the title to fit
-		if(len <= 35) //the length of the max title is 35 fixed width chars
+		if (self.gameCnt < 1)
 		{
-			sprintf(gameName, "%s", (header->title));
+			sprintf(gameName, "%s", "Please add a game...");
+			len = strlen(gameName);
 		}
 		else
 		{
-			strncpy(gameName, header->title, 32);
-			gameName[32] = '\0';
-			strncat(gameName, "...", 3);
-			len = 35;
+			len = strlen(header->title);
+			// chomp the title to fit
+			if(len <= 35) //the length of the max title is 35 fixed width chars
+			{
+				sprintf(gameName, "%s", (header->title));
+			}
+			else
+			{
+				strncpy(gameName, header->title, 32);
+				gameName[32] = '\0';
+				strncat(gameName, "...", 3);
+				len = 35;
+			}
 		}
-
 		float offset = (len*7.9); // calc a font scaled offset from title length
-		
 		if((int)offset > 260)
 			offset = 260.0; // dont draw on top of the setting button
-		
+	
 #ifndef TEST_MODE
 		GRRLIB_Printf(340 - (int)offset, 400, font_title, 0xFFFFFFFF, textSize, "%s", gameName);
 #else

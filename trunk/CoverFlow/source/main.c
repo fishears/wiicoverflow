@@ -84,8 +84,9 @@ void initVars()
 	self.my_wbfsDev = WBFS_DEVICE_USB;
 	self.hdd = NULL;
 	self.gameList = NULL;
+//	self.max_cover = 1;
 	self.max_cover = 0;
-	self.min_cover = 1;
+	self.min_cover = 0;
 	self.slot_glow = 0;
 	
 	initGameSettings(&gameSetting);
@@ -400,7 +401,7 @@ int main( int argc, char **argv )
 				else
 					settings.coverZoom -= 0.03; // zoom out
 			} // Check for B to control flow with wrist twist
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_B)
+			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_B) && (self.gameCnt > 1))
 			{	
 				pointer.p_type = 1; //set cursor to rotating hand
 
@@ -645,7 +646,9 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 //		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 //		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
-//		GRRLIB_Printf(50, 20, font_title, 0x808080FF, .5, "shift     : %f", settings.coverZoom);
+		GRRLIB_Printf(50, 20, font_title_small, 0x808080FF, 1, "Shift        : %f", self.shift);
+		GRRLIB_Printf(50, 40, font_title_small, 0x808080FF, 1, "gameCnt      : %d", self.gameCnt);
+		GRRLIB_Printf(50, 60, font_title_small, 0x808080FF, 1, "Min/Max cover: %d / %d", self.min_cover, self.max_cover);
 //		GRRLIB_Printf(50, 40, font_title, 0x808080FF, 1, "Pointer: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
 //		GRRLIB_Printf(50, 60, font_title, 0x808080FF, 1, "X: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
 
