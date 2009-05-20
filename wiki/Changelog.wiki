@@ -21,6 +21,7 @@
   * Fixed Cover Zoom available with Parental Lock on (Issue63)
   * Fixed Progress Bar limit - sometimes exceeded container
   * Fixed a number of bugs when user had 0, 1 or 2 games installed
+  * Fixed missing pointer after usb drive retry
 -NEW-
   * Settings buttons hidden if parental control is enabled
   * New slider and buttons graphics
