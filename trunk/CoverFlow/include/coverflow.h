@@ -148,6 +148,8 @@ typedef struct{
 	int rumbleAmt;
 	f32 gsize;
 	float progress;
+	int max_cover;
+	int min_cover;
 	
 	/*Animate Parameters*/
 	float animate_flip;

@@ -69,29 +69,20 @@ void DragSlider(int xPos)
 
 	int min_loc = 125; // slider range
 	int max_loc = 440;
-	int max_cover;
-	int min_cover;
 
 	if (xPos >= max_loc)
 		xPos = max_loc;
 	else if (xPos <= min_loc)
 		xPos = min_loc;
 	
-	if ( ((int)((COVER_COUNT/2.0) + 0.5)) - (COVER_COUNT/2.0) == 0) // even # of covers
-		max_cover = (int)(COVER_COUNT/2.0);
-	else // odd # of covers
-		max_cover = (int)((COVER_COUNT/2.0) - 0.5);
-	
-	min_cover = (-1*((int)((COVER_COUNT/2.0) + 0.5)) +1);
-	
-	float fx = change_scale(xPos, min_loc, max_loc, max_cover, min_cover);
+	float fx = change_scale(xPos, min_loc, max_loc, self.max_cover, self.min_cover);
 
-	if ((fx > min_cover) && (fx < max_cover))
+	if ((fx > self.min_cover) && (fx < self.max_cover))
 		self.shift = fx;
-	else if (fx >= max_cover)
-		self.shift = max_cover;
-	else if (fx <= min_cover)
-		self.shift = min_cover;
+	else if (fx >= self.max_cover)
+		self.shift = self.max_cover;
+	else if (fx <= self.min_cover)
+		self.shift = self.min_cover;
 }
 
 /*
@@ -139,6 +130,8 @@ void initVars(){
 	self.my_wbfsDev = WBFS_DEVICE_USB;
 	self.hdd = NULL;
 	self.gameList = NULL;
+	self.max_cover = 0;
+	self.min_cover = 1;
 	
 	initGameSettings(&gameSetting);
 }
@@ -172,11 +165,7 @@ int main( int argc, char **argv )
 	
 	SETTINGS_Init();
 	
- 	
 	GRRLIB_Init();
-    GRRLIB_FillScreen(0x000000FF);
-    GRRLIB_Render();
-	
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
 	
@@ -319,21 +308,15 @@ int main( int argc, char **argv )
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_B)
 		{
 			if(self.selected && self.animate_flip >= 1.0)
-			{
 				self.selected = false;
-			}
 		}
 		
 		if(dragging) // if the user is dragging the slider
 		{
 			if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) //with the A button
-			{
 				DragSlider(pointer.p_x);
-			}
 			else
-			{
 				dragging = false; // they let go
-			}
 		}
 		
 	 	// Check for the A button action
@@ -444,43 +427,26 @@ int main( int argc, char **argv )
 		// Nothing is selected and nothing is flipped
 		else if (!self.selected && self.animate_flip == 0)
 		{
-                    
-                // 2 cover check and fix
-                int max_cover;
-                int min_cover;
-                if(COVER_COUNT == 2)
-                {
-                    max_cover = 0;
-                    min_cover = 1;
-                }
-                else
-                {
-                    if ( ((int)((COVER_COUNT/2.0) + 0.5)) - (COVER_COUNT/2.0) == 0) // odd # of covers
-                        max_cover = ((int)(-1*((COVER_COUNT/2.0)-1)));
-                    else // even # of covers
-                        max_cover = (int)(-1*((COVER_COUNT/2.0)));
-
-                    min_cover = (int)(COVER_COUNT/2.0);
-                }
-//for debugging this painful section
-//GRRLIB_Printf(50, 40, font_title, 0x808080FF, 1, "min/max: %d, %d", min_cover, max_cover);
-//GRRLIB_Printf(50, 60, font_title, 0x808080FF, 1, "self.shift: %d", (int)self.shift);
-                        // Check for Left pad, flip cover left
+            // Check for Left pad, flip cover left
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT)
 			{	
 				select_ready = false;
-				if(!((int)self.shift+.5 >= min_cover))
+				if ((int)self.shift < self.max_cover)
 					self.shift += SCROLL_SPEED;
+				else if ((int)self.shift >= self.max_cover)
+					self.shift = self.max_cover;
+				else if ((int)self.shift <= self.min_cover)
+					self.shift = self.min_cover;
 			} // now check for right, flip cover right
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT)
 			{
 				select_ready = false;
-
-                                if(!((int)self.shift-SCROLL_SPEED <= max_cover))
+				if ((int)self.shift > self.min_cover)
 					self.shift -= SCROLL_SPEED;
-                                else if(COVER_COUNT ==2 && self.shift >= 0)
-                                    self.shift -= SCROLL_SPEED;
-                                
+				else if ((int)self.shift >= self.max_cover)
+					self.shift = self.max_cover;
+				else if ((int)self.shift <= self.min_cover)
+					self.shift = self.min_cover;
 			} // Check for UP button held to zoom in
 			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsHeld(0) & PAD_BUTTON_UP)
 			{	
@@ -502,28 +468,26 @@ int main( int argc, char **argv )
 
 				if ((self.orient.roll < -10.0) || (self.orient.roll > 10.0)) // check for movement out of the -10.0 to 10.0 deg range (dead soze)
 				{
-					if (self.orient.roll > 0)
+					if ( ((self.shift > self.min_cover) && (self.shift < self.max_cover)) ||
+						((self.shift == self.min_cover) && (self.orient.roll < 0)) ||
+						((self.shift == self.max_cover) && (self.orient.roll > 0)) )
 					{
-						// flow right
-						if (!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0))) // watch for the end of the stack
-						{
-							self.shift -= change_scale(self.orient.roll, -90.0, 90.0, -0.3, 0.3);
-							twisting = true;
-						}
+						self.shift -= change_scale(self.orient.roll, -90.0, 90.0, -0.3, 0.3);
+						twisting = true;
 					}
-					else
+					else if (self.shift >= self.max_cover)
 					{
-						// flow left
-						if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
-						{
-							self.shift -= change_scale(self.orient.roll, -90.0, 90.0, -0.3, 0.3);
-							twisting = true;
-						}
+						self.shift = self.max_cover;
+						twisting = true;
+					}
+					else if (self.shift <= self.min_cover)
+					{
+						self.shift = self.min_cover;
+						twisting = true;
 					}
 				}
 				if (settings.enablepitch)
 				{
-
 					if ((self.orient.pitch > 5.0) || (self.orient.pitch < -5.0)) // check for movement out of the -20.0 to -30.0 deg range (dead soze)
 					{
 						if (self.orient.pitch < -5.0)
