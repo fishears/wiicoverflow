@@ -276,6 +276,17 @@ s32 GetEntries()
 	self.gameCnt  = cnt;
 	COVER_COUNT = self.gameCnt;
 	
+	if(!(self.gameCnt == 2))
+	{
+		if ( ((int)((COVER_COUNT/2.0) + 0.5)) - (COVER_COUNT/2.0) == 0) // even # of covers
+			self.max_cover = (int)(COVER_COUNT/2.0);
+		else // odd # of covers
+			self.max_cover = (int)((COVER_COUNT/2.0) - 0.5);
+		
+		self.min_cover = (-1*((int)((COVER_COUNT/2.0) + 0.5)) +1);
+	}
+	
+	
 	Init_Covers();
 
 	self.progress+=0.05;
