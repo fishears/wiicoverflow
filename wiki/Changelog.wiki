@@ -12,6 +12,7 @@
   * Finished White Theme (issue27)
   * Fixed Cover Zoom available with Parental Lock on (Issue63)
   * Fixed Progress Bar limit - sometimes exceeded container
+  * Fixed a number of bugs when user had 0, 1 or 2 games installed
 -NEW-
   * Settings buttons hidden if parental control is enabled
   * New slider and buttons graphics
