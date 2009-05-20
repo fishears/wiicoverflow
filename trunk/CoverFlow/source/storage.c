@@ -92,7 +92,7 @@ void checkDirs(){
 			mkdir("games", S_ISVTX);
 		}
 		else{
-			WindowPrompt(localStr("M003", "ERROR!"), localStr("M110", "Can't read directories. Covers will not be saved."), &okButton, NULL);
+			WindowPrompt(localStr("M003", "ERROR!"), localStr("M110", "Can't read directories.\nCovers will not be saved."), &okButton, NULL);
 		}
 	}
 	else{
@@ -133,7 +133,7 @@ void checkDirs(){
 		}
 		
 		else{
-			WindowPrompt(localStr("M003", "ERROR!"), localStr("M111", "Can't create directories. Covers will not be saved."), &okButton, NULL);
+			WindowPrompt(localStr("M003", "ERROR!"), localStr("M111", "Can't create directories.\nCovers will not be saved."), &okButton, NULL);
 		}
 	}
 }
