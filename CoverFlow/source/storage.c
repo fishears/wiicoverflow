@@ -193,9 +193,10 @@ void initWBFS(){
 				WDVD_Close();
 				
 				/* Load Custom IOS */
-				int ret2 = IOS_ReloadIOS(222);
+				int ret2;
+				//ret2 = IOS_ReloadIOS(222);
 				
-				if (ret2 < 0) 
+				//if (ret2 < 0) 
 				{
 					ret2 = IOS_ReloadIOS(249);
 				}

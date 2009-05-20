@@ -151,11 +151,12 @@ int main( int argc, char **argv )
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 	#ifndef TEST_MODE
+	int ret;
 	
 	/* Load Custom IOS */
-    int ret = IOS_ReloadIOS(222);
+    //ret = IOS_ReloadIOS(222);
 	
-    if (ret < 0) 
+    //if (ret < 0) 
 	{
         ret = IOS_ReloadIOS(249);
     }
