@@ -548,7 +548,7 @@ int main( int argc, char **argv )
 					if(self.select_shift > 0)
 					{
 						self.select_shift -= mult*SCROLL_SPEED;
-						if(!((int)self.shift-1 <= (-1)*(COVER_COUNT/2.0)))
+						if(!(self.shift <= self.min_cover))
 						{
 							self.shift -= mult*SCROLL_SPEED;
 						}
@@ -556,7 +556,7 @@ int main( int argc, char **argv )
 					else
 					{
 						self.select_shift += mult*SCROLL_SPEED;
-						if(!((int)self.shift+.5 >= (COVER_COUNT/2.0)))
+						if(!(self.shift >= self.max_cover))
 						{
 							self.shift += mult*SCROLL_SPEED;
 						}

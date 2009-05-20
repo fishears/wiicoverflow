@@ -44,21 +44,21 @@ void LoadTextures()
 	cover_texture		   = GRRLIB_LoadTexture(no_cover_png);
 	back_texture		   = GRRLIB_LoadTexture(back_cover_png);
 	no_disc_texture		   = GRRLIB_LoadTexture(no_disc_png);
-	slide_bar_texture_w    = GRRLIB_LoadTexture(slide_bar_white_png);
-//	slide_bar_texture_b    = GRRLIB_LoadTexture(slide_bar_black_png);
-	slide_bar_texture_b    = GRRLIB_LoadTexture(slide_bar_grey_png);
 	load_bg_texture		   = GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
 	font_texture           = GRRLIB_LoadTexture(BMfont5_png);
 	font_title             = GRRLIB_LoadTexture(font_w14_h20_png);
+	slidebar_texture       = GRRLIB_LoadTexture(slidebar_png);
+	slidebar_white_texture = GRRLIB_CreateEmptyTexture(slidebar_texture.w, slidebar_texture.h);
+	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white
 	ambientlight_texture   = GRRLIB_LoadTexture(ambientlight_png);
 	ambientlight_white_texture = GRRLIB_CreateEmptyTexture(ambientlight_texture.w, ambientlight_texture.h);
 	GRRLIB_BMFX_Invert(ambientlight_texture, ambientlight_white_texture); //invert the fade from black to white
-        battery_bar             = GRRLIB_LoadTexture(battery_bar_png);
-        battery             = GRRLIB_LoadTexture(battery_png);
-        battery_dead             = GRRLIB_LoadTexture(battery_dead_png);
+	battery_bar            = GRRLIB_LoadTexture(battery_bar_png);
+    battery                = GRRLIB_LoadTexture(battery_png);
+    battery_dead           = GRRLIB_LoadTexture(battery_dead_png);
 
 	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
-        GRRLIB_InitTileSet(&font_title, 14, 20, 32);
+	GRRLIB_InitTileSet(&font_title, 14, 20, 32);
 }
 
 void DrawBufferedCover(int i, float loc, float angle)
@@ -143,26 +143,26 @@ void Init_Buttons()
 #ifndef 	LOCALBUTTON_OFF
     char labelBuf[15]; //add for Localization
 #endif	
-	addButton			= Button_Init(add_button_png, add_button_hover_png, 580, 417);
-    slideButton         = Button_Init(slide_png, slide_hover_png, 260, 426);
-    okButton            = Button_Init(ok_png, ok_hover_png, 220, 290);
-	cancelButton		= Button_Init(cancel_png, cancel_hover_png, 360, 290);
-	loadButton          = Button_Init(load_png, load_hover_png, 220, 300);
-	deleteButton		= Button_Init(delete_png, delete_hover_png, 220, 400);
-    resetButton		    = Button_Init(reset_png, reset_hover_png, 350, 330);
-    backButton          = Button_Init(back_png, back_hover_png, 340, 300);
-    gbackButton         = Button_Init(back_png, back_hover_png, 340, 300);
-    gsettingsButton     = Button_Init(settings_png, settings_hover_png, 30, 420);
-    cheatonButton		= Button_Init(toggle_on_png, toggle_on_png, 215,85);
-    cheatoffButton		= Button_Init(toggle_off_png, toggle_off_png, 215,85);
-    langupButton		= Button_Init(plus_button_png, plus_button_hover_png,456,123);
-    langdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,123);
-    vidupButton         = Button_Init(plus_button_png, plus_button_hover_png, 456,150);
-    viddownButton		= Button_Init(minus_button_png, minus_button_hover_png, 300,150);
-    vidtvonButton		= Button_Init(toggle_on_png, toggle_on_png, 350, 175);
-    vidtvoffButton		= Button_Init(toggle_off_png, toggle_off_png, 350, 175);
-    hookupButton		= Button_Init(plus_button_png, plus_button_hover_png, 456,87);
-    hookdownButton		= Button_Init(minus_button_png, minus_button_hover_png, 360,87);
+	addButton				= Button_Init(add_button_png, add_button_hover_png, 580, 417);
+    slideButton				= Button_Init(slide_png, slide_hover_png, 260, 426);
+    okButton				= Button_Init(ok_png, ok_hover_png, 220, 290);
+	cancelButton			= Button_Init(cancel_png, cancel_hover_png, 360, 290);
+	loadButton				= Button_Init(load_png, load_hover_png, 220, 300);
+	deleteButton			= Button_Init(delete_png, delete_hover_png, 220, 400);
+    resetButton				= Button_Init(reset_png, reset_hover_png, 350, 330);
+    backButton				= Button_Init(back_png, back_hover_png, 340, 300);
+    gbackButton				= Button_Init(back_png, back_hover_png, 340, 300);
+    gsettingsButton			= Button_Init(settings_png, settings_hover_png, 30, 420);
+    cheatonButton			= Button_Init(toggle_on_png, toggle_on_png, 215,85);
+    cheatoffButton			= Button_Init(toggle_off_png, toggle_off_png, 215,85);
+    langupButton			= Button_Init(plus_button_png, plus_button_hover_png,456,123);
+    langdownButton			= Button_Init(minus_button_png, minus_button_hover_png, 300,123);
+    vidupButton				= Button_Init(plus_button_png, plus_button_hover_png, 456,150);
+    viddownButton			= Button_Init(minus_button_png, minus_button_hover_png, 300,150);
+    vidtvonButton			= Button_Init(toggle_on_png, toggle_on_png, 350, 175);
+    vidtvoffButton			= Button_Init(toggle_off_png, toggle_off_png, 350, 175);
+    hookupButton			= Button_Init(plus_button_png, plus_button_hover_png, 456,87);
+    hookdownButton			= Button_Init(minus_button_png, minus_button_hover_png, 360,87);
     gcheatonButton          = Button_Init(toggle_on_png, toggle_on_png, 239,185); //
     gcheatoffButton         = Button_Init(toggle_off_png, toggle_off_png, 239,185); //
     glangupButton           = Button_Init(plus_button_png, plus_button_hover_png,480,223);
@@ -198,7 +198,6 @@ void Init_Buttons()
     musicOffButton          = Button_Init(toggle_off_png, toggle_off_png, 350, 410);
     bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 515, 140);
     bookmarkOffButton       = Button_Init(star_off_png, star_on_png, 515, 140);
-
     homeMenuTopButton       = Button_Init(homeTop_png, homeTop_hover_png, 0, 0);
     homeMenuBottomButton    = Button_Init(homeBottom_png, homeBottom_hover_png, 0, 368);
     wiiMenuButton           = Button_Init(wiiMenu_png, wiiMenu_hover_png, 34, 180);
@@ -210,22 +209,18 @@ void Init_Buttons()
 	sprintf(addButton.label, localStr("B01","")); 
     sprintf(deleteButton.label, localStr("B02","")); 
     sprintf(cancelButton.label, localStr("B03",""));
- 
 	sprintf(yesButton.label, localStr("B04","")); 
     sprintf(noButton.label, localStr("B05","")); 
-	
 	sprintf(labelBuf, localStr("B06",""));
     sprintf(okButton.label, labelBuf); 
 	sprintf(graphicsButton.label, labelBuf);
-	
     sprintf(resetButton.label, localStr("B07","")); 
     sprintf(downloadButton.label, localStr("B08","")); 
     sprintf(loadButton.label, localStr("B09","")); 
-	
     sprintf(labelBuf, localStr("B10",""));
 	sprintf(backButton.label, labelBuf); 
 	sprintf(gbackButton.label, labelBuf); 
-    
+
 	//sprintf(labelBuf, "An"); //for testing
 	sprintf(labelBuf, localStr("B11",""));
 	sprintf(cheatonButton.label, labelBuf); 
@@ -247,7 +242,6 @@ void Init_Buttons()
 	sprintf(quickstartOffButton.label, labelBuf); 
 	sprintf(rumbleOffButton.label, labelBuf); 
 	sprintf(musicOffButton.label, labelBuf); 
-
 	sprintf(themeWhiteButton.label, localStr("B13",""));
 	sprintf(themeBlackButton.label, localStr("B14",""));
 	sprintf(homeMenuTopButton.label, localStr("B15",""));
@@ -269,15 +263,15 @@ void DrawSlider(int theme_id)
 	switch (theme_id)
 	{
 		case 0: // black theme
-			GRRLIB_DrawImg(120, 410, slide_bar_texture_b, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(120, 410, slidebar_texture, 0, 1, 1, 0xFFFFFFFF);
 			Button_Theme_Paint(&slideButton, settings.theme);
 			break;
 		case 1: // white theme
-			GRRLIB_DrawImg(120, 410, slide_bar_texture_w, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(120, 410, slidebar_white_texture, 0, 1, 1, 0xFFFFFFFF);
 			Button_Theme_Paint(&slideButton, settings.theme);
 			break;
 		default:
-			GRRLIB_DrawImg(120, 410, slide_bar_texture_b, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(120, 410, slidebar_texture, 0, 1, 1, 0xFFFFFFFF);
 			Button_Theme_Paint(&slideButton, settings.theme);
 			break;
 	}
@@ -289,9 +283,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 		return;
 
 	if(pos == 0)
-	{
 		self.gameSelected = texture_id;
-	}
 	
 	if((self.selected || self.animate_flip > 0) && pos == 0)
 		return;

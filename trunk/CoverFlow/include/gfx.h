@@ -71,10 +71,10 @@ GRRLIB_texImg current_cover_texture;
 GRRLIB_texImg loader_main_texture;
 GRRLIB_texImg progress_texture;
 GRRLIB_texImg menu_bg_texture;
-GRRLIB_texImg slide_bar_texture_w; // white slider
-GRRLIB_texImg slide_bar_texture_b; // black slider
-GRRLIB_texImg font_texture;		   // little old font
-GRRLIB_texImg font_title;          // title font
+GRRLIB_texImg slidebar_texture;			// black theme slider
+GRRLIB_texImg slidebar_white_texture;	// white theme slider
+GRRLIB_texImg font_texture;				// little old font
+GRRLIB_texImg font_title;				// title font
 GRRLIB_texImg load_bg_texture;
 GRRLIB_texImg ambientlight_texture;
 GRRLIB_texImg ambientlight_white_texture;
