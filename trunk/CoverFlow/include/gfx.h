@@ -155,7 +155,7 @@ Button loaderButton;
 Button wiiMenuButton;
 
 void LoadTextures();
-void DrawBufferedCover(int i, float loc, float angle);
+void DrawBufferedCover(int i, float loc, float angle, float falloff );
 void Paint_Progress(float v, char* msg);
 void Paint_Progress_Generic(int v, int max, char* msg);
 void Init_Buttons();

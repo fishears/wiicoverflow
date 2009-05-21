@@ -53,7 +53,7 @@ void Init_Covers()
 {
 	#ifdef TEST_MODE
 	self.progress+=0.05;
-	Paint_Progress(self.progress, NULL);
+	Paint_Progress(self.progress, "Initializing Covers...");
 	
 	int i;
 	int CoverCount = COVER_COUNT;
@@ -64,7 +64,7 @@ void Init_Covers()
 	{
 		AddCover( GRRLIB_LoadTexture(no_cover_png) );
 		self.progress+=per_game_prog;
-		Paint_Progress(self.progress, NULL);
+		Paint_Progress(self.progress, "Initializing Covers...");
 	}
 	
 	#endif
