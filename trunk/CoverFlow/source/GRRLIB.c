@@ -1231,7 +1231,7 @@ void GRRLIB_SetBGColor(int theme)
 	if (theme) // white theme
 	{
 		// clears the bg to color and clears the z buffer
-		GXColor background = { 0xFF, 0xFF, 0xFF, 0xFF };
+		GXColor background = { 0xCF, 0xCF, 0xCF, 0xFF };
 		GX_SetCopyClear (background, GX_MAX_Z24);
 		GRRLIB_Render();
 

@@ -332,13 +332,13 @@ void draw_covers()
 	
 	if (settings.theme) //white
 	{
-		GRRLIB_DrawImg(-30, 0, ambientlight_white_texture, 0, 1, 1, 0xFFFFFFFF);   // draw the left side fade
-		GRRLIB_DrawImg(430, 0, ambientlight_white_texture, 180, 1, 1, 0xFFFFFFFF); // flip the graphic horizontally for the right side
+		GRRLIB_DrawImg(-50, 0, ambientlight_white_texture, 0, 1, 1, 0xEEEEEEFF);   // draw the left side fade
+		GRRLIB_DrawImg(450, 0, ambientlight_white_texture, 180, 1, 1, 0xEEEEEEFF); // flip the graphic horizontally for the right side
 	}
 	else //default black
 	{
-		GRRLIB_DrawImg(-30, 0, ambientlight_texture, 0, 1, 1, 0xFFFFFFFF);   // draw the left side fade
-		GRRLIB_DrawImg(430, 0, ambientlight_texture, 180, 1, 1, 0xFFFFFFFF); // flip the graphic horizontally for the right side
+		GRRLIB_DrawImg(-40, 0, ambientlight_texture, 0, 1, 1, 0xFFFFFFFF);   // draw the left side fade
+		GRRLIB_DrawImg(440, 0, ambientlight_texture, 180, 1, 1, 0xFFFFFFFF); // flip the graphic horizontally for the right side
 	}
 }
 
