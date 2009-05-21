@@ -100,7 +100,7 @@ void Graphic_Settings_Menu(){
 			}
 			else if(Button_Select(&falloffdownButton, pointer.p_x, pointer.p_y))
 			{
-				settings.coverZoom -= 0.01;
+				settings.coverFallOff -= 0.01;
 			}
 			else if(Button_Select(&falloffupButton, pointer.p_x, pointer.p_y))
 			{
