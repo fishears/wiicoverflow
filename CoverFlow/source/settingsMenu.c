@@ -93,10 +93,18 @@ void Graphic_Settings_Menu(){
 			}
 			else if(Button_Select(&zoomupButton, pointer.p_x, pointer.p_y))
 			{
-                                if (settings.coverZoom >= .69)
+                if (settings.coverZoom >= .69)
 					settings.coverZoom  = .69; // sanity check
 				else
 					settings.coverZoom += 0.03;
+			}
+			else if(Button_Select(&falloffdownButton, pointer.p_x, pointer.p_y))
+			{
+				settings.coverZoom -= 0.01;
+			}
+			else if(Button_Select(&falloffupButton, pointer.p_x, pointer.p_y))
+			{
+				settings.coverFallOff += 0.01;
 			}
 		}
 		
@@ -113,9 +121,11 @@ void Graphic_Settings_Menu(){
 		GRRLIB_Printf(350, 148, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
 		GRRLIB_Printf(145, 197, font_texture, settings.fontColor, 1, localStr("M052", "Angle:") );
 		GRRLIB_Printf(350, 197, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
-		GRRLIB_Printf(145, 245, font_texture, settings.fontColor, 1, localStr("M053", "Draw Window:") );
-		GRRLIB_Printf(350, 245, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
-		GRRLIB_Printf(145, 292, font_texture, settings.fontColor, 1, localStr("M054", "Game Title:") );
+		GRRLIB_Printf(145, 240, font_texture, settings.fontColor, 1, "Falloff:" );
+		GRRLIB_Printf(350, 240, font_texture, settings.fontColor, 1, "%f", settings.coverFallOff);
+		GRRLIB_Printf(145, 275, font_texture, settings.fontColor, 1, localStr("M053", "Draw Window:") );
+		GRRLIB_Printf(350, 275, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
+		GRRLIB_Printf(145, 332, font_texture, settings.fontColor, 1, localStr("M054", "Game Title:") );
 		
 		//Button_Theme_Paint(&settingsButton, settings.theme);
 		Button_Paint(&spacingupButton);

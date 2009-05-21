@@ -491,11 +491,6 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
     Mtx m, mv;
 
     GX_InitTexObj(&texObj, tex.data, tex.w, tex.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-    //GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1); //removed to allow antialiasing
-    //GX_LoadTexObj(&texObj, GX_TEXMAP0);
-
-    //GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
-    //GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
 
     width = tex.w * 0.01 * scale;
     height = tex.h * 0.01 * scale;
@@ -506,11 +501,11 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
 	
 	if(scale > 1)
 	{
-		guMtxTransApply(m, m, loc, 0, 6.0f);
+		guMtxTransApply(m, m, loc, 0, 6.0f+abs(loc)*settings.coverFallOff);
 	}
 	else
 	{
-		guMtxTransApply(m, m, loc, 0, 8.0f);
+		guMtxTransApply(m, m, loc, 0, 8.0f+abs(loc)*settings.coverFallOff);
 	}
 	
     guMtxConcat (view, m, mv);

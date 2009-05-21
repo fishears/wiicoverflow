@@ -7,6 +7,7 @@ typedef struct {
     float coverZoom;
     float coverAngle;
     float coverSpacing;
+	float coverFallOff;
     int drawWindow;
     int coverText;
     int theme;

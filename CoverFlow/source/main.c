@@ -235,6 +235,7 @@ int main( int argc, char **argv )
 	
 	while(1) 
 	{
+	
 	#ifndef TEST_MODE
 		WPAD_ScanPads();
 		GetWiimoteData();
