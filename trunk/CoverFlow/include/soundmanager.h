@@ -11,7 +11,7 @@
 
 #include "coverflow.h"
 
-SoundFile _sounds[MAX_SOUNDS];
+//SoundFile _sounds[MAX_SOUNDS];
 
 inline void SOUND_Init();
 

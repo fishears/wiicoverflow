@@ -1,5 +1,5 @@
 #include "coverflow.h"
-#include "soundmanager.h"
+//#include "soundmanager.h"
 #include "filter.h"
 
 extern u8 shutdown;
@@ -196,6 +196,8 @@ int main( int argc, char **argv )
 	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
 #endif
 
+	//ee();
+
 	// set the background
 	sprintf(self.debugMsg, localStr("M105", "Setting background theme...") );
 	Paint_Progress(self.progress,self.debugMsg);
@@ -228,6 +230,7 @@ int main( int argc, char **argv )
 	//////////////////////////
 	// main screen gui loop //
 	//////////////////////////
+	
 	while(1) 
 	{
 		WPAD_ScanPads();

@@ -24,5 +24,6 @@ void quit();
 void WiiLight(int enable);
 void UpdateBufferedImages();
 void DragSlider(int xPos);
+int getRandomNum(int min, int max);
 
 #endif
