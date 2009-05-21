@@ -84,7 +84,7 @@ void HomeMenu_Show()
 	wiiMenuButton.x = 28-400;
 	wiiMenuButton.y = 180;
 	loaderButton.x  = 355+400;
-	loaderButton.y = 170;
+	loaderButton.y = 180;
 	
 	wiimoteButton.x = 64;
 	wiimoteButton.y = 400 + 400;
