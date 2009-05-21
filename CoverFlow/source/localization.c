@@ -8,21 +8,26 @@
 
 extern s_settings settings;
 static mxml_node_t *MSGs = NULL;
+bool missingFile=false;
 
 char *localStr ( char *CODE, char * defaultStr )
 {
+return defaultStr;
    //mxml_node_t *root;
    mxml_node_t *node;
    mxml_node_t *lang_n;
    mxml_node_t *msg_n;
 
-   if (MSGs == NULL) {
+   if (MSGs == NULL || missingFile) {
 	   FILE *fp;
 
 	   fp = fopen(USBLOADER_PATH "/localization.xml", "r");
 
 	   if(fp == NULL)
-		return defaultStr;
+	   {
+			missingFile=true;
+			return defaultStr;
+	   }
 
 	   MSGs = mxmlLoadFile(NULL, fp, MXML_NO_CALLBACK);
 	   fclose(fp);
