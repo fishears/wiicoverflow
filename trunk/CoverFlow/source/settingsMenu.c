@@ -100,11 +100,11 @@ void Graphic_Settings_Menu(){
 			}
 			else if(Button_Select(&falloffdownButton, pointer.p_x, pointer.p_y))
 			{
-				settings.coverFallOff -= 0.01;
+				settings.coverFallOff -= 0.002;
 			}
 			else if(Button_Select(&falloffupButton, pointer.p_x, pointer.p_y))
 			{
-				settings.coverFallOff += 0.01;
+				settings.coverFallOff += 0.002;
 			}
 		}
 		
