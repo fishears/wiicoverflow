@@ -64,7 +64,7 @@
 /* Aspect ratio fix for some image*/
 #define AR_16_9 0.80F //0.85
 
-#define TEST_MODE 1
+//#define TEST_MODE 1
 #define DEBUG 1
 
 //#define D3_COVERS
