@@ -641,17 +641,17 @@
 	<M046 val="Erro ao estabelecer conexão" />
 	<M047 val="Resposta HTTP sem arquivo\n" />
 	<M048 val="Sem memória para copiar arquivo da resposta HTTP\n" />
-	<M049 val="Configurações dos Gráficos" />
+	<M049 val="Configuração Gráfica" />
 	<M050 val="Zoom:" />
 	<M051 val="Espaçamento:" />
 	<M052 val="Ângulo:" />
 	<M053 val="Janela de Desenho:" />
 	<M054 val="Título do Jogo:" />
 	<M055 val="Baixar Capas" />
-	<M056 val="Esta operação não pode ser cancelada, continuar ?" />
+	<M056 val="Esta operação não pode ser\n cancelada, continuar ?" />
 	<M057 val="Configuração do Coverflow" />
 	<M058 val="Gráficos:" />
-	<M059 val="Capas faltando?:" />
+	<M059 val="Baixar Capas ?" />
 	<M060 val="Tema" />
 	<M061 val="Carregar com 1 clique:" />
 	<M062 val="Tremer:" />
@@ -729,23 +729,23 @@
 	<M134 val="Formatando Partição %s" />
   <M135 val="Ocarina:" />
 
-	<B01 val="Novo" />
+	<B01 val="Adicionar" />
 	<B02 val="Remover" />
-	<B03 val="Adicionar" />
+	<B03 val="Cancelar" />
 	<B04 val="Sim" />
 	<B05 val="Não" />
-	<B06 val="Ok" />
+	<B06 val="OK" />
 	<B07 val="Reiniciar" />
 	<B08 val="Baixar" />
 	<B09 val="Carregar" />
 	<B10 val="Voltar" />
 	<B11 val="Lig" />
-	<B12 val="    Desl" />
-	<B13 val="    Pr" />
-	<B14 val="Br" />
-	<B15 val="Início" />
+	<B12 val="Desl." />
+	<B13 val="Branco" />
+	<B14 val="Preto" />
+	<B15 val="Menu Princ." />
 	<B16 val="Menu Wii" />
-	<B17 val="Loader" />
+	<B17 val="HBC" />		 
 
 </PT-BR>
 
