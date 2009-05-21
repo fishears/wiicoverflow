@@ -113,8 +113,8 @@ int main( int argc, char **argv )
 	/* Check if Custom IOS is loaded */
 	if (ret < 0)
 	{
-		printf(localStr("M086", "[+] ERROR:\n"));
-		printf(localStr("M087", "    Custom IOS could not be loaded! (ret = %d)\n"), ret);
+		printf("[+] ERROR:\n");
+		printf("    Custom IOS could not be loaded! (ret = %d)\n", ret);
 		return 0;
 	}
 #endif
@@ -133,14 +133,14 @@ int main( int argc, char **argv )
     progress_texture    = GRRLIB_LoadTexture(progress_png);
 
 	self.progress += .1;
-	sprintf(self.debugMsg, localStr("M088", "Loading textures") );
+	sprintf(self.debugMsg, "Loading textures" );
 	Paint_Progress(self.progress,self.debugMsg);
 	
 	LoadTextures();		// load textures
 	Init_Buttons();		// load buttons so they can be used for error msgs
 
 	self.progress += .1;
-	sprintf(self.debugMsg, localStr("M089", "Init USB") );
+	sprintf(self.debugMsg, "Init USB" );
 	Paint_Progress(self.progress,self.debugMsg);
 	
 	/* Initialize Wiimote subsystem */
@@ -149,12 +149,12 @@ int main( int argc, char **argv )
 #ifndef TEST_MODE
 	if(!init_usbfs())
 	{
-		WindowPrompt(localStr("M003", "ERROR!"), localStr("M090", "Cannot init USBFS, quitting."), &okButton, 0);
+		WindowPrompt("ERROR!", "Cannot init USBFS, quitting.", &okButton, 0);
 		return 0;
 	}
 	
 	//self.progress += .1;
-	sprintf(self.debugMsg, localStr("M999", "Initializing FileSystem") );
+	sprintf(self.debugMsg, "Initializing FileSystem" );
 	Paint_Progress(self.progress,self.debugMsg);
 	
 	self.my_wbfsDev = WBFS_DEVICE_USB;
@@ -184,7 +184,7 @@ int main( int argc, char **argv )
 	float wait = 120; //ms
 	float prog = 2.1/wait;
 	
-	sprintf(self.debugMsg, localStr("M104", "Initializing Threaded Image Buffer...") );	
+	sprintf(self.debugMsg, "Initializing Threaded Image Buffer..." );	
 	while(wait > 0)
 	{
 		wait--;
