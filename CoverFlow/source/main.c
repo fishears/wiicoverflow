@@ -173,6 +173,7 @@ int main( int argc, char **argv )
 
 	
 #else
+	PAD_Init();
 	self.gameCnt = 29;
 #endif
 	
@@ -219,6 +220,7 @@ int main( int argc, char **argv )
 	bool twisting        = false;
 	self.animate_count   = 50;
 	self.animate_slide_x = 0;
+	self.animate_flip    = 0;
 	
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
@@ -233,11 +235,14 @@ int main( int argc, char **argv )
 	
 	while(1) 
 	{
+	#ifndef TEST_MODE
 		WPAD_ScanPads();
-		PAD_ScanPads();
 		GetWiimoteData();
+	#endif //_TEST_MODE
+		PAD_ScanPads();
 		twisting = false;
 
+	
 		// Check for 'HOME' button press
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME) || (PAD_ButtonsDown(0) & PAD_TRIGGER_Z))
 		{
