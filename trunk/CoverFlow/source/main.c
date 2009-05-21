@@ -163,12 +163,14 @@ int main( int argc, char **argv )
 	checkFiles();
 	Sys_Init();
 	Subsystem_Init();
-	SOUND_Init();
+	// I'll have to read a fair bit of code but this should be done as early as possible
 	initWBFS();
-	initUSBFS();
-
+	SOUND_Init();
+	// the pad needs to be init after a usb retry but before anything else
 	PAD_Init();
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+	initUSBFS();
+
 	
 #else
 	self.gameCnt = 29;
