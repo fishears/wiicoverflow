@@ -34,6 +34,7 @@ void SETTINGS_Init()
 	settings.coverZoom    = -2.0;
 	settings.coverAngle   = 90;
 	settings.coverSpacing = 3.1;
+	settings.coverFallOff = 0.0;
 	settings.drawWindow   = 7;
 	settings.coverText    = 1;
 	settings.theme		 = 0; // default to black
@@ -57,12 +58,13 @@ void SETTINGS_Init()
 	settings.vipatch      = 0;
 };
 //called by reset button on graphics settings screen
-//button used to reset EVERYTHING including parental lock & kids found out
+//button used to reset EVERYTHING
 void graphics_SETTINGS_Init()
 {
-    	settings.coverZoom    = -2.0;
+    settings.coverZoom    = -2.0;
 	settings.coverAngle   = 90;
 	settings.coverSpacing = 3.1;
+	settings.coverFallOff = 0.0;
 	settings.drawWindow   = 7;
 	settings.coverText    = 1;
 }
@@ -99,6 +101,8 @@ int SETTINGS_Load()
 			  settings.coverAngle   = atof(mxmlElementGetAttr(next_n,"angle"));
 		  if(mxmlElementGetAttr(next_n,"zoom"))
 			  settings.coverZoom    = atof(mxmlElementGetAttr(next_n,"zoom"));
+		  if(mxmlElementGetAttr(next_n,"falloff"))
+			  settings.coverFallOff = atof(mxmlElementGetAttr(next_n,"falloff"));
 		  if(mxmlElementGetAttr(next_n,"drawWindow"))
 			  settings.drawWindow   = atoi(mxmlElementGetAttr(next_n,"drawWindow"));
 		  if(mxmlElementGetAttr(next_n,"coverText"))
@@ -201,6 +205,9 @@ int SETTINGS_Save()
 	
 	sprintf(buffer, "%f", settings.coverZoom);
 	mxmlElementSetAttr(node, "zoom", buffer);
+	
+	sprintf(buffer, "%f", settings.coverFallOff);
+	mxmlElementSetAttr(node, "falloff", buffer);
 	
 	sprintf(buffer, "%d", settings.drawWindow);
 	mxmlElementSetAttr(node, "drawWindow", buffer);

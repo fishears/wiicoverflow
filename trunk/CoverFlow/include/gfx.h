@@ -142,6 +142,8 @@ Button angleupButton;
 Button angledownButton;
 Button zoomupButton;
 Button zoomdownButton;
+Button falloffupButton;
+Button falloffdownButton;
 Button windowupButton;
 Button windowdownButton;
 

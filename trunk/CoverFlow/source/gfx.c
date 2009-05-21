@@ -177,8 +177,8 @@ void Init_Buttons()
     gvidtvoffButton         = Button_Init(toggle_off_png, toggle_off_png, 374, 275);
     ghookupButton           = Button_Init(plus_button_png, plus_button_hover_png, 480,187);
     ghookdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 384,187);
-    coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 291);
-    coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 291);
+    coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 330);
+    coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 330);
     graphicsButton          = Button_Init(ok_png, ok_hover_png, 350, 210);
     yesButton               = Button_Init(yes_png, yes_hover_png, 220, 290);
     noButton                = Button_Init(no_png, no_hover_png, 340, 290);
@@ -190,8 +190,10 @@ void Init_Buttons()
     zoomdownButton          = Button_Init(minus_button_png, minus_button_hover_png, 300,95);
     angleupButton           = Button_Init(plus_button_png, plus_button_hover_png,456,191);
     angledownButton         = Button_Init(minus_button_png, minus_button_hover_png, 300,191);
-    windowupButton          = Button_Init(plus_button_png, plus_button_hover_png,456, 239);
-    windowdownButton        = Button_Init(minus_button_png, minus_button_hover_png, 300,239);
+    falloffupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,239);
+    falloffdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,239);
+    windowupButton          = Button_Init(plus_button_png, plus_button_hover_png,456, 291);
+    windowdownButton        = Button_Init(minus_button_png, minus_button_hover_png, 300,291);
     themeWhiteButton        = Button_Init(theme_white_png, theme_white_png, 350, 291);
     themeBlackButton        = Button_Init(theme_black_png, theme_black_png, 350, 291);
     quickstartOnButton      = Button_Init(toggle_on_png, toggle_on_png, 350, 330);
