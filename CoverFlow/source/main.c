@@ -181,7 +181,7 @@ int main( int argc, char **argv )
 	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 	UpdateBufferedImages();
 	
-	float wait = 120; //ms
+	float wait = 100; //ms
 	float prog = 2.1/wait;
 	
 	sprintf(self.debugMsg, "Initializing Threaded Image Buffer..." );	

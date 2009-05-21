@@ -482,7 +482,7 @@ inline void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees,
  * @param scaleY
  * @param color
  */
-inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float scale, u32 color ) {
+inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float scale, u32 color, float falloff ) {
 	GRRLIB_3D_Init();
 
     GXTexObj texObj;
@@ -501,11 +501,11 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
 	
 	if(scale > 1)
 	{
-		guMtxTransApply(m, m, loc, 0, 6.0f+abs(loc)*settings.coverFallOff);
+		guMtxTransApply(m, m, loc, 0, 6.0f+falloff);
 	}
 	else
 	{
-		guMtxTransApply(m, m, loc, 0, 8.0f+abs(loc)*settings.coverFallOff);
+		guMtxTransApply(m, m, loc, 0, 8.0f+falloff);
 	}
 	
     guMtxConcat (view, m, mv);

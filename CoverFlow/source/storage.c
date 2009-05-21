@@ -18,12 +18,12 @@ bool init_usbfs()
 	Fat_MountSDHC();
 	
 	self.progress+=0.05;
-	Paint_Progress(self.progress, NULL);
+	Paint_Progress(self.progress, "Initializing USBFS...");
 	
 	/* Initialize DIP module */
 	ret = Disc_Init();
 	self.progress+=0.05;
-	Paint_Progress(self.progress, NULL);
+	Paint_Progress(self.progress, "Initializing Disc...");
 	
 	if (ret < 0) {
 		printf(localStr("M086", "[+] ERROR:\n"));
@@ -250,7 +250,7 @@ s32 GetEntries()
 
 	self.progress+=0.05;
 	sprintf(self.debugMsg, localStr("M998", "Getting game list") );
-	Paint_Progress(self.progress, NULL);
+	Paint_Progress(self.progress, self.debugMsg);
 	
 	/* Get header list */
 	ret = WBFS_GetHeaders(buffer, cnt, sizeof(struct discHdr));
@@ -259,13 +259,13 @@ s32 GetEntries()
 
 	self.progress+=0.05;
 	sprintf(self.debugMsg, localStr("M997", "Sorting game list") );
-	Paint_Progress(self.progress, NULL);
+	Paint_Progress(self.progress, self.debugMsg);
 	
 	/* Sort entries */
 	qsort(buffer, cnt, sizeof(struct discHdr), __Menu_EntryCmp);
 
 	self.progress+=0.05;
-	Paint_Progress(self.progress, NULL);
+	Paint_Progress(self.progress, self.debugMsg);
 	
 	/* Free memory */
 	if (self.gameList)
@@ -299,7 +299,7 @@ s32 GetEntries()
 	Init_Covers();
 
 	self.progress+=0.05;
-	Paint_Progress(self.progress, NULL);
+	Paint_Progress(self.progress, self.debugMsg);
 	
 	/* Reset variables */
 	self.gameSelected = self.gameStart = 0;
@@ -319,14 +319,14 @@ err:
 
 bool Init_Game_List(){
 
-	Paint_Progress(self.progress, NULL);
+	Paint_Progress(self.progress, "Initialize WBFS Game List...");
 	
 	/* Try to open device */
 	if (WBFS_Open() >= 0) {
 		/* Get game list */
 		
 		self.progress+=0.05;
-		Paint_Progress(self.progress, NULL);
+		Paint_Progress(self.progress, "Getting Entries...");
 		GetEntries();
 		return true;
 	}

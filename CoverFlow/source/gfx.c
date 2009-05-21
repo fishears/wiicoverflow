@@ -63,7 +63,7 @@ void LoadTextures()
 	GRRLIB_InitTileSet(&font_title_small, 10, 14, 32);
 }
 
-void DrawBufferedCover(int i, float loc, float angle)
+void DrawBufferedCover(int i, float loc, float angle, float falloff)
 {
 	if(i < MAX_BUFFERED_COVERS || i >= 0)
 	{
@@ -72,22 +72,22 @@ void DrawBufferedCover(int i, float loc, float angle)
 			pthread_mutex_lock(&buffer_mutex[i]);
 			if(_texture_data[i].data)
 			{
-				GRRLIB_DrawCoverImg(loc*1.2,_texture_data[i],angle,1.0,0xFFFFFFFF);
+				GRRLIB_DrawCoverImg(loc*1.2,_texture_data[i],angle,1.0,0xFFFFFFFF, falloff);
 			}
 			else
 			{
-				GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
+				GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff);
 			}
 			pthread_mutex_unlock(&buffer_mutex[i]);
 		}
 		else
 		{
-			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
+			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff);
 		}	
 	}
 	else
 	{
-		GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF);
+		GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff);
 	}	
 
 }
@@ -300,17 +300,21 @@ void GRRLIB_Cover(float pos, int texture_id)
 	//static const float SPACING = 2.8;
 	float dir = 1;
 	float loc, scale, angle;
-
+	float falloff;
+	
 	if (pos < 0) {
 		dir *= -1;
 		pos *= -1;
 	}
 
 	loc = settings.coverSpacing * dir * (pow(pos + 1, -1) - 1);
+	
+	falloff = (pos)*2*settings.coverFallOff;
+	
 	scale = pow(pos + 1, -2);
 	angle = -1 * dir * change_scale(scale, 0, 1, settings.coverAngle, 0);
 
-	DrawBufferedCover(texture_id, loc, angle);
+	DrawBufferedCover(texture_id, loc, angle, falloff);
 }
 
 
@@ -571,7 +575,7 @@ int draw_selected_two(bool load, bool hover)
   }
   else
   {
-	DrawBufferedCover(self.gameSelected, loc, angle);
+	DrawBufferedCover(self.gameSelected, loc, angle,  0 );
   }
   
   return 0;
@@ -602,7 +606,7 @@ void draw_selected()
 	
 	float dir = 1;
 	float loc, scale, angle;
-
+	
 	loc = settings.coverSpacing * dir * (pow(1, -1) - 1);
 	scale = change_scale(self.animate_flip, 0, 1, 0, 360);
 	angle = -1 * dir * scale;
@@ -610,7 +614,7 @@ void draw_selected()
 	if(scale >= 180)
 	{
 		//Use back art texture
-		GRRLIB_DrawCoverImg(loc*1.2,back_texture,angle,1.4,0xFFFFFFFF);
+		GRRLIB_DrawCoverImg(loc*1.2,back_texture,angle,1.4,0xFFFFFFFF, 0);
 	
 		if(scale >= 360)
 		{
@@ -667,7 +671,7 @@ void draw_selected()
   }
   else
   {
-	DrawBufferedCover(self.gameSelected, loc, angle);
+	DrawBufferedCover(self.gameSelected, loc, angle, 0);
 	
   }
 }
