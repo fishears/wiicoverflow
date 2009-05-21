@@ -360,7 +360,7 @@ int main( int argc, char **argv )
 							// User clicked back button
 							self.selected = false;
 						}
-						else if(Button_Select(&gsettingsButton, pointer.p_x, pointer.p_y))
+						else if(!settings.parentalLock && Button_Select(&gsettingsButton, pointer.p_x, pointer.p_y))
                         {
 							//clicked settings button on launch screen
                             game_settings_menu(self.gameList);
