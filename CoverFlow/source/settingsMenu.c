@@ -134,6 +134,8 @@ void Graphic_Settings_Menu(){
 		Button_Paint(&zoomdownButton);
 		Button_Paint(&angleupButton);
 		Button_Paint(&angledownButton);
+		Button_Paint(&falloffupButton);
+		Button_Paint(&falloffdownButton);
 		Button_Paint(&windowupButton);
 		Button_Paint(&windowdownButton);
 		if (settings.coverText)
@@ -155,7 +157,9 @@ void Graphic_Settings_Menu(){
 			Button_Hover(&coverTextOffButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&resetButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&angleupButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&angledownButton, pointer.p_x, pointer.p_y))
+			Button_Hover(&angledownButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&falloffupButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&falloffdownButton, pointer.p_x, pointer.p_y))
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
