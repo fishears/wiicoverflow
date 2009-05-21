@@ -41,6 +41,8 @@
 #include "installMenu.h"
 #include "bootMenu.h"
 #include "deleteMenu.h"
+#include "soundmanager.h"
+//#include "ee.h"
 
 
 /*DOL TEST*/
@@ -122,6 +124,9 @@ GRRLIB_texImg pointer_shadow_texture;
 GRRLIB_texImg turn_point_texture;
 
 int COVER_COUNT;
+
+SoundFile _sounds[MAX_SOUNDS];
+
 WPADData *wd;
 Mtx GXmodelView2D;
 

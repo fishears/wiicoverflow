@@ -202,3 +202,10 @@ void DragSlider(int xPos)
 		self.shift = self.min_cover;
 }
 
+int getRandomNum(int min, int max){
+
+	int diff = max - min + 1;
+	int res = (rand() % diff)+min;
+	
+	return res;
+}
