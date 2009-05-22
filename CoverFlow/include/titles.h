@@ -12,7 +12,6 @@ typedef struct{
 
 int initTitle();
 int getNumLines(FILE* fp);
-//void fillTitleStruct(s_title* titleList, int len);
 void fillTitleStruct(s_title* titleList, int len);
 void getTitle(s_title* titleList, char* id, char* title);
 
