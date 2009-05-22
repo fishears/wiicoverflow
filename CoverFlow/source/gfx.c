@@ -72,22 +72,22 @@ void DrawBufferedCover(int i, float loc, float angle, float falloff)
 			pthread_mutex_lock(&buffer_mutex[i]);
 			if(_texture_data[i].data)
 			{
-				GRRLIB_DrawCoverImg(loc*1.2,_texture_data[i],angle,1.0,0xFFFFFFFF, falloff);
+				GRRLIB_DrawCoverImg(loc*1.2,_texture_data[i],angle,1.0,0xFFFFFFFF, falloff, settings.theme);
 			}
 			else
 			{
-				GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff);
+				GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
 			}
 			pthread_mutex_unlock(&buffer_mutex[i]);
 		}
 		else
 		{
-			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff);
+			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
 		}	
 	}
 	else
 	{
-		GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff);
+		GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
 	}	
 
 }
@@ -614,7 +614,7 @@ void draw_selected()
 	if(scale >= 180)
 	{
 		//Use back art texture
-		GRRLIB_DrawCoverImg(loc*1.2,back_texture,angle,1.4,0xFFFFFFFF, 0);
+		GRRLIB_DrawCoverImg(loc*1.2,back_texture,angle,1.4,0xFFFFFFFF, 0, settings.theme);
 	
 		if(scale >= 360)
 		{
