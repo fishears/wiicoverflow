@@ -4,8 +4,10 @@
 == RC3 (No Date) ==
 
 -FIX-
+  * Fixed transparent reflection problem (issue 73)
 
 -NEW-
+  * Max buffer set to 260
 
 -OTHER-
 
