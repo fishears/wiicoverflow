@@ -8,6 +8,7 @@
 
 -NEW-
   * Max buffer set to 260
+  * New Graphic Setting - Falloff
 
 -OTHER-
 
