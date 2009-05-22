@@ -3,6 +3,7 @@
 extern s_settings settings;
 extern s_gameSettings gameSetting;
 extern s_self self;
+extern s_title* titleList;
 
 // Slot light patch - from Bool's wiilight)
 static vu32 *_wiilight_reg = (u32*)0xCD0000C0;
@@ -166,6 +167,7 @@ void quit()
 	//we should free all allocated textures (SCO);
 	BUFFER_KillBuffer();
 	freeResources();
+	free(titleList);
 	exit(0);
 }
 

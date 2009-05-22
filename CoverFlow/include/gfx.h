@@ -3,6 +3,7 @@
 
 #include "coverflow.h"
 #include "button.h"
+#include "titles.h"
 
 #define FLIP_SPEED  0.016
 

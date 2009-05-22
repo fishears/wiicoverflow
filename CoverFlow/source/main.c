@@ -5,6 +5,7 @@
 extern u8 shutdown;
 extern u8 reset;
 extern s_settings settings;
+s_title *titleList;
 
 // Language selection config
 char languages[11][22] =
@@ -227,7 +228,20 @@ int main( int argc, char **argv )
 #ifndef TEST_MODE
     ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
 #endif
+
+#ifdef TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
+	int numLines = initTitle();
+	if(numLines > 0){
+		self.usingTitlesTxt = true;
+		self.titlesTxtSize = numLines;
+	}
 	
+	if(self.usingTitlesTxt){
+		titleList = (s_title *) malloc (numLines * sizeof(s_title));
+		fillTitleStruct(titleList, numLines);
+	}
+#endif
+		//fillTitleStruct(titleList, numLines);
 
 	//////////////////////////
 	// main screen gui loop //
@@ -469,6 +483,7 @@ int main( int argc, char **argv )
 				//
 				// SCOGNITO'S TRASH TEST CORNER
 				//
+				//ee();
 				/*
 				if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 					WindowPrompt("Titolo", "16:9", 0, &cancelButton);
