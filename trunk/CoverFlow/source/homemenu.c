@@ -8,6 +8,7 @@ extern s_pointer pointer;
 extern u8 shutdown;
 extern u8 reset;
 extern s_settings settings;
+extern s_title* titleList;
 
 #define MAX_WIIMOTES				4
 
@@ -311,6 +312,7 @@ void HomeMenu_Destroy()
 	
 	BUFFER_KillBuffer();
 	freeResources();
+	free(titleList);
 	
 	//quit();
 }

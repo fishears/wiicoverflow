@@ -1,6 +1,7 @@
 #include "deleteMenu.h"
 
 extern s_self self;
+extern s_title* titleList;
 
 bool Menu_Delete(){
 
@@ -16,13 +17,21 @@ bool Menu_Delete(){
 
 	/* Selected game */
 	header = &self.gameList[self.gameSelected];
+	char title[MAX_TITLE_LEN];
 
-	if(strlen(header->title) < 30) {
-		sprintf(gameName, "%s", header->title);
+	if(self.usingTitlesTxt){
+		sprintf(title, "%s", header->title);
+		getTitle(titleList, (char*)header->id, title);
+	}
+	else
+		sprintf(title, "%s", (header->title));
+
+	if(strlen(title) < 30) {
+		sprintf(gameName, "%s", title);
 	}
 	else
 	{
-		strncpy(gameName, header->title, 27);
+		strncpy(gameName, title, 27);
 		gameName[27] = '\0';
 		strncat(gameName, "...", 3);
 	}

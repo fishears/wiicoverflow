@@ -43,6 +43,7 @@
 #include "deleteMenu.h"
 #include "soundmanager.h"
 //#include "ee.h"
+#include "titles.h"
 
 
 /*DOL TEST*/
@@ -66,6 +67,7 @@
 
 //#define TEST_MODE 1
 #define DEBUG 1
+//#define TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
 
 //#define D3_COVERS
 
@@ -87,7 +89,7 @@
 /* Sound stuff */
 #define OGG_FORMAT 0
 #define RAW_FORMAT 1
-#define MAX_SOUNDS   4
+#define MAX_SOUNDS   5
 
 /* CFG stuff */
 #define CFG_VIDEO_COUNT  6
@@ -98,7 +100,8 @@ enum {
 	FX_BG_MUSIC = 0,
 	FX_COVER_FLIP,
 	FX_COVER_SCROLL,
-	FX_BUTTON_CLICK
+	FX_BUTTON_CLICK,
+	FX_TOASTY
 };
 
 extern const u8 no_cover_png[];
@@ -175,6 +178,9 @@ typedef struct{
 	s32 my_wbfsDev;
 	wbfs_t *hdd;
 	struct discHdr *gameList;
+	
+	bool usingTitlesTxt;
+	int titlesTxtSize;
 	
 	int dummy;
 

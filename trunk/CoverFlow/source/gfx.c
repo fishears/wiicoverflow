@@ -6,6 +6,8 @@ extern s_self self;
 extern s_pointer pointer;
 extern s_settings settings;
 extern s_gameSettings gameSetting;
+extern s_title* titleList;
+
 // Language selection config
 char glanguages[11][22] =
 {{"Console Default"},
@@ -355,11 +357,17 @@ void draw_game_title(int index, float textSize)
 	if(index != -1)
 	{
 		int len = 0;
+		
 		struct discHdr *header = NULL;
-		char gameName[36]; 
+		char gameName[36];
+		char title[MAX_TITLE_LEN];
 		
 		header = &self.gameList[index];
-		len = strlen(header->title);
+		
+		if(self.usingTitlesTxt){
+			sprintf(title, "%s", header->title);
+			getTitle(titleList, (char*)header->id, title);
+		}
 		
 		if (self.gameCnt < 1)
 		{
@@ -368,21 +376,34 @@ void draw_game_title(int index, float textSize)
 		}
 		else
 		{
-			len = strlen(header->title);
+			if(self.usingTitlesTxt)
+				len = strlen(title);
+			else
+				len = strlen(header->title);
 			// chomp the title to fit
 			if(len <= 35) //the length of the max title is 35 fixed width chars
 			{
-				sprintf(gameName, "%s", (header->title));
+				if(self.usingTitlesTxt)
+					sprintf(gameName, "%s", (title));
+				else
+					sprintf(gameName, "%s", (header->title));
 			}
 			else
 			{
-				strncpy(gameName, header->title, 32);
+				if(self.usingTitlesTxt)
+					strncpy(gameName, title, 32);
+				else
+					strncpy(gameName, header->title, 32);
 				gameName[32] = '\0';
 				strncat(gameName, "...", 3);
 				len = 35;
 			}
 		}
+		
+		len = strlen(gameName);
+		
 		float offset = (len*7.9); // calc a font scaled offset from title length
+		
 		if((int)offset > 260)
 			offset = 260.0; // dont draw on top of the setting button
 	
@@ -502,9 +523,23 @@ int draw_selected_two(bool load, bool hover)
 #ifndef TEST_MODE
 		struct discHdr *header = NULL;
 		header = &self.gameList[self.gameSelected];
-		char gameName[21]; 
+		char gameName[MAX_TITLE_LEN]; 
 
+
+		if(self.usingTitlesTxt){
+			sprintf(gameName, "%s", header->title);
+			getTitle(titleList, (char*)header->id, gameName);
+		}
+		else
+			sprintf(gameName, "%s", (header->title));
 		// chomp the title to fit
+		if(strlen(gameName) >= 20)
+		{
+			//strncpy(gameName, header->title, 17);
+			gameName[17] = '\0';
+			strncat(gameName, "...", 3);
+		}
+		/*
 		if(strlen(header->title) < 20)
 		{
 			sprintf(gameName, "%s", (header->title));
@@ -515,6 +550,7 @@ int draw_selected_two(bool load, bool hover)
 			gameName[17] = '\0';
 			strncat(gameName, "...", 3);
 		}
+		*/
 
 		// Display Title, Last Played, and Size
 		GRRLIB_Printf(245, 174, font_title, 0xFFFFFFFF, 1, "%s", gameName);
@@ -583,6 +619,7 @@ int draw_selected_two(bool load, bool hover)
 
 void draw_selected()
 {
+	//WindowPrompt("zucca!", "topa", 0, &okButton);
 	
 	if(self.selected && self.animate_flip < 1.0)
 	{
@@ -638,11 +675,18 @@ void draw_selected()
 
 			/* Get game size */
 			WBFS_GameSize(header->id, &size);
-			char name[64];
+			char name[MAX_TITLE_LEN];
 			
-			for(i = 0; i < 64; i++)
-				name[i] = toupper(header->title[i]);
-				
+			if(self.usingTitlesTxt){
+				sprintf(name, "%s", header->title);
+				getTitle(titleList, (char*)header->id, name);
+			}
+			else{
+				WindowPrompt("zucca!", "eheh", 0, &okButton);
+				for(i = 0; i < MAX_TITLE_LEN; i++)
+					name[i] = toupper(header->title[i]);
+			}
+			
 			len = strlen(name);
 			
 			float tsize = .8;
@@ -918,19 +962,23 @@ void game_settings_menu()
     struct discHdr *header = NULL;
     header = &self.gameList[self.gameSelected];
     char titleID[7];
-    char gameName[21];
+    char gameName[MAX_TITLE_LEN];
 
     // chomp the title to fit
-    if(strlen(header->title) < 20)
-    {
+	if(self.usingTitlesTxt){
+		sprintf(gameName, "%s", header->title);
+		getTitle(titleList, (char*)header->id, gameName);
+	}
+	else
 		sprintf(gameName, "%s", (header->title));
-    }
-    else
+	
+    if(strlen(header->title) >= 20)
     {
-		strncpy(gameName, header->title, 17);
+		//strncpy(gameName, header->title, 17);
 		gameName[17] = '\0';
 		strncat(gameName, "...", 3);
     }
+	
     sprintf(titleID, "%s", header->id);
     if(!getGameSettings(titleID, &gameSetting));
     {
@@ -1077,7 +1125,7 @@ void game_settings_menu()
 		Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
 
         //BUTTON TEXT
-		GRRLIB_Printf(89, 145,  font_title, settings.fontColor, 1, localStr("M036", "%s: settings"), gameName);
+		GRRLIB_Printf(89, 145,  font_title, settings.fontColor, 1, localStr("M036", "%s settings"), gameName);
 		GRRLIB_Printf(169, 193,  font_texture, settings.fontColor, 1, localStr("M135", "Ocarina:"));
 		GRRLIB_Printf(334, 193,  font_texture, settings.fontColor, 1, localStr("M037", "Hook:"));
 		GRRLIB_Printf(409, 193,  font_texture, 0xFFFFFFFF, 1, "%s",ghooks[gameSetting.hooktype]);
