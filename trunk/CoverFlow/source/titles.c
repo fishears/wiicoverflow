@@ -35,15 +35,10 @@ int getNumLines(FILE* fp){
 	return lineCount;
 }
 
-//void fillTitleStruct(s_title titleList[], int len){
 void fillTitleStruct(s_title* titleList, int len){
 	
 	int i = 0;
 	char line[MAX_TITLE_LEN];
-	
-	//char sss[123];
-	//sprintf(sss, "%d", len);
-	//WindowPrompt(sss, "Cuct!", 0, &cancelButton);
 	
 	FILE* fp;
 	fp = fopen(USBLOADER_PATH "/titles.txt", "r");

@@ -45,7 +45,6 @@
 //#include "ee.h"
 #include "titles.h"
 
-
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
 // the bootloader to the Coverflow/bootloader/ folder

@@ -241,7 +241,6 @@ int main( int argc, char **argv )
 		fillTitleStruct(titleList, numLines);
 	}
 #endif
-		//fillTitleStruct(titleList, numLines);
 
 	//////////////////////////
 	// main screen gui loop //
