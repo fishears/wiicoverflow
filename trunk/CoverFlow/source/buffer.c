@@ -10,7 +10,7 @@
  #include <malloc.h>
  
  #define MEM2_START_ADDRESS 0x91000000
- #define MEM2_EXTENT 0x3000000
+ #define MEM2_EXTENT 225*160*4*260
  #define TEXTURE_DATA_SIZE 225*160*4
  #define DENSITY_METHOD 1
  #define ALL_CACHED 2
