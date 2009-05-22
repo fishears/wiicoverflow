@@ -7,7 +7,7 @@
   * Fixed transparent reflection problem (issue 73)
 
 -NEW-
-  * Max buffer set to 260
+  * Max buffer set to 260 for permanent cache (500 covers are still supported but have never been tested)
   * New Graphic Setting - Falloff
 
 -OTHER-
