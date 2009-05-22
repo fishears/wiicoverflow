@@ -206,6 +206,10 @@ void Settings_Menu(){
 		{
 			doloop = false;
 		}
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1) // Check for screen shot
+		{
+			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+		}
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 		{
 			if (Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
