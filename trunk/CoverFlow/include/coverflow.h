@@ -64,7 +64,7 @@
 /* Aspect ratio fix for some image*/
 #define AR_16_9 0.80F //0.85
 
-#define TEST_MODE 1
+//#define TEST_MODE 1
 #define DEBUG 1
 //#define TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
 
