@@ -6,12 +6,16 @@
 -FIX-
   * Fixed transparent reflection problem (issue73)
   * Fixed a bug that download black image when a cover is not found (issue134)
+  * Fixed a bug that my crash wii if wireless signal is lost: now network is initialized each time a button that requires a download is clicked (issue138)
+  * Fixed a post installation dump (issue128)
+  * Fixed slow setting menu bug (issue131)
+  * Other minor fixes we forgot, and general code cleanup
 
 -NEW-
   * Max buffer set to 260 for permanent cache (500 covers are still supported but have never been tested) *NOT YET FIXED*, see issue146
   * New Graphic Setting - Falloff
-
--OTHER-
+  * Wiimote battery support
+  * New buttons images
 
 == RC2 (20 May 2009) ==
 
