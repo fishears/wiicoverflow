@@ -1,6 +1,4 @@
 #labels Featured
-= CHANGELOG =
-
 == RC3 (No Date) ==
 
 -FIX-
@@ -16,7 +14,7 @@
   * New Graphic Setting - Falloff
   * Wiimote battery support
   * New buttons images
-
+----
 == RC2 (20 May 2009) ==
 
 -FIX-
