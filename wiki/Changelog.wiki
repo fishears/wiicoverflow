@@ -4,10 +4,11 @@
 == RC3 (No Date) ==
 
 -FIX-
-  * Fixed transparent reflection problem (issue 73)
+  * Fixed transparent reflection problem (issue73)
+  * Fixed a bug that download black image when a cover is not found (issue134)
 
 -NEW-
-  * Max buffer set to 260 for permanent cache (500 covers are still supported but have never been tested)
+  * Max buffer set to 260 for permanent cache (500 covers are still supported but have never been tested) *NOT YET FIXED*, see issue146
   * New Graphic Setting - Falloff
 
 -OTHER-
