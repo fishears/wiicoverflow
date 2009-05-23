@@ -117,15 +117,15 @@ void Graphic_Settings_Menu(){
 		GRRLIB_Printf(190, 55,  font_title, settings.fontColor, 1, localStr("M049", "Graphics Settings"));
 		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, localStr("M050", "Zoom:") );
 		GRRLIB_Printf(350, 100, font_texture, settings.fontColor, 1, "%f", settings.coverZoom);
-		GRRLIB_Printf(145, 148, font_texture, settings.fontColor, 1, localStr("M051", "Spacing:") );
-		GRRLIB_Printf(350, 148, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
-		GRRLIB_Printf(145, 197, font_texture, settings.fontColor, 1, localStr("M052", "Angle:") );
-		GRRLIB_Printf(350, 197, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
-		GRRLIB_Printf(145, 240, font_texture, settings.fontColor, 1, "Falloff:" );
-		GRRLIB_Printf(350, 240, font_texture, settings.fontColor, 1, "%f", settings.coverFallOff);
-		GRRLIB_Printf(145, 275, font_texture, settings.fontColor, 1, localStr("M053", "Draw Window:") );
-		GRRLIB_Printf(350, 275, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
-		GRRLIB_Printf(145, 332, font_texture, settings.fontColor, 1, localStr("M054", "Game Title:") );
+		GRRLIB_Printf(145, 138, font_texture, settings.fontColor, 1, localStr("M051", "Spacing:") );
+		GRRLIB_Printf(350, 138, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
+		GRRLIB_Printf(145, 176, font_texture, settings.fontColor, 1, localStr("M052", "Angle:") );
+		GRRLIB_Printf(350, 176, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
+		GRRLIB_Printf(145, 214, font_texture, settings.fontColor, 1, "Falloff:" );
+		GRRLIB_Printf(350, 214, font_texture, settings.fontColor, 1, "%f", settings.coverFallOff);
+		GRRLIB_Printf(145, 252, font_texture, settings.fontColor, 1, localStr("M053", "Draw Window:") );
+		GRRLIB_Printf(350, 252, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
+		GRRLIB_Printf(145, 290, font_texture, settings.fontColor, 1, localStr("M054", "Game Title:") );
 		
 		//Button_Theme_Paint(&settingsButton, settings.theme);
 		Button_Paint(&spacingupButton);
@@ -351,13 +351,13 @@ void Settings_Menu(){
 		GRRLIB_Printf(330, 128, font_texture, 0xFFFFFFFF, 1, "%s",languages[settings.language]);
 		GRRLIB_Printf(145, 157, font_texture, settings.fontColor, 1, localStr("M039", "Video mode") );
 		GRRLIB_Printf(330, 155, font_texture, 0xFFFFFFFF, 1, "%s",vidmodes[settings.video]);
-		GRRLIB_Printf(145, 189, font_texture, settings.fontColor, 1, localStr("M040", "VIDTV patch") );
-		GRRLIB_Printf(145, 221, font_texture, settings.fontColor, 1, localStr("M058", "Graphics") );
-		GRRLIB_Printf(145, 260, font_texture, settings.fontColor, 1, localStr("M059", "Get Missing Covers") );
-		GRRLIB_Printf(145, 300, font_texture, settings.fontColor, 1, localStr("M060", "Theme") );
-		GRRLIB_Printf(145, 340, font_texture, settings.fontColor, 1, localStr("M061", "1-Click Launch") );
-		GRRLIB_Printf(145, 380, font_texture, settings.fontColor, 1, localStr("M062", "Rumble") );
-		GRRLIB_Printf(145, 420, font_texture, settings.fontColor, 1, localStr("M063", "Sound") );
+		GRRLIB_Printf(145, 187, font_texture, settings.fontColor, 1, localStr("M040", "VIDTV patch") );
+		GRRLIB_Printf(145, 227, font_texture, settings.fontColor, 1, localStr("M058", "Graphics") );
+		GRRLIB_Printf(145, 267, font_texture, settings.fontColor, 1, localStr("M059", "Get Missing Covers") );
+		GRRLIB_Printf(145, 307, font_texture, settings.fontColor, 1, localStr("M060", "Theme") );
+		GRRLIB_Printf(145, 347, font_texture, settings.fontColor, 1, localStr("M061", "1-Click Launch") );
+		GRRLIB_Printf(145, 387, font_texture, settings.fontColor, 1, localStr("M062", "Rumble") );
+		GRRLIB_Printf(145, 427, font_texture, settings.fontColor, 1, localStr("M063", "Sound") );
 		//GRRLIB_Printf(218, 446, font_texture, settings.fontColor, 1.15, "Press B to return");
 
 		// Draw stateless buttons
