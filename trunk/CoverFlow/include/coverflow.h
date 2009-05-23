@@ -66,12 +66,12 @@
 
 //#define TEST_MODE 1
 #define DEBUG 1
-//#define TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
+#define TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
 
 //#define D3_COVERS
 
 //TTF TEST
-#define TTF_TEST
+//#define TTF_TEST
 
 #define KB_SIZE         1024.0
 #define MB_SIZE         1048576.0
@@ -83,7 +83,7 @@
 #define BUFFER_THREAD_COUNT  1
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           15
-#define RELEASE              "RC 2"
+#define RELEASE              "RC 3"
 
 #define ANIMATE_TEST 1
 #define ANIMATE_SPEED 0
