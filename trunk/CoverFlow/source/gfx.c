@@ -8,6 +8,7 @@ extern s_settings settings;
 extern s_gameSettings gameSetting;
 extern s_title* titleList;
 
+extern int COVER_COUNT;
 // Language selection config
 char glanguages[11][22] =
 {{"Console Default"},

@@ -2,6 +2,7 @@
 
 extern s_self self;
 extern s_gameSettings gameSetting;
+extern int COVER_COUNT;
 
 void LoadCurrentCover(int id, struct discHdr *gameList)
 {

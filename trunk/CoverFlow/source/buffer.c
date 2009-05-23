@@ -16,7 +16,7 @@
  #define ALL_CACHED 2
  
  //this is just over 32MB Hope it works
- 
+
  extern const u8         back_cover_png[];
  
  // private cars

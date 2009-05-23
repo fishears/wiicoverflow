@@ -2,6 +2,7 @@
 
 extern s_self self;
 extern s_title* titleList;
+extern int COVER_COUNT;
 
 bool Menu_Delete(){
 
