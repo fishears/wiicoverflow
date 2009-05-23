@@ -1,11 +1,27 @@
-#include "coverflow.h"
-//#include "soundmanager.h"
-#include "filter.h"
+
+extern "C" {
+	#include "coverflow.h"
+	//#include "soundmanager.h"
+	#include "filter.h"
+
+	extern int COVER_COUNT;
+	#ifdef TEST_MODE
+	int COVER_COUNT = 29;
+	#else
+	int COVER_COUNT = 0;
+	#endif
+}
+
+#include "FreeTypeGX.h"
+
+extern u8 font_ttf[];
+extern u32 font_ttf_size;
 
 extern u8 shutdown;
 extern u8 reset;
 extern s_settings settings;
 s_title *titleList;
+
 
 // Language selection config
 char languages[11][22] =
@@ -47,11 +63,6 @@ s_self self; // Create this struct
 s_pointer pointer;
 s_gameSettings gameSetting;
 
-#ifdef TEST_MODE
-int COVER_COUNT = 29;
-#else
-int COVER_COUNT = 0;
-#endif
 
 float SCROLL_SPEED = 0.050;
 bool imageNotFound = false;
@@ -244,6 +255,10 @@ int main( int argc, char **argv )
 	// main screen gui loop //
 	//////////////////////////
 	
+	//load test font stuff
+	FreeTypeGX *freeTypeGX = new FreeTypeGX();
+	freeTypeGX->loadFont(font_ttf, font_ttf_size, 32, true);
+	
 	while(1) 
 	{
 	
@@ -374,7 +389,7 @@ int main( int argc, char **argv )
 						else if(!settings.parentalLock && Button_Select(&gsettingsButton, pointer.p_x, pointer.p_y))
                         {
 							//clicked settings button on launch screen
-                            game_settings_menu(self.gameList);
+                            game_settings_menu();
                         }
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
 						{	
@@ -721,6 +736,11 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(50, 60, font_title, 0x808080FF, 1, "X: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
 
 #endif
+		
+		#ifdef TTF_TEST
+		freeTypeGX->drawText(100, 80, _TEXT("JUSTIN IS A STUD!"), (GXColor){0x20, 0xff, 0x20, 0xff});
+		#endif //TTF_TEST
+		
 		// Draw the pointing hand
 		DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		// Main loop Render()

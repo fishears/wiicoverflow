@@ -3,6 +3,7 @@
 extern s_self self;
 extern s_settings settings;
 
+extern int COVER_COUNT;
 bool init_usbfs()
 {    
    // __Disc_SetLowMem();

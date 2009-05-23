@@ -64,11 +64,14 @@
 /* Aspect ratio fix for some image*/
 #define AR_16_9 0.80F //0.85
 
-//#define TEST_MODE 1
+#define TEST_MODE 1
 #define DEBUG 1
 //#define TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
 
 //#define D3_COVERS
+
+//TTF TEST
+#define TTF_TEST
 
 #define KB_SIZE         1024.0
 #define MB_SIZE         1048576.0
@@ -120,12 +123,12 @@ extern const u8 font_w14_h20_png[]; // title font
 extern const u8 font_w10_h14_png[]; // title font
 extern const u8 ambientlight_png[];
 
+
 GRRLIB_texImg covers[MAX_COVERS];
 GRRLIB_texImg pointer_texture;
 GRRLIB_texImg pointer_shadow_texture;
 GRRLIB_texImg turn_point_texture;
 
-int COVER_COUNT;
 
 SoundFile _sounds[MAX_SOUNDS];
 

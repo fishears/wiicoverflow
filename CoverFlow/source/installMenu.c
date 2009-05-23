@@ -2,6 +2,7 @@
 
 extern s_self self;
 
+extern int COVER_COUNT;
 bool Menu_Install(){
 
 	WPAD_Rumble(0,0);
