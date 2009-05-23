@@ -146,7 +146,7 @@ void apply_settings()
     }
 }
 
-int Net_Init(char *ip)
+bool networkInit(char *ip)
 {
 	s32 res;
 	while ((res = net_init()) == -EAGAIN)
@@ -162,6 +162,28 @@ int Net_Init(char *ip)
 	return true;
 }
 
+/*
+bool networkInit()
+{	//if(self.firstTimeDownload == true){
+		
+		//char myIP[16];
+		
+		//sprintf(self.debugMsg, localStr("M001", "Initializing Network") );
+		//Paint_Progress_Generic(v, max, self.debugMsg);
+		
+		if(!ifConfig(self.ipAddress))
+		{
+			//sprintf(self.debugMsg, localStr("M002", "Error Initializing Network") );
+			//Paint_Progress_Generic(v, max, self.debugMsg);
+			//WindowPrompt (localStr("M003", "ERROR!"), localStr("M002", "Error initializing network"), &okButton, 0);
+			return false;
+		}
+
+		return true;
+		//self.firstTimeDownload = false;
+	//}
+}
+*/
 void quit()
 {
 	//we should free all allocated textures (SCO);

@@ -12,6 +12,8 @@ extern char languages[11][22];
 extern char vidmodes[6][22];
 extern char hooks[3][9];
 
+extern s_title* titleList;
+
 void Graphic_Settings_Menu(){
 
 	bool doloop = true;
@@ -272,16 +274,55 @@ void Settings_Menu(){
 					settings.hooktype = 0;
 				}
 			}
-			else if (Button_Select(&downloadButton, pointer.p_x, pointer.p_y))
+			else if (Button_Select(&coversButton, pointer.p_x, pointer.p_y))
 			{
 				// Clicked on the Download Covers button
 				//if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
 				if (WindowPrompt(localStr("M055", "Cover Download"),localStr("M056", "This operation can't be canceled,\ncontinue?"), &okButton, &cancelButton))
 				{
-					batchDownloadCover(self.gameList);
-					CoversDownloaded();
+					if(networkInit(self.ipAddress)){
+						batchDownloadCover(self.gameList);
+						CoversDownloaded();
+					}
+					else
+						WindowPrompt(localStr("M003", "ERROR!"), localStr("M002", "Error initializing network\nCover can't be downloaded."), &okButton, 0);
 				}
 			}
+#ifdef TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
+			else if(Button_Select(&titlesButton, pointer.p_x, pointer.p_y)){
+				if(networkInit(self.ipAddress)){
+				
+					//if(self.usingTitlesTxt)
+					//{
+					//	{
+							if(!downloadTitles())
+								WindowPrompt(localStr("M003", "ERROR!"), "Error downloading Titles.txt\nAn error occurred while downloading/saving file.", &okButton, 0);
+							else
+							{
+								if(self.usingTitlesTxt){
+									self.usingTitlesTxt = false;
+									self.titlesTxtSize = 0;
+									free(titleList);
+								}
+
+								int numLines = initTitle();
+								if(numLines > 0){
+									self.usingTitlesTxt = true;
+									self.titlesTxtSize = numLines;
+									titleList = (s_title *) malloc (numLines * sizeof(s_title));
+									fillTitleStruct(titleList, numLines);
+									char numLinesTxt[250];
+									sprintf(numLinesTxt, "Succesfully imported %d titles!", numLines);
+									WindowPrompt("Success!", numLinesTxt, &okButton, 0);
+								}
+							}
+						//}
+					//}
+				}
+				else
+					WindowPrompt(localStr("M003", "ERROR!"), "Error initializing network\nTitles.txt can't be downloaded.", &okButton, 0);
+			}
+#endif
 			else if (Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
 			{
 				// Clicked on the video down button
@@ -353,7 +394,7 @@ void Settings_Menu(){
 		GRRLIB_Printf(330, 155, font_texture, 0xFFFFFFFF, 1, "%s",vidmodes[settings.video]);
 		GRRLIB_Printf(145, 187, font_texture, settings.fontColor, 1, localStr("M040", "VIDTV patch") );
 		GRRLIB_Printf(145, 227, font_texture, settings.fontColor, 1, localStr("M058", "Graphics") );
-		GRRLIB_Printf(145, 267, font_texture, settings.fontColor, 1, localStr("M059", "Get Missing Covers") );
+		GRRLIB_Printf(145, 267, font_texture, settings.fontColor, 1, localStr("M059", "Get additional data") );
 		GRRLIB_Printf(145, 307, font_texture, settings.fontColor, 1, localStr("M060", "Theme") );
 		GRRLIB_Printf(145, 347, font_texture, settings.fontColor, 1, localStr("M061", "1-Click Launch") );
 		GRRLIB_Printf(145, 387, font_texture, settings.fontColor, 1, localStr("M062", "Rumble") );
@@ -368,7 +409,8 @@ void Settings_Menu(){
 		Button_Paint(&hookupButton);
 		Button_Paint(&hookdownButton);
 		Button_Paint(&graphicsButton);
-		Button_Paint(&downloadButton);
+		Button_Paint(&titlesButton);
+		Button_Paint(&coversButton);
 		// Draw stateful buttons
 		Button_Toggle_Paint(&cheatoffButton, &cheatonButton, settings.ocarina);
 		Button_Toggle_Paint(&vidtvoffButton, &vidtvonButton, settings.vipatch);
@@ -395,7 +437,8 @@ void Settings_Menu(){
 			Button_Hover(&musicOnButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&musicOffButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&graphicsButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&downloadButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&titlesButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&coversButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&hookupButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&hookdownButton, pointer.p_x, pointer.p_y))
 		{
