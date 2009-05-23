@@ -72,8 +72,8 @@ void Graphic_Settings_Menu(){
 			}
 			else if(Button_Select(&angledownButton, pointer.p_x, pointer.p_y))
 			{
-				if (settings.coverAngle <= 0)
-					settings.coverAngle = 0; // sanity check
+				if (settings.coverAngle <= -140)
+					settings.coverAngle = -140; // sanity check
                                 else
                                         settings.coverAngle -= 1;
 			}
