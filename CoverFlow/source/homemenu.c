@@ -87,7 +87,7 @@ void HomeMenu_Show()
 	loaderButton.x  = 355+400;
 	loaderButton.y = 180;
 	
-	wiimoteButton.x = 64;
+	wiimoteButton.x = 54;
 	wiimoteButton.y = 400 + 400;
 	for(i = 0; i <= 10; i++)
 	{
@@ -318,37 +318,37 @@ void HomeMenu_Destroy()
 }
 void Do_Batteries()
 {
-    	#ifdef BATTMAN
+    #ifdef BATTMAN
 	int i,x;
-        u8 ret;
-        u8 level;
+	u8 ret;
+	u8 level;
 
-                for(x = 0; x <= 3; x++)
-                {
-                    ret = WPAD_BatteryLevel(x);
-                    level = (ret * 4)/100;
+	for(x = 0; x <= 3; x++)
+	{
+		ret = WPAD_BatteryLevel(x);
+		level = (ret * 4)/100;
 
-                    if(level > 4) level = 4; //restrict to maximum bars
-                            if(ret!=0) //no wiimote here
-                            {
-                                    if(level == 0) //no power bars here
-                                    {
-                                                GRRLIB_Printf(185+(106*x), 375, font_title, 0x808080FF, 1, "P%d", x+1);
-                                                GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
-                                    }
-                                    else //we have power, but how much?
-                                    {
-                                            GRRLIB_Printf(185+(106*x), 375, font_title, 0x808080FF, 1, "P%d", x+1);
-                                            GRRLIB_DrawImg(216+(106*x), 373, battery, 0, 1, 1, 0xFFFFFFFF); //draw battery container
+		if(level > 4) level = 4; //restrict to maximum bars
 
-                                        for(i = 0; i < level; i++)
-                                        {
-                                                GRRLIB_DrawImg(221+((107*x)+(8*i)), 377, battery_bar, 0, 1, 1, 0xFFFFFFFF); //draw the bars
-                                        }
-                                        }
-                            }
-                }
-
-        #endif
+		if(ret!=0) //no wiimote here
+		{
+			if(level == 0) //no power bars here
+			{
+				GRRLIB_Printf(185+(106*x), 375, font_title, 0x808080FF, 1, "P%d", x+1);
+				GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
+			}
+			else //we have power, but how much?
+			{
+				GRRLIB_Printf(185+(106*x), 375, font_title, 0x808080FF, 1, "P%d", x+1);
+				GRRLIB_DrawImg(216+(106*x), 373, battery, 0, 1, 1, 0xFFFFFFFF); //draw battery container
+				
+				for(i = 0; i < level; i++)
+				{
+					GRRLIB_DrawImg(221+((107*x)+(8*i)), 377, battery_bar, 0, 1, 1, 0xFFFFFFFF); //draw the bars
+				}
+			}
+		}
+	}
+	#endif
 }
 

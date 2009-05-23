@@ -188,6 +188,7 @@ void Init_Buttons()
     settingsButton		    = Button_Init(settings_png, settings_hover_png, 30, 420);
     settingsButton	    	= Button_Init(settings_png, settings_hover_png, 30, 420);
     titlesButton		    = Button_Init(titles_png, titles_hover_png, 400, 250);
+	coversButton			= Button_Init(covers_png, covers_hover_png, 310, 250);
     zoomupButton            = Button_Init(plus_button_png, plus_button_hover_png,456,95);
     zoomdownButton          = Button_Init(minus_button_png, minus_button_hover_png, 300,95);
     spacingupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,133);
@@ -212,7 +213,7 @@ void Init_Buttons()
     homeMenuBottomButton    = Button_Init(homeBottom_png, homeBottom_hover_png, 0, 368);
     wiiMenuButton           = Button_Init(wiiMenu_png, wiiMenu_hover_png, 34, 180);
     loaderButton            = Button_Init(loader_png, loader_hover_png, 174, 180);
-    wiimoteButton           = Button_Init(wiimote_png, wiimote_png, 64, 400);
+    wiimoteButton           = Button_Init(wiimote_png, wiimote_png, 54, 400);
 
 #ifndef 	LOCALBUTTON_OFF
 	//add for Localization

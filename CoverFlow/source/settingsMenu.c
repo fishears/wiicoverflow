@@ -280,6 +280,7 @@ void Settings_Menu(){
 				//if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
 				if (WindowPrompt(localStr("M055", "Cover Download"),localStr("M056", "This operation can't be canceled,\ncontinue?"), &okButton, &cancelButton))
 				{
+					WPAD_Rumble(0,0); //sometimes rumble remain active
 					if(networkInit(self.ipAddress)){
 						batchDownloadCover(self.gameList);
 						CoversDownloaded();
@@ -290,34 +291,29 @@ void Settings_Menu(){
 			}
 #ifdef TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
 			else if(Button_Select(&titlesButton, pointer.p_x, pointer.p_y)){
+				WPAD_Rumble(0,0); //sometimes rumble remain active
 				if(networkInit(self.ipAddress)){
-				
-					//if(self.usingTitlesTxt)
-					//{
-					//	{
-							if(!downloadTitles())
-								WindowPrompt(localStr("M003", "ERROR!"), "Error downloading Titles.txt\nAn error occurred while downloading/saving file.", &okButton, 0);
-							else
-							{
-								if(self.usingTitlesTxt){
-									self.usingTitlesTxt = false;
-									self.titlesTxtSize = 0;
-									free(titleList);
-								}
+					if(!downloadTitles())
+						WindowPrompt(localStr("M003", "ERROR!"), "Error downloading Titles.txt\nAn error occurred while downloading/saving file.", &okButton, 0);
+					else
+					{
+						if(self.usingTitlesTxt){
+							self.usingTitlesTxt = false;
+							self.titlesTxtSize = 0;
+							free(titleList);
+						}
 
-								int numLines = initTitle();
-								if(numLines > 0){
-									self.usingTitlesTxt = true;
-									self.titlesTxtSize = numLines;
-									titleList = (s_title *) malloc (numLines * sizeof(s_title));
-									fillTitleStruct(titleList, numLines);
-									char numLinesTxt[250];
-									sprintf(numLinesTxt, "Succesfully imported %d titles!", numLines);
-									WindowPrompt("Success!", numLinesTxt, &okButton, 0);
-								}
-							}
-						//}
-					//}
+						int numLines = initTitle();
+						if(numLines > 0){
+							self.usingTitlesTxt = true;
+							self.titlesTxtSize = numLines;
+							titleList = (s_title *) malloc (numLines * sizeof(s_title));
+							fillTitleStruct(titleList, numLines);
+							char numLinesTxt[250];
+							sprintf(numLinesTxt, "Succesfully imported %d titles!", numLines);
+							WindowPrompt("Success!", numLinesTxt, &okButton, 0);
+						}
+					}
 				}
 				else
 					WindowPrompt(localStr("M003", "ERROR!"), "Error initializing network\nTitles.txt can't be downloaded.", &okButton, 0);
