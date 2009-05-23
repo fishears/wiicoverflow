@@ -10,7 +10,7 @@
  #include <malloc.h>
  
  #define MEM2_START_ADDRESS 0x91000000
- #define MEM2_EXTENT 225*160*4*260
+ #define MEM2_EXTENT 225*160*4*50
  #define TEXTURE_DATA_SIZE 225*160*4
  #define DENSITY_METHOD 1
  #define ALL_CACHED 2
@@ -32,10 +32,11 @@
  } COVERQUEUE;
 
  COVERQUEUE _cq;
-int BufferMethod;
- double Density;
+ int BufferMethod=DENSITY_METHOD;
+ float Density;
  int MainCacheSize;
- int FloatingCacheSize;
+ int maxSlots;
+ int FloatingCacheSize=0;
  int CurrentSelection;
  struct discHdr *CoverList;
  int nCovers;
@@ -169,17 +170,17 @@ int BufferMethod;
 				 
 		if (ret > 0) 
 		{
-			int thisDataMem2Address;
+			int thisDataMem2Address=-1;
 			if (_cq.permaBufferPosition[index]!=-1)
 			{
 				thisDataMem2Address=MEM2_START_ADDRESS + TEXTURE_DATA_SIZE * _cq.permaBufferPosition[index];
 			}
 			else
 			{
-				int floatingPosition=GetFLoatingQueuePosition(index);
+				int floatingPosition=_cq.floatingQueuePosition[index];
 				if (floatingPosition!=-1)
 				{
-					thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition) * TEXTURE_DATA_SIZE ;
+					thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition + 1) * TEXTURE_DATA_SIZE ;
 				}
 				else
 				{
@@ -227,7 +228,7 @@ int BufferMethod;
 			int index = selection +i*(j*2-1); 
 			if (index>=0 && index<=nCovers)
 			{
-				if (_cq.request[index] && !_cq.remove[index]&&!_cq.ready[index]) return index;
+				if (_cq.request[index] && !_cq.ready[index]) return index;
 			}
 		}
 	}
@@ -250,7 +251,10 @@ int BufferMethod;
 		{
 			for (j=0;j<2;j++)
 			{
+				pthread_mutex_lock(&queue_mutex);
 				int index=GetPrioritisedCover(CurrentSelection);
+				pthread_mutex_unlock(&queue_mutex);
+
 				if (index==-1) index= (nCovers+1)/2 +i*(j*2-1);
 				if (index>=0 && index<=nCovers)
 				{
@@ -258,7 +262,7 @@ int BufferMethod;
 			 
 					/*Handle Load Requests*/
 					pthread_mutex_lock(&queue_mutex);
-					b = _cq.request[index] && !_cq.remove[index]&&!_cq.ready[index];
+					b = _cq.request[index] && !_cq.ready[index];
 					if (b) _cq.request[index]=false;
 					pthread_mutex_unlock(&queue_mutex);
 			 
@@ -284,12 +288,16 @@ int BufferMethod;
  
  }
  
- 
+   // internal only - no need to lock (already locked)
  void RemoveFromCache(int index)
   {
-          if (_cq.floatingQueuePosition[index] != -1)
+          if (_cq.floatingQueuePosition[FloatingCacheCovers[index]] != -1)
           {
-                  _cq.ready[index] = false;
+                _cq.ready[FloatingCacheCovers[index]] = false;
+                _cq.request[FloatingCacheCovers[index]] = false;
+			  	_texture_data[FloatingCacheCovers[index]].data=0;
+				_cq.floatingQueuePosition[FloatingCacheCovers[index]]=-1;
+
           }
          
   }
@@ -313,15 +321,17 @@ int BufferMethod;
 			  {
 				  if (abs(FloatingCacheCovers[i] - selection) > maxDistance)
 				  {
-					maxDistance = abs(FloatingCacheCovers[i] - selection) - maxDistance;
+					maxDistance = abs(FloatingCacheCovers[i] - selection);
 					maxIndex=i;
 				  }
 			  }
 	  }
 	  if (!spaceFound)
 	  {
+		
 			  RemoveFromCache(maxIndex);
 			  FloatingCacheCovers[maxIndex] = newCacheItem;
+			  _cq.floatingQueuePosition[newCacheItem]=maxIndex;
 	  }
 }
  
@@ -330,8 +340,6 @@ int BufferMethod;
 	  int i=0;
 	  int extra = 0;
 	  CurrentSelection=nCovers-index;
-//		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "Sel: %d", CurrentSelection);
-//       GRRLIB_Render();
 
 	  if (doNotRemoveFromFloating) extra = 1;
 	  int searchSize=nCoversInWindow*(2+extra);
@@ -340,14 +348,18 @@ int BufferMethod;
 	  {
 		  if (i >= 0 && i < nCovers)
 		  {
+			pthread_mutex_lock(&queue_mutex);
+
 			  if (!_cq.ready[i] && !_cq.request[i])
 			  {
 				  _cq.requestId[i]=&CoverList[i];
 				  _cq.request[i] = true;
 				  // this one isn't permenantly cached make a space for it in the floating cache
-				  if (_cq.permaBufferPosition[i] == -1 && !doNotRemoveFromFloating) SetFloatingCacheItem(CurrentSelection,i);
+				  if (_cq.permaBufferPosition[i] == -1) SetFloatingCacheItem(CurrentSelection,i);
 
 			  }
+			pthread_mutex_lock(&queue_mutex);
+
 		  }
 	  }
   }
@@ -355,6 +367,10 @@ int BufferMethod;
   void SetSelectedCover(int index)
   {
        iSetSelectedCover(index+nCovers/2.0,false);
+	   //GRRLIB_Printf(50, 40, font_texture, 0xFFFFFFFF, 1, "Method %d Max Slots %d Main Cache %d", BufferMethod, maxSlots, MainCacheSize);
+		//GRRLIB_Printf(50, 60, font_texture, 0xFFFFFFFF, 1, "Floating Cache %d, Density %f",FloatingCacheSize,Density);
+		//GRRLIB_Printf(50, 80, font_texture, 0xFFFFFFFF, 1, " Current Selection %d", CurrentSelection);
+
   }
  
  
@@ -373,33 +389,13 @@ int BufferMethod;
 	pthread_mutex_unlock(&buffer_mutex[index]);
   }
   
-  // internal only - no need to lock (already locked)
+ 
+   // internal only - no need to lock (already locked)
   void RequestForCache(int index)
   {
           _cq.requestId[index]=&CoverList[index];
           _cq.request[index]=true;
   }
- 
- 
- void RemoveFarthestFloatingCacheItem()
- {
-	 int i=0;
-	 int maxDistance=0;
-	 int maxIndex=-1;
-	 for (i=0;i<FloatingCacheSize;i++)
-	 {
-		 if (FloatingCacheCovers[i]!=-1)
-		 {
-			 if (abs(FloatingCacheCovers[i]-CurrentSelection)>maxDistance)
-			 {
-				 maxDistance=abs(FloatingCacheCovers[i]-CurrentSelection)>maxDistance;
-				 maxIndex=i;
-			 }
-		 }
-	 }
-	 FloatingCacheCovers[maxIndex]=-1;
- }
-
  
   // call at start, on add or on delete
   void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection)
@@ -417,7 +413,7 @@ int BufferMethod;
         pthread_mutex_unlock(&queue_mutex);
  
           
-          int maxSlots=MEM2_EXTENT/TEXTURE_DATA_SIZE;
+          maxSlots=250;//MEM2_EXTENT/(TEXTURE_DATA_SIZE);
           //decide on buffering method
           if (gameCount<=maxSlots)
           {
@@ -426,9 +422,11 @@ int BufferMethod;
           }
           else
           {
+				  BufferMethod=DENSITY_METHOD;
                   Density = ((float)maxSlots) / ((float)(gameCount));
                   FloatingCacheSize=(int)(((1-Density)*numberOfCoversToBeShown+1)*4);
                   MainCacheSize = maxSlots - FloatingCacheSize;
+				  Density = ((float)MainCacheSize) / ((float)(gameCount));
                   //FloatingCacheCovers = new int[FloatingCacheSize];// may be in .h
            }
           if (BufferMethod==ALL_CACHED)
