@@ -137,26 +137,18 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			Paint_Progress_Generic(v, max,self.debugMsg);
 		}
 		else{
-			/*
-			if (CFG.widescreen)
-				sprintf(url, "http://www.theotherzone.com/wii/widescreen/%s/%s.png", region, header->id);
-			else
-				sprintf(url, "http://www.theotherzone.com/wii/%s/%s.png", region, header->id);
-			*/
-			
+
 			sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, header->id);
 			sprintf(self.debugMsg, localStr("M007", "Getting %s"), url);
 			Paint_Progress_Generic(v, max,self.debugMsg);
 		
 			file = downloadfile(url);
 			
-			if(file.data != NULL){
+			if(file.data != NULL && file.size != 184){ //site return a black image of 184 bytes if the image is not found
 				saveFile(imgPath, file);
 				free(file.data);
 				sprintf(self.debugMsg, localStr("M008", "done") );
 			    Paint_Progress_Generic(v, max,self.debugMsg);
-				//else
-					//donotdownload = true;
 			}
 			else {
 				sprintf(self.debugMsg, localStr("M009", "some error occurred") );
@@ -182,13 +174,11 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			
 			file = downloadfile(url);
 			
-			if(file.data != NULL){
+			if(file.data != NULL && file.size != 7386){ //site return a generic of 7386 bytes image is not found
 				saveFile(imgPath, file);
 				free(file.data);
 				sprintf(self.debugMsg, localStr("M008", "done") );
 			    Paint_Progress_Generic(v, max,self.debugMsg);
-				//else
-					//donotdownload = true;
 			}
 			else { //TRY WITH 3 DIGIT COVER
 				
@@ -199,7 +189,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 				
 				file = downloadfile(url);
 			
-				if(file.data != NULL){
+				if(file.data != NULL && file.size != 7386){ //site return a generic of 7386 bytes image is not found
 					saveFile(imgPath, file);
 					free(file.data);
 					sprintf(self.debugMsg, localStr("M008", "done") );

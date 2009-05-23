@@ -484,6 +484,18 @@ int main( int argc, char **argv )
 				//
 				//ee();
 				/*
+				char imgPath[256];
+				snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, "zucc");
+					
+				FILE* fp = fopen(imgPath, "rb");
+				fseek(fp, 0, SEEK_END);
+				int size=ftell (fp);
+				fclose (fp);
+				
+				sprintf(imgPath, "filesize: %d", size);
+				WindowPrompt("Titolo", imgPath, 0, &cancelButton);
+				*/
+				/*
 				if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 					WindowPrompt("Titolo", "16:9", 0, &cancelButton);
 				else
@@ -491,18 +503,50 @@ int main( int argc, char **argv )
 				*/
 				GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 				//LoadCurrentCover(self.gameSelected, gameList);
+				
 				/*
-				self.gsize = getGameSize(gameList);
-				char sss[70];
-				float gsize = 2.4;
-				sprintf(sss, "Size:    %.2fGB", gsize);
-				WindowPrompt("TITOLO", sss, 0, &cancelButton);
+				sprintf(self.debugMsg, localStr("M001", "Initializing Network") );
+				
+				char myIP[16];
+				if(!Net_Init(myIP))
+				{
+					sprintf(self.debugMsg, localStr("M002", "Error Initializing Network") );
+					
+					WindowPrompt (localStr("M003", "ERROR!"), localStr("M002", "Error initializing network"), &okButton, 0);
+				}
+				else
+				{
+					sprintf(self.debugMsg, localStr("M004", "Network Initialized") );
+					
+					self.inetOk = true;
+				}
+						
+						struct block file = downloadfile("http://www.theotherzone.com/wii/diskart/160/160/zuc2.png");
+						if(file.data != NULL && file.size != 7386){
+							
+							char imgPath[256];
+							snprintf(imgPath, sizeof(imgPath), "%s/disks/%s.png", USBLOADER_PATH, "zucc");
+							saveFile(imgPath, file);
+							free(file.data);
+							//sprintf(imgPath, "size: %d", file.size);
+							WindowPrompt("Trovato", imgPath, 0, &okButton);
+						}
+						else{
+							WindowPrompt("NON Trovato", "ma quali", 0, &okButton);
+						}
 				*/
-				//PAD_BUTTON
-				/*Hitting 1 causes crash right now...*/
-				//sysdate();
-				//quit();
-				//WindowPrompt("Titolo", "This is a long message using\n\the character \\n as escape sequence.\nAlso now buttons title and message are\naligned now. :)", &okButton, &cancelButton);
+						/*
+						self.gsize = getGameSize(gameList);
+						char sss[70];
+						float gsize = 2.4;
+						sprintf(sss, "Size:    %.2fGB", gsize);
+						WindowPrompt("TITOLO", sss, 0, &cancelButton);
+						*/
+						//PAD_BUTTON
+						/*Hitting 1 causes crash right now...*/
+						//sysdate();
+						//quit();
+						//WindowPrompt("Titolo", "This is a long message using\n\the character \\n as escape sequence.\nAlso now buttons title and message are\naligned now. :)", &okButton, &cancelButton);
 			}
 			else
 			{
