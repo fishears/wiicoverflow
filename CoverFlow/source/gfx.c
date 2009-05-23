@@ -184,8 +184,9 @@ void Init_Buttons()
     graphicsButton          = Button_Init(ok_png, ok_hover_png, 350, 215);
     yesButton               = Button_Init(yes_png, yes_hover_png, 220, 290);
     noButton                = Button_Init(no_png, no_hover_png, 340, 290);
-    settingsButton	    = Button_Init(settings_png, settings_hover_png, 30, 420);
-    downloadButton          = Button_Init(download_png, download_hover_png, 350, 255);
+    settingsButton		    = Button_Init(settings_png, settings_hover_png, 30, 420);
+    settingsButton	    	= Button_Init(settings_png, settings_hover_png, 30, 420);
+    titlesButton		    = Button_Init(titles_png, titles_hover_png, 400, 250);
     zoomupButton            = Button_Init(plus_button_png, plus_button_hover_png,456,95);
     zoomdownButton          = Button_Init(minus_button_png, minus_button_hover_png, 300,95);
     spacingupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,133);
@@ -223,7 +224,9 @@ void Init_Buttons()
     sprintf(okButton.label, labelBuf); 
 	sprintf(graphicsButton.label, labelBuf);
     sprintf(resetButton.label, localStr("B07","")); 
-    sprintf(downloadButton.label, localStr("B08","")); 
+    //sprintf(downloadButton.label, localStr("B08","")); 
+	sprintf(coversButton.label, localStr("B08","")); 
+	sprintf(titlesButton.label, localStr("B08","")); 
     sprintf(loadButton.label, localStr("B09","")); 
     sprintf(labelBuf, localStr("B10",""));
 	sprintf(backButton.label, labelBuf); 

@@ -78,8 +78,8 @@ void initVars()
 	self.array_size = 0;
 	self.rumbleAmt = 0;
 	self.progress = 0.0;
-	self.firstTimeDownload = true;
-	self.inetOk = false;
+	//self.firstTimeDownload = true;
+	//self.inetOk = false;
 	self.dummy = 0;
 	self.gsize = 0;
 	self.my_wbfsDev = WBFS_DEVICE_USB;
@@ -89,6 +89,7 @@ void initVars()
 	self.max_cover = 0;
 	self.min_cover = 0;
 	self.slot_glow = 0;
+	strcpy(self.ipAddress, "000.000.000.000");
 	
 	initGameSettings(&gameSetting);
 }
@@ -234,9 +235,6 @@ int main( int argc, char **argv )
 	if(numLines > 0){
 		self.usingTitlesTxt = true;
 		self.titlesTxtSize = numLines;
-	}
-	
-	if(self.usingTitlesTxt){
 		titleList = (s_title *) malloc (numLines * sizeof(s_title));
 		fillTitleStruct(titleList, numLines);
 	}

@@ -167,8 +167,8 @@ typedef struct{
 	int animate_count;
 	int animate_slide_x;
 	
-	bool firstTimeDownload;
-	bool inetOk;
+	//bool firstTimeDownload;
+	//bool inetOk;
 	
 	//Wiimote data
 	ir_t ir;
@@ -180,6 +180,8 @@ typedef struct{
 	
 	bool usingTitlesTxt;
 	int titlesTxtSize;
+	
+	char ipAddress[16]; // 000.000.000.000\0
 	
 	int dummy;
 

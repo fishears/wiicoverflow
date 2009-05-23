@@ -47,8 +47,6 @@ void AddCover(GRRLIB_texImg tex)
 	}
 }
 
-
-
 void Init_Covers()
 {
 	#ifdef TEST_MODE
@@ -77,6 +75,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 	if (!header)
 		return;
 
+	/*
 	if(self.firstTimeDownload == true){
 		
 		char myIP[16];
@@ -96,11 +95,11 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			Paint_Progress_Generic(v, max, self.debugMsg);
 			self.inetOk = true;
 		}
-
+		
 		self.firstTimeDownload = false;
 	}
-
-	if(self.inetOk) {
+	*/
+	//if(self.inetOk) {
 		//printf("\n    Network connection established.");
 		/*try to download image */
 			
@@ -203,7 +202,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 		//else
 			//donotdownload = true;
 		}
-	}
+	//}
 	//refresh = true;				
 } /* end download */
 

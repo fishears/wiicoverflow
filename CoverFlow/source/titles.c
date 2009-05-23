@@ -47,9 +47,6 @@ void fillTitleStruct(s_title* titleList, int len){
 		WindowPrompt("ERROR!", "Cannot fill struct!", 0, &cancelButton);
 		return;
 	}
-	
-	//malloc();
-	
 	else
 	{
 		//while(fgets(line, sizeof(line), fp)){
@@ -57,7 +54,7 @@ void fillTitleStruct(s_title* titleList, int len){
 			fgets(line, sizeof(line), fp);
 			snprintf(titleList[i].id, 5, "%s",line);
 			sprintf(titleList[i].name, "%s",line+7);
-			titleList[i].name[strlen(titleList[i].name)-2] = '\0';
+			titleList[i].name[strlen(titleList[i].name)-1] = '\0';
 			//i++;
 			//break;
 		}
@@ -100,4 +97,25 @@ void getTitle(s_title* titleList, char* id, char* title){
 			sprintf(title, "%s", titleList[i].name);
 		}
 	}
+}
+
+bool downloadTitles(){
+	//WindowPrompt(localStr("M003", "ERROR!"), "Error initializing network\nTitles.txt can't be downloaded.", &okButton, 0);
+	char titlesPath[100];
+	struct block file;
+	
+	snprintf(titlesPath, sizeof(titlesPath), "%s/titles.txt", USBLOADER_PATH);
+	
+	file = downloadfile("http://www.theotherzone.com/wii/titles.txt");
+	if(file.data != NULL){
+		unlink(titlesPath);
+		if(saveFile(titlesPath, file)){
+			free(file.data);
+			return true;
+		}
+		else
+			free(file.data);
+	}
+	
+	return false;
 }

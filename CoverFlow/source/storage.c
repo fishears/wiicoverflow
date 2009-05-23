@@ -60,17 +60,19 @@ bool reinit_usbfs()
 	return true;
 }
 
-void saveFile(char* imgPath, struct block file){
+bool saveFile(char* imgPath, struct block file){
 			
 	/* save png to sd card for future use*/
 			
 	FILE *f;
 	f = fopen(imgPath, "wb");
-	if (f)
+	if(f)
 	{
 		fwrite(file.data,1,file.size,f);
 		fclose (f);
+		return true;
 	}
+	return false;
 }
 
 void checkDirs(){
