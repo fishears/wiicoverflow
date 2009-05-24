@@ -1,4 +1,10 @@
 #labels Featured
+Next Release
+
+-FIX-
+  * Fixed Code dump on too many covers (issue146)
+-NEW-
+----
 == RC3 (25 May 2009) ==
 
 -FIX-
