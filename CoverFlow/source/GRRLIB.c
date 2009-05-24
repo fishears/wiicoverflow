@@ -822,18 +822,28 @@ inline void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees
  * @param ... Optional arguments.
  */
 void GRRLIB_Printf(f32 xpos, f32 ypos, GRRLIB_texImg tex, u32 color, f32 zoom, const char *text, ...) {
+
     int i, size;
     char tmp[1024];
-
+	
     va_list argp;
     va_start(argp, text);
     size = vsprintf(tmp, text, argp);
     va_end(argp);
 
+
+#ifndef TTF_TEST
     for(i=0; i<size; i++) {
         u8 c = tmp[i]-tex.tilestart;
         GRRLIB_DrawTile(xpos+i*tex.tilew*zoom, ypos, tex, 0, zoom, zoom, color, c);
     }
+#else
+  //TODO Set up color
+  //Different sized fonts
+  //Different type of fonts
+	CFreeTypeGX_DrawText(freeTypeGX, xpos, ypos+18, CFreeTypeGX_charToWideChar(freeTypeGX, tmp), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0000);
+#endif
+
 }
 
 /**
