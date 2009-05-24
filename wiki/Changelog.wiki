@@ -1,5 +1,5 @@
 #labels Featured
-== RC3 (No Date) ==
+== RC3 (25 May 2009) ==
 
 -FIX-
   * Fixed transparent reflection problem (issue73)
@@ -10,7 +10,6 @@
   * Other minor fixes we forgot, and general code cleanup
 
 -NEW-
-  * Max buffer set to 260 for permanent cache (500 covers are still supported but have never been tested) *NOT YET FIXED*, see issue146
   * New Graphic Setting - Falloff
   * Wiimote battery support
   * New buttons images
