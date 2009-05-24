@@ -251,9 +251,9 @@
 		{
 			for (j=0;j<2;j++)
 			{
-				pthread_mutex_lock(&queue_mutex);
+//				pthread_mutex_lock(&queue_mutex);
 				int index=GetPrioritisedCover(CurrentSelection);
-				pthread_mutex_unlock(&queue_mutex);
+//				pthread_mutex_unlock(&queue_mutex);
 
 				if (index==-1) index= (nCovers+1)/2 +i*(j*2-1);
 				if (index>=0 && index<=nCovers)
@@ -348,7 +348,7 @@
 	  {
 		  if (i >= 0 && i < nCovers)
 		  {
-			pthread_mutex_lock(&queue_mutex);
+//			pthread_mutex_lock(&queue_mutex);
 
 			  if (!_cq.ready[i] && !_cq.request[i])
 			  {
@@ -358,7 +358,7 @@
 				  if (_cq.permaBufferPosition[i] == -1) SetFloatingCacheItem(CurrentSelection,i);
 
 			  }
-			pthread_mutex_lock(&queue_mutex);
+//			pthread_mutex_lock(&queue_mutex);
 
 		  }
 	  }
