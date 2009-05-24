@@ -177,7 +177,7 @@
 			}
 			else
 			{
-				int floatingPosition=_cq.floatingQueuePosition[index];
+				int floatingPosition=GetFLoatingQueuePosition(index);
 				if (floatingPosition!=-1)
 				{
 					thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition + 1) * TEXTURE_DATA_SIZE ;
@@ -190,20 +190,20 @@
 			if (thisDataMem2Address!=-1)
 			{
 				_texture_data[index] = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgData, (void *)thisDataMem2Address);
+				GRRLIB_texImg textureData=_texture_data[index];
+				if (!((textureData.h ==224 || textureData.h ==225) && textureData.w == 160))
+				{
+					_cq.coverMissing[index]=true; // bad image size
+					_cq.ready[index]   = false;
+				}
+				else
+				{
+					_cq.ready[index]   = true;
+				}
 			}
 			free(imgData);
 
 			pthread_mutex_lock(&queue_mutex);
-			GRRLIB_texImg textureData=_texture_data[index];
-			if (!((textureData.h ==224 || textureData.h ==225) && textureData.w == 160))
-			{
-				_cq.coverMissing[index]=true; // bad image size
-				_cq.ready[index]   = false;
-			}
-			else
-			{
-				_cq.ready[index]   = true;
-			}
 			pthread_mutex_unlock(&queue_mutex);
 		 }
 		 else
@@ -288,6 +288,18 @@
  
  }
  
+ bool InCache(int index)
+ {
+	bool ret=false;
+	int i;
+	for (i=0;i<FloatingCacheSize;i++)
+	{
+		if (FloatingCacheCovers[i]==index) ret=true;
+	}
+
+	return ret;
+ }
+ 
    // internal only - no need to lock (already locked)
  void RemoveFromCache(int index)
   {
@@ -305,6 +317,7 @@
    //already locked
  void SetFloatingCacheItem(int selection, int newCacheItem)
   {
+	if (InCache(newCacheItem)) return;
 	  int i=0;
 	  bool spaceFound = false;
 	  int maxDistance=0;
@@ -315,6 +328,8 @@
 		  {
 			  spaceFound = true;
 			  FloatingCacheCovers[i] = newCacheItem;
+				_cq.requestId[newCacheItem]=&CoverList[newCacheItem];
+				_cq.request[newCacheItem] = true;
 			  break;
 		  }
 			  if (FloatingCacheCovers[i]!=-1)
@@ -332,7 +347,11 @@
 			  RemoveFromCache(maxIndex);
 			  FloatingCacheCovers[maxIndex] = newCacheItem;
 			  _cq.floatingQueuePosition[newCacheItem]=maxIndex;
+			_cq.requestId[newCacheItem]=&CoverList[newCacheItem];
+			_cq.request[newCacheItem] = true;
 	  }
+
+	  
 }
  
   void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
@@ -350,10 +369,10 @@
 		  {
 //			pthread_mutex_lock(&queue_mutex);
 
-			  if (!_cq.ready[i] && !_cq.request[i])
+			  if (!_cq.ready[i] && !_cq.request[i] && _cq.permaBufferPosition[i] == -1)
 			  {
-				  _cq.requestId[i]=&CoverList[i];
-				  _cq.request[i] = true;
+				_cq.requestId[i]=&CoverList[i];
+				_cq.request[i] = true;
 				  // this one isn't permenantly cached make a space for it in the floating cache
 				  if (_cq.permaBufferPosition[i] == -1) SetFloatingCacheItem(CurrentSelection,i);
 
@@ -367,9 +386,12 @@
   void SetSelectedCover(int index)
   {
        iSetSelectedCover(index+nCovers/2.0,false);
-	   //GRRLIB_Printf(50, 40, font_texture, 0xFFFFFFFF, 1, "Method %d Max Slots %d Main Cache %d", BufferMethod, maxSlots, MainCacheSize);
-		//GRRLIB_Printf(50, 60, font_texture, 0xFFFFFFFF, 1, "Floating Cache %d, Density %f",FloatingCacheSize,Density);
-		//GRRLIB_Printf(50, 80, font_texture, 0xFFFFFFFF, 1, " Current Selection %d", CurrentSelection);
+//	   GRRLIB_Printf(50, 20, font_texture, 0xFFFFFFFF, 1, "Method %d Max Slots %d Main Cache %d", BufferMethod, maxSlots, MainCacheSize);
+//		GRRLIB_Printf(50, 40, font_texture, 0xFFFFFFFF, 1, "Floating Cache %d, Density %f",FloatingCacheSize,Density);
+//		GRRLIB_Printf(50, 60, font_texture, 0xFFFFFFFF, 1, " Current Selection %d", CurrentSelection);
+//		GRRLIB_Printf(50, 0, font_texture, 0xFFFFFFFF, 1, " Floating Cache %d %d %d %d %d %d %d %d %d %d", FloatingCacheCovers[0],FloatingCacheCovers[1],FloatingCacheCovers[2],FloatingCacheCovers[3],FloatingCacheCovers[4],FloatingCacheCovers[5],FloatingCacheCovers[6],FloatingCacheCovers[7],FloatingCacheCovers[8],FloatingCacheCovers[9]);
+//		int i=CurrentSelection;
+//		GRRLIB_Printf(50, 80, font_texture, 0xFFFFFFFF, 1, " Buffer Ready %d Request %d PBP %d Missing %d Floating %d", _cq.ready[i],_cq.request[i],_cq.permaBufferPosition[i],_cq.coverMissing[i],_cq.floatingQueuePosition[i]);
 
   }
  
@@ -427,7 +449,10 @@
                   FloatingCacheSize=(int)(((1-Density)*numberOfCoversToBeShown+1)*4);
                   MainCacheSize = maxSlots - FloatingCacheSize;
 				  Density = ((float)MainCacheSize) / ((float)(gameCount));
-                  //FloatingCacheCovers = new int[FloatingCacheSize];// may be in .h
+				  for (i=0;i<FloatingCacheSize;i++)
+				  {
+					FloatingCacheCovers[i]=-1;
+				  }
            }
           if (BufferMethod==ALL_CACHED)
           {
@@ -456,7 +481,6 @@
                   }
           }
  
-          iSetSelectedCover(initialSelection,true);
           //now request all the permenant covers
           for (i=0;i<gameCount;i++) 
           {
@@ -465,6 +489,7 @@
                          RequestForCache(i);
                   }
           }
+          iSetSelectedCover(initialSelection,true);
 		pthread_mutex_unlock(&lock_thread_mutex);
 		sleep(2);
  }
