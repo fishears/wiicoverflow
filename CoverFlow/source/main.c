@@ -190,8 +190,19 @@ int main( int argc, char **argv )
 	// the pad needs to be init after a usb retry but before anything else
 	PAD_Init();
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
-	initUSBFS();
 
+//moved here as it sets the self.usingTitlesTxt used in initUSBFS sorting
+#ifdef TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
+	int numLines = initTitle();
+	if(numLines > 0){
+		self.usingTitlesTxt = true;
+		self.titlesTxtSize = numLines;
+		titleList = (s_title *) malloc (numLines * sizeof(s_title));
+		fillTitleStruct(titleList, numLines);
+	}
+#endif
+
+	initUSBFS();
 	
 #else
 	PAD_Init();
@@ -217,8 +228,6 @@ int main( int argc, char **argv )
 #ifndef TEST_MODE
 	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
 #endif
-
-	//ee();
 
 	// set the background
 	sprintf(self.debugMsg, localStr("M105", "Setting background theme...") );
@@ -249,20 +258,11 @@ int main( int argc, char **argv )
     ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
 #endif
 
-#ifdef TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
-	int numLines = initTitle();
-	if(numLines > 0){
-		self.usingTitlesTxt = true;
-		self.titlesTxtSize = numLines;
-		titleList = (s_title *) malloc (numLines * sizeof(s_title));
-		fillTitleStruct(titleList, numLines);
-	}
-#endif
-
 	//////////////////////////
 	// main screen gui loop //
 	//////////////////////////
 	
+	//ee();
 	
 	while(1) 
 	{
