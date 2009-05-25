@@ -841,7 +841,8 @@ void GRRLIB_Printf(f32 xpos, f32 ypos, GRRLIB_texImg tex, u32 color, f32 zoom, c
   //TODO Set up color
   //Different sized fonts
   //Different type of fonts
-	CFreeTypeGX_DrawText(freeTypeGX, xpos, ypos+18, CFreeTypeGX_charToWideChar(freeTypeGX, tmp), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0000);
+
+	CFreeTypeGX_DrawText(ttf16pt, xpos, ypos+18, CFreeTypeGX_charToWideChar(ttf16pt, tmp), (GXColor){0xf0, 0xf0, 0xf0, 0xff}, 0x0000);
 #endif
 
 }

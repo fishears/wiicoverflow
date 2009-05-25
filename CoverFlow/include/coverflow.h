@@ -74,8 +74,12 @@
 //#define TTF_TEST
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 #include "CFreeTypeGX.h"
-extern CFreeTypeGX *freeTypeGX;
-CFreeTypeGX *freeTypeGX;
+extern CFreeTypeGX *ttf16pt;
+extern CFreeTypeGX *ttf18pt;
+extern CFreeTypeGX *ttf22pt;
+CFreeTypeGX *ttf16pt;
+CFreeTypeGX *ttf18pt;
+CFreeTypeGX *ttf22pt;
 
 #define KB_SIZE         1024.0
 #define MB_SIZE         1048576.0

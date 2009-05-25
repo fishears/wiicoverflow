@@ -60,6 +60,8 @@ void LoadTextures()
 	battery_bar            = GRRLIB_LoadTexture(battery_bar_png);
     battery                = GRRLIB_LoadTexture(battery_png);
     battery_dead           = GRRLIB_LoadTexture(battery_dead_png);
+	ttf_button_black       = GRRLIB_LoadTexture(ttf_button_black_png);
+	ttf_button_white       = GRRLIB_LoadTexture(ttf_button_white_png);
 
 	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
 	GRRLIB_InitTileSet(&font_title, 14, 20, 32);
@@ -386,6 +388,8 @@ void draw_game_title(int index, float textSize)
 			else
 				len = strlen(header->title);
 			// chomp the title to fit
+			// TODO: Lengthen this for TTF
+#ifndef TTF_TEST
 			if(len <= 35) //the length of the max title is 35 fixed width chars
 			{
 				if(self.usingTitlesTxt)
@@ -403,20 +407,50 @@ void draw_game_title(int index, float textSize)
 				strncat(gameName, "...", 3);
 				len = 35;
 			}
+#else
+			if(len <= 45) //the length of the max title is 45 22pt TTF chars
+			{
+				if(self.usingTitlesTxt)
+					sprintf(gameName, "%s", (title));
+				else
+					sprintf(gameName, "%s", (header->title));
+			}
+			else
+			{
+				if(self.usingTitlesTxt)
+					strncpy(gameName, title, 42);
+				else
+					strncpy(gameName, header->title, 42);
+				gameName[42] = '\0';
+				strncat(gameName, "...", 3);
+				len = 45;
+			}
+			
+#endif
 		}
 		
+
+#ifndef TTF_TEST
 		len = strlen(gameName);
 		
 		float offset = (len*7.9); // calc a font scaled offset from title length
 		
 		if((int)offset > 260)
 			offset = 260.0; // dont draw on top of the setting button
-	
-#ifndef TEST_MODE
+
 		GRRLIB_Printf(340 - (int)offset, 400, font_title, 0xFFFFFFFF, textSize, "%s", gameName);
 #else
-		GRRLIB_Printf(340 - (int)offset, 400, font_title, 0xFFFFFFFF, textSize, "%s", "Game Title");
-#endif
+		if (settings.theme) // black text on white matte
+		{
+			CFreeTypeGX_DrawText(ttf22pt, 320, 410, CFreeTypeGX_charToWideChar(ttf22pt, gameName), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0002);
+			CFreeTypeGX_DrawText(ttf22pt, 320, 410, CFreeTypeGX_charToWideChar(ttf22pt, gameName), (GXColor){0x00, 0x00, 0x00, 0xcc}, 0x0002);
+		}
+		else //white text on black matte
+		{
+			CFreeTypeGX_DrawText(ttf22pt, 320, 410, CFreeTypeGX_charToWideChar(ttf22pt, gameName), (GXColor){0x00, 0x00, 0x00, 0xff}, 0x0002);
+			CFreeTypeGX_DrawText(ttf22pt, 320, 410, CFreeTypeGX_charToWideChar(ttf22pt, gameName), (GXColor){0xff, 0xff, 0xff, 0xdd}, 0x0002);
+		}
+#endif		
 	}
 }
 
@@ -794,20 +828,36 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		if(choice_a != 0 && choice_b != 0){
 			choice_a->x = 320-5-80;
 			choice_b->x = 320+5;
-			
-			Button_Paint(choice_a);
+#ifndef TTF_TEST
+			Button_Paint(choice_a); 
 			Button_Paint(choice_b);
+#else
+			GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
+			CFreeTypeGX_DrawText(ttf16pt, (choice_a->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "OK"), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0002);
+			GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
+			CFreeTypeGX_DrawText(ttf16pt, (choice_b->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "CANCEL"), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0002);
+#endif
 		}
 		
 		else{
 			if(choice_a != 0){
 				choice_a->x = 320-40;
-				Button_Paint(choice_a);
+#ifndef TTF_TEST
+				Button_Paint(choice_a); 
+#else
+				GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
+				CFreeTypeGX_DrawText(ttf16pt, (choice_a->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "OK"), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0002);
+#endif
 			}
 			
 			if(choice_b != 0){
 				choice_b->x = 320-40;
+#ifndef TTF_TEST
 				Button_Paint(choice_b);
+#else
+				GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
+				CFreeTypeGX_DrawText(ttf16pt, (choice_b->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "CANCEL"), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0002);
+#endif
 			}
 		}
 		
@@ -815,8 +865,12 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		int sp = 0;
 		
 		// Draw text
+#ifndef TTF_TEST
 		GRRLIB_Printf(100, 105, font_title, 0xFFFFFFFF, 1, "%s", title);
-		
+#else
+		CFreeTypeGX_DrawText(ttf22pt, 100, 105, CFreeTypeGX_charToWideChar(ttf22pt, title), (GXColor){0x00, 0x00, 0x00, 0xff}, 0x0001);
+		CFreeTypeGX_DrawText(ttf22pt, 100, 105, CFreeTypeGX_charToWideChar(ttf22pt, title), (GXColor){0xff, 0xff, 0xff, 0xdd}, 0x0001);
+#endif
 		if(txt != NULL)
 		{
 			char* msg = malloc(strlen(txt)*sizeof(char));
@@ -825,7 +879,12 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			pch = strtok(msg, "\n");
 			while (pch != NULL)
 			{
+#ifndef TTF_TEST
 				GRRLIB_Printf(138, y+sp, font_title_small, settings.fontColor, 1, "%s", pch);
+#else
+				CFreeTypeGX_DrawText(ttf16pt, 135, y+sp, CFreeTypeGX_charToWideChar(ttf16pt, pch), (GXColor){0x00, 0x00, 0x00, 0xff}, 0x0001);
+				CFreeTypeGX_DrawText(ttf16pt, 135, y+sp, CFreeTypeGX_charToWideChar(ttf16pt, pch), (GXColor){0xff, 0xff, 0xff, 0xdd}, 0x0001);
+#endif
 				pch = strtok(NULL, "\n");
 				sp+=16;
 			}
