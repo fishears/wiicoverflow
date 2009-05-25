@@ -19,7 +19,9 @@ extern u8 shutdown;
 extern u8 reset;
 extern s_settings settings;
 s_title *titleList;
-extern CFreeTypeGX *freeTypeGX;
+extern CFreeTypeGX *ttf16pt;
+extern CFreeTypeGX *ttf18pt;
+extern CFreeTypeGX *ttf22pt;
 
 // Language selection config
 char languages[11][22] =
@@ -137,8 +139,12 @@ int main( int argc, char **argv )
     GRRLIB_Render();
 	
 	//load test font stuff
-	freeTypeGX = CFreeTypeGX_new();
-	CFreeTypeGX_LoadFont(freeTypeGX,font_ttf, font_ttf_size, 18, true);
+	ttf16pt = CFreeTypeGX_new();
+	ttf18pt = CFreeTypeGX_new();
+	ttf22pt = CFreeTypeGX_new();
+	CFreeTypeGX_LoadFont(ttf16pt,font_ttf, font_ttf_size, 16, true);
+	CFreeTypeGX_LoadFont(ttf18pt,font_ttf, font_ttf_size, 18, true);
+	CFreeTypeGX_LoadFont(ttf22pt,font_ttf, font_ttf_size, 22, true);
 	
 	u8 FPS = 0; // frames per second counter
 	

@@ -51,6 +51,8 @@ extern const u8 theme_black_png[];
 extern const u8 bg_options_screen_no_transparency_png[];
 extern const u8 star_on_png[];
 extern const u8 star_off_png[];
+extern const u8 ttf_button_black_png[];
+extern const u8 ttf_button_white_png[];
 
 /*Home Menu Images*/
 extern const u8 wiiMenu_png[];
@@ -85,6 +87,8 @@ GRRLIB_texImg ambientlight_white_texture;
 GRRLIB_texImg battery;
 GRRLIB_texImg battery_dead;
 GRRLIB_texImg battery_bar;
+GRRLIB_texImg ttf_button_white;
+GRRLIB_texImg ttf_button_black;
 
 Button addButton;
 Button slideButton;
