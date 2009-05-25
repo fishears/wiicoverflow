@@ -1,11 +1,10 @@
 #labels Featured
 Next Release
-
 -FIX-
-  * Fixed Code dump on too many covers (issue146)
+
 -NEW-
 ----
-== RC3 (25 May 2009) ==
+== RC3 Update (25 May 2009) ==
 
 -FIX-
   * Fixed transparent reflection problem (issue73)
@@ -13,11 +12,13 @@ Next Release
   * Fixed a bug that my crash wii if wireless signal is lost: now network is initialized each time a button that requires a download is clicked (issue138)
   * Fixed a post installation dump (issue128)
   * Fixed slow setting menu bug (issue131)
+  * Fixed Code dump on too many covers (issue146) (RC3 Update)
+  * Fixed Ocarina/Patching causing code dump (issue151) (RC3 Update)
   * Other minor fixes we forgot, and general code cleanup
 
 -NEW-
   * New Graphic Setting - Falloff
-  * Wiimote battery support
+  * Wiimote battery support (enhanced (RC3 Update))
   * New buttons images
   * Support for titles.txt, downloadable from settings menu
 ----
