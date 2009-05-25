@@ -67,6 +67,7 @@ extern const u8 homeBottom_hover_png[];
 extern const u8 battery_png[];
 extern const u8 battery_bar_png[];
 extern const u8 battery_dead_png[];
+extern const u8 battery_bar_red_png[];
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg back_texture;
@@ -87,6 +88,7 @@ GRRLIB_texImg ambientlight_white_texture;
 GRRLIB_texImg battery;
 GRRLIB_texImg battery_dead;
 GRRLIB_texImg battery_bar;
+GRRLIB_texImg battery_bar_red;
 GRRLIB_texImg ttf_button_white;
 GRRLIB_texImg ttf_button_black;
 
