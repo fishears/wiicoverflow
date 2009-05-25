@@ -25,7 +25,7 @@ INCLUDES	:=  include include/pngu include/libwbfs include/core
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= -Os -Wall $(MACHDEP) $(INCLUDE)
+CFLAGS	= -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
