@@ -2,8 +2,9 @@
 
 extern s_self self;
 extern s_settings settings;
-
+extern s_title* titleList;
 extern int COVER_COUNT;
+
 bool init_usbfs()
 {    
    // __Disc_SetLowMem();
@@ -224,7 +225,22 @@ s32 __Menu_EntryCmp(const void *a, const void *b)
 	struct discHdr *hdr2 = (struct discHdr *)b;
 
 	/* Compare strings */
-	return strcmp(hdr1->title, hdr2->title);
+	
+	if(self.usingTitlesTxt){
+	
+		char title1[MAX_TITLE_LEN];
+		char title2[MAX_TITLE_LEN];
+	
+		sprintf(title1, "%s", hdr1->id);
+		sprintf(title2, "%s", hdr2->id);
+		
+		getTitle(titleList, (char*)hdr1->id, title1);
+		getTitle(titleList, (char*)hdr2->id, title2);
+		
+		return strcmp(title1, title2);
+	}
+	else
+		return strcmp(hdr1->title, hdr2->title);
 }
 
 s32 GetEntries()
