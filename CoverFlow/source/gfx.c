@@ -58,6 +58,7 @@ void LoadTextures()
 	ambientlight_white_texture = GRRLIB_CreateEmptyTexture(ambientlight_texture.w, ambientlight_texture.h);
 	GRRLIB_BMFX_Invert(ambientlight_texture, ambientlight_white_texture); //invert the fade from black to white
 	battery_bar            = GRRLIB_LoadTexture(battery_bar_png);
+        battery_bar_red            = GRRLIB_LoadTexture(battery_bar_red_png);
     battery                = GRRLIB_LoadTexture(battery_png);
     battery_dead           = GRRLIB_LoadTexture(battery_dead_png);
 	ttf_button_black       = GRRLIB_LoadTexture(ttf_button_black_png);

@@ -332,10 +332,12 @@ void Do_Batteries()
 
 		if(ret!=0) //no wiimote here
 		{
-			if(level == 0) //no power bars here
+			if(level < 2) //no power bars here
 			{
-				GRRLIB_Printf(185+(106*x), 375, font_title, 0x808080FF, 1, "P%d", x+1);
+				GRRLIB_Printf(185+(106*x), 375, font_title, 0xe90000FF, 1, "P%d", x+1);
 				GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
+                                if (level == 1)
+                                    GRRLIB_DrawImg(221+((107*x)), 377, battery_bar_red, 0, 1, 1, 0xFFFFFFFF);
 			}
 			else //we have power, but how much?
 			{
