@@ -1,5 +1,7 @@
 #include "bootloader.h"
 
+s_bootloader settings;
+
 // Language selection config
 char languages[11][22] =
 {{"Console Default"},

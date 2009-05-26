@@ -17,7 +17,7 @@ include $(DEVKITPPC)/wii_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	source ../CoverFlow/source/libwbfs ../CoverFlow/source/core
+SOURCES		:=	source ../CoverFlow/source/libwbfs ../CoverFlow/source/core 
 DATA		:=	 
 INCLUDES	:=  include ../CoverFlow/include/libwbfs ../CoverFlow/include/core
 
@@ -25,7 +25,7 @@ INCLUDES	:=  include ../CoverFlow/include/libwbfs ../CoverFlow/include/core
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= -Os -Wall $(MACHDEP) $(INCLUDE)
+CFLAGS	= -DBOOTLOADER -Os -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
@@ -40,7 +40,7 @@ LIBS	:= -lz -lfat -lwiiuse -lbte -logc -lm
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:=
+LIBDIRS	:= $(CURDIR)/../CoverFlow/libs/wiiuse $(CURDIR)/../CoverFlow/libs/libfat
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional

@@ -27,9 +27,15 @@
 #include "apploader.h"
 #include "patchcode.h"
 #include "fwrite_patch.h"
+
+#ifndef BOOTLOADER
 #include "settings.h"
 
 extern s_settings settings;
+#else
+#include "bootloader.h"
+extern s_bootloader settings;
+#endif
 
 extern void patchhook(u32 address, u32 len);
 extern void patchhook2(u32 address, u32 len);
