@@ -133,10 +133,10 @@ int main( int argc, char **argv )
 	}
 #endif
 	
+	languageDefault();  // load default msgs
 	SETTINGS_Init();
+	//languageLoad();		// load localization
 	
-	//languageDefault();  //load default msgs
-		
 	GRRLIB_Init();
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
@@ -233,7 +233,7 @@ int main( int argc, char **argv )
 #endif
 
 	// set the background
-	sprintf(self.debugMsg, localStr("M105", "Setting background theme...") );
+	sprintf(self.debugMsg, TX.setBackground );
 	Paint_Progress(self.progress,self.debugMsg);
 	if (settings.theme)
 	{	// black fonts for white theme
@@ -559,18 +559,18 @@ int main( int argc, char **argv )
 				//LoadCurrentCover(self.gameSelected, gameList);
 				
 				/*
-				sprintf(self.debugMsg, localStr("M001", "Initializing Network") );
+				sprintf(self.debugMsg, TX.iniNet );
 				
 				char myIP[16];
 				if(!Net_Init(myIP))
 				{
-					sprintf(self.debugMsg, localStr("M002", "Error Initializing Network") );
+					sprintf(self.debugMsg, TX.iniNetErr );
 					
-					WindowPrompt (localStr("M003", "ERROR!"), localStr("M002", "Error initializing network"), &okButton, 0);
+					WindowPrompt (TX.error, TX.iniNetErr, &okButton, 0);
 				}
 				else
 				{
-					sprintf(self.debugMsg, localStr("M004", "Network Initialized") );
+					sprintf(self.debugMsg, TX.iniNetReady );
 					
 					self.inetOk = true;
 				}
@@ -653,7 +653,7 @@ int main( int argc, char **argv )
 			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_1) &&
 			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
 		{
-			if (WindowPrompt(localStr("M107", "Parental Control"),localStr("M108", "Would you like to enable parental\ncontrols?"), &yesButton, &noButton))
+			if (WindowPrompt(TX.parentalCtrl, TX.enableParentCtrl, &yesButton, &noButton))
 				settings.parentalLock = 1;
 			else
 				settings.parentalLock = 0;

@@ -28,65 +28,65 @@ void sysdate(char* ret_string)
 	switch(ts->tm_wday){
 	
 		case 0:
-			sprintf(dow, localStr("M112", "Sun") );
+			sprintf(dow, TX.Sun );
 			break;
 		case 1:
-			sprintf(dow, localStr("M113", "Mon") );
+			sprintf(dow, TX.Mon );
 			break;
 		case 2:
-			sprintf(dow, localStr("M114", "Tue") );
+			sprintf(dow, TX.Tue );
 			break;
 		case 3:
-			sprintf(dow, localStr("M115", "Wed") );
+			sprintf(dow, TX.Wed );
 			break;
 		case 4:
-			sprintf(dow, localStr("M116", "Thu") );
+			sprintf(dow, TX.Thu );
 			break;
 		case 5:
-			sprintf(dow, localStr("M117", "Fri") );
+			sprintf(dow, TX.Fri );
 			break;
 		case 6:
-			sprintf(dow, localStr("M118", "Sat") );
+			sprintf(dow, TX.Sat );
 			break;
 	}
 	
 	switch(ts->tm_mon){
 		
 		case 0:
-			sprintf(month, localStr("M119", "Jan") );
+			sprintf(month, TX.Jan );
 			break;
 		case 1:
-			sprintf(month, localStr("M120", "Feb") );
+			sprintf(month, TX.Feb );
 			break;
 		case 2:
-			sprintf(month, localStr("M121", "Mar") );
+			sprintf(month, TX.Mar );
 			break;
 		case 3:
-			sprintf(month, localStr("M122", "Apr") );
+			sprintf(month, TX.Apr );
 			break;
 		case 4:
-			sprintf(month, localStr("M123", "May") );
+			sprintf(month, TX.May );
 			break;
 		case 5:
-			sprintf(month, localStr("M124", "Jun") );
+			sprintf(month, TX.Jun );
 			break;
 		case 6:
-			sprintf(month, localStr("M125", "Jul") );
+			sprintf(month, TX.Jul );
 			break;
 		case 7:
-			sprintf(month, localStr("M126", "Aug") );
+			sprintf(month, TX.Aug );
 			break;
 		case 8:
-			sprintf(month, localStr("M127", "Sep") );
+			sprintf(month, TX.Sep );
 			break;
 		case 9:
-			sprintf(month, localStr("M128", "Oct") );
+			sprintf(month, TX.Oct );
 			break;
 		case 10:
-			sprintf(month, localStr("M129", "Nov") );
+			sprintf(month, TX.Nov );
 			break;
 		case 11:
-			sprintf(month, localStr("M130", "Dec") );
+			sprintf(month, TX.Dec );
 			break;
 		//default:
 		//	sprintf(month, "xxx: %d", ts->tm_mon);
@@ -105,8 +105,8 @@ void ios_version_check()
     if(iosrev <REQUIRED_IOS_REV)
     {
         char string[80];
-        sprintf(string, localStr("M131", "Current: cIOS Rev%d  Required: cIOS Rev%d"),iosrev, REQUIRED_IOS_REV);
-        WindowPrompt(localStr("M132", "cIOS Upgrade Required"),string, &okButton, 0);
+        sprintf(string, TX.currentCIOS,iosrev, REQUIRED_IOS_REV);
+        WindowPrompt(TX.cIOSupgrade,string, &okButton, 0);
     }
 }
 
@@ -154,7 +154,7 @@ bool networkInit(char *ip)
         
 	if (if_config(ip, NULL, NULL, true) < 0)
 	{
-		WindowPrompt(localStr("M003", "ERROR!"), localStr("M085", "Cannot get local IP address."), &okButton, 0);
+		WindowPrompt(TX.error, TX.noLocalIP, &okButton, 0);
 		usleep(1000 * 1000 * 1); //1 sec
 		return false;
 	}
@@ -168,14 +168,14 @@ bool networkInit()
 		
 		//char myIP[16];
 		
-		//sprintf(self.debugMsg, localStr("M001", "Initializing Network") );
+		//sprintf(self.debugMsg, TX.iniNet );
 		//Paint_Progress_Generic(v, max, self.debugMsg);
 		
 		if(!ifConfig(self.ipAddress))
 		{
-			//sprintf(self.debugMsg, localStr("M002", "Error Initializing Network") );
+			//sprintf(self.debugMsg, TX.iniNetErr );
 			//Paint_Progress_Generic(v, max, self.debugMsg);
-			//WindowPrompt (localStr("M003", "ERROR!"), localStr("M002", "Error initializing network"), &okButton, 0);
+			//WindowPrompt (TX.error, TX.iniNetErr, &okButton, 0);
 			return false;
 		}
 
