@@ -8,15 +8,15 @@
 #include <malloc.h>
 #include <math.h>
 #include <gccore.h>
-#include <wiiuse/wpad.h>
+
 #include <sys/dir.h>
 #include <ogc/lwp_watchdog.h>   // Needed for gettime and ticks_to_millisecs
-#include "wpad.h"
+#include "wpadsvn.h"
 #include "wbfs.h"
 #include "wdvd.h"
 #include "libwbfs.h"
 #include "disc.h"
-#include "cfg.h"
+
 #include "sys/errno.h"
 #include "sys/unistd.h"
 #include "fat.h"
@@ -29,5 +29,20 @@
 #define MAX_CHARACTERS	 	 30
 
 #define USBLOADER_PATH       "SD:/usb-loader"
+
+#define KB_SIZE         1024.0
+#define MB_SIZE         1048576.0
+#define GB_SIZE         1073741824.0
+
+u32 swap32(u32 x);
+
+typedef struct {
+    int ocarina;
+    int hooktype;
+    int language;
+    int video;
+    int vipatch;
+	char localLanguage[5];
+} s_bootloader;
 
 #endif
