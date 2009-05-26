@@ -86,6 +86,49 @@ out:
 	return ret;
 }
 
+s32 Fat_ReadFileToBuffer(const char *filepath, void *outbuf, int maxsize)
+{
+	FILE *fp     = NULL;
+
+	struct stat filestat;
+	u32         filelen;
+
+	s32 ret;
+
+	/* Get filestats */
+	stat(filepath, &filestat);
+
+	/* Get filesize */
+	filelen = filestat.st_size;
+
+	if (filelen>maxsize) goto err;
+	
+
+	/* Open file */
+	fp = fopen(filepath, "rb");
+	if (!fp)
+		goto err;
+
+	/* Read file */
+	ret = fread(outbuf, 1, filelen, fp);	
+	if (ret != filelen)
+		goto err;
+
+	goto out;
+
+err:
+
+	/* Error code */
+	ret = -1;
+
+out:
+	/* Close file */
+	if (fp)
+		fclose(fp);
+
+	return ret;
+}
+
 s32 Fat_UnmountSDHC(void)
 {
 	s32 ret;

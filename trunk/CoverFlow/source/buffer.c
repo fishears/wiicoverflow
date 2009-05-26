@@ -10,7 +10,7 @@
  #include <malloc.h>
  
  #define MEM2_START_ADDRESS 0x91000000
- #define MEM2_EXTENT 225*160*4*50
+ //#define MEM2_EXTENT 225*160*4*50
  #define TEXTURE_DATA_SIZE 225*160*4
  #define DENSITY_METHOD 1
  #define ALL_CACHED 2
@@ -151,7 +151,7 @@
 }
  
  
- void HandleLoadRequest(int index)
+ void HandleLoadRequest(int index,int threadNo)
  {
 	pthread_mutex_lock(&buffer_mutex[index]);
 	 
@@ -159,14 +159,14 @@
 	if(!_cq.ready[index] && !_cq.coverMissing[index])
 	{
 	 
-		void *imgData=0;
+		int imgDataAddress=MEM2_START_ADDRESS + TEXTURE_DATA_SIZE * (252+threadNo);
 	 
 		char filepath[128];
 		s32  ret;
 
 		sprintf(filepath, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
 
-		ret = Fat_ReadFile(filepath, &imgData);
+		ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress,TEXTURE_DATA_SIZE);
 				 
 		if (ret > 0) 
 		{
@@ -189,7 +189,7 @@
 			}
 			if (thisDataMem2Address!=-1)
 			{
-				_texture_data[index] = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgData, (void *)thisDataMem2Address);
+				_texture_data[index] = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgDataAddress, (void *)thisDataMem2Address);
 				GRRLIB_texImg textureData=_texture_data[index];
 				if (!((textureData.h ==224 || textureData.h ==225) && textureData.w == 160))
 				{
@@ -201,7 +201,7 @@
 					_cq.ready[index]   = true;
 				}
 			}
-			free(imgData);
+			//free(imgData);
 
 			pthread_mutex_lock(&queue_mutex);
 			pthread_mutex_unlock(&queue_mutex);
@@ -238,6 +238,7 @@
  
  void* process(void *arg)
  {
+	int thread = (int)arg;
 	int i,j = 0;
 	bool b = false;
 	/*Main Buffering Thread*/
@@ -266,7 +267,7 @@
 					if (b) _cq.request[index]=false;
 					pthread_mutex_unlock(&queue_mutex);
 			 
-					if(b) HandleLoadRequest(index);
+					if(b) HandleLoadRequest(index,thread);
 			 
 					pthread_mutex_unlock(&lock_thread_mutex);
 					
