@@ -61,6 +61,15 @@ void initVars(){
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
 
+	//Default Settings
+	settings.video    = 0;
+    settings.ocarina  = 0;
+    settings.hooktype = 0;
+    settings.language = 0;
+    settings.video    = 0;
+    settings.vipatch  = 0;
+	strcpy(settings.localLanguage, "EN-US"); //Localization
+
 	/* Load Custom IOS */
 	int ret = IOS_ReloadIOS(249);
 	/* Check if Custom IOS is loaded */

@@ -48,22 +48,22 @@ bool Menu_Boot(){
 	#else
 	//TODO No really sure how args need to be set up...
 	char* buffer;
-	buffer = malloc(strlen("bootloader.dol") + 1 + 6 + 1);
-	sprintf(buffer, "bootloader.dol%c%s%c", '\0', header->id, '\0');
+	buffer = malloc(strlen("bootloader.dol") + 1 + 6 + 2);
+	sprintf(buffer, "bootloader.dol%c%s%c%c", '\0', header->id, '\0','\0');
 	
 	struct __argv argv;
 	bzero(&argv, sizeof(argv));
 	argv.argvMagic = ARGV_MAGIC;
+	
 	//length is bootloader length + null + header length + null + null
-	argv.length = strlen(buffer) + 1;
+	argv.length = strlen(buffer);
 	argv.commandLine = malloc(argv.length);
 	strcpy(argv.commandLine, buffer);
 	
-	argv.commandLine[argv.length - 1] = '\x00';
 	argv.argc = 2;
 	argv.argv = & argv.commandLine;
 	
-	argv.endARGV = argv.argv + 1;
+	argv.endARGV = argv.argv + argv.length;
 			
 	run_dol(bootloader_dol, &argv);
 	#endif
