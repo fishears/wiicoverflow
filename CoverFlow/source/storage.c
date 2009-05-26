@@ -28,8 +28,8 @@ bool init_usbfs()
 	Paint_Progress(self.progress, "Initializing Disc...");
 	
 	if (ret < 0) {
-		printf(localStr("M086", "[+] ERROR:\n"));
-		printf(localStr("M109", "    Could not initialize DIP module! (ret = %d)\n"), ret);
+		printf(TX.addError);
+		printf(TX.errorDIP, ret);
 
 		return false;
 	}
@@ -53,8 +53,8 @@ bool reinit_usbfs()
 	ret = Disc_Init();
 	
 	if (ret < 0) {
-		printf(localStr("M086", "[+] ERROR:\n"));
-		printf(localStr("M109", "    Could not initialize DIP module! (ret = %d)\n"), ret);
+		printf(TX.addError);
+		printf(TX.errorDIP, ret);
 
 		return false;
 	}
@@ -96,7 +96,7 @@ void checkDirs(){
 			mkdir("games", S_ISVTX);
 		}
 		else{
-			WindowPrompt(localStr("M003", "ERROR!"), localStr("M110", "Can't read directories.\nCovers will not be saved."), &okButton, NULL);
+			WindowPrompt(TX.error, TX.errorReadDir, &okButton, NULL);
 		}
 	}
 	else{
@@ -137,7 +137,7 @@ void checkDirs(){
 		}
 		
 		else{
-			WindowPrompt(localStr("M003", "ERROR!"), localStr("M111", "Can't create directories.\nCovers will not be saved."), &okButton, NULL);
+			WindowPrompt(TX.error, TX.errorCreateDir, &okButton, NULL);
 		}
 	}
 }
@@ -160,7 +160,7 @@ void initWBFS(){
 	int ret;
 	
 	self.progress += .1;
-	sprintf(self.debugMsg, localStr("M091", "Initializing WBFS") );
+	sprintf(self.debugMsg, TX.initWBFS);
 	Paint_Progress(self.progress,self.debugMsg);
 
   INIT_RETRY:
@@ -175,8 +175,8 @@ void initWBFS(){
 			if (retries==0)
 			{
 				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M092", "USB Error - Drive not found"));
-				GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, localStr("M093", "Press A to Retry, B to Exit"));
+				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.errorNoUSBDrv);
+				GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, TX.pressAB);
 				
 				GRRLIB_Render();
 			}
@@ -186,8 +186,8 @@ void initWBFS(){
 				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A))
 				{
 					GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-					GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M094", "Attempt to connect to USB Drive"));
-					GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, localStr("M067", "Please Wait..."));
+					GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.connectUSBDrv);
+					GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, TX.pleaseWait);
 					GRRLIB_Render();
 					Sleep(1000);
 				}
@@ -268,7 +268,7 @@ s32 GetEntries()
 	memset(buffer, 0, len);
 
 	self.progress+=0.05;
-	sprintf(self.debugMsg, localStr("M998", "Getting game list") );
+	sprintf(self.debugMsg, "Getting game list" );
 	Paint_Progress(self.progress, self.debugMsg);
 	
 	/* Get header list */
@@ -277,7 +277,7 @@ s32 GetEntries()
 		goto err;
 
 	self.progress+=0.05;
-	sprintf(self.debugMsg, localStr("M997", "Sorting game list") );
+	sprintf(self.debugMsg,"Sorting game list" );
 	Paint_Progress(self.progress, self.debugMsg);
 	
 	/* Sort entries */
@@ -365,8 +365,8 @@ USB_RETRY:
 		{
 			WPAD_ScanPads();
 			GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M095", "USB Error - NO WBFS Parition.") );
-			GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, localStr("M096", "Hold 1 And 2 to Format, B to Exit"));
+			GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.errorNoWBFS );
+			GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, TX.hold12B );
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_1 && WPAD_ButtonsHeld(0) & WPAD_BUTTON_2)
@@ -374,7 +374,7 @@ USB_RETRY:
 				//TODO ADD WBFS Format code
 				WPAD_ScanPads();
 				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M097", "Finding Partitions..."));
+				GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.findPartitions);
 				GRRLIB_Render();
 				
 				sleep(1);
@@ -394,12 +394,12 @@ USB_RETRY:
 					f32 size = entry->size * (sector_size / GB_SIZE);
 					
 					if(size) {
-						sprintf(txtBuff[cnt], localStr("M098", "Partition %d: %.2fGB"), cnt+1, size);
+						sprintf(txtBuff[cnt], TX.partition, cnt+1, size);
 						valid[cnt] = true;
 					}
 					else
 					{
-						sprintf(txtBuff[cnt], localStr("M099", "Partition %d: (Can't be formatted)"), cnt+1);
+						sprintf(txtBuff[cnt], TX.partitionNoFormat, cnt+1);
 						valid[cnt] = false;
 					}
 				}
@@ -412,23 +412,23 @@ USB_RETRY:
 						
 						if(entry->size) 
 						{
-							if(WindowPrompt(localStr("M100", "Do you want to format:"), txtBuff[cnt], &okButton, &noButton))
+							if(WindowPrompt(TX.askFormat, txtBuff[cnt], &okButton, &noButton))
 							{
 								WPAD_ScanPads();
 								GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M134", "Formatting Partition %s"), txtBuff[cnt]);
-								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, localStr("M067", "Please Wait...") );
+								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.formatPartition, txtBuff[cnt]);
+								GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.pleaseWait );
 								GRRLIB_Render();
 								
 								ret = WBFS_Format(entry->sector, entry->size); 
 							
 								if(ret < 0)
 								{
-									WindowPrompt(localStr("M003", "Error:"), localStr("M101", "Failed formatting!"), &okButton, 0);
+									WindowPrompt(TX.error, TX.errorFormat, &okButton, 0);
 								}
 								else
 								{
-									WindowPrompt(localStr("M102", "Success:"), localStr("M103", "Format Complete."), &okButton, 0);
+									WindowPrompt(TX.successFormat, TX.formatComplete, &okButton, 0);
 								}
 								
 								goto USB_RETRY;

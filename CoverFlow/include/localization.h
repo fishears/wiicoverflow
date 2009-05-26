@@ -44,12 +44,12 @@ struct LANGUAGE
 	char neverPlayed[50];			//M032
 	char played[50];				//M033
 	char size[30];					//M034
-	char installing[40];			//M035
+	char installing[50];			//M035
 	char setting[40];				//M036
-	char hook[40];				    //M037
-	char language[40];				//M038
-	char videoMode[40];				//M039
-	char patchVIDTV[40];			//M040
+	char hook[20];				    //M037
+	char language[20];				//M038
+	char videoMode[20];				//M039
+	char patchVIDTV[20];			//M040
 	char errorConnect[100];			//M041
 	char URLnoBegin[100];			//M042
 	char URLnoPath[100];			//M043
@@ -144,6 +144,8 @@ struct LANGUAGE
 	char cIOSupgrade[60];			//M132
 	char noFreeSpace[60];			//M133
 	char formatPartition[40];		//M134
+	char ocarina[20];				//M135
+	char falloff[20];            	//M136
 // Buttons	
 	char addB[15];					//B01
 	char deleteB[15];				//B02

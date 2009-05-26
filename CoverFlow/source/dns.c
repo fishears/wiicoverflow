@@ -105,7 +105,7 @@ u32 getipbynamecached(char *domain)
 		
 		if(node == NULL)
 		{
-			printf(localStr("M013", "Configuration error, MAX_DNS_ENTRIES reached while the list is empty\n") );
+			printf(TX.configError );
 			exit(1);
 		} else if(previousnode == NULL)
 		{

@@ -91,7 +91,7 @@ struct block read_message(s32 connection)
 		//Anything below 0 is an error in the connection
 		if(bytes_read < 0)
 		{
-			printf(localStr("M041", "Connection error from net_read()  Errorcode: %i\n"), bytes_read);
+			printf(TX.errorConnect, bytes_read);
 			return emptyblock;
 		}
 		
@@ -136,7 +136,7 @@ struct block downloadfile(const char *url)
 	//Check if the url starts with "http://", if not it is not considered a valid url
 	if(strncmp(url, "http://", strlen("http://")) != 0)
 	{
-		printf(localStr("M042", "URL '%s' doesn't start with 'http://'\n"), url);
+		printf(TX.URLnoBegin, url);
 		return emptyblock;
 	}
 	
@@ -146,7 +146,7 @@ struct block downloadfile(const char *url)
 	//At the very least the url has to end with '/', ending with just a domain is invalid
 	if(path == NULL)
 	{
-		printf(localStr("M043", "URL '%s' has no PATH part\n"), url);
+		printf(TX.URLnoPath, url);
 		return emptyblock;
 	}
 	
@@ -155,7 +155,7 @@ struct block downloadfile(const char *url)
 	
 	if(domainlength == 0)
 	{
-		printf(localStr("M044", "No domain part in URL '%s'\n"), url);
+		printf(TX.URLnoDomain, url);
 		return emptyblock;
 	}
 	
@@ -168,7 +168,7 @@ struct block downloadfile(const char *url)
 	
 	if(ipaddress == 0)
 	{
-		printf(localStr("M045", "\ndomain %s could not be resolved"), domain);
+		printf(TX.errorDomain, domain);
 		return emptyblock;
 	}
 
@@ -176,7 +176,7 @@ struct block downloadfile(const char *url)
 	s32 connection = server_connect(ipaddress, 80);
 	
 	if(connection < 0) {
-		printf(localStr("M046", "Error establishing connection") );
+		printf(TX.errEstablishConn);
 		return emptyblock;
 	}
 	
@@ -209,7 +209,7 @@ struct block downloadfile(const char *url)
 	
 	if(filestart == NULL)
 	{
-		printf(localStr("M047", "HTTP Response was without a file\n") );
+		printf(TX.HTTPnoFile);
 		free(response.data);
 		return emptyblock;
 	}
@@ -221,7 +221,7 @@ struct block downloadfile(const char *url)
 	
 	if(file.data == NULL)
 	{
-		printf(localStr("M048", "No more memory to copy file from HTTP response\n") );
+		printf(TX.noMemCopy );
 		free(response.data);
 		return emptyblock;
 	}

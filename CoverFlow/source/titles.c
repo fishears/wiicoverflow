@@ -100,7 +100,7 @@ void getTitle(s_title* titleList, char* id, char* title){
 }
 
 bool downloadTitles(){
-	//WindowPrompt(localStr("M003", "ERROR!"), "Error initializing network\nTitles.txt can't be downloaded.", &okButton, 0);
+	//WindowPrompt(TX.error, "Error initializing network\nTitles.txt can't be downloaded.", &okButton, 0);
 	char titlesPath[100];
 	struct block file;
 	

@@ -11,10 +11,10 @@ bool Menu_Install(){
 	cancelButton.y = 290;
     static struct discHdr headerdisc ATTRIBUTE_ALIGN(32);
 	
-	if(!WindowPrompt (localStr("M064", "Install new Game?"), localStr("M065", "Place disk in drive and hit ok."),&okButton,&cancelButton))
+	if(!WindowPrompt (TX.installNewGame, TX.diskInDrive, &okButton,&cancelButton))
 		return false;
 		
-	WindowPrompt (localStr("M066", "Initializing DVD Drive") , localStr("M067", "Please Wait..."),0,0);
+	WindowPrompt (TX.initDVD, TX.pleaseWait,0,0);
 	
 	/* Disable WBFS mode */
 	Disc_SetWBFS(0, NULL);
@@ -25,19 +25,19 @@ bool Menu_Install(){
 
 	ret = Disc_Wait();
 	if (ret < 0) {
-		WindowPrompt (localStr("M068", "Error reading Disc"),0,&cancelButton,0);
+		WindowPrompt (TX.errorReadDisc,0,&cancelButton,0);
 		return false;
 	}
 	ret = Disc_Open();
 	if (ret < 0) {
-		WindowPrompt (localStr("M069", "Could not open Disc"),0,&cancelButton,0);
+		WindowPrompt (TX.errorOpenDisc,0,&cancelButton,0);
 		return false;
 	}
 
 	ret = Disc_IsWii();
 	
 	if (ret < 0) {
-		choice = WindowPrompt (localStr("M070", "Not a Wii Disc"), localStr("M071", "Insert a Wii Disc!"),&okButton,&cancelButton);
+		choice = WindowPrompt (TX.notWiiDisc, TX.insertWiiDisc, &okButton,&cancelButton);
 
 		if (!choice) {
 			return false;
@@ -61,12 +61,12 @@ bool Menu_Install(){
 
 	ret = WBFS_CheckGame(headerdisc.id);
 	if (ret) {
-		WindowPrompt (localStr("M072", "Game is already installed:"),name,&cancelButton,0);
+		WindowPrompt (TX.alreadyInstalled, name, &cancelButton,0);
 		return false;
 	}
 	self.hdd = GetHddInfo();
 	if (!self.hdd) {
-		WindowPrompt (localStr("M073", "No HDD found!"), localStr("M003", "Error!!"),&cancelButton,0);
+		WindowPrompt (TX.noHDD, TX.error, &cancelButton,0);
 		return false;
 		}
 
@@ -77,25 +77,25 @@ bool Menu_Install(){
 	f32 gamesize = ((f32) estimation)/1073741824;
 	char gametxt[50];
 	
-	sprintf(gametxt, localStr("M074", "Installing game %.2fGB:"), gamesize);
+	sprintf(gametxt, TX.installingGame, gamesize);
 	
 	char ttext[50];
 	char tsize[50];
-	sprintf(ttext, localStr("M075", "Install %s?"), name);
-	sprintf(tsize, localStr("M076", "Game Size: %.2fGB"), gamesize);
+	sprintf(ttext, TX.install, name);
+	sprintf(tsize, TX.gameSize, gamesize);
 	
 	if(WindowPrompt (ttext,tsize,&okButton,&cancelButton))
 	{
 		if (gamesize > freespace) {
 			char errortxt[50];
-			sprintf(errortxt, localStr("M077", "Game Size: %.2fGB, Free Space: %.2fGB"), gamesize, freespace);
-			WindowPrompt(localStr("M133", "Not enough free space!"),errortxt,&cancelButton, 0);
+			sprintf(errortxt, TX.gameSizeSpace, gamesize, freespace);
+			WindowPrompt(TX.noFreeSpace, errortxt, &cancelButton, 0);
 			return false;
 		}
 		else {
 			ret = ProgressWindow(self.hdd, gametxt, name);
 			if (ret != 0) {
-				WindowPrompt (localStr("M078", "Install error!"),0,&cancelButton,0);
+				WindowPrompt (TX.errorInstall,0,&cancelButton,0);
 				return false;
 			} else {
 				Sleep(100);
@@ -104,7 +104,7 @@ bool Menu_Install(){
 				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 				Sleep(1000);
 				
-				WindowPrompt (localStr("M079", "Successfully installed:"),name,&okButton,0);
+				WindowPrompt (TX.successInstall, name,&okButton,0);
 				return true;
 			}
 		}

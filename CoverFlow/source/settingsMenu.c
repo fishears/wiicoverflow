@@ -116,18 +116,18 @@ void Graphic_Settings_Menu(){
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFCC);
 		// Draw text
-		GRRLIB_Printf(190, 55,  font_title, settings.fontColor, 1, localStr("M049", "Graphics Settings"));
-		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, localStr("M050", "Zoom:") );
+		GRRLIB_Printf(190, 55,  font_title, settings.fontColor, 1, TX.graphicSetting);
+		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, TX.zoom );
 		GRRLIB_Printf(350, 100, font_texture, settings.fontColor, 1, "%f", settings.coverZoom);
-		GRRLIB_Printf(145, 138, font_texture, settings.fontColor, 1, localStr("M051", "Spacing:") );
+		GRRLIB_Printf(145, 138, font_texture, settings.fontColor, 1, TX.spacing );
 		GRRLIB_Printf(350, 138, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
-		GRRLIB_Printf(145, 176, font_texture, settings.fontColor, 1, localStr("M052", "Angle:") );
+		GRRLIB_Printf(145, 176, font_texture, settings.fontColor, 1, TX.angle );
 		GRRLIB_Printf(350, 176, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
-		GRRLIB_Printf(145, 214, font_texture, settings.fontColor, 1, localStr("M136", "Falloff:") );
+		GRRLIB_Printf(145, 214, font_texture, settings.fontColor, 1, TX.falloff );
 		GRRLIB_Printf(350, 214, font_texture, settings.fontColor, 1, "%f", settings.coverFallOff);
-		GRRLIB_Printf(145, 252, font_texture, settings.fontColor, 1, localStr("M053", "Draw Window:") );
+		GRRLIB_Printf(145, 252, font_texture, settings.fontColor, 1, TX.drawWindow );
 		GRRLIB_Printf(350, 252, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
-		GRRLIB_Printf(145, 290, font_texture, settings.fontColor, 1, localStr("M054", "Game Title:") );
+		GRRLIB_Printf(145, 290, font_texture, settings.fontColor, 1, TX.gameTitle );
 		
 		//Button_Theme_Paint(&settingsButton, settings.theme);
 		Button_Paint(&spacingupButton);
@@ -278,7 +278,7 @@ void Settings_Menu(){
 			{
 				// Clicked on the Download Covers button
 				//if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
-				if (WindowPrompt(localStr("M055", "Cover Download"),localStr("M056", "This operation can't be canceled,\ncontinue?"), &okButton, &cancelButton))
+				if (WindowPrompt(TX.coverDownload, TX.opNoCancel , &okButton, &cancelButton))
 				{
 					WPAD_Rumble(0,0); //sometimes rumble remain active
 					if(networkInit(self.ipAddress)){
@@ -286,7 +286,7 @@ void Settings_Menu(){
 						CoversDownloaded();
 					}
 					else
-						WindowPrompt(localStr("M003", "ERROR!"), localStr("M002", "Error initializing network\nCover can't be downloaded."), &okButton, 0);
+						WindowPrompt(TX.error, TX.iniNetErr , &okButton, 0);
 				}
 			}
 #ifdef TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
@@ -294,7 +294,7 @@ void Settings_Menu(){
 				WPAD_Rumble(0,0); //sometimes rumble remain active
 				if(networkInit(self.ipAddress)){
 					if(!downloadTitles())
-						WindowPrompt(localStr("M003", "ERROR!"), "Error downloading Titles.txt\nAn error occurred while downloading/saving file.", &okButton, 0);
+						WindowPrompt( TX.error, "Error downloading Titles.txt\nAn error occurred while downloading/saving file.", &okButton, 0);
 					else
 					{
 						if(self.usingTitlesTxt){
@@ -316,7 +316,7 @@ void Settings_Menu(){
 					}
 				}
 				else
-					WindowPrompt(localStr("M003", "ERROR!"), "Error initializing network\nTitles.txt can't be downloaded.", &okButton, 0);
+					WindowPrompt(TX.error, "Error initializing network\nTitles.txt can't be downloaded.", &okButton, 0);
 			}
 #endif
 			else if (Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
@@ -380,21 +380,21 @@ void Settings_Menu(){
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFCC);//old one bg renamed to _old
 		// Draw text
-		GRRLIB_Printf(184, 55,  font_title, 0xFFFFFFFF, 1, localStr("M057", "Coverflow Settings") );
-		GRRLIB_Printf(145, 93,  font_texture, settings.fontColor, 1, localStr("M135", "Ocarina") );
-		GRRLIB_Printf(310, 93,  font_texture, settings.fontColor, 1, localStr("M037", "Hook") );
+		GRRLIB_Printf(184, 55,  font_title, 0xFFFFFFFF, 1, TX.cflowSettings );
+		GRRLIB_Printf(145, 93,  font_texture, settings.fontColor, 1, TX.ocarina );
+		GRRLIB_Printf(310, 93,  font_texture, settings.fontColor, 1, TX.hook );
 		GRRLIB_Printf(385, 93,  font_texture, 0xFFFFFFFF, 1, "%s",hooks[settings.hooktype]);
-		GRRLIB_Printf(145, 128, font_texture, settings.fontColor, 1, localStr("M038", "Language") );
+		GRRLIB_Printf(145, 128, font_texture, settings.fontColor, 1, TX.language );
 		GRRLIB_Printf(330, 128, font_texture, 0xFFFFFFFF, 1, "%s",languages[settings.language]);
-		GRRLIB_Printf(145, 157, font_texture, settings.fontColor, 1, localStr("M039", "Video mode") );
+		GRRLIB_Printf(145, 157, font_texture, settings.fontColor, 1, TX.videoMode );
 		GRRLIB_Printf(330, 155, font_texture, 0xFFFFFFFF, 1, "%s",vidmodes[settings.video]);
-		GRRLIB_Printf(145, 187, font_texture, settings.fontColor, 1, localStr("M040", "VIDTV patch") );
-		GRRLIB_Printf(145, 227, font_texture, settings.fontColor, 1, localStr("M058", "Graphics") );
-		GRRLIB_Printf(145, 267, font_texture, settings.fontColor, 1, localStr("M059", "Get additional data") );
-		GRRLIB_Printf(145, 307, font_texture, settings.fontColor, 1, localStr("M060", "Theme") );
-		GRRLIB_Printf(145, 347, font_texture, settings.fontColor, 1, localStr("M061", "1-Click Launch") );
-		GRRLIB_Printf(145, 387, font_texture, settings.fontColor, 1, localStr("M062", "Rumble") );
-		GRRLIB_Printf(145, 427, font_texture, settings.fontColor, 1, localStr("M063", "Sound") );
+		GRRLIB_Printf(145, 187, font_texture, settings.fontColor, 1, TX.patchVIDTV );
+		GRRLIB_Printf(145, 227, font_texture, settings.fontColor, 1, TX.graphics );
+		GRRLIB_Printf(145, 267, font_texture, settings.fontColor, 1, "Get additional data" );
+		GRRLIB_Printf(145, 307, font_texture, settings.fontColor, 1, TX.theme );
+		GRRLIB_Printf(145, 347, font_texture, settings.fontColor, 1, TX.oneClickLaunch );
+		GRRLIB_Printf(145, 387, font_texture, settings.fontColor, 1, TX.rumble );
+		GRRLIB_Printf(145, 427, font_texture, settings.fontColor, 1, TX.sound );
 		//GRRLIB_Printf(218, 446, font_texture, settings.fontColor, 1.15, "Press B to return");
 
 		// Draw stateless buttons

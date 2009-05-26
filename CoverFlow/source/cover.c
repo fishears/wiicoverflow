@@ -81,18 +81,18 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 		
 		char myIP[16];
 		
-		sprintf(self.debugMsg, localStr("M001", "Initializing Network") );
+		sprintf(self.debugMsg, TX.iniNet );
 		Paint_Progress_Generic(v, max, self.debugMsg);
 		
 		if(!Net_Init(myIP))
 		{
-			sprintf(self.debugMsg, localStr("M002", "Error Initializing Network") );
+			sprintf(self.debugMsg, TX.iniNetErr );
 			Paint_Progress_Generic(v, max, self.debugMsg);
-			WindowPrompt (localStr("M003", "ERROR!"), localStr("M002", "Error initializing network"), &okButton, 0);
+			WindowPrompt (TX.error, TX.iniNetErr, &okButton, 0);
 		}
 		else
 		{
-			sprintf(self.debugMsg, localStr("M004", "Network Initialized") );
+			sprintf(self.debugMsg, TX.iniNetReady );
 			Paint_Progress_Generic(v, max, self.debugMsg);
 			self.inetOk = true;
 		}
@@ -125,7 +125,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 
 		snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, header->id);
 		
-		sprintf(self.debugMsg, localStr("M005", "Checking presence of %s"), imgPath);
+		sprintf(self.debugMsg, TX.checkPresence, imgPath);
 		Paint_Progress_Generic(v, max,self.debugMsg);
 		
 		FILE *fp;
@@ -133,13 +133,13 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 		if (fp)
 		{
 			fclose (fp);
-			sprintf(self.debugMsg,  localStr("M006", "%s present, not downloading"), imgPath);
+			sprintf(self.debugMsg,  TX.noDownload, imgPath);
 			Paint_Progress_Generic(v, max,self.debugMsg);
 		}
 		else{
 
 			sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, header->id);
-			sprintf(self.debugMsg, localStr("M007", "Getting %s"), url);
+			sprintf(self.debugMsg, TX.getting, url);
 			Paint_Progress_Generic(v, max,self.debugMsg);
 		
 			file = downloadfile(url);
@@ -147,29 +147,29 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			if(file.data != NULL && file.size != 184){ //site return a black image of 184 bytes if the image is not found
 				saveFile(imgPath, file);
 				free(file.data);
-				sprintf(self.debugMsg, localStr("M008", "done") );
+				sprintf(self.debugMsg, TX.done );
 			    Paint_Progress_Generic(v, max,self.debugMsg);
 			}
 			else {
-				sprintf(self.debugMsg, localStr("M009", "some error occurred") );
+				sprintf(self.debugMsg, TX.someErrors );
 				Paint_Progress_Generic(v, max,self.debugMsg);
 			}
 		}
 		
 		snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c%c.png", USBLOADER_PATH,  header->id[0], header->id[1], header->id[2], header->id[3]);
-		sprintf(self.debugMsg, localStr("M005", "Checking presence of %s"), imgPath);
+		sprintf(self.debugMsg, TX.checkPresence, imgPath);
 		Paint_Progress_Generic(v, max,self.debugMsg);
 		
 		fp = fopen(imgPath, "rb");
 		if (fp)
 		{
 			fclose (fp);
-			sprintf(self.debugMsg,localStr("M006", "%s present, not downloading"), imgPath);
+			sprintf(self.debugMsg, TX.noDownload, imgPath);
 			Paint_Progress_Generic(v, max,self.debugMsg);
 		}
 		else{
 			sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c%c.png", header->id[0], header->id[1], header->id[2], header->id[3]);
-			sprintf(self.debugMsg, localStr("M007", "Getting %s"), url);
+			sprintf(self.debugMsg, TX.getting, url);
 			Paint_Progress_Generic(v, max,self.debugMsg);
 			
 			file = downloadfile(url);
@@ -177,14 +177,14 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			if(file.data != NULL && file.size != 7386){ //site return a generic of 7386 bytes image is not found
 				saveFile(imgPath, file);
 				free(file.data);
-				sprintf(self.debugMsg, localStr("M008", "done") );
+				sprintf(self.debugMsg, TX.done );
 			    Paint_Progress_Generic(v, max,self.debugMsg);
 			}
 			else { //TRY WITH 3 DIGIT COVER
 				
 				snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c.png", USBLOADER_PATH,  header->id[0], header->id[1], header->id[2]);
 				sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c.png", header->id[0], header->id[1], header->id[2]);
-				sprintf(self.debugMsg, localStr("M007", "Getting %s"), url);
+				sprintf(self.debugMsg, TX.getting, url);
 				Paint_Progress_Generic(v, max,self.debugMsg);
 				
 				file = downloadfile(url);
@@ -192,11 +192,11 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 				if(file.data != NULL && file.size != 7386){ //site return a generic of 7386 bytes image is not found
 					saveFile(imgPath, file);
 					free(file.data);
-					sprintf(self.debugMsg, localStr("M008", "done") );
+					sprintf(self.debugMsg, TX.done );
 					Paint_Progress_Generic(v, max,self.debugMsg);
 				}
 				else {
-					sprintf(self.debugMsg, localStr("M009", "some error occurred") );
+					sprintf(self.debugMsg, TX.someErrors );
 					Paint_Progress_Generic(v, max,self.debugMsg);
 				}
 			}
@@ -218,7 +218,7 @@ void batchDownloadCover(struct discHdr *gameList)
 		
 		if(self.array_size < MAX_COVERS)
 		{
-			sprintf(self.debugMsg, localStr("M010", "Checking next cover...%s"), header->id);
+			sprintf(self.debugMsg, TX.checkNextCover, header->id);
 			Paint_Progress_Generic(i, self.gameCnt, self.debugMsg);
 			Download_Cover(gameList, header, i, self.gameCnt);
 			//sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
@@ -228,6 +228,6 @@ void batchDownloadCover(struct discHdr *gameList)
 	Sleep(300);
 //	UpdateBufferedImages();
 	Sleep(100);
-	WindowPrompt (localStr("M011", "Operation finished!"), localStr("M012", "Press A to continue"), &okButton, 0);
+	WindowPrompt (TX.opFinished, TX.pressA, &okButton, 0);
 }
 

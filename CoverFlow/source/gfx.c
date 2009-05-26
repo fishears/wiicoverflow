@@ -220,25 +220,25 @@ void Init_Buttons()
 
 #ifndef 	LOCALBUTTON_OFF
 	//add for Localization
-	sprintf(addButton.label, localStr("B01","")); 
-    sprintf(deleteButton.label, localStr("B02","")); 
-    sprintf(cancelButton.label, localStr("B03",""));
-	sprintf(yesButton.label, localStr("B04","")); 
-    sprintf(noButton.label, localStr("B05","")); 
-	sprintf(labelBuf, localStr("B06",""));
+	sprintf(addButton.label, TX.addB); 
+    sprintf(deleteButton.label, TX.deleteB); 
+    sprintf(cancelButton.label, TX.cancelB);
+	sprintf(yesButton.label, TX.yesB); 
+    sprintf(noButton.label, TX.noB); 
+	sprintf(labelBuf, TX.okB);
     sprintf(okButton.label, labelBuf); 
 	sprintf(graphicsButton.label, labelBuf);
-    sprintf(resetButton.label, localStr("B07","")); 
-    //sprintf(downloadButton.label, localStr("B08","")); 
-	sprintf(coversButton.label, localStr("B08","")); 
-	sprintf(titlesButton.label, localStr("B08","")); 
-    sprintf(loadButton.label, localStr("B09","")); 
-    sprintf(labelBuf, localStr("B10",""));
+    sprintf(resetButton.label, TX.resetB); 
+    //sprintf(downloadButton.label, TX.downloadB); 
+	sprintf(coversButton.label, TX.downloadB); 
+	sprintf(titlesButton.label, TX.downloadB); 
+    sprintf(loadButton.label, TX.loadB); 
+    sprintf(labelBuf, TX.backB);
 	sprintf(backButton.label, labelBuf); 
 	sprintf(gbackButton.label, labelBuf); 
 
 	//sprintf(labelBuf, "An"); //for testing
-	sprintf(labelBuf, localStr("B11",""));
+	sprintf(labelBuf, TX.toggleOnB);
 	sprintf(cheatonButton.label, labelBuf); 
 	sprintf(vidtvonButton.label, labelBuf); 
 	sprintf(gcheatonButton.label, labelBuf); 
@@ -249,7 +249,7 @@ void Init_Buttons()
 	sprintf(musicOnButton.label, labelBuf); 
 
 	//sprintf(labelBuf, "      Aus");  //for testing
-	sprintf(labelBuf, localStr("B12",""));
+	sprintf(labelBuf, TX.toggleOffB);
 	sprintf(cheatoffButton.label, labelBuf); 
 	sprintf(vidtvoffButton.label, labelBuf); 
 	sprintf(gcheatoffButton.label, labelBuf); 
@@ -258,11 +258,11 @@ void Init_Buttons()
 	sprintf(quickstartOffButton.label, labelBuf); 
 	sprintf(rumbleOffButton.label, labelBuf); 
 	sprintf(musicOffButton.label, labelBuf); 
-	sprintf(themeWhiteButton.label, localStr("B13",""));
-	sprintf(themeBlackButton.label, localStr("B14",""));
-	sprintf(homeMenuTopButton.label, localStr("B15",""));
-	sprintf(wiiMenuButton.label, localStr("B16",""));
-	sprintf(loaderButton.label, localStr("B17",""));
+	sprintf(themeWhiteButton.label, TX.whiteB);
+	sprintf(themeBlackButton.label, TX.blackB);
+	sprintf(homeMenuTopButton.label, TX.homeMenuTopB);
+	sprintf(wiiMenuButton.label, TX.wiimenuB);
+	sprintf(loaderButton.label, TX.loaderB);
 	
 #endif
 }
@@ -595,10 +595,10 @@ int draw_selected_two(bool load, bool hover)
 		// Display Title, Last Played, and Size
 		GRRLIB_Printf(245, 174, font_title, 0xFFFFFFFF, 1, "%s", gameName);
 		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
-			GRRLIB_Printf(255, 220, font_title_small, 0xFFFFFFFF, 1, localStr("M032", "Never played before"));
+			GRRLIB_Printf(255, 220, font_title_small, 0xFFFFFFFF, 1, TX.neverPlayed);
 		else
-			GRRLIB_Printf(255, 220, font_title_small, 0xFFFFFFFF, 1, localStr("M033", "Played %s"),gameSetting.lastPlayed);
-		GRRLIB_Printf(255, 240, font_title_small, 0xFFFFFFFF, 1, localStr("M034", "Size: %.2f GB"), self.gsize);
+			GRRLIB_Printf(255, 220, font_title_small, 0xFFFFFFFF, 1, TX.played, gameSetting.lastPlayed);
+		GRRLIB_Printf(255, 240, font_title_small, 0xFFFFFFFF, 1, TX.size, self.gsize);
 #else
 		GRRLIB_Printf(270, 174, font_title, 0xFFFFFFFF, 1, "%s", "Best game");
 		GRRLIB_Printf(280, 210, font_title_small, 0xFFFFFFFF, 1, "%s", " Game ID: KBGSUX");
@@ -961,7 +961,7 @@ void ShowProgress (s32 done, s32 total)
 
 	//sprintf(prozent, "%s%0.2f%%", "Installing Game...", percent);
 
-    sprintf(timet,localStr("M035", "Installing... (%0.2f%%) Time left: %d:%02d:%02d"),percent, h,m,s);
+    sprintf(timet,TX.installing, percent, h,m,s);
 
 	/*Update and Draw Progress Window Here*/
 	//WindowPrompt(prozent, timet, 0, 0);
@@ -1190,15 +1190,15 @@ void game_settings_menu()
 		Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
 
         //BUTTON TEXT
-		GRRLIB_Printf(89, 145,  font_title, settings.fontColor, 1, localStr("M036", "%s settings"), gameName);
-		GRRLIB_Printf(169, 193,  font_texture, settings.fontColor, 1, localStr("M135", "Ocarina:"));
-		GRRLIB_Printf(334, 193,  font_texture, settings.fontColor, 1, localStr("M037", "Hook:"));
+		GRRLIB_Printf(89, 145,  font_title, settings.fontColor, 1, TX.setting, gameName);
+		GRRLIB_Printf(169, 193,  font_texture, settings.fontColor, 1, TX.ocarina);
+		GRRLIB_Printf(334, 193,  font_texture, settings.fontColor, 1, TX.hook);
 		GRRLIB_Printf(409, 193,  font_texture, 0xFFFFFFFF, 1, "%s",ghooks[gameSetting.hooktype]);
-		GRRLIB_Printf(169, 228, font_texture, settings.fontColor, 1, localStr("M038", "Language:"));
+		GRRLIB_Printf(169, 228, font_texture, settings.fontColor, 1, TX.language);
 		GRRLIB_Printf(354, 228, font_texture, 0xFFFFFFFF, 1, "%s",glanguages[gameSetting.language]);
-		GRRLIB_Printf(169, 257, font_texture, settings.fontColor, 1, localStr("M039", "Video mode:"));
+		GRRLIB_Printf(169, 257, font_texture, settings.fontColor, 1, TX.videoMode);
 		GRRLIB_Printf(354, 255, font_texture, 0xFFFFFFFF, 1, "%s",gvidmodes[gameSetting.video]);
-		GRRLIB_Printf(169, 289, font_texture, settings.fontColor, 1, localStr("M040", "VIDTV patch:"));
+		GRRLIB_Printf(169, 289, font_texture, settings.fontColor, 1, TX.patchVIDTV);
 
 		// Draw the default pointer hand
 		if(doloop)
