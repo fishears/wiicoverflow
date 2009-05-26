@@ -135,11 +135,12 @@ int main( int argc, char **argv )
 	
 	languageDefault();  // load default msgs
 	SETTINGS_Init();
-	//languageLoad();		// load localization
+	
 	
 	GRRLIB_Init();
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
+	
 	
 	//load test font stuff
 	ttf16pt = CFreeTypeGX_new();
@@ -266,6 +267,12 @@ int main( int argc, char **argv )
 	//////////////////////////
 	
 	//ee();
+#ifndef TTF_TEST
+
+#else	
+	languageLoad();		// load localization (german for test)
+#endif
+	
 #ifdef ONE_AT_A_TIME
         bool LEFT = false, RIGHT = false;
         int L_CNT = 0, R_CNT = 0;
