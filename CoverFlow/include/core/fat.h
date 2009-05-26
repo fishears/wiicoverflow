@@ -4,6 +4,7 @@
 /* Prototypes */
 s32 Fat_MountSDHC(void);
 s32 Fat_ReadFile(const char *, void **);
+s32 Fat_ReadFileToBuffer(const char *filepath, void *outbuf, int maxsize);
 s32 Fat_UnmountSDHC(void);
 
 #endif
