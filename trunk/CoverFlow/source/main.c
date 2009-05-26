@@ -266,7 +266,10 @@ int main( int argc, char **argv )
 	//////////////////////////
 	
 	//ee();
-	
+#ifdef ONE_AT_A_TIME
+        bool LEFT = false, RIGHT = false;
+        int L_CNT = 0, R_CNT = 0;
+#endif
 	while(1) 
 	{
 	
@@ -410,10 +413,9 @@ int main( int argc, char **argv )
 
 		// Check for non-A activity
 		// Nothing is selected and nothing is flipped
-		else if (!self.selected && self.animate_flip == 0)
-		{
-            // Check for Left pad, flip cover left
-			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT)
+		else if (!self.selected && self.animate_flip == 0)// Check for MINUS, flip cover left
+		{       // Check for LEFT, flip cover left
+                        if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT)
 			{	
 				select_ready = false;
 				if ((int)self.shift < self.max_cover)
@@ -423,7 +425,7 @@ int main( int argc, char **argv )
 				else if ((int)self.shift <= self.min_cover)
 					self.shift = self.min_cover;
 			} // now check for right, flip cover right
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT)
+                        else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT)
 			{
 				select_ready = false;
 				if ((int)self.shift > self.min_cover)
@@ -432,7 +434,38 @@ int main( int argc, char **argv )
 					self.shift = self.max_cover;
 				else if ((int)self.shift <= self.min_cover)
 					self.shift = self.min_cover;
-			} // Check for UP button held to zoom in
+			}// Check for MINUS, flip cover left
+#ifdef ONE_AT_A_TIME
+                        else if (LEFT || WPAD_ButtonsHeld(0) & WPAD_BUTTON_MINUS)
+			{	
+                            LEFT = true;
+                            select_ready = false;
+				if ((int)self.shift < self.max_cover){
+                                    self.shift += SCROLL_SPEED;
+                                    L_CNT++;
+                                    if(L_CNT==20){LEFT=false;L_CNT=0;}
+                                }
+				else if ((int)self.shift >= self.max_cover)
+                                {self.shift = self.max_cover; LEFT = false;L_CNT=0;}
+				else if ((int)self.shift <= self.min_cover)
+                                {self.shift = self.min_cover; LEFT = false;L_CNT=0;}
+			} // now check for PLUS, flip cover right
+			else if (RIGHT || WPAD_ButtonsHeld(0) & WPAD_BUTTON_PLUS)
+			{
+                            RIGHT = true;
+				select_ready = false;
+				if ((int)self.shift > self.min_cover){
+					self.shift -= SCROLL_SPEED;
+                                        R_CNT++;
+                                        if(R_CNT==20){RIGHT=false;R_CNT=0;}
+                                    }
+                                else if ((int)self.shift >= self.max_cover)
+                                {self.shift = self.max_cover; RIGHT = false;R_CNT=0;}
+				else if ((int)self.shift <= self.min_cover)
+                                {self.shift = self.min_cover; RIGHT = false;R_CNT=0;}
+			}
+#endif
+                        // Check for UP button held to zoom in
 			else if (!settings.parentalLock && (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsHeld(0) & PAD_BUTTON_UP))
 			{	
 				if (settings.coverZoom >= .69)
