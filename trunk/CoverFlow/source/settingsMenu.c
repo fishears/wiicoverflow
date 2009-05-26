@@ -123,7 +123,7 @@ void Graphic_Settings_Menu(){
 		GRRLIB_Printf(350, 138, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
 		GRRLIB_Printf(145, 176, font_texture, settings.fontColor, 1, localStr("M052", "Angle:") );
 		GRRLIB_Printf(350, 176, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
-		GRRLIB_Printf(145, 214, font_texture, settings.fontColor, 1, "Falloff:" );
+		GRRLIB_Printf(145, 214, font_texture, settings.fontColor, 1, localStr("M136", "Falloff:") );
 		GRRLIB_Printf(350, 214, font_texture, settings.fontColor, 1, "%f", settings.coverFallOff);
 		GRRLIB_Printf(145, 252, font_texture, settings.fontColor, 1, localStr("M053", "Draw Window:") );
 		GRRLIB_Printf(350, 252, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
