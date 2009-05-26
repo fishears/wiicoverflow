@@ -146,6 +146,8 @@
 	<M132 val="cIOS Upgrade Required" />
 	<M133 val="Not enough free space!" />
 	<M134 val="Formatting Partition %s" />
+	<M135 val="Ocarina:" />
+	<M136 val="Falloff:" />
 	<B01 val="add" />
 	<B02 val="delete" />
 	<B03 val="cancel" />
@@ -301,6 +303,8 @@
 	<M132 val="cIOS Mise à jour Nécessaire" />
 	<M133 val="Pas assez d'espace libre!" />
 	<M134 val="Formatage de la partition %s" />
+	<M135 val="Ocarina:" />
+	<M136 val="Falloff:" />
   </FR>
   
   <DA desc="Dansk">
