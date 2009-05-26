@@ -3,7 +3,8 @@
 	#include "coverflow.h"
 	//#include "soundmanager.h"
 	#include "filter.h"
-
+    //#include "localization.h"
+	
 	extern int COVER_COUNT;
 	#ifdef TEST_MODE
 	int COVER_COUNT = 29;
@@ -134,6 +135,8 @@ int main( int argc, char **argv )
 	
 	SETTINGS_Init();
 	
+	//languageDefault();  //load default msgs
+		
 	GRRLIB_Init();
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
