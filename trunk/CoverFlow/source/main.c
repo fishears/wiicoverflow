@@ -279,9 +279,6 @@ int main( int argc, char **argv )
         bool LEFT = false, RIGHT = false;
         int L_CNT = 0, R_CNT = 0;
 #endif
-
-	self.hovering = false;
-	self.hover_angle = 0;
 	
 	while(1) 
 	{
@@ -665,20 +662,6 @@ int main( int argc, char **argv )
 					select_ready = true;
 				}
 			}
-		}
-		
-		if(select_ready && CoverHoverCenter())
-		{
-			self.hovering = true;
-		}
-		else
-		{
-			self.hovering = false;
-		}
-		
-		if(!select_ready)
-		{
-			self.hover_angle = 0.0;
 		}
 		
 		// Check for parental lock button combo A + B + 1 + 2
