@@ -7,6 +7,7 @@ extern s_pointer pointer;
 extern s_settings settings;
 extern s_gameSettings gameSetting;
 extern s_title* titleList;
+extern s_coverFlip coverFlip[];
 
 extern int COVER_COUNT;
 // Language selection config
@@ -323,7 +324,30 @@ void GRRLIB_Cover(float pos, int texture_id)
 	
 	scale = pow(pos + 1, -2);
 	angle = -1 * dir * change_scale(scale, 0, 1, settings.coverAngle, 0);
-
+		
+	#ifdef D3_COVERS
+	if(coverFlip[texture_id].flip)
+	{
+		coverFlip[texture_id].angle+=3;
+		if(coverFlip[texture_id].angle >=180)
+			coverFlip[texture_id].angle = 180;
+			
+		angle += coverFlip[texture_id].angle;
+	}
+	else if(!coverFlip[texture_id].flip)
+	{
+		if(coverFlip[texture_id].angle > 0)
+		{
+			coverFlip[texture_id].angle-=3;
+		}
+		else
+			coverFlip[texture_id].angle = 0;
+			
+		angle += coverFlip[texture_id].angle;
+		
+	}
+	#endif
+	
 	DrawBufferedCover(texture_id, loc, angle, falloff);
 }
 
@@ -487,8 +511,16 @@ int draw_selected_two(bool load, bool hover)
 	float loc, scale, angle;
 
 	loc = settings.coverSpacing * dir * (pow(1, -1) - 1);
-	scale = change_scale(self.animate_flip, 0, 1, 0, 270);
+
+#ifdef D3_COVERS
+	scale = change_scale(self.animate_flip, 0, 1, 0, 360);
 	angle = -1 * dir * scale;
+	
+	angle += coverFlip[self.gameSelected].angle;
+#else
+	scale = change_scale(self.animate_flip, 0, 1, 0, 270);
+	angle = -1 * dir * scale ;
+#endif
 
 	if(load)
 	{
@@ -528,8 +560,11 @@ int draw_selected_two(bool load, bool hover)
 			self.animate_load--;
 	}
 	
-		
+#ifdef D3_COVERS
+	if(scale >= 180)//-16
+#else
 	if(scale >= 250)//-16
+#endif
 	{
 		GRRLIB_DrawImg(64, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		

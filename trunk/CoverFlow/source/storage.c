@@ -4,6 +4,7 @@ extern s_self self;
 extern s_settings settings;
 extern s_title* titleList;
 extern int COVER_COUNT;
+extern s_coverFlip coverFlip[];
 
 bool init_usbfs()
 {    
@@ -322,7 +323,13 @@ s32 GetEntries()
 	
 	/* Reset variables */
 	self.gameSelected = self.gameStart = 0;
-
+	int i = 0;
+	for(i = 0; i < self.gameCnt; i++)
+	{
+		coverFlip[i].flip = false;
+		coverFlip[i].angle = 0.0;
+	}
+	
 	//Init Filter
 	//InitFilter(&gameFilter, gameList);
 
