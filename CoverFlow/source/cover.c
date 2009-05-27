@@ -3,6 +3,7 @@
 extern s_self self;
 extern s_gameSettings gameSetting;
 extern int COVER_COUNT;
+bool coverLoaded=false;
 
 void LoadCurrentCover(int id, struct discHdr *gameList)
 {
@@ -22,16 +23,32 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 	sprintf(titleID, "%s", header->id);
 	getGameSettings(titleID, &gameSetting);
 	
+	if (coverLoaded)
+	{
+		free(current_cover_texture.data);  //should be freed if loading another
+		coverLoaded=false;
+	}
+	
 	if (ret > 0)
+	{
 		current_cover_texture = GRRLIB_LoadTexture((const unsigned char*)imgData);
-	else{
+		coverLoaded=true;
+	}
+	else
+	{
 		sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c.png", header->id[0],header->id[1],header->id[2]);
 		ret = Fat_ReadFile(filepath, &imgData);
 		
 		if (ret > 0)
+		{
 			current_cover_texture = GRRLIB_LoadTexture((const unsigned char*)imgData);
+			coverLoaded=true;
+		}
 		else
+		{
 			current_cover_texture = no_disc_texture;
+			coverLoaded=false;
+		}
 	}
 	
 	#else
