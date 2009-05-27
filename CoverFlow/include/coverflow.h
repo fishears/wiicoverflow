@@ -183,10 +183,7 @@ typedef struct{
 	
 	int animate_count;
 	int animate_slide_x;
-	
-	bool hovering;
-	float hover_angle;
-	
+		
 	//bool firstTimeDownload;
 	//bool inetOk;
 	
