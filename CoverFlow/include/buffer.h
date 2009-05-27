@@ -56,3 +56,6 @@ inline void BUFFER_KillBuffer();
 inline void BUFFER_ClearCovers();
 
 inline void* process(void *arg);
+
+
+GRRLIB_texImg BufferStaticImage(const unsigned char* pngDataAddress);

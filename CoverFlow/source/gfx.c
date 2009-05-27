@@ -1,6 +1,7 @@
 #include "gfx.h"
 #include "settings.h"
 #include "localization.h"
+#include "buffer.h"
 
 extern s_self self;
 extern s_pointer pointer;
@@ -41,29 +42,29 @@ static char timet[256];
 
 void LoadTextures()
 {
-	pointer_texture        = GRRLIB_LoadTexture(generic_point_png);
-	pointer_shadow_texture = GRRLIB_LoadTexture(pointer_shadow_png);
-	turn_point_texture     = GRRLIB_LoadTexture(turning_point_png);
-	menu_bg_texture		   = GRRLIB_LoadTexture(menu_bg_png);
-	cover_texture		   = GRRLIB_LoadTexture(no_cover_png);
-	back_texture		   = GRRLIB_LoadTexture(back_cover_png);
-	no_disc_texture		   = GRRLIB_LoadTexture(no_disc_png);
-	load_bg_texture		   = GRRLIB_LoadTexture(bg_options_screen_no_transparency_png);
-	font_texture           = GRRLIB_LoadTexture(BMfont5_png);
-	font_title             = GRRLIB_LoadTexture(font_w14_h20_png);
-	font_title_small       = GRRLIB_LoadTexture(font_w10_h14_png);
-	slidebar_texture       = GRRLIB_LoadTexture(slidebar_png);
+	pointer_texture        = BufferStaticImage(generic_point_png);
+	pointer_shadow_texture = BufferStaticImage(pointer_shadow_png);
+	turn_point_texture     = BufferStaticImage(turning_point_png); // can't find free
+	menu_bg_texture		   = BufferStaticImage(menu_bg_png); // can't find free
+	cover_texture		   = BufferStaticImage(no_cover_png);
+	back_texture		   = BufferStaticImage(back_cover_png);
+	no_disc_texture		   = BufferStaticImage(no_disc_png);
+	load_bg_texture		   = BufferStaticImage(bg_options_screen_no_transparency_png); // can't find free
+	font_texture           = BufferStaticImage(BMfont5_png);
+	font_title             = BufferStaticImage(font_w14_h20_png);
+	font_title_small       = BufferStaticImage(font_w10_h14_png);
+	slidebar_texture       = BufferStaticImage(slidebar_png);  // can't find free
 	slidebar_white_texture = GRRLIB_CreateEmptyTexture(slidebar_texture.w, slidebar_texture.h);
 	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white
-	ambientlight_texture   = GRRLIB_LoadTexture(ambientlight_png);
+	ambientlight_texture   = BufferStaticImage(ambientlight_png);  // can't find free
 	ambientlight_white_texture = GRRLIB_CreateEmptyTexture(ambientlight_texture.w, ambientlight_texture.h);
 	GRRLIB_BMFX_Invert(ambientlight_texture, ambientlight_white_texture); //invert the fade from black to white
-	battery_bar            = GRRLIB_LoadTexture(battery_bar_png);
-        battery_bar_red            = GRRLIB_LoadTexture(battery_bar_red_png);
-    battery                = GRRLIB_LoadTexture(battery_png);
-    battery_dead           = GRRLIB_LoadTexture(battery_dead_png);
-	ttf_button_black       = GRRLIB_LoadTexture(ttf_button_black_png);
-	ttf_button_white       = GRRLIB_LoadTexture(ttf_button_white_png);
+	battery_bar            = BufferStaticImage(battery_bar_png);  // can't find free
+    battery_bar_red        = BufferStaticImage(battery_bar_red_png);  // can't find free
+    battery                = BufferStaticImage(battery_png);  // can't find free
+    battery_dead           = BufferStaticImage(battery_dead_png);  // can't find free
+	ttf_button_black       = BufferStaticImage(ttf_button_black_png);  // can't find free
+	ttf_button_white       = BufferStaticImage(ttf_button_white_png); // can't find free
 
 	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
 	GRRLIB_InitTileSet(&font_title, 14, 20, 32);
@@ -1276,16 +1277,16 @@ void game_settings_menu()
 
 void freeResources(){
 
-	free(pointer_texture.data);
-	free(pointer_shadow_texture.data);
-	free(cover_texture.data);
-	free(back_texture.data);
-	free(empty_texture.data);
-	free(no_disc_texture.data);
-	free(current_cover_texture.data);
-	free(font_texture.data);
-	free(font_title.data);
-	free(font_title_small.data);
+	//free(pointer_texture.data);
+	//free(pointer_shadow_texture.data);
+	//free(cover_texture.data);
+	//free(back_texture.data);
+	free(empty_texture.data); // can't find load
+	//free(no_disc_texture.data);
+	free(current_cover_texture.data); // is this always available?
+	//free(font_texture.data);
+	//free(font_title.data);
+	//free(font_title_small.data);
 	free(progress_texture.data);
 	
 	GRRLIB_FillScreen(0x000000FF);
