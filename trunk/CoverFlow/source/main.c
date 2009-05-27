@@ -156,8 +156,8 @@ int main( int argc, char **argv )
 	
 	initVars();
 	
-    loader_main_texture = GRRLIB_LoadTexture(loading_main_png);
-    progress_texture    = GRRLIB_LoadTexture(progress_png);
+    loader_main_texture = BufferStaticImage(loading_main_png); // can't find free
+    progress_texture    = BufferStaticImage(progress_png);
 
 	self.progress += .1;
 	sprintf(self.debugMsg, "Loading textures" );
