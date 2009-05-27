@@ -449,11 +449,12 @@ int main( int argc, char **argv )
                         else if (LEFT || WPAD_ButtonsHeld(0) & WPAD_BUTTON_MINUS)
 			{	
                             LEFT = true;
+                            RIGHT = false;
                             select_ready = false;
 				if ((int)self.shift < self.max_cover){
                                     self.shift += SCROLL_SPEED;
                                     L_CNT++;
-                                    if(L_CNT==20){LEFT=false;L_CNT=0;}
+                                    if(L_CNT==19){LEFT=false;L_CNT=0;}
                                 }
 				else if ((int)self.shift >= self.max_cover)
                                 {self.shift = self.max_cover; LEFT = false;L_CNT=0;}
@@ -463,11 +464,12 @@ int main( int argc, char **argv )
 			else if (RIGHT || WPAD_ButtonsHeld(0) & WPAD_BUTTON_PLUS)
 			{
                             RIGHT = true;
+                            LEFT = false;
 				select_ready = false;
 				if ((int)self.shift > self.min_cover){
 					self.shift -= SCROLL_SPEED;
                                         R_CNT++;
-                                        if(R_CNT==20){RIGHT=false;R_CNT=0;}
+                                        if(R_CNT==19){RIGHT=false;R_CNT=0;}
                                     }
                                 else if ((int)self.shift >= self.max_cover)
                                 {self.shift = self.max_cover; RIGHT = false;R_CNT=0;}
@@ -695,7 +697,20 @@ int main( int argc, char **argv )
 			
 			if (settings.quickstart)
 			{
-				LaunchGame();
+                                // Quickstart used to load game, so save settings before launching
+                                SETTINGS_Save();
+                                struct discHdr *header = &self.gameList[self.gameSelected];
+                                char titleID[7];
+                                sprintf(titleID, "%s", header->id);
+                                if(getGameSettings(titleID, &gameSetting))
+                                        apply_settings();
+                                setGameSettings(titleID, &gameSetting,1);
+                                WiiLight(0); // turn off the slot light
+                                if(!LaunchGame())
+                                {
+                                        SETTINGS_Load(); //failed to launch so get the globals back
+                                        return 0;
+                                }
 			}
 			else
 			{
