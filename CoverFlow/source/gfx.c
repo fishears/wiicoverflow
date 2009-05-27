@@ -1287,7 +1287,7 @@ void freeResources(){
 	//free(font_texture.data);
 	//free(font_title.data);
 	//free(font_title_small.data);
-	free(progress_texture.data);
+	//free(progress_texture.data);
 	
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
