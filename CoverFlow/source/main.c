@@ -64,6 +64,8 @@ s_self self; // Create this struct
 s_pointer pointer;
 s_gameSettings gameSetting;
 
+s_coverFlip coverFlip[500];
+
 
 float SCROLL_SPEED = 0.050;
 bool imageNotFound = false;
@@ -277,6 +279,10 @@ int main( int argc, char **argv )
         bool LEFT = false, RIGHT = false;
         int L_CNT = 0, R_CNT = 0;
 #endif
+
+	self.hovering = false;
+	self.hover_angle = 0;
+	
 	while(1) 
 	{
 	
@@ -540,6 +546,13 @@ int main( int argc, char **argv )
 			}
 			else if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for button 1 hold
 			{
+				//Beardfaces stuff
+				if(CoverHoverCenter() && select_ready)
+				{
+					coverFlip[self.gameSelected].flip = !(coverFlip[self.gameSelected].flip);
+				}
+					
+			
 				//
 				// SCOGNITO'S TRASH TEST CORNER
 				//
@@ -562,7 +575,7 @@ int main( int argc, char **argv )
 				else
 					WindowPrompt("Titolo", "4:3", 0, &cancelButton);
 				*/
-				GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+				//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 				//LoadCurrentCover(self.gameSelected, gameList);
 				
 				/*
@@ -652,6 +665,20 @@ int main( int argc, char **argv )
 					select_ready = true;
 				}
 			}
+		}
+		
+		if(select_ready && CoverHoverCenter())
+		{
+			self.hovering = true;
+		}
+		else
+		{
+			self.hovering = false;
+		}
+		
+		if(!select_ready)
+		{
+			self.hover_angle = 0.0;
 		}
 		
 		// Check for parental lock button combo A + B + 1 + 2

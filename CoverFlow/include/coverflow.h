@@ -152,6 +152,11 @@ typedef struct{
 } s_pointer;
 
 typedef struct{
+	bool flip;
+	float angle;
+} s_coverFlip;
+
+typedef struct{
 
 	char debugMsg[1024];
 	float shift;
@@ -178,6 +183,9 @@ typedef struct{
 	
 	int animate_count;
 	int animate_slide_x;
+	
+	bool hovering;
+	float hover_angle;
 	
 	//bool firstTimeDownload;
 	//bool inetOk;
