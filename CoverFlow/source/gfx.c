@@ -1281,9 +1281,9 @@ void freeResources(){
 	//free(pointer_shadow_texture.data);
 	//free(cover_texture.data);
 	//free(back_texture.data);
-	free(empty_texture.data); // can't find load
+	//free(empty_texture.data); // can't find load
 	//free(no_disc_texture.data);
-	free(current_cover_texture.data); // is this always available?
+	if (coverLoaded)free(current_cover_texture.data); // is this always available?
 	//free(font_texture.data);
 	//free(font_title.data);
 	//free(font_title_small.data);
