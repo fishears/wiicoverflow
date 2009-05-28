@@ -316,7 +316,7 @@ void Settings_Menu(){
 				WPAD_Rumble(0,0); //sometimes rumble remain active
 				if(networkInit(self.ipAddress)){
 					if(!downloadTitles())
-						WindowPrompt( TX.error, "Error downloading Titles.txt\nAn error occurred while downloading/saving file.", &okButton, 0);
+						WindowPrompt( TX.error, TX.errTitles, &okButton, 0);
 					else
 					{
 						if(self.usingTitlesTxt){
@@ -332,13 +332,13 @@ void Settings_Menu(){
 							titleList = (s_title *) malloc (numLines * sizeof(s_title));
 							fillTitleStruct(titleList, numLines);
 							char numLinesTxt[250];
-							sprintf(numLinesTxt, "Succesfully imported %d titles!", numLines);
-							WindowPrompt("Success!", numLinesTxt, &okButton, 0);
+							sprintf(numLinesTxt, TX.successTitles, numLines);
+							WindowPrompt(TX.Success, numLinesTxt, &okButton, 0);
 						}
 					}
 				}
 				else
-					WindowPrompt(TX.error, "Error initializing network\nTitles.txt can't be downloaded.", &okButton, 0);
+					WindowPrompt(TX.error, TX.errNetTitles, &okButton, 0);
 			}
 			else if (Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
 			{
@@ -411,7 +411,7 @@ void Settings_Menu(){
 		GRRLIB_Printf(330, 155, font_texture, 0xFFFFFFFF, 1, "%s",vidmodes[settings.video]);
 		GRRLIB_Printf(145, 187, font_texture, settings.fontColor, 1, TX.patchVIDTV );
 		GRRLIB_Printf(145, 227, font_texture, settings.fontColor, 1, TX.graphics );
-		GRRLIB_Printf(145, 267, font_texture, settings.fontColor, 1, "Get additional data" );
+		GRRLIB_Printf(145, 267, font_texture, settings.fontColor, 1, TX.getAddData );
 		GRRLIB_Printf(145, 307, font_texture, settings.fontColor, 1, TX.theme );
 		GRRLIB_Printf(145, 347, font_texture, settings.fontColor, 1, TX.oneClickLaunch );
 		GRRLIB_Printf(145, 387, font_texture, settings.fontColor, 1, TX.rumble );

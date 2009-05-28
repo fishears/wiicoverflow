@@ -134,6 +134,13 @@ currentCIOS = Aktuell: cIOS Rev%d  Erforderlich: cIOS Rev%d
 cIOSupgrade = Ein cIOS-Upgrade ist erforderlich.
 noFreeSpace = Nicht genügend freier Seicherplatz!
 formatPartition = Formatiere Partition: %s
+addAGame = Füge ein Spiel hinzu...
+getAddData = Lade zus. Daten
+errTitles = Download-Fehler!\nWährend des Downloads bzw. Speicherns\nist ein Fehler aufgetaucht!
+successTitles = Es wurden %d Titel importiert.
+errNetTitles = Netzwerkfehler!\nKein Download von Titles.txt!
+Success = Erfolg!
+
 ###########
 # Buttons #
 ###########

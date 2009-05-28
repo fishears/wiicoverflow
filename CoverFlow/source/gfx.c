@@ -414,7 +414,7 @@ void draw_game_title(int index, float textSize)
 		
 		if (self.gameCnt < 1)
 		{
-			sprintf(gameName, "%s", "Please add a game...");
+			sprintf(gameName, "%s", TX.addAGame);
 			len = strlen(gameName);
 		}
 		else

@@ -134,6 +134,12 @@ currentCIOS =
 cIOSupgrade =
 noFreeSpace =
 formatPartition =
+addAGame = 
+getAddData = 
+errTitles =
+successTitles =
+errNetTitles =
+Success =
 
 addB =
 deleteB =

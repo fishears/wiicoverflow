@@ -41,15 +41,11 @@ void languageDefault()
 	snprintf(TX.iniNetErr, sizeof(TX.iniNetErr), "Error Initializing Network");   		//M002
 	snprintf(TX.error, sizeof(TX.error), "ERROR!");   									//M003
 	snprintf(TX.iniNetReady, sizeof(TX.iniNetReady), "Network Initialized");   		//M004
-	//snprintf(TX.checkPresence, sizeof(TX.checkPresence), "Checking presence of %s");  //M005*
 	strcopy(TX.checkPresence, "Checking presence of %s", sizeof(TX.checkPresence));
-	//snprintf(TX.noDownload, sizeof(TX.noDownload), "%s present, not downloading");   	//M006*
 	strcopy(TX.noDownload, "%s present, not downloading", sizeof(TX.noDownload));
-	//snprintf(TX.getting, sizeof(TX.getting), "Getting %s");   						//M007*
 	strcopy(TX.getting, "Getting %s", sizeof(TX.getting));
 	snprintf(TX.done, sizeof(TX.done), "done");   										//M008
 	snprintf(TX.someErrors, sizeof(TX.someErrors), "some error occurred");   			//M009
-	//snprintf(TX.checkNextCover, sizeof(TX.checkNextCover), "Checking next cover...%s");//M010*
 	strcopy(TX.checkNextCover, "Checking next cover...%s", sizeof(TX.checkNextCover));
 	snprintf(TX.opFinished, sizeof(TX.opFinished), "Operation finished!");   			//M011
 	snprintf(TX.pressA, sizeof(TX.pressA), "Press A to continue");   					//M012
@@ -73,28 +69,19 @@ void languageDefault()
 	snprintf(TX.forcePAL60, sizeof(TX.forcePAL60),   "Force PAL60");   				//M030
 	snprintf(TX.forceNTSC, sizeof(TX.forceNTSC),     "Force NTSC");   					//M031
 	snprintf(TX.neverPlayed, sizeof(TX.neverPlayed), "Never played before");   		//M032
-	//snprintf(TX.played, sizeof(TX.played), "Played %s");   							//M033*
 	strcopy(TX.played, "Played %s", sizeof(TX.played));
-	//snprintf(TX.size, sizeof(TX.size), "Size:    %.2fGB" );   						//M034*
 	strcopy(TX.size, "Size:    %.2fGB", sizeof(TX.size));
-	//snprintf(TX.installing, sizeof(TX.installing), "Installing... (%0.2f%%) Time left: %d:%02d:%02d"); //M035*
 	strcopy(TX.installing, "Installing... (%0.2f%%) Time left: %d:%02d:%02d", sizeof(TX.installing));
-	//snprintf(TX.setting, sizeof(TX.setting), "%s: settings");   						//M036*
 	strcopy(TX.setting, "%s: settings", sizeof(TX.setting));
 	snprintf(TX.hook, sizeof(TX.hook), "Hook:"); 										//M037
   	snprintf(TX.ocarina, sizeof(TX.ocarina), "Ocarina:"); 								//M135
 	snprintf(TX.language, sizeof(TX.language), "Language:");   						//M038
 	snprintf(TX.videoMode, sizeof(TX.videoMode), "Video mode:");   					//M039
 	snprintf(TX.patchVIDTV, sizeof(TX.patchVIDTV), "VIDTV patch:");   					//M040
-	//snprintf(TX.errorConnect, sizeof(TX.errorConnect), "Connection error from net_read()  Errorcode: %i\n"); //M041*
     strcopy(TX.errorConnect, "Connection error from net_read()  Errorcode: %i\n", sizeof(TX.errorConnect));
-	//snprintf(TX.URLnoBegin, sizeof(TX.URLnoBegin), "URL '%s' doesn't start with 'http://'\n"); //M042*
 	strcopy(TX.URLnoBegin, "URL '%s' doesn't start with 'http://'\n", sizeof(TX.URLnoBegin));
-	//snprintf(TX.URLnoPath, sizeof(TX.URLnoPath), "URL '%s' has no PATH part\n");   	//M043*
 	strcopy(TX.URLnoPath, "URL '%s' has no PATH part\n", sizeof(TX.URLnoPath));
-	//snprintf(TX.URLnoDomain, sizeof(TX.URLnoDomain), "No domain part in URL '%s'\n");  //M044*
 	strcopy(TX.URLnoDomain, "No domain part in URL '%s'\n", sizeof(TX.URLnoDomain));
-	//snprintf(TX.errorDomain, sizeof(TX.errorDomain), "\ndomain %s could not be resolved");//M045*
 	strcopy(TX.errorDomain, "\ndomain %s could not be resolved", sizeof(TX.errorDomain));
 	snprintf(TX.errEstablishConn, sizeof(TX.errEstablishConn), "Error establishing connection"); //M046
 	snprintf(TX.HTTPnoFile, sizeof(TX.HTTPnoFile), "HTTP Response was without a file\n"); //M047	
@@ -125,13 +112,9 @@ void languageDefault()
 	snprintf(TX.insertWiiDisc, sizeof(TX.insertWiiDisc), "Insert a Wii Disc!" );   	//M071
 	snprintf(TX.alreadyInstalled, sizeof(TX.alreadyInstalled), "Game is already installed:"); //M072
 	snprintf(TX.noHDD, sizeof(TX.noHDD), "No HDD found!");   							//M073
-	//snprintf(TX.installingGame, sizeof(TX.installingGame), "Installing game %.2fGB:"); //M074*
 	strcopy(TX.installingGame, "Installing game %.2fGB:", sizeof(TX.installingGame));
-	//snprintf(TX.install, sizeof(TX.install), "Install %s?");   						//M075*
 	strcopy(TX.install, "Installing game %.2fGB:" , sizeof(TX.install));
-	//snprintf(TX.gameSize, sizeof(TX.gameSize), "Game Size: %.2fGB");   				//M076*
 	strcopy(TX.gameSize, "Game Size: %.2fGB", sizeof(TX.gameSize));
-	//snprintf(TX.gameSizeSpace, sizeof(TX.gameSizeSpace), "Game Size: %.2fGB, Free Space: %.2fGB"); //M077*
 	strcopy(TX.gameSizeSpace, "Game Size: %.2fGB, Free Space: %.2fGB", sizeof(TX.gameSizeSpace));
 	snprintf(TX.errorInstall, sizeof(TX.errorInstall), "Install error!");   			//M078
 	snprintf(TX.successInstall, sizeof(TX.successInstall), "Successfully installed:"); //M079
@@ -142,7 +125,6 @@ void languageDefault()
 	snprintf(TX.pressOkContinue, sizeof(TX.pressOkContinue), "Press Ok to Continue."); //M084
 	snprintf(TX.noLocalIP, sizeof(TX.noLocalIP), "Cannot get local IP address.");   	//M085
 	snprintf(TX.addError, sizeof(TX.addError), "[+] ERROR:");   						//M086
-	//snprintf(TX.errorCIOS, sizeof(TX.errorCIOS), "Custom IOS could not be loaded! (ret = %d)\n"); //M087*
 	strcopy(TX.errorCIOS, "Custom IOS could not be loaded! (ret = %d)\n", sizeof(TX.errorCIOS));
 	snprintf(TX.loadTextures, sizeof(TX.loadTextures), "Loading textures");   			//M088
 	snprintf(TX.initUSB, sizeof(TX.initUSB), "Init USB");   							//M089
@@ -154,9 +136,7 @@ void languageDefault()
 	snprintf(TX.errorNoWBFS, sizeof(TX.errorNoWBFS), "USB Error - NO WBFS Parition."); //M095
 	snprintf(TX.hold12B, sizeof(TX.hold12B), "Hold 1 And 2 to Format, B to Exit"); 	//M096
 	snprintf(TX.findPartitions, sizeof(TX.findPartitions), "Finding Partitions...");   //M097
-	//snprintf(TX.partition, sizeof(TX.partition), "Partition %d: %.2fGB");   			//M098*
 	strcopy(TX.partition, "Partition %d: %.2fGB", sizeof(TX.partition));
-	//snprintf(TX.partitionNoFormat, sizeof(TX.partitionNoFormat), "Partition %d: (Can't be formatted)"); //M099*
 	strcopy(TX.partitionNoFormat, "Partition %d: (Can't be formatted)", sizeof(TX.partitionNoFormat));
 	snprintf(TX.askFormat, sizeof(TX.askFormat), "Do you want to format:");   			//M100
 	snprintf(TX.errorFormat, sizeof(TX.errorFormat), "Failed formatting!");   			//M101
@@ -167,7 +147,6 @@ void languageDefault()
 	snprintf(TX.freeTextures, sizeof(TX.freeTextures), "Freeing unused textures...");  //M106
 	snprintf(TX.parentalCtrl, sizeof(TX.parentalCtrl), "Parental Control");   			//M107
 	snprintf(TX.enableParentCtrl, sizeof(TX.enableParentCtrl), "Would you like to enable parental controls?"); //M108
-	//snprintf(TX.errorDIP, sizeof(TX.errorDIP), "Could not initialize DIP module! (ret = %d)\n"); //M109*
 	strcopy(TX.errorDIP, "Could not initialize DIP module! (ret = %d)\n", sizeof(TX.errorDIP));
 	snprintf(TX.errorReadDir, sizeof(TX.errorReadDir), "Can't read directories. Covers will not be saved."); //M110
 	snprintf(TX.errorCreateDir, sizeof(TX.errorCreateDir), "Can't create directories. Covers will not be saved."); //M111
@@ -190,12 +169,17 @@ void languageDefault()
 	snprintf(TX.Oct, sizeof(TX.Oct), "Oct");   										//M128
 	snprintf(TX.Nov, sizeof(TX.Nov), "Nov");   										//M129
 	snprintf(TX.Dec, sizeof(TX.Dec), "Dec");   										//M130
-	//snprintf(TX.currentCIOS, sizeof(TX.currentCIOS), "Current: cIOS Rev%d  Required: cIOS Rev%d"); //M131*
 	strcopy(TX.currentCIOS, "Current: cIOS Rev%d  Required: cIOS Rev%d", sizeof(TX.currentCIOS));
 	snprintf(TX.cIOSupgrade, sizeof(TX.cIOSupgrade), "cIOS Upgrade Required");   		//M132
 	snprintf(TX.noFreeSpace, sizeof(TX.noFreeSpace), "Not enough free space!" );  		//M133
-	//snprintf(TX.formatPartition, sizeof(TX.formatPartition), "Formatting Partition %s");  //M134*
 	strcopy(TX.formatPartition, "Formatting Partition %s", sizeof(TX.formatPartition));
+	snprintf(TX.addAGame, sizeof(TX.addAGame), "Please add a game..." );  		
+	snprintf(TX.getAddData, sizeof(TX.getAddData), "Get additional data" );  		
+	snprintf(TX.errTitles, sizeof(TX.errTitles), "Error downloading Titles.txt\nAn error occurred while downloading/saving file." );
+	strcopy(TX.successTitles, "Succesfully imported %d titles!", sizeof(TX.successTitles));
+	snprintf(TX.errNetTitles, sizeof(TX.errNetTitles), "Error initializing network\nTitles.txt can't be downloaded." );  		
+	snprintf(TX.Success, sizeof(TX.Success), "Success!" );  		
+
 // Buttons	
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
 	snprintf(TX.deleteB, sizeof(TX.deleteB), "delete");     		//B02
@@ -767,7 +751,36 @@ void languageSet(char *name, char *val)
 	if (strcmp(name, "formatPartition") == 0) {
 		strcopy(TX.formatPartition, val, sizeof(TX.formatPartition));
 		return;
-	}	
+	}
+	if (strcmp(name, "addAGame") == 0) {
+		strcopy(TX.addAGame, val, sizeof(TX.addAGame));
+		return;
+	}
+	if (strcmp(name, "getAddData") == 0) {
+		strcopy(TX.getAddData, val, sizeof(TX.getAddData));
+		return;
+	}
+	if (strcmp(name, "errTitles") == 0) {
+		strcopy(TX.errTitles, val, sizeof(TX.errTitles));
+		return;
+	}
+	if (strcmp(name, "successTitles") == 0) {
+		strcopy(TX.successTitles, val, sizeof(TX.successTitles));
+		return;
+	}
+	if (strcmp(name, "errNetTitles") == 0) {
+		strcopy(TX.errNetTitles, val, sizeof(TX.errNetTitles));
+		return;
+	}
+	if (strcmp(name, "Success") == 0) {
+		strcopy(TX.Success, val, sizeof(TX.Success));
+		return;
+	}
+
+
+//////////////// Buttons //////////////
+
+	
 	if (strcmp(name, "addB") == 0) {
 		strcopy(TX.addB, val, sizeof(TX.addB));
 		return;

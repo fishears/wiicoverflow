@@ -146,6 +146,13 @@ struct LANGUAGE
 	char formatPartition[40];		//M134
 	char ocarina[20];				//M135
 	char falloff[20];            	//M136
+	char addAGame[50];				//137
+	char getAddData[40];			//138
+	char errTitles[100];			//139
+	char successTitles[50];			//140
+	char errNetTitles[100];			//141
+	char Success[15];				//142
+	
 // Buttons	
 	char addB[15];					//B01
 	char deleteB[15];				//B02
