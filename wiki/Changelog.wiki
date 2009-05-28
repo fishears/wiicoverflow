@@ -5,7 +5,7 @@
   * Fixed sorting issues (issue155)
 
 -NEW-
-  * nothing yet?
+  * The last game played will be the default game when the Loader is launched
 ----
 == RC3 Update (25 May 2009) ==
 
