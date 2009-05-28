@@ -270,9 +270,9 @@ int main( int argc, char **argv )
 	
 	//ee();
 #ifndef TTF_TEST
-
-#else	
-	languageLoad();		// load localization (german for test)
+//
+#else
+	languageLoad();		// load localization ( file TestLanguage for test)
 #endif
 	
 #ifdef ONE_AT_A_TIME
