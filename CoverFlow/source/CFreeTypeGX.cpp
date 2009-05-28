@@ -39,6 +39,18 @@ wchar_t* CFreeTypeGX_charToWideChar(const CFreeTypeGX *ftgx, char* p)
 	return f->charToWideChar(p);
 }
 
+uint16_t CFreeTypeGX_getWidth(const CFreeTypeGX *ftgx, wchar_t *text)
+{
+	FreeTypeGX *f = (FreeTypeGX*)ftgx;
+	return f->getWidth(text);
+}
+
+uint16_t CFreeTypeGX_getHeight(const CFreeTypeGX *ftgx, wchar_t *text)
+{
+	FreeTypeGX *f = (FreeTypeGX*)ftgx;
+	return f->getHeight(text);
+}
+
 #ifdef __cplusplus
 }
 #endif

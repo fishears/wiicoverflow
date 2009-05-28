@@ -30,6 +30,10 @@ void CFreeTypeGX_DrawTextWithShadow(const CFreeTypeGX *ftgx, uint16_t x, uint16_
 
 wchar_t* CFreeTypeGX_charToWideChar(const CFreeTypeGX *ftgx, char* p);
 
+uint16_t CFreeTypeGX_getWidth(const CFreeTypeGX *ftgx, wchar_t *text);
+
+uint16_t CFreeTypeGX_getHeight(const CFreeTypeGX *ftgx, wchar_t *text);
+
 #ifdef __cplusplus
 }
 #endif
