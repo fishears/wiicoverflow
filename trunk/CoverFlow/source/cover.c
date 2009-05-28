@@ -3,7 +3,6 @@
 extern s_self self;
 extern s_gameSettings gameSetting;
 extern int COVER_COUNT;
-bool coverLoaded=false;
 
 void LoadCurrentCover(int id, struct discHdr *gameList)
 {
@@ -33,6 +32,7 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 	{
 		current_cover_texture = GRRLIB_LoadTexture((const unsigned char*)imgData);
 		coverLoaded=true;
+		free(imgData);
 	}
 	else
 	{
@@ -43,6 +43,7 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 		{
 			current_cover_texture = GRRLIB_LoadTexture((const unsigned char*)imgData);
 			coverLoaded=true;
+			free(imgData);
 		}
 		else
 		{
@@ -67,6 +68,7 @@ void AddCover(GRRLIB_texImg tex)
 
 void Init_Covers()
 {
+	coverLoaded=false;
 	#ifdef TEST_MODE
 	self.progress+=0.05;
 	Paint_Progress(self.progress, "Initializing Covers...");

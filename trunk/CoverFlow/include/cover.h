@@ -8,5 +8,5 @@ void AddCover(GRRLIB_texImg tex);
 void Init_Covers();
 void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int max);
 void batchDownloadCover(struct discHdr *gameList);
-
+bool coverLoaded;
 #endif
