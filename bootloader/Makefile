@@ -19,7 +19,7 @@ TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source ../CoverFlow/source/libwbfs ../CoverFlow/source/core 
 DATA		:=	 
-INCLUDES	:=  include ../CoverFlow/include/libwbfs ../CoverFlow/include/core
+INCLUDES	:=  include ../CoverFlow/include/libwbfs ../CoverFlow/include/core ../Coverflow/libs/mxml/include
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -34,13 +34,13 @@ LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:= -lz -lfat -lwiiuse -lbte -logc -lm
+LIBS	:= -lz -lfat -lwiiuse -lbte -logc -lmxml -lm
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(CURDIR)/../CoverFlow/libs/wiiuse $(CURDIR)/../CoverFlow/libs/libfat
+LIBDIRS	:= $(CURDIR)/../CoverFlow/libs/wiiuse $(CURDIR)/../CoverFlow/libs/libfat $(CURDIR)/../CoverFlow/libs/mxml
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional

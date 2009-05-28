@@ -1,6 +1,7 @@
 #include "bootloader.h"
 #include "wpadsvn.h"
 #include "subsystem.h"
+#include "errno.h"
 
 s_bootloader settings;
 
@@ -108,14 +109,15 @@ int main( int argc, char **argv ){
 	printf("\x1b[2;0H");
 	
 
-	printf("Hello World!\n");
-	
+	printf("ITALY ROXXXX!\n");
+	/*
 	int j=0;
 	printf("argc: %d\n", argc);
 	for(;j<argc;j++)
 	{
 		printf("ARG[%d] = %s\n",j,argv[j]);
 	}
+	*/
 	
 	int i = 0;
 	for(i=0; i<5; i++){
@@ -139,11 +141,15 @@ int main( int argc, char **argv ){
 		//printf("    Custom IOS could not be loaded! (ret = %d)\n", ret);
 
 		return 0;
-	}
-		
+	}	
+	
 	if(!init_usbfs()){
 		return 0;
 	}
+	
+		Sys_Init();
+	Subsystem_Init();
+	//initWBFS();
 	
 	my_wbfsDev = WBFS_DEVICE_USB;
 	
@@ -156,6 +162,66 @@ int main( int argc, char **argv ){
 		
 		/* Set WBFS mode */
 		Disc_SetWBFS(WBFS_DEVICE_USB,argv[1]);
+	}
+	else{
+	
+		  //TODO:
+		  // Implement system settings load and per settings game, this is just a proof of concept
+		  // on how boot games without the need of parameters (since we suck and cannot get it work)
+		  // In my opinion this way is also good because it uses standard call for getting parameters.
+		  // If an option is added in settings we don't need to add to the parameter list, just use
+		  // the normal calls for getting parameter.
+		  // Do not forget to call system settings if per game settings are not found!
+		
+		  char gameID[7];
+	
+		  FILE *fp;
+		  mxml_node_t *xml;
+
+		  fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
+		  
+		  if(fp == NULL){
+			 
+			printf("wait for succablank %d\n", errno);
+			printf(USBLOADER_PATH "/wiicoverflow.xml");
+			VIDEO_WaitVSync();
+			usleep(10000);
+			 
+			 return -1;
+			}
+		  
+		  xml = mxmlLoadFile(NULL, fp, MXML_NO_CALLBACK);
+		 
+		 
+		  fclose(fp);
+				
+		  if(xml != NULL)
+		  {
+		  
+				printf("xml != null\n");
+				VIDEO_WaitVSync();
+				usleep(5000);
+
+		  
+			  mxml_node_t *node;
+			  mxml_node_t *next_n;
+				
+			  node = mxmlFindElement(xml,xml, "wiicoverflow", NULL, NULL, MXML_DESCEND); 
+			  if(node == NULL) return -1;
+			  
+			  next_n = mxmlFindElement(node, node, "graphics", NULL, NULL, MXML_DESCEND); 
+			  next_n = mxmlFindElement(node, node, "general", NULL, NULL, MXML_DESCEND);
+			  next_n = mxmlFindElement(node, node, "game", NULL, NULL, MXML_DESCEND);
+			  
+			    if(next_n != NULL)
+				  {
+					if(mxmlElementGetAttr(next_n,"lastplayed")){
+						  strcpy(gameID, mxmlElementGetAttr(next_n,"lastplayed"));
+						  Disc_SetWBFS(WBFS_DEVICE_USB, gameID);
+						  }
+				  }
+		 }
+		
 	}
 	
 	/*TODO Use other args to set up CFG for patching, etc...*/

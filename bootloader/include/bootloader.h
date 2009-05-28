@@ -24,6 +24,8 @@
 
 #define DEFAULT_FIFO_SIZE  (256*1024)
 
+#include "mxml.h" // Because Scognito rox ( == because Scognito is LAZY )
+
 /* Constants */
 #define ENTRIES_PER_PAGE 	 12
 #define MAX_CHARACTERS	 	 30
