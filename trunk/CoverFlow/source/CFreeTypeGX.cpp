@@ -18,11 +18,18 @@ void CFreeTypeGX_LoadFont(const CFreeTypeGX *ftgx,uint8_t* fontBuffer, FT_Long b
 	f->loadFont(fontBuffer, bufferSize, pointSize, cacheAll);
 }
 
-void CFreeTypeGX_DrawText(const CFreeTypeGX *ftgx,uint16_t x, uint16_t y, wchar_t *text, GXColor color, uint16_t textStyling)
+void CFreeTypeGX_DrawText(const CFreeTypeGX *ftgx, uint16_t x, uint16_t y, wchar_t *text, GXColor color, uint16_t textStyling)
 {
 	FreeTypeGX *f = (FreeTypeGX*)ftgx;
 	
 	f->drawText(x,y,text,color,textStyling);
+}
+	
+void CFreeTypeGX_DrawTextWithShadow(const CFreeTypeGX *ftgx, uint16_t x, uint16_t y, wchar_t *text, GXColor color, GXColor shadowColor, uint16_t textStyling)
+{
+	FreeTypeGX *f = (FreeTypeGX*)ftgx;
+	
+	f->drawTextWithShadow(x, y, text, color, shadowColor, textStyling);
 }
 
 wchar_t* CFreeTypeGX_charToWideChar(const CFreeTypeGX *ftgx, char* p)

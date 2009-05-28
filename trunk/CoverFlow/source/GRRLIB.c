@@ -15,7 +15,6 @@ Download and Help Forum : http://grrlib.santo.fr
 #include "GRRLIB.h"
 #include <fatsvn.h>
 #include "settings.h"
-
 #include "core/video.h"
 
 #define DEFAULT_FIFO_SIZE (256 * 1024)
@@ -890,16 +889,13 @@ void GRRLIB_Printf(f32 xpos, f32 ypos, GRRLIB_texImg tex, u32 color, f32 zoom, c
 
 
 #ifndef TTF_TEST
-    for(i=0; i<size; i++) {
+    for(i=0; i<size; i++)
+	{
         u8 c = tmp[i]-tex.tilestart;
         GRRLIB_DrawTile(xpos+i*tex.tilew*zoom, ypos, tex, 0, zoom, zoom, color, c);
     }
 #else
-  //TODO Set up color
-  //Different sized fonts
-  //Different type of fonts
-
-	CFreeTypeGX_DrawText(ttf16pt, xpos, ypos+18, CFreeTypeGX_charToWideChar(ttf16pt, tmp), (GXColor){0xf0, 0xf0, 0xf0, 0xff}, 0x0000);
+	CFreeTypeGX_DrawTextWithShadow(ttf16pt, xpos, ypos+18, CFreeTypeGX_charToWideChar(ttf16pt, tmp), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_NULL);
 #endif
 
 }
@@ -1289,7 +1285,7 @@ void GRRLIB_Init() {
     GX_InitTexObj(&fullTex, fullTexture.data, fullTexture.w, fullTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 	GX_InitTexObj(&rightSideTex, rightTexture.data, rightTexture.w, rightTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 	#endif
-//afour test
+
 	matteBlackTexture = GRRLIB_LoadTexture(matte_black_png);
 	matteGreyTexture = GRRLIB_LoadTexture(matte_grey_png);
     GX_InitTexObj(&matteBlackTex, matteBlackTexture.data, matteBlackTexture.w, matteBlackTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);

@@ -6,10 +6,10 @@
 Button Button_Init(const unsigned char normal_img[], const unsigned char hover_img[], int x, int y)
 {
 	Button new_button;
-	new_button.texture = BufferStaticImage(normal_img);		// This core dumps on exit to HBC
-	new_button.hoverTexture = BufferStaticImage(hover_img);
-//	new_button.texture = GRRLIB_LoadTexture(normal_img);
-//	new_button.hoverTexture = GRRLIB_LoadTexture(hover_img);
+	new_button.texture = GRRLIB_LoadTexture(normal_img);
+	new_button.hoverTexture = GRRLIB_LoadTexture(hover_img);
+//	new_button.texture = BufferStaticImage(normal_img);
+//	new_button.hoverTexture = BufferStaticImage(hover_img);
 	new_button.x = x;
 	new_button.y = y;
 	new_button.hovering = false;

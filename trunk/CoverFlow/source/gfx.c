@@ -2,6 +2,7 @@
 #include "settings.h"
 #include "localization.h"
 #include "buffer.h"
+#include "CFreeTypeGX.h"
 
 extern s_self self;
 extern s_pointer pointer;
@@ -9,9 +10,8 @@ extern s_settings settings;
 extern s_gameSettings gameSetting;
 extern s_title* titleList;
 extern s_coverFlip coverFlip[];
-
 extern int COVER_COUNT;
-// Language selection config
+
 char glanguages[11][22] =
 {{"Console Default"},
 {"   Japanese"},
@@ -24,7 +24,6 @@ char glanguages[11][22] =
 {"   S. Chinese"},
 {"   T. Chinese"},
 {"    Korean"}};
-//video mode text
 char gvidmodes[6][22] =
 {{ "  Game Default" },
 { "   Automatic", },
@@ -32,13 +31,23 @@ char gvidmodes[6][22] =
 { "  Force PAL60", },
 { "  Force NTSC", },
 { "Console Default"}};
-//hook types for ocarina
 char ghooks[3][9] =
 {{"   VI"},
 {" Wii Pad"},
 {" GC Pad"}};
 
 static char timet[256];
+
+void LoadFonts()
+{
+	ttf16pt = CFreeTypeGX_new();
+	ttf18pt = CFreeTypeGX_new();
+	ttf20pt = CFreeTypeGX_new();
+	CFreeTypeGX_LoadFont(ttf16pt, font_ttf, font_ttf_size, 16, true);
+	CFreeTypeGX_LoadFont(ttf18pt, font_ttf, font_ttf_size, 18, true);
+	CFreeTypeGX_LoadFont(ttf20pt, font_ttf, font_ttf_size, 20, true);
+}
+
 
 void LoadTextures()
 {
@@ -110,16 +119,17 @@ void Paint_Progress(float v, char* msg)
 
 	GRRLIB_2D_Init();
 
-	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
+	CFreeTypeGX_DrawText(ttf18pt, 320, 220, CFreeTypeGX_charToWideChar(ttf18pt, "Welcome to CoverFloader"), (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
+	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
 
 	for(i = 0; i < count; i++)
 	{
-		GRRLIB_DrawImg(165+12*i, 231, progress_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(165+12*i, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
 	}
 	
 #ifdef DEBUG
 	if(msg != NULL)
-		GRRLIB_Printf(140, 255, font_title_small,  0x444444FF, 1, "%s", msg);
+		CFreeTypeGX_DrawText(ttf16pt, 320, 270, CFreeTypeGX_charToWideChar(ttf16pt, msg), (GXColor){0x66, 0x66, 0x66, 0xff}, FTGX_JUSTIFY_CENTER);
 #endif
     
 	GRRLIB_Render();
@@ -135,16 +145,16 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 
 	GRRLIB_2D_Init();
 	
-	GRRLIB_DrawImg(0, 0, loader_main_texture, 0, 1, 1, 0xFFFFFFFF);
+	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
 	
 	for(i = 0; i < count; i++)
 	{
-		GRRLIB_DrawImg(165+12*i, 231, progress_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImg(165+12*i, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
 	}
 	
 	#ifdef DEBUG
 	if(msg != NULL)
-		GRRLIB_Printf(140, 255, font_title_small,  0x444444FF, 1, "%s", msg);
+		CFreeTypeGX_DrawText(ttf16pt, 320, 270, CFreeTypeGX_charToWideChar(ttf16pt, msg), (GXColor){0x66, 0x66, 0x66, 0xff}, FTGX_JUSTIFY_CENTER);
     #endif
     
 	GRRLIB_Render();
@@ -468,13 +478,11 @@ void draw_game_title(int index, float textSize)
 #else
 		if (settings.theme) // black text on white matte
 		{
-			CFreeTypeGX_DrawText(ttf22pt, 320, 410, CFreeTypeGX_charToWideChar(ttf22pt, gameName), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0002);
-			CFreeTypeGX_DrawText(ttf22pt, 320, 410, CFreeTypeGX_charToWideChar(ttf22pt, gameName), (GXColor){0x00, 0x00, 0x00, 0xcc}, 0x0002);
+			CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410, CFreeTypeGX_charToWideChar(ttf20pt, gameName), (GXColor){0x11, 0x11, 0x11, 0xff}, (GXColor){0xcc, 0xcc, 0xcc, 0x44}, FTGX_JUSTIFY_CENTER);
 		}
 		else //white text on black matte
 		{
-			CFreeTypeGX_DrawText(ttf22pt, 320, 410, CFreeTypeGX_charToWideChar(ttf22pt, gameName), (GXColor){0x00, 0x00, 0x00, 0xff}, 0x0002);
-			CFreeTypeGX_DrawText(ttf22pt, 320, 410, CFreeTypeGX_charToWideChar(ttf22pt, gameName), (GXColor){0xff, 0xff, 0xff, 0xdd}, 0x0002);
+			CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410, CFreeTypeGX_charToWideChar(ttf20pt, gameName), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 		}
 #endif		
 	}
@@ -870,9 +878,9 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			Button_Paint(choice_b);
 #else
 			GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-			CFreeTypeGX_DrawText(ttf16pt, (choice_a->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "OK"), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0002);
+			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "OK"), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 			GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-			CFreeTypeGX_DrawText(ttf16pt, (choice_b->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "CANCEL"), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0002);
+			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "CANCEL"), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 #endif
 		}
 		
@@ -883,7 +891,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 				Button_Paint(choice_a); 
 #else
 				GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawText(ttf16pt, (choice_a->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "OK"), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0002);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "OK"), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 #endif
 			}
 			
@@ -893,7 +901,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 				Button_Paint(choice_b);
 #else
 				GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawText(ttf16pt, (choice_b->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "CANCEL"), (GXColor){0xff, 0xff, 0xff, 0xff}, 0x0002);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "CANCEL"), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 #endif
 			}
 		}
@@ -905,8 +913,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 #ifndef TTF_TEST
 		GRRLIB_Printf(100, 105, font_title, 0xFFFFFFFF, 1, "%s", title);
 #else
-		CFreeTypeGX_DrawText(ttf22pt, 100, 105, CFreeTypeGX_charToWideChar(ttf22pt, title), (GXColor){0x00, 0x00, 0x00, 0xff}, 0x0001);
-		CFreeTypeGX_DrawText(ttf22pt, 100, 105, CFreeTypeGX_charToWideChar(ttf22pt, title), (GXColor){0xff, 0xff, 0xff, 0xdd}, 0x0001);
+		CFreeTypeGX_DrawTextWithShadow(ttf20pt, 100, 105, CFreeTypeGX_charToWideChar(ttf20pt, title), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
 #endif
 		if(txt != NULL)
 		{
@@ -919,8 +926,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 #ifndef TTF_TEST
 				GRRLIB_Printf(138, y+sp, font_title_small, settings.fontColor, 1, "%s", pch);
 #else
-				CFreeTypeGX_DrawText(ttf16pt, 135, y+sp, CFreeTypeGX_charToWideChar(ttf16pt, pch), (GXColor){0x00, 0x00, 0x00, 0xff}, 0x0001);
-				CFreeTypeGX_DrawText(ttf16pt, 135, y+sp, CFreeTypeGX_charToWideChar(ttf16pt, pch), (GXColor){0xff, 0xff, 0xff, 0xdd}, 0x0001);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 140, y+sp, CFreeTypeGX_charToWideChar(ttf16pt, pch), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
 #endif
 				pch = strtok(NULL, "\n");
 				sp+=16;
@@ -1229,11 +1235,11 @@ void game_settings_menu()
 		GRRLIB_Printf(89, 145,  font_title, settings.fontColor, 1, TX.setting, gameName);
 		GRRLIB_Printf(169, 193,  font_texture, settings.fontColor, 1, TX.ocarina);
 		GRRLIB_Printf(334, 193,  font_texture, settings.fontColor, 1, TX.hook);
-		GRRLIB_Printf(409, 193,  font_texture, 0xFFFFFFFF, 1, "%s",ghooks[gameSetting.hooktype]);
+		GRRLIB_Printf(409, 193,  font_texture, 0xFFFFFFFF, 1, "%s", ghooks[gameSetting.hooktype]);
 		GRRLIB_Printf(169, 228, font_texture, settings.fontColor, 1, TX.language);
-		GRRLIB_Printf(354, 228, font_texture, 0xFFFFFFFF, 1, "%s",glanguages[gameSetting.language]);
+		GRRLIB_Printf(354, 228, font_texture, 0xFFFFFFFF, 1, "%s", glanguages[gameSetting.language]);
 		GRRLIB_Printf(169, 257, font_texture, settings.fontColor, 1, TX.videoMode);
-		GRRLIB_Printf(354, 255, font_texture, 0xFFFFFFFF, 1, "%s",gvidmodes[gameSetting.video]);
+		GRRLIB_Printf(354, 255, font_texture, 0xFFFFFFFF, 1, "%s", gvidmodes[gameSetting.video]);
 		GRRLIB_Printf(169, 289, font_texture, settings.fontColor, 1, TX.patchVIDTV);
 
 		// Draw the default pointer hand
@@ -1287,7 +1293,8 @@ void freeResources(){
 	//free(font_texture.data);
 	//free(font_title.data);
 	//free(font_title_small.data);
-	//free(progress_texture.data);
+	free(progress_step_texture.data);
+	free(progress_bar_texture.data);
 	
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();

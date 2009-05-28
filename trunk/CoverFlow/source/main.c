@@ -1,78 +1,33 @@
-
-//extern "C" {
-	#include "coverflow.h"
-	//#include "soundmanager.h"
-	#include "filter.h"
-    //#include "localization.h"
+/*
+ *  main.c
+ *
+ *  Wii CoverFloader
+ *  Copyright 2009 Beardface April 29th, 2009
+ *  Additional coding by: gitkua, scognito, F1SHE4RS, afour98, blackbird399, LoudBob11, alexcarlosantao
+ *  Licensed under the terms of the GNU GPL, version 2
+ *  http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+ *
+ */
+#include "coverflow.h"
+#include "filter.h"
 	
-	extern int COVER_COUNT;
-	#ifdef TEST_MODE
-	int COVER_COUNT = 29;
-	#else
-	int COVER_COUNT = 0;
-	#endif
-//}
-
-extern u8 font_ttf[];
-extern u32 font_ttf_size;
+extern int COVER_COUNT;
+#ifdef TEST_MODE
+int COVER_COUNT = 29;
+#else
+int COVER_COUNT = 0;
+#endif
 
 extern u8 shutdown;
 extern u8 reset;
 extern s_settings settings;
-s_title *titleList;
-extern CFreeTypeGX *ttf16pt;
-extern CFreeTypeGX *ttf18pt;
-extern CFreeTypeGX *ttf22pt;
 
-// Language selection config
-char languages[11][22] =
-{{"Console Default"},
-{"   Japanese"},
-{"    English"},
-{"    German"},
-{"    French"},
-{"    Spanish"},
-{"    Italian"},
-{"     Dutch"},
-{"   S. Chinese"},
-{"   T. Chinese"},
-{"    Korean"}};
-//video mode text
-char vidmodes[6][22] =
-{{ "  Game Default" },
-{ "   Automatic", },
-{ "  Force PAL50", },
-{ "  Force PAL60", },
-{ "  Force NTSC", },
-{ "Console Default"}};
-//hook types for ocarina
-char hooks[3][9] =
-{{"   VI"},
-{" Wii Pad"},
-{" GC Pad"}};
-/* Gamelist buffer */
-
-//static struct discHdr *gameList = NULL;
-static s_Filter gameFilter;
-
-//static wbfs_t *hdd = NULL;
-
-/* WBFS device */
-//static s32 my_wbfsDev = WBFS_DEVICE_USB;
-
-s_self self; // Create this struct
-s_pointer pointer;
+s_title       *titleList;
+s_self         self;
+s_pointer      pointer;
 s_gameSettings gameSetting;
-
-s_coverFlip coverFlip[500];
-
-
-float SCROLL_SPEED = 0.050;
-bool imageNotFound = false;
-int buffer_window_min = 0;
-int buffer_window_max = 0;
-int oldmin = 0;
-int oldmax = 0;
+s_coverFlip    coverFlip[500];
+//static s_Filter gameFilter;
 
 void initVars()
 {
@@ -84,8 +39,8 @@ void initVars()
 	self.shift = 0;
 	self.select_shift = 0;
 	self.gameCnt = 0;
-        self.gameSelected=0;
-        self.gameStart = 0;
+    self.gameSelected=0;
+    self.gameStart = 0;
 	self.selected = false;
 	self.animate_flip = 0.0;
 	self.animate_rotate = 0.0;
@@ -99,10 +54,11 @@ void initVars()
 	self.my_wbfsDev = WBFS_DEVICE_USB;
 	self.hdd = NULL;
 	self.gameList = NULL;
-//	self.max_cover = 1;
+	//self.max_cover = 1;
 	self.max_cover = 0;
 	self.min_cover = 0;
 	self.slot_glow = 0;
+	self.scroll_speed = 0.050;
 	strcpy(self.ipAddress, "000.000.000.000");
 	
 	initGameSettings(&gameSetting);
@@ -134,30 +90,18 @@ int main( int argc, char **argv )
 		return 0;
 	}
 #endif
-	
+	u8 FPS = 0; // frames per second counter
 	languageDefault();  // load default msgs
 	SETTINGS_Init();
-	
+	LoadFonts();
+	initVars();
 	
 	GRRLIB_Init();
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
 	
-	
-	//load test font stuff
-	ttf16pt = CFreeTypeGX_new();
-	ttf18pt = CFreeTypeGX_new();
-	ttf22pt = CFreeTypeGX_new();
-	CFreeTypeGX_LoadFont(ttf16pt,font_ttf, font_ttf_size, 16, true);
-	CFreeTypeGX_LoadFont(ttf18pt,font_ttf, font_ttf_size, 18, true);
-	CFreeTypeGX_LoadFont(ttf22pt,font_ttf, font_ttf_size, 22, true);
-	
-	u8 FPS = 0; // frames per second counter
-	
-	initVars();
-	
-    loader_main_texture = BufferStaticImage(loading_main_png); // can't find free
-    progress_texture    = BufferStaticImage(progress_png);
+    progress_step_texture = GRRLIB_LoadTexture(progress_step_png);
+    progress_bar_texture  = GRRLIB_LoadTexture(progress_bar_png);
 
 	self.progress += .1;
 	sprintf(self.debugMsg, "Loading textures" );
@@ -264,10 +208,6 @@ int main( int argc, char **argv )
     ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
 #endif
 
-	//////////////////////////
-	// main screen gui loop //
-	//////////////////////////
-	
 	//ee();
 #ifndef TTF_TEST
 //
@@ -279,17 +219,21 @@ int main( int argc, char **argv )
         bool LEFT = false, RIGHT = false;
         int L_CNT = 0, R_CNT = 0;
 #endif
-//get last game played and select it as centre cover at startup
-        if(strcmp(settings.lastplayed,"")!=0){
-            int i;
-            char titleID[7];
-            for(i=0;i<=self.gameCnt;i++){
-                struct discHdr *header = &self.gameList[i];
-                sprintf(titleID, "%s", header->id);
-                if(strcmp(titleID,settings.lastplayed)==0)
-                        self.shift = (COVER_COUNT/2)-i;
-                }
-        }
+	//get last game played and select it as centre cover at startup
+	if(strcmp(settings.lastplayed,"")!=0){
+		int i;
+		char titleID[7];
+		for(i=0;i<=self.gameCnt;i++){
+			struct discHdr *header = &self.gameList[i];
+			sprintf(titleID, "%s", header->id);
+			if(strcmp(titleID,settings.lastplayed)==0)
+				self.shift = (COVER_COUNT/2)-i;
+		}
+	}
+
+	//////////////////////////
+	// main screen gui loop //
+	//////////////////////////
 	while(1) 
 	{
 	
@@ -332,7 +276,7 @@ int main( int argc, char **argv )
 			//First Check if any UI buttons or slider are selected
 			if((!settings.parentalLock) && Button_Select(&addButton, pointer.p_x, pointer.p_y))
 			{
-                                Menu_Install();
+				Menu_Install();
 			}
 			else if((!settings.parentalLock) && Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
 			{
@@ -440,7 +384,7 @@ int main( int argc, char **argv )
 			{	
 				select_ready = false;
 				if ((int)self.shift < self.max_cover)
-					self.shift += SCROLL_SPEED;
+					self.shift += self.scroll_speed;
 				else if ((int)self.shift >= self.max_cover)
 					self.shift = self.max_cover;
 				else if ((int)self.shift <= self.min_cover)
@@ -450,7 +394,7 @@ int main( int argc, char **argv )
 			{
 				select_ready = false;
 				if ((int)self.shift > self.min_cover)
-					self.shift -= SCROLL_SPEED;
+					self.shift -= self.scroll_speed;
 				else if ((int)self.shift >= self.max_cover)
 					self.shift = self.max_cover;
 				else if ((int)self.shift <= self.min_cover)
@@ -463,7 +407,7 @@ int main( int argc, char **argv )
                             RIGHT = false;
                             select_ready = false;
 				if ((int)self.shift < self.max_cover){
-                                    self.shift += SCROLL_SPEED;
+                                    self.shift += self.scroll_speed;
                                     L_CNT++;
                                     if(L_CNT==19){LEFT=false;L_CNT=0;}
                                 }
@@ -478,7 +422,7 @@ int main( int argc, char **argv )
                             LEFT = false;
 				select_ready = false;
 				if ((int)self.shift > self.min_cover){
-					self.shift -= SCROLL_SPEED;
+					self.shift -= self.scroll_speed;
                                         R_CNT++;
                                         if(R_CNT==19){RIGHT=false;R_CNT=0;}
                                     }
@@ -557,10 +501,10 @@ int main( int argc, char **argv )
 			else if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for button 1 hold
 			{
 				//Beardfaces stuff
-				if(CoverHoverCenter() && select_ready)
-				{
-					coverFlip[self.gameSelected].flip = !(coverFlip[self.gameSelected].flip);
-				}
+				//if(CoverHoverCenter() && select_ready)
+				//{
+				//	coverFlip[self.gameSelected].flip = !(coverFlip[self.gameSelected].flip);
+				//}
 					
 			
 				//
@@ -585,7 +529,7 @@ int main( int argc, char **argv )
 				else
 					WindowPrompt("Titolo", "4:3", 0, &cancelButton);
 				*/
-				//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+				GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 				//LoadCurrentCover(self.gameSelected, gameList);
 				
 				/*
@@ -634,38 +578,38 @@ int main( int argc, char **argv )
 			}
 			else
 			{
-				if(abs(self.select_shift) > SCROLL_SPEED)
+				if(abs(self.select_shift) > self.scroll_speed)
 				{
 					select_ready = false;
 					int mult = abs((int)self.select_shift);
 					if(self.select_shift > 0)
 					{
-						self.select_shift -= mult*SCROLL_SPEED;
+						self.select_shift -= mult*self.scroll_speed;
 						if(!(self.shift <= self.min_cover))
 						{
-							self.shift -= mult*SCROLL_SPEED;
+							self.shift -= mult*self.scroll_speed;
 						}
 					}
 					else
 					{
-						self.select_shift += mult*SCROLL_SPEED;
+						self.select_shift += mult*self.scroll_speed;
 						if(!(self.shift >= self.max_cover))
 						{
-							self.shift += mult*SCROLL_SPEED;
+							self.shift += mult*self.scroll_speed;
 						}
 					}
 					
 				}
-				else if(abs(((int)self.shift * 10000.0) - (self.shift*10000.0))/10000.0 > (SCROLL_SPEED+SCROLL_SPEED/2.0))
+				else if(abs(((int)self.shift * 10000.0) - (self.shift*10000.0))/10000.0 > (self.scroll_speed + self.scroll_speed/2.0))
 				{
 					select_ready = false;
 					if((int)((int)(self.shift+0.5) - (int)self.shift) == 0)
 					{
-						self.shift -= SCROLL_SPEED;
+						self.shift -= self.scroll_speed;
 					}
 					else
 					{
-						self.shift += SCROLL_SPEED;
+						self.shift += self.scroll_speed;
 					}
 				}
 				else
@@ -707,29 +651,29 @@ int main( int argc, char **argv )
 			
 			if (settings.quickstart)
 			{
-                                // Quickstart used to load game, so save settings before launching
-                                struct discHdr *header = &self.gameList[self.gameSelected];
-                                char titleID[7];
-                                sprintf(titleID, "%s", header->id);
-                                strcpy(settings.lastplayed,titleID);//save this game as last game played
-                                SETTINGS_Save();
-                                if(getGameSettings(titleID, &gameSetting))
-                                        apply_settings();
-                                setGameSettings(titleID, &gameSetting,1);
-                                WiiLight(0); // turn off the slot light
-                                if(!LaunchGame())
-                                {
-                                        SETTINGS_Load(); //failed to launch so get the globals back
-                                        return 0;
-                                }
+				// Quickstart used to load game, so save settings before launching
+				struct discHdr *header = &self.gameList[self.gameSelected];
+				char titleID[7];
+				sprintf(titleID, "%s", header->id);
+				strcpy(settings.lastplayed,titleID);//save this game as last game played
+				SETTINGS_Save();
+				if(getGameSettings(titleID, &gameSetting))
+					apply_settings();
+				setGameSettings(titleID, &gameSetting,1);
+				WiiLight(0); // turn off the slot light
+				if(!LaunchGame())
+				{
+					SETTINGS_Load(); //failed to launch so get the globals back
+					return 0;
+				}
 			}
 			else
 			{
-				#ifndef ANIMATE_TEST
+#ifndef ANIMATE_TEST
 				draw_selected(self.gameList);
-				#else
+#else
 				draw_selected_two(false, Button_Hover(&loadButton, pointer.p_x, pointer.p_y));
-				#endif
+#endif
 			}
 		}
 		else
@@ -739,7 +683,7 @@ int main( int argc, char **argv )
             if(!settings.parentalLock)
                 Button_Theme_Paint(&addButton, settings.theme);
 			if(!settings.parentalLock)
-			Button_Theme_Paint(&settingsButton, settings.theme);
+				Button_Theme_Paint(&settingsButton, settings.theme);
 			
 			// Draw Game Title
 			if(settings.coverText && (!dragging && !twisting && select_ready))
@@ -753,16 +697,15 @@ int main( int argc, char **argv )
 		// Check for button-pointer intersections, and rumble
 		if (
 			(!self.selected && // main screen button only
-			(((!settings.parentalLock) && Button_Hover(&addButton, pointer.p_x, pointer.p_y)) ||
-			Button_Hover(&settingsButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&slideButton, pointer.p_x, pointer.p_y))) 
+			 (((!settings.parentalLock) && Button_Hover(&addButton, pointer.p_x, pointer.p_y)) ||
+			  Button_Hover(&settingsButton, pointer.p_x, pointer.p_y) ||
+			  Button_Hover(&slideButton, pointer.p_x, pointer.p_y))) 
 			||
 			(self.selected && // game load panel is showing
-			(((!settings.parentalLock) && Button_Hover(&deleteButton, pointer.p_x, pointer.p_y)) ||
-			Button_Hover(&loadButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&backButton, pointer.p_x, pointer.p_y)))
-			
+			 (((!settings.parentalLock) && Button_Hover(&deleteButton, pointer.p_x, pointer.p_y)) ||
+			  Button_Hover(&loadButton, pointer.p_x, pointer.p_y) ||
+			  Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y) ||
+			  Button_Hover(&backButton, pointer.p_x, pointer.p_y)))
 			)
 		{
 			// Should we be rumbling?
