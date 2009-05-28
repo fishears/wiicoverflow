@@ -79,6 +79,11 @@ void HomeMenu_Show()
         
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
+
+		WPAD_ScanPads();
+		GetWiimoteData();
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		
 		GRRLIB_Render();
 	}
 	
@@ -106,6 +111,10 @@ void HomeMenu_Show()
 		Button_Paint(&loaderButton);
 		
 		Button_Paint(&wiimoteButton);
+		
+		WPAD_ScanPads();
+		GetWiimoteData();
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		
 		GRRLIB_Render();
 	}
@@ -258,6 +267,10 @@ void HomeMenu_Show()
 		
 		Button_Paint(&wiimoteButton);
 		
+		WPAD_ScanPads();
+		GetWiimoteData();
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		
 		GRRLIB_Render();
 	}
 	
@@ -266,6 +279,8 @@ void HomeMenu_Show()
 		homeMenuTopButton.y -= 4;
 		homeMenuBottomButton.y += 4;
 		
+		fade-=7;
+		
 		draw_covers();
 		
 		GRRLIB_2D_Init();
@@ -273,6 +288,11 @@ void HomeMenu_Show()
 
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
+		
+		WPAD_ScanPads();
+		GetWiimoteData();
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		
 		GRRLIB_Render();
 	}
 	
