@@ -8,9 +8,32 @@ extern s_gameSettings gameSetting;
 extern u8 shutdown;
 extern u8 reset;
 
-extern char languages[11][22];
-extern char vidmodes[6][22];
-extern char hooks[3][9];
+// Language selection config
+char languages[11][22] =
+{{"Console Default"},
+{"   Japanese"},
+{"    English"},
+{"    German"},
+{"    French"},
+{"    Spanish"},
+{"    Italian"},
+{"     Dutch"},
+{"   S. Chinese"},
+{"   T. Chinese"},
+{"    Korean"}};
+//video mode text
+char vidmodes[6][22] =
+{{ "  Game Default" },
+{ "   Automatic", },
+{ "  Force PAL50", },
+{ "  Force PAL60", },
+{ "  Force NTSC", },
+{ "Console Default"}};
+//hook types for ocarina
+char hooks[3][9] =
+{{"   VI"},
+{" Wii Pad"},
+{" GC Pad"}};
 
 extern s_title* titleList;
 

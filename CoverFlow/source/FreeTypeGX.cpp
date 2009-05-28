@@ -51,19 +51,18 @@ FreeTypeGX::~FreeTypeGX() {
  * @return Wide character representation of supplied character string.
  */
 wchar_t* FreeTypeGX::charToWideChar(char* strChar) {
-      wchar_t *strWChar;
-      strWChar = new wchar_t[strlen(strChar) + 1];
-
-      //char *tempSrc = strChar;
-      //wchar_t *tempDest = strWChar;
-      //while((*tempDest++ = *tempSrc++));
-	  
-	  int ln = mbstowcs(strWChar, strChar, strlen(strChar));
-	  if(ln < 0) ln = 0;
-	  strWChar[ln] = (wchar_t)'\0';
-
-
-      return strWChar;
+	wchar_t *strWChar;
+	strWChar = new wchar_t[strlen(strChar) + 1];
+	
+	//      char *tempSrc = strChar;
+	//      wchar_t *tempDest = strWChar;
+	//      while((*tempDest++ = *tempSrc++));
+	
+	int ln = mbstowcs(strWChar, strChar, strlen(strChar));
+	if(ln < 0) ln = 0;
+	strWChar[ln] = (wchar_t)'\0';
+	
+	return strWChar;
 }
 
 /**
@@ -670,4 +669,83 @@ void FreeTypeGX::copyFeatureToFramebuffer(uint8_t positionFormat, uint16_t featu
 	  		break;
   	}
 	GX_End();
+}
+
+/**
+ * CoverFloader Method used for drawing titles. It displays drop shadow behind the text to make it stand out better
+ * 
+ * @param x	Screen X coordinate at which to output the text.
+ * @param y Screen Y coordinate at which to output the text. Note that this value corresponds to the text string origin and not the top or bottom of the glyphs.
+ * @param text	NULL terminated string to output.
+ * @param color	Optional color to apply to the text characters. If not specified default value is ftgxWhite: (GXColor){0xff, 0xff, 0xff, 0xff}
+ * @param blurColor	Color to apply to the shadow. If not specified default value is ftgxWhite with no alpha: (GXColor){0xff, 0xff, 0xff, 0xff}
+ * @param textStyle	Flags which specify any styling which should be applied to the rendered string.
+ * @return The number of characters printed.
+ */
+uint16_t FreeTypeGX::drawTextWithShadow(uint16_t x, uint16_t y, wchar_t *text, GXColor color, GXColor shadowColor, uint16_t textStyle) {
+
+	uint16_t strLength = wcslen(text);
+	uint16_t x_pos = x, printed = 0;
+	uint16_t x_offset = 0, y_offset = 0;
+
+	GXTexObj glyphTexture;
+	FT_Vector pairDelta;
+	
+	if(textStyle & 0x000F)
+		x_offset = this->getStyleOffsetWidth(this->getWidth(text), textStyle);
+	if(textStyle & 0x00F0)
+		y_offset = this->getStyleOffsetHeight(this->getOffset(text), textStyle);
+
+	// Draw the drop shadow layer
+	for (uint16_t i = 0; i < strLength; i++)
+	{
+		ftgxCharData* glyphData = NULL;
+		if ( this->fontData.find(text[i]) != this->fontData.end() )
+			glyphData = &this->fontData[text[i]];
+		else
+			glyphData = this->cacheGlyphData(text[i]);
+		
+		if (glyphData != NULL)
+		{
+			if (this->ftKerningEnabled && i)
+			{
+				FT_Get_Kerning( this->ftFace, this->fontData[text[i - 1]].glyphIndex, glyphData->glyphIndex, FT_KERNING_DEFAULT, &pairDelta );
+				x_pos += pairDelta.x >> 6;
+			}
+
+			GX_InitTexObj(&glyphTexture, glyphData->glyphDataTexture, glyphData->textureWidth, glyphData->textureHeight, this->textureFormat, GX_CLAMP, GX_CLAMP, GX_FALSE);
+			this->copyTextureToFramebuffer(&glyphTexture, this->positionFormat, glyphData->textureWidth+6, glyphData->textureHeight+6, x_pos - x_offset - 3, y - glyphData->renderOffsetY - y_offset-3, shadowColor);
+			x_pos += glyphData->glyphAdvanceX;
+			printed++;
+		}
+	}
+	// Reset and draw the text
+	x_pos = x, printed = 0;
+	for (uint16_t i = 0; i < strLength; i++)
+	{
+		ftgxCharData* glyphData = NULL;
+		if ( this->fontData.find(text[i]) != this->fontData.end() )
+			glyphData = &this->fontData[text[i]];
+		else
+			glyphData = this->cacheGlyphData(text[i]);
+		
+		if (glyphData != NULL)
+		{
+			if (this->ftKerningEnabled && i)
+			{
+				FT_Get_Kerning( this->ftFace, this->fontData[text[i - 1]].glyphIndex, glyphData->glyphIndex, FT_KERNING_DEFAULT, &pairDelta );
+				x_pos += pairDelta.x >> 6;
+			}
+			
+			GX_InitTexObj(&glyphTexture, glyphData->glyphDataTexture, glyphData->textureWidth, glyphData->textureHeight, this->textureFormat, GX_CLAMP, GX_CLAMP, GX_FALSE);
+			this->copyTextureToFramebuffer(&glyphTexture, this->positionFormat, glyphData->textureWidth, glyphData->textureHeight, x_pos - x_offset, y - glyphData->renderOffsetY - y_offset, color);
+			x_pos += glyphData->glyphAdvanceX;
+			printed++;
+		}
+	}
+	
+	if(textStyle & 0x0F00)
+		this->drawTextFeature(x - x_offset, y, this->getWidth(text), this->getOffset(text), textStyle, color);
+	
+	return printed;
 }

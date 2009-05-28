@@ -42,8 +42,9 @@
 #include "bootMenu.h"
 #include "deleteMenu.h"
 #include "soundmanager.h"
-//#include "ee.h"
+#include "CFreeTypeGX.h"
 #include "titles.h"
+//#include "ee.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -59,28 +60,19 @@
  
 #define COVER_WIDTH    160
 #define COVER_HEIGHT   224
-//#define DEFAULT_FIFO_SIZE  (256*1024)
 
 /* Aspect ratio fix for some image*/
 #define AR_16_9 0.80F //0.85
 
 //#define TEST_MODE 1
 #define DEBUG 1
-#define TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
+//#define TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
 //#define ONE_AT_A_TIME
 
 //#define D3_COVERS
 
-//TTF TEST
-//#define TTF_TEST
+#define TTF_TEST
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
-#include "CFreeTypeGX.h"
-extern CFreeTypeGX *ttf16pt;
-extern CFreeTypeGX *ttf18pt;
-extern CFreeTypeGX *ttf22pt;
-CFreeTypeGX *ttf16pt;
-CFreeTypeGX *ttf18pt;
-CFreeTypeGX *ttf22pt;
 
 #define KB_SIZE         1024.0
 #define MB_SIZE         1048576.0
@@ -96,6 +88,7 @@ CFreeTypeGX *ttf22pt;
 
 #define ANIMATE_TEST 1
 #define ANIMATE_SPEED 0
+#define FLIP_SPEED  0.016
 
 /* Sound stuff */
 #define OGG_FORMAT 0
@@ -115,12 +108,22 @@ enum {
 	FX_TOASTY
 };
 
+// Fonts
+extern u8 font_ttf[]; // the font file
+extern u32 font_ttf_size;
+extern CFreeTypeGX *ttf16pt;
+extern CFreeTypeGX *ttf18pt;
+extern CFreeTypeGX *ttf20pt;
+CFreeTypeGX *ttf16pt;
+CFreeTypeGX *ttf18pt;
+CFreeTypeGX *ttf20pt;
+
 extern const u8 no_cover_png[];
 extern const u8 back_cover_png[];
 extern const u8 no_disc_png[];
 extern const u8 BMfont5_png[];
-extern const u8 loading_main_png[];
-extern const u8 progress_png[];
+extern const u8 progress_step_png[];
+extern const u8 progress_bar_png[];
 extern const u8 gradient_bg_png[];
 extern const u8 slidebar_png[];
 extern const u8 generic_point_png[];
@@ -128,11 +131,9 @@ extern const u8 pointer_shadow_png[];
 extern const u8 turning_point_png[];
 extern const u8 menu_bg_png[];
 extern const u8 menu_bg2_png[];
-extern const u8 font_w14_h20_png[]; // title font
-extern const u8 font_w10_h14_png[]; // title font
+extern const u8 font_w14_h20_png[]; // old title font
+extern const u8 font_w10_h14_png[]; // old title font
 extern const u8 ambientlight_png[];
-
-
 GRRLIB_texImg covers[MAX_COVERS];
 GRRLIB_texImg pointer_texture;
 GRRLIB_texImg pointer_shadow_texture;
@@ -173,6 +174,7 @@ typedef struct{
 	int max_cover;
 	int min_cover;
 	int slot_glow;
+	float scroll_speed;
 	
 	/*Animate Parameters*/
 	float animate_flip;
@@ -203,6 +205,8 @@ typedef struct{
 	int dummy;
 
 } s_self;
+
+
 
 void initVars();
 

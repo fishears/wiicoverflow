@@ -259,6 +259,9 @@ class FreeTypeGX {
 		uint16_t getHeight(wchar_t const *text);
 		ftgxDataOffset getOffset(wchar_t *text);
 		ftgxDataOffset getOffset(wchar_t const *text);
+		// CoverFloader needs
+		uint16_t drawTextWithShadow(uint16_t x, uint16_t y, wchar_t *text, GXColor color = ftgxWhite, GXColor shadowColor = ftgxWhite, uint16_t textStyling = FTGX_NULL);
+	
 };
 
 #endif /* FREETYPEGX_H_ */

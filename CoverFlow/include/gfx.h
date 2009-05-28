@@ -5,8 +5,6 @@
 #include "button.h"
 #include "titles.h"
 
-#define FLIP_SPEED  0.016
-
 char* _title;
 char* _msg;
 
@@ -74,8 +72,8 @@ GRRLIB_texImg back_texture;
 GRRLIB_texImg empty_texture;
 GRRLIB_texImg no_disc_texture;
 GRRLIB_texImg current_cover_texture;
-GRRLIB_texImg loader_main_texture;
-GRRLIB_texImg progress_texture;
+GRRLIB_texImg progress_step_texture;
+GRRLIB_texImg progress_bar_texture;
 GRRLIB_texImg menu_bg_texture;
 GRRLIB_texImg slidebar_texture;			// black theme slider
 GRRLIB_texImg slidebar_white_texture;	// white theme slider
@@ -164,6 +162,7 @@ Button wiimoteButton;
 Button loaderButton;
 Button wiiMenuButton;
 
+void LoadFonts();
 void LoadTextures();
 void DrawBufferedCover(int i, float loc, float angle, float falloff );
 void Paint_Progress(float v, char* msg);
