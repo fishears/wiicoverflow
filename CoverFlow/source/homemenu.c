@@ -354,18 +354,18 @@ void Do_Batteries()
 		{
                         if(level==0) //battery critical
                         {
-				GRRLIB_Printf(185+(106*x), 375, font_title, 0xe90000FF, 1, "P%d", x+1);
+				GRRLIB_Printf(185+(106*x), 375, font_texture, 0xe90000FF, 1, "P%d", x+1);
 				GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
                         }
                         else if(level==1) //battery level is in the red
 			{
-				GRRLIB_Printf(185+(106*x), 375, font_title, 0xe90000FF, 1, "P%d", x+1);
+				GRRLIB_Printf(185+(106*x), 375, font_texture, 0xe90000FF, 1, "P%d", x+1);
 				GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
                                 GRRLIB_DrawImg(221+((107*x)), 377, battery_bar_red, 0, 1, 1, 0xFFFFFFFF);
 			}
                         else //level ok - draw white
 			{
-				GRRLIB_Printf(185+(106*x), 375, font_title, 0x808080FF, 1, "P%d", x+1);
+				GRRLIB_Printf(185+(106*x), 375, font_texture, 0x808080FF, 1, "P%d", x+1);
 				GRRLIB_DrawImg(216+(106*x), 373, battery, 0, 1, 1, 0xFFFFFFFF); //draw battery container
 				
 				for(i = 0; i < level; i++)

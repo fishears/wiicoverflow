@@ -1,12 +1,25 @@
+/*
+ *  settingsMenu.c
+ *
+ *  Wii CoverFloader
+ *  Copyright 2009 Beardface April 29th, 2009
+ *  Additional coding by: gitkua, scognito, F1SHE4RS, afour98, blackbird399, LoudBob11, alexcarlosantao
+ *  Licensed under the terms of the GNU GPL, version 2
+ *  http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+ *
+ *  This file contains the methods to draw the two primary settings screens:
+ *    - CoverFloader Settings
+ *    - Graphics Settings
+ */
 #include "settingsMenu.h"
 
-extern s_self self;
-extern s_pointer pointer;
-extern s_settings settings;
+extern s_self         self;
+extern s_pointer      pointer;
+extern s_settings     settings;
 extern s_gameSettings gameSetting;
-
-extern u8 shutdown;
-extern u8 reset;
+extern s_title*       titleList;
+extern u8             shutdown;
+extern u8             reset;
 
 // Language selection config
 char languages[11][22] =
@@ -35,14 +48,11 @@ char hooks[3][9] =
 {" Wii Pad"},
 {" GC Pad"}};
 
-extern s_title* titleList;
 
 void Graphic_Settings_Menu(){
 
 	bool doloop = true;
-	//bool dummy = false;
 
-	/*Render and control Settings*/
 	do{
 		WPAD_ScanPads();
 		GetWiimoteData();
@@ -85,36 +95,36 @@ void Graphic_Settings_Menu(){
 			{
 				if (settings.coverSpacing <= 2)
 					settings.coverSpacing = 2; // sanity check
-                                else
-                                        settings.coverSpacing -= 0.05;
+				else
+					settings.coverSpacing -= 0.05;
 			}
 			else if(Button_Select(&spacingupButton, pointer.p_x, pointer.p_y))
 			{
 				if (settings.coverSpacing >= 9)
 					settings.coverSpacing = 9; // sanity check
-                                else
-                                        settings.coverSpacing += 0.05;
+				else
+					settings.coverSpacing += 0.05;
 			}
 			else if(Button_Select(&angledownButton, pointer.p_x, pointer.p_y))
 			{
 				if (settings.coverAngle <= -140)
 					settings.coverAngle = -140; // sanity check
-                                else
-                                        settings.coverAngle -= 1;
+				else
+					settings.coverAngle -= 1;
 			}
 			else if(Button_Select(&angleupButton, pointer.p_x, pointer.p_y))
 			{
 				if (settings.coverAngle >= 140)
 					settings.coverAngle = 140; // sanity check
-                                else
-                                        settings.coverAngle += 1;
+				else
+					settings.coverAngle += 1;
 			}
 			else if(Button_Select(&zoomdownButton, pointer.p_x, pointer.p_y))
 			{
 				if (settings.coverZoom <= -8.0)
 					settings.coverZoom = -8.0; // sanity check
 				else
-                                        settings.coverZoom -= 0.03;
+					settings.coverZoom -= 0.03;
 			}
 			else if(Button_Select(&zoomupButton, pointer.p_x, pointer.p_y))
 			{
@@ -133,13 +143,13 @@ void Graphic_Settings_Menu(){
 			}
 		}
 		
-		/*Draw Covers*/ //PREVIEW
+		// Draw the covers behind the dialog
 		draw_covers();
 		// Draw menu dialog background
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFCC);
-		// Draw text
-		GRRLIB_Printf(190, 55,  font_title, settings.fontColor, 1, TX.graphicSetting);
+		// Draw text features
+		CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 55, CFreeTypeGX_charToWideChar(ttf18pt, TX.graphicSetting), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, TX.zoom );
 		GRRLIB_Printf(350, 100, font_texture, settings.fontColor, 1, "%f", settings.coverZoom);
 		GRRLIB_Printf(145, 138, font_texture, settings.fontColor, 1, TX.spacing );
@@ -207,13 +217,10 @@ void Graphic_Settings_Menu(){
 		GRRLIB_Render();
 		
 		if(shutdown == 1)
-		{
 			Sys_Shutdown();
-		}
 		else if(reset == 1)
-		{
 			Sys_Reboot(); 
-		}
+
 	}while(doloop);
 }
 
@@ -221,7 +228,6 @@ void Settings_Menu(){
 
 	bool doloop = true;
 
-	/*Render and control Settings*/
 	do{
 		WPAD_ScanPads();
 		GetWiimoteData();
@@ -256,55 +262,39 @@ void Settings_Menu(){
 			else if (Button_Select(&langdownButton, pointer.p_x, pointer.p_y))
 			{ // Clicked on the language buttons
 				if (settings.language > 0)
-				{
 					settings.language --;
-				}
 				else
-				{
 					settings.language = (CFG_LANG_COUNT - 1);
-				}
 			}
 			else if (Button_Select(&langupButton, pointer.p_x, pointer.p_y))
 			{
 				if (settings.language < (CFG_LANG_COUNT - 1))
-				{
 					settings.language ++;
-				}
 				else
-				{
 					settings.language = 0;
-				}
 			}
-                        else if (Button_Select(&hookdownButton, pointer.p_x, pointer.p_y))
+			else if (Button_Select(&hookdownButton, pointer.p_x, pointer.p_y))
 			{ // Clicked on the hooktype buttons
 				if (settings.hooktype > 0)
-				{
 					settings.hooktype --;
-				}
 				else
-				{
 					settings.hooktype = (CFG_HOOK_COUNT - 1);
-				}
 			}
 			else if (Button_Select(&hookupButton, pointer.p_x, pointer.p_y))
 			{
 				if (settings.hooktype < (CFG_HOOK_COUNT - 1))
-				{
 					settings.hooktype ++;
-				}
 				else
-				{
 					settings.hooktype = 0;
-				}
 			}
 			else if (Button_Select(&coversButton, pointer.p_x, pointer.p_y))
 			{
 				// Clicked on the Download Covers button
-				//if (WindowPrompt("Cover download","This operation can't be canceled, continue?", &okButton, &cancelButton))
 				if (WindowPrompt(TX.coverDownload, TX.opNoCancel , &okButton, &cancelButton))
 				{
 					WPAD_Rumble(0,0); //sometimes rumble remain active
-					if(networkInit(self.ipAddress)){
+					if(networkInit(self.ipAddress))
+					{
 						batchDownloadCover(self.gameList);
 						CoversDownloaded();
 					}
@@ -324,7 +314,7 @@ void Settings_Menu(){
 							self.titlesTxtSize = 0;
 							free(titleList);
 						}
-
+						
 						int numLines = initTitle();
 						if(numLines > 0){
 							self.usingTitlesTxt = true;
@@ -344,25 +334,17 @@ void Settings_Menu(){
 			{
 				// Clicked on the video down button
 				if (settings.video > 0)
-				{
 					settings.video --;
-				}
 				else
-				{
 					settings.video = (CFG_VIDEO_COUNT -1);
-				}
 			}
 			else if (Button_Select(&vidupButton, pointer.p_x,pointer.p_y))
 			{
 				// Clicked on the video up button
 				if (settings.video <(CFG_VIDEO_COUNT -1))
-				{
 					settings.video ++;
-				}
 				else
-				{
 					settings.video = 0;
-				}
 			}
 			else if (Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y) || Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
 			{
@@ -370,8 +352,7 @@ void Settings_Menu(){
 				settings.theme = (settings.theme) ? 0 : 1;
 				if (settings.theme)
 				{	// black fonts for white theme
-					settings.fontColor = 0xFFFFFFFF; //temp until I fix the dialogs for the white theme
-//					settings.fontColor = 0x000000FF;
+					settings.fontColor = 0xFFFFFFFF;
 					GRRLIB_SetBGColor(1); // set BG to white
 				}
 				else
@@ -379,7 +360,6 @@ void Settings_Menu(){
 					settings.fontColor = 0xFFFFFFFF;
 					GRRLIB_SetBGColor(0);  // set BG to black
 				}
-				
 			}
 			else if (Button_Select(&quickstartOnButton, pointer.p_x, pointer.p_y) || Button_Select(&quickstartOffButton, pointer.p_x, pointer.p_y))
 			{
@@ -395,13 +375,13 @@ void Settings_Menu(){
 			}
 		}
 		
-		// Draw screen background
+		// Draw the covers behind the dialog
 		draw_covers();
 		// Draw menu dialog background
 		GRRLIB_2D_Init();
-		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFCC);//old one bg renamed to _old
-		// Draw text
-		GRRLIB_Printf(184, 55,  font_title, 0xFFFFFFFF, 1, TX.cflowSettings );
+		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFCC);
+		// Draw text features
+		CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 55, CFreeTypeGX_charToWideChar(ttf18pt, TX.cflowSettings), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 		GRRLIB_Printf(145, 93,  font_texture, settings.fontColor, 1, TX.ocarina );
 		GRRLIB_Printf(310, 93,  font_texture, settings.fontColor, 1, TX.hook );
 		GRRLIB_Printf(385, 93,  font_texture, 0xFFFFFFFF, 1, "%s",hooks[settings.hooktype]);
@@ -463,9 +443,7 @@ void Settings_Menu(){
 			if (--self.rumbleAmt > 0)
 			{
 				if(settings.rumble)
-				{
 					WPAD_Rumble(0,1); // Turn on Wiimote rumble
-				}
 			}
 			else 
 				WPAD_Rumble(0,0); // Kill the rumble
@@ -478,17 +456,13 @@ void Settings_Menu(){
 		
 		// Draw the default pointer hand
 		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
-		// Spit it out
 		GRRLIB_Render();
 		
 		if(shutdown == 1)
-		{
 			Sys_Shutdown();
-		}
 		else if(reset == 1)
-		{
 			Sys_Reboot(); 
-		}
+
 	}while(doloop);
 	
 	WPAD_Rumble(0,0);

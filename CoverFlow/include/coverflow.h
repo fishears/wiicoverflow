@@ -120,7 +120,6 @@ CFreeTypeGX *ttf20pt;
 extern const u8 no_cover_png[];
 extern const u8 back_cover_png[];
 extern const u8 no_disc_png[];
-extern const u8 BMfont5_png[];
 extern const u8 progress_step_png[];
 extern const u8 progress_bar_png[];
 extern const u8 gradient_bg_png[];
@@ -130,8 +129,6 @@ extern const u8 pointer_shadow_png[];
 extern const u8 turning_point_png[];
 extern const u8 menu_bg_png[];
 extern const u8 menu_bg2_png[];
-extern const u8 font_w14_h20_png[]; // old title font
-extern const u8 font_w10_h14_png[]; // old title font
 extern const u8 ambientlight_png[];
 GRRLIB_texImg covers[MAX_COVERS];
 GRRLIB_texImg pointer_texture;

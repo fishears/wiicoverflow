@@ -878,26 +878,14 @@ inline void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees
  * @param ... Optional arguments.
  */
 void GRRLIB_Printf(f32 xpos, f32 ypos, GRRLIB_texImg tex, u32 color, f32 zoom, const char *text, ...) {
-
-    int i, size;
+	// This is provided as legacy support for drawing text via the GRRBLIB_Printf... should be using CFreeTypeGX_DrawText now for TTF
+    int size;
     char tmp[1024];
-	
     va_list argp;
     va_start(argp, text);
     size = vsprintf(tmp, text, argp);
     va_end(argp);
-
-
-#ifndef TTF_TEST
-    for(i=0; i<size; i++)
-	{
-        u8 c = tmp[i]-tex.tilestart;
-        GRRLIB_DrawTile(xpos+i*tex.tilew*zoom, ypos, tex, 0, zoom, zoom, color, c);
-    }
-#else
-	CFreeTypeGX_DrawTextWithShadow(ttf16pt, xpos, ypos+18, CFreeTypeGX_charToWideChar(ttf16pt, tmp), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_NULL);
-#endif
-
+	CFreeTypeGX_DrawText(ttf16pt, xpos, ypos, CFreeTypeGX_charToWideChar(ttf16pt, tmp), (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_NULL);
 }
 
 /**
@@ -1277,14 +1265,13 @@ void GRRLIB_Init() {
 
 	GRRLIB_2D_Init();
 	
-	#ifdef D3_COVERS
+#ifdef D3_COVERS
 	rightTexture = GRRLIB_LoadTexture(case_right_png);
-	
 	fullTexture = GRRLIB_LoadTexture(full_cover_png);
 	
     GX_InitTexObj(&fullTex, fullTexture.data, fullTexture.w, fullTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 	GX_InitTexObj(&rightSideTex, rightTexture.data, rightTexture.w, rightTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-	#endif
+#endif
 
 	matteBlackTexture = GRRLIB_LoadTexture(matte_black_png);
 	matteGreyTexture = GRRLIB_LoadTexture(matte_grey_png);
@@ -1367,6 +1354,14 @@ void GRRLIB_Render() {
  */
 void GRRLIB_Exit() {
 	
+	// Free custom GRRLIB textures
+#ifdef D3_COVERS
+	free(rightTexture.data);
+	free(fullTexture.data);
+#endif
+	free(matteBlackTexture.data);
+	free(matteGreyTexture.data);
+		
     GX_Flush();
     GX_AbortFrame();
 
