@@ -1,4 +1,6 @@
 #include "bootloader.h"
+#include "wpadsvn.h"
+#include "subsystem.h"
 
 s_bootloader settings;
 
@@ -26,6 +28,9 @@ char vidmodes[6][10] =
 
 /* WBFS device */
 static s32 my_wbfsDev = WBFS_DEVICE_USB;
+
+static void *xfb = NULL;
+static GXRModeObj *rmode = NULL;
 
 bool init_usbfs()
 {    
@@ -61,12 +66,68 @@ void initVars(){
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
 
+
+	
+	
+	VIDEO_Init();
+	
+	// This function initialises the attached controllers
+	//WPAD_Init();
+	
+	// Obtain the preferred video mode from the system
+	// This will correspond to the settings in the Wii menu
+	rmode = VIDEO_GetPreferredMode(NULL);
+
+	// Allocate memory for the display in the uncached region
+	xfb = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
+	
+	// Initialise the console, required for printf
+	console_init(xfb,20,20,rmode->fbWidth,rmode->xfbHeight,rmode->fbWidth*VI_DISPLAY_PIX_SZ);
+	
+	// Set up the video registers with the chosen mode
+	VIDEO_Configure(rmode);
+	
+	// Tell the video hardware where our display memory is
+	VIDEO_SetNextFramebuffer(xfb);
+	
+	// Make the display visible
+	VIDEO_SetBlack(FALSE);
+
+	// Flush the video register changes to the hardware
+	VIDEO_Flush();
+
+	// Wait for Video setup to complete
+	VIDEO_WaitVSync();
+	if(rmode->viTVMode&VI_NON_INTERLACE) VIDEO_WaitVSync();
+
+
+	// The console understands VT terminal escape codes
+	// This positions the cursor on row 2, column 0
+	// we can use variables for this with format codes too
+	// e.g. printf ("\x1b[%d;%dH", row, column );
+	printf("\x1b[2;0H");
+	
+
+	printf("Hello World!\n");
+	
+	int j=0;
+	printf("argc: %d\n", argc);
+	for(;j<argc;j++)
+	{
+		printf("ARG[%d] = %s\n",j,argv[j]);
+	}
+	
+	int i = 0;
+	for(i=0; i<5; i++){
+			usleep(1000);
+			VIDEO_WaitVSync();
+	}
+	
 	//Default Settings
 	settings.video    = 0;
     settings.ocarina  = 0;
     settings.hooktype = 0;
     settings.language = 0;
-    settings.video    = 0;
     settings.vipatch  = 0;
 	strcpy(settings.localLanguage, "EN-US"); //Localization
 
@@ -115,3 +176,4 @@ int main( int argc, char **argv ){
 	
 	return 0;
 } 
+

@@ -1,6 +1,11 @@
 #include "bootMenu.h"
+#include "capp_dol.h"
+
+#include "processor.h"
+#include "asm.h"
 
 extern s_self self;
+extern s_settings settings;
 extern s_gameSettings gameSetting;
 
 bool Menu_Boot(){
@@ -46,6 +51,7 @@ bool Menu_Boot(){
     }
 
 	#else
+	/*
 	//TODO No really sure how args need to be set up...
 	char* buffer;
 	buffer = malloc(strlen("bootloader.dol") + 1 + 6 + 2);
@@ -66,6 +72,17 @@ bool Menu_Boot(){
 	argv.endARGV = argv.argv + argv.length;
 			
 	run_dol(bootloader_dol, &argv);
+	*/
+	
+	char cmdLine[256];
+	
+	
+	sprintf(cmdLine, "%s %s %d %d %d %d %d", "bootloader.dol",
+			header->id, settings.ocarina, settings.hooktype, settings.language,
+			settings.video, settings.vipatch);
+	
+	CAPPDOL_Launch(bootloader_dol, (const char *)cmdLine);	
+
 	#endif
 
 	#endif
