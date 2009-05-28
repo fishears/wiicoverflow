@@ -1,8 +1,11 @@
 #labels Featured
-Next Release
+== RC4 (sometime 2009) ==
+
 -FIX-
+  * Fixed sorting issues (issue155)
 
 -NEW-
+  * nothing yet?
 ----
 == RC3 Update (25 May 2009) ==
 
