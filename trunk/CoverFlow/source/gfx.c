@@ -59,9 +59,7 @@ void LoadTextures()
 	back_texture		   = BufferStaticImage(back_cover_png);
 	no_disc_texture		   = BufferStaticImage(no_disc_png);
 	load_bg_texture		   = BufferStaticImage(bg_options_screen_no_transparency_png); // can't find free
-	font_texture           = BufferStaticImage(BMfont5_png);
-	font_title             = BufferStaticImage(font_w14_h20_png);
-	font_title_small       = BufferStaticImage(font_w10_h14_png);
+	font_texture           = BufferStaticImage(slidebar_png);  // TODO: go away post TTF
 	slidebar_texture       = BufferStaticImage(slidebar_png);  // can't find free
 	slidebar_white_texture = GRRLIB_CreateEmptyTexture(slidebar_texture.w, slidebar_texture.h);
 	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white
@@ -74,10 +72,6 @@ void LoadTextures()
     battery_dead           = BufferStaticImage(battery_dead_png);  // can't find free
 	ttf_button_black       = BufferStaticImage(ttf_button_black_png);  // can't find free
 	ttf_button_white       = BufferStaticImage(ttf_button_white_png); // can't find free
-
-	GRRLIB_InitTileSet(&font_texture, 8, 16, 0);
-	GRRLIB_InitTileSet(&font_title, 14, 20, 32);
-	GRRLIB_InitTileSet(&font_title_small, 10, 14, 32);
 }
 
 void DrawBufferedCover(int i, float loc, float angle, float falloff)
@@ -412,7 +406,7 @@ void draw_game_title(int index, float textSize)
 			getTitle(titleList, (char*)header->id, title);
 		}
 		
-		if (self.gameCnt < 1)
+		if (self.gameCnt < 1) // No games yet
 		{
 			sprintf(gameName, "%s", TX.addAGame);
 			len = strlen(gameName);
@@ -423,27 +417,8 @@ void draw_game_title(int index, float textSize)
 				len = strlen(title);
 			else
 				len = strlen(header->title);
+
 			// chomp the title to fit
-			// TODO: Lengthen this for TTF
-#ifndef TTF_TEST
-			if(len <= 35) //the length of the max title is 35 fixed width chars
-			{
-				if(self.usingTitlesTxt)
-					sprintf(gameName, "%s", (title));
-				else
-					sprintf(gameName, "%s", (header->title));
-			}
-			else
-			{
-				if(self.usingTitlesTxt)
-					strncpy(gameName, title, 32);
-				else
-					strncpy(gameName, header->title, 32);
-				gameName[32] = '\0';
-				strncat(gameName, "...", 3);
-				len = 35;
-			}
-#else
 			if(len <= 45) //the length of the max title is 45 22pt TTF chars
 			{
 				if(self.usingTitlesTxt)
@@ -461,30 +436,12 @@ void draw_game_title(int index, float textSize)
 				strncat(gameName, "...", 3);
 				len = 45;
 			}
-			
-#endif
 		}
 		
-
-#ifndef TTF_TEST
-		len = strlen(gameName);
-		
-		float offset = (len*7.9); // calc a font scaled offset from title length
-		
-		if((int)offset > 260)
-			offset = 260.0; // dont draw on top of the setting button
-
-		GRRLIB_Printf(340 - (int)offset, 400, font_title, 0xFFFFFFFF, textSize, "%s", gameName);
-#else
 		if (settings.theme) // black text on white matte
-		{
 			CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410, CFreeTypeGX_charToWideChar(ttf20pt, gameName), (GXColor){0x11, 0x11, 0x11, 0xff}, (GXColor){0xcc, 0xcc, 0xcc, 0x44}, FTGX_JUSTIFY_CENTER);
-		}
 		else //white text on black matte
-		{
 			CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410, CFreeTypeGX_charToWideChar(ttf20pt, gameName), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
-		}
-#endif		
 	}
 }
 
@@ -637,16 +594,16 @@ int draw_selected_two(bool load, bool hover)
 		*/
 
 		// Display Title, Last Played, and Size
-		GRRLIB_Printf(245, 174, font_title, 0xFFFFFFFF, 1, "%s", gameName);
+		GRRLIB_Printf(245, 174, font_texture, 0xFFFFFFFF, 1, "%s", gameName);
 		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
-			GRRLIB_Printf(255, 220, font_title_small, 0xFFFFFFFF, 1, TX.neverPlayed);
+			GRRLIB_Printf(255, 220, font_texture, 0xFFFFFFFF, 1, TX.neverPlayed);
 		else
-			GRRLIB_Printf(255, 220, font_title_small, 0xFFFFFFFF, 1, TX.played, gameSetting.lastPlayed);
-		GRRLIB_Printf(255, 240, font_title_small, 0xFFFFFFFF, 1, TX.size, self.gsize);
+			GRRLIB_Printf(255, 220, font_texture, 0xFFFFFFFF, 1, TX.played, gameSetting.lastPlayed);
+		GRRLIB_Printf(255, 240, font_texture, 0xFFFFFFFF, 1, TX.size, self.gsize);
 #else
-		GRRLIB_Printf(270, 174, font_title, 0xFFFFFFFF, 1, "%s", "Best game");
-		GRRLIB_Printf(280, 210, font_title_small, 0xFFFFFFFF, 1, "%s", " Game ID: KBGSUX");
-		GRRLIB_Printf(280, 230, font_title_small, 0xFFFFFFFF, 1, "Size:    %.2fGB", self.gsize);
+		GRRLIB_Printf(270, 174, font_texture, 0xFFFFFFFF, 1, "%s", "Best game");
+		GRRLIB_Printf(280, 210, font_texture, 0xFFFFFFFF, 1, "%s", " Game ID: KBGSUX");
+		GRRLIB_Printf(280, 230, font_texture, 0xFFFFFFFF, 1, "Size:    %.2fGB", self.gsize);
 #endif
 		
 		// DISC IMAGE
@@ -703,8 +660,6 @@ int draw_selected_two(bool load, bool hover)
 
 void draw_selected()
 {
-	//WindowPrompt("zucca!", "topa", 0, &okButton);
-	
 	if(self.selected && self.animate_flip < 1.0)
 	{
 		self.animate_flip += FLIP_SPEED;
@@ -911,7 +866,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		
 		// Draw text
 #ifndef TTF_TEST
-		GRRLIB_Printf(100, 105, font_title, 0xFFFFFFFF, 1, "%s", title);
+		GRRLIB_Printf(100, 105, font_texture, 0xFFFFFFFF, 1, "%s", title);
 #else
 		CFreeTypeGX_DrawTextWithShadow(ttf20pt, 100, 105, CFreeTypeGX_charToWideChar(ttf20pt, title), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
 #endif
@@ -924,7 +879,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			while (pch != NULL)
 			{
 #ifndef TTF_TEST
-				GRRLIB_Printf(138, y+sp, font_title_small, settings.fontColor, 1, "%s", pch);
+				GRRLIB_Printf(138, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
 #else
 				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 140, y+sp, CFreeTypeGX_charToWideChar(ttf16pt, pch), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
 #endif
@@ -1232,7 +1187,7 @@ void game_settings_menu()
 		Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
 
         //BUTTON TEXT
-		GRRLIB_Printf(89, 145,  font_title, settings.fontColor, 1, TX.setting, gameName);
+		GRRLIB_Printf(89, 145,  font_texture, settings.fontColor, 1, TX.setting, gameName);
 		GRRLIB_Printf(169, 193,  font_texture, settings.fontColor, 1, TX.ocarina);
 		GRRLIB_Printf(334, 193,  font_texture, settings.fontColor, 1, TX.hook);
 		GRRLIB_Printf(409, 193,  font_texture, 0xFFFFFFFF, 1, "%s", ghooks[gameSetting.hooktype]);
@@ -1291,10 +1246,8 @@ void freeResources(){
 	//free(no_disc_texture.data);
 	if (coverLoaded)free(current_cover_texture.data); // is this always available?
 	//free(font_texture.data);
-	//free(font_title.data);
-	//free(font_title_small.data);
-	free(progress_step_texture.data);
-	free(progress_bar_texture.data);
+	//free(progress_step_texture.data);
+	//free(progress_bar_texture.data);
 	
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();

@@ -7,6 +7,8 @@
  *  Licensed under the terms of the GNU GPL, version 2
  *  http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  *
+ *  This file contains the main() entry point to the application
+ *  Build configuration settings can be found in "coverflow.h"
  */
 #include "coverflow.h"
 #include "filter.h"
@@ -207,11 +209,7 @@ int main( int argc, char **argv )
 #endif
 
 	//ee();
-#ifndef TTF_TEST
-//
-#else
 	languageLoad();		// load localization ( file TestLanguage for test)
-#endif
 	
 #ifdef ONE_AT_A_TIME
         bool LEFT = false, RIGHT = false;
@@ -234,14 +232,12 @@ int main( int argc, char **argv )
 	//////////////////////////
 	while(1) 
 	{
-	
 	#ifndef TEST_MODE
 		WPAD_ScanPads();
 		GetWiimoteData();
 	#endif //_TEST_MODE
 		PAD_ScanPads();
 		twisting = false;
-
 	
 		// Check for 'HOME' button press
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME) || (PAD_ButtonsDown(0) & PAD_TRIGGER_Z))
@@ -498,6 +494,9 @@ int main( int argc, char **argv )
 			}
 			else if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for button 1 hold
 			{
+				// Take a screen shot
+				GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+
 				//Beardfaces stuff
 				//if(CoverHoverCenter() && select_ready)
 				//{
@@ -527,7 +526,6 @@ int main( int argc, char **argv )
 				else
 					WindowPrompt("Titolo", "4:3", 0, &cancelButton);
 				*/
-				GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 				//LoadCurrentCover(self.gameSelected, gameList);
 				
 				/*
@@ -584,17 +582,13 @@ int main( int argc, char **argv )
 					{
 						self.select_shift -= mult*self.scroll_speed;
 						if(!(self.shift <= self.min_cover))
-						{
 							self.shift -= mult*self.scroll_speed;
-						}
 					}
 					else
 					{
 						self.select_shift += mult*self.scroll_speed;
 						if(!(self.shift >= self.max_cover))
-						{
 							self.shift += mult*self.scroll_speed;
-						}
 					}
 					
 				}
@@ -602,13 +596,9 @@ int main( int argc, char **argv )
 				{
 					select_ready = false;
 					if((int)((int)(self.shift+0.5) - (int)self.shift) == 0)
-					{
 						self.shift -= self.scroll_speed;
-					}
 					else
-					{
 						self.shift += self.scroll_speed;
-					}
 				}
 				else
 				{
@@ -635,8 +625,8 @@ int main( int argc, char **argv )
 		
 		// This is the main routine to draw the covers
 		draw_covers();
-                //Play flip sound if needed
 
+		//Play flip sound if needed
 		if((int)(self.shift+1000.5) != self.lastGameSelected)
 		{
 			self.lastGameSelected = (int)(self.shift+1000.5);
@@ -646,7 +636,6 @@ int main( int argc, char **argv )
 		// Check to see if it's time to draw the game launch dialog panel
 		if(self.selected || self.animate_flip != 0)
 		{
-			
 			if (settings.quickstart)
 			{
 				// Quickstart used to load game, so save settings before launching
@@ -682,7 +671,7 @@ int main( int argc, char **argv )
                 Button_Theme_Paint(&addButton, settings.theme);
 			if(!settings.parentalLock)
 				Button_Theme_Paint(&settingsButton, settings.theme);
-			
+
 			// Draw Game Title
 			if(settings.coverText && (!dragging && !twisting && select_ready))
 			{	
@@ -693,8 +682,7 @@ int main( int argc, char **argv )
 		}
 		
 		// Check for button-pointer intersections, and rumble
-		if (
-			(!self.selected && // main screen button only
+		if ((!self.selected && // main screen button only
 			 (((!settings.parentalLock) && Button_Hover(&addButton, pointer.p_x, pointer.p_y)) ||
 			  Button_Hover(&settingsButton, pointer.p_x, pointer.p_y) ||
 			  Button_Hover(&slideButton, pointer.p_x, pointer.p_y))) 
@@ -703,8 +691,7 @@ int main( int argc, char **argv )
 			 (((!settings.parentalLock) && Button_Hover(&deleteButton, pointer.p_x, pointer.p_y)) ||
 			  Button_Hover(&loadButton, pointer.p_x, pointer.p_y) ||
 			  Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y) ||
-			  Button_Hover(&backButton, pointer.p_x, pointer.p_y)))
-			)
+			  Button_Hover(&backButton, pointer.p_x, pointer.p_y))) )
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
@@ -739,11 +726,22 @@ int main( int argc, char **argv )
 			}
 		}
 		
-		
-		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))
+		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))  // Button2 is the 'Get Info' button
 		{
-			GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
-			GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "CoverFloader r%d %s",SVN_VERSION, RELEASE);
+			char tIOS[20];
+			char tAppInfo[30];
+			sprintf(tIOS, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
+			sprintf(tAppInfo, "CoverFloader r%d %s", SVN_VERSION, RELEASE);
+			if (settings.theme) // black text on white matte
+			{
+				CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 30, CFreeTypeGX_charToWideChar(ttf18pt, tAppInfo), (GXColor){0x00, 0x00, 0x00, 0xff}, (GXColor){0x99, 0x99, 0x99, 0x44}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 70, 30, CFreeTypeGX_charToWideChar(ttf16pt, tIOS), (GXColor){0x00, 0x00, 0x00, 0xff}, (GXColor){0x99, 0x99, 0x99, 0x44}, FTGX_JUSTIFY_CENTER);
+			}
+			else //white text on black matte
+			{
+				CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 30, CFreeTypeGX_charToWideChar(ttf18pt, tAppInfo), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x44}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 70, 30, CFreeTypeGX_charToWideChar(ttf16pt, tIOS), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x44}, FTGX_JUSTIFY_CENTER);
+			}
 		}
 	
 #ifdef DEBUG
@@ -754,12 +752,12 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 //		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 //		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
-//		GRRLIB_Printf(50, 20, font_title_small, 0x808080FF, 1, "Shift        : %f", self.shift);
-//		GRRLIB_Printf(50, 40, font_title_small, 0x808080FF, 1, "gameCnt      : %d", self.gameCnt);
-//		GRRLIB_Printf(50, 60, font_title_small, 0x808080FF, 1, "Min/Max cover: %d / %d", self.min_cover, self.max_cover);
-//		GRRLIB_Printf(50, 40, font_title, 0x808080FF, 1, "Pointer: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
-//		GRRLIB_Printf(50, 60, font_title, 0x808080FF, 1, "X: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
-//                GRRLIB_Printf(50,20,font_title_small,0x808080FF,1,"gameCnt:%d shift:%f lastplayed:%s lastsel: %d",self.gameCnt,self.shift,settings.lastplayed,self.lastGameSelected);
+//		GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "Shift        : %f", self.shift);
+//		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "gameCnt      : %d", self.gameCnt);
+//		GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "Min/Max cover: %d / %d", self.min_cover, self.max_cover);
+//		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "Pointer: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
+//		GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "X: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
+//		GRRLIB_Printf(50,20,font_texture,0x808080FF,1,"gameCnt:%d shift:%f lastplayed:%s lastsel: %d",self.gameCnt,self.shift,settings.lastplayed,self.lastGameSelected);
 
 #endif
 		
@@ -770,22 +768,16 @@ int main( int argc, char **argv )
 
         FPS = CalculateFrameRate();
 		
-		//Sleep(1);
 		if(shutdown == 1)
-		{
 			Sys_Shutdown();
-		}
 		else if(reset == 1)
-		{
 			Sys_Reboot(); 
-		}
-	}
+		
+	} // main screen gui loop END
 
-	//WindowPrompt("TEST", "Quitting test", 0, &cancelButton);
+	// Wrap it up to leave
     GRRLIB_Exit(); 
-	
 	SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
-	
 	return 0;
 } 
 
