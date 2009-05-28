@@ -342,30 +342,33 @@ void Do_Batteries()
 	int i,x;
 	u8 ret;
 	u8 level;
+	char tUnit[4];
+
 
 	for(x = 0; x <= 3; x++)
 	{
 		ret = WPAD_BatteryLevel(x);
 		level = (ret * 4)/100;
+		sprintf(tUnit, "P%d", x+1);
 
 		if(level > 4) level = 4; //restrict to maximum bars
 
 		if(ret!=0) //no wiimote here
 		{
-                        if(level==0) //battery critical
-                        {
-				GRRLIB_Printf(185+(106*x), 375, font_texture, 0xe90000FF, 1, "P%d", x+1);
-				GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
-                        }
-                        else if(level==1) //battery level is in the red
+			if(level==0) //battery critical
 			{
-				GRRLIB_Printf(185+(106*x), 375, font_texture, 0xe90000FF, 1, "P%d", x+1);
+				CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, CFreeTypeGX_charToWideChar(ttf18pt, tUnit), (GXColor){0xe9, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 				GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
-                                GRRLIB_DrawImg(221+((107*x)), 377, battery_bar_red, 0, 1, 1, 0xFFFFFFFF);
 			}
-                        else //level ok - draw white
+			else if(level==1) //battery level is in the red
 			{
-				GRRLIB_Printf(185+(106*x), 375, font_texture, 0x808080FF, 1, "P%d", x+1);
+				CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, CFreeTypeGX_charToWideChar(ttf18pt, tUnit), (GXColor){0xe9, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+				GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
+				GRRLIB_DrawImg(221+((107*x)), 377, battery_bar_red, 0, 1, 1, 0xFFFFFFFF);
+			}
+			else //level ok - draw white
+			{
+				CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, CFreeTypeGX_charToWideChar(ttf18pt, tUnit), (GXColor){0x80, 0x80, 0x80, 0xff}, FTGX_JUSTIFY_LEFT);
 				GRRLIB_DrawImg(216+(106*x), 373, battery, 0, 1, 1, 0xFFFFFFFF); //draw battery container
 				
 				for(i = 0; i < level; i++)
