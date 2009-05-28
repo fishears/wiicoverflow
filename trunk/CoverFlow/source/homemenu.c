@@ -300,15 +300,15 @@ void HomeMenu_Destroy()
 		GRRLIB_Render();
 	}
 
-	free(homeMenuTopButton.texture.data);
-	free(homeMenuBottomButton.texture.data);
-	free(wiiMenuButton.texture.data);
-	free(loaderButton.texture.data);
-	free(homeMenuTopButton.hoverTexture.data);
-	free(homeMenuBottomButton.hoverTexture.data);
-	free(wiiMenuButton.hoverTexture.data);
-	free(loaderButton.hoverTexture.data);
-	free(wiimoteButton.texture.data);
+	//free(homeMenuTopButton.texture.data);
+	//free(homeMenuBottomButton.texture.data);
+	//free(wiiMenuButton.texture.data);
+	//free(loaderButton.texture.data);
+	//free(homeMenuTopButton.hoverTexture.data);
+	//free(homeMenuBottomButton.hoverTexture.data);
+	//free(wiiMenuButton.hoverTexture.data);
+	//free(loaderButton.hoverTexture.data);
+	//free(wiimoteButton.texture.data);
 	
 	BUFFER_KillBuffer();
 	freeResources();
