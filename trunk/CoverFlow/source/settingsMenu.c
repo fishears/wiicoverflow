@@ -312,7 +312,6 @@ void Settings_Menu(){
 						WindowPrompt(TX.error, TX.iniNetErr , &okButton, 0);
 				}
 			}
-#ifdef TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
 			else if(Button_Select(&titlesButton, pointer.p_x, pointer.p_y)){
 				WPAD_Rumble(0,0); //sometimes rumble remain active
 				if(networkInit(self.ipAddress)){
@@ -341,7 +340,6 @@ void Settings_Menu(){
 				else
 					WindowPrompt(TX.error, "Error initializing network\nTitles.txt can't be downloaded.", &okButton, 0);
 			}
-#endif
 			else if (Button_Select(&viddownButton, pointer.p_x,pointer.p_y))
 			{
 				// Clicked on the video down button

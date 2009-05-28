@@ -142,7 +142,6 @@ int main( int argc, char **argv )
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 
 //moved here as it sets the self.usingTitlesTxt used in initUSBFS sorting
-#ifdef TITLES_TXT_IS_SAFE_BUT_I_COMMENTED_BC_I_DON_T_WANT_TO_ADD_OTHER_FEATURES_BEFORE_ONE_POINT_ZERO_RELEASE
 	int numLines = initTitle();
 	if(numLines > 0){
 		self.usingTitlesTxt = true;
@@ -150,7 +149,6 @@ int main( int argc, char **argv )
 		titleList = (s_title *) malloc (numLines * sizeof(s_title));
 		fillTitleStruct(titleList, numLines);
 	}
-#endif
 
 	initUSBFS();
 	
