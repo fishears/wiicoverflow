@@ -56,6 +56,7 @@ void SETTINGS_Init()
 	settings.language     = 0;
 	settings.video        = 0;
 	settings.vipatch      = 0;
+        strcpy(settings.lastplayed,"");
 };
 //called by reset button on graphics settings screen
 //button used to reset EVERYTHING
@@ -165,6 +166,8 @@ int SETTINGS_Load()
 			  settings.video   = atof(mxmlElementGetAttr(next_n,"video"));
 		  if(mxmlElementGetAttr(next_n,"vipatch"))
 			  settings.vipatch     = atof(mxmlElementGetAttr(next_n,"vipatch"));
+                  if(mxmlElementGetAttr(next_n,"lastplayed"))
+			  strcpy(settings.lastplayed, mxmlElementGetAttr(next_n,"lastplayed"));
 	  }
 	  else
 	  {
@@ -258,6 +261,9 @@ int SETTINGS_Save()
 
 	sprintf(buffer, "%d", settings.vipatch);
 	mxmlElementSetAttr(node, "vipatch", buffer);
+
+	mxmlElementSetAttr(node, "lastplayed", settings.lastplayed);
+
 	
 	FILE *fp;
 

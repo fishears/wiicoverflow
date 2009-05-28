@@ -7,7 +7,7 @@ typedef struct {
     float coverZoom;
     float coverAngle;
     float coverSpacing;
-	float coverFallOff;
+    float coverFallOff;
     int drawWindow;
     int coverText;
     int theme;
@@ -27,7 +27,8 @@ typedef struct {
     int language;
     int video;
     int vipatch;
-	char localLanguage[5];
+    char lastplayed[7];
+    char localLanguage[5];
 } s_settings;
 
 
