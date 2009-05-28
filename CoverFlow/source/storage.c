@@ -238,10 +238,10 @@ s32 __Menu_EntryCmp(const void *a, const void *b)
 		getTitle(titleList, (char*)hdr1->id, title1);
 		getTitle(titleList, (char*)hdr2->id, title2);
 		
-		return strcmp(title1, title2);
+		return strcasecmp(title1, title2);
 	}
 	else
-		return strcmp(hdr1->title, hdr2->title);
+		return strcasecmp(hdr1->title, hdr2->title);
 }
 
 s32 GetEntries()
