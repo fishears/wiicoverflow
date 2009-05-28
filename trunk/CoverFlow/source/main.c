@@ -84,8 +84,8 @@ void initVars()
 	self.shift = 0;
 	self.select_shift = 0;
 	self.gameCnt = 0;
-	self.gameSelected = 0;
-	self.gameStart = 0;
+        self.gameSelected=0;
+        self.gameStart = 0;
 	self.selected = false;
 	self.animate_flip = 0.0;
 	self.animate_rotate = 0.0;
@@ -279,7 +279,17 @@ int main( int argc, char **argv )
         bool LEFT = false, RIGHT = false;
         int L_CNT = 0, R_CNT = 0;
 #endif
-	
+//get last game played and select it as centre cover at startup
+        if(strcmp(settings.lastplayed,"")!=0){
+            int i;
+            char titleID[7];
+            for(i=0;i<=self.gameCnt;i++){
+                struct discHdr *header = &self.gameList[i];
+                sprintf(titleID, "%s", header->id);
+                if(strcmp(titleID,settings.lastplayed)==0)
+                        self.shift = (COVER_COUNT/2)-i;
+                }
+        }
 	while(1) 
 	{
 	
@@ -322,7 +332,7 @@ int main( int argc, char **argv )
 			//First Check if any UI buttons or slider are selected
 			if((!settings.parentalLock) && Button_Select(&addButton, pointer.p_x, pointer.p_y))
 			{
-				Menu_Install();
+                                Menu_Install();
 			}
 			else if((!settings.parentalLock) && Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
 			{
@@ -382,10 +392,11 @@ int main( int argc, char **argv )
 						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y)) // load
 						{
 							// User clicked on the load game, so save settings before launching
-							SETTINGS_Save();
-							struct discHdr *header = &self.gameList[self.gameSelected];
+                                                        struct discHdr *header = &self.gameList[self.gameSelected];
 							char titleID[7];
 							sprintf(titleID, "%s", header->id);
+                                                        strcpy(settings.lastplayed,titleID); //save this game as last game played
+                                                        SETTINGS_Save();
 							if(getGameSettings(titleID, &gameSetting))
 								apply_settings();
 							setGameSettings(titleID, &gameSetting,1);
@@ -400,7 +411,7 @@ int main( int argc, char **argv )
 						{
 							// User clicked delete button
 							Menu_Delete();
-							self.selected = false;
+                                                        self.selected = false;
 						}
 						else if(Button_Select(&backButton, pointer.p_x, pointer.p_y)) // back
 						{
@@ -682,8 +693,7 @@ int main( int argc, char **argv )
 		
 		// This is the main routine to draw the covers
 		draw_covers();
-
-		//Play flip sound if needed
+                //Play flip sound if needed
 
 		if((int)(self.shift+1000.5) != self.lastGameSelected)
 		{
@@ -698,10 +708,11 @@ int main( int argc, char **argv )
 			if (settings.quickstart)
 			{
                                 // Quickstart used to load game, so save settings before launching
-                                SETTINGS_Save();
                                 struct discHdr *header = &self.gameList[self.gameSelected];
                                 char titleID[7];
                                 sprintf(titleID, "%s", header->id);
+                                strcpy(settings.lastplayed,titleID);//save this game as last game played
+                                SETTINGS_Save();
                                 if(getGameSettings(titleID, &gameSetting))
                                         apply_settings();
                                 setGameSettings(titleID, &gameSetting,1);
@@ -807,6 +818,7 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(50, 60, font_title_small, 0x808080FF, 1, "Min/Max cover: %d / %d", self.min_cover, self.max_cover);
 //		GRRLIB_Printf(50, 40, font_title, 0x808080FF, 1, "Pointer: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
 //		GRRLIB_Printf(50, 60, font_title, 0x808080FF, 1, "X: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
+//                GRRLIB_Printf(50,20,font_title_small,0x808080FF,1,"gameCnt:%d shift:%f lastplayed:%s lastsel: %d",self.gameCnt,self.shift,settings.lastplayed,self.lastGameSelected);
 
 #endif
 		
