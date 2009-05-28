@@ -54,9 +54,14 @@ wchar_t* FreeTypeGX::charToWideChar(char* strChar) {
       wchar_t *strWChar;
       strWChar = new wchar_t[strlen(strChar) + 1];
 
-      char *tempSrc = strChar;
-      wchar_t *tempDest = strWChar;
-      while((*tempDest++ = *tempSrc++));
+      //char *tempSrc = strChar;
+      //wchar_t *tempDest = strWChar;
+      //while((*tempDest++ = *tempSrc++));
+	  
+	  int ln = mbstowcs(strWChar, strChar, strlen(strChar));
+	  if(ln < 0) ln = 0;
+	  strWChar[ln] = (wchar_t)'\0';
+
 
       return strWChar;
 }

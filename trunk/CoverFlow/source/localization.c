@@ -13,7 +13,7 @@ static char *cfg_name, *cfg_val;
 
 ///////////////////////////////////
 // Later set via cfg
-char langFile[20] = "german";
+char langFile[20] = "TestLanguage";
 ///////////////////////////////////
 
 char *localStr ( char *CODE, char * defaultStr )
