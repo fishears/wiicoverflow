@@ -220,6 +220,7 @@ void languageDefault()
 	snprintf(TX.errNetTitles, sizeof(TX.errNetTitles), "Error initializing network\nTitles.txt can't be downloaded." );  		
 	snprintf(TX.Success, sizeof(TX.Success), "Success!" );  		
 	snprintf(TX.welcomeMsg, sizeof(TX.welcomeMsg), "Welcome to CoverFloader" );
+	strcopy(TX.batteryUnit, "P%d", sizeof(TX.batteryUnit));
 
 // Buttons	
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
@@ -836,6 +837,10 @@ void languageSet(char *name, char *val)
 	}
 	if (strcmp(name, "welcomeMsg") == 0) {
 		strcopy(TX.welcomeMsg, val, sizeof(TX.welcomeMsg));
+		return;
+	}
+	if (strcmp(name, "batteryUnit") == 0) {
+		strcopy(TX.batteryUnit, val, sizeof(TX.batteryUnit));
 		return;
 	}
 

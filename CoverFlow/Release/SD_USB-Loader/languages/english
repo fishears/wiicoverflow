@@ -141,6 +141,7 @@ successTitles = Succesfully imported %d titles!
 errNetTitles = Error initializing network\nTitles.txt can't be downloaded.
 Success = Success!
 welcomeMsg = Welcome to CoverFloader
+batteryUnit = P%d
 
 addB = add
 deleteB = delete

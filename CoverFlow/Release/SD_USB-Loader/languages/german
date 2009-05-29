@@ -141,6 +141,7 @@ successTitles = Es wurden %d Titel importiert.
 errNetTitles = Netzwerkfehler!\nKein Download von Titles.txt!
 Success = Erfolg!
 welcomeMsg = Willkommen bei CoverFloader
+batteryUnit = S%d
 
 ###########
 # Buttons #

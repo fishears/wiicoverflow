@@ -1,5 +1,6 @@
 #include "homemenu.h"
 
+#include "localization.h"
 #include "gfx.h"
 
 extern s_self self;
@@ -349,8 +350,7 @@ void Do_Batteries()
 	{
 		ret = WPAD_BatteryLevel(x);
 		level = (ret * 4)/100;
-		sprintf(tUnit, "P%d", x+1);
-
+		sprintf(tUnit, TX.batteryUnit, x+1);
 		if(level > 4) level = 4; //restrict to maximum bars
 
 		if(ret!=0) //no wiimote here
