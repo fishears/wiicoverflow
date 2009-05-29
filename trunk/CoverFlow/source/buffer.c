@@ -217,7 +217,7 @@ void HandleLoadRequest(int index,int threadNo)
 				#ifndef D3_COVERS
 				if (!((textureData.h ==224 || textureData.h ==225) && textureData.w == 160))
 				#else
-				if (!(textureData.h ==512 && textureData.w == 340))
+				if (!(textureData.h ==340 && textureData.w == 512))
 				#endif
 				{
 					_cq.coverMissing[index]=true; // bad image size
