@@ -12,31 +12,9 @@ extern s_title* titleList;
 extern s_coverFlip coverFlip[];
 extern int COVER_COUNT;
 
-extern char** glanguages;
-extern char** gvidmodes;
+extern char** languages;
+extern char** vidmodes;
 
-/*
-char glanguages[11][22] =
-{{"Console Default"},
-{"   Japanese"},
-{"    English"},
-{"    German"},
-{"    French"},
-{"    Spanish"},
-{"    Italian"},
-{"     Dutch"},
-{"   S. Chinese"},
-{"   T. Chinese"},
-{"    Korean"}};
-
-char gvidmodes[6][22] =
-{{ "  Game Default" },
-{ "   Automatic", },
-{ "  Force PAL50", },
-{ "  Force PAL60", },
-{ "  Force NTSC", },
-{ "Console Default"}};
-*/
 char ghooks[3][9] =
 {{"   VI"},
 {" Wii Pad"},
@@ -1250,9 +1228,9 @@ void game_settings_menu()
 		GRRLIB_Printf(334, 193,  font_texture, settings.fontColor, 1, TX.hook);
 		GRRLIB_Printf(409, 193,  font_texture, 0xFFFFFFFF, 1, "%s", ghooks[gameSetting.hooktype]);
 		GRRLIB_Printf(169, 228, font_texture, settings.fontColor, 1, TX.language);
-		GRRLIB_Printf(354, 228, font_texture, 0xFFFFFFFF, 1, "%s", glanguages[gameSetting.language]);
+		GRRLIB_Printf(354, 228, font_texture, 0xFFFFFFFF, 1, "%s", languages[gameSetting.language]);
 		GRRLIB_Printf(169, 257, font_texture, settings.fontColor, 1, TX.videoMode);
-		GRRLIB_Printf(354, 255, font_texture, 0xFFFFFFFF, 1, "%s", gvidmodes[gameSetting.video]);
+		GRRLIB_Printf(354, 255, font_texture, 0xFFFFFFFF, 1, "%s", vidmodes[gameSetting.video]);
 		GRRLIB_Printf(169, 289, font_texture, settings.fontColor, 1, TX.patchVIDTV);
 
 		// Draw the default pointer hand
