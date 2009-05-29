@@ -9,21 +9,21 @@
 #include <string.h>
 #include <malloc.h>
 
-#define MEM2_START_ADDRESS 0x91000000
+#define IMAGE_CACHE 1024*1024*4
+#define MEM2_START_ADDRESS 0x90000000
+#define MEM2_EXTENT 54217216 //don't see why this cant be used
+//#define MEM2_START_ADDRESS 0x90000000
+//#define MEM2_EXTENT 37440000 
 
 #ifndef D3_COVERS
-#define MAX_SLOTS 220
+#define COVER_WIDTH 160
+#define COVER_HEIGHT 224
 #else
-#define MAX_SLOTS 40
+#define COVER_WIDTH 512
+#define COVER_HEIGHT 340
 #endif
 
-#define STATIC_IMAGES_SLOT MAX_SLOTS+8
-
-#ifndef D3_COVERS
-#define TEXTURE_DATA_SIZE 225*160*4
-#else
-#define TEXTURE_DATA_SIZE 512*340*4
-#endif
+#define TEXTURE_DATA_SIZE COVER_WIDTH*COVER_HEIGHT*4
 
 #define DENSITY_METHOD 1
 #define ALL_CACHED 2
@@ -54,7 +54,7 @@ struct discHdr *CoverList;
 int nCovers;
 int nCoversInWindow;
 bool bCleanedUp=false;
-s32 staticBufferLocation=(STATIC_IMAGES_SLOT)*TEXTURE_DATA_SIZE+MEM2_START_ADDRESS;
+s32 staticBufferLocation=MEM2_START_ADDRESS+MEM2_EXTENT-IMAGE_CACHE; // 4Mb buffer for images - if ttf goes in completely this can be removed along with the function
 // end of private vars
 
 
@@ -166,11 +166,11 @@ int GetFLoatingQueuePosition(int index)
 	return ret;
 }
 
-
+//  This does the actual work
 void HandleLoadRequest(int index,int threadNo)
 {
 	if(index >= MAX_BUFFERED_COVERS)
-		return -1;
+		return ;
 		
 	pthread_mutex_lock(&buffer_mutex[index]);
 	
@@ -178,7 +178,7 @@ void HandleLoadRequest(int index,int threadNo)
 	if(!_cq.ready[index] && !_cq.coverMissing[index])
 	{
 		
-		int imgDataAddress=MEM2_START_ADDRESS + TEXTURE_DATA_SIZE * (MAX_SLOTS+threadNo+2);
+		void *imgData=0;
 		
 		char filepath[128];
 		s32  ret;
@@ -189,7 +189,7 @@ void HandleLoadRequest(int index,int threadNo)
 		sprintf(filepath, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
 		#endif
 		
-		ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress,TEXTURE_DATA_SIZE);
+		ret = Fat_ReadFile(filepath, &imgData);
 		
 		if (ret > 0) 
 		{
@@ -212,13 +212,10 @@ void HandleLoadRequest(int index,int threadNo)
 			}
 			if (thisDataMem2Address!=-1)
 			{
-				_texture_data[index] = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgDataAddress, (void *)thisDataMem2Address);
+				pthread_mutex_lock(&queue_mutex);
+				_texture_data[index] = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgData, (void *)thisDataMem2Address);
 				GRRLIB_texImg textureData=_texture_data[index];
-				#ifndef D3_COVERS
-				if (!((textureData.h ==224 || textureData.h ==225) && textureData.w == 160))
-				#else
-				if (!(textureData.h ==340 && textureData.w == 512))
-				#endif
+				if (!(textureData.h ==COVER_HEIGHT && textureData.w == COVER_WIDTH))
 				{
 					_cq.coverMissing[index]=true; // bad image size
 					_cq.ready[index]   = false;
@@ -227,11 +224,10 @@ void HandleLoadRequest(int index,int threadNo)
 				{
 					_cq.ready[index]   = true;
 				}
+				pthread_mutex_unlock(&queue_mutex);
 			}
-			//free(imgData);
+			free(imgData);
 			
-			pthread_mutex_lock(&queue_mutex);
-			pthread_mutex_unlock(&queue_mutex);
 		}
 		else
 		{
@@ -484,7 +480,7 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	pthread_mutex_unlock(&queue_mutex);
 	
 	
-	maxSlots=MAX_SLOTS;//MEM2_EXTENT/(TEXTURE_DATA_SIZE);
+	maxSlots=(MEM2_EXTENT-IMAGE_CACHE)/(TEXTURE_DATA_SIZE);
 	//decide on buffering method
 	if (gameCount<=maxSlots)
 	{
