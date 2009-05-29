@@ -12,6 +12,10 @@
  *    - Graphics Settings
  */
 #include "settingsMenu.h"
+#include "localization.h"
+
+extern char** languages;
+extern char** vidmodes;
 
 extern s_self         self;
 extern s_pointer      pointer;
@@ -22,6 +26,7 @@ extern u8             shutdown;
 extern u8             reset;
 
 // Language selection config
+/*
 char languages[11][22] =
 {{"Console Default"},
 {"   Japanese"},
@@ -42,6 +47,7 @@ char vidmodes[6][22] =
 { "  Force PAL60", },
 { "  Force NTSC", },
 { "Console Default"}};
+*/
 //hook types for ocarina
 char hooks[3][9] =
 {{"   VI"},

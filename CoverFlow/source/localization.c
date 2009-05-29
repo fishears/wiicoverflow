@@ -10,6 +10,11 @@
 
 extern s_settings settings;
 static char *cfg_name, *cfg_val;
+char** languages;
+char** glanguages;
+char** vidmodes;
+char** gvidmodes;
+
 
 ///////////////////////////////////
 // Later set via cfg
@@ -37,6 +42,26 @@ return false;
 
 void languageDefault()
 {
+	int i;
+	
+	languages =  (char**)malloc(11*sizeof(char*));
+	glanguages = (char**)malloc(11*sizeof(char*));
+	
+	for (i=0;i<11;i++)
+	{
+	 languages[i] =  (char*)malloc(30*sizeof(char));
+	 glanguages[i] = (char*)malloc(30*sizeof(char));
+	}
+
+	vidmodes =  (char**)malloc(6*sizeof(char*));
+	gvidmodes = (char**)malloc(6*sizeof(char*));
+	
+	for (i=0;i<6;i++)
+	{
+	 vidmodes[i] =  (char*)malloc(30*sizeof(char));
+	 gvidmodes[i] = (char*)malloc(30*sizeof(char));
+	}
+
 	snprintf(TX.iniNet, sizeof(TX.iniNet), "Initializing Network");   					//M001
 	snprintf(TX.iniNetErr, sizeof(TX.iniNetErr), "Error Initializing Network");   		//M002
 	snprintf(TX.error, sizeof(TX.error), "ERROR!");   									//M003
@@ -52,6 +77,7 @@ void languageDefault()
 	snprintf(TX.configError, sizeof(TX.configError), "Configuration error, MAX_DNS_ENTRIES reached while the list is empty\n"); //M013
 	snprintf(TX.errorsaveGL, sizeof(TX.errorsaveGL), "Can't save gamelist.xml");   	//M014
 	snprintf(TX.errorcreateGL, sizeof(TX.errorcreateGL), "Cannot create gamelist file!");	//M015
+	
 	snprintf(TX.consoleDefault, sizeof(TX.consoleDefault), "Console Default");   		//M016
 	snprintf(TX.Japanese, sizeof(TX.Japanese), "Japanese");   							//M017
 	snprintf(TX.German, sizeof(TX.German),     "German");   							//M018
@@ -67,7 +93,43 @@ void languageDefault()
 	snprintf(TX.automatic, sizeof(TX.automatic),     "Automatic");   					//M028
 	snprintf(TX.forcePAL50, sizeof(TX.forcePAL50),   "Force PAL50");   				//M029
 	snprintf(TX.forcePAL60, sizeof(TX.forcePAL60),   "Force PAL60");   				//M030
-	snprintf(TX.forceNTSC, sizeof(TX.forceNTSC),     "Force NTSC");   					//M031
+	snprintf(TX.forceNTSC, sizeof(TX.forceNTSC),     "Force NTSC"); 
+	
+	snprintf(languages[0],  sizeof(TX.consoleDefault), "%s", TX.consoleDefault);   		
+	snprintf(glanguages[0], sizeof(TX.consoleDefault), "%s", TX.consoleDefault);   		
+	snprintf(gvidmodes[5],  sizeof(TX.consoleDefault), "%s", TX.consoleDefault);   		
+	snprintf(vidmodes[5],   sizeof(TX.consoleDefault), "%s", TX.consoleDefault);   		
+	snprintf(languages[1],  sizeof(TX.Japanese),   "   %s",  TX.Japanese);  
+	snprintf(glanguages[1], sizeof(TX.Japanese),   "   %s",  TX.Japanese);
+	snprintf(languages[2],  sizeof(TX.English),    "    %s", TX.English);  
+	snprintf(glanguages[2], sizeof(TX.English),    "    %s", TX.English);
+	snprintf(languages[3],  sizeof(TX.German),     "    %s", TX.German);  
+	snprintf(glanguages[3], sizeof(TX.German),     "    %s", TX.German);
+	snprintf(languages[4],  sizeof(TX.French),     "    %s", TX.French);  
+	snprintf(glanguages[4], sizeof(TX.French),     "    %s", TX.French);
+	snprintf(languages[5],  sizeof(TX.Spanish),    "    %s", TX.Spanish);  
+	snprintf(glanguages[5], sizeof(TX.Spanish),    "    %s", TX.Spanish);
+	snprintf(languages[6],  sizeof(TX.Italian),    "    %s", TX.Italian);  
+	snprintf(glanguages[6], sizeof(TX.Italian),    "    %s", TX.Italian);
+	snprintf(languages[7],  sizeof(TX.Dutch),      "     %s",TX.Dutch);  
+	snprintf(glanguages[7], sizeof(TX.Dutch),      "     %s",TX.Dutch);
+	snprintf(languages[8],  sizeof(TX.SChinese),   "   %s",  TX.SChinese);  
+	snprintf(glanguages[8], sizeof(TX.SChinese),   "   %s",  TX.SChinese);
+	snprintf(languages[9],  sizeof(TX.TChinese),   "   %s",  TX.TChinese);  
+	snprintf(glanguages[9], sizeof(TX.TChinese),   "   %s",  TX.TChinese);
+	snprintf(languages[10], sizeof(TX.Korean),     "    %s", TX.Korean);  
+	snprintf(glanguages[10],sizeof(TX.Korean),     "    %s", TX.Korean);
+	snprintf(vidmodes[0],   sizeof(TX.gameDefault),"  %s",   TX.gameDefault);  
+	snprintf(gvidmodes[0],  sizeof(TX.gameDefault),"  %s",   TX.gameDefault);
+	snprintf(vidmodes[1],   sizeof(TX.automatic),  "   %s",  TX.automatic);  
+	snprintf(gvidmodes[1],  sizeof(TX.automatic),  "   %s",  TX.automatic);
+	snprintf(vidmodes[2],   sizeof(TX.forcePAL50), "   %s",  TX.forcePAL50);  
+	snprintf(gvidmodes[2],  sizeof(TX.forcePAL50), "   %s",  TX.forcePAL50);
+	snprintf(vidmodes[3],   sizeof(TX.forcePAL60), "   %s",  TX.forcePAL60);  
+	snprintf(gvidmodes[3],  sizeof(TX.forcePAL60), "   %s",  TX.forcePAL60);
+	snprintf(vidmodes[4],   sizeof(TX.forceNTSC),  "   %s",  TX.forceNTSC);  
+	snprintf(gvidmodes[4],  sizeof(TX.forceNTSC),  "   %s",  TX.forceNTSC);
+
 	snprintf(TX.neverPlayed, sizeof(TX.neverPlayed), "Never played before");   		//M032
 	strcopy(TX.played, "Played %s", sizeof(TX.played));
 	strcopy(TX.size, "Size:    %.2fGB", sizeof(TX.size));
@@ -179,6 +241,7 @@ void languageDefault()
 	strcopy(TX.successTitles, "Succesfully imported %d titles!", sizeof(TX.successTitles));
 	snprintf(TX.errNetTitles, sizeof(TX.errNetTitles), "Error initializing network\nTitles.txt can't be downloaded." );  		
 	snprintf(TX.Success, sizeof(TX.Success), "Success!" );  		
+	snprintf(TX.welcomeMsg, sizeof(TX.welcomeMsg), "Welcome to CoverFloader" );
 
 // Buttons	
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
@@ -270,66 +333,100 @@ void languageSet(char *name, char *val)
 	}	
 	if (strcmp(name, "consoleDefault") == 0) {
 		strcopy(TX.consoleDefault, val, sizeof(TX.consoleDefault));
+		snprintf(languages[0],  sizeof(TX.consoleDefault), "%s", TX.consoleDefault);   		
+		snprintf(glanguages[0], sizeof(TX.consoleDefault), "%s", TX.consoleDefault);   		
+		snprintf(gvidmodes[5],  sizeof(TX.consoleDefault), "%s", TX.consoleDefault);   		
+		snprintf(vidmodes[5],   sizeof(TX.consoleDefault), "%s", TX.consoleDefault);   		
 		return;
 	}	
 	if (strcmp(name, "Japanese") == 0) {
 		strcopy(TX.Japanese, val, sizeof(TX.Japanese));
-		return;
-	}	
-	if (strcmp(name, "German") == 0) {
-		strcopy(TX.German, val, sizeof(TX.German));
+		snprintf(languages[1],  sizeof(TX.Japanese), "   %s", TX.Japanese);  
+		snprintf(glanguages[1], sizeof(TX.Japanese), "   %s", TX.Japanese);
 		return;
 	}	
 	if (strcmp(name, "English") == 0) {
 		strcopy(TX.English, val, sizeof(TX.English));
+		snprintf(languages[2],  sizeof(TX.English), "    %s", TX.English);  
+		snprintf(glanguages[2], sizeof(TX.English), "    %s", TX.English);
+		return;
+	}
+	if (strcmp(name, "German") == 0) {
+		strcopy(TX.German, val, sizeof(TX.German));
+		snprintf(languages[3],  sizeof(TX.German), "    %s", TX.German);  
+		snprintf(glanguages[3], sizeof(TX.German), "    %s", TX.German);
 		return;
 	}	
 	if (strcmp(name, "French") == 0) {
 		strcopy(TX.French, val, sizeof(TX.French));
+		snprintf(languages[4],  sizeof(TX.French), "    %s", TX.French);  
+		snprintf(glanguages[4], sizeof(TX.French), "    %s", TX.French);
 		return;
 	}	
 	if (strcmp(name, "Spanish") == 0) {
 		strcopy(TX.Spanish, val, sizeof(TX.Spanish));
+		snprintf(languages[5],   sizeof(TX.Spanish), "    %s", TX.Spanish);  
+		snprintf(glanguages[5],  sizeof(TX.Spanish), "    %s", TX.Spanish);
 		return;
 	}	
 	if (strcmp(name, "Italian") == 0) {
 		strcopy(TX.Italian, val, sizeof(TX.Italian));
+		snprintf(languages[6],   sizeof(TX.Italian), "    %s", TX.Italian);  
+		snprintf(glanguages[6],  sizeof(TX.Italian), "    %s", TX.Italian);
 		return;
 	}	
 	if (strcmp(name, "Dutch") == 0) {
-		strcopy(TX.Dutch, val, sizeof(TX.Dutch));
+		strcopy(TX.Dutch, val,  sizeof(TX.Dutch));
+		snprintf(languages[7],  sizeof(TX.Dutch), "     %s",TX.Dutch);  
+		snprintf(glanguages[7], sizeof(TX.Dutch), "     %s",TX.Dutch);
 		return;
 	}	
 	if (strcmp(name, "SChinese") == 0) {
 		strcopy(TX.SChinese, val, sizeof(TX.SChinese));
+		snprintf(languages[8],    sizeof(TX.SChinese), "   %s", TX.SChinese);  
+		snprintf(glanguages[8],   sizeof(TX.SChinese), "   %s", TX.SChinese);
 		return;
 	}	
 	if (strcmp(name, "TChinese") == 0) {
 		strcopy(TX.TChinese, val, sizeof(TX.TChinese));
+		snprintf(languages[9],    sizeof(TX.TChinese), "   %s", TX.TChinese);  
+		snprintf(glanguages[9],   sizeof(TX.TChinese), "   %s", TX.TChinese);
 		return;
 	}	
 	if (strcmp(name, "Korean") == 0) {
 		strcopy(TX.Korean, val, sizeof(TX.Korean));
+		snprintf(languages[10], sizeof(TX.Korean), "    %s", TX.Korean);  
+		snprintf(glanguages[10],sizeof(TX.Korean), "    %s", TX.Korean);
 		return;
 	}	
 	if (strcmp(name, "gameDefault") == 0) {
 		strcopy(TX.gameDefault, val, sizeof(TX.gameDefault));
+		snprintf(vidmodes[0],  sizeof(TX.gameDefault),"  %s", TX.gameDefault);  
+		snprintf(gvidmodes[0], sizeof(TX.gameDefault),"  %s", TX.gameDefault);
 		return;
 	}	
 	if (strcmp(name, "automatic") == 0) {
 		strcopy(TX.automatic, val, sizeof(TX.automatic));
+		snprintf(vidmodes[1],  sizeof(TX.automatic), "   %s", TX.automatic);  
+		snprintf(gvidmodes[1], sizeof(TX.automatic), "   %s", TX.automatic);
 		return;
 	}	
 	if (strcmp(name, "forcePAL50") == 0) {
 		strcopy(TX.forcePAL50, val, sizeof(TX.forcePAL50));
+		snprintf(vidmodes[2],  sizeof(TX.forcePAL50), "   %s", TX.forcePAL50);  
+		snprintf(gvidmodes[2], sizeof(TX.forcePAL50), "   %s", TX.forcePAL50);
 		return;
 	}	
 	if (strcmp(name, "forcePAL60") == 0) {
 		strcopy(TX.forcePAL60, val, sizeof(TX.forcePAL60));
+		snprintf(vidmodes[3],  sizeof(TX.forcePAL60), "   %s", TX.forcePAL60);  
+		snprintf(gvidmodes[3], sizeof(TX.forcePAL60), "   %s", TX.forcePAL60);
 		return;
 	}	
 	if (strcmp(name, "forceNTSC") == 0) {
 		strcopy(TX.forceNTSC, val, sizeof(TX.forceNTSC));
+		snprintf(vidmodes[4],  sizeof(TX.forceNTSC), "   %s", TX.forceNTSC);  
+		snprintf(gvidmodes[4], sizeof(TX.forceNTSC), "   %s", TX.forceNTSC);
 		return;
 	}	
 	if (strcmp(name, "neverPlayed") == 0) {
@@ -776,7 +873,10 @@ void languageSet(char *name, char *val)
 		strcopy(TX.Success, val, sizeof(TX.Success));
 		return;
 	}
-
+	if (strcmp(name, "welcomeMsg") == 0) {
+		strcopy(TX.welcomeMsg, val, sizeof(TX.welcomeMsg));
+		return;
+	}
 
 //////////////// Buttons //////////////
 

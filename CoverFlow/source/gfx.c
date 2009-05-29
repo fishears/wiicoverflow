@@ -12,6 +12,10 @@ extern s_title* titleList;
 extern s_coverFlip coverFlip[];
 extern int COVER_COUNT;
 
+extern char** glanguages;
+extern char** gvidmodes;
+
+/*
 char glanguages[11][22] =
 {{"Console Default"},
 {"   Japanese"},
@@ -24,6 +28,7 @@ char glanguages[11][22] =
 {"   S. Chinese"},
 {"   T. Chinese"},
 {"    Korean"}};
+
 char gvidmodes[6][22] =
 {{ "  Game Default" },
 { "   Automatic", },
@@ -31,6 +36,7 @@ char gvidmodes[6][22] =
 { "  Force PAL60", },
 { "  Force NTSC", },
 { "Console Default"}};
+*/
 char ghooks[3][9] =
 {{"   VI"},
 {" Wii Pad"},
@@ -117,7 +123,7 @@ void Paint_Progress(float v, char* msg)
 
 	GRRLIB_2D_Init();
 
-	CFreeTypeGX_DrawText(ttf18pt, 320, 220, CFreeTypeGX_charToWideChar(ttf18pt, "Welcome to CoverFloader"), (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
+	CFreeTypeGX_DrawText(ttf18pt, 320, 220, CFreeTypeGX_charToWideChar(ttf18pt, TX.welcomeMsg), (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
 	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
 
 	for(i = 0; i < count; i++)

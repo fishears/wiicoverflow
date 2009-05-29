@@ -140,6 +140,7 @@ errTitles = Error downloading Titles.txt\nAn error occurred while downloading/sa
 successTitles = Succesfully imported %d titles!
 errNetTitles = Error initializing network\nTitles.txt can't be downloaded.
 Success = Success!
+welcomeMsg = Welcome to CoverFloader
 
 addB = add
 deleteB = delete

@@ -107,6 +107,7 @@ int main( int argc, char **argv )
 
 	self.progress += .1;
 	sprintf(self.debugMsg, "Loading textures" );
+
 	Paint_Progress(self.progress,self.debugMsg);
 	
 	LoadTextures();		// load textures
