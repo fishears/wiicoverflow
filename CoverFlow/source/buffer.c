@@ -10,9 +10,21 @@
 #include <malloc.h>
 
 #define MEM2_START_ADDRESS 0x91000000
+
+#ifndef D3_COVERS
 #define MAX_SLOTS 220
+#else
+#define MAX_SLOTS 40
+#endif
+
 #define STATIC_IMAGES_SLOT MAX_SLOTS+8
+
+#ifndef D3_COVERS
 #define TEXTURE_DATA_SIZE 225*160*4
+#else
+#define TEXTURE_DATA_SIZE 512*340*4
+#endif
+
 #define DENSITY_METHOD 1
 #define ALL_CACHED 2
 
@@ -143,6 +155,9 @@ void BUFFER_KillBuffer()
 
 int GetFLoatingQueuePosition(int index)
 {
+	if(index >= MAX_BUFFERED_COVERS)
+		return -1;
+
 	int i,ret=-1;
 	for (i=0;i<FloatingCacheSize;i++)
 	{
@@ -154,6 +169,9 @@ int GetFLoatingQueuePosition(int index)
 
 void HandleLoadRequest(int index,int threadNo)
 {
+	if(index >= MAX_BUFFERED_COVERS)
+		return -1;
+		
 	pthread_mutex_lock(&buffer_mutex[index]);
 	
 	/*Definitely dont need to load the same texture twice*/
@@ -165,7 +183,11 @@ void HandleLoadRequest(int index,int threadNo)
 		char filepath[128];
 		s32  ret;
 		
+		#ifndef D3_COVERS
 		sprintf(filepath, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
+		#else
+		sprintf(filepath, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
+		#endif
 		
 		ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress,TEXTURE_DATA_SIZE);
 		
@@ -192,7 +214,11 @@ void HandleLoadRequest(int index,int threadNo)
 			{
 				_texture_data[index] = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgDataAddress, (void *)thisDataMem2Address);
 				GRRLIB_texImg textureData=_texture_data[index];
+				#ifndef D3_COVERS
 				if (!((textureData.h ==224 || textureData.h ==225) && textureData.w == 160))
+				#else
+				if (!(textureData.h ==512 && textureData.w == 340))
+				#endif
 				{
 					_cq.coverMissing[index]=true; // bad image size
 					_cq.ready[index]   = false;
@@ -229,6 +255,9 @@ int GetPrioritisedCover(int selection)
 			int index = selection +i*(j*2-1); 
 			if (index>=0 && index<=nCovers)
 			{
+				if(index >= MAX_BUFFERED_COVERS)
+					return -1;
+		
 				if (_cq.request[index] && !_cq.ready[index]) return index;
 			}
 		}
@@ -292,6 +321,9 @@ void* process(void *arg)
 
 bool InCache(int index)
 {
+	if(index >= MAX_BUFFERED_COVERS)
+		return false;
+		
 	bool ret=false;
 	int i;
 	for (i=0;i<FloatingCacheSize;i++)
@@ -305,6 +337,9 @@ bool InCache(int index)
 // internal only - no need to lock (already locked)
 void RemoveFromCache(int index)
 {
+	if(index >= MAX_BUFFERED_COVERS)
+		return;
+		
 	if (_cq.floatingQueuePosition[FloatingCacheCovers[index]] != -1)
 	{
 		_cq.ready[FloatingCacheCovers[index]] = false;
@@ -326,6 +361,9 @@ void SetFloatingCacheItem(int selection, int newCacheItem)
 	int maxIndex=-1;
 	for (i=0;i<FloatingCacheSize;i++)
 	{
+		if(i >= MAX_BUFFERED_COVERS)
+			return;
+		
 		if (FloatingCacheCovers[i] == -1)
 		{
 			spaceFound = true;
@@ -371,6 +409,9 @@ void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
 		{
 			//                      pthread_mutex_lock(&queue_mutex);
 			
+			if(i >= MAX_BUFFERED_COVERS)
+				return;
+		
 			if (!_cq.ready[i] && !_cq.request[i] && _cq.permaBufferPosition[i] == -1)
 			{
 				_cq.requestId[i]=&CoverList[i];
@@ -401,6 +442,9 @@ void SetSelectedCover(int index)
 // internal only - no need to lock (already locked)
 void ResetQueueItem(int index)
 {
+	if(index >= MAX_BUFFERED_COVERS)
+		return;
+		
 	_cq.ready[index]=false;
 	_cq.request[index]=false;
 	_cq.requestId[index]=0;
@@ -417,6 +461,9 @@ void ResetQueueItem(int index)
 // internal only - no need to lock (already locked)
 void RequestForCache(int index)
 {
+	if(index >= MAX_BUFFERED_COVERS)
+		return;
+		
 	_cq.requestId[index]=&CoverList[index];
 	_cq.request[index]=true;
 }

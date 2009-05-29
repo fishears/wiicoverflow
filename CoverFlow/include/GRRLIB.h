@@ -79,6 +79,7 @@ inline void GRRLIB_Rectangle(f32 x, f32 y, f32 width, f32 height, u32 color, u8 
 void GRRLIB_NGone(Vector v[], u32 color, long n);
 void GRRLIB_NGoneFilled(Vector v[], u32 color, long n);
 
+inline void GRRLIB_DrawFlatCoverImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color );
 GRRLIB_texImg GRRLIB_CreateEmptyTexture(unsigned int, unsigned int);
 GRRLIB_texImg GRRLIB_DuplicateTexture(GRRLIB_texImg tex, unsigned int w, unsigned int h);
 inline GRRLIB_texImg GRRLIB_LoadTexturePNG(const unsigned char my_img[]);

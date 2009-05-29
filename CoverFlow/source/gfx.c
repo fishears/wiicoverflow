@@ -55,7 +55,11 @@ void LoadTextures()
 	pointer_shadow_texture = BufferStaticImage(pointer_shadow_png);
 	turn_point_texture     = BufferStaticImage(turning_point_png); // can't find free
 	menu_bg_texture		   = BufferStaticImage(menu_bg_png); // can't find free
+	#ifndef D3_COVERS
 	cover_texture		   = BufferStaticImage(no_cover_png);
+	#else
+	cover_texture		   = BufferStaticImage(full_cover_png);
+	#endif
 	back_texture		   = BufferStaticImage(back_cover_png);
 	no_disc_texture		   = BufferStaticImage(no_disc_png);
 	load_bg_texture		   = BufferStaticImage(bg_options_screen_no_transparency_png); // can't find free
@@ -620,33 +624,81 @@ int draw_selected_two(bool load, bool hover)
 				if(_texture_data[self.gameSelected].data)
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+					{
+						#ifdef D3_COVERS
+						GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+						#else
 						GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+						#endif
+					}
 					else
+					{
+						#ifdef D3_COVERS
+						GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+						#else
 						GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+						#endif
+					}
 				}
 				else
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+					{
+						#ifdef D3_COVERS
+						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+						#else
 						GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+						#endif
+					}
 					else
+					{
+						#ifdef D3_COVERS
+						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+						#else
 						GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+						#endif
+					}
 				}
 					
 				pthread_mutex_unlock(&buffer_mutex[self.gameSelected]);
 			}
 			else
 			{	if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+				{
+					#ifdef D3_COVERS
+					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
+					#else
 					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
+					#endif
+				}
 				else
+				{
+					#ifdef D3_COVERS
+					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+					#else
 					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+					#endif
+				}
 			}	
 		}
 		else
 		{	
 			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+			{
+				#ifdef D3_COVERS
+				GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+				#else
 				GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+				#endif
+			}
 			else
+			{
+				#ifdef D3_COVERS
+				GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+				#else
 				GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+				#endif
+			}
 		}	
 		
   }
