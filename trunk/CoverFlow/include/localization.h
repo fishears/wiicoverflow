@@ -153,6 +153,7 @@ struct LANGUAGE
 	char errNetTitles[100];			//141
 	char Success[15];				//142
 	char welcomeMsg[40];			//143
+	char batteryUnit[4];			//144
 	
 // Buttons	
 	char addB[15];					//B01
