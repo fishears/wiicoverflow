@@ -140,6 +140,7 @@ errTitles =
 successTitles =
 errNetTitles =
 Success =
+welcomeMsg =
 
 addB =
 deleteB =

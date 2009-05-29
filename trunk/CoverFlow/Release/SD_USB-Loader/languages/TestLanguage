@@ -129,7 +129,7 @@ Aug = Aug
 Sep = Sep
 Oct = Okt
 Nov = Nov
-Dec = Dec
+Dec = Dez
 currentCIOS = Aktuell: cIOS Rev%d  Erforderlich: cIOS Rev%d
 cIOSupgrade = Ein cIOS-Upgrade ist erforderlich.
 noFreeSpace = Nicht genügend freier Seicherplatz!
@@ -140,6 +140,7 @@ errTitles = Download-Fehler!\nWährend des Downloads bzw. Speicherns\nist ein Fe
 successTitles = Es wurden %d Titel importiert.
 errNetTitles = Netzwerkfehler!\nKein Download von Titles.txt!
 Success = Erfolg!
+welcomeMsg = Willkommen bei CoverFloader
 
 ###########
 # Buttons #

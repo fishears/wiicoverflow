@@ -25,7 +25,7 @@ struct LANGUAGE
 	char configError[100];			//M013
 	char errorsaveGL[50];			//M014
 	char errorcreateGL[50];			//M015
-	char consoleDefault[40];		//M016
+	char consoleDefault[30];		//M016
 	char Japanese[30];				//M017
 	char German[30];				//M018
 	char English[30];				//M019
@@ -36,11 +36,11 @@ struct LANGUAGE
 	char SChinese[30];				//M024
 	char TChinese[30];				//M025
 	char Korean[30];				//M026
-	char gameDefault[40];			//M027
-	char automatic[40];				//M028
-    char forcePAL50[40];			//M029
-	char forcePAL60[40];			//M030
-	char forceNTSC[40];				//M031
+	char gameDefault[30];			//M027
+	char automatic[30];				//M028
+    char forcePAL50[30];			//M029
+	char forcePAL60[30];			//M030
+	char forceNTSC[30];				//M031
 	char neverPlayed[50];			//M032
 	char played[50];				//M033
 	char size[30];					//M034
@@ -152,6 +152,7 @@ struct LANGUAGE
 	char successTitles[50];			//140
 	char errNetTitles[100];			//141
 	char Success[15];				//142
+	char welcomeMsg[40];			//143
 	
 // Buttons	
 	char addB[15];					//B01
