@@ -73,7 +73,7 @@
 
 //#define TEST_MODE 1
 #define DEBUG 1
-//#define ONE_AT_A_TIME
+#define ONE_AT_A_TIME
 
 
 #define TTF_TEST

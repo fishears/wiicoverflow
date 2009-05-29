@@ -375,7 +375,7 @@ int main( int argc, char **argv )
 
 		// Check for non-A activity
 		// Nothing is selected and nothing is flipped
-		else if (!self.selected && self.animate_flip == 0)// Check for MINUS, flip cover left
+		else if (!self.selected && self.animate_flip == 0)
 		{       // Check for LEFT, flip cover left
                         if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT)
 			{	

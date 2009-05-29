@@ -692,11 +692,11 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
     GX_TexCoord2f32(0, 0);
 
     GX_Position3f32(-width, height-height*dist, thickness);
-    GX_Color1u32(0xFFFFFFFF);
+    GX_Color1u32(0xFFFFFF60);
     GX_TexCoord2f32(0, 1);
 
     GX_Position3f32(width, height-height*dist, thickness);
-    GX_Color1u32(0xFFFFFFFF);
+    GX_Color1u32(0xFFFFFF60);
     GX_TexCoord2f32(left, 1);
 
     GX_Position3f32(width, -height-height*dist, thickness);
@@ -716,7 +716,7 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
     GX_TexCoord2f32(1, 0);
 	
     GX_Position3f32(-width, height-height*dist, 0);
-    GX_Color1u32(0xFFFFFF00);
+    GX_Color1u32(0xFFFFFF70);
     GX_TexCoord2f32(1, 1);
 	
     GX_Position3f32(-width, height-height*dist, thickness);
@@ -724,7 +724,7 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
     GX_TexCoord2f32(0, 1);
 	
     GX_Position3f32(-width, -height-height*dist, thickness);
-    GX_Color1u32(0xFFFFFF70);
+    GX_Color1u32(0xFFFFFF00);
     GX_TexCoord2f32(0, 0);
     GX_End();
 
@@ -740,11 +740,11 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
     GX_TexCoord2f32(left, 0);
 	
     GX_Position3f32(width, height-height*dist, thickness);
-    GX_Color1u32(0xFFFFFFFF);
+    GX_Color1u32(0xFFFFFF70);
     GX_TexCoord2f32(left, 1);
 	
     GX_Position3f32(width, height-height*dist, 0);
-    GX_Color1u32(0xFFFFFFFF);
+    GX_Color1u32(0xFFFFFF70);
     GX_TexCoord2f32(right, 1);
 	
     GX_Position3f32(width, -height-height*dist, 0);
@@ -784,12 +784,12 @@ inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float
     GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
     GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
     GX_LoadPosMtxImm (mv, GX_PNMTX0);
-	
+
 #ifdef D3_COVERS
 
 	// Draw Front Cover reflection
 	
-	GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+    GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
     GX_Position3f32(-width, -height-height*dist, 0);
     GX_Color1u32(0xFFFFFF00);
     GX_TexCoord2f32(1, 0);
