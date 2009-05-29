@@ -368,7 +368,7 @@ void Do_Batteries()
 			}
 			else //level ok - draw white
 			{
-				CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, CFreeTypeGX_charToWideChar(ttf18pt, tUnit), (GXColor){0x80, 0x80, 0x80, 0xff}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, CFreeTypeGX_charToWideChar(ttf18pt, tUnit), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 				GRRLIB_DrawImg(216+(106*x), 373, battery, 0, 1, 1, 0xFFFFFFFF); //draw battery container
 				
 				for(i = 0; i < level; i++)
