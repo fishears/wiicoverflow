@@ -113,11 +113,14 @@ int main( int argc, char **argv )
 	Init_Buttons();		// load buttons so they can be used for error msgs
 
 	self.progress += .1;
-	sprintf(self.debugMsg, "Init USB" );
+	sprintf(self.debugMsg, "Init WPAD" );
 	Paint_Progress(self.progress,self.debugMsg);
-	
+		
 	/* Initialize Wiimote subsystem */
 	Wpad_Init();
+	
+	sprintf(self.debugMsg, "Init USB" );
+	Paint_Progress(self.progress,self.debugMsg);
 
 #ifndef TEST_MODE
 	if(!init_usbfs())
@@ -492,16 +495,12 @@ int main( int argc, char **argv )
 					}
 				}
 			}
-			else if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for button 1 hold
+			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1 && (WPAD_ButtonsDown(0) & WPAD_BUTTON_UP)) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for button 1 hold
 			{
 				// Take a screen shot
 				GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 
 				//Beardfaces stuff
-				//if(CoverHoverCenter() && select_ready)
-				//{
-				//	coverFlip[self.gameSelected].flip = !(coverFlip[self.gameSelected].flip);
-				//}
 					
 			
 				//
@@ -571,6 +570,16 @@ int main( int argc, char **argv )
 						//sysdate();
 						//quit();
 						//WindowPrompt("Titolo", "This is a long message using\n\the character \\n as escape sequence.\nAlso now buttons title and message are\naligned now. :)", &okButton, &cancelButton);
+			}
+			else if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_2) || (PAD_ButtonsDown(0) & PAD_BUTTON_Y))// Check for button 1 hold
+			{
+				#ifdef D3_COVERS
+				if(CoverHoverCenter() && select_ready)
+				{
+					coverFlip[self.gameSelected].flip = !(coverFlip[self.gameSelected].flip);
+				}
+				#endif
+				
 			}
 			else
 			{
@@ -726,7 +735,7 @@ int main( int argc, char **argv )
 			}
 		}
 		
-		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_2))  // Button2 is the 'Get Info' button
+		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1))  // Button2 is the 'Get Info' button
 		{
 			char tIOS[20];
 			char tAppInfo[30];

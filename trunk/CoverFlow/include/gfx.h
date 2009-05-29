@@ -40,6 +40,8 @@ extern const u8 plus_button_png[];
 extern const u8 plus_button_hover_png[];
 extern const u8 minus_button_png[];
 extern const u8 minus_button_hover_png[];
+
+
 extern const u8 covers_png[];
 extern const u8 covers_hover_png[];
 extern const u8 titles_png[];

@@ -11,12 +11,15 @@ bool init_usbfs()
    // __Disc_SetLowMem();
 	s32 ret;
 
+	Paint_Progress(self.progress, "Init Sys...");
+	
 	/* Initialize system */
 	Sys_Init();
 
 	///* Initialize subsystems */
 	//Wpad_Init();
 
+	Paint_Progress(self.progress, "Init SDHC...");
 	/* Mount SDHC */
 	Fat_MountSDHC();
 	
@@ -125,6 +128,18 @@ void checkDirs(){
 			else{
 				dirclose(dir);
 			}
+			
+			#ifdef D3_COVERS
+			dir = diropen("3dcovers");
+	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);	
+			if(dir == NULL) {
+				mkdir("3dcovers", S_ISVTX);
+			}
+			else{
+				dirclose(dir);
+			}
+			#endif
+			
 			/*
 			dir = diropen("games");
 	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);	
