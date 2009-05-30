@@ -110,6 +110,7 @@ int main( int argc, char **argv )
 
 	Paint_Progress(self.progress,self.debugMsg);
 	
+	ClearBufferSlotMemory();
 	LoadTextures();		// load textures
 	Init_Buttons();		// load buttons so they can be used for error msgs
 
