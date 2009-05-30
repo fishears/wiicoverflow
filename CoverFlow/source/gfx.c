@@ -43,9 +43,11 @@ void ResetBuffer()
 
 void LoadFonts()
 {
-	ttf16pt = CFreeTypeGX_new();
+        ttf14pt = CFreeTypeGX_new();
+        ttf16pt = CFreeTypeGX_new();
 	ttf18pt = CFreeTypeGX_new();
 	ttf20pt = CFreeTypeGX_new();
+        CFreeTypeGX_LoadFont(ttf14pt, font_ttf, font_ttf_size, 14, true);
 	CFreeTypeGX_LoadFont(ttf16pt, font_ttf, font_ttf_size, 16, true);
 	CFreeTypeGX_LoadFont(ttf18pt, font_ttf, font_ttf_size, 18, true);
 	CFreeTypeGX_LoadFont(ttf20pt, font_ttf, font_ttf_size, 20, true);
@@ -197,16 +199,16 @@ void Init_Buttons()
     backButton				= Button_Init(back_png, back_hover_png, 340, 300);
     gbackButton				= Button_Init(back_png, back_hover_png, 340, 300);
     gsettingsButton			= Button_Init(settings_png, settings_hover_png, 30, 420);
-    cheatonButton			= Button_Init(toggle_on_png, toggle_on_png, 215,85);
-    cheatoffButton			= Button_Init(toggle_off_png, toggle_off_png, 215,85);
-    langupButton			= Button_Init(plus_button_png, plus_button_hover_png,456,123);
-    langdownButton			= Button_Init(minus_button_png, minus_button_hover_png, 300,123);
-    vidupButton				= Button_Init(plus_button_png, plus_button_hover_png, 456,150);
-    viddownButton			= Button_Init(minus_button_png, minus_button_hover_png, 300,150);
-    vidtvonButton			= Button_Init(toggle_on_png, toggle_on_png, 350, 175);
-    vidtvoffButton			= Button_Init(toggle_off_png, toggle_off_png, 350, 175);
-    hookupButton			= Button_Init(plus_button_png, plus_button_hover_png, 456,87);
-    hookdownButton			= Button_Init(minus_button_png, minus_button_hover_png, 360,87);
+    cheatonButton			= Button_Init(toggle_on_png, toggle_on_png, 222,75);
+    cheatoffButton			= Button_Init(toggle_off_png, toggle_off_png, 222,75);
+    langupButton			= Button_Init(plus_button_png, plus_button_hover_png,466,113);
+    langdownButton			= Button_Init(minus_button_png, minus_button_hover_png, 300,113);
+    vidupButton				= Button_Init(plus_button_png, plus_button_hover_png, 466,140);
+    viddownButton			= Button_Init(minus_button_png, minus_button_hover_png, 300,140);
+    vidtvonButton			= Button_Init(toggle_on_png, toggle_on_png, 350, 165);
+    vidtvoffButton			= Button_Init(toggle_off_png, toggle_off_png, 350, 165);
+    hookupButton			= Button_Init(plus_button_png, plus_button_hover_png, 466,77);
+    hookdownButton			= Button_Init(minus_button_png, minus_button_hover_png, 364,77);
     gcheatonButton          = Button_Init(toggle_on_png, toggle_on_png, 239,185); //
     gcheatoffButton         = Button_Init(toggle_off_png, toggle_off_png, 239,185); //
     glangupButton           = Button_Init(plus_button_png, plus_button_hover_png,480,223);
@@ -218,37 +220,37 @@ void Init_Buttons()
     ghookupButton           = Button_Init(plus_button_png, plus_button_hover_png, 480,187);
     ghookdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 384,187);
 	
-    coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 280);
-    coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 280);
+    coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 275);
+    coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 275);
 	
     covers3dOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 315);
     covers3dOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 315);
 	
-    graphicsButton          = Button_Init(ok_png, ok_hover_png, 350, 215);
+    graphicsButton          = Button_Init(ok_png, ok_hover_png, 350, 205);
     yesButton               = Button_Init(yes_png, yes_hover_png, 220, 290);
     noButton                = Button_Init(no_png, no_hover_png, 340, 290);
     settingsButton		    = Button_Init(settings_png, settings_hover_png, 30, 420);
     settingsButton	    	= Button_Init(settings_png, settings_hover_png, 30, 420);
-    titlesButton		    = Button_Init(titles_png, titles_hover_png, 400, 250);
-	coversButton			= Button_Init(covers_png, covers_hover_png, 310, 250);
-    zoomupButton            = Button_Init(plus_button_png, plus_button_hover_png,456,95);
-    zoomdownButton          = Button_Init(minus_button_png, minus_button_hover_png, 300,95);
-    spacingupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,133);
-    spacingdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,133);
-    angleupButton           = Button_Init(plus_button_png, plus_button_hover_png,456,171);
-    angledownButton         = Button_Init(minus_button_png, minus_button_hover_png, 300,171);
-    falloffupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,209);
-    falloffdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,209);
-    windowupButton          = Button_Init(plus_button_png, plus_button_hover_png,456, 247);
-    windowdownButton        = Button_Init(minus_button_png, minus_button_hover_png, 300,247);
-    themeWhiteButton        = Button_Init(theme_white_png, theme_white_png, 350, 295);
-    themeBlackButton        = Button_Init(theme_black_png, theme_black_png, 350, 295);
-    quickstartOnButton      = Button_Init(toggle_on_png, toggle_on_png, 350, 335);
-    quickstartOffButton     = Button_Init(toggle_off_png, toggle_off_png, 350, 335);
-    rumbleOnButton          = Button_Init(toggle_on_png, toggle_on_png, 350, 375);
-    rumbleOffButton         = Button_Init(toggle_off_png, toggle_off_png, 350, 375);
-    musicOnButton           = Button_Init(toggle_on_png, toggle_on_png, 350, 415);
-    musicOffButton          = Button_Init(toggle_off_png, toggle_off_png, 350, 415);
+    titlesButton		    = Button_Init(titles_png, titles_hover_png, 400, 245);
+	coversButton			= Button_Init(covers_png, covers_hover_png, 310, 245);
+    zoomupButton            = Button_Init(plus_button_png, plus_button_hover_png,456,85);
+    zoomdownButton          = Button_Init(minus_button_png, minus_button_hover_png, 300,85);
+    spacingupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,123);
+    spacingdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,123);
+    angleupButton           = Button_Init(plus_button_png, plus_button_hover_png,456,161);
+    angledownButton         = Button_Init(minus_button_png, minus_button_hover_png, 300,161);
+    falloffupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,199);
+    falloffdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,199);
+    windowupButton          = Button_Init(plus_button_png, plus_button_hover_png,456, 237);
+    windowdownButton        = Button_Init(minus_button_png, minus_button_hover_png, 300,237);
+    themeWhiteButton        = Button_Init(theme_white_png, theme_white_png, 350, 285);
+    themeBlackButton        = Button_Init(theme_black_png, theme_black_png, 350, 285);
+    quickstartOnButton      = Button_Init(toggle_on_png, toggle_on_png, 350, 325);
+    quickstartOffButton     = Button_Init(toggle_off_png, toggle_off_png, 350, 325);
+    rumbleOnButton          = Button_Init(toggle_on_png, toggle_on_png, 350, 365);
+    rumbleOffButton         = Button_Init(toggle_off_png, toggle_off_png, 350, 365);
+    musicOnButton           = Button_Init(toggle_on_png, toggle_on_png, 350, 405);
+    musicOffButton          = Button_Init(toggle_off_png, toggle_off_png, 350, 405);
     bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 515, 140);
     bookmarkOffButton       = Button_Init(star_off_png, star_on_png, 515, 140);
     homeMenuTopButton       = Button_Init(homeTop_png, homeTop_hover_png, 0, 0);
