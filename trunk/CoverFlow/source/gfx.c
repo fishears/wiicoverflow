@@ -209,16 +209,16 @@ void Init_Buttons()
     vidtvoffButton			= Button_Init(toggle_off_png, toggle_off_png, 350, 165);
     hookupButton			= Button_Init(plus_button_png, plus_button_hover_png, 466,77);
     hookdownButton			= Button_Init(minus_button_png, minus_button_hover_png, 364,77);
-    gcheatonButton          = Button_Init(toggle_on_png, toggle_on_png, 239,170); //
-    gcheatoffButton         = Button_Init(toggle_off_png, toggle_off_png, 239,170); //
-    glangupButton           = Button_Init(plus_button_png, plus_button_hover_png,485,213);
-    glangdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 324,213);
-    gvidupButton            = Button_Init(plus_button_png, plus_button_hover_png, 485,240);
-    gviddownButton          = Button_Init(minus_button_png, minus_button_hover_png, 324,240);
-    gvidtvonButton          = Button_Init(toggle_on_png, toggle_on_png, 374, 270);
-    gvidtvoffButton         = Button_Init(toggle_off_png, toggle_off_png, 374, 270);
-    ghookupButton           = Button_Init(plus_button_png, plus_button_hover_png, 485,177);
-    ghookdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 384,177);
+    gcheatonButton          = Button_Init(toggle_on_png, toggle_on_png, 279,170); //
+    gcheatoffButton         = Button_Init(toggle_off_png, toggle_off_png, 279,170); //
+    glangupButton           = Button_Init(plus_button_png, plus_button_hover_png,525,213);
+    glangdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 364,213);
+    gvidupButton            = Button_Init(plus_button_png, plus_button_hover_png, 525,240);
+    gviddownButton          = Button_Init(minus_button_png, minus_button_hover_png, 364,240);
+    gvidtvonButton          = Button_Init(toggle_on_png, toggle_on_png, 414, 270);
+    gvidtvoffButton         = Button_Init(toggle_off_png, toggle_off_png, 414, 270);
+    ghookupButton           = Button_Init(plus_button_png, plus_button_hover_png, 525,177);
+    ghookdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 424,177);
 	
     coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 236);
     coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 236);
@@ -643,14 +643,17 @@ int draw_selected_two(bool load, bool hover)
 			strncat(gameName, "...", 3);
 		}
 		*/
-
+                char tTemp[50];
 		// Display Title, Last Played, and Size
-		GRRLIB_Printf(245, 174, font_texture, 0xFFFFFFFF, 1, "%s", gameName);
+                sprintf(tTemp,"%s",gameName);
+                CFreeTypeGX_DrawText(ttf18pt, 245,174, CFreeTypeGX_charToWideChar(ttf18pt, tTemp), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
-			GRRLIB_Printf(255, 220, font_texture, 0xFFFFFFFF, 1, TX.neverPlayed);
+                        CFreeTypeGX_DrawText(ttf14pt, 255,220, CFreeTypeGX_charToWideChar(ttf14pt, TX.neverPlayed), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 		else
-			GRRLIB_Printf(255, 220, font_texture, 0xFFFFFFFF, 1, TX.played, gameSetting.lastPlayed);
-		GRRLIB_Printf(255, 240, font_texture, 0xFFFFFFFF, 1, TX.size, self.gsize);
+                {       sprintf(tTemp,TX.played, gameSetting.lastPlayed);
+                        CFreeTypeGX_DrawText(ttf14pt, 255,220, CFreeTypeGX_charToWideChar(ttf14pt, tTemp), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);}
+		sprintf(tTemp,TX.size, self.gsize);
+                CFreeTypeGX_DrawText(ttf14pt, 255,240, CFreeTypeGX_charToWideChar(ttf14pt, tTemp), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 #else
 		GRRLIB_Printf(270, 174, font_texture, 0xFFFFFFFF, 1, "%s", "Best game");
 		GRRLIB_Printf(280, 210, font_texture, 0xFFFFFFFF, 1, "%s", " Game ID: KBGSUX");
@@ -1284,6 +1287,114 @@ void game_settings_menu()
 		draw_covers();
 		//GRRLIB_FillScreen(0x000000FF);
 		GRRLIB_DrawImg(64, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
+		if(self.gameSelected < MAX_BUFFERED_COVERS || self.gameSelected >= 0)
+		{
+			if(BUFFER_IsCoverReady(self.gameSelected))
+			{
+				pthread_mutex_lock(&buffer_mutex[self.gameSelected]);
+				if(_texture_data[self.gameSelected].data)
+				{
+					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+					{
+						if(settings.covers3d)
+						{
+							GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+						}
+						else
+						{
+							GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+						}
+					}
+					else
+					{
+						if(settings.covers3d)
+						{
+							GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+						}
+						else
+						{
+							GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+						}
+					}
+				}
+				else
+				{
+					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+					{
+						if(settings.covers3d)
+						{
+							GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
+						}
+						else
+						{
+							GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+						}
+					}
+					else
+					{
+						if(settings.covers3d)
+						{
+							GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+						}
+						else
+						{
+							GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+						}
+					}
+				}
+
+				pthread_mutex_unlock(&buffer_mutex[self.gameSelected]);
+			}
+			else
+			{	if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+				{
+					if(settings.covers3d)
+					{
+						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, AR_16_9, 0xFFFFFFFF);
+					}
+					else
+					{
+						GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
+					}
+				}
+				else
+				{
+					if(settings.covers3d)
+					{
+						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+					}
+					else
+					{
+						GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+					}
+				}
+			}
+		}
+		else
+		{
+			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+			{
+				if(settings.covers3d)
+				{
+					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
+				}
+				else
+				{
+					GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+				}
+			}
+			else
+			{
+				if(settings.covers3d)
+				{
+					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+				}
+				else
+				{
+					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+				}
+			}
+		}
 
 		gbackButton.x = 474;
 		gbackButton.y = 320;
@@ -1311,29 +1422,17 @@ void game_settings_menu()
 		Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
 
         //BUTTON TEXT
-                char tLabel[50];
-                sprintf(tLabel,TX.setting, gameName);
-                CFreeTypeGX_DrawText(ttf18pt, 95,150, CFreeTypeGX_charToWideChar(ttf18pt, tLabel), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 169,193, CFreeTypeGX_charToWideChar(ttf14pt, TX.ocarina), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 334,193, CFreeTypeGX_charToWideChar(ttf14pt, TX.hook), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 409,193, CFreeTypeGX_charToWideChar(ttf14pt, ghooks[gameSetting.hooktype]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 169,228, CFreeTypeGX_charToWideChar(ttf14pt, TX.language), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 354,228, CFreeTypeGX_charToWideChar(ttf14pt, languages[gameSetting.language]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 169,257, CFreeTypeGX_charToWideChar(ttf14pt, TX.videoMode), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 354,255, CFreeTypeGX_charToWideChar(ttf14pt, vidmodes[gameSetting.video]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 169,289, CFreeTypeGX_charToWideChar(ttf14pt, TX.patchVIDTV), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-
-/*
-                GRRLIB_Printf(89, 145,  font_texture, settings.fontColor, 1, TX.setting, gameName);
-		GRRLIB_Printf(169, 193,  font_texture, settings.fontColor, 1, TX.ocarina);
-		GRRLIB_Printf(334, 193,  font_texture, settings.fontColor, 1, TX.hook);
-		GRRLIB_Printf(409, 193,  font_texture, 0xFFFFFFFF, 1, "%s", ghooks[gameSetting.hooktype]);
-		GRRLIB_Printf(169, 228, font_texture, settings.fontColor, 1, TX.language);
-		GRRLIB_Printf(354, 228, font_texture, 0xFFFFFFFF, 1, "%s", languages[gameSetting.language]);
-		GRRLIB_Printf(169, 257, font_texture, settings.fontColor, 1, TX.videoMode);
-		GRRLIB_Printf(354, 255, font_texture, 0xFFFFFFFF, 1, "%s", vidmodes[gameSetting.video]);
-		GRRLIB_Printf(169, 289, font_texture, settings.fontColor, 1, TX.patchVIDTV);
-*/
+                //char tLabel[50];
+                //sprintf(tLabel,TX.setting, gameName);
+                CFreeTypeGX_DrawText(ttf18pt, 209,150, CFreeTypeGX_charToWideChar(ttf18pt, TX.setting), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 209,193, CFreeTypeGX_charToWideChar(ttf14pt, TX.ocarina), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 374,193, CFreeTypeGX_charToWideChar(ttf14pt, TX.hook), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 449,193, CFreeTypeGX_charToWideChar(ttf14pt, ghooks[gameSetting.hooktype]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 209,228, CFreeTypeGX_charToWideChar(ttf14pt, TX.language), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 394,228, CFreeTypeGX_charToWideChar(ttf14pt, languages[gameSetting.language]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 209,257, CFreeTypeGX_charToWideChar(ttf14pt, TX.videoMode), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 394,255, CFreeTypeGX_charToWideChar(ttf14pt, vidmodes[gameSetting.video]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 209,289, CFreeTypeGX_charToWideChar(ttf14pt, TX.patchVIDTV), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 
 		// Draw the default pointer hand
 		if(doloop)
@@ -1370,7 +1469,7 @@ void game_settings_menu()
 		GRRLIB_Render();
 
 	}while(doloop);
-
+		
     return;
 }
 

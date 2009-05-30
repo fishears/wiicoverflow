@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <wiicoverflow>
   <languages>
     <lang id="EN-US" />
@@ -47,7 +47,7 @@
 	<M033 val="Played %s" />
 	<M034 val="Size:    %.2fGB" />
 	<M035 val="Installing... (%0.2f%%) Time left: %d:%02d:%02d" />
-	<M036 val="%s: settings" />
+	<M036 val="Settings" />
 	<M037 val="Hook:" />
 	<M038 val="Language:" />
 	<M039 val="Video mode:" />
@@ -204,7 +204,7 @@
 	<M033 val="Joué %s" />
 	<M034 val="Taille:    %.2fGo" />
 	<M035 val="Installation... (%0.2f%%) Temps restant: %d:%02d:%02d" />
-	<M036 val="%s: paramètres" />
+	<M036 val="Paramètres" />
 	<M037 val="Crochet:" />
 	<M038 val="Langue:" />
 	<M039 val="Mode Video:" />
@@ -343,7 +343,7 @@
 	<M033 val="Spillet %s" />
 
 	<M035 val="Installerer... (%0.2f%%) Tid tilbage: %d:%02d:%02d" />
-	<M036 val="%s: indstillinger" />
+	<M036 val="Indstillinger" />
 	<M037 val="Krog:" />
 	<M038 val="Sprog:" />
 	<M039 val="Video tilstand:" />
@@ -478,7 +478,7 @@
 	<M033 val="Gestartet: %s" />
 	<M034 val="Größe:    %.2fGB" />
 	<M035 val="Installation... (%0.2f%%) Restzeit: %d:%02d:%02d" />
-	<M036 val="%s; Einstellungen" />
+	<M036 val="Einstellungen" />
 	<M037 val="Hook:" />
 	<M038 val="Sprache" />
 	<M039 val="Video Modus:" />
@@ -632,7 +632,7 @@
 	<M033 val="Jogado em %s" />
 	<M034 val="Tamanho: %.2fGB" />
 	<M035 val="Instalando... (%0.2f%%) Tempo restante: %d:%02d:%02d" />
-	<M036 val="%s: configuração" />
+	<M036 val="Configuração" />
 	<M037 val="Gancho:" />
 	<M038 val="Língua:" />
 	<M039 val="Modo de Vídeo:" />
@@ -789,7 +789,7 @@
 	<M033 val="已執行次數: %s" />
 	<M034 val="容量大小:    %.2fGB" />
 	<M035 val="安裝中... (%0.2f%%) 剩餘時間: %d:%02d:%02d" />
-	<M036 val="%s: 設定" />
+	<M036 val="設定" />
 	<M037 val="聯結:" />
 	<M038 val="語言:" />
 	<M039 val="影像模式:" />
@@ -926,7 +926,7 @@
         <M033 val="Giocato %s" />
         <M034 val="Dimenzioni:    %.2fGB" />
         <M035 val="Installazione... (%0.2f%%) Tempo rimanente : %d:%02d:%02d" />
-        <M036 val="%s: impostazioni" />
+        <M036 val="Impostazioni" />
         <M037 val="Hook:" />
         <M038 val="Linguaggio:" />
         <M039 val="Modalità Video:" />
@@ -1062,7 +1062,7 @@
 		<M033 val="Jugado %s" />
 		<M034 val="Tamaño:  %.2fGB" />
 		<M035 val="Instalando... (%0.2f%%) tiempo restante: %d:%02d:%02d" />
-		<M036 val="%s; Configuración" />
+		<M036 val="Configuración" />
 		<M037 val="Hook:" />
 		<M038 val="Idioma" />
 		<M039 val="Modo de video:" />
