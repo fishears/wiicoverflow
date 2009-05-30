@@ -22,6 +22,25 @@ char ghooks[3][9] =
 
 static char timet[256];
 
+void ResetBuffer()
+{
+	BUFFER_KillBuffer();
+	Sleep(300);
+	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
+	
+	if(settings.covers3d)
+	{
+		BUFFER_3D_COVERS();
+	}
+	else
+	{
+		BUFFER_2D_COVERS();
+	}
+	
+	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+	UpdateBufferedImages();
+}
+
 void LoadFonts()
 {
 	ttf16pt = CFreeTypeGX_new();
@@ -39,11 +58,11 @@ void LoadTextures()
 	pointer_shadow_texture = BufferStaticImage(pointer_shadow_png);
 	turn_point_texture     = BufferStaticImage(turning_point_png); // can't find free
 	menu_bg_texture		   = BufferStaticImage(menu_bg_png); // can't find free
-	#ifndef D3_COVERS
+	
 	cover_texture		   = BufferStaticImage(no_cover_png);
-	#else
-	cover_texture		   = BufferStaticImage(full_cover_png);
-	#endif
+	
+	cover_texture_3d	   = BufferStaticImage(full_cover_png);
+	
 	back_texture		   = BufferStaticImage(back_cover_png);
 	no_disc_texture		   = BufferStaticImage(no_disc_png);
 	load_bg_texture		   = BufferStaticImage(bg_options_screen_no_transparency_png); // can't find free
@@ -75,18 +94,39 @@ void DrawBufferedCover(int i, float loc, float angle, float falloff)
 			}
 			else
 			{
-				GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+				if(settings.covers3d)
+				{
+					GRRLIB_DrawCoverImg(loc*1.2,cover_texture_3d,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+				}
+				else
+				{
+					GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+				}
 			}
 			pthread_mutex_unlock(&buffer_mutex[i]);
 		}
 		else
 		{
-			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+			if(settings.covers3d)
+			{
+				GRRLIB_DrawCoverImg(loc*1.2,cover_texture_3d,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+			}
+			else
+			{
+				GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+			}
 		}	
 	}
 	else
 	{
-		GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+		if(settings.covers3d)
+		{
+			GRRLIB_DrawCoverImg(loc*1.2,cover_texture_3d,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+		}
+		else
+		{
+			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+		}
 	}	
 
 }
@@ -153,7 +193,7 @@ void Init_Buttons()
 	cancelButton			= Button_Init(cancel_png, cancel_hover_png, 360, 290);
 	loadButton				= Button_Init(load_png, load_hover_png, 220, 300);
 	deleteButton			= Button_Init(delete_png, delete_hover_png, 220, 400);
-    resetButton				= Button_Init(reset_png, reset_hover_png, 350, 330);
+    resetButton				= Button_Init(reset_png, reset_hover_png, 350, 355);
     backButton				= Button_Init(back_png, back_hover_png, 340, 300);
     gbackButton				= Button_Init(back_png, back_hover_png, 340, 300);
     gsettingsButton			= Button_Init(settings_png, settings_hover_png, 30, 420);
@@ -177,8 +217,13 @@ void Init_Buttons()
     gvidtvoffButton         = Button_Init(toggle_off_png, toggle_off_png, 374, 275);
     ghookupButton           = Button_Init(plus_button_png, plus_button_hover_png, 480,187);
     ghookdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 384,187);
-    coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 330);
-    coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 330);
+	
+    coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 280);
+    coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 280);
+	
+    covers3dOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 315);
+    covers3dOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 315);
+	
     graphicsButton          = Button_Init(ok_png, ok_hover_png, 350, 215);
     yesButton               = Button_Init(yes_png, yes_hover_png, 220, 290);
     noButton                = Button_Init(no_png, no_hover_png, 340, 290);
@@ -238,12 +283,14 @@ void Init_Buttons()
 	sprintf(gcheatonButton.label, labelBuf); 
 	sprintf(gvidtvonButton.label, labelBuf); 
 	sprintf(coverTextOnButton.label, labelBuf); 
+	sprintf(covers3dOnButton.label, labelBuf);
 	sprintf(quickstartOnButton.label, labelBuf); 
 	sprintf(rumbleOnButton.label, labelBuf); 
 	sprintf(musicOnButton.label, labelBuf); 
 
 	//sprintf(labelBuf, "      Aus");  //for testing
 	sprintf(labelBuf, TX.toggleOffB);
+	sprintf(covers3dOffButton.label, labelBuf);
 	sprintf(cheatoffButton.label, labelBuf); 
 	sprintf(vidtvoffButton.label, labelBuf); 
 	sprintf(gcheatoffButton.label, labelBuf); 
@@ -318,28 +365,29 @@ void GRRLIB_Cover(float pos, int texture_id)
 	scale = pow(pos + 1, -2);
 	angle = -1 * dir * change_scale(scale, 0, 1, settings.coverAngle, 0);
 		
-	#ifdef D3_COVERS
-	if(coverFlip[texture_id].flip)
+	if(settings.covers3d)
 	{
-		coverFlip[texture_id].angle+=3;
-		if(coverFlip[texture_id].angle >=180)
-			coverFlip[texture_id].angle = 180;
-			
-		angle += coverFlip[texture_id].angle;
-	}
-	else if(!coverFlip[texture_id].flip)
-	{
-		if(coverFlip[texture_id].angle > 0)
+		if(coverFlip[texture_id].flip)
 		{
-			coverFlip[texture_id].angle-=3;
+			coverFlip[texture_id].angle+=3;
+			if(coverFlip[texture_id].angle >=180)
+				coverFlip[texture_id].angle = 180;
+				
+			angle += coverFlip[texture_id].angle;
 		}
-		else
-			coverFlip[texture_id].angle = 0;
+		else if(!coverFlip[texture_id].flip)
+		{
+			if(coverFlip[texture_id].angle > 0)
+			{
+				coverFlip[texture_id].angle-=3;
+			}
+			else
+				coverFlip[texture_id].angle = 0;
+				
+			angle += coverFlip[texture_id].angle;
 			
-		angle += coverFlip[texture_id].angle;
-		
+		}
 	}
-	#endif
 	
 	DrawBufferedCover(texture_id, loc, angle, falloff);
 }
@@ -466,15 +514,18 @@ int draw_selected_two(bool load, bool hover)
 
 	loc = settings.coverSpacing * dir * (pow(1, -1) - 1);
 
-#ifdef D3_COVERS
-	scale = change_scale(self.animate_flip, 0, 1, 0, 360);
-	angle = -1 * dir * scale;
-	
-	angle += coverFlip[self.gameSelected].angle;
-#else
-	scale = change_scale(self.animate_flip, 0, 1, 0, 270);
-	angle = -1 * dir * scale ;
-#endif
+	if(settings.covers3d)
+	{
+		scale = change_scale(self.animate_flip, 0, 1, 0, 360);
+		angle = -1 * dir * scale;
+		
+		angle += coverFlip[self.gameSelected].angle;
+	}
+	else
+	{
+		scale = change_scale(self.animate_flip, 0, 1, 0, 270);
+		angle = -1 * dir * scale ;
+	}
 
 	if(load)
 	{
@@ -514,11 +565,20 @@ int draw_selected_two(bool load, bool hover)
 			self.animate_load--;
 	}
 	
-#ifdef D3_COVERS
-	if(scale >= 180)//-16
-#else
-	if(scale >= 250)//-16
-#endif
+	int check = 0;
+	
+	if(settings.covers3d)
+	{
+		if(scale >= 180)//-16
+			check = 1;
+	}
+	else
+	{
+		if(scale >= 250)//-16
+			check = 1;
+	}
+	
+	if(check)
 	{
 		GRRLIB_DrawImg(64, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 		
@@ -609,38 +669,50 @@ int draw_selected_two(bool load, bool hover)
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 					{
-						#ifdef D3_COVERS
-						GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
-						#else
-						GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
-						#endif
+						if(settings.covers3d)
+						{
+							GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+						}
+						else
+						{
+							GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+						}
 					}
 					else
 					{
-						#ifdef D3_COVERS
-						GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
-						#else
-						GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
-						#endif
+						if(settings.covers3d)
+						{
+							GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+						} 
+						else
+						{
+							GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+						}
 					}
 				}
 				else
 				{
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 					{
-						#ifdef D3_COVERS
-						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
-						#else
-						GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
-						#endif
+						if(settings.covers3d)
+						{
+							GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
+						}
+						else
+						{
+							GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+						}
 					}
 					else
 					{
-						#ifdef D3_COVERS
-						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-						#else
-						GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-						#endif
+						if(settings.covers3d)
+						{
+							GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+						}
+						else
+						{
+							GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+						}
 					}
 				}
 					
@@ -649,19 +721,25 @@ int draw_selected_two(bool load, bool hover)
 			else
 			{	if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 				{
-					#ifdef D3_COVERS
-					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
-					#else
-					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
-					#endif
+					if(settings.covers3d)
+					{
+						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, AR_16_9, 0xFFFFFFFF);
+					}
+					else
+					{
+						GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
+					}
 				}
 				else
 				{
-					#ifdef D3_COVERS
-					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-					#else
-					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-					#endif
+					if(settings.covers3d)
+					{
+						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+					}
+					else
+					{
+						GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+					}
 				}
 			}	
 		}
@@ -669,19 +747,25 @@ int draw_selected_two(bool load, bool hover)
 		{	
 			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 			{
-				#ifdef D3_COVERS
-				GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
-				#else
-				GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
-				#endif
+				if(settings.covers3d)
+				{
+					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
+				}
+				else
+				{
+					GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+				}
 			}
 			else
 			{
-				#ifdef D3_COVERS
-				GRRLIB_DrawFlatCoverImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-				#else
-				GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-				#endif
+				if(settings.covers3d)
+				{
+					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+				}
+				else
+				{
+					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+				}
 			}
 		}	
 		

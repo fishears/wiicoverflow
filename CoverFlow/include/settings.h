@@ -12,6 +12,10 @@ typedef struct {
     int coverText;
     int theme;
     int fontColor; // stores the hex val of the theme
+	
+	int covers3d;
+	int hideScroll;
+	
 
 	int volume;
 

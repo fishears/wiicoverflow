@@ -40,6 +40,9 @@ void SETTINGS_Init()
 	settings.theme		 = 0; // default to black
 	settings.fontColor    = 0xFFFFFFFF; // default to white
 	
+	settings.covers3d     = 0;
+	settings.hideScroll   = 0;
+	
 	settings.volume = 100;
 	
 	//General
@@ -68,6 +71,8 @@ void graphics_SETTINGS_Init()
 	settings.coverFallOff = 0.0;
 	settings.drawWindow   = 7;
 	settings.coverText    = 1;
+	
+	settings.hideScroll   = 0;
 }
 
 int SETTINGS_Load()
@@ -112,6 +117,11 @@ int SETTINGS_Load()
 			  settings.theme		   = atoi(mxmlElementGetAttr(next_n,"theme"));
 		  if(mxmlElementGetAttr(next_n,"enablepitch"))
 			  settings.enablepitch  = atoi(mxmlElementGetAttr(next_n,"enablepitch"));
+		  if(mxmlElementGetAttr(next_n,"3d"))
+			  settings.covers3d  = atoi(mxmlElementGetAttr(next_n,"3d"));
+		  if(mxmlElementGetAttr(next_n,"hideScroll"))
+			  settings.hideScroll  = atoi(mxmlElementGetAttr(next_n,"hideScroll"));
+			  
 		  if (settings.theme)
 		  {
 //			  settings.fontColor = 0x000000FF;
@@ -221,6 +231,12 @@ int SETTINGS_Save()
 	sprintf(buffer, "%d", settings.theme);
 	mxmlElementSetAttr(node, "theme", buffer);
 
+	sprintf(buffer, "%d", settings.covers3d);
+	mxmlElementSetAttr(node, "3d", buffer);
+	
+	sprintf(buffer, "%d", settings.hideScroll);
+	mxmlElementSetAttr(node, "hideScroll", buffer);
+	
     //GENERAL SETTINGS
 	node = mxmlNewElement(tree, "general");
 	sprintf(buffer, "%d", settings.sound);

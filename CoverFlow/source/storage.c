@@ -129,7 +129,6 @@ void checkDirs(){
 				dirclose(dir);
 			}
 			
-			#ifdef D3_COVERS
 			dir = diropen("3dcovers");
 	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);	
 			if(dir == NULL) {
@@ -138,7 +137,6 @@ void checkDirs(){
 			else{
 				dirclose(dir);
 			}
-			#endif
 			
 			/*
 			dir = diropen("games");

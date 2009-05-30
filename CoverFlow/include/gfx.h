@@ -70,6 +70,7 @@ extern const u8 battery_dead_png[];
 extern const u8 battery_bar_red_png[];
 
 GRRLIB_texImg cover_texture;
+GRRLIB_texImg cover_texture_3d;
 GRRLIB_texImg back_texture;
 GRRLIB_texImg empty_texture;
 GRRLIB_texImg no_disc_texture;
@@ -143,6 +144,9 @@ Button musicOffButton;
 Button bookmarkOnButton;
 Button bookmarkOffButton;
 
+Button covers3dOnButton;
+Button covers3dOffButton;
+
 /*gfx buttons*/
 Button spacingupButton;
 Button spacingdownButton;
@@ -162,6 +166,7 @@ Button wiimoteButton;
 Button loaderButton;
 Button wiiMenuButton;
 
+void ResetBuffer();
 void LoadFonts();
 void LoadTextures();
 void DrawBufferedCover(int i, float loc, float angle, float falloff );
