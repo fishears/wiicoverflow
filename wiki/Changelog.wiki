@@ -3,7 +3,12 @@
 
 -FIX-
   * Fixed sorting issues (issue155)
-
+  * Configurable 3D Covers (Turn on/off in graphics settings menu.)
+    NOTE: You have to redownload covers the first time you turn on 3D
+  * Buffer stability fixes (mem issues)
+  * Language updates
+  * GFX Tweaks
+  * Font cleanup
 -NEW-
   * The last game played will be the default game when the Loader is launched
 ----
