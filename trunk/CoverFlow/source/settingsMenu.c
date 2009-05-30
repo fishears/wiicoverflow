@@ -25,6 +25,7 @@ extern s_title*       titleList;
 extern u8             shutdown;
 extern u8             reset;
 
+char tFloat[12];
 //hook types for ocarina
 char hooks[3][9] =
 {{"   VI"},
@@ -138,7 +139,24 @@ void Graphic_Settings_Menu(){
 		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFCC);
 		// Draw text features
 		CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 55, CFreeTypeGX_charToWideChar(ttf18pt, TX.graphicSetting), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
-		GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, TX.zoom );
+		CFreeTypeGX_DrawText(ttf14pt, 145,100, CFreeTypeGX_charToWideChar(ttf14pt, TX.zoom), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                sprintf(tFloat, "%f", settings.coverZoom);
+                CFreeTypeGX_DrawText(ttf14pt, 350,100, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,138, CFreeTypeGX_charToWideChar(ttf14pt, TX.spacing), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                sprintf(tFloat, "%f", settings.coverSpacing);
+                CFreeTypeGX_DrawText(ttf14pt, 350,138, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,176, CFreeTypeGX_charToWideChar(ttf14pt, TX.angle), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                sprintf(tFloat, "%f", settings.coverAngle);
+                CFreeTypeGX_DrawText(ttf14pt, 350,176, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,214, CFreeTypeGX_charToWideChar(ttf14pt, TX.falloff), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                sprintf(tFloat, "%f", settings.coverFallOff);
+                CFreeTypeGX_DrawText(ttf14pt, 350,214, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,252, CFreeTypeGX_charToWideChar(ttf14pt, TX.drawWindow), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                sprintf(tFloat, "%d", settings.drawWindow);
+                CFreeTypeGX_DrawText(ttf14pt, 350,252, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,295, CFreeTypeGX_charToWideChar(ttf14pt, TX.gameTitle), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+/*
+                GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, TX.zoom );
 		GRRLIB_Printf(350, 100, font_texture, settings.fontColor, 1, "%f", settings.coverZoom);
 		GRRLIB_Printf(145, 138, font_texture, settings.fontColor, 1, TX.spacing );
 		GRRLIB_Printf(350, 138, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
@@ -149,9 +167,11 @@ void Graphic_Settings_Menu(){
 		GRRLIB_Printf(145, 252, font_texture, settings.fontColor, 1, TX.drawWindow );
 		GRRLIB_Printf(350, 252, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
 		GRRLIB_Printf(145, 295, font_texture, settings.fontColor, 1, TX.gameTitle );
+*/
 		
 		//TODO add setting
-		GRRLIB_Printf(145, 330, font_texture, settings.fontColor, 1, "3D Covers" );
+		CFreeTypeGX_DrawText(ttf14pt, 145,330, CFreeTypeGX_charToWideChar(ttf14pt, "3D Covers"), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                //GRRLIB_Printf(145, 330, font_texture, settings.fontColor, 1, "3D Covers" );
 		
 		//Button_Theme_Paint(&settingsButton, settings.theme);
 		Button_Paint(&spacingupButton);
@@ -383,21 +403,20 @@ void Settings_Menu(){
 		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFCC);
 		// Draw text features
 		CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 55, CFreeTypeGX_charToWideChar(ttf18pt, TX.cflowSettings), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
-		GRRLIB_Printf(145, 93,  font_texture, settings.fontColor, 1, TX.ocarina );
-		GRRLIB_Printf(310, 93,  font_texture, settings.fontColor, 1, TX.hook );
-		GRRLIB_Printf(385, 93,  font_texture, 0xFFFFFFFF, 1, "%s",hooks[settings.hooktype]);
-		GRRLIB_Printf(145, 128, font_texture, settings.fontColor, 1, TX.language );
-		GRRLIB_Printf(330, 128, font_texture, 0xFFFFFFFF, 1, "%s",languages[settings.language]);
-		GRRLIB_Printf(145, 157, font_texture, settings.fontColor, 1, TX.videoMode );
-		GRRLIB_Printf(330, 155, font_texture, 0xFFFFFFFF, 1, "%s",vidmodes[settings.video]);
-		GRRLIB_Printf(145, 187, font_texture, settings.fontColor, 1, TX.patchVIDTV );
-		GRRLIB_Printf(145, 227, font_texture, settings.fontColor, 1, TX.graphics );
-		GRRLIB_Printf(145, 267, font_texture, settings.fontColor, 1, TX.getAddData );
-		GRRLIB_Printf(145, 307, font_texture, settings.fontColor, 1, TX.theme );
-		GRRLIB_Printf(145, 347, font_texture, settings.fontColor, 1, TX.oneClickLaunch );
-		GRRLIB_Printf(145, 387, font_texture, settings.fontColor, 1, TX.rumble );
-		GRRLIB_Printf(145, 427, font_texture, settings.fontColor, 1, TX.sound );
-		//GRRLIB_Printf(218, 446, font_texture, settings.fontColor, 1.15, "Press B to return");
+		CFreeTypeGX_DrawText(ttf14pt, 145,93, CFreeTypeGX_charToWideChar(ttf14pt, TX.ocarina), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 310,93, CFreeTypeGX_charToWideChar(ttf14pt, TX.hook), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 390,93, CFreeTypeGX_charToWideChar(ttf14pt, hooks[settings.hooktype]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,128, CFreeTypeGX_charToWideChar(ttf14pt, TX.language), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 330,128, CFreeTypeGX_charToWideChar(ttf14pt, languages[settings.language]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,157, CFreeTypeGX_charToWideChar(ttf14pt, TX.videoMode), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 330,155, CFreeTypeGX_charToWideChar(ttf14pt, vidmodes[settings.video]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,187, CFreeTypeGX_charToWideChar(ttf14pt, TX.patchVIDTV), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,227, CFreeTypeGX_charToWideChar(ttf14pt, TX.graphics), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,267, CFreeTypeGX_charToWideChar(ttf14pt, TX.getAddData), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,307, CFreeTypeGX_charToWideChar(ttf14pt, TX.theme), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,347, CFreeTypeGX_charToWideChar(ttf14pt, TX.oneClickLaunch), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,387, CFreeTypeGX_charToWideChar(ttf14pt, TX.rumble), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,427, CFreeTypeGX_charToWideChar(ttf14pt, TX.sound), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 
 		// Draw stateless buttons
 		Button_Paint(&langupButton);
