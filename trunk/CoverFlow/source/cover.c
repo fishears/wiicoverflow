@@ -1,6 +1,7 @@
 #include "cover.h"
 
 extern s_self self;
+extern s_settings settings;
 extern s_gameSettings gameSetting;
 extern int COVER_COUNT;
 
@@ -142,11 +143,14 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			break;
 		}
 
-		#ifndef D3_COVERS
-		snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, header->id);
-		#else
-		snprintf(imgPath, sizeof(imgPath), "%s/3dcovers/%c%c%c%c.png", USBLOADER_PATH, header->id[0], header->id[1], header->id[2], header->id[3]);
-		#endif
+		if(settings.covers3d)
+		{
+			snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, header->id);
+		} 
+		else
+		{
+			snprintf(imgPath, sizeof(imgPath), "%s/3dcovers/%c%c%c%c.png", USBLOADER_PATH, header->id[0], header->id[1], header->id[2], header->id[3]);
+		}
 		
 		sprintf(self.debugMsg, TX.checkPresence, imgPath);
 		Paint_Progress_Generic(v, max,self.debugMsg);
@@ -161,11 +165,14 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 		}
 		else{
 
-			#ifndef D3_COVERS
-			sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, header->id);
-			#else
-			sprintf(url, "http://www.theotherzone.com/wii/fullcover/%c%c%c%c.png", header->id[0], header->id[1], header->id[2], header->id[3]);
-			#endif
+			if(settings.covers3d)
+			{
+				sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, header->id);
+			}
+			else
+			{
+				sprintf(url, "http://www.theotherzone.com/wii/fullcover/%c%c%c%c.png", header->id[0], header->id[1], header->id[2], header->id[3]);
+			}
 			
 			sprintf(self.debugMsg, TX.getting, url);
 			Paint_Progress_Generic(v, max,self.debugMsg);

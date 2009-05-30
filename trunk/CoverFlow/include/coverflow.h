@@ -58,15 +58,11 @@
 
 /*DOL TEST END*/
 
-//#define D3_COVERS
-
-#ifndef D3_COVERS
 #define COVER_WIDTH    160
 #define COVER_HEIGHT   224
-#else
-#define COVER_WIDTH    512
-#define COVER_HEIGHT   340
-#endif
+
+#define COVER_WIDTH_3D    512
+#define COVER_HEIGHT_3D   340
 
 /* Aspect ratio fix for some image*/
 #define AR_16_9 0.80F //0.85
@@ -123,11 +119,8 @@ CFreeTypeGX *ttf16pt;
 CFreeTypeGX *ttf18pt;
 CFreeTypeGX *ttf20pt;
 
-#ifdef D3_COVERS
 extern const u8 full_cover_png[];
-#else
 extern const u8 no_cover_png[];
-#endif
 
 extern const u8 no_cover_png[];
 extern const u8 back_cover_png[];

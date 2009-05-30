@@ -15,15 +15,15 @@
 //#define MEM2_START_ADDRESS 0x90000000
 //#define MEM2_EXTENT 37440000 
 
-#ifndef D3_COVERS
 #define COVER_WIDTH 160
 #define COVER_HEIGHT 224
-#else
-#define COVER_WIDTH 512
-#define COVER_HEIGHT 340
-#endif
+
+#define COVER_WIDTH_3D 512
+#define COVER_HEIGHT_3D 340
+
 
 #define TEXTURE_DATA_SIZE COVER_WIDTH*COVER_HEIGHT*4
+#define TEXTURE_DATA_SIZE_3D COVER_WIDTH_3D*COVER_HEIGHT_3D*4
 
 #define DENSITY_METHOD 1
 #define ALL_CACHED 2
@@ -76,6 +76,7 @@ void BUFFER_InitBuffer(int thread_count)
 	pthread_mutex_init(&queue_mutex, 0);
 	pthread_mutex_init(&quit_mutex, 0);
 	pthread_mutex_init(&lock_thread_mutex, 0);
+	pthread_mutex_init(&covers_3d_mutex, 0);
 	
 	for(i = 0; i < MAX_BUFFERED_COVERS; i++)
 	{
@@ -108,6 +109,7 @@ void BUFFER_Shutdown()
 	pthread_mutex_destroy(&queue_mutex);
 	pthread_mutex_destroy(&quit_mutex);
 	pthread_mutex_destroy(&lock_thread_mutex);
+	pthread_mutex_destroy(&covers_3d_mutex);
 	
 	for(m = 0; m < MAX_BUFFERED_COVERS; m++)
 		pthread_mutex_destroy(&buffer_mutex[m]);
@@ -143,6 +145,20 @@ bool BUFFER_IsCoverQueued(int index)
 	return retval;
 }
 
+
+void BUFFER_2D_COVERS()
+{
+	pthread_mutex_lock(&covers_3d_mutex);
+	_covers3d = 0;
+	pthread_mutex_unlock(&covers_3d_mutex);
+}
+
+void BUFFER_3D_COVERS()
+{
+	pthread_mutex_lock(&covers_3d_mutex);
+	_covers3d = 1;
+	pthread_mutex_unlock(&covers_3d_mutex);
+}
 
 void BUFFER_KillBuffer()
 {
@@ -183,11 +199,28 @@ void HandleLoadRequest(int index,int threadNo)
 		char filepath[128];
 		s32  ret;
 		
-		#ifndef D3_COVERS
-		sprintf(filepath, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
-		#else
-		sprintf(filepath, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
-		#endif
+		bool covers3d = false;
+		
+		int tW = 0;
+		int tH = 0;
+		
+		pthread_mutex_lock(&covers_3d_mutex);
+		covers3d = _covers3d;
+		pthread_mutex_unlock(&covers_3d_mutex);
+		
+		//TODO Will this be a problem?? might need to create different setting for covers used by this thread and protected with mutex
+		if(!covers3d)
+		{
+			tW = COVER_WIDTH;
+			tH = COVER_HEIGHT;
+			sprintf(filepath, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
+		}
+		else
+		{
+			tW = COVER_WIDTH_3D;
+			tH = COVER_HEIGHT_3D;
+			sprintf(filepath, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
+		}
 		
 		ret = Fat_ReadFile(filepath, &imgData);
 		
@@ -196,14 +229,28 @@ void HandleLoadRequest(int index,int threadNo)
 			int thisDataMem2Address=-1;
 			if (_cq.permaBufferPosition[index]!=-1)
 			{
-				thisDataMem2Address=MEM2_START_ADDRESS + TEXTURE_DATA_SIZE * _cq.permaBufferPosition[index];
+				if(covers3d)
+				{
+					thisDataMem2Address=MEM2_START_ADDRESS + TEXTURE_DATA_SIZE_3D * _cq.permaBufferPosition[index];
+				}
+				else
+				{
+					thisDataMem2Address=MEM2_START_ADDRESS + TEXTURE_DATA_SIZE * _cq.permaBufferPosition[index];
+				}
 			}
 			else
 			{
 				int floatingPosition=GetFLoatingQueuePosition(index);
 				if (floatingPosition!=-1)
 				{
-					thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition + 1) * TEXTURE_DATA_SIZE ;
+					if(covers3d)
+					{
+						thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition + 1) * TEXTURE_DATA_SIZE_3D ;
+					}
+					else
+					{
+						thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition + 1) * TEXTURE_DATA_SIZE ;
+					}
 				}
 				else
 				{
@@ -215,7 +262,7 @@ void HandleLoadRequest(int index,int threadNo)
 				pthread_mutex_lock(&queue_mutex);
 				_texture_data[index] = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgData, (void *)thisDataMem2Address);
 				GRRLIB_texImg textureData=_texture_data[index];
-				if (!(textureData.h ==COVER_HEIGHT && textureData.w == COVER_WIDTH))
+				if (!(textureData.h ==tH && textureData.w == tW))
 				{
 					_cq.coverMissing[index]=true; // bad image size
 					_cq.ready[index]   = false;
@@ -479,8 +526,21 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	for (i=0;i<gameCount;i++) ResetQueueItem(i);
 	pthread_mutex_unlock(&queue_mutex);
 	
+	bool covers3d = false;
 	
-	maxSlots=(MEM2_EXTENT-IMAGE_CACHE)/(TEXTURE_DATA_SIZE);
+	pthread_mutex_lock(&covers_3d_mutex);
+	covers3d = _covers3d;
+	pthread_mutex_unlock(&covers_3d_mutex);
+	
+	if(covers3d)
+	{
+		maxSlots=(MEM2_EXTENT-IMAGE_CACHE)/(TEXTURE_DATA_SIZE_3D);
+	}
+	else
+	{
+		maxSlots=(MEM2_EXTENT-IMAGE_CACHE)/(TEXTURE_DATA_SIZE);
+	}
+	
 	//decide on buffering method
 	if (gameCount<=maxSlots)
 	{

@@ -70,6 +70,11 @@ void Graphic_Settings_Menu(){
 			{
 				settings.coverText = (settings.coverText) ? 0 : 1;
 			}
+			else if (Button_Select(&covers3dOnButton, pointer.p_x, pointer.p_y) || Button_Select(&covers3dOffButton, pointer.p_x, pointer.p_y))
+			{
+				settings.covers3d = (settings.covers3d) ? 0 : 1;
+				ResetBuffer();
+			}
 		}
 		
 		if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A)
@@ -143,7 +148,10 @@ void Graphic_Settings_Menu(){
 		GRRLIB_Printf(350, 214, font_texture, settings.fontColor, 1, "%f", settings.coverFallOff);
 		GRRLIB_Printf(145, 252, font_texture, settings.fontColor, 1, TX.drawWindow );
 		GRRLIB_Printf(350, 252, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
-		GRRLIB_Printf(145, 290, font_texture, settings.fontColor, 1, TX.gameTitle );
+		GRRLIB_Printf(145, 295, font_texture, settings.fontColor, 1, TX.gameTitle );
+		
+		//TODO add setting
+		GRRLIB_Printf(145, 330, font_texture, settings.fontColor, 1, "3D Covers" );
 		
 		//Button_Theme_Paint(&settingsButton, settings.theme);
 		Button_Paint(&spacingupButton);
@@ -156,11 +164,19 @@ void Graphic_Settings_Menu(){
 		Button_Paint(&falloffdownButton);
 		Button_Paint(&windowupButton);
 		Button_Paint(&windowdownButton);
+		
 		if (settings.coverText)
 		{
 			Button_Paint(&coverTextOnButton);
 		}
 		else Button_Paint(&coverTextOffButton);
+		
+		if (settings.covers3d)
+		{
+			Button_Paint(&covers3dOnButton);
+		}
+		else Button_Paint(&covers3dOffButton);
+		
 		Button_Paint(&resetButton);
 	
 		// Check for button-pointer intersections, and rumble
@@ -177,7 +193,9 @@ void Graphic_Settings_Menu(){
 			Button_Hover(&angleupButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&angledownButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&falloffupButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&falloffdownButton, pointer.p_x, pointer.p_y))
+			Button_Hover(&falloffdownButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&covers3dOnButton, pointer.p_x, pointer.p_y) ||
+			Button_Hover(&covers3dOffButton, pointer.p_x, pointer.p_y))
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)

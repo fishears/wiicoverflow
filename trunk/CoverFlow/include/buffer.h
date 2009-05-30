@@ -33,7 +33,12 @@ pthread_mutex_t buffer_mutex[MAX_BUFFERED_COVERS];
 /*Protect quit*/
 pthread_mutex_t quit_mutex;
 
+/*Protect covers3d*/
+pthread_mutex_t covers_3d_mutex;
+
 bool _requestQuit;
+
+bool _covers3d;
 
 extern GRRLIB_texImg _texture_data[];
 GRRLIB_texImg _texture_data[MAX_BUFFERED_COVERS];
@@ -46,7 +51,9 @@ inline void BUFFER_InitBuffer(int thread_count);
 void CoversDownloaded();
 void SetSelectedCover(int index);
 void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection);
- 
+
+void BUFFER_2D_COVERS();
+void BUFFER_3D_COVERS(); 
 
 inline bool BUFFER_IsCoverReady(int index);
 

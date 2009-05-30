@@ -163,7 +163,21 @@ int main( int argc, char **argv )
 	self.gameCnt = 29;
 #endif
 	
+#ifndef TEST_MODE
+	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
+#endif
+
 	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
+	
+	if(settings.covers3d)
+	{
+		BUFFER_3D_COVERS();
+	}
+	else
+	{
+		BUFFER_2D_COVERS();
+	}
+	
 	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 	UpdateBufferedImages();
 	
@@ -179,9 +193,6 @@ int main( int argc, char **argv )
 		Sleep(1);
 	}
 	
-#ifndef TEST_MODE
-	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
-#endif
 
 	// set the background
 	sprintf(self.debugMsg, TX.setBackground );
@@ -574,13 +585,13 @@ int main( int argc, char **argv )
 			}
 			else if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_2) || (PAD_ButtonsDown(0) & PAD_BUTTON_Y))// Check for button 1 hold
 			{
-				#ifdef D3_COVERS
-				if(CoverHoverCenter() && select_ready)
+				if(settings.covers3d)
 				{
-					coverFlip[self.gameSelected].flip = !(coverFlip[self.gameSelected].flip);
-				}
-				#endif
-				
+					if(CoverHoverCenter() && select_ready)
+					{
+						coverFlip[self.gameSelected].flip = !(coverFlip[self.gameSelected].flip);
+					}
+				}	
 			}
 			else
 			{
@@ -675,8 +686,15 @@ int main( int argc, char **argv )
 		}
 		else
 		{
-			// Draw the slider and corner buttons
-			DrawSlider(settings.theme);
+		
+			if(!settings.hideScroll)
+			{
+				//TODO IF hiding scroll; don't let user click and drag it.
+				
+				// Draw the slider and corner buttons
+				DrawSlider(settings.theme);
+			}
+			
             if(!settings.parentalLock)
                 Button_Theme_Paint(&addButton, settings.theme);
 			if(!settings.parentalLock)
@@ -735,6 +753,12 @@ int main( int argc, char **argv )
 				self.slot_glow = 0;
 			}
 		}
+		
+		//if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1))
+		//{
+			//settings.covers3d = !(settings.covers3d);
+			//ResetBuffer();
+		//}
 		
 		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1))  // Button2 is the 'Get Info' button
 		{
