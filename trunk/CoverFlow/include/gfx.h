@@ -146,6 +146,8 @@ Button bookmarkOffButton;
 
 Button covers3dOnButton;
 Button covers3dOffButton;
+Button hidescrollOnButton;
+Button hidescrollOffButton;
 
 /*gfx buttons*/
 Button spacingupButton;

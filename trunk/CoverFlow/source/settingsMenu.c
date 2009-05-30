@@ -76,6 +76,10 @@ void Graphic_Settings_Menu(){
 				settings.covers3d = (settings.covers3d) ? 0 : 1;
 				ResetBuffer();
 			}
+                        else if (Button_Select(&hidescrollOnButton, pointer.p_x, pointer.p_y) || Button_Select(&hidescrollOffButton, pointer.p_x, pointer.p_y))
+			{
+				settings.hideScroll = (settings.hideScroll) ? 0 : 1;
+			}
 		}
 		
 		if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A)
@@ -139,39 +143,26 @@ void Graphic_Settings_Menu(){
 		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFCC);
 		// Draw text features
 		CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 55, CFreeTypeGX_charToWideChar(ttf18pt, TX.graphicSetting), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
-		CFreeTypeGX_DrawText(ttf14pt, 145,100, CFreeTypeGX_charToWideChar(ttf14pt, TX.zoom), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,90, CFreeTypeGX_charToWideChar(ttf14pt, TX.zoom), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
                 sprintf(tFloat, "%f", settings.coverZoom);
-                CFreeTypeGX_DrawText(ttf14pt, 350,100, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 145,138, CFreeTypeGX_charToWideChar(ttf14pt, TX.spacing), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 350,90, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,123, CFreeTypeGX_charToWideChar(ttf14pt, TX.spacing), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
                 sprintf(tFloat, "%f", settings.coverSpacing);
-                CFreeTypeGX_DrawText(ttf14pt, 350,138, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 145,176, CFreeTypeGX_charToWideChar(ttf14pt, TX.angle), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 350,123, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,156, CFreeTypeGX_charToWideChar(ttf14pt, TX.angle), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
                 sprintf(tFloat, "%f", settings.coverAngle);
-                CFreeTypeGX_DrawText(ttf14pt, 350,176, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 145,214, CFreeTypeGX_charToWideChar(ttf14pt, TX.falloff), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 350,156, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,189, CFreeTypeGX_charToWideChar(ttf14pt, TX.falloff), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
                 sprintf(tFloat, "%f", settings.coverFallOff);
-                CFreeTypeGX_DrawText(ttf14pt, 350,214, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 145,252, CFreeTypeGX_charToWideChar(ttf14pt, TX.drawWindow), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 350,189, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,222, CFreeTypeGX_charToWideChar(ttf14pt, TX.drawWindow), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
                 sprintf(tFloat, "%d", settings.drawWindow);
-                CFreeTypeGX_DrawText(ttf14pt, 350,252, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 145,295, CFreeTypeGX_charToWideChar(ttf14pt, TX.gameTitle), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-/*
-                GRRLIB_Printf(145, 100, font_texture, settings.fontColor, 1, TX.zoom );
-		GRRLIB_Printf(350, 100, font_texture, settings.fontColor, 1, "%f", settings.coverZoom);
-		GRRLIB_Printf(145, 138, font_texture, settings.fontColor, 1, TX.spacing );
-		GRRLIB_Printf(350, 138, font_texture, settings.fontColor, 1, "%f", settings.coverSpacing);
-		GRRLIB_Printf(145, 176, font_texture, settings.fontColor, 1, TX.angle );
-		GRRLIB_Printf(350, 176, font_texture, settings.fontColor, 1, "%f", settings.coverAngle);
-		GRRLIB_Printf(145, 214, font_texture, settings.fontColor, 1, TX.falloff );
-		GRRLIB_Printf(350, 214, font_texture, settings.fontColor, 1, "%f", settings.coverFallOff);
-		GRRLIB_Printf(145, 252, font_texture, settings.fontColor, 1, TX.drawWindow );
-		GRRLIB_Printf(350, 252, font_texture, settings.fontColor, 1, "%d", settings.drawWindow);
-		GRRLIB_Printf(145, 295, font_texture, settings.fontColor, 1, TX.gameTitle );
-*/
+                CFreeTypeGX_DrawText(ttf14pt, 350,222, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,254, CFreeTypeGX_charToWideChar(ttf14pt, TX.gameTitle), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 		
-		//TODO add setting
-		CFreeTypeGX_DrawText(ttf14pt, 145,330, CFreeTypeGX_charToWideChar(ttf14pt, "3D Covers"), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                //GRRLIB_Printf(145, 330, font_texture, settings.fontColor, 1, "3D Covers" );
+		//TODO add language setting for 3D Covers and Hide Scroll Bar
+		CFreeTypeGX_DrawText(ttf14pt, 145,294, CFreeTypeGX_charToWideChar(ttf14pt, "3D Covers"), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,334, CFreeTypeGX_charToWideChar(ttf14pt, "Hide Scroll Bar"), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 		
 		//Button_Theme_Paint(&settingsButton, settings.theme);
 		Button_Paint(&spacingupButton);
@@ -196,6 +187,12 @@ void Graphic_Settings_Menu(){
 			Button_Paint(&covers3dOnButton);
 		}
 		else Button_Paint(&covers3dOffButton);
+
+                if (settings.hideScroll)
+		{
+			Button_Paint(&hidescrollOnButton);
+		}
+                else Button_Paint(&hidescrollOffButton);
 		
 		Button_Paint(&resetButton);
 	
@@ -215,7 +212,9 @@ void Graphic_Settings_Menu(){
 			Button_Hover(&falloffupButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&falloffdownButton, pointer.p_x, pointer.p_y) ||
 			Button_Hover(&covers3dOnButton, pointer.p_x, pointer.p_y) ||
-			Button_Hover(&covers3dOffButton, pointer.p_x, pointer.p_y))
+			Button_Hover(&covers3dOffButton, pointer.p_x, pointer.p_y) ||
+                        Button_Hover(&hidescrollOnButton, pointer.p_x, pointer.p_y) ||
+                        Button_Hover(&hidescrollOffButton, pointer.p_x, pointer.p_y))
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
