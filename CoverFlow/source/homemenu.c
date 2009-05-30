@@ -357,18 +357,18 @@ void Do_Batteries()
 		{
 			if(level==0) //battery critical
 			{
-				CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, CFreeTypeGX_charToWideChar(ttf18pt, tUnit), (GXColor){0xe9, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, tUnit, (GXColor){0xe9, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 				GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
 			}
 			else if(level==1) //battery level is in the red
 			{
-				CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, CFreeTypeGX_charToWideChar(ttf18pt, tUnit), (GXColor){0xe9, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, tUnit, (GXColor){0xe9, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 				GRRLIB_DrawImg(216+(106*x), 373, battery_dead, 0, 1, 1, 0xFFFFFFFF); //draw red battery
 				GRRLIB_DrawImg(221+((107*x)), 377, battery_bar_red, 0, 1, 1, 0xFFFFFFFF);
 			}
 			else //level ok - draw white
 			{
-				CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, CFreeTypeGX_charToWideChar(ttf18pt, tUnit), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, tUnit, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 				GRRLIB_DrawImg(216+(106*x), 373, battery, 0, 1, 1, 0xFFFFFFFF); //draw battery container
 				
 				for(i = 0; i < level; i++)
@@ -378,7 +378,7 @@ void Do_Batteries()
 			}
 		}
                 else //no wiimote so write player ID in grey (matches sysmenu behaviour
-                        CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, CFreeTypeGX_charToWideChar(ttf18pt, tUnit), (GXColor){0x80, 0x80, 0x80, 0xff}, FTGX_JUSTIFY_LEFT);
+                        CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392,  tUnit, (GXColor){0x80, 0x80, 0x80, 0xff}, FTGX_JUSTIFY_LEFT);
 	}
 	#endif
 }

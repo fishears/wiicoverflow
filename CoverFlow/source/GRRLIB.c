@@ -925,7 +925,7 @@ void GRRLIB_Printf(f32 xpos, f32 ypos, GRRLIB_texImg tex, u32 color, f32 zoom, c
     va_start(argp, text);
     size = vsprintf(tmp, text, argp);
     va_end(argp);
-	CFreeTypeGX_DrawText(ttf16pt, xpos, ypos, CFreeTypeGX_charToWideChar(ttf16pt, tmp), (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_NULL);
+	CFreeTypeGX_DrawText(ttf16pt, xpos, ypos,  tmp, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_NULL);
 }
 
 /**
