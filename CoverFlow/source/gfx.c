@@ -54,19 +54,19 @@ void LoadFonts()
 
 void LoadTextures()
 {
-	pointer_texture        = BufferStaticImage(generic_point_png);
-	pointer_shadow_texture = BufferStaticImage(pointer_shadow_png);
-	turn_point_texture     = BufferStaticImage(turning_point_png); // can't find free
-	menu_bg_texture		   = BufferStaticImage(menu_bg_png); // can't find free
+	pointer_texture        = BufferImageToSlot(generic_point_png,1);
+	pointer_shadow_texture = BufferImageToSlot(pointer_shadow_png,2);
+	turn_point_texture     = BufferImageToSlot(turning_point_png,3); // can't find free
+	menu_bg_texture		   = BufferImageToSlot(menu_bg_png,4); // can't find free
 	
-	cover_texture		   = BufferStaticImage(no_cover_png);
+	cover_texture		   = BufferImageToSlot(no_cover_png,5);
 	
-	cover_texture_3d	   = BufferStaticImage(full_cover_png);
+	cover_texture_3d	   = BufferImageToSlot(full_cover_png,6);
 	
-	back_texture		   = BufferStaticImage(back_cover_png);
-	no_disc_texture		   = BufferStaticImage(no_disc_png);
-	load_bg_texture		   = BufferStaticImage(bg_options_screen_no_transparency_png); // can't find free
-	font_texture           = BufferStaticImage(slidebar_png);  // TODO: go away post TTF
+	back_texture		   = BufferImageToSlot(back_cover_png,7);
+	no_disc_texture		   = BufferImageToSlot(no_disc_png,8);
+	load_bg_texture		   = BufferImageToSlot(bg_options_screen_no_transparency_png,9); // can't find free
+	font_texture           = BufferImageToSlot(slidebar_png,10);  // TODO: go away post TTF
 	slidebar_texture       = BufferStaticImage(slidebar_png);  // can't find free
 	slidebar_white_texture = GRRLIB_CreateEmptyTexture(slidebar_texture.w, slidebar_texture.h);
 	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white

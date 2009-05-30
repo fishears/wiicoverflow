@@ -188,6 +188,29 @@ GRRLIB_texImg GRRLIB_LoadTexturePNGToMemory(const unsigned char my_png[], void *
 }
 
 /**
+ * Load a texture from a buffer into fixed memory location.
+ * @param my_png the PNG buffer to load.
+ * @param textureAddress the destination address.
+ * @return A GRRLIB_texImg structure filled with PNG informations.
+ */
+GRRLIB_texImg GRRLIB_LoadTexturePNGToMemorySized(const unsigned char my_png[], void * textureAddress,int Size) {
+    PNGUPROP imgProp;
+    IMGCTX ctx;
+    GRRLIB_texImg my_texture;
+
+    ctx = PNGU_SelectImageFromBuffer(my_png);
+    PNGU_GetImageProperties (ctx, &imgProp);
+    my_texture.data = textureAddress;
+	if (Size != imgProp.imgWidth * imgProp.imgHeight * 4) return my_texture;
+    PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture.data, 255);
+    PNGU_ReleaseImageContext (ctx);
+    my_texture.w = imgProp.imgWidth;
+    my_texture.h = imgProp.imgHeight;
+    GRRLIB_FlushTex(my_texture);
+    return my_texture;
+}
+
+/**
  * Convert a raw bmp (RGB, no alpha) to 4x4RGBA.
  * @author DrTwox
  * @param src

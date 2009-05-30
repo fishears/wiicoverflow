@@ -58,6 +58,21 @@ int nCoversInWindow;
 bool bCleanedUp=false;
 // end of private vars
 
+#define IMAGE_SLOTS 10
+unsigned int FreeMemorySlots[IMAGE_SLOTS+1] =
+	{
+	76*88*4,
+	76*88*4,
+	76*88*4,
+	384*236*4,
+	160*224*4,
+	512*340*4,
+	80*32*4,
+	160*160*4,
+	512*286*4,
+	400*64*4,
+	0};
+
 
 #include <unistd.h>
 void Sleep(unsigned long milliseconds)
@@ -614,4 +629,24 @@ GRRLIB_texImg BufferStaticImage(const unsigned char* pngDataAddress)
 	return ret;
 }
 
+void ClearBufferSlotMemory()
+{
+		memset((void *)MEM2_START_ADDRESS+MEM2_EXTENT-IMAGE_CACHE,0,IMAGE_CACHE);
+}
+
+GRRLIB_texImg BufferImageToSlot(const unsigned char* pngDataAddress,int slot)
+{
+	int i=0;
+	unsigned int offset=0;
+	GRRLIB_texImg ret;
+	if ((slot>IMAGE_SLOTS)) return ret;
+	for (i=0;i<slot;i++)
+	{
+		offset+=FreeMemorySlots[i];
+	}
+	// start half way up cache till all the calls are changed
+	ret = GRRLIB_LoadTexturePNGToMemory(pngDataAddress, (void *)(MEM2_START_ADDRESS+MEM2_EXTENT-IMAGE_CACHE+IMAGE_CACHE/2+offset));
+	FreeMemorySlots[i]=ret.w*ret.h*4;
+	return ret;
+}
 

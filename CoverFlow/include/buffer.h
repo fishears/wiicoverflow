@@ -66,6 +66,7 @@ inline void BUFFER_ClearCovers();
 
 inline void* process(void *arg);
 
-
+void ClearBufferSlotMemory();
 GRRLIB_texImg BufferStaticImage(const unsigned char* pngDataAddress);
+GRRLIB_texImg BufferImageToSlot(const unsigned char* pngDataAddress,int slot);
 #endif
