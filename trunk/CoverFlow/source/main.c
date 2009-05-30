@@ -768,13 +768,13 @@ int main( int argc, char **argv )
 			sprintf(tAppInfo, "CoverFloader r%d %s", SVN_VERSION, RELEASE);
 			if (settings.theme) // black text on white matte
 			{
-				CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 30, CFreeTypeGX_charToWideChar(ttf18pt, tAppInfo), (GXColor){0x00, 0x00, 0x00, 0xff}, (GXColor){0x99, 0x99, 0x99, 0x44}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 70, 30, CFreeTypeGX_charToWideChar(ttf16pt, tIOS), (GXColor){0x00, 0x00, 0x00, 0xff}, (GXColor){0x99, 0x99, 0x99, 0x44}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 30,  tAppInfo, (GXColor){0x00, 0x00, 0x00, 0xff}, (GXColor){0x99, 0x99, 0x99, 0x44}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 70, 30,  tIOS, (GXColor){0x00, 0x00, 0x00, 0xff}, (GXColor){0x99, 0x99, 0x99, 0x44}, FTGX_JUSTIFY_CENTER);
 			}
 			else //white text on black matte
 			{
-				CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 30, CFreeTypeGX_charToWideChar(ttf18pt, tAppInfo), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x44}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 70, 30, CFreeTypeGX_charToWideChar(ttf16pt, tIOS), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x44}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 30,  tAppInfo, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x44}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 70, 30,  tIOS, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x44}, FTGX_JUSTIFY_CENTER);
 			}
 		}
 	

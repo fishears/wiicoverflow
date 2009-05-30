@@ -142,27 +142,27 @@ void Graphic_Settings_Menu(){
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFCC);
 		// Draw text features
-		CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 55, CFreeTypeGX_charToWideChar(ttf18pt, TX.graphicSetting), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
-		CFreeTypeGX_DrawText(ttf14pt, 145,90, CFreeTypeGX_charToWideChar(ttf14pt, TX.zoom), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 55, TX.graphicSetting, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf14pt, 145,90, TX.zoom, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
                 sprintf(tFloat, "%f", settings.coverZoom);
-                CFreeTypeGX_DrawText(ttf14pt, 350,90, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 145,123, CFreeTypeGX_charToWideChar(ttf14pt, TX.spacing), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 350,90, tFloat, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,123, TX.spacing, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
                 sprintf(tFloat, "%f", settings.coverSpacing);
-                CFreeTypeGX_DrawText(ttf14pt, 350,123, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 145,156, CFreeTypeGX_charToWideChar(ttf14pt, TX.angle), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 350,123, tFloat, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,156, TX.angle, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
                 sprintf(tFloat, "%f", settings.coverAngle);
-                CFreeTypeGX_DrawText(ttf14pt, 350,156, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 145,189, CFreeTypeGX_charToWideChar(ttf14pt, TX.falloff), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 350,156, tFloat, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,189, TX.falloff, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
                 sprintf(tFloat, "%f", settings.coverFallOff);
-                CFreeTypeGX_DrawText(ttf14pt, 350,189, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 145,222, CFreeTypeGX_charToWideChar(ttf14pt, TX.drawWindow), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 350,189, tFloat, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,222, TX.drawWindow, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
                 sprintf(tFloat, "%d", settings.drawWindow);
-                CFreeTypeGX_DrawText(ttf14pt, 350,222, CFreeTypeGX_charToWideChar(ttf14pt, tFloat), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 145,254, CFreeTypeGX_charToWideChar(ttf14pt, TX.gameTitle), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 350,222, tFloat, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,254, TX.gameTitle, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 		
 		//TODO add language setting for 3D Covers and Hide Scroll Bar
-		CFreeTypeGX_DrawText(ttf14pt, 145,294, CFreeTypeGX_charToWideChar(ttf14pt, "3D Covers"), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 145,334, CFreeTypeGX_charToWideChar(ttf14pt, "Hide Scroll Bar"), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,294, "3D Covers", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 145,334, "Hide Scroll Bar", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 		
 		//Button_Theme_Paint(&settingsButton, settings.theme);
 		Button_Paint(&spacingupButton);
@@ -401,21 +401,21 @@ void Settings_Menu(){
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFCC);
 		// Draw text features
-		CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 55, CFreeTypeGX_charToWideChar(ttf18pt, TX.cflowSettings), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
-		CFreeTypeGX_DrawText(ttf14pt, 145,93, CFreeTypeGX_charToWideChar(ttf14pt, TX.ocarina), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 310,93, CFreeTypeGX_charToWideChar(ttf14pt, TX.hook), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 390,93, CFreeTypeGX_charToWideChar(ttf14pt, hooks[settings.hooktype]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 145,128, CFreeTypeGX_charToWideChar(ttf14pt, TX.language), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 330,128, CFreeTypeGX_charToWideChar(ttf14pt, languages[settings.language]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 145,157, CFreeTypeGX_charToWideChar(ttf14pt, TX.videoMode), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 330,155, CFreeTypeGX_charToWideChar(ttf14pt, vidmodes[settings.video]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 145,187, CFreeTypeGX_charToWideChar(ttf14pt, TX.patchVIDTV), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 145,227, CFreeTypeGX_charToWideChar(ttf14pt, TX.graphics), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 145,267, CFreeTypeGX_charToWideChar(ttf14pt, TX.getAddData), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 145,307, CFreeTypeGX_charToWideChar(ttf14pt, TX.theme), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 145,347, CFreeTypeGX_charToWideChar(ttf14pt, TX.oneClickLaunch), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 145,387, CFreeTypeGX_charToWideChar(ttf14pt, TX.rumble), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 145,427, CFreeTypeGX_charToWideChar(ttf14pt, TX.sound), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 55,  TX.cflowSettings, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf14pt, 145,93,  TX.ocarina, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 310,93,  TX.hook, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 390,93,  hooks[settings.hooktype], (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,128,  TX.language, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 330,128, languages[settings.language], (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,157, TX.videoMode, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 330,155, vidmodes[settings.video], (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,187, TX.patchVIDTV, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,227, TX.graphics, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,267, TX.getAddData, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,307, TX.theme, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,347, TX.oneClickLaunch, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,387, TX.rumble, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 145,427, TX.sound, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 
 		// Draw stateless buttons
 		Button_Paint(&langupButton);

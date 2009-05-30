@@ -141,7 +141,7 @@ void Paint_Progress(float v, char* msg)
 
 	GRRLIB_2D_Init();
 
-	CFreeTypeGX_DrawText(ttf18pt, 320, 220, CFreeTypeGX_charToWideChar(ttf18pt, TX.welcomeMsg), (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
+	CFreeTypeGX_DrawText(ttf18pt, 320, 220, TX.welcomeMsg, (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
 	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
 
 	for(i = 0; i < count; i++)
@@ -151,7 +151,7 @@ void Paint_Progress(float v, char* msg)
 	
 #ifdef DEBUG
 	if(msg != NULL)
-		CFreeTypeGX_DrawText(ttf16pt, 320, 270, CFreeTypeGX_charToWideChar(ttf16pt, msg), (GXColor){0x66, 0x66, 0x66, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 320, 270, msg, (GXColor){0x66, 0x66, 0x66, 0xff}, FTGX_JUSTIFY_CENTER);
 #endif
     
 	GRRLIB_Render();
@@ -176,7 +176,7 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 	
 	#ifdef DEBUG
 	if(msg != NULL)
-		CFreeTypeGX_DrawText(ttf16pt, 320, 270, CFreeTypeGX_charToWideChar(ttf16pt, msg), (GXColor){0x66, 0x66, 0x66, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 320, 270,  msg, (GXColor){0x66, 0x66, 0x66, 0xff}, FTGX_JUSTIFY_CENTER);
     #endif
     
 	GRRLIB_Render();
@@ -476,9 +476,9 @@ void draw_game_title(int index, float textSize)
 		}
 		
 		if (settings.theme) // black text on white matte
-			CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410, CFreeTypeGX_charToWideChar(ttf20pt, gameName), (GXColor){0x11, 0x11, 0x11, 0xff}, (GXColor){0xcc, 0xcc, 0xcc, 0x44}, FTGX_JUSTIFY_CENTER);
+			CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410,  gameName, (GXColor){0x11, 0x11, 0x11, 0xff}, (GXColor){0xcc, 0xcc, 0xcc, 0x44}, FTGX_JUSTIFY_CENTER);
 		else //white text on black matte
-			CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410, CFreeTypeGX_charToWideChar(ttf20pt, gameName), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+			CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410,  gameName, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 	}
 }
 
@@ -644,14 +644,14 @@ int draw_selected_two(bool load, bool hover)
                 char tTemp[50];
 		// Display Title, Last Played, and Size
                 sprintf(tTemp,"%s",gameName);
-                CFreeTypeGX_DrawText(ttf18pt, 245,174, CFreeTypeGX_charToWideChar(ttf18pt, tTemp), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf18pt, 245,174,  tTemp, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
-                        CFreeTypeGX_DrawText(ttf14pt, 255,220, CFreeTypeGX_charToWideChar(ttf14pt, TX.neverPlayed), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                        CFreeTypeGX_DrawText(ttf14pt, 255,220,  TX.neverPlayed, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 		else
                 {       sprintf(tTemp,TX.played, gameSetting.lastPlayed);
-                        CFreeTypeGX_DrawText(ttf14pt, 255,220, CFreeTypeGX_charToWideChar(ttf14pt, tTemp), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);}
+                        CFreeTypeGX_DrawText(ttf14pt, 255,220,  tTemp, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);}
 		sprintf(tTemp,TX.size, self.gsize);
-                CFreeTypeGX_DrawText(ttf14pt, 255,240, CFreeTypeGX_charToWideChar(ttf14pt, tTemp), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 255,240,  tTemp, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 #else
 		GRRLIB_Printf(270, 174, font_texture, 0xFFFFFFFF, 1, "%s", "Best game");
 		GRRLIB_Printf(280, 210, font_texture, 0xFFFFFFFF, 1, "%s", " Game ID: KBGSUX");
@@ -957,9 +957,9 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			Button_Paint(choice_b);
 #else
 			GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "OK"), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 			GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "CANCEL"), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 #endif
 		}
 		
@@ -970,7 +970,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 				Button_Paint(choice_a); 
 #else
 				GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "OK"), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 #endif
 			}
 			
@@ -980,7 +980,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 				Button_Paint(choice_b);
 #else
 				GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, CFreeTypeGX_charToWideChar(ttf16pt, "CANCEL"), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
 #endif
 			}
 		}
@@ -992,7 +992,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 #ifndef TTF_TEST
 		GRRLIB_Printf(100, 105, font_texture, 0xFFFFFFFF, 1, "%s", title);
 #else
-		CFreeTypeGX_DrawTextWithShadow(ttf20pt, 100, 105, CFreeTypeGX_charToWideChar(ttf20pt, title), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawTextWithShadow(ttf20pt, 100, 105, title, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
 #endif
 		if(txt != NULL)
 		{
@@ -1005,7 +1005,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 #ifndef TTF_TEST
 				GRRLIB_Printf(138, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
 #else
-				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 140, y+sp, CFreeTypeGX_charToWideChar(ttf16pt, pch), (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 140, y+sp, pch, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
 #endif
 				pch = strtok(NULL, "\n");
 				sp+=16;
@@ -1427,15 +1427,15 @@ void game_settings_menu()
         //BUTTON TEXT
                 //char tLabel[50];
                 //sprintf(tLabel,TX.setting, gameName);
-                CFreeTypeGX_DrawText(ttf18pt, 209,150, CFreeTypeGX_charToWideChar(ttf18pt, TX.setting), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 209,193, CFreeTypeGX_charToWideChar(ttf14pt, TX.ocarina), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 374,193, CFreeTypeGX_charToWideChar(ttf14pt, TX.hook), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 449,193, CFreeTypeGX_charToWideChar(ttf14pt, ghooks[gameSetting.hooktype]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 209,228, CFreeTypeGX_charToWideChar(ttf14pt, TX.language), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 394,228, CFreeTypeGX_charToWideChar(ttf14pt, languages[gameSetting.language]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 209,257, CFreeTypeGX_charToWideChar(ttf14pt, TX.videoMode), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 394,255, CFreeTypeGX_charToWideChar(ttf14pt, vidmodes[gameSetting.video]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 209,289, CFreeTypeGX_charToWideChar(ttf14pt, TX.patchVIDTV), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf18pt, 209,150, TX.setting, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 209,193, TX.ocarina, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 374,193, TX.hook, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 449,193, ghooks[gameSetting.hooktype], (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 209,228, TX.language, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 394,228, languages[gameSetting.language], (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 209,257, TX.videoMode, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 394,255, vidmodes[gameSetting.video], (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 209,289, TX.patchVIDTV, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 
 		// Draw the default pointer hand
 		if(doloop)
