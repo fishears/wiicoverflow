@@ -195,7 +195,7 @@ void HandleLoadRequest(int index,int threadNo)
 	if(!_cq.ready[index] && !_cq.coverMissing[index])
 	{
 		
-		void *imgData=0;
+		//void *imgData=0;
 		
 		char filepath[128];
 		s32  ret;
@@ -223,35 +223,22 @@ void HandleLoadRequest(int index,int threadNo)
 			sprintf(filepath, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
 		}
 		
-		ret = Fat_ReadFile(filepath, &imgData);
+		int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
+		ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress,tW * tH * 4);
 		
 		if (ret > 0) 
 		{
 			int thisDataMem2Address=-1;
 			if (_cq.permaBufferPosition[index]!=-1)
 			{
-				if(covers3d)
-				{
-					thisDataMem2Address=MEM2_START_ADDRESS + TEXTURE_DATA_SIZE_3D * _cq.permaBufferPosition[index];
-				}
-				else
-				{
-					thisDataMem2Address=MEM2_START_ADDRESS + TEXTURE_DATA_SIZE * _cq.permaBufferPosition[index];
-				}
+				thisDataMem2Address=MEM2_START_ADDRESS + tW * tH * 4 * _cq.permaBufferPosition[index];
 			}
 			else
 			{
 				int floatingPosition=GetFLoatingQueuePosition(index);
 				if (floatingPosition!=-1)
 				{
-					if(covers3d)
-					{
-						thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition + 1) * TEXTURE_DATA_SIZE_3D ;
-					}
-					else
-					{
-						thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition + 1) * TEXTURE_DATA_SIZE ;
-					}
+					thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition + 1) * tW * tH * 4 ;
 				}
 				else
 				{
@@ -260,9 +247,9 @@ void HandleLoadRequest(int index,int threadNo)
 			}
 			if (thisDataMem2Address!=-1)
 			{
-				pthread_mutex_lock(&queue_mutex);
-				_texture_data[index] = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgData, (void *)thisDataMem2Address);
+				_texture_data[index] = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgDataAddress, (void *)thisDataMem2Address);
 				GRRLIB_texImg textureData=_texture_data[index];
+				pthread_mutex_lock(&queue_mutex);
 				if (!(textureData.h ==tH && textureData.w == tW))
 				{
 					_cq.coverMissing[index]=true; // bad image size
@@ -274,7 +261,7 @@ void HandleLoadRequest(int index,int threadNo)
 				}
 				pthread_mutex_unlock(&queue_mutex);
 			}
-			free(imgData);
+			//free(imgData);
 			
 		}
 		else

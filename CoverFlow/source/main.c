@@ -792,6 +792,16 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "Pointer: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
 //		GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "X: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
 //		GRRLIB_Printf(50,20,font_texture,0x808080FF,1,"gameCnt:%d shift:%f lastplayed:%s lastsel: %d",self.gameCnt,self.shift,settings.lastplayed,self.lastGameSelected);
+/*		void * freeMemPtr;
+		int freeMem=0;
+		freeMemPtr = memalign(32,1024);
+		if (freeMemPtr >0)
+		{
+			freeMem = 0x817FFFFF - (unsigned int)freeMemPtr;
+			free((void *)freeMemPtr);
+		}
+		GRRLIB_Printf(50,20,font_texture,0x808080FF,1,"FreeMemory %u %x",freeMem,freeMemPtr);
+*/
 
 #endif
 		
