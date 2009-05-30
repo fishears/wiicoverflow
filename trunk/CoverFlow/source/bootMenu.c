@@ -105,8 +105,19 @@ bool LaunchGame()
 	
 	/*Fade to black*/
 	//TODO Fade to black instead of just drawing black
-	GRRLIB_FillScreen(0x000000FF);
-	GRRLIB_Render();
+	
+	int i = 0;
+	int fade = 0x00;
+	
+	for(i = 0; i <= 25; i++){
+		fade+=10;
+		
+		draw_covers();
+		draw_selected_two(true, false);
+		GRRLIB_2D_Init();
+		GRRLIB_FillScreen(0x00000000|fade);
+		GRRLIB_Render();
+	}
 	
 
 	if(!Menu_Boot())

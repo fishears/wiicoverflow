@@ -20,8 +20,6 @@ char ghooks[3][9] =
 {" Wii Pad"},
 {" GC Pad"}};
 
-static char timet[256];
-
 void ResetBuffer()
 {
 	BUFFER_KillBuffer();
@@ -167,7 +165,7 @@ void Paint_Progress_Generic(int v, int max, char* msg)
                 count = 26;
 	int i;
 
-	GRRLIB_2D_Init();
+	//GRRLIB_2D_Init();
 	
 	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
 	
@@ -1053,8 +1051,10 @@ void ShowProgress (s32 done, s32 total)
     static time_t start;
 	static u32 expected;
 
-    f32 percent; //, size;
-	u32 d, h, m, s;
+	char timet[1024];
+    
+	int percent; //, size;
+	int d, h, m, s;
 
 	//first time
 	if (!done) {
@@ -1076,15 +1076,17 @@ void ShowProgress (s32 done, s32 total)
 
 	//Calculate time values
 	h =  d / 3600;
-	m = (d / 60) % 60;
-	s =  d % 60;
+	m = (int)(d / 60) % 60;
+	s =  (int)d % 60;
 
 	//Calculate percentage/size
-	percent = (done * 100.0) / total;
+	percent = (int)(done * 100.0) / total;
 
 	//sprintf(prozent, "%s%0.2f%%", "Installing Game...", percent);
 
-    sprintf(timet,TX.installing, percent, h,m,s);
+	//sprintf(timet,TX.installing, percent, h,m,s);
+    //sprintf(timet, "Installing %d (%d %d %d)", percent, h,m,s);//OK
+	sprintf(timet, "Installing %d%% (%d:%02d:%02d)", percent, h,m,s);
 
 	/*Update and Draw Progress Window Here*/
 	//WindowPrompt(prozent, timet, 0, 0);
@@ -1103,6 +1105,7 @@ int ProgressWindow(wbfs_t *hdd, char* title, char* msg)
 	_msg   = msg;
 	
 	int ret = wbfs_add_disc(hdd, __WBFS_ReadDVD, NULL, ShowProgress, ONLY_GAME_PARTITION, 0);
+	//int ret = wbfs_add_disc(hdd, __WBFS_ReadDVD, NULL, NULL, ONLY_GAME_PARTITION, 0);
 	
 	self.progress = 0.0;
 	
