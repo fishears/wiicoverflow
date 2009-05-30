@@ -16,7 +16,7 @@ extern char** languages;
 extern char** vidmodes;
 
 char ghooks[3][9] =
-{{"   VI"},
+{{"      VI"},
 {" Wii Pad"},
 {" GC Pad"}};
 
@@ -209,23 +209,24 @@ void Init_Buttons()
     vidtvoffButton			= Button_Init(toggle_off_png, toggle_off_png, 350, 165);
     hookupButton			= Button_Init(plus_button_png, plus_button_hover_png, 466,77);
     hookdownButton			= Button_Init(minus_button_png, minus_button_hover_png, 364,77);
-    gcheatonButton          = Button_Init(toggle_on_png, toggle_on_png, 239,185); //
-    gcheatoffButton         = Button_Init(toggle_off_png, toggle_off_png, 239,185); //
-    glangupButton           = Button_Init(plus_button_png, plus_button_hover_png,480,223);
-    glangdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 324,223);
-    gvidupButton            = Button_Init(plus_button_png, plus_button_hover_png, 480,250);
-    gviddownButton          = Button_Init(minus_button_png, minus_button_hover_png, 324,250);
-    gvidtvonButton          = Button_Init(toggle_on_png, toggle_on_png, 374, 275);
-    gvidtvoffButton         = Button_Init(toggle_off_png, toggle_off_png, 374, 275);
-    ghookupButton           = Button_Init(plus_button_png, plus_button_hover_png, 480,187);
-    ghookdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 384,187);
+    gcheatonButton          = Button_Init(toggle_on_png, toggle_on_png, 239,170); //
+    gcheatoffButton         = Button_Init(toggle_off_png, toggle_off_png, 239,170); //
+    glangupButton           = Button_Init(plus_button_png, plus_button_hover_png,485,213);
+    glangdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 324,213);
+    gvidupButton            = Button_Init(plus_button_png, plus_button_hover_png, 485,240);
+    gviddownButton          = Button_Init(minus_button_png, minus_button_hover_png, 324,240);
+    gvidtvonButton          = Button_Init(toggle_on_png, toggle_on_png, 374, 270);
+    gvidtvoffButton         = Button_Init(toggle_off_png, toggle_off_png, 374, 270);
+    ghookupButton           = Button_Init(plus_button_png, plus_button_hover_png, 485,177);
+    ghookdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 384,177);
 	
-    coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 275);
-    coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 275);
-	
-    covers3dOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 315);
-    covers3dOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 315);
-	
+    coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 236);
+    coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 236);
+    covers3dOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 276);
+    covers3dOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 276);
+    hidescrollOnButton      = Button_Init(toggle_on_png, toggle_on_png, 350,316);
+    hidescrollOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 316);
+
     graphicsButton          = Button_Init(ok_png, ok_hover_png, 350, 205);
     yesButton               = Button_Init(yes_png, yes_hover_png, 220, 290);
     noButton                = Button_Init(no_png, no_hover_png, 340, 290);
@@ -233,16 +234,16 @@ void Init_Buttons()
     settingsButton	    	= Button_Init(settings_png, settings_hover_png, 30, 420);
     titlesButton		    = Button_Init(titles_png, titles_hover_png, 400, 245);
 	coversButton			= Button_Init(covers_png, covers_hover_png, 310, 245);
-    zoomupButton            = Button_Init(plus_button_png, plus_button_hover_png,456,85);
-    zoomdownButton          = Button_Init(minus_button_png, minus_button_hover_png, 300,85);
-    spacingupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,123);
-    spacingdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,123);
-    angleupButton           = Button_Init(plus_button_png, plus_button_hover_png,456,161);
-    angledownButton         = Button_Init(minus_button_png, minus_button_hover_png, 300,161);
-    falloffupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,199);
-    falloffdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,199);
-    windowupButton          = Button_Init(plus_button_png, plus_button_hover_png,456, 237);
-    windowdownButton        = Button_Init(minus_button_png, minus_button_hover_png, 300,237);
+    zoomupButton            = Button_Init(plus_button_png, plus_button_hover_png,456,75);
+    zoomdownButton          = Button_Init(minus_button_png, minus_button_hover_png, 300,75);
+    spacingupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,108);
+    spacingdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,108);
+    angleupButton           = Button_Init(plus_button_png, plus_button_hover_png,456,141);
+    angledownButton         = Button_Init(minus_button_png, minus_button_hover_png, 300,141);
+    falloffupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,174);
+    falloffdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,174);
+    windowupButton          = Button_Init(plus_button_png, plus_button_hover_png,456, 207);
+    windowdownButton        = Button_Init(minus_button_png, minus_button_hover_png, 300,207);
     themeWhiteButton        = Button_Init(theme_white_png, theme_white_png, 350, 285);
     themeBlackButton        = Button_Init(theme_black_png, theme_black_png, 350, 285);
     quickstartOnButton      = Button_Init(toggle_on_png, toggle_on_png, 350, 325);
@@ -624,10 +625,10 @@ int draw_selected_two(bool load, bool hover)
 		else
 			sprintf(gameName, "%s", (header->title));
 		// chomp the title to fit
-		if(strlen(gameName) >= 20)
+		if(strlen(gameName) >= 30)
 		{
 			//strncpy(gameName, header->title, 17);
-			gameName[17] = '\0';
+			gameName[27] = '\0';
 			strncat(gameName, "...", 3);
 		}
 		/*
@@ -1156,11 +1157,11 @@ void game_settings_menu()
 	else
 		sprintf(gameName, "%s", (header->title));
 	
-    if(strlen(header->title) >= 20)
+    if(strlen(header->title) >= 30)
     {
 		//strncpy(gameName, header->title, 17);
-		gameName[17] = '\0';
-		strncat(gameName, "...", 3);
+		gameName[27] = '\0';
+		strncat(gameName, ".. ", 3);
     }
 	
     sprintf(titleID, "%s", header->id);
@@ -1279,8 +1280,9 @@ void game_settings_menu()
 				}
 			}
 		}
-
-		GRRLIB_FillScreen(0x000000FF);
+		// Draw the covers behind the dialog
+		draw_covers();
+		//GRRLIB_FillScreen(0x000000FF);
 		GRRLIB_DrawImg(64, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
 
 		gbackButton.x = 474;
@@ -1309,7 +1311,20 @@ void game_settings_menu()
 		Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
 
         //BUTTON TEXT
-		GRRLIB_Printf(89, 145,  font_texture, settings.fontColor, 1, TX.setting, gameName);
+                char tLabel[50];
+                sprintf(tLabel,TX.setting, gameName);
+                CFreeTypeGX_DrawText(ttf18pt, 95,150, CFreeTypeGX_charToWideChar(ttf18pt, tLabel), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 169,193, CFreeTypeGX_charToWideChar(ttf14pt, TX.ocarina), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 334,193, CFreeTypeGX_charToWideChar(ttf14pt, TX.hook), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 409,193, CFreeTypeGX_charToWideChar(ttf14pt, ghooks[gameSetting.hooktype]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 169,228, CFreeTypeGX_charToWideChar(ttf14pt, TX.language), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 354,228, CFreeTypeGX_charToWideChar(ttf14pt, languages[gameSetting.language]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 169,257, CFreeTypeGX_charToWideChar(ttf14pt, TX.videoMode), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 354,255, CFreeTypeGX_charToWideChar(ttf14pt, vidmodes[gameSetting.video]), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf14pt, 169,289, CFreeTypeGX_charToWideChar(ttf14pt, TX.patchVIDTV), (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+
+/*
+                GRRLIB_Printf(89, 145,  font_texture, settings.fontColor, 1, TX.setting, gameName);
 		GRRLIB_Printf(169, 193,  font_texture, settings.fontColor, 1, TX.ocarina);
 		GRRLIB_Printf(334, 193,  font_texture, settings.fontColor, 1, TX.hook);
 		GRRLIB_Printf(409, 193,  font_texture, 0xFFFFFFFF, 1, "%s", ghooks[gameSetting.hooktype]);
@@ -1318,6 +1333,7 @@ void game_settings_menu()
 		GRRLIB_Printf(169, 257, font_texture, settings.fontColor, 1, TX.videoMode);
 		GRRLIB_Printf(354, 255, font_texture, 0xFFFFFFFF, 1, "%s", vidmodes[gameSetting.video]);
 		GRRLIB_Printf(169, 289, font_texture, settings.fontColor, 1, TX.patchVIDTV);
+*/
 
 		// Draw the default pointer hand
 		if(doloop)
