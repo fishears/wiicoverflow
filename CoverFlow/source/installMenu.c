@@ -1,6 +1,7 @@
 #include "installMenu.h"
 
 extern s_self self;
+extern s_title* titleList;
 
 extern int COVER_COUNT;
 bool Menu_Install(){
@@ -20,7 +21,7 @@ bool Menu_Install(){
 	Disc_SetWBFS(0, NULL);
 	
     int ret, choice = 0;
-	char *name;
+	char name[MAX_TITLE_LEN];
 	static char buffer[MAX_CHARACTERS + 4];
 
 	ret = Disc_Wait();
@@ -37,19 +38,34 @@ bool Menu_Install(){
 	ret = Disc_IsWii();
 	
 	if (ret < 0) {
-		choice = WindowPrompt (TX.notWiiDisc, TX.insertWiiDisc, &okButton,&cancelButton);
-
+		choice = WindowPrompt (TX.notWiiDisc, TX.insertWiiDisc,0,&cancelButton);
+/*
+		
 		if (!choice) {
 			return false;
 		}
 		else
 		{
+			//don't like
 			return Menu_Install();
 		}
+		*/
+		return false; //
 	}
 	
 	Disc_ReadHeader(&headerdisc);
-	name = headerdisc.title;
+	sprintf(name, headerdisc.title);
+
+	if(self.usingTitlesTxt){
+		char id[7];
+		sprintf(id, "%s",headerdisc.id);
+		getTitle(titleList, id, name);
+	}
+	
+	
+	//WindowPrompt("SUCCA", headerdisc.title, 0, &cancelButton);
+	
+	/*
 	if (strlen(name) < (22 + 3)) {
 			memset(buffer, 0, sizeof(buffer));
 			sprintf(name, "%s", name);
@@ -58,7 +74,8 @@ bool Menu_Install(){
 			strncat(buffer, "...", 3);
 			sprintf(name, "%s", buffer);
 	}
-
+	*/
+	
 	ret = WBFS_CheckGame(headerdisc.id);
 	if (ret) {
 		WindowPrompt (TX.alreadyInstalled, name, &cancelButton,0);
@@ -81,7 +98,7 @@ bool Menu_Install(){
 	
 	char ttext[50];
 	char tsize[50];
-	sprintf(ttext, TX.install, name);
+	sprintf(ttext, "Installing game: %s", name); // FIX M074
 	sprintf(tsize, TX.gameSize, gamesize);
 	
 	if(WindowPrompt (ttext,tsize,&okButton,&cancelButton))
@@ -104,7 +121,9 @@ bool Menu_Install(){
 				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 				Sleep(1000);
 				
+				WiiLight(1);
 				WindowPrompt (TX.successInstall, name,&okButton,0);
+				WiiLight(0);
 				return true;
 			}
 		}
