@@ -85,7 +85,7 @@
 #define BUFFER_THREAD_COUNT  1
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           15
-#define RELEASE              "RC 3"
+#define RELEASE              "RC4"
 
 #define ANIMATE_TEST 1
 #define ANIMATE_SPEED 0
@@ -112,9 +112,11 @@ enum {
 // Fonts
 extern u8 font_ttf[]; // the font file
 extern u32 font_ttf_size;
+extern CFreeTypeGX *ttf14pt;
 extern CFreeTypeGX *ttf16pt;
 extern CFreeTypeGX *ttf18pt;
 extern CFreeTypeGX *ttf20pt;
+CFreeTypeGX *ttf14pt;
 CFreeTypeGX *ttf16pt;
 CFreeTypeGX *ttf18pt;
 CFreeTypeGX *ttf20pt;

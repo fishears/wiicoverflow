@@ -353,7 +353,7 @@ void Do_Batteries()
 		sprintf(tUnit, TX.batteryUnit, x+1);
 		if(level > 4) level = 4; //restrict to maximum bars
 
-		if(ret!=0) //no wiimote here
+		if(ret!=0) //wiimote found
 		{
 			if(level==0) //battery critical
 			{
@@ -377,6 +377,8 @@ void Do_Batteries()
 				}
 			}
 		}
+                else //no wiimote so write player ID in grey (matches sysmenu behaviour
+                        CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), 392, CFreeTypeGX_charToWideChar(ttf18pt, tUnit), (GXColor){0x80, 0x80, 0x80, 0xff}, FTGX_JUSTIFY_LEFT);
 	}
 	#endif
 }
