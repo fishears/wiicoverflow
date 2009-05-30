@@ -112,7 +112,7 @@ void languageDefault()
 	strcopy(TX.played, "Played %s", sizeof(TX.played));
 	strcopy(TX.size, "Size:    %.2fGB", sizeof(TX.size));
 	strcopy(TX.installing, "Installing... (%0.2f%%) Time left: %d:%02d:%02d", sizeof(TX.installing));
-	strcopy(TX.setting, "%s: settings", sizeof(TX.setting));
+	strcopy(TX.setting, "Settings", sizeof(TX.setting));
 	snprintf(TX.hook, sizeof(TX.hook), "Hook:"); 										//M037
   	snprintf(TX.ocarina, sizeof(TX.ocarina), "Ocarina:"); 								//M135
 	snprintf(TX.language, sizeof(TX.language), "Language:");   						//M038

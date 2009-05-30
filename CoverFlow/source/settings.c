@@ -71,7 +71,7 @@ void graphics_SETTINGS_Init()
 	settings.coverFallOff = 0.0;
 	settings.drawWindow   = 7;
 	settings.coverText    = 1;
-	
+
 	settings.hideScroll   = 0;
 }
 
