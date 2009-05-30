@@ -1,4 +1,9 @@
 #labels Featured
+== RC5 (unknown) ==
+
+  * Fixed True Type memory leak (issue176)
+  * Wrong Covers (issue168)
+
 == RC4 (May 29 2009) ==
 
 -FIX-
