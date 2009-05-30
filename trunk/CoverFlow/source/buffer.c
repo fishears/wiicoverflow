@@ -9,10 +9,7 @@
 #include <string.h>
 #include <malloc.h>
 
-#define IMAGE_CACHE 1024*1024*4
-#define MEM2_START_ADDRESS 0x90000000
-#define MEM2_EXTENT 54217216 //don't see why this cant be used
-//#define MEM2_START_ADDRESS 0x90000000
+//#define MEM2_START_ADDRESS 0x91000000
 //#define MEM2_EXTENT 37440000 
 
 #define COVER_WIDTH 160
@@ -27,6 +24,11 @@
 
 #define DENSITY_METHOD 1
 #define ALL_CACHED 2
+
+#define IMAGE_CACHE 1024*1024*8
+#define MEM2_START_ADDRESS 0x90000000
+#define MEM2_EXTENT 54217216 //don't see why this cant be used
+static int staticBufferLocation=MEM2_START_ADDRESS+MEM2_EXTENT-IMAGE_CACHE; // buffer for images - if ttf goes in completely this can be removed along with the function
 
 
 extern const u8 back_cover_png[];
@@ -54,7 +56,6 @@ struct discHdr *CoverList;
 int nCovers;
 int nCoversInWindow;
 bool bCleanedUp=false;
-s32 staticBufferLocation=MEM2_START_ADDRESS+MEM2_EXTENT-IMAGE_CACHE; // 4Mb buffer for images - if ttf goes in completely this can be removed along with the function
 // end of private vars
 
 
@@ -525,6 +526,7 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	//start from a clear point
 	for (i=0;i<gameCount;i++) ResetQueueItem(i);
 	pthread_mutex_unlock(&queue_mutex);
+	memset((void *)MEM2_START_ADDRESS,0,MEM2_EXTENT-IMAGE_CACHE);
 	
 	bool covers3d = false;
 	

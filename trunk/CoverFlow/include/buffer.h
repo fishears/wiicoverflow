@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _BUFFER_H_
+#define _BUFFER_H_
 
 #include "pthread.h"
 
@@ -17,6 +18,7 @@ pthread_mutex_t count_mutex;
 
 /*Protect the Ready Queue*/
 pthread_mutex_t queue_mutex;
+
 
 /*Protect the Thread Lock*/
 extern pthread_mutex_t lock_thread_mutex;
@@ -66,3 +68,4 @@ inline void* process(void *arg);
 
 
 GRRLIB_texImg BufferStaticImage(const unsigned char* pngDataAddress);
+#endif
