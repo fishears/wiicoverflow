@@ -1,5 +1,5 @@
 #labels Featured
-== RC4 (sometime 2009) ==
+== RC4 (May 29 2009) ==
 
 -FIX-
   * Fixed sorting issues (issue155)
