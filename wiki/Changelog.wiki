@@ -1,12 +1,14 @@
 #labels Featured
-== RC5 (unknown) ==
+== RC6 (Unknown) ==
+
+== RC5 (May 30 2009) ==
 
   * Fixed True Type memory leak (issue176)
   * Wrong Covers (issue168)
   * Fixed swapped download for 2D/3D covers
   * Settings Menu Clean up.
   * Fix for game install errors.
-
+----
 == RC4 (May 29 2009) ==
 
 -FIX-
