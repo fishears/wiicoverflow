@@ -1,8 +1,13 @@
 #labels Featured
 == RC6 (Unknown) ==
 
+-NEW-
+  * Improved install menu, use only with 2D covers
+  * Changed boot mode (external dol) for save some memory, should be transparent for the user
+----
 == RC5 (May 30 2009) ==
 
+-FIX-
   * Fixed True Type memory leak (issue176)
   * Wrong Covers (issue168)
   * Fixed swapped download for 2D/3D covers
