@@ -476,9 +476,11 @@ void draw_game_title(int index, float textSize)
 		}
 		
 		if (settings.theme) // black text on white matte
-			CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410,  gameName, (GXColor){0x11, 0x11, 0x11, 0xff}, (GXColor){0xcc, 0xcc, 0xcc, 0x44}, FTGX_JUSTIFY_CENTER);
+			//CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410,  gameName, (GXColor){0x11, 0x11, 0x11, 0xff}, (GXColor){0xcc, 0xcc, 0xcc, 0x44}, FTGX_JUSTIFY_CENTER);
+                        CFreeTypeGX_DrawText(ttf20pt, 320, 410,  gameName, (GXColor){0x11, 0x11, 0x11, 0xff}, FTGX_JUSTIFY_CENTER);
 		else //white text on black matte
-			CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410,  gameName, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+			//CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410,  gameName, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+                        CFreeTypeGX_DrawText(ttf20pt, 320, 410,  gameName, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 	}
 }
 
@@ -644,7 +646,7 @@ int draw_selected_two(bool load, bool hover)
                 char tTemp[50];
 		// Display Title, Last Played, and Size
                 sprintf(tTemp,"%s",gameName);
-                CFreeTypeGX_DrawText(ttf18pt, 245,174,  tTemp, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf18pt, 380,174,  tTemp, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
                         CFreeTypeGX_DrawText(ttf14pt, 255,220,  TX.neverPlayed, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 		else
