@@ -1,7 +1,11 @@
 #ifndef _GAMESETTINGS_H_
 #define _GAMESETTINGS_H_
 
+#ifndef BOOTLOADER
 #include "coverflow.h"
+#else
+#include "bootloader.h"
+#endif
 
 typedef struct{
 

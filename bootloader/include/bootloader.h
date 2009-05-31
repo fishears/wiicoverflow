@@ -16,13 +16,13 @@
 #include "wdvd.h"
 #include "libwbfs.h"
 #include "disc.h"
+#include "gameSettings.h"
+#include "settings.h"
 
 #include "sys/errno.h"
 #include "sys/unistd.h"
 #include "fat.h"
 #include "sys.h"
-
-#include "settings.h"
 
 #define DEFAULT_FIFO_SIZE  (256*1024)
 
@@ -39,8 +39,6 @@
 #define GB_SIZE         1073741824.0
 
 u32 swap32(u32 x);
-
-//typedef s_settings s_bootloader;
 
 /*
 typedef struct {
