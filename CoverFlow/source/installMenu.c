@@ -22,7 +22,7 @@ bool Menu_Install(){
 	
     int ret, choice = 0;
 	char name[MAX_TITLE_LEN];
-	static char buffer[MAX_CHARACTERS + 4];
+	//static char buffer[MAX_CHARACTERS + 4];
 
 	ret = Disc_Wait();
 	if (ret < 0) {
@@ -96,12 +96,13 @@ bool Menu_Install(){
 	
 	sprintf(gametxt, TX.installingGame, gamesize);
 	
-	char ttext[50];
+	//char ttext[50];
 	char tsize[50];
-	sprintf(ttext, "Installing game: %s", name); // FIX M074
+	//sprintf(ttext, "Installing game: %s", name); // FIX M074
 	sprintf(tsize, TX.gameSize, gamesize);
 	
-	if(WindowPrompt (ttext,tsize,&okButton,&cancelButton))
+	//if(WindowPrompt(headerdisc.id, ttext,tsize,&okButton,&cancelButton))
+	if(WindowPromptInstall((char*)headerdisc.id, name, tsize,&okButton,&cancelButton))
 	{
 		if (gamesize > freespace) {
 			char errortxt[50];
@@ -122,7 +123,8 @@ bool Menu_Install(){
 				Sleep(1000);
 				
 				WiiLight(1);
-				WindowPrompt (TX.successInstall, name,&okButton,0);
+				WindowPromptInstall((char*)headerdisc.id, name, TX.successInstall, &okButton,&cancelButton);
+				//WindowPrompt (TX.successInstall, name,&okButton,0);
 				WiiLight(0);
 				return true;
 			}

@@ -89,11 +89,11 @@ void Init_Covers()
 	#endif
 }
 
-void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int max)
+void Download_Cover(char* id, int v, int max)
 {
 	char imgPath[100];
 
-	if (!header)
+	if (!id)
 		return;
 
 	/*
@@ -128,7 +128,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 		struct block file;
 	
 		char region[4];
-		switch(header->id[3]){
+		switch(id[3]){
 	
 		case 'E':
 			sprintf(region,"ntsc");
@@ -145,11 +145,11 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 
 		if(!(settings.covers3d))
 		{
-			snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, header->id);
+			snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, id);
 		} 
 		else
 		{
-			snprintf(imgPath, sizeof(imgPath), "%s/3dcovers/%c%c%c%c.png", USBLOADER_PATH, header->id[0], header->id[1], header->id[2], header->id[3]);
+			snprintf(imgPath, sizeof(imgPath), "%s/3dcovers/%c%c%c%c.png", USBLOADER_PATH, id[0], id[1], id[2], id[3]);
 		}
 		
 		sprintf(self.debugMsg, TX.checkPresence, imgPath);
@@ -167,11 +167,11 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 
 			if(!(settings.covers3d))
 			{
-				sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, header->id);
+				sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, id);
 			}
 			else
 			{
-				sprintf(url, "http://www.theotherzone.com/wii/fullcover/%c%c%c%c.png", header->id[0], header->id[1], header->id[2], header->id[3]);
+				sprintf(url, "http://www.theotherzone.com/wii/fullcover/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
 			}
 			
 			sprintf(self.debugMsg, TX.getting, url);
@@ -191,7 +191,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			}
 		}
 		
-		snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c%c.png", USBLOADER_PATH,  header->id[0], header->id[1], header->id[2], header->id[3]);
+		snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c%c.png", USBLOADER_PATH,  id[0], id[1], id[2], id[3]);
 		sprintf(self.debugMsg, TX.checkPresence, imgPath);
 		Paint_Progress_Generic(v, max,self.debugMsg);
 		
@@ -203,7 +203,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			Paint_Progress_Generic(v, max,self.debugMsg);
 		}
 		else{
-			sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c%c.png", header->id[0], header->id[1], header->id[2], header->id[3]);
+			sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
 			sprintf(self.debugMsg, TX.getting, url);
 			Paint_Progress_Generic(v, max,self.debugMsg);
 			
@@ -217,8 +217,8 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			}
 			else { //TRY WITH 3 DIGIT COVER
 				
-				snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c.png", USBLOADER_PATH,  header->id[0], header->id[1], header->id[2]);
-				sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c.png", header->id[0], header->id[1], header->id[2]);
+				snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c.png", USBLOADER_PATH,  id[0], id[1], id[2]);
+				sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c.png", id[0], id[1], id[2]);
 				sprintf(self.debugMsg, TX.getting, url);
 				Paint_Progress_Generic(v, max,self.debugMsg);
 				
@@ -246,6 +246,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 void batchDownloadCover(struct discHdr *gameList)
 {
 	int i;
+	char id[7];
 	
 	for(i = 0; i < self.gameCnt; i++)
 	{
@@ -253,9 +254,10 @@ void batchDownloadCover(struct discHdr *gameList)
 		
 		if(self.array_size < MAX_COVERS)
 		{
+			sprintf(id, "%s", header->id);
 			sprintf(self.debugMsg, TX.checkNextCover, header->id);
 			Paint_Progress_Generic(i, self.gameCnt, self.debugMsg);
-			Download_Cover(gameList, header, i, self.gameCnt);
+			Download_Cover(id, i, self.gameCnt);
 			//sprintf(filepath, USBLOADER_PATH "/covers/%s.png", header->id);
 		}
 	}
