@@ -190,6 +190,7 @@ int draw_selected_two(bool load, bool hover);
 float change_scale_without_containing(float val, float in_min, float in_max, float out_min, float out_max);
 float change_scale(float val, float in_min, float in_max, float out_min, float out_max);
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
+int WindowPromptInstall(char* id, char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
 
 void ShowProgress (s32 done, s32 total);
 int ProgressWindow(wbfs_t *hdd, char* title, char* msg);

@@ -729,11 +729,11 @@ int draw_selected_two(bool load, bool hover)
 				{
 					if(settings.covers3d)
 					{
-						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, AR_16_9, 0xFFFFFFFF);
+						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
 					}
 					else
 					{
-						GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
+						GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 					}
 				}
 				else
@@ -1037,6 +1037,176 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		
 	}while(doloop);
 	self.rumbleAmt = 0;
+	return false;
+}
+
+int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
+{
+	bool doloop = true;
+	char* pch;
+	
+	if(choice_a == 0 && choice_b == 0)
+	{
+		doloop = false;
+	}
+	else
+	{
+		doloop = true;
+	}
+	
+	GRRLIB_texImg myTex;
+	unsigned char buffer[160 * 224 * 4 * 10]; //why 5 I don't know
+	
+	WPAD_Rumble(0,0); //sometimes rumble remain active
+	if(networkInit(self.ipAddress))
+	{
+		Download_Cover(id, 1, self.gameCnt);
+		//CoversDownloaded();
+		
+		char filepath[255];
+		sprintf(filepath, USBLOADER_PATH "/covers/%s.png", id);
+        //int imgDataAddress = MEM2_START_ADDRESS + 160 * 224 * 4 * (maxSlots+threadNo);
+        //int ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress, 160 * 224 * 4);
+		//WindowPrompt("Pre reading", "sss", 0, &cancelButton);
+		int ret = Fat_ReadFileToBuffer(filepath, (void*)buffer, 160 * 224 * 4);
+		//WindowPrompt("Post reading", "sss", 0, &cancelButton);
+		if(ret > 0){
+			//WindowPrompt("Pre texture", "sss", 0, &cancelButton);
+			myTex = GRRLIB_LoadTexturePNG(buffer);
+		}
+		else{ //WindowPrompt("Pre nocover", "sss", 0, &cancelButton);
+			myTex = GRRLIB_LoadTexture(no_cover_png);
+		}
+		
+		//WindowPrompt("Post", "sss", 0, &cancelButton);
+		//myTex = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgDataAddress, (void *)thisDataMem2Address);
+	}
+	
+	do{
+		WPAD_ScanPads();
+		PAD_ScanPads();
+		GetWiimoteData();
+		
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)|| (PAD_ButtonsDown(0) & PAD_BUTTON_B)){
+			free(myTex.data);
+			return false;
+		}
+		
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
+		{
+			if(choice_a != 0)
+			{
+				if(Button_Select(choice_a, pointer.p_x, pointer.p_y)){
+					free(myTex.data);
+					return true;
+				}
+			}
+			if(choice_b != 0)
+			{
+				if(Button_Select(choice_b, pointer.p_x, pointer.p_y)){
+					free(myTex.data);
+					return false;
+				}
+			}
+		}
+
+		// Draw the dialog panel
+		GRRLIB_DrawImg(50, 80, load_bg_texture, 0, 1, 1.25, 0xFFFFFFFF);
+		
+		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+			GRRLIB_DrawImg(60, 80, myTex, 0, AR_16_9, 1, 0xFFFFFFFF);
+		else
+			GRRLIB_DrawImg(60, 80, myTex, 0, 1, 1, 0xFFFFFFFF);
+		
+
+		// Draw buttons
+		if(choice_a != 0 && choice_b != 0){
+			choice_a->x = 320-5-80;
+			choice_b->x = 320+5;
+#ifndef TTF_TEST
+			Button_Paint(choice_a); 
+			Button_Paint(choice_b);
+#else
+			GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
+			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+			GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
+			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+#endif
+		}
+		
+		else{
+			if(choice_a != 0){
+				choice_a->x = 320-40;
+#ifndef TTF_TEST
+				Button_Paint(choice_a); 
+#else
+				GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+#endif
+			}
+			
+			if(choice_b != 0){
+				choice_b->x = 320-40;
+#ifndef TTF_TEST
+				Button_Paint(choice_b);
+#else
+				GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+#endif
+			}
+		}
+		
+		int y = 140;
+		int sp = 0;
+		
+		// Draw text
+#ifndef TTF_TEST
+		GRRLIB_Printf(270, 105, font_texture, 0xFFFFFFFF, 1, "%s", title);
+#else
+		CFreeTypeGX_DrawTextWithShadow(ttf20pt, 220, 105, title, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
+#endif
+		if(txt != NULL)
+		{
+			char* msg = malloc(strlen(txt)*sizeof(char));
+			sprintf(msg, txt);
+			
+			pch = strtok(msg, "\n");
+			while (pch != NULL)
+			{
+#ifndef TTF_TEST
+				GRRLIB_Printf(208, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
+#else
+				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 240, y+sp, pch, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
+#endif
+				pch = strtok(NULL, "\n");
+				sp+=16;
+			}
+			free(msg);
+        }
+		// Check for button-pointer intersections, and rumble
+		if (Button_Hover(choice_a, pointer.p_x, pointer.p_y) ||
+			Button_Hover(choice_b, pointer.p_x, pointer.p_y))
+		{
+			// Should we be rumbling?
+			if (--self.rumbleAmt > 0)
+				WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			else 
+				WPAD_Rumble(0,0); // Kill the rumble
+		}
+		else
+		{ // If no button is being hovered, kill the rumble
+			WPAD_Rumble(0,0);
+			self.rumbleAmt = 5;
+		}
+		// Draw the default pointer hand
+		if(doloop)
+			DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		
+		GRRLIB_Render();
+		
+	}while(doloop);
+	self.rumbleAmt = 0;
+	free(myTex.data);
 	return false;
 }
 
