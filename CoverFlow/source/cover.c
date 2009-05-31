@@ -143,7 +143,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 			break;
 		}
 
-		if(settings.covers3d)
+		if(!(settings.covers3d))
 		{
 			snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, header->id);
 		} 
@@ -165,7 +165,7 @@ void Download_Cover(struct discHdr *gameList, struct discHdr *header, int v, int
 		}
 		else{
 
-			if(settings.covers3d)
+			if(!(settings.covers3d))
 			{
 				sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, header->id);
 			}
