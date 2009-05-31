@@ -4,6 +4,7 @@
 #include "errno.h"
 
 s_settings settings;
+s_gameSettings gameSetting;
 
 // Language selection config
 char languages[11][22] =
@@ -25,7 +26,7 @@ char vidmodes[6][10] =
 	{ " pal50", },
 	{ " pal60", },
 	{ " ntsc ", },
-        { "system"}};
+		{ "system"}};
 
 /* WBFS device */
 static s32 my_wbfsDev = WBFS_DEVICE_USB;
@@ -109,7 +110,7 @@ int main( int argc, char **argv ){
 	printf("\x1b[2;0H");
 	
 
-	printf("ITALY ROXXXX!\n");
+	//printf("ITALY ROXXXX!\n");
 	/*
 	int j=0;
 	printf("argc: %d\n", argc);
@@ -127,10 +128,10 @@ int main( int argc, char **argv ){
 	
 	//Default Settings
 	settings.video    = 0;
-    settings.ocarina  = 0;
-    settings.hooktype = 0;
-    settings.language = 0;
-    settings.vipatch  = 0;
+	settings.ocarina  = 0;
+	settings.hooktype = 0;
+	settings.language = 0;
+	settings.vipatch  = 0;
 	strcpy(settings.localLanguage, "EN-US"); //Localization
 
 	/* Load Custom IOS */
@@ -147,12 +148,11 @@ int main( int argc, char **argv ){
 		return 0;
 	}
 	
-		Sys_Init();
+	Sys_Init();
 	Subsystem_Init();
 	//initWBFS();
 	
 	my_wbfsDev = WBFS_DEVICE_USB;
-	
 	
 	ret = WBFS_Init(my_wbfsDev);
 		
@@ -161,70 +161,59 @@ int main( int argc, char **argv ){
 		/*arg 1 == Game ID*/
 		
 		/* Set WBFS mode */
-		Disc_SetWBFS(WBFS_DEVICE_USB,argv[1]);
+		Disc_SetWBFS(WBFS_DEVICE_USB, (u8*)argv[1]);
 	}
 	else{
+			
+		char gameID[7];
 	
-		  //TODO:
-		  // Implement system settings load and per settings game, this is just a proof of concept
-		  // on how boot games without the need of parameters (since we suck and cannot get it work)
-		  // In my opinion this way is also good because it uses standard call for getting parameters.
-		  // If an option is added in settings we don't need to add to the parameter list, just use
-		  // the normal calls for getting parameter.
-		  // Do not forget to call system settings if per game settings are not found!
-		
-		  char gameID[7];
-	
-		  FILE *fp;
-		  mxml_node_t *xml;
+		FILE *fp;
+		mxml_node_t *xml;
 
-		  fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
-		  
-		  if(fp == NULL){
-			 
-			printf("wait for succablank %d\n", errno);
-			printf(USBLOADER_PATH "/wiicoverflow.xml");
+		fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
+
+		if(fp == NULL){
+			
+			printf("can't open wiicoverlow.h (error: %d)\n", errno);
+			//printf(USBLOADER_PATH "/wiicoverflow.xml");
 			VIDEO_WaitVSync();
 			usleep(10000);
-			 
-			 return -1;
-			}
-		  
-		  xml = mxmlLoadFile(NULL, fp, MXML_NO_CALLBACK);
-		 
-		 
-		  fclose(fp);
-				
-		  if(xml != NULL)
-		  {
-		  
-				printf("xml != null\n");
-				VIDEO_WaitVSync();
-				usleep(5000);
+			
+			return -1;
+		}
 
-		  
-			  mxml_node_t *node;
-			  mxml_node_t *next_n;
+		xml = mxmlLoadFile(NULL, fp, MXML_NO_CALLBACK);
 				
-			  node = mxmlFindElement(xml,xml, "wiicoverflow", NULL, NULL, MXML_DESCEND); 
-			  if(node == NULL) return -1;
+		fclose(fp);
+				
+		if(xml != NULL)
+		{		  		  
+			mxml_node_t *node;
+			mxml_node_t *next_n;
+				
+			node = mxmlFindElement(xml,xml, "wiicoverflow", NULL, NULL, MXML_DESCEND);
+			if(node == NULL) return -1;
 			  
-			  next_n = mxmlFindElement(node, node, "graphics", NULL, NULL, MXML_DESCEND); 
-			  next_n = mxmlFindElement(node, node, "general", NULL, NULL, MXML_DESCEND);
-			  next_n = mxmlFindElement(node, node, "game", NULL, NULL, MXML_DESCEND);
+			next_n = mxmlFindElement(node, node, "graphics", NULL, NULL, MXML_DESCEND);
+			next_n = mxmlFindElement(node, node, "general", NULL, NULL, MXML_DESCEND);
+			next_n = mxmlFindElement(node, node, "game", NULL, NULL, MXML_DESCEND);
 			  
-			    if(next_n != NULL)
-				  {
-					if(mxmlElementGetAttr(next_n,"lastplayed")){
-						  strcpy(gameID, mxmlElementGetAttr(next_n,"lastplayed"));
-						  Disc_SetWBFS(WBFS_DEVICE_USB, gameID);
-						  }
-				  }
-		 }
-		
+			if(next_n != NULL)
+			{
+				if(mxmlElementGetAttr(next_n,"lastplayed"))
+				{
+					strcpy(gameID, mxmlElementGetAttr(next_n,"lastplayed"));
+					
+					//if(getGameSettings(gameID, &gameSetting))
+					//apply_settings();
+					
+					getGameSettings(gameID, &gameSetting);
+					
+					Disc_SetWBFS(WBFS_DEVICE_USB, (u8*)gameID);
+				}
+			}
+		}
 	}
-	
-	/*TODO Use other args to set up CFG for patching, etc...*/
 	
 	/* Open disc */
 	ret = Disc_Open();
@@ -233,9 +222,9 @@ int main( int argc, char **argv ){
 	}
 
 	ret = Disc_WiiBoot();
-    if (ret < 0) {
-        SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
-    }
+	if (ret < 0) {
+		SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
+	}
 	
 	
 	SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);

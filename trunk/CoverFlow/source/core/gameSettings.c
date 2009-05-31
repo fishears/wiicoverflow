@@ -140,6 +140,7 @@ void succa(s_gameSettings* gs){
 	gs->vipatch = 5;
 }
 
+#ifndef BOOTLOADER
 void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 	
 	FILE *fp;
@@ -285,4 +286,4 @@ void createEmptyGameSettingsFile(){
 	else
 		WindowPrompt(TX.error, TX.errorcreateGL, 0, &okButton);
 }
-
+#endif

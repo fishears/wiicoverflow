@@ -28,8 +28,8 @@ INCLUDES	:=  include include/pngu include/libwbfs include/core
 CFLAGS	= -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
-LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
-#LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
+#LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
+LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
@@ -103,9 +103,9 @@ $(BUILD): version
 
 version:
 	@echo Generating Version.h file...
-	@echo "#pragma once" > include/version.h
-	@echo -n "#define SVN_VERSION " >> include/version.h
-	@echo `cat .svn/entries | head -4 | tail -1` >> include/version.h
+#	@echo "#pragma once" > include/version.h
+#	@echo -n "#define SVN_VERSION " >> include/version.h
+#	@echo `cat .svn/entries | head -4 | tail -1` >> include/version.h
 
 
 #-------------------------------------------------------------------------------
