@@ -67,18 +67,18 @@ void LoadTextures()
 	no_disc_texture		   = BufferImageToSlot(no_disc_png,8);
 	load_bg_texture		   = BufferImageToSlot(bg_options_screen_no_transparency_png,9); // can't find free
 	font_texture           = BufferImageToSlot(slidebar_png,10);  // TODO: go away post TTF
-	slidebar_texture       = BufferStaticImage(slidebar_png);  // can't find free
+	slidebar_texture       = GRRLIB_LoadTexturePNG(slidebar_png);  // can't find free
 	slidebar_white_texture = GRRLIB_CreateEmptyTexture(slidebar_texture.w, slidebar_texture.h);
 	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white
-	ambientlight_texture   = BufferStaticImage(ambientlight_png);  // can't find free
+	ambientlight_texture   = GRRLIB_LoadTexturePNG(ambientlight_png);  // can't find free
 	ambientlight_white_texture = GRRLIB_CreateEmptyTexture(ambientlight_texture.w, ambientlight_texture.h);
 	GRRLIB_BMFX_Invert(ambientlight_texture, ambientlight_white_texture); //invert the fade from black to white
-	battery_bar            = BufferStaticImage(battery_bar_png);  // can't find free
-    battery_bar_red        = BufferStaticImage(battery_bar_red_png);  // can't find free
-    battery                = BufferStaticImage(battery_png);  // can't find free
-    battery_dead           = BufferStaticImage(battery_dead_png);  // can't find free
-	ttf_button_black       = BufferStaticImage(ttf_button_black_png);  // can't find free
-	ttf_button_white       = BufferStaticImage(ttf_button_white_png); // can't find free
+	battery_bar            = GRRLIB_LoadTexturePNG(battery_bar_png);  // can't find free
+    battery_bar_red        = GRRLIB_LoadTexturePNG(battery_bar_red_png);  // can't find free
+    battery                = GRRLIB_LoadTexturePNG(battery_png);  // can't find free
+    battery_dead           = GRRLIB_LoadTexturePNG(battery_dead_png);  // can't find free
+	ttf_button_black       = GRRLIB_LoadTexturePNG(ttf_button_black_png);  // can't find free
+	ttf_button_white       = GRRLIB_LoadTexturePNG(ttf_button_white_png); // can't find free
 }
 
 void DrawBufferedCover(int i, float loc, float angle, float falloff)
