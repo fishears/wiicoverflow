@@ -9,8 +9,8 @@
 #include <string.h>
 #include <malloc.h>
 
-//#define MEM2_START_ADDRESS 0x91000000
-//#define MEM2_EXTENT 37440000 
+#define MEM2_START_ADDRESS 0x91000000
+#define MEM2_EXTENT 37440000 
 
 #define COVER_WIDTH 160
 #define COVER_HEIGHT 224
@@ -58,18 +58,19 @@ int nCoversInWindow;
 bool bCleanedUp=false;
 // end of private vars
 
-#define IMAGE_SLOTS 10
+#define IMAGE_SLOTS 12
 unsigned int FreeMemorySlots[IMAGE_SLOTS+1] =
 	{
+	0,
 	76*88*4,
 	76*88*4,
 	76*88*4,
 	384*236*4,
 	160*224*4,
 	512*340*4,
-	80*32*4,
+	160*224*4,
 	160*160*4,
-	512*286*4,
+	512*268*4,
 	400*64*4,
 	0};
 
@@ -475,13 +476,13 @@ void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
 void SetSelectedCover(int index)
 {
 	iSetSelectedCover(index+nCovers/2.0,false);
-	//         GRRLIB_Printf(50, 20, font_texture, 0xFFFFFFFF, 1, "Method %d Max Slots %d Main Cache %d", BufferMethod, maxSlots, MainCacheSize);
-	//              GRRLIB_Printf(50, 40, font_texture, 0xFFFFFFFF, 1, "Floating Cache %d, Density %f",FloatingCacheSize,Density);
-	// GRRLIB_Printf(50, 60, font_texture, 0xFFFFFFFF, 1, " Current Selection %d", CurrentSelection);
-	//              GRRLIB_Printf(50, 0, font_texture, 0xFFFFFFFF, 1, " Floating Cache %d %d %d %d %d %d %d %d %d %d", FloatingCacheCovers[0],FloatingCacheCovers[1],FloatingCacheCovers[2],FloatingCacheCovers[3],FloatingCacheCovers[4],FloatingCacheCovers[5],FloatingCacheCovers[6],FloatingCacheCovers[7],FloatingCacheCovers[8],FloatingCacheCovers[9]);
-	//              int i=CurrentSelection;
-	//              GRRLIB_Printf(50, 80, font_texture, 0xFFFFFFFF, 1, " Buffer Ready %d Request %d PBP %d Missing %d Floating %d", _cq.ready[i],_cq.request[i],_cq.permaBufferPosition[i],_cq.coverMissing[i],_cq.floatingQueuePosition[i]);
-	
+/*	         GRRLIB_Printf(50, 20, font_texture, 0xFFFFFFFF, 1, "Method %d Max Slots %d Main Cache %d", BufferMethod, maxSlots, MainCacheSize);
+	              GRRLIB_Printf(50, 40, font_texture, 0xFFFFFFFF, 1, "Floating Cache %d, Density %f",FloatingCacheSize,Density);
+	 GRRLIB_Printf(50, 60, font_texture, 0xFFFFFFFF, 1, " Current Selection %d", CurrentSelection);
+	              GRRLIB_Printf(50, 0, font_texture, 0xFFFFFFFF, 1, " Floating Cache %d %d %d %d %d %d %d %d %d %d", FloatingCacheCovers[0],FloatingCacheCovers[1],FloatingCacheCovers[2],FloatingCacheCovers[3],FloatingCacheCovers[4],FloatingCacheCovers[5],FloatingCacheCovers[6],FloatingCacheCovers[7],FloatingCacheCovers[8],FloatingCacheCovers[9]);
+	              int i=CurrentSelection;
+	              GRRLIB_Printf(50, 80, font_texture, 0xFFFFFFFF, 1, " Buffer Ready %d Request %d PBP %d Missing %d Floating %d", _cq.ready[i],_cq.request[i],_cq.permaBufferPosition[i],_cq.coverMissing[i],_cq.floatingQueuePosition[i]);
+	*/
 }
 
 
@@ -646,7 +647,10 @@ GRRLIB_texImg BufferImageToSlot(const unsigned char* pngDataAddress,int slot)
 	}
 	// start half way up cache till all the calls are changed
 	ret = GRRLIB_LoadTexturePNGToMemory(pngDataAddress, (void *)(MEM2_START_ADDRESS+MEM2_EXTENT-IMAGE_CACHE+IMAGE_CACHE/2+offset));
-	FreeMemorySlots[i]=ret.w*ret.h*4;
+	if (FreeMemorySlots[slot]!=ret.w*ret.h*4)
+	{
+		exit(0);
+	}
 	return ret;
 }
 
