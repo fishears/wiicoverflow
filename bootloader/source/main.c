@@ -3,7 +3,7 @@
 #include "subsystem.h"
 #include "errno.h"
 
-s_bootloader settings;
+s_settings settings;
 
 // Language selection config
 char languages[11][22] =

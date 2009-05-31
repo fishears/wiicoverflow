@@ -13,16 +13,10 @@
 //#include "cfg.h"
 #include "subsystem.h"
 
-#ifndef BOOTLOADER
 #include "settings.h"
 
 extern s_settings settings;
 
-#else
-#include "bootloader.h"
-
-extern s_bootloader settings;
-#endif
 
 /* Constants */
 #define PTABLE_OFFSET	0x40000

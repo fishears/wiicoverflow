@@ -1,7 +1,11 @@
 #ifndef _SETTINGS_H_
 #define _SETTINGS_H_
 
+#ifndef BOOTLOADER
 #include "coverflow.h"
+#else
+#include "bootloader.h"
+#endif
 
 typedef struct {
     float coverZoom;

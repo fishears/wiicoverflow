@@ -7,16 +7,10 @@
 #include "patchcode.h" /*FISHEARS*/
 #include "kenobiwii.h" /*FISHEARS*/
 
-#ifndef BOOTLOADER
 #include "settings.h"
 
 extern s_settings settings;
 
-#else
-#include "bootloader.h"
-
-extern s_bootloader settings;
-#endif
 
 /*KENOBI! - FISHEARS*/
 extern const unsigned char kenobiwii[];

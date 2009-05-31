@@ -22,6 +22,8 @@
 #include "fat.h"
 #include "sys.h"
 
+#include "settings.h"
+
 #define DEFAULT_FIFO_SIZE  (256*1024)
 
 #include "mxml.h" // Because Scognito rox ( == because Scognito is LAZY )
@@ -38,6 +40,9 @@
 
 u32 swap32(u32 x);
 
+//typedef s_settings s_bootloader;
+
+/*
 typedef struct {
     int ocarina;
     int hooktype;
@@ -46,5 +51,6 @@ typedef struct {
     int vipatch;
 	char localLanguage[5];
 } s_bootloader;
+*/
 
 #endif
