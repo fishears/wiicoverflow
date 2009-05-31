@@ -959,9 +959,9 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			Button_Paint(choice_b);
 #else
 			GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+			CFreeTypeGX_DrawText(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 			GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+			CFreeTypeGX_DrawText(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 #endif
 		}
 		
@@ -972,7 +972,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 				Button_Paint(choice_a); 
 #else
 				GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 #endif
 			}
 			
@@ -982,7 +982,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 				Button_Paint(choice_b);
 #else
 				GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 #endif
 			}
 		}
@@ -994,7 +994,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 #ifndef TTF_TEST
 		GRRLIB_Printf(100, 105, font_texture, 0xFFFFFFFF, 1, "%s", title);
 #else
-		CFreeTypeGX_DrawTextWithShadow(ttf20pt, 100, 105, title, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
+		CFreeTypeGX_DrawText(ttf20pt, 100, 105, title, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 #endif
 		if(txt != NULL)
 		{
@@ -1007,7 +1007,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 #ifndef TTF_TEST
 				GRRLIB_Printf(138, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
 #else
-				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 140, y+sp, pch, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf16pt, 140, y+sp, pch, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 #endif
 				pch = strtok(NULL, "\n");
 				sp+=16;
