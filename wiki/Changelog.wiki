@@ -3,6 +3,7 @@
 
   * Fixed True Type memory leak (issue176)
   * Wrong Covers (issue168)
+  * Fixed swapped download for 2D/3D covers
 
 == RC4 (May 29 2009) ==
 
