@@ -142,7 +142,7 @@ void Graphic_Settings_Menu(){
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1.45, 0xFFFFFFCC);
 		// Draw text features
-		CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 55, TX.graphicSetting, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf18pt, 320, 55, TX.graphicSetting, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf14pt, 145,90, TX.zoom, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
                 sprintf(tFloat, "%f", settings.coverZoom);
                 CFreeTypeGX_DrawText(ttf14pt, 350,90, tFloat, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
@@ -401,7 +401,7 @@ void Settings_Menu(){
 		GRRLIB_2D_Init();
 		GRRLIB_DrawImg(115, 136, menu_bg_texture, 0, 1, 1.8, 0xFFFFFFCC);
 		// Draw text features
-		CFreeTypeGX_DrawTextWithShadow(ttf18pt, 320, 55,  TX.cflowSettings, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf18pt, 320, 55,  TX.cflowSettings, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf14pt, 145,93,  TX.ocarina, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 		CFreeTypeGX_DrawText(ttf14pt, 310,93,  TX.hook, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 		CFreeTypeGX_DrawText(ttf14pt, 390,93,  hooks[settings.hooktype], (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
