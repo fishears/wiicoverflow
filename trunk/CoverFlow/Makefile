@@ -103,9 +103,9 @@ $(BUILD): version
 
 version:
 	@echo Generating Version.h file...
-#	@echo "#pragma once" > include/version.h
-#	@echo -n "#define SVN_VERSION " >> include/version.h
-#	@echo `cat .svn/entries | head -4 | tail -1` >> include/version.h
+	@echo "#pragma once" > include/version.h
+	@echo -n "#define SVN_VERSION " >> include/version.h
+	@echo `cat .svn/entries | head -4 | tail -1` >> include/version.h
 
 
 #-------------------------------------------------------------------------------
