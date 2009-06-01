@@ -179,7 +179,7 @@ void Download_Cover(char* id, int v, int max)
 		
 			file = downloadfile(url);
 			
-			if(file.data != NULL && file.size != 184){ //site return a black image of 184 bytes if the image is not found
+			if(file.data != NULL && file.size != 7386 && file.size != 36864 && file.size >= 1024){ //site return a black image of 184 bytes if the image is not found
 				saveFile(imgPath, file);
 				free(file.data);
 				sprintf(self.debugMsg, TX.done );
@@ -209,7 +209,7 @@ void Download_Cover(char* id, int v, int max)
 			
 			file = downloadfile(url);
 			
-			if(file.data != NULL && file.size != 7386){ //site return a generic of 7386 bytes image is not found
+			if(file.data != NULL && file.size != 7386 && file.size != 36864 && file.size >= 1024){ //site return a generic of 7386 bytes image is not found
 				saveFile(imgPath, file);
 				free(file.data);
 				sprintf(self.debugMsg, TX.done );
@@ -224,7 +224,7 @@ void Download_Cover(char* id, int v, int max)
 				
 				file = downloadfile(url);
 			
-				if(file.data != NULL && file.size != 7386){ //site return a generic of 7386 bytes image is not found
+				if(file.data != NULL && file.size != 7386 && file.size != 36864 && file.size >= 1024){ //site return a generic of 7386 bytes image is not found
 					saveFile(imgPath, file);
 					free(file.data);
 					sprintf(self.debugMsg, TX.done );
