@@ -26,7 +26,7 @@
 #define ALL_CACHED 2
 
 #define IMAGE_CACHE 1024*1024*8
-#define MEM2_START_ADDRESS 0x90000000
+//#define MEM2_START_ADDRESS 0x90000000
 //#define MEM2_EXTENT 54217216 //don't see why this cant be used
 static int staticBufferLocation=MEM2_START_ADDRESS+MEM2_EXTENT-IMAGE_CACHE; // buffer for images - if ttf goes in completely this can be removed along with the function
 
