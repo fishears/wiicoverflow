@@ -28,8 +28,8 @@ INCLUDES	:=  include ../CoverFlow/include/libwbfs ../CoverFlow/include/core ../C
 CFLAGS	= -DBOOTLOADER -Os -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
-#LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
-LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
+LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
+#LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
