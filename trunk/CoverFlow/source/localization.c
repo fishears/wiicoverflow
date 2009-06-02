@@ -957,11 +957,7 @@ bool languageFind()
 		}
 	if (strcmp(settings.localLanguage, "nl-DUT") == 0) {
 		sprintf(langFile, "dutch" );
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "nl-DUT") == 0) {
-		sprintf(langFile, "dutch" );
-		return false;
+		return true;
 		}
 	if (strcmp(settings.localLanguage, "nn-NOR") == 0) {
 		sprintf(langFile, "norwegian" );
