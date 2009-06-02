@@ -1,17 +1,19 @@
-To test the localization you have to edit wiicoverflow.xml
+possible values for localizeLang= "" in wiicoverflow.xml
 
-Sample:
-localizeLang="EN-US"
-for default hardcoded language
-or
-
-localizeLang="DE"
-for Deutsch
-
-or
-
-localizeLang="PT-BR"
-for Português Brasil
-
-Later on a select-menu will set this.
-A write-function is already coded.
+"default"      // en-US
+"ca-CAT" 
+"da-DAN" 
+"de-GER" 
+"es-SPA" 
+"fi-FIN" 
+"fr-FRE" 
+"it-ITA" 
+"ja-JPN" 
+"ko-KOR" 
+"nl-DUT" 
+"nn-NOR" 
+"pt-BR"  
+"ru-RUS" 
+"tr-TUR" 
+"zh-CN"  
+"zh-TW"  

@@ -51,7 +51,7 @@ void SETTINGS_Init()
 	settings.music        = 1;
 	settings.quickstart   = 0;
 	settings.enablepitch  = 0;
-	strcpy(settings.localLanguage, "EN-US"); //Localization
+	strcpy(settings.localLanguage, "default"); // en-US 
  
 	//Global Game
 	settings.ocarina      = 0;
