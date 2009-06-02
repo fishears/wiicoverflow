@@ -39,6 +39,7 @@
 #define GB_SIZE         1073741824.0
 
 u32 swap32(u32 x);
+void apply_settings();
 
 /*
 typedef struct {

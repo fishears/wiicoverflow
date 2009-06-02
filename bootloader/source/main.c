@@ -6,37 +6,11 @@
 s_settings settings;
 s_gameSettings gameSetting;
 
-// Language selection config
-char languages[11][22] =
-{{"Console Default"},
-{"   Japanese"},
-{"    English"},
-{"    German"},
-{"    French"},
-{"    Spanish"},
-{"    Italian"},
-{"     Dutch"},
-{"   S. Chinese"},
-{"   T. Chinese"},
-{"    Korean"}};
-//video mode text
-char vidmodes[6][10] =
-{{ " game " },
-	{ " auto ", },
-	{ " pal50", },
-	{ " pal60", },
-	{ " ntsc ", },
-		{ "system"}};
-
-/* WBFS device */
-static s32 my_wbfsDev = WBFS_DEVICE_USB;
-
 static void *xfb = NULL;
 static GXRModeObj *rmode = NULL;
 
 bool init_usbfs()
 {    
-   // __Disc_SetLowMem();
 
 	s32 ret;
 
@@ -44,9 +18,6 @@ bool init_usbfs()
 	/* Initialize system */
 	Sys_Init();
 
-	/* Mount SDHC */
-	//Fat_MountSDHC();
-	
 	/* Initialize DIP module */
 	ret = Disc_Init();
 	
@@ -68,13 +39,7 @@ void initVars(){
 int main( int argc, char **argv ){
 //---------------------------------------------------------------------------------
 
-
-	
-	
 	VIDEO_Init();
-	
-	// This function initialises the attached controllers
-	//WPAD_Init();
 	
 	// Obtain the preferred video mode from the system
 	// This will correspond to the settings in the Wii menu
@@ -102,38 +67,14 @@ int main( int argc, char **argv ){
 	VIDEO_WaitVSync();
 	if(rmode->viTVMode&VI_NON_INTERLACE) VIDEO_WaitVSync();
 
-
-	// The console understands VT terminal escape codes
-	// This positions the cursor on row 2, column 0
-	// we can use variables for this with format codes too
-	// e.g. printf ("\x1b[%d;%dH", row, column );
-	printf("\x1b[2;0H");
-	
-
-	//printf("ITALY ROXXXX!\n");
-	/*
-	int j=0;
-	printf("argc: %d\n", argc);
-	for(;j<argc;j++)
-	{
-		printf("ARG[%d] = %s\n",j,argv[j]);
-	}
-	*/
-	
+/*
 	int i = 0;
 	for(i=0; i<5; i++){
 			usleep(1000);
 			VIDEO_WaitVSync();
 	}
+*/
 	
-	//Default Settings
-	settings.video    = 0;
-	settings.ocarina  = 0;
-	settings.hooktype = 0;
-	settings.language = 0;
-	settings.vipatch  = 0;
-	strcpy(settings.localLanguage, "EN-US"); //Localization
-
 	/* Load Custom IOS */
 	int ret = IOS_ReloadIOS(249);
 	/* Check if Custom IOS is loaded */
@@ -150,81 +91,28 @@ int main( int argc, char **argv ){
 	
 	Sys_Init();
 	Subsystem_Init();
-	//initWBFS();
-	
-	my_wbfsDev = WBFS_DEVICE_USB;
-	
-	ret = WBFS_Init(my_wbfsDev);
 		
-	if(argc > 0)
-	{
-		/*arg 1 == Game ID*/
-		
-		/* Set WBFS mode */
-		Disc_SetWBFS(WBFS_DEVICE_USB, (u8*)argv[1]);
-	}
-	else{
-			
 		char gameID[7];
+                SETTINGS_Load();
+                strcpy(gameID, settings.lastplayed);
+                if(getGameSettings(gameID, &gameSetting))
+					apply_settings();
 	
-		FILE *fp;
-		mxml_node_t *xml;
+	/* Set WBFS mode */
+	Disc_SetWBFS(WBFS_DEVICE_USB,(u8*)gameID);
 
-		fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
+	s32 retval;
 
-		if(fp == NULL){
-			
-			printf("can't open wiicoverlow.h (error: %d)\n", errno);
-			//printf(USBLOADER_PATH "/wiicoverflow.xml");
-			VIDEO_WaitVSync();
-			usleep(10000);
-			
-			return -1;
-		}
-
-		xml = mxmlLoadFile(NULL, fp, MXML_NO_CALLBACK);
-				
-		fclose(fp);
-				
-		if(xml != NULL)
-		{		  		  
-			mxml_node_t *node;
-			mxml_node_t *next_n;
-				
-			node = mxmlFindElement(xml,xml, "wiicoverflow", NULL, NULL, MXML_DESCEND);
-			if(node == NULL) return -1;
-			  
-			next_n = mxmlFindElement(node, node, "graphics", NULL, NULL, MXML_DESCEND);
-			next_n = mxmlFindElement(node, node, "general", NULL, NULL, MXML_DESCEND);
-			next_n = mxmlFindElement(node, node, "game", NULL, NULL, MXML_DESCEND);
-			  
-			if(next_n != NULL)
-			{
-				if(mxmlElementGetAttr(next_n,"lastplayed"))
-				{
-					strcpy(gameID, mxmlElementGetAttr(next_n,"lastplayed"));
-					
-					//if(getGameSettings(gameID, &gameSetting))
-					//apply_settings();
-					
-					getGameSettings(gameID, &gameSetting);
-					
-					Disc_SetWBFS(WBFS_DEVICE_USB, (u8*)gameID);
-				}
-			}
-		}
-	}
-	
 	/* Open disc */
-	ret = Disc_Open();
-	if (ret < 0) {
+	retval = Disc_Open();
+	if (retval < 0) {
 		return false;
 	}
 
-	ret = Disc_WiiBoot();
-	if (ret < 0) {
-		SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
-	}
+	retval = Disc_WiiBoot();
+    if (retval < 0) {
+        SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
+    }
 	
 	
 	SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
