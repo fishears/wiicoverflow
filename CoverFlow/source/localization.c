@@ -937,7 +937,7 @@ bool languageFind()
 		}
 	if (strcmp(settings.localLanguage, "fi-FIN") == 0) {
 		sprintf(langFile, "finnish" );
-		return false;
+		return true;
 		}
 	if (strcmp(settings.localLanguage, "fr-FRE") == 0) {
 		sprintf(langFile, "french" );
