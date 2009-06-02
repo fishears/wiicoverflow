@@ -36,7 +36,7 @@ typedef struct {
     int video;
     int vipatch;
     char lastplayed[7];
-    char localLanguage[5];
+    char localLanguage[7];
 } s_settings;
 
 

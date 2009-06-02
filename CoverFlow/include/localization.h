@@ -1,15 +1,10 @@
-//////////////////////#include <gctypes.h>
 #ifndef _LOCALIZATION_H_
 #define _LOCALIZATION_H_
 
 #include "coverflow.h"
 
-char *localStr ( char *CODE, char * defaultStr );
-void langLoad();
-
 struct LANGUAGE
 {
-	
 	char iniNet[40];				//M001
 	char iniNetErr[40];				//M002
 	char error[20];					//M003
@@ -179,7 +174,9 @@ extern struct LANGUAGE TX;
 
 void languageDefault();
 void languageLoad();
+bool languageFind();
 void languageSet(char *name, char *val);
+void initLanguageSelect();
 char* strcopy(char *dest, char *src, int size);
 bool checkfile(char * path);
 

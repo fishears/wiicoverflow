@@ -12,32 +12,11 @@ extern s_settings settings;
 static char *cfg_name, *cfg_val;
 char** languages;
 char** vidmodes;
+char** selLanguages;
+
+char langFile[20];
 
 
-
-///////////////////////////////////
-// Later set via cfg
-char langFile[20] = "TestLanguage";
-///////////////////////////////////
-
-char *localStr ( char *CODE, char * defaultStr )
-{
-   return defaultStr;	
-}
-
-
-bool checkfile(char * path)
-{
-    FILE * f;
-    f = fopen(path,"r");
-    if(f)
-	{
-    fclose(f);
-    return true;
-    }
-    fclose(f);
-return false;
-}
 
 void languageDefault()
 {
@@ -57,6 +36,8 @@ void languageDefault()
 	 vidmodes[i] =  (char*)malloc(30*sizeof(char));
 	}
 
+	initLanguageSelect();
+	
 	snprintf(TX.iniNet, sizeof(TX.iniNet), "Initializing Network");   					//M001
 	snprintf(TX.iniNetErr, sizeof(TX.iniNetErr), "Error Initializing Network");   		//M002
 	snprintf(TX.error, sizeof(TX.error), "ERROR!");   									//M003
@@ -922,10 +903,139 @@ void languageSet(char *name, char *val)
 
 void languageLoad()
 {
-	char pathname[200];
 
-    sprintf(pathname, USBLOADER_PATH "/languages/%s", langFile);
+ if (languageFind() == true)
+	{
+    char pathname[200];
+	sprintf(pathname, USBLOADER_PATH "/languages/%s", langFile);
 	cfg_parsefile(pathname, &languageSet);
+	}
+}
+
+
+
+bool languageFind()
+{
+	if (strcmp(settings.localLanguage, "default") == 0) {
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "ca-CAT") == 0) {
+		sprintf(langFile, "catalan" );
+		return true;
+		}
+	if (strcmp(settings.localLanguage, "da-DAN") == 0) {
+		sprintf(langFile, "danish" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "de-GER") == 0) {
+		sprintf(langFile, "german" );
+		return true;
+		}
+	if (strcmp(settings.localLanguage, "es-SPA") == 0) {
+		sprintf(langFile, "spanish" );
+		return true;
+		}
+	if (strcmp(settings.localLanguage, "fi-FIN") == 0) {
+		sprintf(langFile, "finnish" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "fr-FRE") == 0) {
+		sprintf(langFile, "french" );
+		return true;
+		}
+	if (strcmp(settings.localLanguage, "it-ITA") == 0) {
+		sprintf(langFile, "italian" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "ja-JPN") == 0) {
+		sprintf(langFile, "japanese" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "ko-KOR") == 0) {
+		sprintf(langFile, "korean" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "nl-DUT") == 0) {
+		sprintf(langFile, "dutch" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "nl-DUT") == 0) {
+		sprintf(langFile, "dutch" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "nn-NOR") == 0) {
+		sprintf(langFile, "norwegian" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "pt-BR") == 0) {
+		sprintf(langFile, "portuguesebr" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "ru-RUS") == 0) {
+		sprintf(langFile, "russian" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "tr-TUR") == 0) {
+		sprintf(langFile, "turkish" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "zh-CN") == 0) {
+		sprintf(langFile, "schinese" );
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "zh-TW") == 0) {
+		sprintf(langFile, "tchinese" );
+		return false;
+		}
+
+    return false;
+}
+
+
+
+void initLanguageSelect()
+{
+	int i;
+	int countLng = 17;
+	
+	selLanguages =  (char**)malloc(countLng*sizeof(char*));
+	
+	for (i=0;i<countLng;i++)
+	{
+	 selLanguages[i] =  (char*)malloc(7*sizeof(char));
+	}
+	
+	sprintf(selLanguages[0],  "default");  // en-US
+	sprintf(selLanguages[1],  "ca-CAT" );
+	sprintf(selLanguages[2],  "da-DAN" );
+	sprintf(selLanguages[3],  "de-GER" );
+	sprintf(selLanguages[4],  "es-SPA" );
+	sprintf(selLanguages[5],  "fi-FIN" );
+	sprintf(selLanguages[6],  "fr-FRE" );
+	sprintf(selLanguages[7],  "it-ITA" );
+	sprintf(selLanguages[8],  "ja-JPN" );
+	sprintf(selLanguages[9],  "ko-KOR" );
+	sprintf(selLanguages[10], "nl-DUT" );
+	sprintf(selLanguages[11], "nn-NOR" );
+	sprintf(selLanguages[12], "pt-BR"  );
+	sprintf(selLanguages[13], "ru-RUS" );
+	sprintf(selLanguages[14], "tr-TUR" );
+	sprintf(selLanguages[15], "zh-CN"  );
+	sprintf(selLanguages[16], "zh-TW"  );
+}
+
+
+bool checkfile(char * path)
+{
+    FILE * f;
+    f = fopen(path,"r");
+    if(f)
+	{
+    fclose(f);
+    return true;
+    }
+    fclose(f);
+return false;
 }
 
 
