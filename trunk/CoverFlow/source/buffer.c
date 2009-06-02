@@ -48,7 +48,7 @@ int maxSlots;
 int FloatingCacheSize=0;
 int CurrentSelection;
 struct discHdr *CoverList;
-int nCovers;
+int nCovers=0;
 int nCoversInWindow;
 bool bCleanedUp=false;
 // end of private vars
@@ -197,7 +197,7 @@ int GetFLoatingQueuePosition(int index)
 //  This does the actual work
 void HandleLoadRequest(int index,int threadNo)
 {
-	if(index >= MAX_BUFFERED_COVERS)
+	if(index >= nCovers)
 		return ;
 		
 	pthread_mutex_lock(&buffer_mutex[index]);
@@ -387,7 +387,9 @@ void RemoveFromCache(int index)
 	{
 		_cq.ready[FloatingCacheCovers[index]] = false;
 		_cq.request[FloatingCacheCovers[index]] = false;
+		pthread_mutex_lock(&buffer_mutex[index]);
 		_texture_data[FloatingCacheCovers[index]].data=0;
+		pthread_mutex_unlock(&buffer_mutex[index]);
 		_cq.floatingQueuePosition[FloatingCacheCovers[index]]=-1;
 		
 	}
@@ -511,17 +513,13 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	CoverList=gameList;
 	nCovers=gameCount;
 	nCoversInWindow=numberOfCoversToBeShown;
-	pthread_mutex_lock(&queue_mutex);
 	//start from a clear point
 	for (i=0;i<gameCount;i++) ResetQueueItem(i);
-	pthread_mutex_unlock(&queue_mutex);
 	memset((void *)MEM2_START_ADDRESS,0,MEM2_EXTENT-IMAGE_CACHE);
 	
 	bool covers3d = false;
 	
-	pthread_mutex_lock(&covers_3d_mutex);
 	covers3d = _covers3d;
-	pthread_mutex_unlock(&covers_3d_mutex);
 	
 	if(covers3d)
 	{
