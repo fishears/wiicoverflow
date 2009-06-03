@@ -94,11 +94,11 @@ void languageDefault()
 	strcopy(TX.size, "Size:    %.2fGB", sizeof(TX.size));
 	strcopy(TX.installing, "Installing... (%0.2f%%) Time left: %d:%02d:%02d", sizeof(TX.installing));
 	strcopy(TX.setting, "Settings", sizeof(TX.setting));
-	snprintf(TX.hook, sizeof(TX.hook), "Hook:"); 										//M037
-  	snprintf(TX.ocarina, sizeof(TX.ocarina), "Ocarina:"); 								//M135
-	snprintf(TX.language, sizeof(TX.language), "Language:");   						//M038
-	snprintf(TX.videoMode, sizeof(TX.videoMode), "Video mode:");   					//M039
-	snprintf(TX.patchVIDTV, sizeof(TX.patchVIDTV), "VIDTV patch:");   					//M040
+	snprintf(TX.hook, sizeof(TX.hook), "Hook"); 										//M037
+  	snprintf(TX.ocarina, sizeof(TX.ocarina), "Ocarina"); 								//M135
+	snprintf(TX.language, sizeof(TX.language), "Language");   						//M038
+	snprintf(TX.videoMode, sizeof(TX.videoMode), "Video Mode");   					//M039
+	snprintf(TX.patchVIDTV, sizeof(TX.patchVIDTV), "VIDTV Patch");   					//M040
     strcopy(TX.errorConnect, "Connection error from net_read()  Errorcode: %i\n", sizeof(TX.errorConnect));
 	strcopy(TX.URLnoBegin, "URL '%s' doesn't start with 'http://'\n", sizeof(TX.URLnoBegin));
 	strcopy(TX.URLnoPath, "URL '%s' has no PATH part\n", sizeof(TX.URLnoPath));
@@ -108,23 +108,23 @@ void languageDefault()
 	snprintf(TX.HTTPnoFile, sizeof(TX.HTTPnoFile), "HTTP Response was without a file\n"); //M047	
 	snprintf(TX.noMemCopy, sizeof(TX.noMemCopy),"No more memory to copy file from HTTP response\n"); //M048
 	snprintf(TX.graphicSetting, sizeof(TX.graphicSetting), "Graphics Settings");   	//M049
-	snprintf(TX.zoom, sizeof(TX.zoom), "Zoom:");   									//M050
-	snprintf(TX.spacing, sizeof(TX.spacing), "Spacing:");   							//M051
-	snprintf(TX.angle, sizeof(TX.angle), "Angle:");   									//M052
-	snprintf(TX.falloff, sizeof(TX.falloff), "Falloff:");   									//M052	
-	snprintf(TX.drawWindow, sizeof(TX.drawWindow), "Draw Window:" );   				//M053
-	snprintf(TX.gameTitle, sizeof(TX.gameTitle), "Game Title:");   					//M054
-	snprintf(TX.coverDownload, sizeof(TX.coverDownload), "Cover download");   			//M055
-	snprintf(TX.opNoCancel, sizeof(TX.opNoCancel), "This operation can't be canceled, continue?"); //M056
-	snprintf(TX.cflowSettings, sizeof(TX.cflowSettings), "Coverflow Settings");   		//M057
-	snprintf(TX.graphics, sizeof(TX.graphics), "Graphics:");   						//M058
+	snprintf(TX.zoom, sizeof(TX.zoom), "Zoom");   									//M050
+	snprintf(TX.spacing, sizeof(TX.spacing), "Spacing");   							//M051
+	snprintf(TX.angle, sizeof(TX.angle), "Angle");   									//M052
+	snprintf(TX.falloff, sizeof(TX.falloff), "Falloff");   									//M052	
+	snprintf(TX.drawWindow, sizeof(TX.drawWindow), "Window" );   				//M053
+	snprintf(TX.gameTitle, sizeof(TX.gameTitle), "Game Title");   					//M054
+	snprintf(TX.coverDownload, sizeof(TX.coverDownload), "Download");   			//M055
+	snprintf(TX.opNoCancel, sizeof(TX.opNoCancel), "This operation cannot be\ncancelled, continue?"); //M056
+	snprintf(TX.cflowSettings, sizeof(TX.cflowSettings), "Settings");   		//M057
+	snprintf(TX.graphics, sizeof(TX.graphics), "Graphics");   						//M058
 	snprintf(TX.missingCovers, sizeof(TX.missingCovers), "Missing Covers?:");   		//M059
-	snprintf(TX.theme, sizeof(TX.theme), "Theme:");   									//M060
-	snprintf(TX.oneClickLaunch, sizeof(TX.oneClickLaunch), "1-Click Launch:");			//M061
-	snprintf(TX.rumble, sizeof(TX.rumble), "Rumble:");   								//M062
-	snprintf(TX.sound, sizeof(TX.sound), "Sound:"); 									//M063
+	snprintf(TX.theme, sizeof(TX.theme), "Theme");   									//M060
+	snprintf(TX.oneClickLaunch, sizeof(TX.oneClickLaunch), "1-Click Launch");			//M061
+	snprintf(TX.rumble, sizeof(TX.rumble), "Rumble");   								//M062
+	snprintf(TX.sound, sizeof(TX.sound), "Sound"); 									//M063
 	snprintf(TX.installNewGame, sizeof(TX.installNewGame), "Install new Game?");   	//M064
-	snprintf(TX.diskInDrive, sizeof(TX.diskInDrive), "Place disk in drive and hit ok."); //M065
+	snprintf(TX.diskInDrive, sizeof(TX.diskInDrive), "Place disk in drive and click ok."); //M065
 	snprintf(TX.initDVD, sizeof(TX.initDVD), "Initializing DVD Drive");   				//M066
 	snprintf(TX.pleaseWait, sizeof(TX.pleaseWait), "Please Wait..." );   				//M067
 	snprintf(TX.errorReadDisc, sizeof(TX.errorReadDisc), "Error reading Disc");   		//M068
@@ -195,7 +195,7 @@ void languageDefault()
 	snprintf(TX.noFreeSpace, sizeof(TX.noFreeSpace), "Not enough free space!" );  		//M133
 	strcopy(TX.formatPartition, "Formatting Partition %s", sizeof(TX.formatPartition));
 	snprintf(TX.addAGame, sizeof(TX.addAGame), "Please add a game..." );  		
-	snprintf(TX.getAddData, sizeof(TX.getAddData), "Get additional data" );  		
+	snprintf(TX.getAddData, sizeof(TX.getAddData), "Download" );  		
 	snprintf(TX.errTitles, sizeof(TX.errTitles), "Error downloading Titles.txt\nAn error occurred while downloading/saving file." );
 	strcopy(TX.successTitles, "Succesfully imported %d titles!", sizeof(TX.successTitles));
 	snprintf(TX.errNetTitles, sizeof(TX.errNetTitles), "Error initializing network\nTitles.txt can't be downloaded." );  		
@@ -205,22 +205,22 @@ void languageDefault()
 
 // Buttons	
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
-	snprintf(TX.deleteB, sizeof(TX.deleteB), "delete");     		//B02
-	snprintf(TX.cancelB, sizeof(TX.cancelB), "cancel");     		//B03
-	snprintf(TX.yesB, sizeof(TX.yesB), "yes");     				//B04
-	snprintf(TX.noB, sizeof(TX.noB), "no");     					//B05
-	snprintf(TX.okB, sizeof(TX.okB), "ok");     					//B06
+	snprintf(TX.deleteB, sizeof(TX.deleteB), "Delete");     		//B02
+	snprintf(TX.cancelB, sizeof(TX.cancelB), "Cancel");     		//B03
+	snprintf(TX.yesB, sizeof(TX.yesB), "Yes");     				//B04
+	snprintf(TX.noB, sizeof(TX.noB), "No");     					//B05
+	snprintf(TX.okB, sizeof(TX.okB), "OK");     					//B06
 	snprintf(TX.resetB, sizeof(TX.resetB), "reset");     			//B07
-	snprintf(TX.downloadB, sizeof(TX.downloadB), "download");     	//B08
-	snprintf(TX.loadB, sizeof(TX.loadB), "load");     				//B09
-	snprintf(TX.backB, sizeof(TX.backB), "back");     				//B10
-	snprintf(TX.toggleOnB, sizeof(TX.toggleOnB), "on");     		//B11
-	snprintf(TX.toggleOffB, sizeof(TX.toggleOffB), "off");     	//B12
-	snprintf(TX.whiteB, sizeof(TX.whiteB), "white");     			//B13
-	snprintf(TX.blackB, sizeof(TX.blackB), "black");     			//B14
-	snprintf(TX.homeMenuTopB, sizeof(TX.homeMenuTopB), "exit");    //B15
-	snprintf(TX.wiimenuB, sizeof(TX.wiimenuB), "Wii menu");        //B16
-	snprintf(TX.loaderB, sizeof(TX.loaderB), "Loader");     		//B17
+	snprintf(TX.downloadB, sizeof(TX.downloadB), "Download");     	//B08
+	snprintf(TX.loadB, sizeof(TX.loadB), "Load");     				//B09
+	snprintf(TX.backB, sizeof(TX.backB), "Back");     				//B10
+	snprintf(TX.toggleOnB, sizeof(TX.toggleOnB), "On");     		//B11
+	snprintf(TX.toggleOffB, sizeof(TX.toggleOffB), "Off");     	//B12
+	snprintf(TX.whiteB, sizeof(TX.whiteB), "White");     			//B13
+	snprintf(TX.blackB, sizeof(TX.blackB), "Black");     			//B14
+	snprintf(TX.homeMenuTopB, sizeof(TX.homeMenuTopB), "Exit");    //B15
+	snprintf(TX.wiimenuB, sizeof(TX.wiimenuB), "Wii Menu");        //B16
+	snprintf(TX.loaderB, sizeof(TX.loaderB), "HBLoader");     		//B17
 };
 
 

@@ -4,12 +4,11 @@ extern s_self self;
 extern s_title* titleList;
 
 extern int COVER_COUNT;
-bool Menu_Install(){
+bool Menu_Install()
+{
 
 	WPAD_Rumble(0,0);
 	self.rumbleAmt = 0;
-	okButton.y = 290;
-	cancelButton.y = 290;
     static struct discHdr headerdisc ATTRIBUTE_ALIGN(32);
 	
 	if(!WindowPrompt (TX.installNewGame, TX.diskInDrive, &okButton,&cancelButton))

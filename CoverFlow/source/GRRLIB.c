@@ -490,6 +490,54 @@ inline void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees,
     GX_SetVtxDesc (GX_VA_TEX0, GX_NONE);
 }
 
+inline void GRRLIB_DrawImgReflection(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, float dist)
+{
+    GXTexObj texObj;
+    u16 width, height;
+    Mtx m, m1, m2, mv;
+
+    GX_InitTexObj(&texObj, tex.data, tex.w, tex.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+    GX_LoadTexObj(&texObj, GX_TEXMAP0);
+	
+    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+	
+    width = tex.w * 0.5;
+    height = tex.h * 0.5 * dist;
+    guMtxIdentity (m1);
+    guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
+    Vector axis = (Vector) {0, 0, 1 };
+    guMtxRotAxisDeg (m2, &axis, degrees);
+    guMtxConcat(m2, m1, m);
+	
+    guMtxTransApply(m, m, xpos+width, ypos+height, 0);
+    guMtxConcat (GXmodelView2D, m, mv);
+    GX_LoadPosMtxImm (mv, GX_PNMTX0);
+	
+    GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+    GX_Position3f32(-width, -height, 0);
+    GX_Color1u32(0xffffff55);
+    GX_TexCoord2f32(0, 1);
+	
+    GX_Position3f32(width, -height, 0);
+    GX_Color1u32(0xffffff55);
+    GX_TexCoord2f32(1, 1);
+	
+    GX_Position3f32(width, height, 0);
+    GX_Color1u32(0xffffff00);
+    GX_TexCoord2f32(1, 0);
+	
+    GX_Position3f32(-width, height, 0);
+    GX_Color1u32(0xffffff00);
+    GX_TexCoord2f32(0, 0);
+    GX_End();
+    GX_LoadPosMtxImm (GXmodelView2D, GX_PNMTX0);
+	
+    GX_SetTevOp (GX_TEVSTAGE0, GX_PASSCLR);
+    GX_SetVtxDesc (GX_VA_TEX0, GX_NONE);
+}
+
 inline void GRRLIB_DrawFlatCoverImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color ) {
     GXTexObj texObj;
     u16 width, height;

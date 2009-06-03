@@ -290,7 +290,7 @@ int main( int argc, char **argv )
 			}
 			else if((!settings.parentalLock) && Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
 			{
-				Settings_Menu();
+				Settings_Menu_Show();
 			}
 			else if(Button_Select(&slideButton, pointer.p_x, pointer.p_y))
 			{
@@ -346,15 +346,15 @@ int main( int argc, char **argv )
 						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y)) // load
 						{
 							// User clicked on the load game, so save settings before launching
-                                                        struct discHdr *header = &self.gameList[self.gameSelected];
+							struct discHdr *header = &self.gameList[self.gameSelected];
 							char titleID[7];
 							sprintf(titleID, "%s", header->id);
-                                                        strcpy(settings.lastplayed,titleID); //save this game as last game played
-                                                        SETTINGS_Save();
+                            strcpy(settings.lastplayed,titleID); //save this game as last game played
+                            SETTINGS_Save();
 							if(getGameSettings(titleID, &gameSetting))
 								apply_settings();
 							setGameSettings(titleID, &gameSetting,1);
-                                                        WiiLight(0); // turn off the slot light
+                            WiiLight(0); // turn off the slot light
 							if(!LaunchGame())
 							{
 								SETTINGS_Load(); //failed to launch so get the globals back
@@ -365,7 +365,7 @@ int main( int argc, char **argv )
 						{
 							// User clicked delete button
 							Menu_Delete();
-                                                        self.selected = false;
+                            self.selected = false;
 						}
 						else if(Button_Select(&backButton, pointer.p_x, pointer.p_y)) // back
 						{
@@ -375,7 +375,7 @@ int main( int argc, char **argv )
 						else if(!settings.parentalLock && Button_Select(&gsettingsButton, pointer.p_x, pointer.p_y))
                         {
 							//clicked settings button on launch screen
-                            game_settings_menu();
+                            Game_Settings_Menu_Show();
                         }
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
 						{	
@@ -508,7 +508,7 @@ int main( int argc, char **argv )
 					}
 				}
 			}
-			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1 && (WPAD_ButtonsDown(0) & WPAD_BUTTON_UP)) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for button 1 hold
+			else if ( ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1) && (WPAD_ButtonsDown(0) & WPAD_BUTTON_UP)) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for button 1 hold
 			{
 				// Take a screen shot
 				GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
@@ -678,11 +678,8 @@ int main( int argc, char **argv )
 			}
 			else
 			{
-#ifndef ANIMATE_TEST
-				draw_selected(self.gameList);
-#else
-				draw_selected_two(false, Button_Hover(&loadButton, pointer.p_x, pointer.p_y));
-#endif
+				// Draw the Load Game Dialog panel
+				DrawLoadGameDialog(false, Button_Hover(&loadButton, pointer.p_x, pointer.p_y));
 			}
 		}
 		else
@@ -777,10 +774,12 @@ int main( int argc, char **argv )
 				CFreeTypeGX_DrawText(ttf18pt, 320, 30,  tAppInfo, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 70, 30,  tIOS, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 			}
+			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+
 		}
 	
 #ifdef DEBUG
-
+// These won't work until they get switched over to use CFreeTypeGX_DrawText
 //		GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "Pitch: %f", self.orient.pitch);
 //		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "adjPitch: %f", (change_scale(self.orient.pitch, -90, 90, -0.5, 0.5)) );
 //		GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "adjRoll: %f", (change_scale(self.orient.roll, -90, 90, -0.5, 0.5)) );

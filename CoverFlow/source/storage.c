@@ -188,11 +188,9 @@ void initWBFS(){
 			WPAD_ScanPads();
 			if (retries==0)
 			{
-				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-                                CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.errorNoUSBDrv, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-				//GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.errorNoUSBDrv);
-                                CFreeTypeGX_DrawText(ttf14pt, 190,160, TX.pressAB, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-				//GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, TX.pressAB);
+				GRRLIB_Rectangle(88, 20, 464, 440, 0x44444499, true);
+				CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.errorNoUSBDrv, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 190,160, TX.pressAB, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 				
 				GRRLIB_Render();
 			}
@@ -201,11 +199,9 @@ void initWBFS(){
 			{
 				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A))
 				{
-					GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-                                        CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.connectUSBDrv, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-					//GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.connectUSBDrv);
+					GRRLIB_Rectangle(88, 20, 464, 440, 0x44444499, true);
+					CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.connectUSBDrv, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 					CFreeTypeGX_DrawText(ttf14pt, 190,160, TX.pleaseWait, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                                        //GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, TX.pleaseWait);
 					GRRLIB_Render();
 					Sleep(1000);
 				}
@@ -388,22 +384,18 @@ USB_RETRY:
 		while(1)
 		{
 			WPAD_ScanPads();
-			GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-                        CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.errorNoWBFS, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-			//GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.errorNoWBFS );
-                        CFreeTypeGX_DrawText(ttf14pt, 190,160, TX.hold12B, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-			//GRRLIB_Printf(190, 160, font_texture, settings.fontColor, 1, TX.hold12B );
+			GRRLIB_Rectangle(88, 20, 464, 440, 0x44444499, true);
+			CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.errorNoWBFS, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+            CFreeTypeGX_DrawText(ttf14pt, 190,160, TX.hold12B, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 			GRRLIB_Render();
 				
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_1 && WPAD_ButtonsHeld(0) & WPAD_BUTTON_2)
 			{
 				//TODO ADD WBFS Format code
 				WPAD_ScanPads();
-				GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-                                CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.findPartitions, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-				//GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.findPartitions);
+				GRRLIB_Rectangle(88, 20, 464, 440, 0x44444499, true);
+				CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.findPartitions, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 				GRRLIB_Render();
-				
 				sleep(1);
 				
 				partitionEntry partitions[MAX_PARTITIONS];
@@ -442,13 +434,11 @@ USB_RETRY:
 							if(WindowPrompt(TX.askFormat, txtBuff[cnt], &okButton, &noButton))
 							{
 								WPAD_ScanPads();
-                                                                char tTemp[50];
-								GRRLIB_DrawImg(115, 95, menu_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-                                                                sprintf(tTemp,TX.formatPartition, txtBuff[cnt]);
-                                                                CFreeTypeGX_DrawText(ttf14pt, 190,140, tTemp, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-								//GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.formatPartition, txtBuff[cnt]);
-                                                                CFreeTypeGX_DrawText(ttf14pt, 190,160, TX.pleaseWait, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-								//GRRLIB_Printf(190, 140, font_texture, settings.fontColor, 1, TX.pleaseWait );
+                                char tTemp[50];
+								GRRLIB_Rectangle(88, 20, 464, 440, 0x44444499, true);
+                                sprintf(tTemp,TX.formatPartition, txtBuff[cnt]);
+								CFreeTypeGX_DrawText(ttf14pt, 190,140, tTemp, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+								CFreeTypeGX_DrawText(ttf14pt, 190,160, TX.pleaseWait, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 								GRRLIB_Render();
 								
 								ret = WBFS_Format(entry->sector, entry->size); 

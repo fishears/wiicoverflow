@@ -97,7 +97,7 @@ bool LaunchGame()
 	{
 		//self.dummy = false;
 		draw_covers();
-		done = draw_selected_two(true, false);
+		done = DrawLoadGameDialog(true, false);
 		
 		GRRLIB_Render();
 		//self.dummy = false;
@@ -113,7 +113,7 @@ bool LaunchGame()
 		fade+=10;
 		
 		draw_covers();
-		draw_selected_two(true, false);
+		DrawLoadGameDialog(true, false);
 		GRRLIB_2D_Init();
 		GRRLIB_FillScreen(0x00000000|fade);
 		GRRLIB_Render();
