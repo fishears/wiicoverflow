@@ -573,6 +573,79 @@ void Settings_Menu_Show()
 				Button_Paint(&langupButton);
 				Button_Paint(&langdownButton);
 				
+				
+				if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+				{
+					if (Button_Select(&flagUSButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "en-US");
+						languageLoad();
+					}
+					else if (Button_Select(&flagDEButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "de-GER");
+						languageLoad();
+					}
+					else if (Button_Select(&flagITButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "it-ITA");
+						languageLoad();
+					}
+					else if (Button_Select(&flagDEButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "de-GER");
+						languageLoad();
+					}
+					else if (Button_Select(&flagUKButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "en-US");
+						languageLoad();
+					}
+					else if (Button_Select(&flagBRButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "es-SPA");
+						languageLoad();
+					}
+					else if (Button_Select(&flagFRButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "fr-FRE");
+						languageLoad();
+					}
+					else if (Button_Select(&flagDAButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "nl-DUT");
+						languageLoad();
+					}
+					else if (Button_Select(&flagJPButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "ja-JPN");
+						languageLoad();
+					}
+					else if (Button_Select(&flagPTButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "pt-BR");
+						languageLoad();
+					}
+					else if (Button_Select(&flagTWButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "zh-TW");
+						languageLoad();
+					}
+					else if (Button_Select(&flagRUButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "ru-RUS");
+						languageLoad();
+					}
+					else if (Button_Select(&flagCNButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "ca-CAT");
+						languageLoad();
+					}
+					
+					//TODO Dutch and Finish Flags
+				}
+				
+				
 				// Draw graphics stuff here
 				Button_Flag_Paint(&flagUSButton);
 				Button_Flag_Paint(&flagITButton);
