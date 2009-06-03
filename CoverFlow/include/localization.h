@@ -200,6 +200,8 @@ struct LANGUAGE
 	char welcomeMsg[40];			//143
 	char batteryUnit[4];			//144
 	
+	
+	
 // Buttons	
 	char addB[15];					//B01
 	char deleteB[15];				//B02
@@ -218,6 +220,9 @@ struct LANGUAGE
 	char homeMenuTopB[15];			//B15
 	char wiimenuB[15];				//B16	
 	char loaderB[15];				//B17
+	char languagesB[15];			//B18
+	char coversB[15];				//B19
+	char titlesB[15];				//B20
 };
 
 extern struct LANGUAGE TX;

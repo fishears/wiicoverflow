@@ -230,7 +230,7 @@ void Init_Buttons()
 	// Settings Panels Header Buttons
     menuSettingsButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 160, 20, TX.cflowSettings); 
 	menuGraphicsButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 320, 20, TX.graphics);
-    menuLanguagesButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 480, 20, "Languages"); // TODO: Make new TX.langSetting
+    menuLanguagesButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 480, 20, TX.languagesB); 
 	menuLogoButton			= Button_Init(menu_logo_png, menu_logo_png, 30, 20);
 	// General Settings Panel
     musicOnButton           = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 97);
@@ -241,8 +241,8 @@ void Init_Buttons()
     quickstartOffButton     = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 165);
     themeBlackButton        = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 310, 199, TX.blackB);
     themeWhiteButton        = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 422, 199, TX.whiteB);
-	coversButton			= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 310, 265, "Covers");  // TODO: Make new TX. setting
-	titlesButton		    = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 422, 265, "Titles");
+	coversButton			= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 310, 265, TX.coversB);
+	titlesButton		    = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 422, 265, TX.titlesB);
     viddownButton			= Button_Init(button_minus_png, button_minus_over_png, 310,334);
 	vidupButton				= Button_Init(button_plus_png, button_plus_over_png, 338,334);
     vidtvonButton			= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 299);
