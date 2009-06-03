@@ -18,7 +18,7 @@ include $(DEVKITPPC)/wii_rules
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source source/pngu images source/libwbfs source/core
-DATA		:=	data bootloader sounds fonts
+DATA		:=	data bootloader sounds fonts languages
 INCLUDES	:=  include include/pngu include/libwbfs include/core
 
 #---------------------------------------------------------------------------------
@@ -150,6 +150,10 @@ $(OUTPUT).elf: $(OFILES)
 	$(bin2o)
 	
 %.ttf.o : %.ttf
+	@echo $(notdir $<)
+	$(bin2o)
+	
+%.lang.o : %.lang
 	@echo $(notdir $<)
 	$(bin2o)
 #---------------------------------------------------------------------------------

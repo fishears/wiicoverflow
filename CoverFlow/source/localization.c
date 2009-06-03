@@ -901,6 +901,70 @@ void languageSet(char *name, char *val)
 
 
 
+bool languageLoad()
+{
+	if (strcmp(settings.localLanguage, "default") == 0) {
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "ca-CAT") == 0) {
+		return parseMemFile( (char*)catalan_lang, catalan_lang_size, &languageSet);
+		}
+	if (strcmp(settings.localLanguage, "da-DAN") == 0) {
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "de-GER") == 0) {
+		return parseMemFile( (char*)german_lang, german_lang_size, &languageSet);
+		}
+	if (strcmp(settings.localLanguage, "es-SPA") == 0) {
+		return parseMemFile( (char*)spanish_lang, spanish_lang_size, &languageSet);
+		}
+	if (strcmp(settings.localLanguage, "fi-FIN") == 0) {
+		return parseMemFile( (char*)finnish_lang, finnish_lang_size, &languageSet);
+		}
+	if (strcmp(settings.localLanguage, "fr-FRE") == 0) {
+		return parseMemFile( (char*)french_lang, french_lang_size, &languageSet);
+		}
+	if (strcmp(settings.localLanguage, "it-ITA") == 0) {
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "ja-JPN") == 0) {
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "ko-KOR") == 0) {
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "nl-DUT") == 0) {
+		return parseMemFile( (char*)dutch_lang, dutch_lang_size, &languageSet);
+		}
+	if (strcmp(settings.localLanguage, "nn-NOR") == 0) {
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "pt-BR") == 0) {
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "ru-RUS") == 0) {
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "tr-TUR") == 0) {
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "zh-CN") == 0) {
+		return false;
+		}
+	if (strcmp(settings.localLanguage, "zh-TW") == 0) {
+		return false;
+		}
+
+    return false;
+}
+
+
+
+
+
+
+
+/*
 void languageLoad()
 {
 
@@ -987,6 +1051,7 @@ bool languageFind()
     return false;
 }
 
+*/
 
 
 void initLanguageSelect()
@@ -1040,5 +1105,26 @@ char* strcopy(char *dest, char *src, int size)
 	strncpy(dest,src,size);
 	dest[size-1] = 0;
 	return dest;
+}
+
+
+bool parseMemFile(char *mfname, u32 mfSize, void (*set_func)(char*, char*))
+{
+	FILE *mf;
+	char line[200];
+
+	mf = fmemopen(mfname, mfSize, "rt");
+	if (!mf) 
+	{
+		return false;
+	}
+
+	while (fgets(line, sizeof(line), mf)) 
+	{
+		if (line[0] == '#') continue;
+		cfg_parseline(line, set_func);
+	}
+	fclose(mf);
+	return true;
 }
 
