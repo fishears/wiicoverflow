@@ -3,6 +3,56 @@
 
 #include "coverflow.h"
 
+extern u8  catalan_lang[];
+extern u32 catalan_lang_size;
+
+extern u8  dutch_lang[];
+extern u32 dutch_lang_size;
+
+extern u8  finnish_lang[];
+extern u32 finnish_lang_size;
+
+extern u8  french_lang[];
+extern u32 french_lang_size;
+
+extern u8  german_lang[];
+extern u32 german_lang_size;
+
+extern u8  spanish_lang[];
+extern u32 spanish_lang_size;
+
+//extern u8  portuguesebr_lang[];
+//extern u32 portuguesebr_lang_size;
+
+//extern u8  schinese_lang[];
+//extern u32 schinese_lang_size;
+
+//extern u8  tchinese_lang[];
+//extern u32 tchinese_lang_size;
+
+//extern u8  danish_lang[];
+//extern u32 danish_lang_size;
+
+//extern u8  italian_lang[];
+//extern u32 italian_lang_size;
+
+//extern u8  japanese_lang[];
+//extern u32 japanese_lang_size;
+
+//extern u8  korean_lang[];
+//extern u32 korean_lang_size;
+
+//extern u8  norwegian_lang[];
+//extern u32 norwegian_lang_size;
+
+//extern u8  russian_lang[];
+//extern u32 russian_lang_size;
+
+//extern u8  turkish_lang[];
+//extern u32 turkish_lang_size;
+
+
+
 struct LANGUAGE
 {
 	char iniNet[40];				//M001
@@ -173,11 +223,11 @@ struct LANGUAGE
 extern struct LANGUAGE TX;
 
 void languageDefault();
-void languageLoad();
+bool languageLoad();
 bool languageFind();
 void languageSet(char *name, char *val);
 void initLanguageSelect();
 char* strcopy(char *dest, char *src, int size);
 bool checkfile(char * path);
-
+bool parseMemFile(char *mfname, u32 mfSize, void (*set_func)(char*, char*));
 #endif
