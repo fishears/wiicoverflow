@@ -142,8 +142,16 @@ errNetTitles = Error initializing network\nTitles.txt can't be downloaded.
 Success = Success!
 welcomeMsg = Welcome to CoverFloader
 batteryUnit = P%d
+basic = Basic
+advanced = Advanced
+hideScrollbar = Hide Scrollbar
+covers3D = 3D Covers
+gameText = Game Title
+gameSettings = Game Settings
 
-
+###########
+# Buttons #
+###########
 addB = add
 deleteB = Delete
 cancelB = Cancel

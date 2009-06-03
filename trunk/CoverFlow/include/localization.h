@@ -199,7 +199,12 @@ struct LANGUAGE
 	char Success[15];				//142
 	char welcomeMsg[40];			//143
 	char batteryUnit[4];			//144
-	
+	char basic[15];					//145
+	char advanced[15];				//146
+	char hideScrollbar[30];			//147
+	char covers3D[20];				//148
+	char gameText[25];				//149
+	char gameSettings[30];			//150
 	
 	
 // Buttons	

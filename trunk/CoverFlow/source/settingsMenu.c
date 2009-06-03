@@ -306,8 +306,8 @@ void Settings_Menu_Show()
 				GRRLIB_Rectangle(120, 260, 430, 140, 0x737373FF, true);
 				GRRLIB_DrawImg(80, 76, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
 				GRRLIB_DrawImg(80, 244, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawText(ttf16pt, 158,96, "Basic", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 158,264, "Advanced", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 158,96, TX.basic, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 158,264,TX.advanced, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Draw the attributes labels
 				CFreeTypeGX_DrawText(ttf16pt, 300,116, TX.sound, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,150, TX.rumble, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
@@ -320,9 +320,9 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 300,387, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 510,387, hooks[settings.hooktype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Draw buttons
-				Button_TTF_Toggle_Paint(&musicOffButton, &musicOnButton, "Off", "On", settings.music);
-				Button_TTF_Toggle_Paint(&rumbleOffButton, &rumbleOnButton, "Off", "On", settings.rumble);
-				Button_TTF_Toggle_Paint(&quickstartOffButton, &quickstartOnButton, "Off", "On", settings.quickstart);
+				Button_TTF_Toggle_Paint(&musicOffButton, &musicOnButton, TX.toggleOffB, TX.toggleOnB, settings.music);
+				Button_TTF_Toggle_Paint(&rumbleOffButton, &rumbleOnButton, TX.toggleOffB, TX.toggleOnB, settings.rumble);
+				Button_TTF_Toggle_Paint(&quickstartOffButton, &quickstartOnButton, TX.toggleOffB, TX.toggleOnB, settings.quickstart);
 				if (settings.theme)
 				{
 					themeWhiteButton.selected = true;
@@ -337,10 +337,10 @@ void Settings_Menu_Show()
 				Button_TTF_Paint(&themeWhiteButton);
 				Button_TTF_Paint(&coversButton);
 				Button_TTF_Paint(&titlesButton);
-				Button_TTF_Toggle_Paint(&vidtvoffButton, &vidtvonButton, "Off", "On", settings.vipatch);
+				Button_TTF_Toggle_Paint(&vidtvoffButton, &vidtvonButton, TX.toggleOffB, TX.toggleOnB, settings.vipatch);
 				Button_Paint(&vidupButton);
 				Button_Paint(&viddownButton);
-				Button_TTF_Toggle_Paint(&cheatoffButton, &cheatonButton, "Off", "On", settings.ocarina);
+				Button_TTF_Toggle_Paint(&cheatoffButton, &cheatonButton, TX.toggleOffB, TX.toggleOnB, settings.ocarina);
 				Button_Paint(&hookupButton);
 				Button_Paint(&hookdownButton);
 				
@@ -475,14 +475,14 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 511, 113, TX.angle, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Draw the 3 bottom boxes (scrollbar, 3D covers, title)
 				GRRLIB_DrawImg(81, 341, menu_graphics_box2_texture, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawText(ttf16pt, 153,360, "Hide Scrollbar", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 153,360, TX.hideScrollbar, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				GRRLIB_DrawImg(248, 341, menu_graphics_box2_texture, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawText(ttf16pt, 320,360, "3D Covers", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320,360, TX.covers3D, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				GRRLIB_DrawImg(415, 341, menu_graphics_box2_texture, 0, 1, 1, 0xFFFFFFFF);
 				CFreeTypeGX_DrawText(ttf16pt, 487,360, TX.gameTitle, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Draw the Title text
 				if (settings.coverText)
-					CFreeTypeGX_DrawText(ttf20pt, 320, 314, "Game Title", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+					CFreeTypeGX_DrawText(ttf20pt, 320, 314, TX.gameText, (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 				// Draw the scroll bar
 				if (!settings.hideScroll)
 					GRRLIB_DrawImg(120, 300, slidebar_texture, 0, .655, .655, 0xFFFFFFFF);
@@ -498,9 +498,9 @@ void Settings_Menu_Show()
 				Button_Paint(&windowupButton);
 				Button_Paint(&windowdownButton);
 				// Draw the toggle buttons
-				Button_TTF_Toggle_Paint(&hidescrollOffButton, &hidescrollOnButton, "Off", "On", settings.hideScroll);
-				Button_TTF_Toggle_Paint(&coverTextOffButton, &coverTextOnButton, "Off", "On", settings.coverText);
-				Button_TTF_Toggle_Paint(&covers3dOffButton, &covers3dOnButton, "Off", "On", settings.covers3d);
+				Button_TTF_Toggle_Paint(&hidescrollOffButton, &hidescrollOnButton, TX.toggleOffB, TX.toggleOnB, settings.hideScroll);
+				Button_TTF_Toggle_Paint(&coverTextOffButton, &coverTextOnButton, TX.toggleOffB, TX.toggleOnB, settings.coverText);
+				Button_TTF_Toggle_Paint(&covers3dOffButton, &covers3dOnButton, TX.toggleOffB, TX.toggleOnB, settings.covers3d);
 				
 				// Check for button-pointer intersections, and rumble
 				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
@@ -975,7 +975,7 @@ void Game_Settings_Menu_Show()
 			}
 		}
 		// Draw the attributes labels
-		CFreeTypeGX_DrawText(ttf20pt, 420, 140, "Game Settings", (GXColor){0x00, 0x00, 0x00F, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf20pt, 420, 140, TX.gameSettings, (GXColor){0x00, 0x00, 0x00F, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 183, TX.patchVIDTV, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 219, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 251, TX.hook, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
@@ -993,8 +993,8 @@ void Game_Settings_Menu_Show()
 		Button_Paint(&gviddownButton);
 		Button_Paint(&ghookupButton);
 		Button_Paint(&ghookdownButton);
-		Button_TTF_Toggle_Paint(&gcheatoffButton, &gcheatonButton, "Off", "On", gameSetting.ocarina);
-		Button_TTF_Toggle_Paint(&gvidtvoffButton, &gvidtvonButton, "Off", "On", gameSetting.vipatch);
+		Button_TTF_Toggle_Paint(&gcheatoffButton, &gcheatonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.ocarina);
+		Button_TTF_Toggle_Paint(&gvidtvoffButton, &gvidtvonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.vipatch);
 		
 		
 		// Draw the default pointer hand
