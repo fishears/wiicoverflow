@@ -2,8 +2,10 @@
 == RC6 (Unknown) ==
 
 -NEW-
+  * Huge UI Overhaul - new buttons, graphics, layout, look and feel
   * Improved install menu, use only with 2D covers
   * Changed boot mode (external dol) for save some memory, should be transparent for the user
+ 
 ----
 == RC5 (May 30 2009) ==
 
