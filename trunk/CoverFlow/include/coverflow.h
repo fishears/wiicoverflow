@@ -71,8 +71,6 @@ extern const u8 bootloader_dol[];
 #define DEBUG 1
 #define ONE_AT_A_TIME
 
-
-#define TTF_TEST
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 
 #define KB_SIZE         1024.0
@@ -87,7 +85,6 @@ extern const u8 bootloader_dol[];
 #define MAX_COVERS           15
 #define RELEASE              "RC4"
 
-#define ANIMATE_TEST 1
 #define ANIMATE_SPEED 0
 #define FLIP_SPEED  0.016
 
@@ -110,7 +107,7 @@ enum {
 };
 
 // Fonts
-extern u8 font_ttf[]; // the font file
+extern u8  font_ttf[]; // the font file (named font.ttf in /fonts/)
 extern u32 font_ttf_size;
 extern CFreeTypeGX *ttf14pt;
 extern CFreeTypeGX *ttf16pt;
@@ -123,19 +120,14 @@ CFreeTypeGX *ttf20pt;
 
 extern const u8 full_cover_png[];
 extern const u8 no_cover_png[];
-
-extern const u8 no_cover_png[];
-extern const u8 back_cover_png[];
 extern const u8 no_disc_png[];
 extern const u8 progress_step_png[];
 extern const u8 progress_bar_png[];
 extern const u8 gradient_bg_png[];
 extern const u8 slidebar_png[];
-extern const u8 generic_point_png[];
+extern const u8 pointer_basic_png[];
 extern const u8 pointer_shadow_png[];
-extern const u8 turning_point_png[];
-extern const u8 menu_bg_png[];
-extern const u8 menu_bg2_png[];
+extern const u8 pointer_turning_png[];
 extern const u8 ambientlight_png[];
 GRRLIB_texImg covers[MAX_COVERS];
 GRRLIB_texImg pointer_texture;

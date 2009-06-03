@@ -15,11 +15,6 @@ extern int COVER_COUNT;
 extern char** languages;
 extern char** vidmodes;
 
-char ghooks[3][9] =
-{{"      VI"},
-{" Wii Pad"},
-{" GC Pad"}};
-
 void ResetBuffer()
 {
 	BUFFER_KillBuffer();
@@ -27,13 +22,9 @@ void ResetBuffer()
 	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
 	
 	if(settings.covers3d)
-	{
 		BUFFER_3D_COVERS();
-	}
 	else
-	{
 		BUFFER_2D_COVERS();
-	}
 	
 	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 	UpdateBufferedImages();
@@ -41,11 +32,11 @@ void ResetBuffer()
 
 void LoadFonts()
 {
-        ttf14pt = CFreeTypeGX_new();
-        ttf16pt = CFreeTypeGX_new();
+	ttf14pt = CFreeTypeGX_new();
+    ttf16pt = CFreeTypeGX_new();
 	ttf18pt = CFreeTypeGX_new();
 	ttf20pt = CFreeTypeGX_new();
-        CFreeTypeGX_LoadFont(ttf14pt, font_ttf, font_ttf_size, 14, true);
+    CFreeTypeGX_LoadFont(ttf14pt, font_ttf, font_ttf_size, 14, true);
 	CFreeTypeGX_LoadFont(ttf16pt, font_ttf, font_ttf_size, 16, true);
 	CFreeTypeGX_LoadFont(ttf18pt, font_ttf, font_ttf_size, 18, true);
 	CFreeTypeGX_LoadFont(ttf20pt, font_ttf, font_ttf_size, 20, true);
@@ -54,31 +45,55 @@ void LoadFonts()
 
 void LoadTextures()
 {
-	pointer_texture        = BufferImageToSlot(generic_point_png,1);
-	pointer_shadow_texture = BufferImageToSlot(pointer_shadow_png,2);
-	turn_point_texture     = BufferImageToSlot(turning_point_png,3); // can't find free
-	menu_bg_texture		   = BufferImageToSlot(menu_bg_png,4); // can't find free
-	
-	cover_texture		   = BufferImageToSlot(no_cover_png,5);
-	
-	cover_texture_3d	   = BufferImageToSlot(full_cover_png,6);
-	
-	back_texture		   = BufferImageToSlot(back_cover_png,7);
-	no_disc_texture		   = BufferImageToSlot(no_disc_png,8);
-	load_bg_texture		   = BufferImageToSlot(bg_options_screen_no_transparency_png,9); // can't find free
-	font_texture           = BufferImageToSlot(slidebar_png,10);  // TODO: go away post TTF
-	slidebar_texture       = GRRLIB_LoadTexturePNG(slidebar_png);  // can't find free
-	slidebar_white_texture = GRRLIB_CreateEmptyTexture(slidebar_texture.w, slidebar_texture.h);
+	// This stuff kept crashing... 
+//	pointer_texture				= BufferImageToSlot(pointer_basic_png,1);
+//	pointer_shadow_texture		= BufferImageToSlot(pointer_shadow_png,2);
+//	turn_point_texture			= BufferImageToSlot(pointer_turning_png,3); // can't find free
+//	cover_texture				= BufferImageToSlot(no_cover_png,5);
+//	cover_texture_3d			= BufferImageToSlot(full_cover_png,6);
+//	back_texture				= BufferImageToSlot(back_cover_png,7);
+//	no_disc_texture				= BufferImageToSlot(no_disc_png,8);
+
+	pointer_texture				= GRRLIB_LoadTexturePNG(pointer_basic_png);
+	pointer_shadow_texture		= GRRLIB_LoadTexturePNG(pointer_shadow_png);
+	turn_point_texture			= GRRLIB_LoadTexturePNG(pointer_turning_png); // can't find free
+	cover_texture				= GRRLIB_LoadTexturePNG(no_cover_png);
+	cover_texture_3d			= GRRLIB_LoadTexturePNG(full_cover_png);
+	no_disc_texture				= GRRLIB_LoadTexturePNG(no_disc_png);
+	slidebar_texture			= GRRLIB_LoadTexturePNG(slidebar_png);  // can't find free
+	slidebar_white_texture		= GRRLIB_CreateEmptyTexture(slidebar_texture.w, slidebar_texture.h);
 	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white
-	ambientlight_texture   = GRRLIB_LoadTexturePNG(ambientlight_png);  // can't find free
-	ambientlight_white_texture = GRRLIB_CreateEmptyTexture(ambientlight_texture.w, ambientlight_texture.h);
+	ambientlight_texture		= GRRLIB_LoadTexturePNG(ambientlight_png);  // can't find free
+	ambientlight_white_texture	= GRRLIB_CreateEmptyTexture(ambientlight_texture.w, ambientlight_texture.h);
 	GRRLIB_BMFX_Invert(ambientlight_texture, ambientlight_white_texture); //invert the fade from black to white
-	battery_bar            = GRRLIB_LoadTexturePNG(battery_bar_png);  // can't find free
-    battery_bar_red        = GRRLIB_LoadTexturePNG(battery_bar_red_png);  // can't find free
-    battery                = GRRLIB_LoadTexturePNG(battery_png);  // can't find free
-    battery_dead           = GRRLIB_LoadTexturePNG(battery_dead_png);  // can't find free
-	ttf_button_black       = GRRLIB_LoadTexturePNG(ttf_button_black_png);  // can't find free
-	ttf_button_white       = GRRLIB_LoadTexturePNG(ttf_button_white_png); // can't find free
+	battery_bar					= GRRLIB_LoadTexturePNG(battery_bar_png);  // can't find free
+    battery_bar_red				= GRRLIB_LoadTexturePNG(battery_bar_red_png);  // can't find free
+    battery						= GRRLIB_LoadTexturePNG(battery_png);  // can't find free
+    battery_dead				= GRRLIB_LoadTexturePNG(battery_dead_png);  // can't find free
+	menu_button_texture			= GRRLIB_LoadTexturePNG(menu_button_png);
+	menu_button_over_texture	= GRRLIB_LoadTexturePNG(menu_button_over_png);	
+	menu_header_texture			= GRRLIB_LoadTexturePNG(menu_header_png);
+	menu_header_vflip_texture	= GRRLIB_CreateEmptyTexture(menu_header_texture.w, menu_header_texture.h);
+	GRRLIB_BMFX_FlipV(menu_header_texture, menu_header_vflip_texture);
+	menu_logo_texture			= GRRLIB_LoadTexturePNG(menu_logo_png);
+	dialog_box_titlebar_texture	= GRRLIB_LoadTexturePNG(dialog_box_titlebar_png);
+	dialog_box_titlebar_long_texture	= GRRLIB_LoadTexturePNG(dialog_box_titlebar_long_png);
+	dialog_box_icon_texture		= GRRLIB_LoadTexturePNG(dialog_box_icon_png);
+	menu_graphics_wireframe_texture	= GRRLIB_LoadTexturePNG(menu_graphics_wireframe_png);
+	menu_graphics_box1_texture	= GRRLIB_LoadTexturePNG(menu_graphics_box1_png);
+	menu_graphics_box2_texture	= GRRLIB_LoadTexturePNG(menu_graphics_box2_png);
+	flag_jp_texture = GRRLIB_LoadTexturePNG(flag_jp_png);
+	flag_br_texture = GRRLIB_LoadTexturePNG(flag_br_png);
+	flag_cn_texture = GRRLIB_LoadTexturePNG(flag_cn_png);
+	flag_da_texture = GRRLIB_LoadTexturePNG(flag_da_png);
+	flag_de_texture = GRRLIB_LoadTexturePNG(flag_de_png);
+	flag_fr_texture = GRRLIB_LoadTexturePNG(flag_fr_png);
+	flag_it_texture = GRRLIB_LoadTexturePNG(flag_it_png);
+	flag_tw_texture = GRRLIB_LoadTexturePNG(flag_tw_png);
+	flag_pt_texture = GRRLIB_LoadTexturePNG(flag_pt_png);
+	flag_ru_texture = GRRLIB_LoadTexturePNG(flag_ru_png);
+	flag_uk_texture = GRRLIB_LoadTexturePNG(flag_uk_png);
+	flag_us_texture = GRRLIB_LoadTexturePNG(flag_us_png);
 }
 
 void DrawBufferedCover(int i, float loc, float angle, float falloff)
@@ -143,15 +158,17 @@ void Paint_Progress(float v, char* msg)
 
 	CFreeTypeGX_DrawText(ttf18pt, 320, 220, TX.welcomeMsg, (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
 	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
+	GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
 
 	for(i = 0; i < count; i++)
 	{
 		GRRLIB_DrawImg(165+12*i, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImgReflection(165+12*i, 232 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
 	}
 	
 #ifdef DEBUG
 	if(msg != NULL)
-		CFreeTypeGX_DrawText(ttf16pt, 320, 270, msg, (GXColor){0x66, 0x66, 0x66, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 320, 320, msg, (GXColor){0x66, 0x66, 0x66, 0xff}, FTGX_JUSTIFY_CENTER);
 #endif
     
 	GRRLIB_Render();
@@ -168,15 +185,18 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 	//GRRLIB_2D_Init();
 	
 	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
+	GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
+
 	
 	for(i = 0; i < count; i++)
 	{
 		GRRLIB_DrawImg(165+12*i, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImgReflection(165+12*i, 232 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
 	}
 	
 	#ifdef DEBUG
 	if(msg != NULL)
-		CFreeTypeGX_DrawText(ttf16pt, 320, 270,  msg, (GXColor){0x66, 0x66, 0x66, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 320, 320,  msg, (GXColor){0x66, 0x66, 0x66, 0xff}, FTGX_JUSTIFY_CENTER);
     #endif
     
 	GRRLIB_Render();
@@ -184,130 +204,98 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 
 void Init_Buttons()
 {
-#ifndef 	LOCALBUTTON_OFF
-    char labelBuf[15]; //add for Localization
-#endif	
-	addButton				= Button_Init(add_button_png, add_button_hover_png, 580, 417);
-    slideButton				= Button_Init(slide_png, slide_hover_png, 260, 426);
-    okButton				= Button_Init(ok_png, ok_hover_png, 220, 290);
-	cancelButton			= Button_Init(cancel_png, cancel_hover_png, 360, 290);
-	loadButton				= Button_Init(load_png, load_hover_png, 220, 300);
-	deleteButton			= Button_Init(delete_png, delete_hover_png, 220, 400);
-    resetButton				= Button_Init(reset_png, reset_hover_png, 350, 355);
-    backButton				= Button_Init(back_png, back_hover_png, 340, 300);
-    gbackButton				= Button_Init(back_png, back_hover_png, 340, 300);
-    gsettingsButton			= Button_Init(settings_png, settings_hover_png, 30, 420);
-    cheatonButton			= Button_Init(toggle_on_png, toggle_on_png, 222,75);
-    cheatoffButton			= Button_Init(toggle_off_png, toggle_off_png, 222,75);
-    langupButton			= Button_Init(plus_button_png, plus_button_hover_png,466,113);
-    langdownButton			= Button_Init(minus_button_png, minus_button_hover_png, 300,113);
-    vidupButton				= Button_Init(plus_button_png, plus_button_hover_png, 466,140);
-    viddownButton			= Button_Init(minus_button_png, minus_button_hover_png, 300,140);
-    vidtvonButton			= Button_Init(toggle_on_png, toggle_on_png, 350, 165);
-    vidtvoffButton			= Button_Init(toggle_off_png, toggle_off_png, 350, 165);
-    hookupButton			= Button_Init(plus_button_png, plus_button_hover_png, 466,77);
-    hookdownButton			= Button_Init(minus_button_png, minus_button_hover_png, 364,77);
-    gcheatonButton          = Button_Init(toggle_on_png, toggle_on_png, 279,170); //
-    gcheatoffButton         = Button_Init(toggle_off_png, toggle_off_png, 279,170); //
-    glangupButton           = Button_Init(plus_button_png, plus_button_hover_png,525,213);
-    glangdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 364,213);
-    gvidupButton            = Button_Init(plus_button_png, plus_button_hover_png, 525,240);
-    gviddownButton          = Button_Init(minus_button_png, minus_button_hover_png, 364,240);
-    gvidtvonButton          = Button_Init(toggle_on_png, toggle_on_png, 414, 270);
-    gvidtvoffButton         = Button_Init(toggle_off_png, toggle_off_png, 414, 270);
-    ghookupButton           = Button_Init(plus_button_png, plus_button_hover_png, 525,177);
-    ghookdownButton         = Button_Init(minus_button_png, minus_button_hover_png, 424,177);
-	
-    coverTextOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 236);
-    coverTextOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 236);
-    covers3dOnButton       = Button_Init(toggle_on_png, toggle_on_png, 350, 276);
-    covers3dOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 276);
-    hidescrollOnButton      = Button_Init(toggle_on_png, toggle_on_png, 350,316);
-    hidescrollOffButton      = Button_Init(toggle_off_png, toggle_off_png, 350, 316);
-
-    graphicsButton          = Button_Init(ok_png, ok_hover_png, 350, 205);
-    yesButton               = Button_Init(yes_png, yes_hover_png, 220, 290);
-    noButton                = Button_Init(no_png, no_hover_png, 340, 290);
-    settingsButton		    = Button_Init(settings_png, settings_hover_png, 30, 420);
-    settingsButton	    	= Button_Init(settings_png, settings_hover_png, 30, 420);
-    titlesButton		    = Button_Init(titles_png, titles_hover_png, 400, 245);
-	coversButton			= Button_Init(covers_png, covers_hover_png, 310, 245);
-    zoomupButton            = Button_Init(plus_button_png, plus_button_hover_png,456,75);
-    zoomdownButton          = Button_Init(minus_button_png, minus_button_hover_png, 300,75);
-    spacingupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,108);
-    spacingdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,108);
-    angleupButton           = Button_Init(plus_button_png, plus_button_hover_png,456,141);
-    angledownButton         = Button_Init(minus_button_png, minus_button_hover_png, 300,141);
-    falloffupButton         = Button_Init(plus_button_png, plus_button_hover_png,456,174);
-    falloffdownButton       = Button_Init(minus_button_png, minus_button_hover_png, 300,174);
-    windowupButton          = Button_Init(plus_button_png, plus_button_hover_png,456, 207);
-    windowdownButton        = Button_Init(minus_button_png, minus_button_hover_png, 300,207);
-    themeWhiteButton        = Button_Init(theme_white_png, theme_white_png, 350, 285);
-    themeBlackButton        = Button_Init(theme_black_png, theme_black_png, 350, 285);
-    quickstartOnButton      = Button_Init(toggle_on_png, toggle_on_png, 350, 325);
-    quickstartOffButton     = Button_Init(toggle_off_png, toggle_off_png, 350, 325);
-    rumbleOnButton          = Button_Init(toggle_on_png, toggle_on_png, 350, 365);
-    rumbleOffButton         = Button_Init(toggle_off_png, toggle_off_png, 350, 365);
-    musicOnButton           = Button_Init(toggle_on_png, toggle_on_png, 350, 405);
-    musicOffButton          = Button_Init(toggle_off_png, toggle_off_png, 350, 405);
-    bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 515, 140);
+	/////////////////////////////////
+	// Main screen
+	slideButton				= Button_Init(slide_png, slide_hover_png, 260, 426);
+	settingsButton	    	= Button_Init(button_round_gear_png, button_round_gear_over_png, 30, 427);
+	addButton				= Button_Init(button_round_add_png,  button_round_add_over_png, 580, 427);
+ 	// Dialog Box Buttons
+	okButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 300, 290, TX.okB);
+	cancelButton			= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 414, 290, TX.cancelB);
+	yesButton               = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 300, 290, TX.yesB);
+    noButton                = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 414, 290, TX.noB);
+	// Game Launch Panel Buttons
+	loadButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 353, 335, TX.loadB);
+    backButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 468, 335, TX.backB);
+	deleteButton			= Button_Init(button_round_delete_png, button_round_delete_over_png, 505, 120);
+    gsettingsButton			= Button_Init(button_round_gear_png, button_round_gear_over_png, 543, 120);
+	bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 515, 140);  
     bookmarkOffButton       = Button_Init(star_off_png, star_on_png, 515, 140);
+	// 'Home' button menu buttons
     homeMenuTopButton       = Button_Init(homeTop_png, homeTop_hover_png, 0, 0);
     homeMenuBottomButton    = Button_Init(homeBottom_png, homeBottom_hover_png, 0, 368);
     wiiMenuButton           = Button_Init(wiiMenu_png, wiiMenu_hover_png, 34, 180);
     loaderButton            = Button_Init(loader_png, loader_hover_png, 174, 180);
     wiimoteButton           = Button_Init(wiimote_png, wiimote_png, 54, 400);
-
-#ifndef 	LOCALBUTTON_OFF
-	//add for Localization
-	sprintf(addButton.label, TX.addB); 
-    sprintf(deleteButton.label, TX.deleteB); 
-    sprintf(cancelButton.label, TX.cancelB);
-	sprintf(yesButton.label, TX.yesB); 
-    sprintf(noButton.label, TX.noB); 
-	sprintf(labelBuf, TX.okB);
-    sprintf(okButton.label, labelBuf); 
-	sprintf(graphicsButton.label, labelBuf);
-    sprintf(resetButton.label, TX.resetB); 
-    //sprintf(downloadButton.label, TX.downloadB); 
-	sprintf(coversButton.label, TX.downloadB); 
-	sprintf(titlesButton.label, TX.downloadB); 
-    sprintf(loadButton.label, TX.loadB); 
-    sprintf(labelBuf, TX.backB);
-	sprintf(backButton.label, labelBuf); 
-	sprintf(gbackButton.label, labelBuf); 
-
-	//sprintf(labelBuf, "An"); //for testing
-	sprintf(labelBuf, TX.toggleOnB);
-	sprintf(cheatonButton.label, labelBuf); 
-	sprintf(vidtvonButton.label, labelBuf); 
-	sprintf(gcheatonButton.label, labelBuf); 
-	sprintf(gvidtvonButton.label, labelBuf); 
-	sprintf(coverTextOnButton.label, labelBuf); 
-	sprintf(covers3dOnButton.label, labelBuf);
-	sprintf(quickstartOnButton.label, labelBuf); 
-	sprintf(rumbleOnButton.label, labelBuf); 
-	sprintf(musicOnButton.label, labelBuf); 
-
-	//sprintf(labelBuf, "      Aus");  //for testing
-	sprintf(labelBuf, TX.toggleOffB);
-	sprintf(covers3dOffButton.label, labelBuf);
-	sprintf(cheatoffButton.label, labelBuf); 
-	sprintf(vidtvoffButton.label, labelBuf); 
-	sprintf(gcheatoffButton.label, labelBuf); 
-	sprintf(gvidtvoffButton.label, labelBuf); 
-	sprintf(coverTextOffButton.label, labelBuf); 
-	sprintf(quickstartOffButton.label, labelBuf); 
-	sprintf(rumbleOffButton.label, labelBuf); 
-	sprintf(musicOffButton.label, labelBuf); 
-	sprintf(themeWhiteButton.label, TX.whiteB);
-	sprintf(themeBlackButton.label, TX.blackB);
-	sprintf(homeMenuTopButton.label, TX.homeMenuTopB);
-	sprintf(wiiMenuButton.label, TX.wiimenuB);
-	sprintf(loaderButton.label, TX.loaderB);
-	
-#endif
-}
+	// Settings Panels Header Buttons
+    menuSettingsButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 160, 20, TX.cflowSettings); 
+	menuGraphicsButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 320, 20, TX.graphics);
+    menuLanguagesButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 480, 20, "Languages"); // TODO: Make new TX.langSetting
+	menuLogoButton			= Button_Init(menu_logo_png, menu_logo_png, 30, 20);
+	// General Settings Panel
+    musicOnButton           = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 97);
+    musicOffButton          = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 97);
+    rumbleOnButton          = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 131);
+    rumbleOffButton         = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 131);
+    quickstartOnButton      = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 165);
+    quickstartOffButton     = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 165);
+    themeBlackButton        = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 310, 199, TX.blackB);
+    themeWhiteButton        = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 422, 199, TX.whiteB);
+	coversButton			= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 310, 265, "Covers");  // TODO: Make new TX. setting
+	titlesButton		    = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 422, 265, "Titles");
+    viddownButton			= Button_Init(button_minus_png, button_minus_over_png, 310,334);
+	vidupButton				= Button_Init(button_plus_png, button_plus_over_png, 338,334);
+    vidtvonButton			= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 299);
+    vidtvoffButton			= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 299);
+    cheatonButton			= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310,367);
+    cheatoffButton			= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310,367);
+    hookdownButton			= Button_Init(button_minus_png, button_minus_over_png, 422,367);
+    hookupButton			= Button_Init(button_plus_png, button_plus_over_png, 450,367);
+	// Graphic Settings Panel
+    falloffdownButton       = Button_Init(button_minus_png, button_minus_over_png, 99,123);
+    falloffupButton         = Button_Init(button_plus_png, button_plus_over_png,127,123);
+    windowdownButton        = Button_Init(button_minus_png, button_minus_over_png, 195,110);
+    windowupButton          = Button_Init(button_plus_png, button_plus_over_png, 223, 110);
+    zoomdownButton          = Button_Init(button_minus_png, button_minus_over_png, 292,110);
+    zoomupButton            = Button_Init(button_plus_png, button_plus_over_png, 320,110);
+    spacingdownButton       = Button_Init(button_minus_png, button_minus_over_png, 386,110);
+    spacingupButton         = Button_Init(button_plus_png, button_plus_over_png, 414,110);
+    angledownButton         = Button_Init(button_minus_png, button_minus_over_png, 484,123);
+    angleupButton           = Button_Init(button_plus_png, button_plus_over_png, 512,123);
+    hidescrollOnButton		= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 101,369);
+    hidescrollOffButton		= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 101, 369);
+    covers3dOnButton		= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 268, 369);
+    covers3dOffButton		= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 268, 369);
+    coverTextOnButton       = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 435, 369);
+    coverTextOffButton      = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 435, 369);
+	// Language Settings Panel
+	langupButton			= Button_Init(button_plus_png, button_plus_over_png,448,90);
+    langdownButton			= Button_Init(button_minus_png, button_minus_over_png, 420,90);
+	flagUSButton			= Button_Flag_Init(flag_us_png, 166, 150, "United States"); // TODO: Need to create TX for all of these
+	flagITButton			= Button_Flag_Init(flag_it_png, 296, 150, "Italy");
+	flagDEButton			= Button_Flag_Init(flag_de_png, 426, 150, "Germany");
+	flagUKButton			= Button_Flag_Init(flag_uk_png, 166, 220, "United Kingdom");
+	flagBRButton			= Button_Flag_Init(flag_br_png, 296, 220, "Brazil");
+	flagFRButton			= Button_Flag_Init(flag_fr_png, 426, 220, "France");
+	flagDAButton			= Button_Flag_Init(flag_da_png, 166, 290, "Netherlands");
+	flagJPButton			= Button_Flag_Init(flag_jp_png, 296, 290, "Japan"); 
+	flagPTButton			= Button_Flag_Init(flag_pt_png, 426, 290, "Portugal");
+	flagTWButton			= Button_Flag_Init(flag_tw_png, 166, 360, "Taiwan");
+	flagRUButton			= Button_Flag_Init(flag_ru_png, 296, 360, "Russia");
+	flagCNButton			= Button_Flag_Init(flag_cn_png, 426, 360, "China");
+	// Game Settings Screen Buttons
+    gvidtvonButton          = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 360, 164);
+    gvidtvoffButton         = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 360, 164);
+	gcheatonButton			= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 360, 198);
+    gcheatoffButton			= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 360, 198);
+    ghookdownButton         = Button_Init(button_minus_png, button_minus_over_png, 360, 232);
+    ghookupButton           = Button_Init(button_plus_png, button_plus_over_png, 388, 232);
+    glangdownButton         = Button_Init(button_minus_png, button_minus_over_png, 360,266);
+	glangupButton           = Button_Init(button_plus_png, button_plus_over_png,388,266);
+    gviddownButton          = Button_Init(button_minus_png, button_minus_over_png, 360, 300);
+	gvidupButton            = Button_Init(button_plus_png, button_plus_over_png, 388, 300);
+	gbackButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 468, 335, TX.backB);
+} // End Init_Buttons();
 
 void DrawSlider(int theme_id)
 {
@@ -475,18 +463,16 @@ void draw_game_title(int index, float textSize)
 			}
 		}
 		
-		if (settings.theme) // black text on white matte
-			//CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410,  gameName, (GXColor){0x11, 0x11, 0x11, 0xff}, (GXColor){0xcc, 0xcc, 0xcc, 0x44}, FTGX_JUSTIFY_CENTER);
-                        CFreeTypeGX_DrawText(ttf20pt, 320, 410,  gameName, (GXColor){0x11, 0x11, 0x11, 0xff}, FTGX_JUSTIFY_CENTER);
-		else //white text on black matte
-			//CFreeTypeGX_DrawTextWithShadow(ttf20pt, 320, 410,  gameName, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
-                        CFreeTypeGX_DrawText(ttf20pt, 320, 410,  gameName, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		if (settings.theme)
+			CFreeTypeGX_DrawText(ttf20pt, 320, 410,  gameName, (GXColor){0x11, 0x11, 0x11, 0xff}, FTGX_JUSTIFY_CENTER);
+		else
+			CFreeTypeGX_DrawText(ttf20pt, 320, 410,  gameName, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 	}
 }
 
-int draw_selected_two(bool load, bool hover)
+int DrawLoadGameDialog(bool load, bool hover)
 {
-        /*Animate fliping cover*/
+	/*Animate fliping cover*/
 	if(self.selected && self.animate_flip < 1.0)
 	{
 		self.animate_rotate = 0.0;
@@ -497,7 +483,7 @@ int draw_selected_two(bool load, bool hover)
 		self.animate_flip += FLIP_SPEED;
 		if(self.animate_flip > 1.0)
 			self.animate_flip = 1.0;
-			
+		
 		if(self.animate_flip > 0.3 && self.animate_flip < 0.7)
 			self.animate_flip = 0.7;
 	}
@@ -514,9 +500,9 @@ int draw_selected_two(bool load, bool hover)
 	
 	float dir = 1;
 	float loc, scale, angle;
-
+	
 	loc = settings.coverSpacing * dir * (pow(1, -1) - 1);
-
+	
 	if(settings.covers3d)
 	{
 		scale = change_scale(self.animate_flip, 0, 1, 0, 360);
@@ -529,27 +515,22 @@ int draw_selected_two(bool load, bool hover)
 		scale = change_scale(self.animate_flip, 0, 1, 0, 270);
 		angle = -1 * dir * scale ;
 	}
-
+	
 	if(load)
 	{
 		self.animate_rotate+=5;
-		if(self.animate_rotate == 360) self.animate_rotate = 0;
+		if(self.animate_rotate == 360)
+			self.animate_rotate = 0;
 		
 		self.animate_load_speed -= 4;
 		
 		if(self.animate_count < 0)
-		{
 			self.animate_slide_x+=8;
-		}
 		else
-		{
 			self.animate_count--;
-		}
-			
+	
 		if(self.animate_slide_x > 530)
-		{
 			return 1;
-		}
 		
 		if(self.animate_load < 15)
 			self.animate_load+=1;
@@ -558,9 +539,7 @@ int draw_selected_two(bool load, bool hover)
 	{
 		
 		if(self.animate_load < 15 )
-		{
 			self.animate_load+=1;
-		}	
 	}
 	else
 	{
@@ -583,84 +562,63 @@ int draw_selected_two(bool load, bool hover)
 	
 	if(check)
 	{
-		GRRLIB_DrawImg(64, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-		
-		loadButton.x = 245;
-		loadButton.y = 316;
-		backButton.x = 335;
-		backButton.y = 316;
-		deleteButton.x = 425;
-		deleteButton.y = 316;
-		gsettingsButton.x = 520;
-		gsettingsButton.y = 312;
-		
-		Button_Paint(&loadButton);
-		Button_Paint(&backButton);
+		// Draw the background panel
+		GRRLIB_Rectangle(40, 106, 560, 276, 0xffffffdd, true);
+		GRRLIB_Rectangle(42, 108, 556, 272, 0x737373FF, true);
+		GRRLIB_Rectangle(268, 168, 304, 44, 0xffffffdd, true);
+		GRRLIB_Rectangle(270, 170, 300, 40, 0x000000FF, true);
+		// Draw the buttons
+		Button_TTF_Paint(&loadButton);
+		Button_TTF_Paint(&backButton);
 		//Button_Toggle_Paint(&bookmarkOffButton, &bookmarkOnButton, self.dummy);
-		
-		if(!settings.parentalLock)
-			Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
-			
-		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
-		
 		if(!settings.parentalLock)
 		{
+			Button_Paint(&deleteButton);
 			Button_Paint(&gsettingsButton);
 			Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y);
+			Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 		}
-		
-		if(!settings.parentalLock)
-			Button_Paint(&deleteButton);
-		
-#ifndef TEST_MODE
+		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
+
+		// Get the title info
 		struct discHdr *header = NULL;
 		header = &self.gameList[self.gameSelected];
 		char gameName[MAX_TITLE_LEN]; 
-
-
-		if(self.usingTitlesTxt){
+		
+		if(self.usingTitlesTxt)
+		{
+			// Load a custom title
 			sprintf(gameName, "%s", header->title);
 			getTitle(titleList, (char*)header->id, gameName);
 		}
 		else
 			sprintf(gameName, "%s", (header->title));
-		// chomp the title to fit
-		if(strlen(gameName) >= 30)
+
+		// Chomp the title to fit
+		if(strlen(gameName) >= 22)
 		{
 			//strncpy(gameName, header->title, 17);
-			gameName[27] = '\0';
+			gameName[19] = '\0';
 			strncat(gameName, "...", 3);
 		}
-		/*
-		if(strlen(header->title) < 20)
-		{
-			sprintf(gameName, "%s", (header->title));
-		}
-		else
-		{
-			strncpy(gameName, header->title, 17);
-			gameName[17] = '\0';
-			strncat(gameName, "...", 3);
-		}
-		*/
-                char tTemp[50];
-		// Display Title, Last Played, and Size
-                sprintf(tTemp,"%s",gameName);
-                CFreeTypeGX_DrawText(ttf18pt, 380,174,  tTemp, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
-		if((strcmp(gameSetting.lastPlayed, "-1"))==0)
-                        CFreeTypeGX_DrawText(ttf14pt, 255,220,  TX.neverPlayed, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		else
-                {       sprintf(tTemp,TX.played, gameSetting.lastPlayed);
-                        CFreeTypeGX_DrawText(ttf14pt, 255,220,  tTemp, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);}
-		sprintf(tTemp,TX.size, self.gsize);
-                CFreeTypeGX_DrawText(ttf14pt, 255,240,  tTemp, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-#else
-		GRRLIB_Printf(270, 174, font_texture, 0xFFFFFFFF, 1, "%s", "Best game");
-		GRRLIB_Printf(280, 210, font_texture, 0xFFFFFFFF, 1, "%s", " Game ID: KBGSUX");
-		GRRLIB_Printf(280, 230, font_texture, 0xFFFFFFFF, 1, "Size:    %.2fGB", self.gsize);
-#endif
 		
-		// DISC IMAGE
+		// Display Title, Last Played, and Size
+        char tTemp[50];
+		sprintf(tTemp,"%s",gameName);
+		CFreeTypeGX_DrawText(ttf20pt, 420, 200, tTemp, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+
+		if ((strcmp(gameSetting.lastPlayed, "-1"))==0)
+			CFreeTypeGX_DrawText(ttf16pt, 270, 253, TX.neverPlayed, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+		else
+		{
+			sprintf(tTemp, TX.played, gameSetting.lastPlayed);
+			CFreeTypeGX_DrawText(ttf16pt, 270, 253, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+		}
+	
+		sprintf(tTemp, TX.size, self.gsize);
+		CFreeTypeGX_DrawText(ttf16pt, 270, 278, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+		
+		// Draw the cover image
 		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 			GRRLIB_DrawImg(86+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
 		else
@@ -676,24 +634,16 @@ int draw_selected_two(bool load, bool hover)
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 					{
 						if(settings.covers3d)
-						{
 							GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
-						}
 						else
-						{
 							GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
-						}
 					}
 					else
 					{
 						if(settings.covers3d)
-						{
 							GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
-						} 
 						else
-						{
 							GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
-						}
 					}
 				}
 				else
@@ -701,51 +651,35 @@ int draw_selected_two(bool load, bool hover)
 					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 					{
 						if(settings.covers3d)
-						{
 							GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
-						}
 						else
-						{
 							GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
-						}
 					}
 					else
 					{
 						if(settings.covers3d)
-						{
 							GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
-						}
 						else
-						{
 							GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-						}
 					}
 				}
-					
 				pthread_mutex_unlock(&buffer_mutex[self.gameSelected]);
 			}
 			else
-			{	if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+			{	
+				if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 				{
 					if(settings.covers3d)
-					{
 						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
-					}
 					else
-					{
 						GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
-					}
 				}
 				else
 				{
 					if(settings.covers3d)
-					{
 						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
-					}
 					else
-					{
 						GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-					}
 				}
 			}	
 		}
@@ -754,135 +688,26 @@ int draw_selected_two(bool load, bool hover)
 			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 			{
 				if(settings.covers3d)
-				{
 					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
-				}
 				else
-				{
 					GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
-				}
 			}
 			else
 			{
 				if(settings.covers3d)
-				{
 					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
-				}
 				else
-				{
 					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-				}
 			}
 		}	
 		
-  }
-  else
-  {
-	DrawBufferedCover(self.gameSelected, loc, angle,  0 );
-  }
-  
-  return 0;
-}
-
-void draw_selected()
-{
-	if(self.selected && self.animate_flip < 1.0)
-	{
-		self.animate_flip += FLIP_SPEED;
-		if(self.animate_flip > 1.0)
-			self.animate_flip = 1.0;
-			
-		if(self.animate_flip > 0.3 && self.animate_flip < 0.7)
-			self.animate_flip = 0.7;
 	}
-	else if(!self.selected)
+	else
 	{
-		self.animate_flip -= FLIP_SPEED;
-		
-		if(self.animate_flip > 0.3 && self.animate_flip < 0.7)
-			self.animate_flip = 0.3;
-		
-		if(self.animate_flip < 0)
-			self.animate_flip = 0;
+		DrawBufferedCover(self.gameSelected, loc, angle,  0 );
 	}
 	
-	float dir = 1;
-	float loc, scale, angle;
-	
-	loc = settings.coverSpacing * dir * (pow(1, -1) - 1);
-	scale = change_scale(self.animate_flip, 0, 1, 0, 360);
-	angle = -1 * dir * scale;
-	
-	if(scale >= 180)
-	{
-		//Use back art texture
-		GRRLIB_DrawCoverImg(loc*1.2,back_texture,angle,1.4,0xFFFFFFFF, 0, settings.theme);
-	
-		if(scale >= 360)
-		{
-			int i ;
-			int len;
-			
-			self.animate_rotate++;
-			
-			if(self.animate_rotate == 360) self.animate_rotate = 0;
-			
-			GRRLIB_DrawImg(230,100, current_cover_texture, self.animate_rotate, 1, 1, 0xFFFFFFFF);
-			
-			Button_Paint(&loadButton);
-			Button_Paint(&backButton);
-			Button_Paint(&deleteButton);
-			
-#ifndef TEST_MODE
-			struct discHdr *header = NULL;
-			header = &self.gameList[self.gameSelected];
-			f32 size = 0.0;
-
-			/* Get game size */
-			WBFS_GameSize(header->id, &size);
-			char name[MAX_TITLE_LEN];
-			
-			if(self.usingTitlesTxt){
-				sprintf(name, "%s", header->title);
-				getTitle(titleList, (char*)header->id, name);
-			}
-			else{
-				WindowPrompt("zucca!", "eheh", 0, &okButton);
-				for(i = 0; i < MAX_TITLE_LEN; i++)
-					name[i] = toupper(header->title[i]);
-			}
-			
-			len = strlen(name);
-			
-			float tsize = .8;
-
-			if(len > 20)
-				tsize = .6;
-
-			if(len > 28)
-				tsize = .4;
-				
-			if(len > 40)
-				tsize = .3;
-			
-			int offset = (len*10);
-			
-			if(offset > 240)
-				offset = 240;
-			
-			GRRLIB_Printf(300 - offset, 10, font_texture, settings.fontColor, tsize, "%s", name);
-			GRRLIB_Printf(210, 50, font_texture, settings.fontColor, .4, "(%c%c%c%c) (%.2fGB)", header->id[0], header->id[1], header->id[2], header->id[3], size);
-#else
-			GRRLIB_Printf(90, 10, font_texture, settings.fontColor, .8, "%s", "JUSTINS GAME");
-			GRRLIB_Printf(180, 50, font_texture, settings.fontColor, .5, "%s", "JUSTINS GAME");
-#endif
-		}
-  }
-  else
-  {
-	DrawBufferedCover(self.gameSelected, loc, angle, 0);
-	
-  }
+	return 0;
 }
 
 float change_scale_without_containing(float val, float in_min, float in_max, float out_min, float out_max)
@@ -910,92 +735,66 @@ float change_scale(float val, float in_min, float in_max, float out_min, float o
 
 int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
 {
+	bool returnVal = false;
 	bool doloop = true;
 	char* pch;
 	
 	if(choice_a == 0 && choice_b == 0)
-	{
 		doloop = false;
-	}
-	else
+	
+	/////////////////////////////////////
+	// Draw the intro - lower the dialog
+	int i = 1;
+	int fade = 0x00;
+	float moving_y;
+	
+	for(i = 0; i <= 20; i++)
 	{
-		doloop = true;
-	}
-		
-	do{
-		WPAD_ScanPads();
-		PAD_ScanPads();
-		GetWiimoteData();
-
-		//if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
-		//	exit(0);
-		
-		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)|| (PAD_ButtonsDown(0) & PAD_BUTTON_B))
-			return false;
-		
-		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
+		// Draw the covers in the back
+		draw_covers();
+		GRRLIB_2D_Init();
+		// Draw the screen fade
+		GRRLIB_FillScreen(0x00000000|fade);
+		fade+=8;
+		// Draw the background panel
+		moving_y = change_scale(i, 0, 20, -202, 148);
+		GRRLIB_Rectangle(108, moving_y, 424, 184, 0xffffffdd, true);
+		moving_y = change_scale(i, 0, 20, -200, 150);
+		GRRLIB_Rectangle(110, moving_y, 420, 180, 0x737373FF, true);
+		moving_y = change_scale(i, 0, 20, -210, 140);
+		GRRLIB_DrawImg(90, moving_y, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
+		// Draw buttons
+		moving_y = change_scale(i, 0, 20, -60, 290);
+		if(choice_a != 0 && choice_b != 0)
+		{
+			choice_a->y = moving_y;
+			choice_b->y = moving_y;
+			Button_TTF_Paint(choice_a);
+			Button_TTF_Paint(choice_b);
+		}
+		else
 		{
 			if(choice_a != 0)
 			{
-				if(Button_Select(choice_a, pointer.p_x, pointer.p_y))
-					return true;
+				choice_a->y = moving_y;
+				Button_TTF_Paint(choice_a);
 			}
 			if(choice_b != 0)
 			{
-				if(Button_Select(choice_b, pointer.p_x, pointer.p_y))
-					return false;
+				choice_b->y = moving_y;
+				Button_TTF_Paint(choice_b);
 			}
 		}
-
-		// Draw the dialog panel
-		GRRLIB_DrawImg(50, 80, load_bg_texture, 0, 1, 1.25, 0xFFFFFFFF);
-
-		// Draw buttons
-		if(choice_a != 0 && choice_b != 0){
-			choice_a->x = 320-5-80;
-			choice_b->x = 320+5;
-#ifndef TTF_TEST
-			Button_Paint(choice_a); 
-			Button_Paint(choice_b);
-#else
-			GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-			CFreeTypeGX_DrawText(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-			GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-			CFreeTypeGX_DrawText(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-#endif
-		}
-		
-		else{
-			if(choice_a != 0){
-				choice_a->x = 320-40;
-#ifndef TTF_TEST
-				Button_Paint(choice_a); 
-#else
-				GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawText(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-#endif
-			}
-			
-			if(choice_b != 0){
-				choice_b->x = 320-40;
-#ifndef TTF_TEST
-				Button_Paint(choice_b);
-#else
-				GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawText(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-#endif
-			}
-		}
-		
-		int y = 140;
-		int sp = 0;
-		
-		// Draw text
-#ifndef TTF_TEST
-		GRRLIB_Printf(100, 105, font_texture, 0xFFFFFFFF, 1, "%s", title);
-#else
-		CFreeTypeGX_DrawText(ttf20pt, 100, 105, title, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
-#endif
+		// Draw Icon and reflection
+		moving_y = change_scale(i, 0, 20, -155, 195);
+		GRRLIB_DrawImg(130, moving_y, dialog_box_icon_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImgReflection(130, moving_y + dialog_box_icon_texture.h + 4, dialog_box_icon_texture, 0, 1, 1, 0.7);
+		// Draw Dialog Box Title Text
+		moving_y = change_scale(i, 0, 20, -197, 153);
+		CFreeTypeGX_DrawText(ttf16pt, 215, moving_y, title, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+		// Draw Dialog Box Body Text
+		moving_y = change_scale(i, 0, 20, -160, 190);
+		int lsp = moving_y;
 		if(txt != NULL)
 		{
 			char* msg = malloc(strlen(txt)*sizeof(char));
@@ -1004,16 +803,28 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			pch = strtok(msg, "\n");
 			while (pch != NULL)
 			{
-#ifndef TTF_TEST
-				GRRLIB_Printf(138, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
-#else
-				CFreeTypeGX_DrawText(ttf16pt, 140, y+sp, pch, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
-#endif
-				pch = strtok(NULL, "\n");
-				sp+=16;
+				CFreeTypeGX_DrawText(ttf16pt, 220, lsp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+				pch  = strtok(NULL, "\n");
+				lsp += 16;
 			}
 			free(msg);
         }
+		// Draw the pointer
+		WPAD_ScanPads();
+		GetWiimoteData();
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		GRRLIB_Render();
+	}
+	
+	
+	do{
+		///////////////////////
+		// Handle Button events
+		WPAD_ScanPads();
+		PAD_ScanPads();
+		GetWiimoteData();
+		
+		/////////////////////////////////////////////////////
 		// Check for button-pointer intersections, and rumble
 		if (Button_Hover(choice_a, pointer.p_x, pointer.p_y) ||
 			Button_Hover(choice_b, pointer.p_x, pointer.p_y))
@@ -1029,15 +840,164 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			WPAD_Rumble(0,0);
 			self.rumbleAmt = 5;
 		}
+		// Check for Button Events
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)|| (PAD_ButtonsDown(0) & PAD_BUTTON_B))
+		{
+			doloop = false;
+		}
+		
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1)
+			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
+		{
+			if(choice_a != 0)
+			{
+				if(Button_Select(choice_a, pointer.p_x, pointer.p_y))
+				{
+					doloop = false;
+					returnVal = true;
+					break;
+				}
+			}
+			if(choice_b != 0)
+			{
+				if(Button_Select(choice_b, pointer.p_x, pointer.p_y))
+				{
+					doloop = false;
+					break;
+				}
+				
+			}
+		}
+
+		////////////////////////
+		// Draw the dialog
+		draw_covers();
+		GRRLIB_2D_Init();
+		// Draw the screen fade
+		GRRLIB_FillScreen(0x00000000|fade);
+		// Draw the background panel
+		GRRLIB_Rectangle(108, 148, 424, 184, 0xffffffdd, true);
+		GRRLIB_Rectangle(110, 150, 420, 180, 0x737373FF, true);
+		GRRLIB_DrawImg(90, 140, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
+		// Draw buttons
+		if(choice_a != 0 && choice_b != 0)
+		{
+			Button_TTF_Paint(choice_a);
+			Button_TTF_Paint(choice_b);
+		}
+		else
+		{
+			if(choice_a != 0)
+				Button_TTF_Paint(choice_a);
+			if(choice_b != 0)
+				Button_TTF_Paint(choice_b);
+		}
+		// Draw Icon and reflection
+		GRRLIB_DrawImg(130, 195, dialog_box_icon_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImgReflection(130, 195 + dialog_box_icon_texture.h + 4, dialog_box_icon_texture, 0, 1, 1, 0.7);
+		// Draw Dialog Box Title Text
+		CFreeTypeGX_DrawText(ttf16pt, 215, 153, title, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+		// Draw Dialog Box Body Text
+		int y = 190;
+		int sp = 0;
+		if(txt != NULL)
+		{
+			char* msg = malloc(strlen(txt)*sizeof(char));
+			sprintf(msg, txt);
+			
+			pch = strtok(msg, "\n");
+			while (pch != NULL)
+			{
+				CFreeTypeGX_DrawText(ttf16pt, 220, y+sp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+				pch = strtok(NULL, "\n");
+				sp+=16;
+			}
+			free(msg);
+        }
+		
+
+		////////////////////////////////
 		// Draw the default pointer hand
-		if(doloop)
-			DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		
 		GRRLIB_Render();
 		
 	}while(doloop);
+	
+	/////////////////////////////////////
+	// Draw the outro - raise the menu
+	for(i = 0; i <= 20; i++)
+	{
+		// Draw the covers in the back
+		draw_covers();
+		GRRLIB_2D_Init();
+		// Draw the screen fade
+		GRRLIB_FillScreen(0x00000000|fade);
+		fade-=8;
+		// Draw the background panel
+		moving_y = change_scale(i, 0, 20, 148, -202);
+		GRRLIB_Rectangle(108, moving_y, 424, 184, 0xffffffdd, true);
+		moving_y = change_scale(i, 0, 20, 150, -200);
+		GRRLIB_Rectangle(110, moving_y, 420, 180, 0x737373FF, true);
+		moving_y = change_scale(i, 0, 20, 140, -210);
+		GRRLIB_DrawImg(90, moving_y, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
+		// Draw buttons
+		moving_y = change_scale(i, 0, 20, 290, -60);
+		if(choice_a != 0 && choice_b != 0)
+		{
+			choice_a->y = moving_y;
+			choice_b->y = moving_y;
+			Button_TTF_Paint(choice_a);
+			Button_TTF_Paint(choice_b);
+		}
+		else
+		{
+			if(choice_a != 0)
+			{
+				choice_a->y = moving_y;
+				Button_TTF_Paint(choice_a);
+			}
+			if(choice_b != 0)
+			{
+				choice_b->y = moving_y;
+				Button_TTF_Paint(choice_b);
+			}
+		}
+		// Draw Icon and reflection
+		moving_y = change_scale(i, 0, 20, 195, -155);
+		GRRLIB_DrawImg(130, moving_y, dialog_box_icon_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImgReflection(130, moving_y + dialog_box_icon_texture.h + 4, dialog_box_icon_texture, 0, 1, 1, 0.7);
+		// Draw Dialog Box Title Text
+		moving_y = change_scale(i, 0, 20, 153, -197);
+		CFreeTypeGX_DrawText(ttf16pt, 215, moving_y, title, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+		// Draw Dialog Box Body Text
+		moving_y = change_scale(i, 0, 20, 190, -160);
+		int lsp = moving_y;
+		if(txt != NULL)
+		{
+			char* msg = malloc(strlen(txt)*sizeof(char));
+			sprintf(msg, txt);
+			
+			pch = strtok(msg, "\n");
+			while (pch != NULL)
+			{
+				CFreeTypeGX_DrawText(ttf16pt, 220, lsp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+				pch  = strtok(NULL, "\n");
+				lsp += 16;
+			}
+			free(msg);
+        }
+		// Draw the pointer
+		WPAD_ScanPads();
+		GetWiimoteData();
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		GRRLIB_Render();
+	}
+	
 	self.rumbleAmt = 0;
-	return false;
+	return returnVal;
 }
 
 int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
@@ -1046,13 +1006,7 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 	char* pch;
 	
 	if(choice_a == 0 && choice_b == 0)
-	{
 		doloop = false;
-	}
-	else
-	{
-		doloop = true;
-	}
 	
 	GRRLIB_texImg myTex;
 	unsigned char buffer[160 * 224 * 4 * 10]; //why 5 I don't know
@@ -1065,21 +1019,19 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 		
 		char filepath[255];
 		sprintf(filepath, USBLOADER_PATH "/covers/%s.png", id);
-        //int imgDataAddress = MEM2_START_ADDRESS + 160 * 224 * 4 * (maxSlots+threadNo);
-        //int ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress, 160 * 224 * 4);
-		//WindowPrompt("Pre reading", "sss", 0, &cancelButton);
 		int ret = Fat_ReadFileToBuffer(filepath, (void*)buffer, 160 * 224 * 4);
-		//WindowPrompt("Post reading", "sss", 0, &cancelButton);
-		if(ret > 0){
-			//WindowPrompt("Pre texture", "sss", 0, &cancelButton);
+		if(ret > 0)
+		{
 			myTex = GRRLIB_LoadTexturePNG(buffer);
 		}
-		else{ //WindowPrompt("Pre nocover", "sss", 0, &cancelButton);
+		else
+		{
 			myTex = GRRLIB_LoadTexture(no_cover_png);
 		}
-		
-		//WindowPrompt("Post", "sss", 0, &cancelButton);
-		//myTex = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgDataAddress, (void *)thisDataMem2Address);
+	}
+	else // no network
+	{
+		myTex = GRRLIB_LoadTexture(no_cover_png);
 	}
 	
 	do{
@@ -1110,9 +1062,12 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 			}
 		}
 
+		draw_covers();
+		GRRLIB_2D_Init();
 		// Draw the dialog panel
-		GRRLIB_DrawImg(50, 80, load_bg_texture, 0, 1, 1.25, 0xFFFFFFFF);
-		
+		GRRLIB_Rectangle(60, 106, 520, 276, 0xffffffdd, true);
+		GRRLIB_Rectangle(62, 108, 516, 272, 0x737373FF, true);
+		// Draw the cover image
 		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 			GRRLIB_DrawImg(60, 80, myTex, 0, AR_16_9, 1, 0xFFFFFFFF);
 		else
@@ -1120,51 +1075,25 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 		
 
 		// Draw buttons
-		if(choice_a != 0 && choice_b != 0){
-			choice_a->x = 320-5-80;
-			choice_b->x = 320+5;
-#ifndef TTF_TEST
-			Button_Paint(choice_a); 
-			Button_Paint(choice_b);
-#else
-			GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
-			GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-			CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
-#endif
+		if(choice_a != 0 && choice_b != 0)
+		{
+			Button_TTF_Paint(choice_a); 
+			Button_TTF_Paint(choice_b);
 		}
-		
-		else{
-			if(choice_a != 0){
-				choice_a->x = 320-40;
-#ifndef TTF_TEST
-				Button_Paint(choice_a); 
-#else
-				GRRLIB_DrawImg(choice_a->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_a->x)+40, 310, "OK", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
-#endif
-			}
-			
-			if(choice_b != 0){
-				choice_b->x = 320-40;
-#ifndef TTF_TEST
-				Button_Paint(choice_b);
-#else
-				GRRLIB_DrawImg(choice_b->x, 290, ttf_button_black, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawTextWithShadow(ttf16pt, (choice_b->x)+40, 310, "CANCEL", (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_CENTER);
-#endif
-			}
+		else
+		{
+			if(choice_a != 0)
+				Button_TTF_Paint(choice_a); 
+			if(choice_b != 0)
+				Button_TTF_Paint(choice_b);
 		}
 		
 		int y = 140;
 		int sp = 0;
 		
 		// Draw text
-#ifndef TTF_TEST
-		GRRLIB_Printf(270, 105, font_texture, 0xFFFFFFFF, 1, "%s", title);
-#else
-		CFreeTypeGX_DrawTextWithShadow(ttf20pt, 220, 105, title, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
-#endif
+		CFreeTypeGX_DrawText(ttf16pt, 215, 105, title, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+
 		if(txt != NULL)
 		{
 			char* msg = malloc(strlen(txt)*sizeof(char));
@@ -1173,11 +1102,7 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 			pch = strtok(msg, "\n");
 			while (pch != NULL)
 			{
-#ifndef TTF_TEST
-				GRRLIB_Printf(208, y+sp, font_texture, settings.fontColor, 1, "%s", pch);
-#else
-				CFreeTypeGX_DrawTextWithShadow(ttf16pt, 240, y+sp, pch, (GXColor){0xff, 0xff, 0xff, 0xff}, (GXColor){0x33, 0x33, 0x33, 0x99}, FTGX_JUSTIFY_LEFT);
-#endif
+				CFreeTypeGX_DrawText(ttf16pt, 240, y+sp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 				pch = strtok(NULL, "\n");
 				sp+=16;
 			}
@@ -1319,345 +1244,15 @@ void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 s
 	}
 	
 }
-void game_settings_menu()
-{
-    //get/set per-game settings
-    struct discHdr *header = NULL;
-    header = &self.gameList[self.gameSelected];
-    char titleID[7];
-    char gameName[MAX_TITLE_LEN];
-
-    // chomp the title to fit
-	if(self.usingTitlesTxt){
-		sprintf(gameName, "%s", header->title);
-		getTitle(titleList, (char*)header->id, gameName);
-	}
-	else
-		sprintf(gameName, "%s", (header->title));
-	
-    if(strlen(header->title) >= 30)
-    {
-		//strncpy(gameName, header->title, 17);
-		gameName[27] = '\0';
-		strncat(gameName, ".. ", 3);
-    }
-	
-    sprintf(titleID, "%s", header->id);
-    if(!getGameSettings(titleID, &gameSetting));
-    {
-        setGameSettings(titleID, &gameSetting,-1);
-        getGameSettings(titleID, &gameSetting);
-    }
-    // ocarina will be -1 if we never been into game settings before
-    if(gameSetting.ocarina == -1)
-    {
-        gameSetting.ocarina = 0;
-        gameSetting.hooktype = 0;
-        gameSetting.language = 0;
-        gameSetting.video = 0;
-        gameSetting.vipatch = 0;
-    }
-
-    bool doloop = true;
-    do{
-		WPAD_ScanPads();
-
-		GetWiimoteData();
-
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
-                {
-                    setGameSettings(titleID, &gameSetting,-1);
-                    return;
-                }
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
-                {
-                    setGameSettings(titleID, &gameSetting,-1);
-                    return;
-                }
-		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
-		{
-			if(Button_Select(&gbackButton, pointer.p_x, pointer.p_y))
-			{
-				setGameSettings(titleID, &gameSetting,-1);
-				return;
-			}
-			else if (Button_Select(&gcheatonButton, pointer.p_x, pointer.p_y) || Button_Select(&gcheatoffButton, pointer.p_x, pointer.p_y))
-			{
-				gameSetting.ocarina = (gameSetting.ocarina) ? 0 : 1; // Clicked the Ocarina button, toggle state
-			}
-			else if (Button_Select(&gvidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&gvidtvoffButton, pointer.p_x, pointer.p_y))
-			{
-				gameSetting.vipatch = (gameSetting.vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
-			}
-			else if (Button_Select(&glangdownButton, pointer.p_x, pointer.p_y))
-			{ // Clicked on the language buttons
-				if (gameSetting.language > 0)
-				{
-					gameSetting.language --;
-				}
-				else
-				{
-					gameSetting.language = (CFG_LANG_COUNT - 1);
-				}
-			}
-			else if (Button_Select(&glangupButton, pointer.p_x, pointer.p_y))
-			{
-				if (gameSetting.language < (CFG_LANG_COUNT - 1))
-				{
-					gameSetting.language ++;
-				}
-				else
-				{
-					gameSetting.language = 0;
-				}
-			}
-			else if (Button_Select(&ghookdownButton, pointer.p_x, pointer.p_y))
-			{ // Clicked on the hooktype buttons
-				if (gameSetting.hooktype > 0)
-				{
-					gameSetting.hooktype --;
-				}
-				else
-				{
-					gameSetting.hooktype = (CFG_HOOK_COUNT - 1);
-				}
-			}
-			else if (Button_Select(&ghookupButton, pointer.p_x, pointer.p_y))
-			{
-				if (gameSetting.hooktype < (CFG_HOOK_COUNT - 1))
-				{
-					gameSetting.hooktype ++;
-				}
-				else
-				{
-					gameSetting.hooktype = 0;
-				}
-			}
-			else if (Button_Select(&gviddownButton, pointer.p_x,pointer.p_y))
-			{
-				// Clicked on the video down button
-				if (gameSetting.video > 0)
-				{
-					gameSetting.video --;
-				}
-				else
-				{
-					gameSetting.video = (CFG_VIDEO_COUNT -1);
-				}
-			}
-			else if (Button_Select(&gvidupButton, pointer.p_x,pointer.p_y))
-			{
-				// Clicked on the video up button
-				if (gameSetting.video <(CFG_VIDEO_COUNT -1))
-				{
-					gameSetting.video ++;
-				}
-				else
-				{
-					gameSetting.video = 0;
-				}
-			}
-		}
-		// Draw the covers behind the dialog
-		draw_covers();
-		//GRRLIB_FillScreen(0x000000FF);
-		GRRLIB_DrawImg(64, 110, load_bg_texture, 0, 1, 1, 0xFFFFFFFF);
-		if(self.gameSelected < MAX_BUFFERED_COVERS || self.gameSelected >= 0)
-		{
-			if(BUFFER_IsCoverReady(self.gameSelected))
-			{
-				pthread_mutex_lock(&buffer_mutex[self.gameSelected]);
-				if(_texture_data[self.gameSelected].data)
-				{
-					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-					{
-						if(settings.covers3d)
-						{
-							GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
-						}
-						else
-						{
-							GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
-						}
-					}
-					else
-					{
-						if(settings.covers3d)
-						{
-							GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
-						}
-						else
-						{
-							GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
-						}
-					}
-				}
-				else
-				{
-					if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-					{
-						if(settings.covers3d)
-						{
-							GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
-						}
-						else
-						{
-							GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
-						}
-					}
-					else
-					{
-						if(settings.covers3d)
-						{
-							GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
-						}
-						else
-						{
-							GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-						}
-					}
-				}
-
-				pthread_mutex_unlock(&buffer_mutex[self.gameSelected]);
-			}
-			else
-			{	if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-				{
-					if(settings.covers3d)
-					{
-						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, AR_16_9, 0xFFFFFFFF);
-					}
-					else
-					{
-						GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
-					}
-				}
-				else
-				{
-					if(settings.covers3d)
-					{
-						GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
-					}
-					else
-					{
-						GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-					}
-				}
-			}
-		}
-		else
-		{
-			if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-			{
-				if(settings.covers3d)
-				{
-					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
-				}
-				else
-				{
-					GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
-				}
-			}
-			else
-			{
-				if(settings.covers3d)
-				{
-					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
-				}
-				else
-				{
-					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
-				}
-			}
-		}
-
-		gbackButton.x = 474;
-		gbackButton.y = 320;
-
-		Button_Paint(&gbackButton);
-		Button_Paint(&glangupButton);
-		Button_Paint(&glangdownButton);
-		Button_Paint(&gvidupButton);
-		Button_Paint(&gviddownButton);
-		Button_Paint(&ghookupButton);
-		Button_Paint(&ghookdownButton);
-		Button_Toggle_Paint(&gcheatoffButton, &gcheatonButton, gameSetting.ocarina);
-		Button_Toggle_Paint(&gvidtvoffButton, &gvidtvonButton, gameSetting.vipatch);
-
-		Button_Hover(&gbackButton, pointer.p_x, pointer.p_y);
-		Button_Hover(&glangupButton, pointer.p_x, pointer.p_y);
-		Button_Hover(&glangdownButton, pointer.p_x, pointer.p_y);
-		Button_Hover(&gvidupButton, pointer.p_x, pointer.p_y);
-		Button_Hover(&gviddownButton, pointer.p_x, pointer.p_y);
-		Button_Hover(&gcheatoffButton, pointer.p_x, pointer.p_y);
-		Button_Hover(&gcheatonButton, pointer.p_x, pointer.p_y);
-		Button_Hover(&gvidtvoffButton, pointer.p_x, pointer.p_y);
-		Button_Hover(&gvidtvonButton, pointer.p_x, pointer.p_y);
-		Button_Hover(&ghookupButton, pointer.p_x, pointer.p_y);
-		Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y);
-
-        //BUTTON TEXT
-                //char tLabel[50];
-                //sprintf(tLabel,TX.setting, gameName);
-                CFreeTypeGX_DrawText(ttf18pt, 209,150, TX.setting, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 209,193, TX.ocarina, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 374,193, TX.hook, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 449,193, ghooks[gameSetting.hooktype], (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 209,228, TX.language, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 394,228, languages[gameSetting.language], (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 209,257, TX.videoMode, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 394,255, vidmodes[gameSetting.video], (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-		CFreeTypeGX_DrawText(ttf14pt, 209,289, TX.patchVIDTV, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-
-		// Draw the default pointer hand
-		if(doloop)
-			DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
-
-		// Check for button-pointer intersections, and rumble
-		if ((Button_Hover(&gbackButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&glangupButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&glangdownButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&gvidupButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&gviddownButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&gcheatoffButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&gcheatonButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&gvidtvoffButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&gvidtvonButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&ghookupButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y)))
-		{
-			// Should we be rumbling?
-			if (--self.rumbleAmt > 0)
-			{
-				if(settings.rumble)
-					WPAD_Rumble(0,1); // Turn on Wiimote rumble
-			}
-			else 
-				WPAD_Rumble(0,0); // Kill the rumble
-		}
-		else
-		{ // If no button is being hovered, kill the rumble
-			WPAD_Rumble(0,0);
-			self.rumbleAmt = 5;
-		}
-		
-		GRRLIB_Render();
-
-	}while(doloop);
-		
-    return;
-}
 
 void freeResources(){
 
 	//free(pointer_texture.data);
 	//free(pointer_shadow_texture.data);
 	//free(cover_texture.data);
-	//free(back_texture.data);
 	//free(empty_texture.data); // can't find load
 	//free(no_disc_texture.data);
 	if (coverLoaded)free(current_cover_texture.data); // is this always available?
-	//free(font_texture.data);
 	//free(progress_step_texture.data);
 	//free(progress_bar_texture.data);
 	

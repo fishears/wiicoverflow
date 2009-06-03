@@ -26,8 +26,6 @@
 #define MEM2_START_ADDRESS 0x90000000
 #define MEM2_EXTENT 54217216 //don't see why this cant be used
 
-extern const u8 back_cover_png[];
-
 // private cars
 typedef struct COVERQUEUE 
 {
@@ -464,13 +462,6 @@ void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
 void SetSelectedCover(int index)
 {
 	iSetSelectedCover(index+nCovers/2.0,false);
-	/*         GRRLIB_Printf(50, 20, font_texture, 0xFFFFFFFF, 1, "Method %d Max Slots %d Main Cache %d", BufferMethod, maxSlots, MainCacheSize);
-	              GRRLIB_Printf(50, 0, font_texture, 0xFFFFFFFF, 1, "Floating Cache %d, Density %f",FloatingCacheSize,Density);
-	 GRRLIB_Printf(50, 60, font_texture, 0xFFFFFFFF, 1, " Current Selection %d", CurrentSelection);
-	              GRRLIB_Printf(50, 40, font_texture, 0xFFFFFFFF, 1, " Floating Cache %d %d %d %d %d %d %d %d %d %d", FloatingCacheCovers[0],FloatingCacheCovers[1],FloatingCacheCovers[2],FloatingCacheCovers[3],FloatingCacheCovers[4],FloatingCacheCovers[5],FloatingCacheCovers[6],FloatingCacheCovers[7],FloatingCacheCovers[8],FloatingCacheCovers[9]);
-	              int i=CurrentSelection;
-	              GRRLIB_Printf(50, 80, font_texture, 0xFFFFFFFF, 1, " Buffer Ready %d Request %d PBP %d Missing %d Floating %d", _cq.ready[i],_cq.request[i],_cq.permaBufferPosition[i],_cq.coverMissing[i],_cq.floatingQueuePosition[i]);
-	*/
 }
 
 

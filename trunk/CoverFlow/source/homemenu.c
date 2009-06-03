@@ -120,22 +120,11 @@ void HomeMenu_Show()
 		GRRLIB_Render();
 	}
 
-
 	/*Render and control Settings*/
 	do{
-
 		WPAD_ScanPads();
 		PAD_ScanPads();
-		
 		GetWiimoteData();
-
-//		WPAD_IR(WPAD_CHAN_0, &self.ir); // Let's get our infrared data
-//		WPAD_Orientation(WPAD_CHAN_0, &self.orient);
-//		wd = WPAD_Data(WPAD_CHAN_0);
-
-//		pointer.p_x = self.ir.sx-160;
-//		pointer.p_y = self.ir.sy-220;
-//		pointer.p_ang = self.ir.angle/2; // Set angle/2 to translate correctly
 
 		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)||(PAD_ButtonsDown(0) & PAD_TRIGGER_Z))
 		{
@@ -156,17 +145,13 @@ void HomeMenu_Show()
 			else if (Button_Select(&wiiMenuButton, pointer.p_x, pointer.p_y))
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
-				//launchTitle(0x0000000100000003LL, 0); //launch system menu
 				HomeMenu_Destroy();
-				
 				exitToSystemMenu() ;
-				//SYS_ResetSystem(SYS_RETURNTOMENU,0,0);%48%41%58%58
 			}
 			else if (Button_Select(&loaderButton, pointer.p_x, pointer.p_y))
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
 				HomeMenu_Destroy();
-
 				launchTitle(0x0001000148415858LL, 0); //launch system menu
 				//exit(1);        // eventually, return a value.
 			}
@@ -182,7 +167,6 @@ void HomeMenu_Show()
 		GRRLIB_2D_Init();
 		GRRLIB_FillScreen(0x000000CC);
 
-		//Button_Theme_Paint(&settingsButton, SETTING_theme);
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
 		Button_Paint(&wiiMenuButton);
