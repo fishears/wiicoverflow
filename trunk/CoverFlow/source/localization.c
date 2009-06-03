@@ -950,6 +950,7 @@ void languageSet(char *name, char *val)
 bool languageLoad()
 {
 	if (strcmp(settings.localLanguage, "default") == 0) {
+		return parseMemFile( (char*)english_lang, german_lang_size, &languageSet);
 		return false;
 		}
 	if (strcmp(settings.localLanguage, "ca-CAT") == 0) {
@@ -957,6 +958,9 @@ bool languageLoad()
 		}
 	if (strcmp(settings.localLanguage, "da-DAN") == 0) {
 		return false;
+		}
+	if (strcmp(settings.localLanguage, "en-US") == 0) {
+		return parseMemFile( (char*)english_lang, german_lang_size, &languageSet);
 		}
 	if (strcmp(settings.localLanguage, "de-GER") == 0) {
 		return parseMemFile( (char*)german_lang, german_lang_size, &languageSet);
