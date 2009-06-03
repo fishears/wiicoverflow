@@ -308,7 +308,7 @@ s32 Apploader_Run(entry_point *entry)
 			vidolpatcher(dst,len);
 
 		langpatcher(dst,len);
-
+                *(u32 *)0x80003140 = *(u32 *)0x80003188; /* 002 Fix by Wiipower */
 		DCFlushRange(dst, len);
     }
 
