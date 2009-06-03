@@ -202,8 +202,12 @@ void languageDefault()
 	snprintf(TX.Success, sizeof(TX.Success), "Success!" );  		
 	snprintf(TX.welcomeMsg, sizeof(TX.welcomeMsg), "Welcome to CoverFloader" );
 	strcopy(TX.batteryUnit, "P%d", sizeof(TX.batteryUnit));
-	
-	
+	snprintf(TX.basic, sizeof(TX.basic), "Basic" ); 
+	snprintf(TX.advanced, sizeof(TX.advanced), "Advanced" ); 
+	snprintf(TX.hideScrollbar, sizeof(TX.hideScrollbar), "Hide Scrollbar" ); 
+	snprintf(TX.covers3D, sizeof(TX.covers3D), "3D Covers" ); 
+	snprintf(TX.gameText, sizeof(TX.gameText), "Game Title" ); 
+	snprintf(TX.gameSettings, sizeof(TX.gameSettings), "Game Settings" ); 	
 	
 // Buttons	
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
@@ -829,7 +833,30 @@ void languageSet(char *name, char *val)
 		strcopy(TX.batteryUnit, val, sizeof(TX.batteryUnit));
 		return;
 	}
-
+	if (strcmp(name, "basic") == 0) {
+		strcopy(TX.basic, val, sizeof(TX.basic));
+		return;
+	}
+	if (strcmp(name, "advanced") == 0) {
+		strcopy(TX.advanced, val, sizeof(TX.advanced));
+		return;
+	}
+	if (strcmp(name, "hideScrollbar") == 0) {
+		strcopy(TX.hideScrollbar, val, sizeof(TX.hideScrollbar));
+		return;
+	}
+	if (strcmp(name, "covers3D") == 0) {
+		strcopy(TX.covers3D, val, sizeof(TX.covers3D));
+		return;
+	}
+	if (strcmp(name, "gameText") == 0) {
+		strcopy(TX.gameText, val, sizeof(TX.gameText));
+		return;
+	}
+	if (strcmp(name, "gameSettings") == 0) {
+		strcopy(TX.gameSettings, val, sizeof(TX.gameSettings));
+		return;
+	}
 
 
 //////////////// Buttons //////////////
