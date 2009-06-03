@@ -51,21 +51,38 @@ int nCoversInWindow;
 bool bCleanedUp=false;
 // end of private vars
 
-#define IMAGE_SLOTS 12
-unsigned int FreeMemorySlots[IMAGE_SLOTS+1] =
+#define IMAGE_SLOTS 15
+unsigned int FreeMemorySlots[IMAGE_SLOTS+2] =
 	{
 	0,
-	76*88*4,
-	76*88*4,
-	76*88*4,
-	384*236*4,
-	160*224*4,
-	512*340*4,
-	160*224*4,
-	160*160*4,
-	512*268*4,
-	400*64*4,
+	76*88*4,//1
+	76*88*4,//2
+	76*88*4,//3
+	384*236*4,//4
+	160*224*4,//5
+	512*340*4,//6
+	160*224*4,//7
+	160*160*4,//8
+	512*268*4,//9
+	400*64*4,//10
+	128,//11 string buffer for thread 0
+	128,//12 string buffer for thread 1
+	128,//13 string buffer for thread 2
+	128,//14 string buffer for thread 3
+	128,//15 string buffer for thread 4
 	0};
+
+void * GetSlotBufferAddress(int slot)
+{
+	int i=0;
+	unsigned int offset=0;
+	if ((slot>IMAGE_SLOTS)) return (void *)offset;
+	for (i=0;i<slot;i++)
+	{
+		offset+=FreeMemorySlots[i];
+	}
+	return (void *) MEM2_START_ADDRESS+MEM2_EXTENT-IMAGE_CACHE+offset;
+}
 
 
 #include <unistd.h>
@@ -206,7 +223,7 @@ void HandleLoadRequest(int index,int threadNo)
 		
 		//void *imgData=0;
 		
-		char filepath[128];
+		char * filepath=GetSlotBufferAddress(11+threadNo);
 		s32  ret;
 		
 		bool covers3d = false;
@@ -223,13 +240,13 @@ void HandleLoadRequest(int index,int threadNo)
 		{
 			tW = COVER_WIDTH;
 			tH = COVER_HEIGHT;
-			sprintf(filepath, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
+			snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
 		}
 		else
 		{
 			tW = COVER_WIDTH_3D;
 			tH = COVER_HEIGHT_3D;
-			sprintf(filepath, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
+			snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
 		}
 		
 		int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
@@ -279,7 +296,10 @@ void HandleLoadRequest(int index,int threadNo)
 			if (_cq.permaBufferPosition[index]!=-1)
 			{
 				int floatingPosition=GetFLoatingQueuePosition(index);
-				FloatingCacheCovers[floatingPosition]=-1;
+				if (floatingPosition!=-1)
+				{
+				  FloatingCacheCovers[floatingPosition]=-1;
+				}
 			}
 			_cq.coverMissing[index]=true;
 			_cq.ready[index]   = false;
@@ -619,7 +639,7 @@ GRRLIB_texImg BufferImageToSlot(const unsigned char* pngDataAddress,int slot)
 		offset+=FreeMemorySlots[i];
 	}
 	// start half way up cache till all the calls are changed
-	ret = GRRLIB_LoadTexturePNGToMemory(pngDataAddress, (void *)(MEM2_START_ADDRESS+MEM2_EXTENT-IMAGE_CACHE+offset));
+	ret = GRRLIB_LoadTexturePNGToMemory(pngDataAddress, GetSlotBufferAddress(slot));
 	if (FreeMemorySlots[slot]!=ret.w*ret.h*4)
 	{
 		exit(0);
