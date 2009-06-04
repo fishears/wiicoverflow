@@ -569,7 +569,7 @@ void Settings_Menu_Show()
 				// Draw Old School language changer
 				// TODO replace this and make the flag based selection work
 				CFreeTypeGX_DrawText(ttf18pt, 316, 110, languages[settings.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 430, "The Flag selections do not work yet...", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
+				//CFreeTypeGX_DrawText(ttf16pt, 320, 430, "The Flag selections do not work yet...", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
 				Button_Paint(&langupButton);
 				Button_Paint(&langdownButton);
 				
@@ -646,8 +646,12 @@ void Settings_Menu_Show()
 						strcpy(settings.localLanguage, "es-SPA");
 						languageLoad();
 					}
+					else if (Button_Select(&flagFIButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "fi-FIN");
+						languageLoad();
+					}
 					
-					//TODO Dutch and Finish Flags
 				}
 				
 				
@@ -659,7 +663,8 @@ void Settings_Menu_Show()
 				Button_Flag_Paint(&flagBRButton);
 				Button_Flag_Paint(&flagFRButton);
 				Button_Flag_Paint(&flagDAButton);
-				Button_Flag_Paint(&flagJPButton);
+				//Button_Flag_Paint(&flagJPButton);
+				Button_Flag_Paint(&flagFIButton);
 				Button_Flag_Paint(&flagPTButton);
 				//Button_Flag_Paint(&flagTWButton);
 				Button_Flag_Paint(&flagRUButton);
@@ -682,7 +687,8 @@ void Settings_Menu_Show()
 					Button_Hover(&flagBRButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagFRButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagDAButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&flagJPButton, pointer.p_x, pointer.p_y) ||
+					//Button_Hover(&flagJPButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&flagFIButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagPTButton, pointer.p_x, pointer.p_y) ||
 					//Button_Hover(&flagTWButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagESButton, pointer.p_x, pointer.p_y) ||
