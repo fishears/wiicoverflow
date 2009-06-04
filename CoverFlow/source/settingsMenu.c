@@ -479,10 +479,10 @@ void Settings_Menu_Show()
 				GRRLIB_DrawImg(248, 341, menu_graphics_box2_texture, 0, 1, 1, 0xFFFFFFFF);
 				CFreeTypeGX_DrawText(ttf16pt, 320,360, TX.covers3D, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				GRRLIB_DrawImg(415, 341, menu_graphics_box2_texture, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawText(ttf16pt, 487,360, TX.gameTitle, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 487,360, TX.gameText, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Draw the Title text
 				if (settings.coverText)
-					CFreeTypeGX_DrawText(ttf20pt, 320, 314, TX.gameText, (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+					CFreeTypeGX_DrawText(ttf20pt, 320, 314, TX.gameTitle, (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 				// Draw the scroll bar
 				if (!settings.hideScroll)
 					GRRLIB_DrawImg(120, 300, slidebar_texture, 0, .655, .655, 0xFFFFFFFF);

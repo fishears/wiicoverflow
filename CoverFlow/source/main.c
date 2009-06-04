@@ -93,7 +93,7 @@ int main( int argc, char **argv )
 	}
 #endif
 	u8 FPS = 0; // frames per second counter
-	languageDefault();  // load default msgs
+	languageInit();     // loads default msgs
 	SETTINGS_Init();
 	LoadFonts();
 	initVars();
@@ -226,6 +226,7 @@ int main( int argc, char **argv )
 
 	//ee();
 	languageLoad();		// load localization 
+
 	
 #ifdef ONE_AT_A_TIME
         bool LEFT = false, RIGHT = false;

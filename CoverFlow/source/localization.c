@@ -1,3 +1,12 @@
+/*
+ *  localization.c
+ *
+ *  Wii CoverFloader
+ *  Copyright 2009 Beardface April 29th, 2009
+ *  Additional coding by: gitkua, scognito, F1SHE4RS, afour98, blackbird399, LoudBob11, alexcarlosantao
+ *  Licensed under the terms of the GNU GPL, version 2
+ *  http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -13,31 +22,55 @@ static char *cfg_name, *cfg_val;
 char** languages;
 char** vidmodes;
 char** selLanguages;
-
 char langFile[20];
 
+struct LANGUAGE TX;
 
-
-void languageDefault()
+void languageInit()
 {
 	int i;
+	int countLng = 18;
 	
 	languages =  (char**)malloc(11*sizeof(char*));
-	
-	for (i=0;i<11;i++)
-	{
+	for (i=0;i<11;i++)	{
 	 languages[i] =  (char*)malloc(30*sizeof(char));
 	}
 
 	vidmodes =  (char**)malloc(6*sizeof(char*));
-	
-	for (i=0;i<6;i++)
-	{
+	for (i=0;i<6;i++) {
 	 vidmodes[i] =  (char*)malloc(30*sizeof(char));
 	}
-
-	initLanguageSelect();
 	
+	selLanguages =  (char**)malloc(countLng*sizeof(char*));
+	for (i=0;i<countLng;i++) {
+	 selLanguages[i] =  (char*)malloc(7*sizeof(char));
+	}
+	
+	sprintf(selLanguages[0],  "default");  // en-US
+	sprintf(selLanguages[1],  "ca-CAT" );
+	sprintf(selLanguages[2],  "da-DAN" );
+	sprintf(selLanguages[3],  "de-GER" );
+	sprintf(selLanguages[4],  "en-US"  );
+	sprintf(selLanguages[5],  "es-SPA" );
+	sprintf(selLanguages[6],  "fi-FIN" );
+	sprintf(selLanguages[7],  "fr-FRE" );
+	sprintf(selLanguages[8],  "it-ITA" );
+	sprintf(selLanguages[9],  "ja-JPN" );
+	sprintf(selLanguages[10], "ko-KOR" );
+	sprintf(selLanguages[11], "nl-DUT" );
+	sprintf(selLanguages[12], "nn-NOR" );
+	sprintf(selLanguages[13], "pt-BR"  );
+	sprintf(selLanguages[14], "ru-RUS" );
+	sprintf(selLanguages[15], "tr-TUR" );
+	sprintf(selLanguages[16], "zh-CN"  );
+	sprintf(selLanguages[17], "zh-TW"  );
+
+	languageDefault();
+}
+
+
+void languageDefault()
+{
 	snprintf(TX.iniNet, sizeof(TX.iniNet), "Initializing Network");   					//M001
 	snprintf(TX.iniNetErr, sizeof(TX.iniNetErr), "Error Initializing Network");   		//M002
 	snprintf(TX.error, sizeof(TX.error), "ERROR!");   									//M003
@@ -50,7 +83,7 @@ void languageDefault()
 	strcopy(TX.checkNextCover, "Checking next cover...%s", sizeof(TX.checkNextCover));
 	snprintf(TX.opFinished, sizeof(TX.opFinished), "Operation finished!");   			//M011
 	snprintf(TX.pressA, sizeof(TX.pressA), "Press A to continue");   					//M012
-	snprintf(TX.configError, sizeof(TX.configError), "Configuration error, MAX_DNS_ENTRIES reached while the list is empty\n"); //M013
+	snprintf(TX.configError, sizeof(TX.configError), "Configuration error, MAX_DNS_ENTRIES\nreached while the list is empty\n"); //M013
 	snprintf(TX.errorsaveGL, sizeof(TX.errorsaveGL), "Can't save gamelist.xml");   	//M014
 	snprintf(TX.errorcreateGL, sizeof(TX.errorcreateGL), "Cannot create gamelist file!");	//M015
 	
@@ -106,7 +139,7 @@ void languageDefault()
 	strcopy(TX.errorDomain, "\ndomain %s could not be resolved", sizeof(TX.errorDomain));
 	snprintf(TX.errEstablishConn, sizeof(TX.errEstablishConn), "Error establishing connection"); //M046
 	snprintf(TX.HTTPnoFile, sizeof(TX.HTTPnoFile), "HTTP Response was without a file\n"); //M047	
-	snprintf(TX.noMemCopy, sizeof(TX.noMemCopy),"No more memory to copy file from HTTP response\n"); //M048
+	snprintf(TX.noMemCopy, sizeof(TX.noMemCopy),"No more memory to copy file\nfrom HTTP response\n"); //M048
 	snprintf(TX.graphicSetting, sizeof(TX.graphicSetting), "Graphics Settings");   	//M049
 	snprintf(TX.zoom, sizeof(TX.zoom), "Zoom");   									//M050
 	snprintf(TX.spacing, sizeof(TX.spacing), "Spacing");   							//M051
@@ -167,10 +200,10 @@ void languageDefault()
 	snprintf(TX.setBackground, sizeof(TX.setBackground), "Setting background theme..."); //M105
 	snprintf(TX.freeTextures, sizeof(TX.freeTextures), "Freeing unused textures...");  //M106
 	snprintf(TX.parentalCtrl, sizeof(TX.parentalCtrl), "Parental Control");   			//M107
-	snprintf(TX.enableParentCtrl, sizeof(TX.enableParentCtrl), "Would you like to enable parental controls?"); //M108
+	snprintf(TX.enableParentCtrl, sizeof(TX.enableParentCtrl), "Would you like to enable\nparental controls?"); //M108
 	strcopy(TX.errorDIP, "Could not initialize DIP module! (ret = %d)\n", sizeof(TX.errorDIP));
-	snprintf(TX.errorReadDir, sizeof(TX.errorReadDir), "Can't read directories. Covers will not be saved."); //M110
-	snprintf(TX.errorCreateDir, sizeof(TX.errorCreateDir), "Can't create directories. Covers will not be saved."); //M111
+	snprintf(TX.errorReadDir, sizeof(TX.errorReadDir), "Can't read directories.\nCovers will not be saved."); //M110
+	snprintf(TX.errorCreateDir, sizeof(TX.errorCreateDir), "Can't create directories.\nCovers will not be saved."); //M111
 	snprintf(TX.Sun, sizeof(TX.Sun), "Sun");   										//M112
 	snprintf(TX.Mon, sizeof(TX.Mon), "Mon");   										//M113
 	snprintf(TX.Tue, sizeof(TX.Tue), "Tue");   										//M114
@@ -224,7 +257,7 @@ void languageDefault()
 	snprintf(TX.toggleOffB, sizeof(TX.toggleOffB), "Off");     	//B12
 	snprintf(TX.whiteB, sizeof(TX.whiteB), "White");     			//B13
 	snprintf(TX.blackB, sizeof(TX.blackB), "Black");     			//B14
-	snprintf(TX.homeMenuTopB, sizeof(TX.homeMenuTopB), "Close");    //B15
+	snprintf(TX.homeMenuTopB, sizeof(TX.homeMenuTopB), "Close");   //B15
 	snprintf(TX.wiimenuB, sizeof(TX.wiimenuB), "Wii Menu");        //B16
 	snprintf(TX.loaderB, sizeof(TX.loaderB), "HBLoader");     		//B17
 	snprintf(TX.languagesB, sizeof(TX.languagesB), "Languages" );  //B18
@@ -232,8 +265,6 @@ void languageDefault()
 	snprintf(TX.titlesB, sizeof(TX.titlesB), "Titles" );  			//B18
 };
 
-
-struct LANGUAGE TX;
 
 void languageSet(char *name, char *val)
 {
@@ -950,8 +981,8 @@ void languageSet(char *name, char *val)
 bool languageLoad()
 {
 	if (strcmp(settings.localLanguage, "default") == 0) {
-		return parseMemFile( (char*)english_lang, german_lang_size, &languageSet);
-		return false;
+		languageDefault();
+		return true;
 		}
 	if (strcmp(settings.localLanguage, "ca-CAT") == 0) {
 		return parseMemFile( (char*)catalan_lang, catalan_lang_size, &languageSet);
@@ -960,7 +991,7 @@ bool languageLoad()
 		return false;
 		}
 	if (strcmp(settings.localLanguage, "en-US") == 0) {
-		return parseMemFile( (char*)english_lang, german_lang_size, &languageSet);
+		return parseMemFile( (char*)english_lang, english_lang_size, &languageSet);
 		}
 	if (strcmp(settings.localLanguage, "de-GER") == 0) {
 		return parseMemFile( (char*)german_lang, german_lang_size, &languageSet);
@@ -1009,10 +1040,51 @@ bool languageLoad()
 }
 
 
+bool checkfile(char * path)
+{
+    FILE * f;
+    f = fopen(path,"r");
+    if(f)
+	{
+    fclose(f);
+    return true;
+    }
+    fclose(f);
+return false;
+}
+
+
+char* strcopy(char *dest, char *src, int size)
+{
+	strncpy(dest,src,size);
+	dest[size-1] = 0;
+	return dest;
+}
+
+
+bool parseMemFile(char *mfname, u32 mfSize, void (*set_func)(char*, char*))
+{
+	FILE *mf;
+	char line[200];
+
+	mf = fmemopen(mfname, mfSize, "rt");
+	if (!mf) 
+	{
+		return false;
+	}
+
+	while (fgets(line, sizeof(line), mf)) 
+	{
+		if (line[0] == '#') continue;
+		cfg_parseline(line, set_func);
+	}
+	fclose(mf);
+	return true;
+}
 
 
 
-
+///////////////////////////////////////////////////////////////////////////////////////
 
 /*
 void languageLoad()
@@ -1102,79 +1174,3 @@ bool languageFind()
 }
 
 */
-
-
-void initLanguageSelect()
-{
-	int i;
-	int countLng = 17;
-	
-	selLanguages =  (char**)malloc(countLng*sizeof(char*));
-	
-	for (i=0;i<countLng;i++)
-	{
-	 selLanguages[i] =  (char*)malloc(7*sizeof(char));
-	}
-	
-	sprintf(selLanguages[0],  "default");  // en-US
-	sprintf(selLanguages[1],  "ca-CAT" );
-	sprintf(selLanguages[2],  "da-DAN" );
-	sprintf(selLanguages[3],  "de-GER" );
-	sprintf(selLanguages[4],  "es-SPA" );
-	sprintf(selLanguages[5],  "fi-FIN" );
-	sprintf(selLanguages[6],  "fr-FRE" );
-	sprintf(selLanguages[7],  "it-ITA" );
-	sprintf(selLanguages[8],  "ja-JPN" );
-	sprintf(selLanguages[9],  "ko-KOR" );
-	sprintf(selLanguages[10], "nl-DUT" );
-	sprintf(selLanguages[11], "nn-NOR" );
-	sprintf(selLanguages[12], "pt-BR"  );
-	sprintf(selLanguages[13], "ru-RUS" );
-	sprintf(selLanguages[14], "tr-TUR" );
-	sprintf(selLanguages[15], "zh-CN"  );
-	sprintf(selLanguages[16], "zh-TW"  );
-}
-
-
-bool checkfile(char * path)
-{
-    FILE * f;
-    f = fopen(path,"r");
-    if(f)
-	{
-    fclose(f);
-    return true;
-    }
-    fclose(f);
-return false;
-}
-
-
-char* strcopy(char *dest, char *src, int size)
-{
-	strncpy(dest,src,size);
-	dest[size-1] = 0;
-	return dest;
-}
-
-
-bool parseMemFile(char *mfname, u32 mfSize, void (*set_func)(char*, char*))
-{
-	FILE *mf;
-	char line[200];
-
-	mf = fmemopen(mfname, mfSize, "rt");
-	if (!mf) 
-	{
-		return false;
-	}
-
-	while (fgets(line, sizeof(line), mf)) 
-	{
-		if (line[0] == '#') continue;
-		cfg_parseline(line, set_func);
-	}
-	fclose(mf);
-	return true;
-}
-
