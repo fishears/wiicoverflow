@@ -86,16 +86,18 @@ void LoadTextures()
 	menu_graphics_box2_texture	= GRRLIB_LoadTexturePNG(menu_graphics_box2_png);
 	flag_jp_texture = GRRLIB_LoadTexturePNG(flag_jp_png);
 	flag_br_texture = GRRLIB_LoadTexturePNG(flag_br_png);
-	flag_cn_texture = GRRLIB_LoadTexturePNG(flag_cn_png);
+	//flag_cn_texture = GRRLIB_LoadTexturePNG(flag_cn_png);
 	flag_da_texture = GRRLIB_LoadTexturePNG(flag_da_png);
 	flag_de_texture = GRRLIB_LoadTexturePNG(flag_de_png);
 	flag_fr_texture = GRRLIB_LoadTexturePNG(flag_fr_png);
 	flag_it_texture = GRRLIB_LoadTexturePNG(flag_it_png);
-	flag_tw_texture = GRRLIB_LoadTexturePNG(flag_tw_png);
+	//flag_tw_texture = GRRLIB_LoadTexturePNG(flag_tw_png);
 	flag_pt_texture = GRRLIB_LoadTexturePNG(flag_pt_png);
 	flag_ru_texture = GRRLIB_LoadTexturePNG(flag_ru_png);
 	flag_uk_texture = GRRLIB_LoadTexturePNG(flag_uk_png);
 	flag_us_texture = GRRLIB_LoadTexturePNG(flag_us_png);
+	flag_es_texture = GRRLIB_LoadTexturePNG(flag_es_png);
+	flag_ct_texture = GRRLIB_LoadTexturePNG(flag_ct_png);
 }
 
 void DrawBufferedCover(int i, float loc, float angle, float falloff)
@@ -282,9 +284,11 @@ void Init_Buttons()
 	flagDAButton			= Button_Flag_Init(flag_da_png, 166, 290, "Netherlands");
 	flagJPButton			= Button_Flag_Init(flag_jp_png, 296, 290, "Japan"); 
 	flagPTButton			= Button_Flag_Init(flag_pt_png, 426, 290, "Portugal");
-	flagTWButton			= Button_Flag_Init(flag_tw_png, 166, 360, "Taiwan");
+	//flagTWButton			= Button_Flag_Init(flag_tw_png, 166, 360, "Taiwan");
 	flagRUButton			= Button_Flag_Init(flag_ru_png, 296, 360, "Russia");
-	flagCNButton			= Button_Flag_Init(flag_cn_png, 426, 360, "China");
+	//flagCNButton			= Button_Flag_Init(flag_cn_png, 426, 360, "China");
+	flagESButton			= Button_Flag_Init(flag_es_png, 166, 360, "Spain");		
+	flagCTButton			= Button_Flag_Init(flag_ct_png, 426, 360, "Catalan");
 	// Game Settings Screen Buttons
     gvidtvonButton          = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 360, 164);
     gvidtvoffButton         = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 360, 164);

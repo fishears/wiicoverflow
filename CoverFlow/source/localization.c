@@ -50,7 +50,7 @@ void languageInit()
 	sprintf(selLanguages[1],  "ca-CAT" );
 	sprintf(selLanguages[2],  "da-DAN" );
 	sprintf(selLanguages[3],  "de-GER" );
-	sprintf(selLanguages[4],  "en-US"  );
+	sprintf(selLanguages[4],  "en-GB"  );
 	sprintf(selLanguages[5],  "es-SPA" );
 	sprintf(selLanguages[6],  "fi-FIN" );
 	sprintf(selLanguages[7],  "fr-FRE" );
@@ -990,7 +990,7 @@ bool languageLoad()
 	if (strcmp(settings.localLanguage, "da-DAN") == 0) {
 		return false;
 		}
-	if (strcmp(settings.localLanguage, "en-US") == 0) {
+	if (strcmp(settings.localLanguage, "en-GB") == 0) {
 		return parseMemFile( (char*)english_lang, english_lang_size, &languageSet);
 		}
 	if (strcmp(settings.localLanguage, "de-GER") == 0) {

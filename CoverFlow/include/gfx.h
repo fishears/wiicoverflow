@@ -65,6 +65,8 @@ extern const u8 flag_pt_png[];
 extern const u8 flag_ru_png[];
 extern const u8 flag_uk_png[];
 extern const u8 flag_us_png[];
+extern const u8 flag_es_png[];		// spanish
+extern const u8 flag_ct_png[];		// catalan
 
 GRRLIB_texImg menu_button_texture;
 GRRLIB_texImg menu_button_over_texture;
@@ -93,6 +95,9 @@ GRRLIB_texImg flag_pt_texture; // Portugal Flag
 GRRLIB_texImg flag_ru_texture; // Russia Flag
 GRRLIB_texImg flag_uk_texture; // UK Flag
 GRRLIB_texImg flag_us_texture; // US Flag
+GRRLIB_texImg flag_es_texture; // Spain Flag
+GRRLIB_texImg flag_ct_texture; // Catalan Flag
+
 Button flagBRButton;
 Button flagCNButton;
 Button flagDAButton;
@@ -105,7 +110,8 @@ Button flagPTButton;
 Button flagRUButton;
 Button flagUKButton;
 Button flagUSButton;
-
+Button flagESButton;
+Button flagCTButton;
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg cover_texture_3d;
