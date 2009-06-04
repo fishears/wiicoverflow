@@ -235,11 +235,11 @@ struct LANGUAGE
 
 extern struct LANGUAGE TX;
 
+void languageInit();
 void languageDefault();
 bool languageLoad();
 bool languageFind();
 void languageSet(char *name, char *val);
-void initLanguageSelect();
 char* strcopy(char *dest, char *src, int size);
 bool checkfile(char * path);
 bool parseMemFile(char *mfname, u32 mfSize, void (*set_func)(char*, char*));
