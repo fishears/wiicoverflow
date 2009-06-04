@@ -36,10 +36,12 @@ void LoadFonts()
     ttf16pt = CFreeTypeGX_new();
 	ttf18pt = CFreeTypeGX_new();
 	ttf20pt = CFreeTypeGX_new();
+	ttf24pt = CFreeTypeGX_new();
     CFreeTypeGX_LoadFont(ttf14pt, font_ttf, font_ttf_size, 14, true);
 	CFreeTypeGX_LoadFont(ttf16pt, font_ttf, font_ttf_size, 16, true);
 	CFreeTypeGX_LoadFont(ttf18pt, font_ttf, font_ttf_size, 18, true);
 	CFreeTypeGX_LoadFont(ttf20pt, font_ttf, font_ttf_size, 20, true);
+	CFreeTypeGX_LoadFont(ttf24pt, font_ttf, font_ttf_size, 24, true);
 }
 
 
@@ -222,11 +224,11 @@ void Init_Buttons()
 	bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 515, 140);  
     bookmarkOffButton       = Button_Init(star_off_png, star_on_png, 515, 140);
 	// 'Home' button menu buttons
-    homeMenuTopButton       = Button_Init(homeTop_png, homeTop_hover_png, 0, 0);
-    homeMenuBottomButton    = Button_Init(homeBottom_png, homeBottom_hover_png, 0, 368);
-    wiiMenuButton           = Button_Init(wiiMenu_png, wiiMenu_hover_png, 34, 180);
-    loaderButton            = Button_Init(loader_png, loader_hover_png, 174, 180);
-    wiimoteButton           = Button_Init(wiimote_png, wiimote_png, 54, 400);
+    homeMenuTopButton       = Button_Init(menu_home_top_png,     menu_home_top_over_png, 0, 0);
+    homeMenuBottomButton    = Button_Init(menu_home_bottom_png,  menu_home_bottom_over_png, 0, 376);
+    wiiMenuButton           = Button_TTF_Init(menu_home_button_png,  menu_home_button_over_png, 46, 187, TX.wiimenuB);
+    loaderButton            = Button_TTF_Init(menu_home_button_png,  menu_home_button_over_png, 186, 187, TX.loaderB);
+    wiimoteButton           = Button_Init(menu_home_wiimote_png, menu_home_wiimote_png, 54, 400);
 	// Settings Panels Header Buttons
     menuSettingsButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 160, 20, TX.cflowSettings); 
 	menuGraphicsButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 320, 20, TX.graphics);

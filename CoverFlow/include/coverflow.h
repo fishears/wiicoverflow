@@ -113,10 +113,12 @@ extern CFreeTypeGX *ttf14pt;
 extern CFreeTypeGX *ttf16pt;
 extern CFreeTypeGX *ttf18pt;
 extern CFreeTypeGX *ttf20pt;
+extern CFreeTypeGX *ttf24pt;
 CFreeTypeGX *ttf14pt;
 CFreeTypeGX *ttf16pt;
 CFreeTypeGX *ttf18pt;
 CFreeTypeGX *ttf20pt;
+CFreeTypeGX *ttf24pt;
 
 extern const u8 full_cover_png[];
 extern const u8 no_cover_png[];

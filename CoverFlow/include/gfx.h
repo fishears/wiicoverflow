@@ -14,15 +14,13 @@ extern const u8 star_on_png[];
 extern const u8 star_off_png[];
 
 /*Home Menu Images*/
-extern const u8 wiiMenu_png[];
-extern const u8 wiiMenu_hover_png[];
-extern const u8 loader_png[];
-extern const u8 loader_hover_png[];
-extern const u8 wiimote_png[];
-extern const u8 homeTop_png[];
-extern const u8 homeTop_hover_png[];
-extern const u8 homeBottom_png[];
-extern const u8 homeBottom_hover_png[];
+extern const u8 menu_home_button_png[];
+extern const u8 menu_home_button_over_png[];
+extern const u8 menu_home_wiimote_png[];
+extern const u8 menu_home_top_png[];
+extern const u8 menu_home_top_over_png[];
+extern const u8 menu_home_bottom_png[];
+extern const u8 menu_home_bottom_over_png[];
 extern const u8 battery_png[];
 extern const u8 battery_bar_png[];
 extern const u8 battery_dead_png[];

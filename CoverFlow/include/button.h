@@ -38,6 +38,7 @@ void Button_Menu_Paint(struct Button* btn); // this prints the large Settings me
 void Button_TTF_Paint(struct Button* btn);  // this is used to print the TTF buttons
 void Button_Flag_Paint(struct Button* btn); // this is used to print the flag buttons on the lang panel
 void Button_Toggle_Paint(struct Button* btn1, struct Button* btn2, int toggle_state);
+void Button_HomeMenu_Paint(struct Button* btn); // this is used to paint the big fat buttons on the 'home' button menu
 void Button_TTF_Toggle_Paint(struct Button* btn1, struct Button* btn2, char *left_text, char *right_text, int toggle_state); // prints the TTG toggle buttons (yes.no, etc)
 void Button_Theme_Paint(struct Button* btn, int theme_id); // Flips the state of the button based on theme
 
