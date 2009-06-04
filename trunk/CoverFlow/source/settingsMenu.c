@@ -578,7 +578,7 @@ void Settings_Menu_Show()
 				{
 					if (Button_Select(&flagUSButton, pointer.p_x, pointer.p_y))
 					{
-						strcpy(settings.localLanguage, "en-US");
+						strcpy(settings.localLanguage, "default");
 						languageLoad();
 					}
 					else if (Button_Select(&flagDEButton, pointer.p_x, pointer.p_y))
@@ -591,19 +591,14 @@ void Settings_Menu_Show()
 						strcpy(settings.localLanguage, "it-ITA");
 						languageLoad();
 					}
-					else if (Button_Select(&flagDEButton, pointer.p_x, pointer.p_y))
-					{
-						strcpy(settings.localLanguage, "de-GER");
-						languageLoad();
-					}
 					else if (Button_Select(&flagUKButton, pointer.p_x, pointer.p_y))
 					{
-						strcpy(settings.localLanguage, "en-US");
+						strcpy(settings.localLanguage, "en-GB");
 						languageLoad();
 					}
 					else if (Button_Select(&flagBRButton, pointer.p_x, pointer.p_y))
 					{
-						strcpy(settings.localLanguage, "es-SPA");
+						strcpy(settings.localLanguage, "pt-BR");
 						languageLoad();
 					}
 					else if (Button_Select(&flagFRButton, pointer.p_x, pointer.p_y))
@@ -638,7 +633,17 @@ void Settings_Menu_Show()
 					}
 					else if (Button_Select(&flagCNButton, pointer.p_x, pointer.p_y))
 					{
+						strcpy(settings.localLanguage, "zh-CN");
+						languageLoad();
+					}
+					else if (Button_Select(&flagCTButton, pointer.p_x, pointer.p_y))
+					{
 						strcpy(settings.localLanguage, "ca-CAT");
+						languageLoad();
+					}
+					else if (Button_Select(&flagESButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "es-SPA");
 						languageLoad();
 					}
 					
@@ -656,13 +661,16 @@ void Settings_Menu_Show()
 				Button_Flag_Paint(&flagDAButton);
 				Button_Flag_Paint(&flagJPButton);
 				Button_Flag_Paint(&flagPTButton);
-				Button_Flag_Paint(&flagTWButton);
+				//Button_Flag_Paint(&flagTWButton);
 				Button_Flag_Paint(&flagRUButton);
-				Button_Flag_Paint(&flagCNButton);
+				//Button_Flag_Paint(&flagCNButton);
+				Button_Flag_Paint(&flagESButton);
+				Button_Flag_Paint(&flagCTButton);
 				
 				
 				// Check for button-pointer intersections, and rumble
-				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
+				if (
+					Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuLanguagesButton, pointer.p_x, pointer.p_y)||
 					Button_Hover(&langupButton, pointer.p_x, pointer.p_y) ||
@@ -676,9 +684,12 @@ void Settings_Menu_Show()
 					Button_Hover(&flagDAButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagJPButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagPTButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&flagTWButton, pointer.p_x, pointer.p_y) ||
+					//Button_Hover(&flagTWButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&flagESButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagRUButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&flagCNButton, pointer.p_x, pointer.p_y))
+					//Button_Hover(&flagCNButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&flagCTButton, pointer.p_x, pointer.p_y)
+				   )
 				{
 					if (--self.rumbleAmt > 0) // Should we be rumbling?
 					{
