@@ -125,8 +125,21 @@ void Button_TTF_Paint(struct Button* btn)
 			CFreeTypeGX_DrawText(ttf16pt, (btn->x + (btn->texture.w / 2)), (btn->y + (btn->texture.h / 2)), btn->ttf_label, (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 		}
 	}
-
 }
+
+void Button_HomeMenu_Paint(struct Button* btn)
+{
+	if(btn == 0)
+		return;
+	
+	if(btn->hovering || btn->selected)
+		GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+	else
+		GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+	// Draw the text centered to the middle of the button FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE
+	CFreeTypeGX_DrawText(ttf24pt, (btn->x + (btn->texture.w / 2)), (btn->y + (btn->texture.h / 2)), btn->ttf_label, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+}
+
 
 void Button_Menu_Paint(struct Button* btn)
 {

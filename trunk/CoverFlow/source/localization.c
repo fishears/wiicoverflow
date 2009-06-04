@@ -224,7 +224,7 @@ void languageDefault()
 	snprintf(TX.toggleOffB, sizeof(TX.toggleOffB), "Off");     	//B12
 	snprintf(TX.whiteB, sizeof(TX.whiteB), "White");     			//B13
 	snprintf(TX.blackB, sizeof(TX.blackB), "Black");     			//B14
-	snprintf(TX.homeMenuTopB, sizeof(TX.homeMenuTopB), "Exit");    //B15
+	snprintf(TX.homeMenuTopB, sizeof(TX.homeMenuTopB), "Close");    //B15
 	snprintf(TX.wiimenuB, sizeof(TX.wiimenuB), "Wii Menu");        //B16
 	snprintf(TX.loaderB, sizeof(TX.loaderB), "HBLoader");     		//B17
 	snprintf(TX.languagesB, sizeof(TX.languagesB), "Languages" );  //B18
