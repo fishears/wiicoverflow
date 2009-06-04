@@ -1006,7 +1006,7 @@ bool languageLoad()
 		return parseMemFile( (char*)french_lang, french_lang_size, &languageSet);
 		}
 	if (strcmp(settings.localLanguage, "it-ITA") == 0) {
-		return false;
+		return parseMemFile( (char*)italian_lang, italian_lang_size, &languageSet);
 		}
 	if (strcmp(settings.localLanguage, "ja-JPN") == 0) {
 		return false;

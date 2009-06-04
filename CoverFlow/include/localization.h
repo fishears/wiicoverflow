@@ -24,6 +24,9 @@ extern u32 spanish_lang_size;
 extern u8  english_lang[];
 extern u32 english_lang_size;
 
+extern u8  italian_lang[];
+extern u32 italian_lang_size;
+
 //extern u8  portuguesebr_lang[];
 //extern u32 portuguesebr_lang_size;
 
@@ -35,9 +38,6 @@ extern u32 english_lang_size;
 
 //extern u8  danish_lang[];
 //extern u32 danish_lang_size;
-
-//extern u8  italian_lang[];
-//extern u32 italian_lang_size;
 
 //extern u8  japanese_lang[];
 //extern u32 japanese_lang_size;
