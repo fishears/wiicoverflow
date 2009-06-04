@@ -84,7 +84,7 @@ void LoadTextures()
 	menu_graphics_wireframe_texture	= GRRLIB_LoadTexturePNG(menu_graphics_wireframe_png);
 	menu_graphics_box1_texture	= GRRLIB_LoadTexturePNG(menu_graphics_box1_png);
 	menu_graphics_box2_texture	= GRRLIB_LoadTexturePNG(menu_graphics_box2_png);
-	flag_jp_texture = GRRLIB_LoadTexturePNG(flag_jp_png);
+	//flag_jp_texture = GRRLIB_LoadTexturePNG(flag_jp_png);
 	flag_br_texture = GRRLIB_LoadTexturePNG(flag_br_png);
 	//flag_cn_texture = GRRLIB_LoadTexturePNG(flag_cn_png);
 	flag_da_texture = GRRLIB_LoadTexturePNG(flag_da_png);
@@ -98,6 +98,7 @@ void LoadTextures()
 	flag_us_texture = GRRLIB_LoadTexturePNG(flag_us_png);
 	flag_es_texture = GRRLIB_LoadTexturePNG(flag_es_png);
 	flag_ct_texture = GRRLIB_LoadTexturePNG(flag_ct_png);
+	flag_fi_texture = GRRLIB_LoadTexturePNG(flag_fi_png);
 }
 
 void DrawBufferedCover(int i, float loc, float angle, float falloff)
@@ -282,7 +283,8 @@ void Init_Buttons()
 	flagBRButton			= Button_Flag_Init(flag_br_png, 296, 220, "Brazil");
 	flagFRButton			= Button_Flag_Init(flag_fr_png, 426, 220, "France");
 	flagDAButton			= Button_Flag_Init(flag_da_png, 166, 290, "Netherlands");
-	flagJPButton			= Button_Flag_Init(flag_jp_png, 296, 290, "Japan"); 
+	//flagJPButton			= Button_Flag_Init(flag_jp_png, 296, 290, "Japan"); 
+	flagFIButton			= Button_Flag_Init(flag_fi_png, 296, 290, "Finnland"); 
 	flagPTButton			= Button_Flag_Init(flag_pt_png, 426, 290, "Portugal");
 	//flagTWButton			= Button_Flag_Init(flag_tw_png, 166, 360, "Taiwan");
 	flagRUButton			= Button_Flag_Init(flag_ru_png, 296, 360, "Russia");
