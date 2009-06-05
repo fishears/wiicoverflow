@@ -11,6 +11,11 @@ CFreeTypeGX * CFreeTypeGX_new()
 	return (CFreeTypeGX*)f;
 }
 
+void CFreeTypeGX_delete(CFreeTypeGX *f)
+{
+	delete ((FreeTypeGX*) f);
+}
+
 void CFreeTypeGX_LoadFont(const CFreeTypeGX *ftgx,uint8_t* fontBuffer, FT_Long bufferSize, FT_UInt pointSize, bool cacheAll)
 {
 	FreeTypeGX *f = (FreeTypeGX*)ftgx;

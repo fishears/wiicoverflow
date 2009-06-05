@@ -21,6 +21,7 @@ extern "C" {
 #endif
 
 CFreeTypeGX * CFreeTypeGX_new();
+void CFreeTypeGX_delete(CFreeTypeGX *f);
 
 void CFreeTypeGX_LoadFont(const CFreeTypeGX *ftgx,uint8_t* fontBuffer, FT_Long bufferSize, FT_UInt pointSize, bool cacheAll);
 
