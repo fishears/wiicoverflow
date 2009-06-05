@@ -851,12 +851,12 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			self.rumbleAmt = 5;
 		}
 		// Check for Button Events
-		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)|| (PAD_ButtonsDown(0) & PAD_BUTTON_B))
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (PAD_ButtonsDown(0) & PAD_BUTTON_B))
 		{
 			doloop = false;
 		}
 		
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1)
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))
 			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
@@ -1142,12 +1142,12 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 			self.rumbleAmt = 5;
 		}
 		// Check for Button Events
-		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)|| (PAD_ButtonsDown(0) & PAD_BUTTON_B))
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (PAD_ButtonsDown(0) & PAD_BUTTON_B))
 		{
 			doloop = false;
 		}
 
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1)
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))
 			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))

@@ -245,6 +245,13 @@ int main( int argc, char **argv )
 		}
 	}
 
+	//WPAD_ScanPads();
+	//GetWiimoteData();
+	//if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_1){
+		//ee();
+	//}
+
+
 	//////////////////////////
 	// main screen gui loop //
 	//////////////////////////
@@ -286,7 +293,7 @@ int main( int argc, char **argv )
 		else if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A || PAD_ButtonsDown(0) & PAD_BUTTON_A)
 		{
 			//First Check if any UI buttons or slider are selected
-			if((!settings.parentalLock) && Button_Select(&addButton, pointer.p_x, pointer.p_y))
+			if((!settings.parentalLock) && (Button_Select(&addButton, pointer.p_x, pointer.p_y) || PAD_ButtonsDown(0) & PAD_TRIGGER_R))
 			{
 				Menu_Install();
 			}
@@ -306,7 +313,7 @@ int main( int argc, char **argv )
 					{
 						// nothing yet selected and nothing animating
 						// Check to see if in the cover area
-						if(CoverHoverCenter())
+						if(CoverHoverCenter() || PAD_ButtonsDown(0) & PAD_BUTTON_A)
 						{
 							if(select_ready && self.select_shift == 0.0)
 							{
@@ -346,7 +353,7 @@ int main( int argc, char **argv )
 					if(self.selected && self.animate_flip == 1.0)
 					{
 						// Check the buttons
-						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y)) // load
+						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y) || PAD_ButtonsDown(0) & PAD_BUTTON_A) // load
 						{
 							// User clicked on the load game, so save settings before launching
 							struct discHdr *header = &self.gameList[self.gameSelected];
@@ -464,7 +471,7 @@ int main( int argc, char **argv )
 				else
 					settings.coverZoom -= 0.03; // zoom out
 			} // Check for B to control flow with wrist twist
-			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_B) && (self.gameCnt > 1))
+			else if (((WPAD_ButtonsHeld(0) & WPAD_BUTTON_B) || (PAD_ButtonsHeld(0) & PAD_BUTTON_B)) && (self.gameCnt > 1))
 			{	
 				pointer.p_type = 1; //set cursor to rotating hand
 
@@ -526,7 +533,7 @@ int main( int argc, char **argv )
 				//
 				// SCOGNITO'S TRASH TEST CORNER
 				//
-				//ee();
+				//ù;
 				/*
 				char imgPath[256];
 				snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, "zucc");

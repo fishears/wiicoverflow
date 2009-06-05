@@ -89,6 +89,7 @@ void HomeMenu_Show()
 		CFreeTypeGX_DrawText(ttf24pt, 490, moving_y, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
 
 		WPAD_ScanPads();
+		PAD_ScanPads();
 		GetWiimoteData();
 		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		
@@ -142,23 +143,24 @@ void HomeMenu_Show()
 			doloop = false;
 		}
 
-		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||((PAD_ButtonsDown(0) & PAD_BUTTON_B)))
-		{
+		//if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||((PAD_ButtonsDown(0) & PAD_BUTTON_A)))
+		//{
 			#ifdef TEST_MODE
+			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 				doloop = false;
 			#endif
-			if (Button_Select(&homeMenuTopButton, pointer.p_x, pointer.p_y))
+			if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) && Button_Select(&homeMenuTopButton, pointer.p_x, pointer.p_y))
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
 				doloop = false;
 			}
-			else if (Button_Select(&wiiMenuButton, pointer.p_x, pointer.p_y))
+			else if(((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) && Button_Select(&wiiMenuButton, pointer.p_x, pointer.p_y)) || PAD_ButtonsDown(0) & PAD_TRIGGER_L)
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
 				HomeMenu_Destroy();
 				exitToSystemMenu() ;
 			}
-			else if (Button_Select(&loaderButton, pointer.p_x, pointer.p_y))
+			else if(((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) && Button_Select(&loaderButton, pointer.p_x, pointer.p_y)) || PAD_ButtonsDown(0) & PAD_TRIGGER_R)
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
 				HomeMenu_Destroy();
@@ -169,7 +171,7 @@ void HomeMenu_Show()
 			{
 				//TODO Show control Screen
 			}
-		}
+		//}
 		
 		draw_covers();
 		// Draw menu dialog background
