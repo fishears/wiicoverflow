@@ -268,3 +268,9 @@ void Button_TTF_Toggle_Paint(struct Button* btn1, struct Button* btn2, char *lef
 	
 }
 
+void FreeButtonResources(struct Button *btn)
+{
+	free(btn->texture.data);	
+	free(btn->hoverTexture.data);	
+}
+

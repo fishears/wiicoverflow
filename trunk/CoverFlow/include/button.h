@@ -42,5 +42,7 @@ void Button_HomeMenu_Paint(struct Button* btn); // this is used to paint the big
 void Button_TTF_Toggle_Paint(struct Button* btn1, struct Button* btn2, char *left_text, char *right_text, int toggle_state); // prints the TTG toggle buttons (yes.no, etc)
 void Button_Theme_Paint(struct Button* btn, int theme_id); // Flips the state of the button based on theme
 
+void FreeButtonResources(struct Button *btn);
+
 #endif //_BUTTON_H_
 
