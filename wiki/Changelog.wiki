@@ -6,7 +6,8 @@
   * Improved install menu, use only with 2D covers
   * Improved translations
   * Gamecube PAD support for booting games / returning to menu (L/R triggers)
-
+  * Add Parental Locking of games. (Games aren't hidden yet; but when locked, won't boot in parental mode.)
+  
 -FIX-
   * Lot of memory issues solved
   * Code cleanup and minor bugs fixed
