@@ -18,6 +18,9 @@ typedef struct{
 	int category;
 	int favorite;
 	
+	//parental lock 
+	int lock;
+	
 	/*Used for lookup and saving game setting*/
 	bool changed;
 } s_gameSettings;

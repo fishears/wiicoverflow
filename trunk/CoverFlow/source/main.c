@@ -71,6 +71,7 @@ void initVars()
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv )
 {
+
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 #ifndef TEST_MODE
@@ -321,6 +322,7 @@ int main( int argc, char **argv )
 								self.gsize = size;
 								
 								LoadCurrentCover(self.gameSelected, self.gameList);
+								
 							}
 						}
 						else if(CoverHoverLeft())
@@ -356,10 +358,14 @@ int main( int argc, char **argv )
 								apply_settings();
 							setGameSettings(titleID, &gameSetting,1);
                             WiiLight(0); // turn off the slot light
-							if(!LaunchGame())
+							
+							if(!(settings.parentalLock && gameSetting.lock))
 							{
-								SETTINGS_Load(); //failed to launch so get the globals back
-								return 0;
+								if(!LaunchGame())
+								{
+									SETTINGS_Load(); //failed to launch so get the globals back
+									return 0;
+								}
 							}
 						}
 						else if((!settings.parentalLock) && Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
@@ -659,6 +665,7 @@ int main( int argc, char **argv )
 		// Check to see if it's time to draw the game launch dialog panel
 		if(self.selected || self.animate_flip != 0)
 		{
+		
 			if (settings.quickstart)
 			{
 				// Quickstart used to load game, so save settings before launching
@@ -671,10 +678,14 @@ int main( int argc, char **argv )
 					apply_settings();
 				setGameSettings(titleID, &gameSetting,1);
 				WiiLight(0); // turn off the slot light
-				if(!LaunchGame())
+				
+				if(!(settings.parentalLock && gameSetting.lock))
 				{
-					SETTINGS_Load(); //failed to launch so get the globals back
-					return 0;
+					if(!LaunchGame())
+					{
+						SETTINGS_Load(); //failed to launch so get the globals back
+						return 0;
+					}
 				}
 			}
 			else
@@ -715,10 +726,10 @@ int main( int argc, char **argv )
 			  Button_Hover(&slideButton, pointer.p_x, pointer.p_y))) 
 			||
 			(self.selected && // game load panel is showing
-			 (((!settings.parentalLock) && Button_Hover(&deleteButton, pointer.p_x, pointer.p_y)) ||
-			  Button_Hover(&loadButton, pointer.p_x, pointer.p_y) ||
-			  Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y) ||
-			  Button_Hover(&backButton, pointer.p_x, pointer.p_y))) )
+			 (((!settings.parentalLock) && (Button_Hover(&deleteButton, pointer.p_x, pointer.p_y) 
+			                              || Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y))) ||
+			  (Button_Hover(&loadButton, pointer.p_x, pointer.p_y) ||
+			   Button_Hover(&backButton, pointer.p_x, pointer.p_y))) ))
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)

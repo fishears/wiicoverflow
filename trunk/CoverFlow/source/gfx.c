@@ -222,6 +222,8 @@ void Init_Buttons()
 	// Game Launch Panel Buttons
 	loadButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 353, 335, TX.loadB);
     backButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 468, 335, TX.backB);
+	lockButton			    = Button_Init(button_round_lock_png, button_round_lock_over_png, 543, 120);
+	unlockButton			= Button_Init(button_round_unlock_png, button_round_unlock_over_png, 543, 120);
 	deleteButton			= Button_Init(button_round_delete_png, button_round_delete_over_png, 505, 120);
     gsettingsButton			= Button_Init(button_round_gear_png, button_round_gear_over_png, 543, 120);
 	bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 515, 140);  
@@ -576,16 +578,23 @@ int DrawLoadGameDialog(bool load, bool hover)
 		GRRLIB_Rectangle(268, 168, 304, 44, 0xffffffdd, true);
 		GRRLIB_Rectangle(270, 170, 300, 40, 0x000000FF, true);
 		// Draw the buttons
-		Button_TTF_Paint(&loadButton);
+		
+		
 		Button_TTF_Paint(&backButton);
 		//Button_Toggle_Paint(&bookmarkOffButton, &bookmarkOnButton, self.dummy);
 		if(!settings.parentalLock)
 		{
 			Button_Paint(&deleteButton);
 			Button_Paint(&gsettingsButton);
+			
 			Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y);
 			Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
+			
 		}
+		
+		Button_TTF_Paint(&loadButton);
+
+		
 		Button_Hover(&backButton, pointer.p_x, pointer.p_y);
 
 		// Get the title info

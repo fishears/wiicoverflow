@@ -837,11 +837,12 @@ void Game_Settings_Menu_Show()
     // ocarina will be -1 if we never been into game settings before
     if(gameSetting.ocarina == -1)
     {
-        gameSetting.ocarina = 0;
+        gameSetting.ocarina  = 0;
         gameSetting.hooktype = 0;
         gameSetting.language = 0;
-        gameSetting.video = 0;
-        gameSetting.vipatch = 0;
+        gameSetting.video    = 0;
+        gameSetting.vipatch  = 0;
+        gameSetting.lock     = 0;
     }
 	
     bool doloop = true;
@@ -946,6 +947,10 @@ void Game_Settings_Menu_Show()
 				{
 					gameSetting.video = 0;
 				}
+			}
+			else if(Button_Select(&lockButton, pointer.p_x, pointer.p_y) || Button_Select(&unlockButton, pointer.p_x, pointer.p_y))
+			{
+				gameSetting.lock = !(gameSetting.lock);
 			}
 		}
 		
@@ -1087,8 +1092,19 @@ void Game_Settings_Menu_Show()
 		Button_TTF_Toggle_Paint(&gvidtvoffButton, &gvidtvonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.vipatch);
 		
 		
+		if(gameSetting.lock)
+		{
+			Button_Paint(&lockButton);
+		}
+		else
+		{
+			Button_Paint(&unlockButton);
+		}
+			
 		// Draw the default pointer hand
-		
+		 Button_Hover(&lockButton, pointer.p_x, pointer.p_y);
+		 Button_Hover(&unlockButton, pointer.p_x, pointer.p_y);
+		 
 		// Check for button-pointer intersections, and rumble
 		if ((Button_Hover(&gbackButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&glangupButton, pointer.p_x, pointer.p_y) ||
@@ -1100,7 +1116,9 @@ void Game_Settings_Menu_Show()
 			 Button_Hover(&gvidtvoffButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&gvidtvonButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&ghookupButton, pointer.p_x, pointer.p_y) ||
-			 Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y)))
+			 Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y) ||
+			 Button_Hover(&lockButton, pointer.p_x, pointer.p_y) ||
+			 Button_Hover(&unlockButton, pointer.p_x, pointer.p_y)))
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)

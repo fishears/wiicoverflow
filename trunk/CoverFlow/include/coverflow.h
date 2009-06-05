@@ -136,7 +136,6 @@ GRRLIB_texImg pointer_texture;
 GRRLIB_texImg pointer_shadow_texture;
 GRRLIB_texImg turn_point_texture;
 
-
 SoundFile _sounds[MAX_SOUNDS];
 
 WPADData *wd;
