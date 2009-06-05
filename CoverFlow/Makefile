@@ -18,7 +18,8 @@ include $(DEVKITPPC)/wii_rules
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source source/pngu images source/libwbfs source/core
-DATA		:=	data bootloader sounds fonts languages
+#DATA		:=	data bootloader sounds fonts languages
+DATA		:=	data sounds fonts languages
 INCLUDES	:=  include include/pngu include/libwbfs include/core
 
 #---------------------------------------------------------------------------------
@@ -28,8 +29,8 @@ INCLUDES	:=  include include/pngu include/libwbfs include/core
 CFLAGS	= -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
-#LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
-LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
+LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80a00100
+#LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project

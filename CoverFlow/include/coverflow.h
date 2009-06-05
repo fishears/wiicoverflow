@@ -53,8 +53,8 @@
 // You also will want to remove .init=0x80a00100 from this make file
 
 //#include "dol.h" 
-#define DOL_TEST 1
-extern const u8 bootloader_dol[];
+//#define DOL_TEST 1
+//extern const u8 bootloader_dol[];
 
 /*DOL TEST END*/
 
