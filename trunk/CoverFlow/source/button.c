@@ -245,7 +245,7 @@ void Button_TTF_Toggle_Paint(struct Button* btn1, struct Button* btn2, char *lef
 		if( (strlen(left_text) > 0) && (strlen(right_text) > 0) )
 		{
 			// Draw the Left side text in white
-			CFreeTypeGX_DrawText(ttf16pt, (btn2->x + ((btn2->texture.w/2)/2)), (btn2->y + (btn2->texture.h/2) + 1), left_text, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+			CFreeTypeGX_DrawText(ttf16pt, (btn2->x + ((btn2->texture.w/2)/2)), (btn2->y + (btn2->texture.h/2) + 1), left_text, (GXColor){0x80, 0x80, 0x80, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 			// Draw the Right side text in black
 			CFreeTypeGX_DrawText(ttf16pt, (btn2->x + ((btn2->texture.w/4)*3)), (btn2->y + (btn2->texture.h/2)), right_text, (GXColor){0xee, 0xee, 0xee, 0xee}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 		}
@@ -261,7 +261,7 @@ void Button_TTF_Toggle_Paint(struct Button* btn1, struct Button* btn2, char *lef
 			// Draw the Left side text in black
 			CFreeTypeGX_DrawText(ttf16pt, (btn1->x + ((btn1->texture.w/2)/2)), (btn1->y + (btn1->texture.h/2)), left_text, (GXColor){0xee, 0xee, 0xee, 0xee}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 			// Draw the Right side text in white
-			CFreeTypeGX_DrawText(ttf16pt, (btn1->x + ((btn1->texture.w/4)*3)), (btn1->y + (btn1->texture.h/2) + 1), right_text, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+			CFreeTypeGX_DrawText(ttf16pt, (btn1->x + ((btn1->texture.w/4)*3)), (btn1->y + (btn1->texture.h/2) + 1), right_text, (GXColor){0x80, 0x80, 0x80, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 		}
 	}
 	
