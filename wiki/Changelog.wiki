@@ -1,10 +1,15 @@
 #labels Featured
-== RC6 (Unknown) ==
+== RC6 (June XX 2009) ==
 
 -NEW-
   * Huge UI Overhaul - new buttons, graphics, layout, look and feel
   * Improved install menu, use only with 2D covers
-  * Changed boot mode (external dol) for save some memory, should be transparent for the user
+  * Improved translations
+  * Gamecube PAD support for booting games / returning to menu (L/R triggers)
+
+-FIX-
+  * Lot of memory issues solved
+  * Code cleanup and minor bugs fixed
  
 ----
 == RC5 (May 30 2009) ==
