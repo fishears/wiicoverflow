@@ -48,7 +48,7 @@ GRRLIB_texImg _texture_data[MAX_BUFFERED_COVERS];
 int _cover_count;
 inline void Sleep(unsigned long milliseconds);
 
-inline void BUFFER_InitBuffer(int thread_count);
+inline void BUFFER_InitBuffer();
 
 void CoversDownloaded();
 void SetSelectedCover(int index);
@@ -67,5 +67,16 @@ inline void BUFFER_ClearCovers();
 inline void* process(void *arg);
 
 void ClearBufferSlotMemory();
+
+/* If you need memory, add the amount you need to the FreeMemorySlots array
+	Pass the ordinal to this and it will give you a consistent address for your need
+	The memory does not need to be freed as there is no associated malloc
+*/
+void * GetSlotBufferAddress(int slot);
+
+/* If you need memory for an image, add the amount you need to the FreeMemorySlots array
+	Pass the ordinal to this and it will give you a consistent address for your need
+	The memory does not need to be freed as there is no associated malloc
+*/
 GRRLIB_texImg BufferImageToSlot(const unsigned char* pngDataAddress,int slot);
 #endif

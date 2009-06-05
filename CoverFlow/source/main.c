@@ -169,7 +169,6 @@ int main( int argc, char **argv )
 	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
 #endif
 
-	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
 	
 	if(settings.covers3d)
 	{
@@ -180,8 +179,9 @@ int main( int argc, char **argv )
 		BUFFER_2D_COVERS();
 	}
 	
+	BUFFER_InitBuffer();
 	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
-	UpdateBufferedImages();
+//	UpdateBufferedImages();
 	
 	float wait = 100; //ms
 	float prog = 2.1/wait;
