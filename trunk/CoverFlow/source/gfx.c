@@ -26,7 +26,9 @@ void ResetBuffer()
 	else
 		BUFFER_2D_COVERS();
 	
-	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+	BUFFER_KillBuffer();
+	InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+	BUFFER_InitBuffer();
 	UpdateBufferedImages();
 }
 

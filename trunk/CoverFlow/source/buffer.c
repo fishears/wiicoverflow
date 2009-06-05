@@ -22,7 +22,6 @@
 #define DENSITY_METHOD 1
 #define ALL_CACHED 2
 
-#define IMAGE_CACHE 1024*1024*8
 #define MEM2_START_ADDRESS 0x90000000
 #define MEM2_EXTENT 54217216 //don't see why this cant be used
 
@@ -51,37 +50,34 @@ int nCoversInWindow;
 bool bCleanedUp=false;
 // end of private vars
 
-#define IMAGE_SLOTS 15
-unsigned int FreeMemorySlots[IMAGE_SLOTS+2] =
+#define BUFFER_SLOTS 5
+unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	{
-	0,
-	76*88*4,//1
-	76*88*4,//2
-	76*88*4,//3
-	384*236*4,//4
-	160*224*4,//5
-	512*340*4,//6
-	160*224*4,//7
-	160*160*4,//8
-	512*268*4,//9
-	400*64*4,//10
-	128,//11 string buffer for thread 0
-	128,//12 string buffer for thread 1
-	128,//13 string buffer for thread 2
-	128,//14 string buffer for thread 3
-	128,//15 string buffer for thread 4
+	128,//0 string buffer for thread 0
+	128,//1 string buffer for thread 1
+	128,//2 string buffer for thread 2
+	128,//3 string buffer for thread 3
+	128,//4 string buffer for thread 4
 	0};
 
-void * GetSlotBufferAddress(int slot)
+int GetOffsetToSlot(int slot)
 {
 	int i=0;
 	unsigned int offset=0;
-	if ((slot>IMAGE_SLOTS)) return (void *)offset;
+	if ((slot>BUFFER_SLOTS)) return offset;
 	for (i=0;i<slot;i++)
 	{
 		offset+=FreeMemorySlots[i];
 	}
-	return (void *) MEM2_START_ADDRESS+MEM2_EXTENT-IMAGE_CACHE+offset;
+	return offset;
+}
+
+void * GetSlotBufferAddress(int slot)
+{
+	unsigned int offset=0;
+	if ((slot>BUFFER_SLOTS)) return (void *)offset;
+	offset=GetOffsetToSlot(slot);
+	return (void *) MEM2_START_ADDRESS+MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS)+offset;
 }
 
 
@@ -94,7 +90,7 @@ void Sleep(unsigned long milliseconds)
 		sleep(milliseconds/1000);
 }
 
-void BUFFER_InitBuffer(int thread_count)
+void BUFFER_InitBuffer()
 {
 	int i = 0;
 	
@@ -111,10 +107,8 @@ void BUFFER_InitBuffer(int thread_count)
 		_texture_data[i].data=0;
 	}
 	
-	pthread_mutex_lock(&quit_mutex);
 	_requestQuit = false;
-	pthread_mutex_unlock(&quit_mutex);
-	
+
 	for(i = 0; i < MAX_THREADS; i++)
 	{
 		if(i < MAX_THREADS)
@@ -215,7 +209,7 @@ void HandleLoadRequest(int index,int threadNo)
 	if(index >= nCovers)
 		return ;
 		
-	pthread_mutex_lock(&buffer_mutex[index]);
+//	pthread_mutex_lock(&buffer_mutex[index]);
 	
 	/*Definitely dont need to load the same texture twice*/
 	if(!_cq.ready[index] && !_cq.coverMissing[index])
@@ -223,7 +217,7 @@ void HandleLoadRequest(int index,int threadNo)
 		
 		//void *imgData=0;
 		
-		char * filepath=GetSlotBufferAddress(11+threadNo);
+		char * filepath=GetSlotBufferAddress(threadNo);
 		s32  ret;
 		
 		bool covers3d = false;
@@ -307,7 +301,7 @@ void HandleLoadRequest(int index,int threadNo)
 		}
 		
 	}
-	pthread_mutex_unlock(&buffer_mutex[index]);
+	//pthread_mutex_unlock(&buffer_mutex[index]);
 }
 
 int GetPrioritisedCover(int selection)
@@ -405,9 +399,7 @@ void RemoveFromCache(int index)
 	{
 		_cq.ready[FloatingCacheCovers[index]] = false;
 		_cq.request[FloatingCacheCovers[index]] = false;
-		pthread_mutex_lock(&buffer_mutex[index]);
 		_texture_data[FloatingCacheCovers[index]].data=0;
-		pthread_mutex_unlock(&buffer_mutex[index]);
 		_cq.floatingQueuePosition[FloatingCacheCovers[index]]=-1;
 		
 	}
@@ -498,9 +490,7 @@ void ResetQueueItem(int index)
 	_cq.permaBufferPosition[index]=-1;
 	_cq.coverMissing[index]=false;
 	_cq.floatingQueuePosition[index]=-1;
-	pthread_mutex_lock(&buffer_mutex[index]);
 	_texture_data[index].data=0;
-	pthread_mutex_unlock(&buffer_mutex[index]);
 }
 
 
@@ -514,10 +504,9 @@ void RequestForCache(int index)
 	_cq.request[index]=true;
 }
 
-// call at start, on add or on delete
+// call at start, on add or on delete - kill the buffer first
 void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection)
 {
-	pthread_mutex_lock(&lock_thread_mutex);
 	initialSelection+=gameCount/2.0;
 	CurrentSelection=initialSelection;
 	int i=0;
@@ -526,7 +515,7 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	nCoversInWindow=numberOfCoversToBeShown;
 	//start from a clear point
 	for (i=0;i<gameCount;i++) ResetQueueItem(i);
-	memset((void *)MEM2_START_ADDRESS,0,MEM2_EXTENT-IMAGE_CACHE);
+	memset((void *)MEM2_START_ADDRESS,0,MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS));
 	
 	bool covers3d = false;
 	
@@ -534,11 +523,11 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	
 	if(covers3d)
 	{
-		maxSlots=(MEM2_EXTENT-IMAGE_CACHE)/(TEXTURE_DATA_SIZE_3D)-MAX_THREADS;
+		maxSlots=(MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS))/(TEXTURE_DATA_SIZE_3D)-MAX_THREADS;
 	}
 	else
 	{
-		maxSlots=(MEM2_EXTENT-IMAGE_CACHE)/(TEXTURE_DATA_SIZE)-MAX_THREADS;
+		maxSlots=(MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS))/(TEXTURE_DATA_SIZE)-MAX_THREADS;
 	}
 	
 	//decide on buffering method
@@ -599,7 +588,6 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 		}
 	}
 	iSetSelectedCover(initialSelection,true);
-	pthread_mutex_unlock(&lock_thread_mutex);
 	sleep(2);
 }
 
@@ -625,7 +613,7 @@ void CoversDownloaded()
 
 void ClearBufferSlotMemory()
 {
-		memset((void *)MEM2_START_ADDRESS+MEM2_EXTENT-IMAGE_CACHE,0,IMAGE_CACHE);
+		memset((void *)MEM2_START_ADDRESS+MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS),0,GetOffsetToSlot(BUFFER_SLOTS));
 }
 
 GRRLIB_texImg BufferImageToSlot(const unsigned char* pngDataAddress,int slot)
@@ -633,7 +621,7 @@ GRRLIB_texImg BufferImageToSlot(const unsigned char* pngDataAddress,int slot)
 	int i=0;
 	unsigned int offset=0;
 	GRRLIB_texImg ret;
-	if ((slot>IMAGE_SLOTS)) return ret;
+	if ((slot>BUFFER_SLOTS)) return ret;
 	for (i=0;i<slot;i++)
 	{
 		offset+=FreeMemorySlots[i];

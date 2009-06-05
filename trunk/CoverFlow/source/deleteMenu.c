@@ -47,7 +47,9 @@ bool Menu_Delete(){
 		{
 			GetEntries();
 			Sleep(300);
+			BUFFER_KillBuffer();
 			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+			BUFFER_InitBuffer();
 			Sleep(100);
 			
 			WindowPrompt(TX.successDelete, TX.pressOkContinue, &okButton, 0);

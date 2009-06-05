@@ -117,9 +117,9 @@ bool Menu_Install()
 			} else {
 				Sleep(100);
 				GetEntries();
-				Sleep(300);
+				BUFFER_KillBuffer();
 				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
-				Sleep(1000);
+				BUFFER_InitBuffer();
 				
 				WiiLight(1);
 				WindowPromptInstall((char*)headerdisc.id, name, TX.successInstall, &okButton,&cancelButton);
