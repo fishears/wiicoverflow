@@ -47,15 +47,6 @@ void LoadFonts()
 
 void LoadTextures()
 {
-	// This stuff kept crashing... 
-//	pointer_texture				= BufferImageToSlot(pointer_basic_png,1);
-//	pointer_shadow_texture		= BufferImageToSlot(pointer_shadow_png,2);
-//	turn_point_texture			= BufferImageToSlot(pointer_turning_png,3); // can't find free
-//	cover_texture				= BufferImageToSlot(no_cover_png,5);
-//	cover_texture_3d			= BufferImageToSlot(full_cover_png,6);
-//	back_texture				= BufferImageToSlot(back_cover_png,7);
-//	no_disc_texture				= BufferImageToSlot(no_disc_png,8);
-
 	pointer_texture				= GRRLIB_LoadTexturePNG(pointer_basic_png);
 	pointer_shadow_texture		= GRRLIB_LoadTexturePNG(pointer_shadow_png);
 	turn_point_texture			= GRRLIB_LoadTexturePNG(pointer_turning_png); // can't find free
@@ -1264,14 +1255,47 @@ void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 s
 
 void freeResources(){
 
-	//free(pointer_texture.data);
-	//free(pointer_shadow_texture.data);
-	//free(cover_texture.data);
-	//free(empty_texture.data); // can't find load
-	//free(no_disc_texture.data);
+	free(pointer_texture.data);
+	free(pointer_shadow_texture.data);
+	free(turn_point_texture.data);
+	free(cover_texture.data);
+	free(cover_texture_3d.data);
+	free(no_disc_texture.data);
+	free(slidebar_texture.data);
+	free(slidebar_white_texture.data);
+	free(ambientlight_texture.data);
+	free(ambientlight_white_texture.data);
+	free(battery_bar.data);
+    free(battery_bar_red.data);
+    free(battery.data);
+    free(battery_dead.data);
+	free(menu_button_texture.data);
+	free(menu_button_over_texture.data);
+	free(menu_header_texture.data);
+	free(menu_header_vflip_texture.data);
+	free(menu_logo_texture.data);
+	free(dialog_box_titlebar_texture.data);
+	free(dialog_box_titlebar_long_texture.data);
+	free(dialog_box_icon_texture.data);
+	free(menu_graphics_wireframe_texture.data);
+	free(menu_graphics_box1_texture.data);
+	free(menu_graphics_box2_texture.data);
+	//free(flag_jp_texture.data);
+	free(flag_br_texture.data);
+	//free(flag_cn_texture.data);
+	free(flag_da_texture.data);
+	free(flag_de_texture.data);
+	free(flag_fr_texture.data);
+	free(flag_it_texture.data);
+	//free(flag_tw_texture.data);
+	free(flag_pt_texture.data);
+	free(flag_ru_texture.data);
+	free(flag_uk_texture.data);
+	free(flag_us_texture.data);
+	free(flag_es_texture.data);
+	free(flag_ct_texture.data);
+	free(flag_fi_texture.data);
 	if (coverLoaded)free(current_cover_texture.data); // is this always available?
-	//free(progress_step_texture.data);
-	//free(progress_bar_texture.data);
 	
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
