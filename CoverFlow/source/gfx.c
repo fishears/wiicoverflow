@@ -1257,6 +1257,7 @@ void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 s
 
 void freeResources(){
 
+	//textures
 	free(pointer_texture.data);
 	free(pointer_shadow_texture.data);
 	free(turn_point_texture.data);
@@ -1298,6 +1299,103 @@ void freeResources(){
 	free(flag_ct_texture.data);
 	free(flag_fi_texture.data);
 	if (coverLoaded)free(current_cover_texture.data); // is this always available?
+	
+	//buttons
+	FreeButtonResources(&slideButton);
+	FreeButtonResources(&settingsButton);
+	FreeButtonResources(&addButton);
+ 	// Dialog Box Buttons
+	FreeButtonResources(&okButton);
+	FreeButtonResources(&cancelButton);
+	FreeButtonResources(&yesButton);
+    FreeButtonResources(&noButton);
+	// Game Launch Panel Buttons
+	FreeButtonResources(&loadButton);
+    FreeButtonResources(&backButton);
+	FreeButtonResources(&lockButton);
+	FreeButtonResources(&unlockButton);
+	FreeButtonResources(&deleteButton);
+    FreeButtonResources(&gsettingsButton);
+	FreeButtonResources(&bookmarkOnButton);
+    FreeButtonResources(&bookmarkOffButton);
+	// 'Home' button menu buttons
+    FreeButtonResources(&homeMenuTopButton);
+    FreeButtonResources(&homeMenuBottomButton);
+    FreeButtonResources(&wiiMenuButton);
+    FreeButtonResources(&loaderButton);
+    FreeButtonResources(&wiimoteButton);
+	// Settings Panels Header Buttons
+    FreeButtonResources(&menuSettingsButton);
+	FreeButtonResources(&menuGraphicsButton);
+    FreeButtonResources(&menuLanguagesButton);
+	FreeButtonResources(&menuLogoButton);
+	// General Settings Panel
+    FreeButtonResources(&musicOnButton);
+    FreeButtonResources(&musicOffButton);
+    FreeButtonResources(&rumbleOnButton);
+    FreeButtonResources(&rumbleOffButton);
+    FreeButtonResources(&quickstartOnButton);
+    FreeButtonResources(&quickstartOffButton);
+    FreeButtonResources(&themeBlackButton);
+    FreeButtonResources(&themeWhiteButton);
+	FreeButtonResources(&coversButton);
+	FreeButtonResources(&titlesButton);
+    FreeButtonResources(&viddownButton);
+	FreeButtonResources(&vidupButton);
+    FreeButtonResources(&vidtvonButton);
+    FreeButtonResources(&vidtvoffButton);
+    FreeButtonResources(&cheatonButton);
+    FreeButtonResources(&cheatoffButton);
+    FreeButtonResources(&hookdownButton);
+    FreeButtonResources(&hookupButton);
+	// Graphic Settings Panel
+    FreeButtonResources(&falloffdownButton);
+    FreeButtonResources(&falloffupButton);
+    FreeButtonResources(&windowdownButton);
+    FreeButtonResources(&windowupButton);
+    FreeButtonResources(&zoomdownButton);
+    FreeButtonResources(&zoomupButton);
+    FreeButtonResources(&spacingdownButton);
+    FreeButtonResources(&spacingupButton);
+    FreeButtonResources(&angledownButton);
+    FreeButtonResources(&angleupButton);
+    FreeButtonResources(&hidescrollOnButton);
+    FreeButtonResources(&hidescrollOffButton);
+    FreeButtonResources(&covers3dOnButton);
+    FreeButtonResources(&covers3dOffButton);
+    FreeButtonResources(&coverTextOnButton);
+    FreeButtonResources(&coverTextOffButton);
+	// Language Settings Panel
+	FreeButtonResources(&langupButton);
+    FreeButtonResources(&langdownButton);
+	FreeButtonResources(&flagUSButton);
+	FreeButtonResources(&flagITButton);
+	FreeButtonResources(&flagDEButton);
+	FreeButtonResources(&flagUKButton);
+	FreeButtonResources(&flagBRButton);
+	FreeButtonResources(&flagFRButton);
+	FreeButtonResources(&flagDAButton);
+	//FreeButtonResources(&flagJPButton);
+	FreeButtonResources(&flagFIButton);
+	FreeButtonResources(&flagPTButton);
+	//FreeButtonResources(&flagTWButton);
+	FreeButtonResources(&flagRUButton);
+	//FreeButtonResources(&flagCNButton);
+	FreeButtonResources(&flagESButton);
+	FreeButtonResources(&flagCTButton);
+	// Game Settings Screen Buttons
+    FreeButtonResources(&gvidtvonButton);
+    FreeButtonResources(&gvidtvoffButton);
+	FreeButtonResources(&gcheatonButton);
+    FreeButtonResources(&gcheatoffButton);
+    FreeButtonResources(&ghookdownButton);
+    FreeButtonResources(&ghookupButton);
+    FreeButtonResources(&glangdownButton);
+	FreeButtonResources(&glangupButton);
+    FreeButtonResources(&gviddownButton);
+	FreeButtonResources(&gvidupButton);
+	FreeButtonResources(&gbackButton);
+
 	
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
