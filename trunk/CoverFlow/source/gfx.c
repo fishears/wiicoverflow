@@ -1012,7 +1012,300 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 
 int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
 {
+	bool returnVal = false;
 	bool doloop = true;
+	char* pch;
+        GRRLIB_texImg myTex;
+	unsigned char buffer[160 * 224 * 4 * 10];
+	WPAD_Rumble(0,0); //sometimes rumble remain active
+	if(networkInit(self.ipAddress))
+	{
+		Download_Cover(id, 1, self.gameCnt);
+		//CoversDownloaded();
+
+		char filepath[255];
+		sprintf(filepath, USBLOADER_PATH "/covers/%s.png", id);
+		int ret = Fat_ReadFileToBuffer(filepath, (void*)buffer, 160 * 224 * 4);
+		if(ret > 0)
+		{
+			myTex = GRRLIB_LoadTexturePNG(buffer);
+		}
+		else
+		{
+			myTex = GRRLIB_LoadTexture(no_cover_png);
+		}
+	}
+	else // no network
+	{
+		myTex = GRRLIB_LoadTexture(no_cover_png);
+	}
+	if(choice_a == 0 && choice_b == 0)
+		doloop = false;
+
+	/////////////////////////////////////
+	// Draw the intro - lower the dialog
+	int i = 1;
+	int fade = 0x00;
+	float moving_y;
+
+	for(i = 0; i <= 20; i++)
+	{
+		// Draw the covers in the back
+		draw_covers();
+		GRRLIB_2D_Init();
+		// Draw the screen fade
+		GRRLIB_FillScreen(0x00000000|fade);
+		fade+=8;
+		// Draw the background panel
+		moving_y = change_scale(i, 0, 20, -202, 148);
+		GRRLIB_Rectangle(108, moving_y, 424, 184, 0xffffffdd, true);
+		moving_y = change_scale(i, 0, 20, -200, 150);
+		GRRLIB_Rectangle(110, moving_y, 420, 180, 0x737373FF, true);
+		moving_y = change_scale(i, 0, 20, -210, 140);
+		GRRLIB_DrawImg(90, moving_y, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
+                // Draw the cover image
+		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+			GRRLIB_DrawImg(85, moving_y, myTex, 0, (AR_16_9)*0.7, 0.7, 0xFFFFFFFF);
+		else
+			GRRLIB_DrawImg(85, moving_y, myTex, 0, 0.7, 0.7, 0xFFFFFFFF);
+		// Draw buttons
+		moving_y = change_scale(i, 0, 20, -60, 290);
+		if(choice_a != 0 && choice_b != 0)
+		{
+			choice_a->y = moving_y;
+			choice_b->y = moving_y;
+			Button_TTF_Paint(choice_a);
+			Button_TTF_Paint(choice_b);
+		}
+		else
+		{
+			if(choice_a != 0)
+			{
+				choice_a->y = moving_y;
+				Button_TTF_Paint(choice_a);
+			}
+			if(choice_b != 0)
+			{
+				choice_b->y = moving_y;
+				Button_TTF_Paint(choice_b);
+			}
+		}
+		// Draw Dialog Box Title Text
+		moving_y = change_scale(i, 0, 20, -197, 153);
+		CFreeTypeGX_DrawText(ttf16pt, 215, moving_y, title, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+		// Draw Dialog Box Body Text
+		moving_y = change_scale(i, 0, 20, -160, 190);
+		int lsp = moving_y;
+		if(txt != NULL)
+		{
+			char* msg = malloc(strlen(txt)*sizeof(char));
+			sprintf(msg, txt);
+
+			pch = strtok(msg, "\n");
+			while (pch != NULL)
+			{
+				CFreeTypeGX_DrawText(ttf16pt, 220, lsp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+				pch  = strtok(NULL, "\n");
+				lsp += 16;
+			}
+			free(msg);
+        }
+		// Draw the pointer
+		WPAD_ScanPads();
+		GetWiimoteData();
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		GRRLIB_Render();
+	}
+
+
+	do{
+		///////////////////////
+		// Handle Button events
+		WPAD_ScanPads();
+		PAD_ScanPads();
+		GetWiimoteData();
+
+		/////////////////////////////////////////////////////
+		// Check for button-pointer intersections, and rumble
+		if (Button_Hover(choice_a, pointer.p_x, pointer.p_y) ||
+			Button_Hover(choice_b, pointer.p_x, pointer.p_y))
+		{
+			// Should we be rumbling?
+			if (--self.rumbleAmt > 0)
+				WPAD_Rumble(0,1); // Turn on Wiimote rumble
+			else
+				WPAD_Rumble(0,0); // Kill the rumble
+		}
+		else
+		{ // If no button is being hovered, kill the rumble
+			WPAD_Rumble(0,0);
+			self.rumbleAmt = 5;
+		}
+		// Check for Button Events
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)|| (PAD_ButtonsDown(0) & PAD_BUTTON_B))
+		{
+			doloop = false;
+		}
+
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1)
+			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
+		{
+			if(choice_a != 0)
+			{
+				if(Button_Select(choice_a, pointer.p_x, pointer.p_y))
+				{
+					doloop = false;
+					returnVal = true;
+					break;
+				}
+			}
+			if(choice_b != 0)
+			{
+				if(Button_Select(choice_b, pointer.p_x, pointer.p_y))
+				{
+					doloop = false;
+					break;
+				}
+
+			}
+		}
+
+		////////////////////////
+		// Draw the dialog
+		draw_covers();
+		GRRLIB_2D_Init();
+		// Draw the screen fade
+		GRRLIB_FillScreen(0x00000000|fade);
+		// Draw the background panel
+		GRRLIB_Rectangle(108, 148, 424, 184, 0xffffffdd, true);
+		GRRLIB_Rectangle(110, 150, 420, 180, 0x737373FF, true);
+		GRRLIB_DrawImg(90, 140, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
+                // Draw the cover image
+		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+			GRRLIB_DrawImg(85, 133, myTex, 0, (AR_16_9)*0.7, 0.7, 0xFFFFFFFF);
+		else
+			GRRLIB_DrawImg(85, 133, myTex, 0, 0.7, 0.7, 0xFFFFFFFF);
+		// Draw buttons
+		if(choice_a != 0 && choice_b != 0)
+		{
+			Button_TTF_Paint(choice_a);
+			Button_TTF_Paint(choice_b);
+		}
+		else
+		{
+			if(choice_a != 0)
+				Button_TTF_Paint(choice_a);
+			if(choice_b != 0)
+				Button_TTF_Paint(choice_b);
+		}
+		// Draw Dialog Box Title Text
+		CFreeTypeGX_DrawText(ttf16pt, 215, 153, title, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+		// Draw Dialog Box Body Text
+		int y = 190;
+		int sp = 0;
+		if(txt != NULL)
+		{
+			char* msg = malloc(strlen(txt)*sizeof(char));
+			sprintf(msg, txt);
+
+			pch = strtok(msg, "\n");
+			while (pch != NULL)
+			{
+				CFreeTypeGX_DrawText(ttf16pt, 220, y+sp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+				pch = strtok(NULL, "\n");
+				sp+=16;
+			}
+			free(msg);
+        }
+
+
+		////////////////////////////////
+		// Draw the default pointer hand
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+
+		GRRLIB_Render();
+
+	}while(doloop);
+
+	/////////////////////////////////////
+	// Draw the outro - raise the menu
+	for(i = 0; i <= 20; i++)
+	{
+		// Draw the covers in the back
+		draw_covers();
+		GRRLIB_2D_Init();
+		// Draw the screen fade
+		GRRLIB_FillScreen(0x00000000|fade);
+		fade-=8;
+		// Draw the background panel
+		moving_y = change_scale(i, 0, 20, 148, -202);
+		GRRLIB_Rectangle(108, moving_y, 424, 184, 0xffffffdd, true);
+		moving_y = change_scale(i, 0, 20, 150, -200);
+		GRRLIB_Rectangle(110, moving_y, 420, 180, 0x737373FF, true);
+		moving_y = change_scale(i, 0, 20, 140, -210);
+		GRRLIB_DrawImg(90, moving_y, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
+                // Draw the cover image
+		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+			GRRLIB_DrawImg(85, moving_y-10, myTex, 0, (AR_16_9)*0.7, 0.7, 0xFFFFFFFF);
+		else
+			GRRLIB_DrawImg(85, moving_y-10, myTex, 0, 0.7, 0.7, 0xFFFFFFFF);
+		// Draw buttons
+		moving_y = change_scale(i, 0, 20, 290, -60);
+		if(choice_a != 0 && choice_b != 0)
+		{
+			choice_a->y = moving_y;
+			choice_b->y = moving_y;
+			Button_TTF_Paint(choice_a);
+			Button_TTF_Paint(choice_b);
+		}
+		else
+		{
+			if(choice_a != 0)
+			{
+				choice_a->y = moving_y;
+				Button_TTF_Paint(choice_a);
+			}
+			if(choice_b != 0)
+			{
+				choice_b->y = moving_y;
+				Button_TTF_Paint(choice_b);
+			}
+		}
+		// Draw Dialog Box Title Text
+		moving_y = change_scale(i, 0, 20, 153, -197);
+		CFreeTypeGX_DrawText(ttf16pt, 215, moving_y, title, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+		// Draw Dialog Box Body Text
+		moving_y = change_scale(i, 0, 20, 190, -160);
+		int lsp = moving_y;
+		if(txt != NULL)
+		{
+			char* msg = malloc(strlen(txt)*sizeof(char));
+			sprintf(msg, txt);
+
+			pch = strtok(msg, "\n");
+			while (pch != NULL)
+			{
+				CFreeTypeGX_DrawText(ttf16pt, 220, lsp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+				pch  = strtok(NULL, "\n");
+				lsp += 16;
+			}
+			free(msg);
+        }
+		// Draw the pointer
+		WPAD_ScanPads();
+		GetWiimoteData();
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		GRRLIB_Render();
+	}
+
+	self.rumbleAmt = 0;
+        free(myTex.data);
+	return returnVal;
+
+/*
+        bool doloop = true;
 	char* pch;
 	
 	if(choice_a == 0 && choice_b == 0)
@@ -1143,6 +1436,7 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 	self.rumbleAmt = 0;
 	free(myTex.data);
 	return false;
+*/
 }
 
 /****************************************************************************
