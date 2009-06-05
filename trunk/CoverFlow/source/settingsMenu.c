@@ -127,14 +127,14 @@ void Settings_Menu_Show()
 		Button_Paint(&menuLogoButton);
 		
 		// Check for B to save and exit
-		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)||((PAD_ButtonsDown(0) & PAD_BUTTON_B)))
+		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)||(PAD_ButtonsDown(0) & PAD_BUTTON_B))
 		{
 			WPAD_Rumble(0,0); // Kill the rumble
 			doloop = false;
 		}
 		
 		// Check for A clicks on top menu buttons
-		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||((PAD_ButtonsDown(0) & PAD_BUTTON_B)))
+		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
 		{
 			if (Button_Select(&menuSettingsButton, pointer.p_x, pointer.p_y))
 			{
@@ -174,9 +174,9 @@ void Settings_Menu_Show()
 			case settingsPanel:		// Case for Settings Panel
 			{
 				// Handle Button events
-				if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1) // Check for screen shot
+				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for screen shot
 					GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
-				if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
 				{
 					if (Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
 					{
@@ -387,7 +387,7 @@ void Settings_Menu_Show()
 			case graphicsPanel:		// Case for graphics
 			{
 				// Handle Button A events
-				if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
 				{
 					if (Button_Select(&covers3dOnButton, pointer.p_x, pointer.p_y) || Button_Select(&covers3dOffButton, pointer.p_x, pointer.p_y))
 					{
@@ -545,10 +545,10 @@ void Settings_Menu_Show()
 			case langPanel:		// Case for languages
 			{
 				// Handle Button A events
-				if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1) // Check for screen shot
+				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for screen shot
 					GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 				// TODO make the flag based selection work
-				if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
 				{
 					if (Button_Select(&langdownButton, pointer.p_x, pointer.p_y))
 					{ // Clicked on the language buttons
@@ -574,7 +574,7 @@ void Settings_Menu_Show()
 				Button_Paint(&langdownButton);
 				
 				
-				if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
 				{
 					if (Button_Select(&flagUSButton, pointer.p_x, pointer.p_y))
 					{
@@ -853,19 +853,19 @@ void Game_Settings_Menu_Show()
 		GetWiimoteData();
 
 		// Handle button events
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_1)
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1)||(PAD_ButtonsDown(0) & PAD_BUTTON_X))
 			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME) || (PAD_ButtonsDown(0) & PAD_TRIGGER_Z))
 		{
 			setGameSettings(titleID, &gameSetting,-1);
 			return;
 		}
-		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)||(PAD_ButtonsDown(0) & PAD_BUTTON_B))
 		{
 			setGameSettings(titleID, &gameSetting,-1);
 			return;
 		}
-		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
 		{
 			if(Button_Select(&gbackButton, pointer.p_x, pointer.p_y))
 			{

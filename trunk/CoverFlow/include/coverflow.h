@@ -44,7 +44,7 @@
 #include "soundmanager.h"
 #include "CFreeTypeGX.h"
 #include "titles.h"
-//#include "ee.h"
+#include "ee.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -83,7 +83,8 @@
 #define BUFFER_THREAD_COUNT  1
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           15
-#define RELEASE              "RC5"
+
+#define RELEASE              "RC6"
 
 #define ANIMATE_SPEED 0
 #define FLIP_SPEED  0.016
