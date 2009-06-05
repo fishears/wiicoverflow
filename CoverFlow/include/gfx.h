@@ -41,6 +41,10 @@ extern const u8 button_round_gear_png[];				// Round button - gear
 extern const u8 button_round_gear_over_png[];			// Round button - gear over
 extern const u8 button_round_delete_png[];				// Round button - delete
 extern const u8 button_round_delete_over_png[];			// Round button - delete over
+extern const u8 button_round_lock_png[];				// Round button - lock
+extern const u8 button_round_lock_over_png[];			// Round button - lock over
+extern const u8 button_round_unlock_png[];				// Round button - unlock
+extern const u8 button_round_unlock_over_png[];			// Round button - unlock over
 extern const u8 dialog_box_titlebar_png[];				// Basic UI Dialog panel Titlebar
 extern const u8 dialog_box_titlebar_long_png[];			// Basic UI Dialog panel Titlebar long version
 extern const u8 dialog_box_icon_png[];					// Icon for dialog panel
@@ -138,6 +142,8 @@ Button okButton;
 Button backButton;
 Button cancelButton;
 Button loadButton;
+Button lockButton;
+Button unlockButton;
 Button cheatonButton;
 Button cheatoffButton;
 Button yesButton;
