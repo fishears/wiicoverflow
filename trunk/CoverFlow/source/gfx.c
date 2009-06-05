@@ -1690,12 +1690,14 @@ void freeResources(){
 	FreeButtonResources(&gvidupButton);
 	FreeButtonResources(&gbackButton);
 
+/* //  CFreeTypeGX_delete function make the games don't boot, removed temporary (it wass addedd in r533)
+
 	CFreeTypeGX_delete(ttf14pt);
     CFreeTypeGX_delete(ttf16pt);
 	CFreeTypeGX_delete(ttf18pt);
 	CFreeTypeGX_delete(ttf20pt);
 	CFreeTypeGX_delete(ttf24pt);
-
+*/
 	
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
