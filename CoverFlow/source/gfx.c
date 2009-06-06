@@ -86,12 +86,14 @@ void LoadTextures()
 	flag_it_texture = GRRLIB_LoadTexturePNG(flag_it_png);
 	//flag_tw_texture = GRRLIB_LoadTexturePNG(flag_tw_png);
 	flag_pt_texture = GRRLIB_LoadTexturePNG(flag_pt_png);
-	flag_ru_texture = GRRLIB_LoadTexturePNG(flag_ru_png);
+	//flag_ru_texture = GRRLIB_LoadTexturePNG(flag_ru_png);
 	flag_uk_texture = GRRLIB_LoadTexturePNG(flag_uk_png);
 	flag_us_texture = GRRLIB_LoadTexturePNG(flag_us_png);
 	flag_es_texture = GRRLIB_LoadTexturePNG(flag_es_png);
 	flag_ct_texture = GRRLIB_LoadTexturePNG(flag_ct_png);
 	flag_fi_texture = GRRLIB_LoadTexturePNG(flag_fi_png);
+	flag_MyLang_texture = GRRLIB_LoadTexturePNG(flag_MyLang_png);
+	
 }
 
 void DrawBufferedCover(int i, float loc, float angle, float falloff)
@@ -282,10 +284,12 @@ void Init_Buttons()
 	flagFIButton			= Button_Flag_Init(flag_fi_png, 296, 290, "Finnland"); 
 	flagPTButton			= Button_Flag_Init(flag_pt_png, 426, 290, "Portugal");
 	//flagTWButton			= Button_Flag_Init(flag_tw_png, 166, 360, "Taiwan");
-	flagRUButton			= Button_Flag_Init(flag_ru_png, 296, 360, "Russia");
+	//flagRUButton			= Button_Flag_Init(flag_ru_png, 296, 360, "Russia");
 	//flagCNButton			= Button_Flag_Init(flag_cn_png, 426, 360, "China");
 	flagESButton			= Button_Flag_Init(flag_es_png, 166, 360, "Spain");		
-	flagCTButton			= Button_Flag_Init(flag_ct_png, 426, 360, "Catalan");
+	flagCTButton			= Button_Flag_Init(flag_ct_png, 296, 360, "Catalan");
+	flagMyLangButton 		= Button_Flag_Init(flag_MyLang_png, 426, 360, "MyLanguage");
+			
 	// Game Settings Screen Buttons
     gvidtvonButton          = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 360, 164);
     gvidtvoffButton         = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 360, 164);
@@ -1452,12 +1456,13 @@ void freeResources(){
 	free(flag_it_texture.data);
 	//free(flag_tw_texture.data);
 	free(flag_pt_texture.data);
-	free(flag_ru_texture.data);
+	//free(flag_ru_texture.data);
 	free(flag_uk_texture.data);
 	free(flag_us_texture.data);
 	free(flag_es_texture.data);
 	free(flag_ct_texture.data);
 	free(flag_fi_texture.data);
+	free(flag_MyLang_texture.data);
 	if (coverLoaded)free(current_cover_texture.data); // is this always available?
 	
 	//buttons
@@ -1539,10 +1544,11 @@ void freeResources(){
 	FreeButtonResources(&flagFIButton);
 	FreeButtonResources(&flagPTButton);
 	//FreeButtonResources(&flagTWButton);
-	FreeButtonResources(&flagRUButton);
+	//FreeButtonResources(&flagRUButton);
 	//FreeButtonResources(&flagCNButton);
 	FreeButtonResources(&flagESButton);
 	FreeButtonResources(&flagCTButton);
+	FreeButtonResources(&flagMyLangButton);
 	// Game Settings Screen Buttons
     FreeButtonResources(&gvidtvonButton);
     FreeButtonResources(&gvidtvoffButton);

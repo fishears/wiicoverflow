@@ -27,8 +27,8 @@ extern u32 english_lang_size;
 extern u8  italian_lang[];
 extern u32 italian_lang_size;
 
-//extern u8  portuguesebr_lang[];
-//extern u32 portuguesebr_lang_size;
+extern u8  portuguesebr_lang[];
+extern u32 portuguesebr_lang_size;
 
 //extern u8  schinese_lang[];
 //extern u32 schinese_lang_size;
@@ -241,6 +241,6 @@ bool languageLoad();
 bool languageFind();
 void languageSet(char *name, char *val);
 char* strcopy(char *dest, char *src, int size);
-bool checkfile(char * path);
+bool checkMyLanguageFile(char *name);
 bool parseMemFile(char *mfname, u32 mfSize, void (*set_func)(char*, char*));
 #endif
