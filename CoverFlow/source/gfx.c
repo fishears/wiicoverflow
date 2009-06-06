@@ -1034,12 +1034,12 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 		}
 		else
 		{
-			myTex = GRRLIB_LoadTexture(no_cover_png);
+			myTex = cover_texture;//GRRLIB_LoadTexture(no_cover_png);
 		}
 	}
 	else // no network
 	{
-		myTex = GRRLIB_LoadTexture(no_cover_png);
+		myTex = cover_texture;//GRRLIB_LoadTexture(no_cover_png);
 	}
 	if(choice_a == 0 && choice_b == 0)
 		doloop = false;
