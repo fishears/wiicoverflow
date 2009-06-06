@@ -19,16 +19,41 @@
 
 extern s_settings settings;
 static char *cfg_name, *cfg_val;
-char** languages;
-char** vidmodes;
-char** selLanguages;
 char langFile[20];
 struct LANGUAGE TX;
 
+extern char	languages[11][30];
+extern char	vidmodes[6][30];
+
+char selLanguages[20][7]=
+{
+	{"default"},
+	{"ca-CAT"},		
+	{"da-DAN"},
+	{"de-GER"},		
+	{"en-GB"},
+	{"es-SPA"},		
+	{"fi-FIN"},
+	{"fr-FRE"},		
+	{"it-ITA"},
+	{"ja-JPN"},		
+	{"ko-KOR"},
+	{"nl-DUT"},		
+	{"nn-NOR"},
+	{"pt-BR"},		
+	{"ru-RUS"},
+	{"tr-TUR"},		
+	{"zh-CN"},
+	{"zh-TW"},		
+	{"pt-POR"},
+	{"myLANG"}		
+};
+
+
 void languageInit()
 {
+	/*
 	int i;
-	int countLng = 20;
 	
 	languages =  (char**)malloc(11*sizeof(char*));
 	for (i=0;i<11;i++)	{
@@ -39,33 +64,7 @@ void languageInit()
 	for (i=0;i<6;i++) {
 	 vidmodes[i] =  (char*)malloc(30*sizeof(char));
 	}
-	
-	selLanguages =  (char**)malloc(countLng*sizeof(char*));
-	for (i=0;i<countLng;i++) {
-	 selLanguages[i] =  (char*)malloc(7*sizeof(char));
-	}
-	
-	sprintf(selLanguages[0],  "default");  // en-US
-	sprintf(selLanguages[1],  "ca-CAT" );
-	sprintf(selLanguages[2],  "da-DAN" );
-	sprintf(selLanguages[3],  "de-GER" );
-	sprintf(selLanguages[4],  "en-GB"  );
-	sprintf(selLanguages[5],  "es-SPA" );
-	sprintf(selLanguages[6],  "fi-FIN" );
-	sprintf(selLanguages[7],  "fr-FRE" );
-	sprintf(selLanguages[8],  "it-ITA" );
-	sprintf(selLanguages[9],  "ja-JPN" );
-	sprintf(selLanguages[10], "ko-KOR" );
-	sprintf(selLanguages[11], "nl-DUT" );
-	sprintf(selLanguages[12], "nn-NOR" );
-	sprintf(selLanguages[13], "pt-BR"  );
-	sprintf(selLanguages[14], "ru-RUS" );
-	sprintf(selLanguages[15], "tr-TUR" );
-	sprintf(selLanguages[16], "zh-CN"  );
-	sprintf(selLanguages[17], "zh-TW"  );
-	sprintf(selLanguages[18], "pt-POR" );
-	sprintf(selLanguages[19], "myLANG" );
-	
+    */
 	languageDefault();
 }
 
@@ -989,7 +988,7 @@ bool languageLoad()
 		return parseMemFile( (char*)catalan_lang, catalan_lang_size, &languageSet);
 		}
 	if (strcmp(settings.localLanguage, "da-DAN") == 0) {
-		return false;
+		return parseMemFile( (char*)danish_lang, danish_lang_size, &languageSet);
 		}
 	if (strcmp(settings.localLanguage, "en-GB") == 0) {
 		return parseMemFile( (char*)english_lang, english_lang_size, &languageSet);

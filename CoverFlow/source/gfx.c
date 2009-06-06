@@ -12,9 +12,6 @@ extern s_title* titleList;
 extern s_coverFlip coverFlip[];
 extern int COVER_COUNT;
 
-extern char** languages;
-extern char** vidmodes;
-
 void ResetBuffer()
 {
 	BUFFER_KillBuffer();
@@ -85,7 +82,7 @@ void LoadTextures()
 	flag_fr_texture = GRRLIB_LoadTexturePNG(flag_fr_png);
 	flag_it_texture = GRRLIB_LoadTexturePNG(flag_it_png);
 	//flag_tw_texture = GRRLIB_LoadTexturePNG(flag_tw_png);
-	flag_pt_texture = GRRLIB_LoadTexturePNG(flag_pt_png);
+	//flag_pt_texture = GRRLIB_LoadTexturePNG(flag_pt_png);
 	//flag_ru_texture = GRRLIB_LoadTexturePNG(flag_ru_png);
 	flag_uk_texture = GRRLIB_LoadTexturePNG(flag_uk_png);
 	flag_us_texture = GRRLIB_LoadTexturePNG(flag_us_png);
@@ -93,7 +90,7 @@ void LoadTextures()
 	flag_ct_texture = GRRLIB_LoadTexturePNG(flag_ct_png);
 	flag_fi_texture = GRRLIB_LoadTexturePNG(flag_fi_png);
 	flag_MyLang_texture = GRRLIB_LoadTexturePNG(flag_MyLang_png);
-	
+	flag_dk_texture = GRRLIB_LoadTexturePNG(flag_dk_png);
 }
 
 void DrawBufferedCover(int i, float loc, float angle, float falloff)
@@ -282,7 +279,8 @@ void Init_Buttons()
 	flagDAButton			= Button_Flag_Init(flag_da_png, 166, 290, "Netherlands");
 	//flagJPButton			= Button_Flag_Init(flag_jp_png, 296, 290, "Japan"); 
 	flagFIButton			= Button_Flag_Init(flag_fi_png, 296, 290, "Finnland"); 
-	flagPTButton			= Button_Flag_Init(flag_pt_png, 426, 290, "Portugal");
+	//flagPTButton			= Button_Flag_Init(flag_pt_png, 426, 290, "Portugal");
+	flagDKButton			= Button_Flag_Init(flag_dk_png, 426, 290, "Denmark");
 	//flagTWButton			= Button_Flag_Init(flag_tw_png, 166, 360, "Taiwan");
 	//flagRUButton			= Button_Flag_Init(flag_ru_png, 296, 360, "Russia");
 	//flagCNButton			= Button_Flag_Init(flag_cn_png, 426, 360, "China");
@@ -1455,7 +1453,8 @@ void freeResources(){
 	free(flag_fr_texture.data);
 	free(flag_it_texture.data);
 	//free(flag_tw_texture.data);
-	free(flag_pt_texture.data);
+	//free(flag_pt_texture.data);
+	free(flag_dk_texture.data);
 	//free(flag_ru_texture.data);
 	free(flag_uk_texture.data);
 	free(flag_us_texture.data);
@@ -1542,7 +1541,8 @@ void freeResources(){
 	FreeButtonResources(&flagDAButton);
 	//FreeButtonResources(&flagJPButton);
 	FreeButtonResources(&flagFIButton);
-	FreeButtonResources(&flagPTButton);
+	//FreeButtonResources(&flagPTButton);
+	FreeButtonResources(&flagDKButton);
 	//FreeButtonResources(&flagTWButton);
 	//FreeButtonResources(&flagRUButton);
 	//FreeButtonResources(&flagCNButton);

@@ -14,9 +14,6 @@
 #include "settingsMenu.h"
 #include "localization.h"
 
-extern char**		  languages;
-extern char** 		  vidmodes;
-
 extern s_self         self;
 extern s_pointer      pointer;
 extern s_settings     settings;
@@ -24,6 +21,11 @@ extern s_gameSettings gameSetting;
 extern s_title*       titleList;
 extern u8             shutdown;
 extern u8             reset;
+
+
+char languages[11][30] = {{""},{""},{""},{""},{""},{""},{""},{""},{""},{""},	{""}};
+
+char vidmodes[6][30] = {{""},{""},{""},{""},{""},{""}};
 
 //hook types for ocarina
 char hooks[3][9] =
@@ -618,9 +620,9 @@ void Settings_Menu_Show()
 						strcpy(settings.localLanguage, "ja-JPN");
 						languageLoad();
 					}
-					else if (Button_Select(&flagPTButton, pointer.p_x, pointer.p_y))
+					else if (Button_Select(&flagDKButton, pointer.p_x, pointer.p_y))
 					{
-						strcpy(settings.localLanguage, "pt-POR");
+						strcpy(settings.localLanguage, "da-DAN");
 						languageLoad();
 					}
 					else if (Button_Select(&flagTWButton, pointer.p_x, pointer.p_y))
@@ -675,7 +677,8 @@ void Settings_Menu_Show()
 				Button_Flag_Paint(&flagDAButton);
 				//Button_Flag_Paint(&flagJPButton);
 				Button_Flag_Paint(&flagFIButton);
-				Button_Flag_Paint(&flagPTButton);
+				//Button_Flag_Paint(&flagPTButton);
+				Button_Flag_Paint(&flagDKButton);
 				//Button_Flag_Paint(&flagTWButton);
 				//Button_Flag_Paint(&flagRUButton);
 				//Button_Flag_Paint(&flagCNButton);
@@ -699,7 +702,8 @@ void Settings_Menu_Show()
 					Button_Hover(&flagDAButton, pointer.p_x, pointer.p_y) ||
 					//Button_Hover(&flagJPButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagFIButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&flagPTButton, pointer.p_x, pointer.p_y) ||
+					//Button_Hover(&flagPTButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&flagDKButton, pointer.p_x, pointer.p_y) ||
 					//Button_Hover(&flagTWButton, pointer.p_x, pointer.p_y) ||
 					//Button_Hover(&flagRUButton, pointer.p_x, pointer.p_y) ||
 					//Button_Hover(&flagCNButton, pointer.p_x, pointer.p_y) ||
