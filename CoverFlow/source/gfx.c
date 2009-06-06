@@ -269,8 +269,8 @@ void Init_Buttons()
     coverTextOnButton       = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 435, 369);
     coverTextOffButton      = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 435, 369);
 	// Language Settings Panel
-	langupButton			= Button_Init(button_plus_png, button_plus_over_png,448,90);
-    langdownButton			= Button_Init(button_minus_png, button_minus_over_png, 420,90);
+	langupButton			= Button_Init(button_plus_png, button_plus_over_png,321,90);
+    langdownButton			= Button_Init(button_minus_png, button_minus_over_png, 293,90);
 	flagUSButton			= Button_Flag_Init(flag_us_png, 166, 150, "United States"); // TODO: Need to create TX for all of these
 	flagITButton			= Button_Flag_Init(flag_it_png, 296, 150, "Italy");
 	flagDEButton			= Button_Flag_Init(flag_de_png, 426, 150, "Germany");
@@ -1303,140 +1303,6 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 	self.rumbleAmt = 0;
         free(myTex.data);
 	return returnVal;
-
-/*
-        bool doloop = true;
-	char* pch;
-	
-	if(choice_a == 0 && choice_b == 0)
-		doloop = false;
-	
-	GRRLIB_texImg myTex;
-	unsigned char buffer[160 * 224 * 4 * 10]; //why 5 I don't know
-	
-	WPAD_Rumble(0,0); //sometimes rumble remain active
-	if(networkInit(self.ipAddress))
-	{
-		Download_Cover(id, 1, self.gameCnt);
-		//CoversDownloaded();
-		
-		char filepath[255];
-		sprintf(filepath, USBLOADER_PATH "/covers/%s.png", id);
-		int ret = Fat_ReadFileToBuffer(filepath, (void*)buffer, 160 * 224 * 4);
-		if(ret > 0)
-		{
-			myTex = GRRLIB_LoadTexturePNG(buffer);
-		}
-		else
-		{
-			myTex = GRRLIB_LoadTexture(no_cover_png);
-		}
-	}
-	else // no network
-	{
-		myTex = GRRLIB_LoadTexture(no_cover_png);
-	}
-	
-	do{
-		WPAD_ScanPads();
-		PAD_ScanPads();
-		GetWiimoteData();
-		
-		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)|| (PAD_ButtonsDown(0) & PAD_BUTTON_B)){
-			free(myTex.data);
-			return false;
-		}
-		
-		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
-		{
-			if(choice_a != 0)
-			{
-				if(Button_Select(choice_a, pointer.p_x, pointer.p_y)){
-					free(myTex.data);
-					return true;
-				}
-			}
-			if(choice_b != 0)
-			{
-				if(Button_Select(choice_b, pointer.p_x, pointer.p_y)){
-					free(myTex.data);
-					return false;
-				}
-			}
-		}
-
-		draw_covers();
-		GRRLIB_2D_Init();
-		// Draw the dialog panel
-		GRRLIB_Rectangle(60, 106, 520, 276, 0xffffffdd, true);
-		GRRLIB_Rectangle(62, 108, 516, 272, 0x737373FF, true);
-		// Draw the cover image
-		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
-			GRRLIB_DrawImg(60, 80, myTex, 0, AR_16_9, 1, 0xFFFFFFFF);
-		else
-			GRRLIB_DrawImg(60, 80, myTex, 0, 1, 1, 0xFFFFFFFF);
-		
-
-		// Draw buttons
-		if(choice_a != 0 && choice_b != 0)
-		{
-			Button_TTF_Paint(choice_a); 
-			Button_TTF_Paint(choice_b);
-		}
-		else
-		{
-			if(choice_a != 0)
-				Button_TTF_Paint(choice_a); 
-			if(choice_b != 0)
-				Button_TTF_Paint(choice_b);
-		}
-		
-		int y = 140;
-		int sp = 0;
-		
-		// Draw text
-		CFreeTypeGX_DrawText(ttf16pt, 215, 105, title, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-
-		if(txt != NULL)
-		{
-			char* msg = malloc(strlen(txt)*sizeof(char));
-			sprintf(msg, txt);
-			
-			pch = strtok(msg, "\n");
-			while (pch != NULL)
-			{
-				CFreeTypeGX_DrawText(ttf16pt, 240, y+sp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				pch = strtok(NULL, "\n");
-				sp+=16;
-			}
-			free(msg);
-        }
-		// Check for button-pointer intersections, and rumble
-		if (Button_Hover(choice_a, pointer.p_x, pointer.p_y) ||
-			Button_Hover(choice_b, pointer.p_x, pointer.p_y))
-		{
-			// Should we be rumbling?
-			if (--self.rumbleAmt > 0)
-				WPAD_Rumble(0,1); // Turn on Wiimote rumble
-			else 
-				WPAD_Rumble(0,0); // Kill the rumble
-		}
-		else
-		{ // If no button is being hovered, kill the rumble
-			WPAD_Rumble(0,0);
-			self.rumbleAmt = 5;
-		}
-		// Draw the default pointer hand
-		if(doloop)
-			DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
-		
-		GRRLIB_Render();
-		
-	}while(doloop);
-	self.rumbleAmt = 0;
-	free(myTex.data);
-	return false;
-*/
 }
 
 /****************************************************************************
