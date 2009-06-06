@@ -14,7 +14,7 @@ bool Menu_Install()
 	if(!WindowPrompt (TX.installNewGame, TX.diskInDrive, &okButton,&cancelButton))
 		return false;
 		
-	WindowPrompt (TX.initDVD, TX.pleaseWait,0,0);
+	//WindowPrompt (TX.initDVD, TX.pleaseWait,0,0);
 	
 	/* Disable WBFS mode */
 	Disc_SetWBFS(0, NULL);
@@ -122,7 +122,7 @@ bool Menu_Install()
 				BUFFER_InitBuffer();
 				
 				WiiLight(1);
-				WindowPromptInstall((char*)headerdisc.id, name, TX.successInstall, &okButton,&cancelButton);
+				WindowPromptInstall((char*)headerdisc.id, name, TX.successInstall, &okButton,0);
 				//WindowPrompt (TX.successInstall, name,&okButton,0);
 				WiiLight(0);
 				return true;

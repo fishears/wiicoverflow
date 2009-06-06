@@ -566,9 +566,9 @@ void Settings_Menu_Show()
 					}
 				}
 				
-				// Draw Old School language changer
-				// TODO replace this and make the flag based selection work
-				CFreeTypeGX_DrawText(ttf18pt, 316, 110, languages[settings.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+				// Draw Game Language changer
+                                CFreeTypeGX_DrawText(ttf18pt, 197, 110, "Game Language", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf18pt, 439, 110, languages[settings.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				//CFreeTypeGX_DrawText(ttf16pt, 320, 430, "The Flag selections do not work yet...", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
 				Button_Paint(&langupButton);
 				Button_Paint(&langdownButton);
@@ -725,7 +725,7 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 320, 230, "GNU GPL version 2", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 250, "http://code.google.com/p/wiicoverflow/", (GXColor){0x22, 022, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf18pt, 320, 310, "Additional Development By:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 330, "gitkua, scognito, F1SHE4RS, afour98,", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 330, "gitkua, scognito, fishears, afour98,", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 350, "blackbird399, LoudBob11, alexcarlosantao", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 430, "Flag icons courtesy of www.icondrawer.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Check for button-pointer intersections, and rumble
