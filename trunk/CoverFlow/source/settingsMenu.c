@@ -14,8 +14,8 @@
 #include "settingsMenu.h"
 #include "localization.h"
 
-extern char** languages;
-extern char** vidmodes;
+extern char**		  languages;
+extern char** 		  vidmodes;
 
 extern s_self         self;
 extern s_pointer      pointer;
@@ -52,6 +52,7 @@ void Settings_Menu_Show()
 	bool doloop       = true;
 	int  stateMachine = settingsPanel;  // default to 'settings' panel
 	menuSettingsButton.selected  = true;
+	bool bMyFile 	  = false;
 	
 	//////////////////
 	// Draw the intro - lower the menu
@@ -59,6 +60,7 @@ void Settings_Menu_Show()
 	int i = 1;
 	int fade = 0x00;
 	float moving_y;
+	bMyFile = checkMyLanguageFile(USBLOADER_PATH "/MyLanguage.lang");
 	
 	for(i = 0; i <= 20; i++)
 	{
@@ -618,7 +620,7 @@ void Settings_Menu_Show()
 					}
 					else if (Button_Select(&flagPTButton, pointer.p_x, pointer.p_y))
 					{
-						strcpy(settings.localLanguage, "pt-BR");
+						strcpy(settings.localLanguage, "pt-POR");
 						languageLoad();
 					}
 					else if (Button_Select(&flagTWButton, pointer.p_x, pointer.p_y))
@@ -651,6 +653,14 @@ void Settings_Menu_Show()
 						strcpy(settings.localLanguage, "fi-FIN");
 						languageLoad();
 					}
+					else if (Button_Select(&flagMyLangButton, pointer.p_x, pointer.p_y))
+					{
+						if (bMyFile)
+						{
+							strcpy(settings.localLanguage, "myLANG");
+							languageLoad();
+						}
+					}
 					
 				}
 				
@@ -667,11 +677,11 @@ void Settings_Menu_Show()
 				Button_Flag_Paint(&flagFIButton);
 				Button_Flag_Paint(&flagPTButton);
 				//Button_Flag_Paint(&flagTWButton);
-				Button_Flag_Paint(&flagRUButton);
+				//Button_Flag_Paint(&flagRUButton);
 				//Button_Flag_Paint(&flagCNButton);
 				Button_Flag_Paint(&flagESButton);
 				Button_Flag_Paint(&flagCTButton);
-				
+				if (bMyFile) Button_Flag_Paint(&flagMyLangButton);
 				
 				// Check for button-pointer intersections, and rumble
 				if (
@@ -691,10 +701,11 @@ void Settings_Menu_Show()
 					Button_Hover(&flagFIButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagPTButton, pointer.p_x, pointer.p_y) ||
 					//Button_Hover(&flagTWButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&flagESButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&flagRUButton, pointer.p_x, pointer.p_y) ||
+					//Button_Hover(&flagRUButton, pointer.p_x, pointer.p_y) ||
 					//Button_Hover(&flagCNButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&flagCTButton, pointer.p_x, pointer.p_y)
+					Button_Hover(&flagESButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&flagCTButton, pointer.p_x, pointer.p_y) ||
+					(bMyFile == true) ? Button_Hover(&flagMyLangButton, pointer.p_x, pointer.p_y) : false
 				   )
 				{
 					if (--self.rumbleAmt > 0) // Should we be rumbling?

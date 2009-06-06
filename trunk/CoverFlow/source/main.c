@@ -226,8 +226,7 @@ int main( int argc, char **argv )
 #endif
 
 	//ee();
-	languageLoad();		// load localization 
-
+	languageLoad();		    // load localization 
 	
 #ifdef ONE_AT_A_TIME
         bool LEFT = false, RIGHT = false;

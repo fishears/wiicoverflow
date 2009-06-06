@@ -23,13 +23,12 @@ char** languages;
 char** vidmodes;
 char** selLanguages;
 char langFile[20];
-
 struct LANGUAGE TX;
 
 void languageInit()
 {
 	int i;
-	int countLng = 18;
+	int countLng = 20;
 	
 	languages =  (char**)malloc(11*sizeof(char*));
 	for (i=0;i<11;i++)	{
@@ -64,7 +63,9 @@ void languageInit()
 	sprintf(selLanguages[15], "tr-TUR" );
 	sprintf(selLanguages[16], "zh-CN"  );
 	sprintf(selLanguages[17], "zh-TW"  );
-
+	sprintf(selLanguages[18], "pt-POR" );
+	sprintf(selLanguages[19], "myLANG" );
+	
 	languageDefault();
 }
 
@@ -1021,7 +1022,7 @@ bool languageLoad()
 		return false;
 		}
 	if (strcmp(settings.localLanguage, "pt-BR") == 0) {
-		return false;
+		return parseMemFile( (char*)portuguesebr_lang, portuguesebr_lang_size, &languageSet);
 		}
 	if (strcmp(settings.localLanguage, "ru-RUS") == 0) {
 		return false;
@@ -1035,23 +1036,39 @@ bool languageLoad()
 	if (strcmp(settings.localLanguage, "zh-TW") == 0) {
 		return false;
 		}
+	if (strcmp(settings.localLanguage, "myLANG") == 0) {
+		if (!cfg_parsefile(USBLOADER_PATH "/MyLanguage.lang", &languageSet)) {
+			sprintf( settings.localLanguage, "default");
+			languageDefault();
+			return false;
+			}
+		else 
+		    {
+			return true;
+			}
+		}
 
-    return false;
+    languageDefault();
+	return false;
 }
 
 
-bool checkfile(char * path)
+bool checkMyLanguageFile(char *fname)
 {
-    FILE * f;
-    f = fopen(path,"r");
-    if(f)
+  	FILE *fp;
+
+	fp = fopen(fname, "r");
+        
+	if(fp != NULL)
 	{
-    fclose(f);
-    return true;
-    }
-    fclose(f);
-return false;
-}
+		fclose(fp);
+	    return true;
+	}
+	else
+	{
+		return false;
+	}
+ }
 
 
 char* strcopy(char *dest, char *src, int size)
@@ -1083,94 +1100,3 @@ bool parseMemFile(char *mfname, u32 mfSize, void (*set_func)(char*, char*))
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////
-
-/*
-void languageLoad()
-{
-
- if (languageFind() == true)
-	{
-    char pathname[200];
-	sprintf(pathname, USBLOADER_PATH "/languages/%s", langFile);
-	cfg_parsefile(pathname, &languageSet);
-	}
-}
-
-
-
-bool languageFind()
-{
-	if (strcmp(settings.localLanguage, "default") == 0) {
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "ca-CAT") == 0) {
-		sprintf(langFile, "catalan" );
-		return true;
-		}
-	if (strcmp(settings.localLanguage, "da-DAN") == 0) {
-		sprintf(langFile, "danish" );
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "de-GER") == 0) {
-		sprintf(langFile, "german" );
-		return true;
-		}
-	if (strcmp(settings.localLanguage, "es-SPA") == 0) {
-		sprintf(langFile, "spanish" );
-		return true;
-		}
-	if (strcmp(settings.localLanguage, "fi-FIN") == 0) {
-		sprintf(langFile, "finnish" );
-		return true;
-		}
-	if (strcmp(settings.localLanguage, "fr-FRE") == 0) {
-		sprintf(langFile, "french" );
-		return true;
-		}
-	if (strcmp(settings.localLanguage, "it-ITA") == 0) {
-		sprintf(langFile, "italian" );
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "ja-JPN") == 0) {
-		sprintf(langFile, "japanese" );
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "ko-KOR") == 0) {
-		sprintf(langFile, "korean" );
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "nl-DUT") == 0) {
-		sprintf(langFile, "dutch" );
-		return true;
-		}
-	if (strcmp(settings.localLanguage, "nn-NOR") == 0) {
-		sprintf(langFile, "norwegian" );
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "pt-BR") == 0) {
-		sprintf(langFile, "portuguesebr" );
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "ru-RUS") == 0) {
-		sprintf(langFile, "russian" );
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "tr-TUR") == 0) {
-		sprintf(langFile, "turkish" );
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "zh-CN") == 0) {
-		sprintf(langFile, "schinese" );
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "zh-TW") == 0) {
-		sprintf(langFile, "tchinese" );
-		return false;
-		}
-
-    return false;
-}
-
-*/
