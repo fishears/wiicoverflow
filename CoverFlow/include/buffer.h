@@ -8,6 +8,7 @@
 #define MAX_BUFFERED_COVERS  500
 
 #define MAX_THREADS 5
+#define GRAPHIC_MODES 2
 
 #include "core/disc.h"
 
@@ -55,10 +56,7 @@ inline void BUFFER_InitBuffer();
 
 void CoversDownloaded();
 void SetSelectedCover(int index);
-void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection);
-
-void BUFFER_2D_COVERS();
-void BUFFER_3D_COVERS(); 
+void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection,int graphMode);
 
 inline bool BUFFER_IsCoverReady(int index);
 

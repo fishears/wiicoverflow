@@ -48,7 +48,15 @@ struct discHdr *CoverList;
 int nCovers=0;
 int nCoversInWindow;
 bool bCleanedUp=false;
+int graphicMode=0;
+int textureDataSize;
 // end of private vars
+
+int GraphicModes[GRAPHIC_MODES][2] =
+{
+	{160,224},
+	{512,340}
+};
 
 #define BUFFER_SLOTS 7
 unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
@@ -182,19 +190,6 @@ bool BUFFER_IsCoverMissing(int index)
 	return retval;
 }
 
-void BUFFER_2D_COVERS()
-{
-	pthread_mutex_lock(&covers_3d_mutex);
-	_covers3d = 0;
-	pthread_mutex_unlock(&covers_3d_mutex);
-}
-
-void BUFFER_3D_COVERS()
-{
-	pthread_mutex_lock(&covers_3d_mutex);
-	_covers3d = 1;
-	pthread_mutex_unlock(&covers_3d_mutex);
-}
 
 void BUFFER_KillBuffer()
 {
@@ -235,26 +230,16 @@ void HandleLoadRequest(int index,int threadNo)
 		char * filepath=GetSlotBufferAddress(threadNo);
 		s32  ret;
 		
-		bool covers3d = false;
-		
-		int tW = 0;
-		int tH = 0;
-		
-		pthread_mutex_lock(&covers_3d_mutex);
-		covers3d = _covers3d;
-		pthread_mutex_unlock(&covers_3d_mutex);
+		int tW = GraphicModes[graphicMode][0];
+		int tH = GraphicModes[graphicMode][1];
 		
 		//TODO Will this be a problem?? might need to create different setting for covers used by this thread and protected with mutex
-		if(!covers3d)
+		if(!graphicMode)
 		{
-			tW = COVER_WIDTH;
-			tH = COVER_HEIGHT;
 			snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
 		}
 		else
 		{
-			tW = COVER_WIDTH_3D;
-			tH = COVER_HEIGHT_3D;
 			snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
 		}
 		
@@ -520,8 +505,10 @@ void RequestForCache(int index)
 }
 
 // call at start, on add or on delete - kill the buffer first
-void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection)
+void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection, int graphMode)
 {
+	graphicMode=graphMode;
+	textureDataSize=GraphicModes[graphicMode][0]*GraphicModes[graphicMode][1]*4;
 	CurrentSelection=initialSelection+gameCount/2.0;
 	int i=0;
 	CoverList=gameList;
@@ -532,18 +519,9 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	for (i=0;i<gameCount;i++) ResetQueueItem(i);
 	memset((void *)MEM2_START_ADDRESS,0,MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS));
 	
-	bool covers3d = false;
+	_covers3d=graphMode;
 	
-	covers3d = _covers3d;
-	
-	if(covers3d)
-	{
-		maxSlots=(MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS))/(TEXTURE_DATA_SIZE_3D)-MAX_THREADS;
-	}
-	else
-	{
-		maxSlots=(MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS))/(TEXTURE_DATA_SIZE)-MAX_THREADS;
-	}
+	maxSlots=(MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS))/(textureDataSize)-MAX_THREADS;
 	
 	//decide on buffering method
 	if (gameCount<=maxSlots)
