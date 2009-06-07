@@ -53,17 +53,7 @@ char selLanguages[20][7]=
 void languageInit()
 {
 	/*
-	int i;
-	
-	languages =  (char**)malloc(11*sizeof(char*));
-	for (i=0;i<11;i++)	{
-	 languages[i] =  (char*)malloc(30*sizeof(char));
-	}
-
-	vidmodes =  (char**)malloc(6*sizeof(char*));
-	for (i=0;i<6;i++) {
-	 vidmodes[i] =  (char*)malloc(30*sizeof(char));
-	}
+		// Inits
     */
 	languageDefault();
 }
