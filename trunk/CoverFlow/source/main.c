@@ -354,25 +354,27 @@ int main( int argc, char **argv )
 						// Check the buttons
 						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y) || PAD_ButtonsDown(0) & PAD_BUTTON_A) // load
 						{
-							// User clicked on the load game, so save settings before launching
+						if(!(settings.parentalLock && gameSetting.lock))
+                                                {
+                                                    // User clicked on the load game, so save settings before launching
 							struct discHdr *header = &self.gameList[self.gameSelected];
 							char titleID[7];
 							sprintf(titleID, "%s", header->id);
-                            strcpy(settings.lastplayed,titleID); //save this game as last game played
-                            SETTINGS_Save();
-							if(getGameSettings(titleID, &gameSetting))
-								apply_settings();
-							setGameSettings(titleID, &gameSetting,1);
-                            WiiLight(0); // turn off the slot light
+                                                        strcpy(settings.lastplayed,titleID); //save this game as last game played
+                                                        SETTINGS_Save();
+                                                                                    if(getGameSettings(titleID, &gameSetting))
+                                                                                            apply_settings();
+                                                                                    setGameSettings(titleID, &gameSetting,1);
+                                                        WiiLight(0); // turn off the slot light
 							
-							if(!(settings.parentalLock && gameSetting.lock))
-							{
-								if(!LaunchGame())
-								{
-									SETTINGS_Load(); //failed to launch so get the globals back
-									return 0;
-								}
-							}
+							
+							
+                                                        if(!LaunchGame())
+                                                        {
+                                                                SETTINGS_Load(); //failed to launch so get the globals back
+                                                                return 0;
+                                                        }
+                                                }
 						}
 						else if((!settings.parentalLock) && Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
 						{
@@ -532,7 +534,7 @@ int main( int argc, char **argv )
 				//
 				// SCOGNITO'S TRASH TEST CORNER
 				//
-				//ù;
+				//ï¿½;
 				/*
 				char imgPath[256];
 				snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, "zucc");
@@ -672,33 +674,36 @@ int main( int argc, char **argv )
 		if(self.selected || self.animate_flip != 0)
 		{
 		
-			if (settings.quickstart)
+			if (settings.quickstart && !(settings.parentalLock && gameSetting.lock))
 			{
-				// Quickstart used to load game, so save settings before launching
-				struct discHdr *header = &self.gameList[self.gameSelected];
-				char titleID[7];
-				sprintf(titleID, "%s", header->id);
-				strcpy(settings.lastplayed,titleID);//save this game as last game played
-				SETTINGS_Save();
-				if(getGameSettings(titleID, &gameSetting))
-					apply_settings();
-				setGameSettings(titleID, &gameSetting,1);
-				WiiLight(0); // turn off the slot light
-				
-				if(!(settings.parentalLock && gameSetting.lock))
-				{
+				    // Quickstart used to load game, so save settings before launching
+                                    struct discHdr *header = &self.gameList[self.gameSelected];
+                                    char titleID[7];
+                                    sprintf(titleID, "%s", header->id);
+                                    strcpy(settings.lastplayed,titleID);//save this game as last game played
+                                    SETTINGS_Save();
+                                    if(getGameSettings(titleID, &gameSetting))
+                                            apply_settings();
+                                    setGameSettings(titleID, &gameSetting,1);
+                                    WiiLight(0); // turn off the slot light
+
 					if(!LaunchGame())
 					{
 						SETTINGS_Load(); //failed to launch so get the globals back
 						return 0;
 					}
-				}
+                                
 			}
-			else
+			else if(!(settings.parentalLock && gameSetting.lock))
 			{
-				// Draw the Load Game Dialog panel
+				 // Draw the Load Game Dialog panel
 				DrawLoadGameDialog(false, Button_Hover(&loadButton, pointer.p_x, pointer.p_y));
 			}
+                        else
+                        {
+                            self.animate_flip = 0;
+                            self.selected = false;
+                        }
 		}
 		else
 		{
