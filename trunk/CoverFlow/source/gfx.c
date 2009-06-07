@@ -1009,6 +1009,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 	}
 	
 	self.rumbleAmt = 0;
+	WPAD_Rumble(0,0);
 	return returnVal;
 }
 
@@ -1302,6 +1303,7 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 		GRRLIB_Render();
 	}
 
+	WPAD_Rumble(0,0);
 	self.rumbleAmt = 0;
         free(myTex.data);
 	return returnVal;
