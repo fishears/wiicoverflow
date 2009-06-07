@@ -110,14 +110,15 @@ bool Menu_Install()
 			return false;
 		}
 		else {
+			BUFFER_KillBuffer();
 			ret = ProgressWindow(self.hdd, gametxt, name);
 			if (ret != 0) {
+				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+				BUFFER_InitBuffer();
 				WindowPrompt (TX.errorInstall,0,&cancelButton,0);
 				return false;
 			} else {
-				Sleep(100);
 				GetEntries();
-				BUFFER_KillBuffer();
 				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
 				BUFFER_InitBuffer();
 				
