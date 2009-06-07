@@ -50,7 +50,7 @@ int nCoversInWindow;
 bool bCleanedUp=false;
 // end of private vars
 
-#define BUFFER_SLOTS 5
+#define BUFFER_SLOTS 7
 unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	{
 	128,//0 string buffer for thread 0
@@ -58,6 +58,8 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	128,//2 string buffer for thread 2
 	128,//3 string buffer for thread 3
 	128,//4 string buffer for thread 4
+	512*340*4, // 5 3d no cover
+	240*480*4, //6 ambilight
 	0};
 
 int GetOffsetToSlot(int slot)
