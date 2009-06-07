@@ -380,7 +380,7 @@ int main( int argc, char **argv )
 						{
 							// User clicked delete button
 							Menu_Delete();
-                            self.selected = false;
+                            //self.selected = false;
 						}
 						else if(Button_Select(&backButton, pointer.p_x, pointer.p_y)) // back
 						{
