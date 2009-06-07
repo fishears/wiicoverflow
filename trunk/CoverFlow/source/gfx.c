@@ -262,22 +262,22 @@ void Init_Buttons()
 	// Language Settings Panel
 	langupButton			= Button_Init(button_plus_png, button_plus_over_png,321,90);
     langdownButton			= Button_Init(button_minus_png, button_minus_over_png, 293,90);
-	flagUSButton			= Button_Flag_Init(flag_us_png, 166, 150, "United States"); // TODO: Need to create TX for all of these
-	flagITButton			= Button_Flag_Init(flag_it_png, 296, 150, "Italy");
-	flagDEButton			= Button_Flag_Init(flag_de_png, 426, 150, "Germany");
-	flagUKButton			= Button_Flag_Init(flag_uk_png, 166, 220, "United Kingdom");
-	flagBRButton			= Button_Flag_Init(flag_br_png, 296, 220, "Brazil");
-	flagFRButton			= Button_Flag_Init(flag_fr_png, 426, 220, "France");
-	flagDAButton			= Button_Flag_Init(flag_da_png, 166, 290, "Netherlands");
-	//flagJPButton			= Button_Flag_Init(flag_jp_png, 296, 290, "Japan"); 
-	flagFIButton			= Button_Flag_Init(flag_fi_png, 296, 290, "Finnland"); 
-	//flagPTButton			= Button_Flag_Init(flag_pt_png, 426, 290, "Portugal");
-	flagDKButton			= Button_Flag_Init(flag_dk_png, 426, 290, "Denmark");
-	//flagTWButton			= Button_Flag_Init(flag_tw_png, 166, 360, "Taiwan");
-	//flagRUButton			= Button_Flag_Init(flag_ru_png, 296, 360, "Russia");
-	//flagCNButton			= Button_Flag_Init(flag_cn_png, 426, 360, "China");
-	flagESButton			= Button_Flag_Init(flag_es_png, 166, 360, "Spain");		
-	flagCTButton			= Button_Flag_Init(flag_ct_png, 296, 360, "Catalan");
+	flagUSButton			= Button_Flag_Init(flag_us_png, 166, 150, "en-US"); //"United States"); 
+	flagITButton			= Button_Flag_Init(flag_it_png, 296, 150, "it-ITA"); //"Italy");
+	flagDEButton			= Button_Flag_Init(flag_de_png, 426, 150, "de-GER"); //"Germany");
+	flagUKButton			= Button_Flag_Init(flag_uk_png, 166, 220, "en-GB"); //"United Kingdom");
+	flagBRButton			= Button_Flag_Init(flag_br_png, 296, 220, "pt-BR"); //"Brazil");
+	flagFRButton			= Button_Flag_Init(flag_fr_png, 426, 220, "fr-FRE"); //"France");
+	flagDAButton			= Button_Flag_Init(flag_da_png, 166, 290, "nl-DUT"); //"Netherlands");
+	//flagJPButton			= Button_Flag_Init(flag_jp_png, 296, 290, "ja-JPN"); //"Japan"); 
+	flagFIButton			= Button_Flag_Init(flag_fi_png, 296, 290, "fi-FIN"); //"Finnland"); 
+	//flagPTButton			= Button_Flag_Init(flag_pt_png, 426, 290, "pt-POR"); //"Portugal");
+	flagDKButton			= Button_Flag_Init(flag_dk_png, 426, 290, "da-DAN"); //"Denmark");
+	//flagTWButton			= Button_Flag_Init(flag_tw_png, 166, 360, "zh-TW"); //"Taiwan");
+	//flagRUButton			= Button_Flag_Init(flag_ru_png, 296, 360, "ru-RUS"); //"Russia");
+	//flagCNButton			= Button_Flag_Init(flag_cn_png, 426, 360, "zh-CN"); //"China");
+	flagESButton			= Button_Flag_Init(flag_es_png, 166, 360, "es-SPA"); //"Spain");		
+	flagCTButton			= Button_Flag_Init(flag_ct_png, 296, 360, "ca-CAT"); //"Catalan");
 	flagMyLangButton 		= Button_Flag_Init(flag_MyLang_png, 426, 360, "MyLanguage");
 			
 	// Game Settings Screen Buttons
