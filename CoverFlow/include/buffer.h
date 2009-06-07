@@ -48,6 +48,9 @@ GRRLIB_texImg _texture_data[MAX_BUFFERED_COVERS];
 int _cover_count;
 inline void Sleep(unsigned long milliseconds);
 
+
+bool BUFFER_IsCoverMissing(int index);
+
 inline void BUFFER_InitBuffer();
 
 void CoversDownloaded();

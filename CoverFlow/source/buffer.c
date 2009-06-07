@@ -166,6 +166,19 @@ bool BUFFER_IsCoverQueued(int index)
 	return retval;
 }
 
+bool BUFFER_IsCoverMissing(int index)
+{
+	bool retval = false;
+	
+	if(index < MAX_BUFFERED_COVERS)
+	{
+		pthread_mutex_lock(&queue_mutex);
+		retval = _cq.coverMissing[index];
+		pthread_mutex_unlock(&queue_mutex);
+	}
+	
+	return retval;
+}
 
 void BUFFER_2D_COVERS()
 {

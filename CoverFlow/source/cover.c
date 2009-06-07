@@ -155,8 +155,11 @@ void Download_Cover(char* id, int v, int max)
 		sprintf(self.debugMsg, TX.checkPresence, imgPath);
 		Paint_Progress_Generic(v, max,self.debugMsg);
 		
-		FILE *fp;
-		fp = fopen(imgPath, "rb");
+		FILE *fp=NULL;
+		if (!BUFFER_IsCoverMissing(v)) // don't try and read the file if the cover is bad
+		{
+			fp = fopen(imgPath, "rb");
+		}
 		if (fp)
 		{
 			fclose (fp);
