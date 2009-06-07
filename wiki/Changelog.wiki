@@ -1,5 +1,5 @@
 #labels Featured
-== RC6 (June XX 2009) ==
+== RC6 (June 07 2009) ==
 
 -NEW-
   * Huge UI Overhaul - new buttons, graphics, layout, look and feel
