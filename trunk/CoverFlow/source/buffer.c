@@ -507,12 +507,12 @@ void RequestForCache(int index)
 // call at start, on add or on delete - kill the buffer first
 void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection)
 {
-	initialSelection+=gameCount/2.0;
-	CurrentSelection=initialSelection;
+	CurrentSelection=initialSelection+gameCount/2.0;
 	int i=0;
 	CoverList=gameList;
 	nCovers=gameCount;
 	nCoversInWindow=numberOfCoversToBeShown;
+	
 	//start from a clear point
 	for (i=0;i<gameCount;i++) ResetQueueItem(i);
 	memset((void *)MEM2_START_ADDRESS,0,MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS));
@@ -588,7 +588,6 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 		}
 	}
 	iSetSelectedCover(initialSelection,true);
-	sleep(2);
 }
 
 void CoversDownloaded()
