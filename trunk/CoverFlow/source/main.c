@@ -170,17 +170,9 @@ int main( int argc, char **argv )
 #endif
 
 	
-	if(settings.covers3d)
-	{
-		BUFFER_3D_COVERS();
-	}
-	else
-	{
-		BUFFER_2D_COVERS();
-	}
 	
 	BUFFER_InitBuffer();
-	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
 //	UpdateBufferedImages();
 	
 	float wait = 100; //ms

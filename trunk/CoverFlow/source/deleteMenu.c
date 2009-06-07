@@ -1,5 +1,7 @@
 #include "deleteMenu.h"
+#include "settings.h"
 
+extern s_settings settings;
 extern s_self self;
 extern s_title* titleList;
 extern int COVER_COUNT;
@@ -42,14 +44,14 @@ bool Menu_Delete(){
 		BUFFER_KillBuffer();
 		if(0 > WBFS_RemoveGame(header->id))
 		{
-			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
 			BUFFER_InitBuffer();
 			WindowPrompt(TX.errorDelete, TX.cantDelete, &okButton, 0);
 		}
 		else
 		{
 			GetEntries();
-			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
 			BUFFER_InitBuffer();
 			WindowPrompt(TX.successDelete, TX.pressOkContinue, &okButton, 0);
 			return true;

@@ -14,17 +14,9 @@ extern int COVER_COUNT;
 
 void ResetBuffer()
 {
-	BUFFER_KillBuffer();
-	Sleep(300);
-	BUFFER_InitBuffer(BUFFER_THREAD_COUNT);
-	
-	if(settings.covers3d)
-		BUFFER_3D_COVERS();
-	else
-		BUFFER_2D_COVERS();
 	
 	BUFFER_KillBuffer();
-	InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+	InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
 	BUFFER_InitBuffer();
 	UpdateBufferedImages();
 }

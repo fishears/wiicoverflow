@@ -1,5 +1,7 @@
 #include "installMenu.h"
+#include "settings.h"
 
+extern s_settings settings;
 extern s_self self;
 extern s_title* titleList;
 
@@ -113,13 +115,13 @@ bool Menu_Install()
 			BUFFER_KillBuffer();
 			ret = ProgressWindow(self.hdd, gametxt, name);
 			if (ret != 0) {
-				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
 				BUFFER_InitBuffer();
 				WindowPrompt (TX.errorInstall,0,&cancelButton,0);
 				return false;
 			} else {
 				GetEntries();
-				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
+				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
 				BUFFER_InitBuffer();
 				
 				WiiLight(1);
