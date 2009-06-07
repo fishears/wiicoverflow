@@ -50,12 +50,12 @@ void LoadTextures()
 	pointer_shadow_texture		= GRRLIB_LoadTexturePNG(pointer_shadow_png);
 	turn_point_texture			= GRRLIB_LoadTexturePNG(pointer_turning_png); // can't find free
 	cover_texture				= GRRLIB_LoadTexturePNG(no_cover_png);
-	cover_texture_3d			= GRRLIB_LoadTexturePNG(full_cover_png);
+	cover_texture_3d			= BufferImageToSlot(full_cover_png,5);
 	no_disc_texture				= GRRLIB_LoadTexturePNG(no_disc_png);
 	slidebar_texture			= GRRLIB_LoadTexturePNG(slidebar_png);  // can't find free
 	slidebar_white_texture		= GRRLIB_CreateEmptyTexture(slidebar_texture.w, slidebar_texture.h);
 	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white
-	ambientlight_texture		= GRRLIB_LoadTexturePNG(ambientlight_png);  // can't find free
+	ambientlight_texture		= BufferImageToSlot(ambientlight_png,6);  // can't find free
 	ambientlight_white_texture	= GRRLIB_CreateEmptyTexture(ambientlight_texture.w, ambientlight_texture.h);
 	GRRLIB_BMFX_Invert(ambientlight_texture, ambientlight_white_texture); //invert the fade from black to white
 	battery_bar					= GRRLIB_LoadTexturePNG(battery_bar_png);  // can't find free
@@ -1426,11 +1426,11 @@ void freeResources(){
 	free(pointer_shadow_texture.data);
 	free(turn_point_texture.data);
 	free(cover_texture.data);
-	free(cover_texture_3d.data);
+	//free(cover_texture_3d.data);
 	free(no_disc_texture.data);
 	free(slidebar_texture.data);
 	free(slidebar_white_texture.data);
-	free(ambientlight_texture.data);
+	//free(ambientlight_texture.data);
 	free(ambientlight_white_texture.data);
 	free(battery_bar.data);
     free(battery_bar_red.data);
