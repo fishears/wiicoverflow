@@ -148,6 +148,7 @@ hideScrollbar = Gem Scrollbar
 covers3D = 3D Forsider
 gameText = Spil Titel
 gameSettings = Spil Indstillinger
+gameLanguage = Spil Sprog
 
 ###########
 # Buttons #

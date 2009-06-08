@@ -142,7 +142,17 @@ errNetTitles = Error de xarxa a l'inicialitzar\nEl fitxer Titles.txt no es pot d
 Success = Correcte!
 welcomeMsg = Benvingut a CoverFloader
 batteryUnit = P%d
+basic = Bàsic
+advanced = Avançat
+hideScrollbar = Amagar barra
+covers3D = Portades 3D
+gameText = Títol del joc
+gameSettings = Opcions del joc
+gameLanguage = Llengua del joc
 
+###########
+# Buttons #
+###########
 addB = afegir
 deleteB = esborrar
 cancelB = cancel·lar
@@ -160,3 +170,6 @@ blackB = negre
 homeMenuTopB = tancar
 wiimenuB = Menú de la Wii
 loaderB = Carregador
+languagesB = Llengües
+coversB = Portades
+titlesB = Títols

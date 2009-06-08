@@ -142,7 +142,16 @@ errNetTitles = Fout bij initialiseren van netwerk\nTitles.txt kan niet worden ge
 Success = Succes!
 welcomeMsg = Welkom bij CoverFloader
 batteryUnit = P%d
+basic = Basic
+advanced = Geavanceerd
+hideScrollbar = Verberg Scrollbar
+covers3D = 3D Covers
+gameText =  Spel Titel
+gameSettings = Spel Instellingen
 
+###########
+# Buttons #
+###########
 addB = toevoegen
 deleteB = verwijder
 cancelB = annuleer
@@ -160,3 +169,6 @@ blackB = zwart
 homeMenuTopB = afsluiten
 wiimenuB = Wii menu
 loaderB = Lader
+languagesB = Talen
+coversB = Covers
+titlesB = Titles
