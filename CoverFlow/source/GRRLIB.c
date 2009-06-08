@@ -152,16 +152,31 @@ void GRRLIB_InitTileSet(struct GRRLIB_texImg *tex, unsigned int tilew, unsigned 
 GRRLIB_texImg GRRLIB_LoadTexturePNG(const unsigned char my_png[]) {
     PNGUPROP imgProp;
     IMGCTX ctx;
+	void * textureAddress;
     GRRLIB_texImg my_texture;
 
     ctx = PNGU_SelectImageFromBuffer(my_png);
     PNGU_GetImageProperties (ctx, &imgProp);
-    my_texture.data = memalign (32, imgProp.imgWidth * imgProp.imgHeight * 4);
-    PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture.data, 255);
-    PNGU_ReleaseImageContext (ctx);
-    my_texture.w = imgProp.imgWidth;
-    my_texture.h = imgProp.imgHeight;
-    GRRLIB_FlushTex(my_texture);
+	textureAddress= memalign (32, imgProp.imgWidth * imgProp.imgHeight * 4);
+	if (textureAddress>0)
+	{
+		my_texture.data = textureAddress;
+		PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture.data, 255);
+		PNGU_ReleaseImageContext (ctx);
+		my_texture.w = imgProp.imgWidth;
+		my_texture.h = imgProp.imgHeight;
+		GRRLIB_FlushTex(my_texture);
+	}
+	else // out of memory
+	{
+		// it would be nice to return a no memory image, but there is no memory
+		// and there'd be issues when free was called (i.e. it'd crash)
+		// at least no someone will notice a missing image (if it doesn't crash -
+		// won't find out till memory runs out).  Still better than nothing
+		my_texture.data=NULL; 
+		my_texture.w=0;
+		my_texture.h=0;
+	}
     return my_texture;
 }
 
@@ -447,6 +462,8 @@ inline void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees,
     GXTexObj texObj;
     u16 width, height;
     Mtx m, m1, m2, mv;
+	
+	if (tex.data==0) return;
 
     GX_InitTexObj(&texObj, tex.data, tex.w, tex.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     //GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
@@ -496,6 +513,8 @@ inline void GRRLIB_DrawImgReflection(f32 xpos, f32 ypos, GRRLIB_texImg tex, floa
     u16 width, height;
     Mtx m, m1, m2, mv;
 
+	if (tex.data==0) return;
+
     GX_InitTexObj(&texObj, tex.data, tex.w, tex.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
     GX_LoadTexObj(&texObj, GX_TEXMAP0);
@@ -542,6 +561,8 @@ inline void GRRLIB_DrawFlatCoverImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float
     GXTexObj texObj;
     u16 width, height;
     Mtx m, m1, m2, mv;
+
+	if (tex.data==0) return;
 
 	float right = .515;
 	
@@ -600,6 +621,9 @@ inline void GRRLIB_DrawFlatCoverImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float
  */
 inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float scale, u32 color, float falloff, int theme)
 {
+	
+	if (tex.data==0) return;
+
 	GRRLIB_3D_Init();
 
     GXTexObj texObj;
@@ -927,6 +951,8 @@ inline void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees
     GXTexObj texObj;
     f32 width, height;
     Mtx m, m1, m2, mv;
+
+	if (tex.data==0) return;
 
     // Frame Correction by spiffen
     f32 FRAME_CORR = 0.001f;
