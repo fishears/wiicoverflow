@@ -118,10 +118,7 @@ int main( int argc, char **argv )
 	self.progress += .1;
 	sprintf(self.debugMsg, "Init WPAD" );
 	Paint_Progress(self.progress,self.debugMsg);
-		
-	/* Initialize Wiimote subsystem */
-	Wpad_Init();
-	
+
 	sprintf(self.debugMsg, "Init USB" );
 	Paint_Progress(self.progress,self.debugMsg);
 
@@ -147,6 +144,8 @@ int main( int argc, char **argv )
 	SOUND_Init();
 	// the pad needs to be init after a usb retry but before anything else
 	PAD_Init();
+        /* Initialize Wiimote subsystem */
+	Wpad_Init();
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 
 //moved here as it sets the self.usingTitlesTxt used in initUSBFS sorting
