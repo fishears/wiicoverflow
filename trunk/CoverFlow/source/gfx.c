@@ -265,7 +265,7 @@ void Init_Buttons()
 	flagUSButton			= Button_Flag_Init(flag_us_png, 166, 150, "en-US"); //"United States"); 
 	flagITButton			= Button_Flag_Init(flag_it_png, 296, 150, "it-ITA"); //"Italy");
 	flagDEButton			= Button_Flag_Init(flag_de_png, 426, 150, "de-GER"); //"Germany");
-	flagUKButton			= Button_Flag_Init(flag_uk_png, 166, 220, "en-GB"); //"United Kingdom");
+	flagUKButton			= Button_Flag_Init(flag_uk_png, 166, 220, "vacant"); //"United Kingdom");
 	flagBRButton			= Button_Flag_Init(flag_br_png, 296, 220, "pt-BR"); //"Brazil");
 	flagFRButton			= Button_Flag_Init(flag_fr_png, 426, 220, "fr-FRE"); //"France");
 	flagDAButton			= Button_Flag_Init(flag_da_png, 166, 290, "nl-DUT"); //"Netherlands");
