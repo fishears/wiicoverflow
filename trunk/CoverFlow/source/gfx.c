@@ -43,12 +43,12 @@ void LoadTextures()
 	pointer_shadow_texture		= GRRLIB_LoadTexturePNG(pointer_shadow_png);
 	turn_point_texture			= GRRLIB_LoadTexturePNG(pointer_turning_png); // can't find free
 	cover_texture				= GRRLIB_LoadTexturePNG(no_cover_png);
-	cover_texture_3d			= BufferImageToSlot(full_cover_png,5);
+	cover_texture_3d			= BufferImageToSlot(full_cover_png,5); // read notes for MEM2_EXTENT before removing
 	no_disc_texture				= GRRLIB_LoadTexturePNG(no_disc_png);
 	slidebar_texture			= GRRLIB_LoadTexturePNG(slidebar_png);  // can't find free
 	slidebar_white_texture		= GRRLIB_CreateEmptyTexture(slidebar_texture.w, slidebar_texture.h);
 	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white
-	ambientlight_texture		= BufferImageToSlot(ambientlight_png,6);  // can't find free
+	ambientlight_texture		= BufferImageToSlot(ambientlight_png,6);   // read notes for MEM2_EXTENT before removing
 	ambientlight_white_texture	= GRRLIB_CreateEmptyTexture(ambientlight_texture.w, ambientlight_texture.h);
 	GRRLIB_BMFX_Invert(ambientlight_texture, ambientlight_white_texture); //invert the fade from black to white
 	battery_bar					= GRRLIB_LoadTexturePNG(battery_bar_png);  // can't find free

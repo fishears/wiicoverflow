@@ -215,8 +215,9 @@ GRRLIB_texImg GRRLIB_LoadTexturePNGToMemorySized(const unsigned char my_png[], v
 
     ctx = PNGU_SelectImageFromBuffer(my_png);
     PNGU_GetImageProperties (ctx, &imgProp);
-    my_texture.data = textureAddress;
+    my_texture.data = 0;
 	if (Size != imgProp.imgWidth * imgProp.imgHeight * 4) return my_texture;
+    my_texture.data = textureAddress;
     PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture.data, 255);
     PNGU_ReleaseImageContext (ctx);
     my_texture.w = imgProp.imgWidth;
