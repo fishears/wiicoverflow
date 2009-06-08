@@ -66,7 +66,7 @@ sound = Sound:
 installNewGame = Neues Spiel installieren?
 diskInDrive = Disk einlegen und OK dr√ºcken.
 initDVD = Initialisiere DVD-Laufwerk.
-pleaseWait = Bitte wartenÖ
+pleaseWait = Bitte warten
 errorReadDisc = Disk-Lesefehler
 errorOpenDisc = Disk kann nicht ge√∂ffnet werden
 notWiiDisc = keine Wii-Disk
@@ -96,16 +96,16 @@ pressAB = D√ºcke A f√ºr Wiederholen, B f√ºr Verlassen.
 connectUSBDrv = Versuche Verbindung mit USB-Laufwerk.
 errorNoWBFS = USB-Fehler - Keine WBFS-Partition.
 hold12B = Dr√ºcke 1 und 2 f√ºr Formatieren, B f√ºr Verlassen.
-findPartitions = Partitionen gefundenÖ
+findPartitions = Partitionen gefunden
 partition = Partition %d: %.2fGB
 partitionNoFormat = Partition %d: (kann nicht formatiert werden.)
 askFormat = Soll formatiert werden:
 errorFormat = Fehler bei der Formatierung!
 successFormat = Erfolg:
 formatComplete = Formatierung abgeschlossen.
-initBuffer = Initialisiere Threaded Image BufferÖ
-setBackground = Konfiguriere Hintergrund-ThemaÖ
-freeTextures = Ungenutzte Texturen freigebenÖ
+initBuffer = Initialisiere Threaded Image Buffer
+setBackground = Konfiguriere Hintergrund-Thema
+freeTextures = Ungenutzte Texturen freigeben
 parentalCtrl = Kindersicherung
 enableParentCtrl = Kindersicherung einschalten
 errorDIP = DIP-Modul konnte nicht initialisiert werden! (ret = %d)\n
@@ -148,6 +148,7 @@ hideScrollbar = Scrollbar unsichtbar
 covers3D = 3D Cover
 gameText = Titel anzeigen
 gameSettings = Spiel-Einstellungen
+gameLanguage = Spiel-Sprache
 
 ###########
 # Buttons #

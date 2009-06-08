@@ -31,7 +31,7 @@ char selLanguages[20][7]=
 	{"ca-CAT"},		
 	{"da-DAN"},
 	{"de-GER"},		
-	{"en-GB"},
+	{"vacant"},
 	{"es-SPA"},		
 	{"fi-FIN"},
 	{"fr-FRE"},		
@@ -231,6 +231,7 @@ void languageDefault()
 	snprintf(TX.covers3D, sizeof(TX.covers3D), "3D Covers" ); 
 	snprintf(TX.gameText, sizeof(TX.gameText), "Game Title" ); 
 	snprintf(TX.gameSettings, sizeof(TX.gameSettings), "Game Settings" ); 	
+	snprintf(TX.gameLanguage, sizeof(TX.gameLanguage), "Game Language" ); 
 	
 // Buttons	
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
@@ -878,6 +879,10 @@ void languageSet(char *name, char *val)
 		strcopy(TX.gameSettings, val, sizeof(TX.gameSettings));
 		return;
 	}
+	if (strcmp(name, "gameLanguage") == 0) {
+		strcopy(TX.gameLanguage, val, sizeof(TX.gameLanguage));
+		return;
+	}
 
 
 //////////////// Buttons //////////////
@@ -980,8 +985,9 @@ bool languageLoad()
 	if (strcmp(settings.localLanguage, "da-DAN") == 0) {
 		return parseMemFile( (char*)danish_lang, danish_lang_size, &languageSet);
 		}
-	if (strcmp(settings.localLanguage, "en-GB") == 0) {
-		return parseMemFile( (char*)english_lang, english_lang_size, &languageSet);
+	if (strcmp(settings.localLanguage, "vacant") == 0) {
+		languageDefault();
+		return true;
 		}
 	if (strcmp(settings.localLanguage, "de-GER") == 0) {
 		return parseMemFile( (char*)german_lang, german_lang_size, &languageSet);

@@ -60,9 +60,9 @@ cflowSettings = Paramètres Coverflow
 graphics = Graphiques:
 missingCovers = Jaquettes Manquantes ?:
 theme = Thème:
-oneClickLaunch = 1-Click Démarrer:
-rumble = Vibration:
-sound = Son:
+oneClickLaunch = 1-Click Démarrer
+rumble = Vibration
+sound = Son
 installNewGame = Installer un nouveau jeu ?
 diskInDrive = Placez le disque dans le lecteur et appuyez sur ok.
 initDVD = Initialisation du lecteur DVD
@@ -142,8 +142,16 @@ errNetTitles = Erreur d'initialisation du réseau : Titles.txt ne peut pas être
 Success = Succès
 welcomeMsg = Bienvenue à CoverFloader
 batteryUnit = P%d
+basic = Simple
+advanced = Avancé
+hideScrollbar = Masquer la barre de défilement
+covers3D = Jaquettes 3D 
+gameText = Titre du jeu
+gameSettings = Paramètres Jeu
 
-
+###########
+# Buttons #
+###########
 addB = Ajouter
 deleteB = Supprimer
 cancelB = Annuler
@@ -157,7 +165,10 @@ backB = Retour
 toggleOnB = On
 toggleOffB = Off
 whiteB = Blanc
-blackB = Noir
-homeMenuTopB = Fermer
+blackB =  Noir
+homeMenuTopB =  Fermer
 wiimenuB = Menu Wii
 loaderB = Chaîne Homebrew
+languagesB = Langues
+coversB = Jaquettes
+titlesB = Titres

@@ -142,7 +142,17 @@ errNetTitles = Error al iniciar la Red\nEl fichero Titles.txt no se puede descar
 Success = ¡Finalizado!
 welcomeMsg = Bienvenido a CoverFloader
 batteryUnit = P%d
+basic = Básico
+advanced = Avanzado
+hideScrollbar = Ocultar barra
+covers3D = Portadas 3D
+gameText = Título del juego
+gameSettings = Opciones del juego
+gameLanguage = Idioma del juego
 
+###########
+# Buttons #
+###########
 addB = añadir
 deleteB = eliminar
 cancelB = cancelar
@@ -160,3 +170,6 @@ blackB = negro
 homeMenuTopB = cerrar
 wiimenuB = Menú de la Wii
 loaderB = Cargador
+languagesB = Idiomas
+coversB = Portadas
+titlesB = Títulos

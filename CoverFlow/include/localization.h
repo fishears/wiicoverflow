@@ -21,8 +21,8 @@ extern u32 german_lang_size;
 extern u8  spanish_lang[];
 extern u32 spanish_lang_size;
 
-extern u8  english_lang[];
-extern u32 english_lang_size;
+//extern u8  english_lang[];
+//extern u32 english_lang_size;
 
 extern u8  italian_lang[];
 extern u32 italian_lang_size;
@@ -208,7 +208,7 @@ struct LANGUAGE
 	char covers3D[20];				//148
 	char gameText[25];				//149
 	char gameSettings[30];			//150
-	
+	char gameLanguage[30];			//151
 	
 // Buttons	
 	char addB[15];					//B01
