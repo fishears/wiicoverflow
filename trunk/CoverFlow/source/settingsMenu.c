@@ -571,7 +571,7 @@ void Settings_Menu_Show()
 				}
 				
 				// Draw Game Language changer
-		        CFreeTypeGX_DrawText(ttf18pt, 197, 110, TX.gameLanguage, (GXColor){0x44, 0x44, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		        CFreeTypeGX_DrawText(ttf18pt, 197, 110, TX.gameLanguage, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf18pt, 439, 110, languages[settings.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				//CFreeTypeGX_DrawText(ttf16pt, 320, 430, "The Flag selections do not work yet...", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
 				Button_Paint(&langupButton);

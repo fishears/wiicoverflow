@@ -148,6 +148,7 @@ hideScrollbar = Masquer la barre de défilement
 covers3D = Jaquettes 3D 
 gameText = Titre du jeu
 gameSettings = Paramètres Jeu
+gameLanguage = Game Language
 
 ###########
 # Buttons #
