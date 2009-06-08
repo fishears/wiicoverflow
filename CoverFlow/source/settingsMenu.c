@@ -23,7 +23,7 @@ extern u8             shutdown;
 extern u8             reset;
 
 
-char languages[11][30] = {{""},{""},{""},{""},{""},{""},{""},{""},{""},{""},	{""}};
+char languages[11][30] = {{""},{""},{""},{""},{""},{""},{""},{""},{""},{""},{""}};
 
 char vidmodes[6][30] = {{""},{""},{""},{""},{""},{""}};
 
@@ -597,7 +597,7 @@ void Settings_Menu_Show()
 					}
 					else if (Button_Select(&flagUKButton, pointer.p_x, pointer.p_y))
 					{
-						strcpy(settings.localLanguage, "en-GB");
+						strcpy(settings.localLanguage, "default");
 						languageLoad();
 					}
 					else if (Button_Select(&flagBRButton, pointer.p_x, pointer.p_y))
