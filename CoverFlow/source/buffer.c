@@ -9,20 +9,14 @@
 #include <string.h>
 #include <malloc.h>
 
-#define COVER_WIDTH 160
-#define COVER_HEIGHT 224
-
-#define COVER_WIDTH_3D 512
-#define COVER_HEIGHT_3D 340
-
-
-#define TEXTURE_DATA_SIZE COVER_WIDTH*COVER_HEIGHT*4
-#define TEXTURE_DATA_SIZE_3D COVER_WIDTH_3D*COVER_HEIGHT_3D*4
-
 #define DENSITY_METHOD 1
 #define ALL_CACHED 2
 
+// this is the start adrress of MEM2 see http://wiibrew.org/wiki/Memory_Map
 #define MEM2_START_ADDRESS 0x90000000
+//this is lower than the extent address of MEM2 which should be 54394880 (0x33E0000) - but there is a crash before that point
+//  IOS has the range 0x933E0000-0x93400000  for a heap but who knows what IOS 249 uses, if there are issues at the end of memory
+// then lower this number
 #define MEM2_EXTENT 54217216 //don't see why this cant be used
 
 // private cars
@@ -38,26 +32,26 @@ typedef struct COVERQUEUE
 } COVERQUEUE;
 
 COVERQUEUE _cq;
-int BufferMethod=DENSITY_METHOD;
-float Density;
-int MainCacheSize;
-int maxSlots;
-int FloatingCacheSize=0;
+int BufferMethod=DENSITY_METHOD; // what buffering method is used either density or all buffered
+float Density; // if density method is used then this is the fill rate for the permanent cache
+int MainCacheSize; // the number of slots available to permanently cache covers
+int maxSlots; // the total number of slots available for cache
+int FloatingCacheSize=0; // the number of floating slots available (for non permanent covers)
 int CurrentSelection;
 struct discHdr *CoverList;
 int nCovers=0;
-int nCoversInWindow;
-bool bCleanedUp=false;
-int graphicMode=0;
-int textureDataSize;
+int nCoversInWindow; // number of covers shown in the GUI
+int graphicMode=0; // the graphic mode for the covers - this relates to the cover sizes
+int textureDataSize; // the size needed for a texture in this graphic mode
 // end of private vars
 
 int GraphicModes[GRAPHIC_MODES][2] =
 {
-	{160,224},
-	{512,340}
+	{160,224},//2d
+	{512,340} //3d
 };
 
+// this is the chunk of MEM2 allocated for other tasks (i.e. things that don't fit in normal memory)
 #define BUFFER_SLOTS 7
 unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	{
@@ -70,6 +64,7 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	240*480*4, //6 ambilight
 	0};
 
+// returns the offset to the memory slot required
 int GetOffsetToSlot(int slot)
 {
 	int i=0;
@@ -82,6 +77,7 @@ int GetOffsetToSlot(int slot)
 	return offset;
 }
 
+//gets the address of a memory slot
 void * GetSlotBufferAddress(int slot)
 {
 	unsigned int offset=0;
@@ -100,6 +96,7 @@ void Sleep(unsigned long milliseconds)
 		sleep(milliseconds/1000);
 }
 
+// sets up mutexes and creates the threads
 void BUFFER_InitBuffer()
 {
 	int i = 0;
@@ -126,6 +123,7 @@ void BUFFER_InitBuffer()
 	}
 }
 
+// waits for the threads to stop and cleans up
 void BUFFER_Shutdown()
 {
 	int i,m;
@@ -176,6 +174,8 @@ bool BUFFER_IsCoverQueued(int index)
 	return retval;
 }
 
+
+//determines if a cover is missing or a bad image
 bool BUFFER_IsCoverMissing(int index)
 {
 	bool retval = false;
@@ -190,7 +190,7 @@ bool BUFFER_IsCoverMissing(int index)
 	return retval;
 }
 
-
+// sets the thread stop flag and waits for shutdown
 void BUFFER_KillBuffer()
 {
 	
@@ -200,6 +200,7 @@ void BUFFER_KillBuffer()
 	BUFFER_Shutdown();
 }
 
+//finds the position in the floating queue for a cover
 int GetFLoatingQueuePosition(int index)
 {
 	if(index >= MAX_BUFFERED_COVERS)
@@ -233,7 +234,7 @@ void HandleLoadRequest(int index,int threadNo)
 		int tW = GraphicModes[graphicMode][0];
 		int tH = GraphicModes[graphicMode][1];
 		
-		//TODO Will this be a problem?? might need to create different setting for covers used by this thread and protected with mutex
+		// determines the cover location
 		if(!graphicMode)
 		{
 			snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
@@ -249,13 +250,13 @@ void HandleLoadRequest(int index,int threadNo)
 		if (ret > 0) 
 		{
 			int thisDataMem2Address=-1;
-			if (_cq.permaBufferPosition[index]!=-1)
+			if (_cq.permaBufferPosition[index]!=-1)// permanent cache
 			{
 				thisDataMem2Address=MEM2_START_ADDRESS + tW * tH * 4 * _cq.permaBufferPosition[index];
 			}
-			else
+			else // floating cache
 			{
-				int floatingPosition=GetFLoatingQueuePosition(index);
+				int floatingPosition=GetFLoatingQueuePosition(index); // should have a slot allocated
 				if (floatingPosition!=-1)
 				{
 					thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition) * tW * tH * 4 ;
@@ -265,12 +266,13 @@ void HandleLoadRequest(int index,int threadNo)
 					thisDataMem2Address=-1;
 				}
 			}
-			if (thisDataMem2Address!=-1)
+			if (thisDataMem2Address!=-1) // we have a slot, load the texture to it
 			{
-				_texture_data[index] = GRRLIB_LoadTexturePNGToMemory((const unsigned char*)imgDataAddress, (void *)thisDataMem2Address);
+				// a garbled image will not cause an issue here
+				_texture_data[index] = GRRLIB_LoadTexturePNGToMemorySized((const unsigned char*)imgDataAddress, (void *)thisDataMem2Address, tW * tH * 4);
 				GRRLIB_texImg textureData=_texture_data[index];
 				pthread_mutex_lock(&queue_mutex);
-				if (!(textureData.h ==tH && textureData.w == tW))
+				if (!(textureData.h ==tH && textureData.w == tW && textureData.data!=0)) // sanity check
 				{
 					_cq.coverMissing[index]=true; // bad image size
 					_cq.ready[index]   = false;
@@ -284,7 +286,7 @@ void HandleLoadRequest(int index,int threadNo)
 			//free(imgData);
 			
 		}
-		else
+		else // no cover file
 		{
 			pthread_mutex_lock(&queue_mutex);
 			if (_cq.permaBufferPosition[index]!=-1)
@@ -304,6 +306,7 @@ void HandleLoadRequest(int index,int threadNo)
 	//pthread_mutex_unlock(&buffer_mutex[index]);
 }
 
+// get a cover in view which hasn't been loaded yet
 int GetPrioritisedCover(int selection)
 {
 	int i,j,ret=-1;
@@ -324,7 +327,7 @@ int GetPrioritisedCover(int selection)
 	return ret;
 }
 
-
+// thread loop
 void* process(void *arg)
 {
 	int thread = (int)arg;
@@ -376,6 +379,7 @@ void* process(void *arg)
 	
 }
 
+// is the cover already cached
 bool InCache(int index)
 {
 	if(index >= MAX_BUFFERED_COVERS)
@@ -392,6 +396,7 @@ bool InCache(int index)
 }
 
 // internal only - no need to lock (already locked)
+// takes a cover out of the floating cache
 void RemoveFromCache(int index)
 {
 		
@@ -407,6 +412,7 @@ void RemoveFromCache(int index)
 }
 
 //already locked
+// put a cover into the floating cache, the current selection means we can remove the furthest away
 void SetFloatingCacheItem(int selection, int newCacheItem)
 {
 	if (InCache(newCacheItem)) return;
@@ -416,7 +422,7 @@ void SetFloatingCacheItem(int selection, int newCacheItem)
 	int maxIndex=-1;
 	for (i=0;i<FloatingCacheSize;i++)
 	{
-		if (FloatingCacheCovers[i] == -1)
+		if (FloatingCacheCovers[i] == -1) // empty slot
 		{
 			spaceFound = true;
 			FloatingCacheCovers[i] = newCacheItem;
@@ -432,7 +438,7 @@ void SetFloatingCacheItem(int selection, int newCacheItem)
 			}
 		}
 	}
-	if (!spaceFound)
+	if (!spaceFound) // no empty slot remove the furthest
 	{
 		
 		RemoveFromCache(maxIndex);
@@ -443,6 +449,7 @@ void SetFloatingCacheItem(int selection, int newCacheItem)
 	
 }
 
+// request all the visible floating cache covers
 void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
 {
 	int i=0;
@@ -471,6 +478,7 @@ void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
 	}
 }
 
+// main application entry point
 void SetSelectedCover(int index)
 {
 	iSetSelectedCover(index+nCovers/2.0,false);
@@ -478,6 +486,7 @@ void SetSelectedCover(int index)
 
 
 // internal only - no need to lock (already locked)
+// reset all values for a cover
 void ResetQueueItem(int index)
 {
 	if(index >= MAX_BUFFERED_COVERS)
@@ -495,6 +504,7 @@ void ResetQueueItem(int index)
 
 
 // internal only - no need to lock (already locked)
+// request for an item to be loaded (permanently)
 void RequestForCache(int index)
 {
 	if(index >= MAX_BUFFERED_COVERS)
@@ -517,29 +527,29 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	
 	//start from a clear point
 	for (i=0;i<gameCount;i++) ResetQueueItem(i);
-	memset((void *)MEM2_START_ADDRESS,0,MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS));
+	memset((void *)MEM2_START_ADDRESS,0,MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS)); // clear all the memory
 	
 	_covers3d=graphMode;
 	
-	maxSlots=(MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS))/(textureDataSize)-MAX_THREADS;
+	maxSlots=(MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS))/(textureDataSize)-MAX_THREADS; // this is the number of slots available
 	
 	//decide on buffering method
-	if (gameCount<=maxSlots)
+	if (gameCount<=maxSlots) // can we fit all the covers in memory
 	{
 		BufferMethod=ALL_CACHED;
 		MainCacheSize=gameCount;
 	}
-	else
+	else //we can't
 	{
 		BufferMethod=DENSITY_METHOD;
 		Density = ((float)maxSlots) / ((float)(gameCount));
-		FloatingCacheSize=(int)(((1-Density)*numberOfCoversToBeShown+1)*4);
+		FloatingCacheSize=(int)(((1-Density)*numberOfCoversToBeShown+1)*4);// works well for 2d may be too big for 3d
 		if (FloatingCacheSize>maxSlots)
 		{
 			FloatingCacheSize=maxSlots;
 		}
 		MainCacheSize = maxSlots - FloatingCacheSize;
-		Density = ((float)(MainCacheSize-1)) / ((float)(gameCount));
+		Density = ((float)(MainCacheSize-1)) / ((float)(gameCount)); // the -1 is important - how many fence posts to cover 10 meters if they are 1 meter apart
 		for (i=0;i<FloatingCacheSize;i++)
 		{
 			FloatingCacheCovers[i]=-1;
@@ -552,7 +562,7 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 			_cq.permaBufferPosition[i]=i;
 		}
 	}
-	else
+	else // allocate all the permanent covers we can, minimising the maximum number of cached covers on screen
 	{
 		int lastValue=-1;
 		double dPosition=0;
@@ -583,6 +593,7 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	iSetSelectedCover(initialSelection,true);
 }
 
+// covers got downloaded
 void CoversDownloaded()
 {
 	int i;
@@ -603,11 +614,13 @@ void CoversDownloaded()
 }
 
 
+// clear out the extra section of MEM2
 void ClearBufferSlotMemory()
 {
 		memset((void *)MEM2_START_ADDRESS+MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS),0,GetOffsetToSlot(BUFFER_SLOTS));
 }
 
+// put an image in the pre allocated slot (must be in the FreeMemorySlots array with the correct number of bytes) bad data = exit to HBC
 GRRLIB_texImg BufferImageToSlot(const unsigned char* pngDataAddress,int slot)
 {
 	int i=0;
