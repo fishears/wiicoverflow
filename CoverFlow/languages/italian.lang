@@ -148,6 +148,7 @@ hideScrollbar = Nascondere la Scrollbar
 covers3D = Cover 3D
 gameText = Titolo del gioco
 gameSettings = Settings del gioco
+gameLanguage = Game Language
 
 ###########
 # Buttons #
