@@ -98,7 +98,10 @@ bool download_txt(int id, struct discHdr *gameList)
         return true;
     }
     else
+    {
+        WindowPrompt("HTTP ERROR",file.error,&okButton,0);
         return false;
+    }
 }
 
 void manage_cheats(int id, struct discHdr *gameList)

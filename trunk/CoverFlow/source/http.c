@@ -3,9 +3,9 @@
 
 /**
  * Emptyblock is a statically defined variable for functions to return if they are unable
- * to complete a request
+ * to complete a request - but now it includes ERROR INFO (fishears)
  */
-const struct block emptyblock = {0, NULL};
+struct block emptyblock = {0, NULL};
 
 //The maximum amount of bytes to send per net_write() call
 #define NET_BUFFER_SIZE 1024
@@ -133,10 +133,10 @@ struct block read_message(s32 connection)
  */
 struct block downloadfile(const char *url)
 {
-	//Check if the url starts with "http://", if not it is not considered a valid url
+        //Check if the url starts with "http://", if not it is not considered a valid url
 	if(strncmp(url, "http://", strlen("http://")) != 0)
 	{
-		printf(TX.URLnoBegin, url);
+		sprintf(emptyblock.error,TX.URLnoBegin, url);
 		return emptyblock;
 	}
 	
@@ -146,7 +146,7 @@ struct block downloadfile(const char *url)
 	//At the very least the url has to end with '/', ending with just a domain is invalid
 	if(path == NULL)
 	{
-		printf(TX.URLnoPath, url);
+		sprintf(emptyblock.error,TX.URLnoPath, url);
 		return emptyblock;
 	}
 	
@@ -155,7 +155,7 @@ struct block downloadfile(const char *url)
 	
 	if(domainlength == 0)
 	{
-		printf(TX.URLnoDomain, url);
+		sprintf(emptyblock.error,TX.URLnoDomain, url);
 		return emptyblock;
 	}
 	
@@ -168,7 +168,7 @@ struct block downloadfile(const char *url)
 	
 	if(ipaddress == 0)
 	{
-		printf(TX.errorDomain, domain);
+		sprintf(emptyblock.error,TX.errorDomain, domain);
 		return emptyblock;
 	}
 
@@ -176,7 +176,7 @@ struct block downloadfile(const char *url)
 	s32 connection = server_connect(ipaddress, 80);
 	
 	if(connection < 0) {
-		printf(TX.errEstablishConn);
+		sprintf(emptyblock.error,TX.errEstablishConn);
 		return emptyblock;
 	}
 	
@@ -209,8 +209,7 @@ struct block downloadfile(const char *url)
 	
 	if(filestart == NULL)
 	{
-		printf(TX.HTTPnoFile);
-		free(response.data);
+		sprintf(emptyblock.error,TX.HTTPnoFile);
 		return emptyblock;
 	}
 	
@@ -221,7 +220,7 @@ struct block downloadfile(const char *url)
 	
 	if(file.data == NULL)
 	{
-		printf(TX.noMemCopy );
+		sprintf(emptyblock.error,TX.noMemCopy );
 		free(response.data);
 		return emptyblock;
 	}

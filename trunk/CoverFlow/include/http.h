@@ -20,9 +20,10 @@ struct block
 {
 	u32 size;
 	unsigned char *data;
+        char error[128];
 };
 
-extern const struct block emptyblock;
+extern struct block emptyblock;
 
 struct block downloadfile(const char *url);
 
