@@ -149,6 +149,11 @@ covers3D = 3D-kannet
 gameText = Pelin nimi
 gameSettings = Pelin asetukset
 gameLanguage = Pelin kieli
+Finnish = Finnish
+PortugueseBR = Portuguese BR
+Danish = Danish
+Catalan = Catalan
+MyLanguage = MyLanguage
 
 ###########
 # Buttons #

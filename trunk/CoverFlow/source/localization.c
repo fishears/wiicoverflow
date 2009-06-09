@@ -232,6 +232,11 @@ void languageDefault()
 	snprintf(TX.gameText, sizeof(TX.gameText), "Game Title" ); 
 	snprintf(TX.gameSettings, sizeof(TX.gameSettings), "Game Settings" ); 	
 	snprintf(TX.gameLanguage, sizeof(TX.gameLanguage), "Game Language" ); 
+	snprintf(TX.Finnish, sizeof(TX.Finnish), "Finnish" ); 
+	snprintf(TX.PortugueseBR, sizeof(TX.PortugueseBR), "Portuguese BR" ); 
+	snprintf(TX.Danish, sizeof(TX.Danish), "Danish" ); 
+	snprintf(TX.Catalan, sizeof(TX.Catalan), "Catalan" ); 
+	snprintf(TX.MyLanguage, sizeof(TX.MyLanguage), "MyLanguage" ); 
 	
 // Buttons	
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
@@ -884,6 +889,28 @@ void languageSet(char *name, char *val)
 		return;
 	}
 
+
+
+	if (strcmp(name, "Finnish") == 0) {
+		strcopy(TX.Finnish, val, sizeof(TX.Finnish));
+		return;
+	}
+	if (strcmp(name, "PortugueseBR") == 0) {
+		strcopy(TX.PortugueseBR, val, sizeof(TX.PortugueseBR));
+		return;
+	}
+	if (strcmp(name, "Danish") == 0) {
+		strcopy(TX.Danish, val, sizeof(TX.Danish));
+		return;
+	}
+	if (strcmp(name, "Catalan") == 0) {
+		strcopy(TX.Catalan, val, sizeof(TX.Catalan));
+		return;
+	}
+	if (strcmp(name, "MyLanguage") == 0) {
+		strcopy(TX.MyLanguage, val, sizeof(TX.MyLanguage));
+		return;
+	}
 
 //////////////// Buttons //////////////
 

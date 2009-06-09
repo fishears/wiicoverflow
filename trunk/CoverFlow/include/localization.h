@@ -209,6 +209,11 @@ struct LANGUAGE
 	char gameText[25];				//149
 	char gameSettings[30];			//150
 	char gameLanguage[30];			//151
+	char Finnish[15];				//152
+	char PortugueseBR[15];			//153
+	char Danish[15];				//154
+	char Catalan[15];				//155
+	char MyLanguage[15];			//156
 	
 // Buttons	
 	char addB[15];					//B01

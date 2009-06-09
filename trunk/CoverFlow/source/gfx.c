@@ -267,19 +267,14 @@ void Init_Buttons()
 	flagITButton			= Button_Flag_Init(flag_it_png, 296, 150, TX.Italian); 
 	flagDEButton			= Button_Flag_Init(flag_de_png, 426, 150, TX.German);
 	flagUKButton			= Button_Flag_Init(flag_uk_png, 166, 220, "vacant"); 
-	flagBRButton			= Button_Flag_Init(flag_br_png, 296, 220, "Portuguese Br"); 
+	flagBRButton			= Button_Flag_Init(flag_br_png, 296, 220, TX.PortugueseBR); 
 	flagFRButton			= Button_Flag_Init(flag_fr_png, 426, 220, TX.French);
 	flagDAButton			= Button_Flag_Init(flag_da_png, 166, 290, TX.Dutch);
-	//flagJPButton			= Button_Flag_Init(flag_jp_png, 296, 290, "ja_JPN"); 
-	flagFIButton			= Button_Flag_Init(flag_fi_png, 296, 290, "Finnish"); 
-	//flagPTButton			= Button_Flag_Init(flag_pt_png, 426, 290, "pt_POR"); 
-	flagDKButton			= Button_Flag_Init(flag_dk_png, 426, 290, "Danish"); 
-	//flagTWButton			= Button_Flag_Init(flag_tw_png, 166, 360, "zh_TW"); 
-	//flagRUButton			= Button_Flag_Init(flag_ru_png, 296, 360, "ru_RUS"); 
-	//flagCNButton			= Button_Flag_Init(flag_cn_png, 426, 360, "zh_CN"); 
+	flagFIButton			= Button_Flag_Init(flag_fi_png, 296, 290, TX.Finnish); 
+	flagDKButton			= Button_Flag_Init(flag_dk_png, 426, 290, TX.Danish); 
 	flagESButton			= Button_Flag_Init(flag_es_png, 166, 360, TX.Spanish); 
-	flagCTButton			= Button_Flag_Init(flag_ct_png, 296, 360, "Catalan"); 
-	flagMyLangButton 		= Button_Flag_Init(flag_MyLang_png, 426, 360, "MyLanguage");
+	flagCTButton			= Button_Flag_Init(flag_ct_png, 296, 360, TX.Catalan); 
+	flagMyLangButton 		= Button_Flag_Init(flag_MyLang_png, 426, 360, TX.MyLanguage);
 			
 	// Game Settings Screen Buttons
     gvidtvonButton          = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 360, 164);
@@ -1440,17 +1435,12 @@ void freeResources(){
 	free(menu_graphics_wireframe_texture.data);
 	free(menu_graphics_box1_texture.data);
 	free(menu_graphics_box2_texture.data);
-	//free(flag_jp_texture.data);
 	free(flag_br_texture.data);
-	//free(flag_cn_texture.data);
 	free(flag_da_texture.data);
 	free(flag_de_texture.data);
 	free(flag_fr_texture.data);
 	free(flag_it_texture.data);
-	//free(flag_tw_texture.data);
-	//free(flag_pt_texture.data);
 	free(flag_dk_texture.data);
-	//free(flag_ru_texture.data);
 	free(flag_uk_texture.data);
 	free(flag_us_texture.data);
 	free(flag_es_texture.data);
@@ -1534,13 +1524,8 @@ void freeResources(){
 	FreeButtonResources(&flagBRButton);
 	FreeButtonResources(&flagFRButton);
 	FreeButtonResources(&flagDAButton);
-	//FreeButtonResources(&flagJPButton);
 	FreeButtonResources(&flagFIButton);
-	//FreeButtonResources(&flagPTButton);
 	FreeButtonResources(&flagDKButton);
-	//FreeButtonResources(&flagTWButton);
-	//FreeButtonResources(&flagRUButton);
-	//FreeButtonResources(&flagCNButton);
 	FreeButtonResources(&flagESButton);
 	FreeButtonResources(&flagCTButton);
 	FreeButtonResources(&flagMyLangButton);
@@ -1688,14 +1673,14 @@ void Label_Buttons()
 	strcopy( flagITButton.ttf_label, TX.Italian, 15);	
 	strcopy( flagDEButton.ttf_label, TX.German, 15);
 	strcopy( flagUKButton.ttf_label, "vacant", 15);	
-	strcopy( flagBRButton.ttf_label, "Portuguese Br", 15);
+	strcopy( flagBRButton.ttf_label, TX.PortugueseBR, 15);
 	strcopy( flagFRButton.ttf_label, TX.French, 15);	
 	strcopy( flagDAButton.ttf_label, TX.Dutch, 15);
-	strcopy( flagFIButton.ttf_label, "Finnish", 15);	
-	strcopy( flagDKButton.ttf_label, "Danish", 15);
+	strcopy( flagFIButton.ttf_label, TX.Finnish, 15);	
+	strcopy( flagDKButton.ttf_label, TX.Danish, 15);
 	strcopy( flagESButton.ttf_label, TX.Spanish, 15);	
-	strcopy( flagCTButton.ttf_label, "Catalan", 15);
-	strcopy( flagMyLangButton.ttf_label, "MyLanguage", 15);	
+	strcopy( flagCTButton.ttf_label, TX.Catalan, 15);
+	strcopy( flagMyLangButton.ttf_label, TX.MyLanguage, 15);	
 }
 
 
