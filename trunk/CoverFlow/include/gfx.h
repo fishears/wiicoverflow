@@ -227,6 +227,7 @@ void DrawBufferedCover(int i, float loc, float angle, float falloff );
 void Paint_Progress(float v, char* msg);
 void Paint_Progress_Generic(int v, int max, char* msg);
 void Init_Buttons();
+void Label_Buttons();
 void GRRLIB_Cover(float pos, int texture_id);
 void GetWiimoteData();
 void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 scaleY, u32 color);

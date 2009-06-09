@@ -584,76 +584,91 @@ void Settings_Menu_Show()
 					{
 						strcpy(settings.localLanguage, "default");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagDEButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "de-GER");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagITButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "it-ITA");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagUKButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "default");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagBRButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "pt-BR");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagFRButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "fr-FRE");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagDAButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "nl-DUT");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagJPButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "ja-JPN");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagDKButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "da-DAN");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagTWButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "zh-TW");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagRUButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "ru-RUS");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagCNButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "zh-CN");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagCTButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "ca-CAT");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagESButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "es-SPA");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagFIButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "fi-FIN");
 						languageLoad();
+						Label_Buttons();
 					}
 					else if (Button_Select(&flagMyLangButton, pointer.p_x, pointer.p_y))
 					{
@@ -661,6 +676,7 @@ void Settings_Menu_Show()
 						{
 							strcpy(settings.localLanguage, "myLANG");
 							languageLoad();
+							Label_Buttons();
 						}
 					}
 					

@@ -1660,3 +1660,42 @@ bool CoverHoverRight()
 }
 
 
+
+void Label_Buttons()
+{
+	strcpy( okButton.ttf_label, TX.okB);
+	strcpy( cancelButton.ttf_label, TX.cancelB);	
+	strcpy( yesButton.ttf_label, TX.yesB);
+	strcpy( noButton.ttf_label, TX.noB);	
+	
+	strcpy( loadButton.ttf_label, TX.loadB);
+	strcpy( backButton.ttf_label, TX.backB);	
+	strcpy( gbackButton.ttf_label, TX.backB);
+	
+	strcpy( wiiMenuButton.ttf_label, TX.wiimenuB);	
+	strcpy( loaderButton.ttf_label, TX.loaderB);
+	
+	strcopy( menuSettingsButton.ttf_label, TX.cflowSettings, 15);	
+	strcopy( menuGraphicsButton.ttf_label, TX.graphics, 15);
+	strcpy( menuLanguagesButton.ttf_label, TX.languagesB);	
+	
+	strcpy( themeBlackButton.ttf_label, TX.blackB);
+	strcpy( themeWhiteButton.ttf_label, TX.whiteB);	
+	strcpy( coversButton.ttf_label, TX.coversB);
+	strcpy( titlesButton.ttf_label, TX.titlesB);	
+
+	strcopy( flagUSButton.ttf_label, TX.English, 15);
+	strcopy( flagITButton.ttf_label, TX.Italian, 15);	
+	strcopy( flagDEButton.ttf_label, TX.German, 15);
+	strcopy( flagUKButton.ttf_label, "vacant", 15);	
+	strcopy( flagBRButton.ttf_label, "Portuguese Br", 15);
+	strcopy( flagFRButton.ttf_label, TX.French, 15);	
+	strcopy( flagDAButton.ttf_label, TX.Dutch, 15);
+	strcopy( flagFIButton.ttf_label, "Finnish", 15);	
+	strcopy( flagDKButton.ttf_label, "Danish", 15);
+	strcopy( flagESButton.ttf_label, TX.Spanish, 15);	
+	strcopy( flagCTButton.ttf_label, "Catalan", 15);
+	strcopy( flagMyLangButton.ttf_label, "MyLanguage", 15);	
+}
+
+
