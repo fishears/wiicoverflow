@@ -5,6 +5,7 @@ extern s_settings settings;
 extern s_title* titleList;
 extern int COVER_COUNT;
 extern s_coverFlip coverFlip[];
+extern s_pointer      pointer;
 
 bool init_usbfs()
 {    
@@ -17,7 +18,7 @@ bool init_usbfs()
 	Sys_Init();
 
 	///* Initialize subsystems */
-	//Wpad_Init();
+	//Wpad_Init();	
 
 	Paint_Progress(self.progress, "Init SDHC...");
 	/* Mount SDHC */
@@ -176,61 +177,48 @@ void initWBFS(){
 	self.progress += .1;
 	sprintf(self.debugMsg, TX.initWBFS);
 	Paint_Progress(self.progress,self.debugMsg);
-
+	pointer.p_x = 0;
+	pointer.p_y = 0;
+	pointer.p_ang = 0;
+	pointer.p_type = 0;
   INIT_RETRY:
 	/* Initialize WBFS */
 	ret = WBFS_Init(self.my_wbfsDev);
-	
 	if(ret < 0)
 	{
 		while(1)
 		{
-			WPAD_ScanPads();
+                        /* Initialize Wiimote subsystem */
+                        Wpad_Init();
+                        WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 			if (retries==0)
 			{
-				GRRLIB_Rectangle(88, 20, 464, 440, 0x44444499, true);
-				CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.errorNoUSBDrv, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-                CFreeTypeGX_DrawText(ttf14pt, 190,160, TX.pressAB, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-				
-				GRRLIB_Render();
+                                WPAD_ScanPads();
+                                DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+                                GRRLIB_Render();
+                                //tell user that no drive was found
+                                if(WindowPrompt(TX.error, TX.errorNoUSBDrv, &okButton, &cancelButton))
+                                {
+                                    retries = 3;
+                                    //ask user to connect drive
+                                    WindowPrompt(TX.error, TX.connectUSBDrv, &okButton, 0);
+                                }
+                                else //pressed cancel so exit to system
+                                {
+                                    GRRLIB_Exit();
+                                    SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
+                                }
 			}
-				
-			if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||retries)
-			{
-				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A))
-				{
-					GRRLIB_Rectangle(88, 20, 464, 440, 0x44444499, true);
-					CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.connectUSBDrv, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-					CFreeTypeGX_DrawText(ttf14pt, 190,160, TX.pleaseWait, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
-					GRRLIB_Render();
-					Sleep(1000);
-				}
-				
-				retries--;
-				Subsystem_Close();
-				WDVD_Close();
-				
-				/* Load Custom IOS */
-				int ret2;
-				//ret2 = IOS_ReloadIOS(222);
-				
-				//if (ret2 < 0) 
-				{
-					ret2 = IOS_ReloadIOS(249);
-				}
-
-				Subsystem_Init();
-				WDVD_Init();
-				goto INIT_RETRY;
-			}
-			
-			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
-			{
-				GRRLIB_Exit();
-				SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
-			}
-		}
-	}
+                        //tries to connect 3 times before asking user again
+                        retries--;
+                        Subsystem_Close();
+                        WDVD_Close();
+                        IOS_ReloadIOS(249);
+                        Subsystem_Init();
+                        WDVD_Init();
+                        goto INIT_RETRY;
+                }
+        }
 }
 
 s32 __Menu_EntryCmp(const void *a, const void *b)
