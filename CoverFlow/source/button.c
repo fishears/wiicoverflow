@@ -53,6 +53,32 @@ Button Button_Init(const unsigned char normal_img[], const unsigned char hover_i
 	return new_button;
 }
 
+Button Duplicate_Button(Button btn, int x, int y)
+{
+	Button new_button;
+	new_button.texture = btn.texture;
+	new_button.hoverTexture = btn.hoverTexture;
+	new_button.x = x;
+	new_button.y = y;
+	new_button.hovering = false;
+	new_button.show_reflection = false;
+	return new_button;
+}
+
+Button Duplicate_Button_TTF(Button btn, int x, int y, char *button_label)
+{
+	Button new_button;
+	new_button.texture = btn.texture;
+	new_button.hoverTexture = btn.hoverTexture;
+	new_button.x = x;
+	new_button.y = y;
+	new_button.hovering = false;
+	new_button.selected = false;
+	new_button.show_reflection = false;
+	strcpy(new_button.ttf_label, button_label);
+	return new_button;
+}
+
 bool Button_Hover(struct Button* btn, int x, int y)
 {
 	x += 40; // adjusts to the tip of the cursor fingertip

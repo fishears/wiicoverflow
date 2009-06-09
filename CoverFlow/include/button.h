@@ -28,6 +28,8 @@ typedef struct Button {
 Button Button_Init(const unsigned char normal_img[], const unsigned char hover_img[], int x, int y);
 Button Button_TTF_Init(const unsigned char normal_img[], const unsigned char hover_img[], int x, int y, char *button_label);
 Button Button_Flag_Init(const unsigned char normal_img[], int x, int y, char *button_label);
+Button Duplicate_Button(Button btn, int x, int y);
+Button Duplicate_Button_TTF(Button btn, int x, int y, char *button_label);
 // Button actions
 bool Button_Hover(struct Button* btn, int x, int y);
 bool Button_Select(struct Button* btn, int x, int y);
