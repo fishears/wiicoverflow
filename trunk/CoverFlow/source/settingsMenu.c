@@ -488,7 +488,7 @@ void Settings_Menu_Show()
 				if (settings.coverText)
 					CFreeTypeGX_DrawText(ttf20pt, 320, 314, TX.gameTitle, (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 				// Draw the scroll bar
-				if (!settings.hideScroll)
+				if (settings.hideScroll)
 					GRRLIB_DrawImg(120, 300, slidebar_texture, 0, .655, .655, 0xFFFFFFFF);
 				// Draw the -/+ buttons
 				Button_Paint(&zoomupButton);
