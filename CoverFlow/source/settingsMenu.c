@@ -906,6 +906,18 @@ void Game_Settings_Menu_Show()
 			else if (Button_Select(&gcheatonButton, pointer.p_x, pointer.p_y) || Button_Select(&gcheatoffButton, pointer.p_x, pointer.p_y))
 			{
 				gameSetting.ocarina = (gameSetting.ocarina) ? 0 : 1; // Clicked the Ocarina button, toggle state
+                                #ifdef CHEAT_MANAGER
+                                if(gameSetting.ocarina == 1)
+                                {
+                                    bool dummy = check_gct(self.gameSelected,self.gameList);
+                                    if(!dummy)
+                                    {
+                                        //dummy = download_txt(self.gameSelected,self.gameList);
+                                        //if(!dummy)
+                                            gameSetting.ocarina = 0;
+                                    }
+                                }
+                                #endif
 			}
 			else if (Button_Select(&gvidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&gvidtvoffButton, pointer.p_x, pointer.p_y))
 			{

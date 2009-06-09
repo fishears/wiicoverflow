@@ -46,6 +46,7 @@
 #include "titles.h"
 #include "ee.h"
 #include "konami.h"
+#include "cheats.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -71,6 +72,7 @@
 //#define TEST_MODE 1
 #define DEBUG 1
 #define ONE_AT_A_TIME
+//#define CHEAT_MANAGER
 
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 
@@ -85,7 +87,7 @@
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           15
 
-#define RELEASE              "RC6"
+#define RELEASE              "RC7"
 
 #define ANIMATE_SPEED 0
 #define FLIP_SPEED  0.016
