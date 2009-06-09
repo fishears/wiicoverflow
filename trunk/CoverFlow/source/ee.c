@@ -24,6 +24,7 @@ void ee(){
 	buttonArray[3] = (Button) Button_Init(ee_alex_png, ee_alex_png, getRandomNum(0, 480), getRandomNum(0, 320));
 	buttonArray[4] = (Button) Button_Init(ee_bob_png, ee_bob_png, getRandomNum(0, 480), getRandomNum(0, 320));
 	buttonArray[5] = (Button) Button_Init(ee_bbird_png, ee_bbird_png, getRandomNum(0, 480), getRandomNum(0, 320));
+	buttonArray[6] = (Button) Button_Init(ee_afour_png, ee_afour_png, getRandomNum(0, 480), getRandomNum(0, 320));
 	
 	for(i=0; i<AUTHORS_LEN; i++){
 		speedArray[i].sx = getRandomNum(4, 7);
