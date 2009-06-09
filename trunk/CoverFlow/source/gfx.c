@@ -42,7 +42,7 @@ void LoadTextures()
 	pointer_texture				= GRRLIB_LoadTexturePNG(pointer_basic_png);
 	pointer_shadow_texture		= GRRLIB_LoadTexturePNG(pointer_shadow_png);
 	turn_point_texture			= GRRLIB_LoadTexturePNG(pointer_turning_png); // can't find free
-	cover_texture				= GRRLIB_LoadTexturePNG(no_cover_png);
+	cover_texture				= BufferImageToSlot(no_cover_png,7);
 	cover_texture_3d			= BufferImageToSlot(full_cover_png,5); // read notes for MEM2_EXTENT before removing
 	no_disc_texture				= GRRLIB_LoadTexturePNG(no_disc_png);
 	slidebar_texture			= GRRLIB_LoadTexturePNG(slidebar_png);  // can't find free
@@ -1408,7 +1408,7 @@ void freeResources(){
 	free(pointer_texture.data);
 	free(pointer_shadow_texture.data);
 	free(turn_point_texture.data);
-	free(cover_texture.data);
+	//free(cover_texture.data);
 	//free(cover_texture_3d.data);
 	free(no_disc_texture.data);
 	free(slidebar_texture.data);

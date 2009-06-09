@@ -115,7 +115,7 @@ void ee(){
 	WPAD_Rumble(0, 0);
 	
 	for(i=0; i<AUTHORS_LEN; i++){
-		free(buttonArray[i].texture.data);
+		FreeButtonResources(&buttonArray[i]);
 		GRRLIB_FillScreen(0x000000FF);
 		GRRLIB_Render();
 	}
