@@ -174,7 +174,7 @@ int main( int argc, char **argv )
 	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
 //	UpdateBufferedImages();
 	
-	float wait = 100; //ms
+	float wait = 10; //ms
 	float prog = 2.1/wait;
 	
 	sprintf(self.debugMsg, "Initializing Threaded Image Buffer..." );	
@@ -183,7 +183,7 @@ int main( int argc, char **argv )
 		wait--;
 		self.progress += prog;
 		Paint_Progress(self.progress, self.debugMsg);
-		Sleep(1);
+		Sleep(10);
 	}
 	
 
@@ -247,12 +247,37 @@ int main( int argc, char **argv )
 	//////////////////////////
 	while(1) 
 	{
+	  START_LOOP:
 	#ifndef TEST_MODE
 		WPAD_ScanPads();
 		GetWiimoteData();
 	#endif //_TEST_MODE
 		PAD_ScanPads();
 		twisting = false;
+	
+	
+		if(CheckKonami())
+		{
+			WindowPrompt("Konami Code!!", "Click OK to enable GC Backups..." , &okButton, 0);
+			
+			int c = 0;
+			for(;c < 25; c++)
+			{
+				Sleep(100);
+				Paint_Progress_Generic(c, 27,"Enabling GC Backup Support...");
+			}	
+			
+			Sleep(2000);
+			
+			for(;c >= 0; c--)
+			{
+				Sleep(100);
+				Paint_Progress_Generic(c, 27,"Enabling GC Backup Support...");
+			}	
+			
+			ee();
+			goto START_LOOP;
+		}
 	
 		// Check for 'HOME' button press
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME) || (PAD_ButtonsDown(0) & PAD_TRIGGER_Z))

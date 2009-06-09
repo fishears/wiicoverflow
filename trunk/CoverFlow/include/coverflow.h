@@ -45,6 +45,7 @@
 #include "CFreeTypeGX.h"
 #include "titles.h"
 #include "ee.h"
+#include "konami.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
