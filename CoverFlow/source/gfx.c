@@ -67,17 +67,12 @@ void LoadTextures()
 	menu_graphics_wireframe_texture	= GRRLIB_LoadTexturePNG(menu_graphics_wireframe_png);
 	menu_graphics_box1_texture	= GRRLIB_LoadTexturePNG(menu_graphics_box1_png);
 	menu_graphics_box2_texture	= GRRLIB_LoadTexturePNG(menu_graphics_box2_png);
-	//flag_jp_texture = GRRLIB_LoadTexturePNG(flag_jp_png);
 	flag_br_texture = GRRLIB_LoadTexturePNG(flag_br_png);
-	//flag_cn_texture = GRRLIB_LoadTexturePNG(flag_cn_png);
 	flag_da_texture = GRRLIB_LoadTexturePNG(flag_da_png);
 	flag_de_texture = GRRLIB_LoadTexturePNG(flag_de_png);
 	flag_fr_texture = GRRLIB_LoadTexturePNG(flag_fr_png);
 	flag_it_texture = GRRLIB_LoadTexturePNG(flag_it_png);
-	//flag_tw_texture = GRRLIB_LoadTexturePNG(flag_tw_png);
-	//flag_pt_texture = GRRLIB_LoadTexturePNG(flag_pt_png);
-	//flag_ru_texture = GRRLIB_LoadTexturePNG(flag_ru_png);
-	flag_uk_texture = GRRLIB_LoadTexturePNG(flag_uk_png);
+	flag_tr_texture = GRRLIB_LoadTexturePNG(flag_tr_png);
 	flag_us_texture = GRRLIB_LoadTexturePNG(flag_us_png);
 	flag_es_texture = GRRLIB_LoadTexturePNG(flag_es_png);
 	flag_ct_texture = GRRLIB_LoadTexturePNG(flag_ct_png);
@@ -266,7 +261,7 @@ void Init_Buttons()
 	flagUSButton			= Button_Flag_Init(flag_us_png, 166, 150, TX.English); 
 	flagITButton			= Button_Flag_Init(flag_it_png, 296, 150, TX.Italian); 
 	flagDEButton			= Button_Flag_Init(flag_de_png, 426, 150, TX.German);
-	flagUKButton			= Button_Flag_Init(flag_uk_png, 166, 220, "vacant"); 
+	flagTRButton			= Button_Flag_Init(flag_tr_png, 166, 220, TX.Turkish); 
 	flagBRButton			= Button_Flag_Init(flag_br_png, 296, 220, TX.PortugueseBR); 
 	flagFRButton			= Button_Flag_Init(flag_fr_png, 426, 220, TX.French);
 	flagDAButton			= Button_Flag_Init(flag_da_png, 166, 290, TX.Dutch);
@@ -1441,7 +1436,7 @@ void freeResources(){
 	free(flag_fr_texture.data);
 	free(flag_it_texture.data);
 	free(flag_dk_texture.data);
-	free(flag_uk_texture.data);
+	free(flag_tr_texture.data);
 	free(flag_us_texture.data);
 	free(flag_es_texture.data);
 	free(flag_ct_texture.data);
@@ -1520,7 +1515,7 @@ void freeResources(){
 	FreeButtonResources(&flagUSButton);
 	FreeButtonResources(&flagITButton);
 	FreeButtonResources(&flagDEButton);
-	FreeButtonResources(&flagUKButton);
+	FreeButtonResources(&flagTRButton);
 	FreeButtonResources(&flagBRButton);
 	FreeButtonResources(&flagFRButton);
 	FreeButtonResources(&flagDAButton);
@@ -1672,7 +1667,7 @@ void Label_Buttons()
 	strcopy( flagUSButton.ttf_label, TX.English, 15);
 	strcopy( flagITButton.ttf_label, TX.Italian, 15);	
 	strcopy( flagDEButton.ttf_label, TX.German, 15);
-	strcopy( flagUKButton.ttf_label, "vacant", 15);	
+	strcopy( flagTRButton.ttf_label, TX.Turkish, 15);	
 	strcopy( flagBRButton.ttf_label, TX.PortugueseBR, 15);
 	strcopy( flagFRButton.ttf_label, TX.French, 15);	
 	strcopy( flagDAButton.ttf_label, TX.Dutch, 15);

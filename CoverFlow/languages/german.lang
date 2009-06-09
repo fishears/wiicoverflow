@@ -150,10 +150,11 @@ gameText = Titel anzeigen
 gameSettings = Spiel-Einstellungen
 gameLanguage = Spiel-Sprache
 Finnish = Finnisch
-PortugueseBR = Portugisisch BR
+PortugueseBR = PortugiesischBR
 Danish = Dänisch
 Catalan = Catalan
 MyLanguage = Meine Sprache
+Turkish = Türkisch
 
 ###########
 # Buttons #

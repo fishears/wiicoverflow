@@ -21,8 +21,8 @@ extern u32 german_lang_size;
 extern u8  spanish_lang[];
 extern u32 spanish_lang_size;
 
-//extern u8  english_lang[];
-//extern u32 english_lang_size;
+extern u8  turkish_lang[];
+extern u32 turkish_lang_size;
 
 extern u8  italian_lang[];
 extern u32 italian_lang_size;
@@ -51,8 +51,7 @@ extern u32 danish_lang_size;
 //extern u8  russian_lang[];
 //extern u32 russian_lang_size;
 
-//extern u8  turkish_lang[];
-//extern u32 turkish_lang_size;
+
 
 
 
@@ -214,6 +213,7 @@ struct LANGUAGE
 	char Danish[15];				//154
 	char Catalan[15];				//155
 	char MyLanguage[15];			//156
+	char Turkish[15];				//157
 	
 // Buttons	
 	char addB[15];					//B01
