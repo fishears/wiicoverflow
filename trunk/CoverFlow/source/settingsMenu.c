@@ -598,9 +598,9 @@ void Settings_Menu_Show()
 						languageLoad();
 						Label_Buttons();
 					}
-					else if (Button_Select(&flagUKButton, pointer.p_x, pointer.p_y))
+					else if (Button_Select(&flagTRButton, pointer.p_x, pointer.p_y))
 					{
-						strcpy(settings.localLanguage, "default");
+						strcpy(settings.localLanguage, "tr-TUR");
 						languageLoad();
 						Label_Buttons();
 					}
@@ -622,33 +622,9 @@ void Settings_Menu_Show()
 						languageLoad();
 						Label_Buttons();
 					}
-					else if (Button_Select(&flagJPButton, pointer.p_x, pointer.p_y))
-					{
-						strcpy(settings.localLanguage, "ja-JPN");
-						languageLoad();
-						Label_Buttons();
-					}
 					else if (Button_Select(&flagDKButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "da-DAN");
-						languageLoad();
-						Label_Buttons();
-					}
-					else if (Button_Select(&flagTWButton, pointer.p_x, pointer.p_y))
-					{
-						strcpy(settings.localLanguage, "zh-TW");
-						languageLoad();
-						Label_Buttons();
-					}
-					else if (Button_Select(&flagRUButton, pointer.p_x, pointer.p_y))
-					{
-						strcpy(settings.localLanguage, "ru-RUS");
-						languageLoad();
-						Label_Buttons();
-					}
-					else if (Button_Select(&flagCNButton, pointer.p_x, pointer.p_y))
-					{
-						strcpy(settings.localLanguage, "zh-CN");
 						languageLoad();
 						Label_Buttons();
 					}
@@ -687,17 +663,12 @@ void Settings_Menu_Show()
 				Button_Flag_Paint(&flagUSButton);
 				Button_Flag_Paint(&flagITButton);
 				Button_Flag_Paint(&flagDEButton);
-				Button_Flag_Paint(&flagUKButton);
+				Button_Flag_Paint(&flagTRButton);
 				Button_Flag_Paint(&flagBRButton);
 				Button_Flag_Paint(&flagFRButton);
 				Button_Flag_Paint(&flagDAButton);
-				//Button_Flag_Paint(&flagJPButton);
 				Button_Flag_Paint(&flagFIButton);
-				//Button_Flag_Paint(&flagPTButton);
 				Button_Flag_Paint(&flagDKButton);
-				//Button_Flag_Paint(&flagTWButton);
-				//Button_Flag_Paint(&flagRUButton);
-				//Button_Flag_Paint(&flagCNButton);
 				Button_Flag_Paint(&flagESButton);
 				Button_Flag_Paint(&flagCTButton);
 				if (bMyFile) Button_Flag_Paint(&flagMyLangButton);
@@ -712,17 +683,12 @@ void Settings_Menu_Show()
 					Button_Hover(&flagUSButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagITButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagDEButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&flagUKButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&flagTRButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagBRButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagFRButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagDAButton, pointer.p_x, pointer.p_y) ||
-					//Button_Hover(&flagJPButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagFIButton, pointer.p_x, pointer.p_y) ||
-					//Button_Hover(&flagPTButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagDKButton, pointer.p_x, pointer.p_y) ||
-					//Button_Hover(&flagTWButton, pointer.p_x, pointer.p_y) ||
-					//Button_Hover(&flagRUButton, pointer.p_x, pointer.p_y) ||
-					//Button_Hover(&flagCNButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagESButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagCTButton, pointer.p_x, pointer.p_y) ||
 					(bMyFile == true) ? Button_Hover(&flagMyLangButton, pointer.p_x, pointer.p_y) : false

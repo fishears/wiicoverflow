@@ -237,6 +237,7 @@ void languageDefault()
 	snprintf(TX.Danish, sizeof(TX.Danish), "Danish" ); 
 	snprintf(TX.Catalan, sizeof(TX.Catalan), "Catalan" ); 
 	snprintf(TX.MyLanguage, sizeof(TX.MyLanguage), "MyLanguage" ); 
+	snprintf(TX.Turkish, sizeof(TX.Turkish), "Turkish" ); 
 	
 // Buttons	
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
@@ -889,8 +890,6 @@ void languageSet(char *name, char *val)
 		return;
 	}
 
-
-
 	if (strcmp(name, "Finnish") == 0) {
 		strcopy(TX.Finnish, val, sizeof(TX.Finnish));
 		return;
@@ -911,7 +910,11 @@ void languageSet(char *name, char *val)
 		strcopy(TX.MyLanguage, val, sizeof(TX.MyLanguage));
 		return;
 	}
-
+	if (strcmp(name, "Turkish") == 0) {
+		strcopy(TX.Turkish, val, sizeof(TX.Turkish));
+		return;
+	}
+	
 //////////////// Buttons //////////////
 
 	
@@ -1012,9 +1015,8 @@ bool languageLoad()
 	if (strcmp(settings.localLanguage, "da-DAN") == 0) {
 		return parseMemFile( (char*)danish_lang, danish_lang_size, &languageSet);
 		}
-	if (strcmp(settings.localLanguage, "vacant") == 0) {
-		languageDefault();
-		return true;
+	if (strcmp(settings.localLanguage, "tr-TUR") == 0) {
+		return parseMemFile( (char*)turkish_lang, turkish_lang_size, &languageSet);
 		}
 	if (strcmp(settings.localLanguage, "de-GER") == 0) {
 		return parseMemFile( (char*)german_lang, german_lang_size, &languageSet);
@@ -1031,32 +1033,11 @@ bool languageLoad()
 	if (strcmp(settings.localLanguage, "it-ITA") == 0) {
 		return parseMemFile( (char*)italian_lang, italian_lang_size, &languageSet);
 		}
-	if (strcmp(settings.localLanguage, "ja-JPN") == 0) {
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "ko-KOR") == 0) {
-		return false;
-		}
 	if (strcmp(settings.localLanguage, "nl-DUT") == 0) {
 		return parseMemFile( (char*)dutch_lang, dutch_lang_size, &languageSet);
 		}
-	if (strcmp(settings.localLanguage, "nn-NOR") == 0) {
-		return false;
-		}
 	if (strcmp(settings.localLanguage, "pt-BR") == 0) {
 		return parseMemFile( (char*)portuguesebr_lang, portuguesebr_lang_size, &languageSet);
-		}
-	if (strcmp(settings.localLanguage, "ru-RUS") == 0) {
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "tr-TUR") == 0) {
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "zh-CN") == 0) {
-		return false;
-		}
-	if (strcmp(settings.localLanguage, "zh-TW") == 0) {
-		return false;
 		}
 	if (strcmp(settings.localLanguage, "myLANG") == 0) {
 		if (!cfg_parsefile(USBLOADER_PATH "/MyLanguage.lang", &languageSet)) {

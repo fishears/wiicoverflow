@@ -148,12 +148,13 @@ hideScrollbar = barre de défilement
 covers3D = Jaquettes 3D 
 gameText = Titre du jeu
 gameSettings = Paramètres Jeu
-gameLanguage = Game Language
-Finnish = Finnish
-PortugueseBR = Portuguese BR
-Danish = Danish
+gameLanguage = Langue du jeu
+Finnish = Finnois
+PortugueseBR = Portugais
+Danish = Dannois
 Catalan = Catalan
-MyLanguage = MyLanguage
+MyLanguage = Ma langue
+Turkish = Turc
 
 ###########
 # Buttons #

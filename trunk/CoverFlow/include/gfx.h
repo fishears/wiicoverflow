@@ -57,23 +57,19 @@ extern const u8 menu_button_over_png[];					// Large menu hover
 extern const u8 menu_header_png[];						// Header bar for settings screens
 extern const u8 menu_logo_png[];						// CoverFloader logo
 extern const u8 menu_panel_png[];						// Settings screen background panel (TODO replace with GRRLIB rectangle)
+
 extern const u8 flag_br_png[];							// Flags...
-extern const u8 flag_cn_png[];
 extern const u8 flag_da_png[];
 extern const u8 flag_de_png[];
 extern const u8 flag_fr_png[];
 extern const u8 flag_it_png[];
-extern const u8 flag_jp_png[];
-extern const u8 flag_tw_png[];
-extern const u8 flag_pt_png[];
-extern const u8 flag_ru_png[];
-extern const u8 flag_uk_png[];
 extern const u8 flag_us_png[];
 extern const u8 flag_es_png[];		// spanish
 extern const u8 flag_ct_png[];		// catalan
 extern const u8 flag_fi_png[];		// finnish
 extern const u8 flag_MyLang_png[];	// MyLang
 extern const u8 flag_dk_png[];		// danish
+extern const u8 flag_tr_png[];		// turkish
 
 GRRLIB_texImg menu_button_texture;
 GRRLIB_texImg menu_button_over_texture;
@@ -91,16 +87,11 @@ Button menuGraphicsButton;
 Button menuLanguagesButton;
 Button menuLogoButton;
 GRRLIB_texImg flag_br_texture; // Brazil flag
-GRRLIB_texImg flag_cn_texture; // China flag
 GRRLIB_texImg flag_da_texture; // Netherlands Flag
 GRRLIB_texImg flag_de_texture; // Germany Flag
 GRRLIB_texImg flag_fr_texture; // France Flag
 GRRLIB_texImg flag_it_texture; // Italy Flag
-GRRLIB_texImg flag_jp_texture; // Japan Flag
-GRRLIB_texImg flag_tw_texture; // Taiwan Flag
-GRRLIB_texImg flag_pt_texture; // Portugal Flag
-GRRLIB_texImg flag_ru_texture; // Russia Flag
-GRRLIB_texImg flag_uk_texture; // UK Flag
+GRRLIB_texImg flag_tr_texture; // Turkey Flag
 GRRLIB_texImg flag_us_texture; // US Flag
 GRRLIB_texImg flag_es_texture; // Spain Flag
 GRRLIB_texImg flag_ct_texture; // Catalan Flag
@@ -109,16 +100,11 @@ GRRLIB_texImg flag_MyLang_texture; // MyLang Flag
 GRRLIB_texImg flag_dk_texture; // Denmark Flag
 
 Button flagBRButton;
-Button flagCNButton;
 Button flagDAButton;
 Button flagDEButton;
 Button flagFRButton;
 Button flagITButton;
-Button flagJPButton;
-Button flagTWButton;
-Button flagPTButton;
-Button flagRUButton;
-Button flagUKButton;
+Button flagTRButton;
 Button flagUSButton;
 Button flagESButton;
 Button flagCTButton;
