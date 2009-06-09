@@ -196,7 +196,8 @@ void Init_Buttons()
 	addButton				= Button_Init(button_round_add_png,  button_round_add_over_png, 580, 427);
  	// Dialog Box Buttons
 	okButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 300, 290, TX.okB);
-	cancelButton			= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 414, 290, TX.cancelB);
+	cancelButton			= Duplicate_Button_TTF(okButton, 414, 290, TX.cancelB);
+//	cancelButton			= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 414, 290, TX.cancelB);
 	yesButton               = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 300, 290, TX.yesB);
     noButton                = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 414, 290, TX.noB);
 	// Game Launch Panel Buttons
@@ -222,7 +223,7 @@ void Init_Buttons()
 	// General Settings Panel
     musicOnButton           = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 97);
     musicOffButton          = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 97);
-    rumbleOnButton          = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 131);
+    rumbleOnButton          = Duplicate_Button(musicOnButton, 310, 131);
     rumbleOffButton         = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 131);
     quickstartOnButton      = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 165);
     quickstartOffButton     = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 165);
@@ -1450,7 +1451,7 @@ void freeResources(){
 	FreeButtonResources(&addButton);
  	// Dialog Box Buttons
 	FreeButtonResources(&okButton);
-	FreeButtonResources(&cancelButton);
+	//FreeButtonResources(&cancelButton);
 	FreeButtonResources(&yesButton);
     FreeButtonResources(&noButton);
 	// Game Launch Panel Buttons
@@ -1476,7 +1477,7 @@ void freeResources(){
 	// General Settings Panel
     FreeButtonResources(&musicOnButton);
     FreeButtonResources(&musicOffButton);
-    FreeButtonResources(&rumbleOnButton);
+    //FreeButtonResources(&rumbleOnButton);
     FreeButtonResources(&rumbleOffButton);
     FreeButtonResources(&quickstartOnButton);
     FreeButtonResources(&quickstartOffButton);
