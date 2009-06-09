@@ -149,6 +149,11 @@ covers3D = Jaquettes 3D
 gameText = Titre du jeu
 gameSettings = Paramètres Jeu
 gameLanguage = Game Language
+Finnish = Finnish
+PortugueseBR = Portuguese BR
+Danish = Danish
+Catalan = Catalan
+MyLanguage = MyLanguage
 
 ###########
 # Buttons #

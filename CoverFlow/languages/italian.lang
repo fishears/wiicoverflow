@@ -149,6 +149,11 @@ covers3D = Cover 3D
 gameText = Titolo del gioco
 gameSettings = Settings del gioco
 gameLanguage = Game Language
+Finnish = Finnish
+PortugueseBR = Portuguese BR
+Danish = Danish
+Catalan = Catalan
+MyLanguage = MyLanguage
 
 ###########
 # Buttons #
