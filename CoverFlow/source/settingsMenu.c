@@ -912,8 +912,8 @@ void Game_Settings_Menu_Show()
                                     bool dummy = check_gct(self.gameSelected,self.gameList);
                                     if(!dummy)
                                     {
-                                        //dummy = download_txt(self.gameSelected,self.gameList);
-                                        //if(!dummy)
+                                        dummy = download_txt(self.gameSelected,self.gameList);
+                                        if(!dummy)
                                             gameSetting.ocarina = 0;
                                     }
                                 }
