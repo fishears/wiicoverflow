@@ -41,7 +41,7 @@ void SETTINGS_Init()
 	settings.fontColor    = 0xFFFFFFFF; // default to white
 	
 	settings.covers3d     = 0;
-	settings.hideScroll   = 0;
+	settings.hideScroll   = 1;
 	
 	settings.volume = 100;
 	
@@ -72,7 +72,7 @@ void graphics_SETTINGS_Init()
 	settings.drawWindow   = 7;
 	settings.coverText    = 1;
 
-	settings.hideScroll   = 0;
+	settings.hideScroll   = 1;
 }
 
 int SETTINGS_Load()

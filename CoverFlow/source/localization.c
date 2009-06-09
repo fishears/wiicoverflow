@@ -227,7 +227,7 @@ void languageDefault()
 	strcopy(TX.batteryUnit, "P%d", sizeof(TX.batteryUnit));
 	snprintf(TX.basic, sizeof(TX.basic), "Basic" ); 
 	snprintf(TX.advanced, sizeof(TX.advanced), "Advanced" ); 
-	snprintf(TX.hideScrollbar, sizeof(TX.hideScrollbar), "Hide Scrollbar" ); 
+	snprintf(TX.hideScrollbar, sizeof(TX.hideScrollbar), "Scrollbar" ); 
 	snprintf(TX.covers3D, sizeof(TX.covers3D), "3D Covers" ); 
 	snprintf(TX.gameText, sizeof(TX.gameText), "Game Title" ); 
 	snprintf(TX.gameSettings, sizeof(TX.gameSettings), "Game Settings" ); 	

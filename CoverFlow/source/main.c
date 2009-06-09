@@ -724,7 +724,7 @@ int main( int argc, char **argv )
 		else
 		{
 		
-			if(!settings.hideScroll)
+			if(settings.hideScroll)
 			{
 				//TODO IF hiding scroll; don't let user click and drag it.
 				
