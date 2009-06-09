@@ -218,7 +218,7 @@ int main( int argc, char **argv )
 
 	//ee();
 	languageLoad();		    // load localization 
-	
+	Label_Buttons();		// Localize buttons
 #ifdef ONE_AT_A_TIME
         bool LEFT = false, RIGHT = false;
         int L_CNT = 0, R_CNT = 0;
