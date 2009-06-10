@@ -140,16 +140,14 @@ void Paint_Progress(float v, char* msg)
 		count = 26;
 
 	GRRLIB_2D_Init();
-
 	CFreeTypeGX_DrawText(ttf18pt, 320, 220, TX.welcomeMsg, (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
-	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
-	GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
-
 	for(i = 0; i < count; i++)
 	{
 		GRRLIB_DrawImg(165+12*i, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImgReflection(165+12*i, 232 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
 	}
+	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
+	GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
 	
 #ifdef DEBUG
 	if(msg != NULL)
@@ -163,29 +161,71 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 {
 	float percent = (float)v/(float)max;
 	int count = percent*26;
-        if(count > 26)
-                count = 26;
+	if(count > 26)
+		count = 26;
+	
+	GRRLIB_2D_Init();
 	int i;
-
-	//GRRLIB_2D_Init();
-	
-	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
-	GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
-
-	
 	for(i = 0; i < count; i++)
 	{
 		GRRLIB_DrawImg(165+12*i, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImgReflection(165+12*i, 232 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
 	}
+	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
+	GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
 	
-	#ifdef DEBUG
+#ifdef DEBUG
 	if(msg != NULL)
 		CFreeTypeGX_DrawText(ttf16pt, 320, 320,  msg, (GXColor){0x66, 0x66, 0x66, 0xff}, FTGX_JUSTIFY_CENTER);
-    #endif
+#endif
     
 	GRRLIB_Render();
 }
+
+void Paint_Progress_FadeInStart()
+{
+	int tFade;
+	for(tFade=0xFF;tFade>=0;tFade-=8)
+	{
+		GRRLIB_2D_Init();
+		CFreeTypeGX_DrawText(ttf18pt, 320, 220, TX.welcomeMsg, (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
+		GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
+		GRRLIB_FillScreen(0x00000000|tFade);
+		GRRLIB_Render();
+	}
+	GRRLIB_FillScreen(0x000000FF);
+	GRRLIB_Render();
+}
+
+void Paint_Progress_FadeToBG()
+{
+	int tFade;
+	for(tFade=0x00;tFade<=255;tFade+=8)
+	{
+		GRRLIB_2D_Init();
+		CFreeTypeGX_DrawText(ttf18pt, 320, 220, TX.welcomeMsg, (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
+		GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
+		int tBar;
+		for(tBar = 0; tBar < 26; tBar++)
+		{
+			GRRLIB_DrawImg(165+12*tBar, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImgReflection(165+12*tBar, 232 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
+		}
+		if (settings.theme)
+			GRRLIB_FillScreen(0xCFCFCF00|tFade);
+		else
+			GRRLIB_FillScreen(0x00000000|tFade);
+		GRRLIB_Render();
+	}
+	if (settings.theme)
+		GRRLIB_FillScreen(0xFFFFFFFF);
+	else
+		GRRLIB_FillScreen(0x000000FF);
+	GRRLIB_Render();
+}
+
 
 void Init_Buttons()
 {
@@ -286,7 +326,7 @@ void Init_Buttons()
 	gbackButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 468, 335, TX.backB);
 } // End Init_Buttons();
 
-void DrawSlider(int theme_id)
+void DrawSlider(int yPos, int theme_id)
 {
 	int min_loc = 20;
 	int max_loc = 296;
@@ -296,20 +336,20 @@ void DrawSlider(int theme_id)
 		x = 155;
 	
 	slideButton.x = 446 - x;
-	slideButton.y = 426;
+	slideButton.y = yPos + 16;
 	
 	switch (theme_id)
 	{
 		case 0: // black theme
-			GRRLIB_DrawImg(120, 410, slidebar_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(120, yPos, slidebar_texture, 0, 1, 1, 0xFFFFFFFF);
 			Button_Theme_Paint(&slideButton, settings.theme);
 			break;
 		case 1: // white theme
-			GRRLIB_DrawImg(120, 410, slidebar_white_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(120, yPos, slidebar_white_texture, 0, 1, 1, 0xFFFFFFFF);
 			Button_Theme_Paint(&slideButton, settings.theme);
 			break;
 		default:
-			GRRLIB_DrawImg(120, 410, slidebar_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImg(120, yPos, slidebar_texture, 0, 1, 1, 0xFFFFFFFF);
 			Button_Theme_Paint(&slideButton, settings.theme);
 			break;
 	}
@@ -370,6 +410,61 @@ void GRRLIB_Cover(float pos, int texture_id)
 	DrawBufferedCover(texture_id, loc, angle, falloff);
 }
 
+void DrawCoverFlyInStart()
+{
+	float zEnd = settings.coverZoom;
+	float yEnd = 0.0;
+	float yEndTitle = 410.0;
+	float yEndSlider = 410.0; 
+	float yEndButtons = 427.0;
+	int   q;
+	int tFade;
+	float moving_y;
+	for (q=0;q<=192;q++)
+	{
+		// Calc the fly in using Penner easing equation
+		settings.coverZoom = easeOutQuint(q, zEnd-10, 10.0, 192);
+		settings.coverCamY = easeOutQuint(q, yEnd+3, -3.0, 192);
+		// Draw the covers
+		draw_covers();
+		// Flip to 2D and draw the bottom items
+		GRRLIB_2D_Init();
+		// Float in the buttons
+		if(!settings.parentalLock)
+		{
+			moving_y = easeOutQuint(q, yEndButtons + 70, -70.0, 192);
+			addButton.y = moving_y;
+			settingsButton.y = moving_y;
+			Button_Theme_Paint(&addButton, settings.theme);
+			Button_Theme_Paint(&settingsButton, settings.theme);
+		}
+		// Float in the game title
+		if(settings.coverText)
+		{
+			moving_y = easeOutQuint(q, yEndTitle + 70, -70.0, 192);
+			draw_game_title(moving_y, self.gameSelected, 1.0);
+		}
+		// Float in the slider
+		if(settings.hideScroll)
+		{
+			moving_y = easeOutQuint(q, yEndSlider + 70, -70.0, 192);
+			DrawSlider(moving_y, settings.theme);
+		}
+		// Draw the fade mask
+		tFade = (255 - (q * 2));
+		if(tFade < 0) tFade = 0;
+		if (settings.theme)
+			GRRLIB_FillScreen(0xCFCFCF00|tFade);
+		else
+			GRRLIB_FillScreen(0x00000000|tFade);
+		WPAD_ScanPads();
+		GetWiimoteData();
+		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+		GRRLIB_Render();
+		// Update the images while flying in
+		UpdateBufferedImages();
+	}
+}
 
 void draw_covers()
 {
@@ -401,9 +496,7 @@ void draw_covers()
 	}
 }
 
-
-
-void draw_game_title(int index, float textSize)
+void draw_game_title(int yPos, int index, float textSize)
 {
 	if(index != -1)
 	{
@@ -453,9 +546,9 @@ void draw_game_title(int index, float textSize)
 		}
 		
 		if (settings.theme)
-			CFreeTypeGX_DrawText(ttf20pt, 320, 410,  gameName, (GXColor){0x11, 0x11, 0x11, 0xff}, FTGX_JUSTIFY_CENTER);
+			CFreeTypeGX_DrawText(ttf20pt, 320, yPos,  gameName, (GXColor){0x11, 0x11, 0x11, 0xff}, FTGX_JUSTIFY_CENTER);
 		else
-			CFreeTypeGX_DrawText(ttf20pt, 320, 410,  gameName, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+			CFreeTypeGX_DrawText(ttf20pt, 320, yPos,  gameName, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 	}
 }
 
