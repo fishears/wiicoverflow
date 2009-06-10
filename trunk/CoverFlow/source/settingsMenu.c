@@ -875,13 +875,16 @@ void Game_Settings_Menu_Show()
                                 #ifdef CHEAT_MANAGER
                                 if(gameSetting.ocarina == 1)
                                 {
-                                    bool dummy = check_gct(self.gameSelected,self.gameList);
-                                    if(!dummy)
+                                    if(!check_txt(self.gameSelected,self.gameList)) //no txt file so try downloading
                                     {
-                                        dummy = download_txt(self.gameSelected,self.gameList);
-                                        if(!dummy)
-                                            gameSetting.ocarina = 0;
+                                        bool dummy = download_txt(self.gameSelected,self.gameList);
                                     }
+                                        if(check_gct(self.gameSelected,self.gameList)) //only enable ocarina if gct file found
+                                            //this will change to go straight into cheat manager if no gct found
+                                            //and to display cheat manager button if gct IS found
+                                        {gameSetting.ocarina = 1;manage_cheats(self.gameSelected,self.gameList);}
+                                        else
+                                            gameSetting.ocarina = 0;
                                 }
                                 #endif
 			}

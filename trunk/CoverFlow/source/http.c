@@ -136,7 +136,7 @@ struct block downloadfile(const char *url)
         //Check if the url starts with "http://", if not it is not considered a valid url
 	if(strncmp(url, "http://", strlen("http://")) != 0)
 	{
-		sprintf(emptyblock.error,TX.URLnoBegin, url);
+		sprintf(emptyblock.error,TX.URLnoBegin, url); //doen't start with http://
 		return emptyblock;
 	}
 	
@@ -146,7 +146,7 @@ struct block downloadfile(const char *url)
 	//At the very least the url has to end with '/', ending with just a domain is invalid
 	if(path == NULL)
 	{
-		sprintf(emptyblock.error,TX.URLnoPath, url);
+		sprintf(emptyblock.error,TX.URLnoPath, url); //no path part in URL
 		return emptyblock;
 	}
 	
@@ -155,7 +155,7 @@ struct block downloadfile(const char *url)
 	
 	if(domainlength == 0)
 	{
-		sprintf(emptyblock.error,TX.URLnoDomain, url);
+		sprintf(emptyblock.error,TX.URLnoDomain, url); //couldn't find a domain in url
 		return emptyblock;
 	}
 	
@@ -168,7 +168,7 @@ struct block downloadfile(const char *url)
 	
 	if(ipaddress == 0)
 	{
-		sprintf(emptyblock.error,TX.errorDomain, domain);
+		sprintf(emptyblock.error,TX.errorDomain, domain); //couldn't resolve domain
 		return emptyblock;
 	}
 
@@ -176,7 +176,7 @@ struct block downloadfile(const char *url)
 	s32 connection = server_connect(ipaddress, 80);
 	
 	if(connection < 0) {
-		sprintf(emptyblock.error,TX.errEstablishConn);
+		sprintf(emptyblock.error,TX.errEstablishConn); //couldn't establish connection
 		return emptyblock;
 	}
 	
@@ -220,7 +220,7 @@ struct block downloadfile(const char *url)
 	
 	if(file.data == NULL)
 	{
-		sprintf(emptyblock.error,TX.noMemCopy );
+		sprintf(emptyblock.error,TX.noMemCopy ); //couldn't copy the file to the block
 		free(response.data);
 		return emptyblock;
 	}
