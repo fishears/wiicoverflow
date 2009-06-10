@@ -18,7 +18,7 @@
 extern "C" {
 #endif
 
-    #define TXT_PATH "sd:/txtcodes/"
+    #define TXT_PATH "/txtcodes/"
     #define GCT_PATH "sd:/codes/"
     #define CODESITE "http://www.usbgecko.com/codes/codes/"
     
