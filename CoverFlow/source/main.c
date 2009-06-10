@@ -374,27 +374,28 @@ int main( int argc, char **argv )
 						// Check the buttons
 						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y) || PAD_ButtonsDown(0) & PAD_BUTTON_A) // load
 						{
-						if(!(settings.parentalLock && gameSetting.lock))
-                                                {
-                                                    // User clicked on the load game, so save settings before launching
-							struct discHdr *header = &self.gameList[self.gameSelected];
-							char titleID[7];
-							sprintf(titleID, "%s", header->id);
-                                                        strcpy(settings.lastplayed,titleID); //save this game as last game played
-                                                        SETTINGS_Save();
-                                                                                    if(getGameSettings(titleID, &gameSetting))
-                                                                                            apply_settings();
-                                                                                    setGameSettings(titleID, &gameSetting,1);
-                                                        WiiLight(0); // turn off the slot light
-							
-							
-							
-                                                        if(!LaunchGame())
-                                                        {
-                                                                SETTINGS_Load(); //failed to launch so get the globals back
-                                                                return 0;
-                                                        }
-                                                }
+							if(!(settings.parentalLock && gameSetting.lock))
+							{
+								// User clicked on the load game, so save settings before launching
+								struct discHdr *header = &self.gameList[self.gameSelected];
+								char titleID[7];
+								
+								sprintf(titleID, "%s", header->id);
+								strcpy(settings.lastplayed,titleID); //save this game as last game played
+								SETTINGS_Save();
+								
+								if(getGameSettings(titleID, &gameSetting))
+									apply_settings();
+								setGameSettings(titleID, &gameSetting,1);
+								
+								WiiLight(0); // turn off the slot light
+								
+								if(!LaunchGame())
+								{
+									SETTINGS_Load(); //failed to launch so get the globals back
+									return 0;
+								}
+							}
 						}
 						else if((!settings.parentalLock) && Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
 						{
@@ -543,10 +544,10 @@ int main( int argc, char **argv )
 					}
 				}
 			}
-			else if ( ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1) && (WPAD_ButtonsDown(0) & WPAD_BUTTON_UP)) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for button 1 hold
+			else if ( ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1)) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for button 1 hold
 			{
 				// Take a screen shot
-				GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+				//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 
 				//Beardfaces stuff
 					
@@ -617,7 +618,7 @@ int main( int argc, char **argv )
 						/*Hitting 1 causes crash right now...*/
 						//sysdate();
 						//quit();
-						//WindowPrompt("Titolo", "This is a long message using\n\the character \\n as escape sequence.\nAlso now buttons title and message are\naligned now. :)", &okButton, &cancelButton);
+						WindowPrompt("Titolo", "This is a long message using\nthe character \\n as escape sequence.\nAlso now buttons title and message are\naligned now. :)", &okButton, &cancelButton);
 			}
 			else if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_2) || (PAD_ButtonsDown(0) & PAD_BUTTON_Y))// Check for button 1 hold
 			{
@@ -817,7 +818,7 @@ int main( int argc, char **argv )
 				CFreeTypeGX_DrawText(ttf18pt, 320, 30,  tAppInfo, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 70, 30,  tIOS, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 			}
-			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+			//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 
 		}
 	
