@@ -217,7 +217,7 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 								mxmlElementSetAttr(next_n, "lock", temp);
 								
 							if(date == 1){
-								sysdate(temp);
+								setSysdate(temp);
 								mxmlElementSetAttr(next_n, "lastplayed", temp);
 							}
 						}
@@ -249,7 +249,9 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 						mxmlElementSetAttr(next_n, "lock", temp);
 						if(date == 1)
 						{
-							sysdate(temp);
+							//sysdate(temp);
+							//char date[30];
+							setSysdate(temp);
 							mxmlElementSetAttr(next_n, "lastplayed", temp);
 						}
 						else if(date == 2)

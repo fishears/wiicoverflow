@@ -14,17 +14,117 @@ u32 swap32(u32 x)
 }
 
 
-void sysdate(char* ret_string)
+void getSysdate(char* now, char* ret_string)
 {
+	char year[3];
+	char month[20];
+	char day[3];
+	char hour[3];
+	char min[3];
+	char dow[20];
+	
+	strncpy(year, now, 2);
+	//strncpy(month, now+2, 2);
+	strncpy(day, now+4, 2);
+	strncpy(hour, now+6, 2);
+	strncpy(min, now+8, 2);
+	//strncpy(dow, now+10, 2);
+	
+	char tmp[20];
+	int tmp_i;
+	
+	strncpy(tmp, now+2, 2);
+	tmp_i = atoi(tmp);
+	
+	switch(tmp_i){
+		
+		case 0:
+			sprintf(month, TX.Jan );
+			break;
+		case 1:
+			sprintf(month, TX.Feb );
+			break;
+		case 2:
+			sprintf(month, TX.Mar );
+			break;
+		case 3:
+			sprintf(month, TX.Apr );
+			break;
+		case 4:
+			sprintf(month, TX.May );
+			break;
+		case 5:
+			sprintf(month, TX.Jun );
+			break;
+		case 6:
+			sprintf(month, TX.Jul );
+			break;
+		case 7:
+			sprintf(month, TX.Aug );
+			break;
+		case 8:
+			sprintf(month, TX.Sep );
+			break;
+		case 9:
+			sprintf(month, TX.Oct );
+			break;
+		case 10:
+			sprintf(month, TX.Nov );
+			break;
+		case 11:
+			sprintf(month, TX.Dec );
+			break;
+		//default:
+		//	sprintf(month, "xxx: %d", ts->tm_mon);
+		
+	}
+	
+	strncpy(tmp, now+10, 2);
+	tmp_i = atoi(tmp);
+	
+	switch(tmp_i){
+	
+		case 0:
+			sprintf(dow, TX.Sun );
+			break;
+		case 1:
+			sprintf(dow, TX.Mon );
+			break;
+		case 2:
+			sprintf(dow, TX.Tue );
+			break;
+		case 3:
+			sprintf(dow, TX.Wed );
+			break;
+		case 4:
+			sprintf(dow, TX.Thu );
+			break;
+		case 5:
+			sprintf(dow, TX.Fri );
+			break;
+		case 6:
+			sprintf(dow, TX.Sat );
+			break;
+	}
+	
+	sprintf(ret_string, "%s %d %s %d (%02d:%02d)", dow, atoi(day), month, 2000+atoi(year), atoi(hour), atoi(min));
+	//return ret_string;
+}
+
+void setSysdate(char* ret_string)
+{
+	//YYMMDDHHMI+dayofweek
+	
 	time_t now;
 	struct tm  *ts;
 	//char string[128];
-	char dow[12];
-	char month[12];
+	//char dow[20];
+	//char month[20];
    
 	now = time(NULL);
 	ts = localtime(&now);
 	
+	/*
 	switch(ts->tm_wday){
 	
 		case 0:
@@ -92,9 +192,11 @@ void sysdate(char* ret_string)
 		//	sprintf(month, "xxx: %d", ts->tm_mon);
 		
 	}
-	sprintf(ret_string, "%s %d %s %02d:%02d", dow, ts->tm_mday, month, ts->tm_hour, ts->tm_min);
-	//sprintf(ret_string, "%s %d %s %d at %02d:%02d", dow, ts->tm_mday, month, 1900+ts->tm_year, ts->tm_hour, ts->tm_min);
-	//sprintf(ret_string, string);
+	*/
+	
+	//sprintf(ret_string, "%s %d %s %02d:%02d", dow, ts->tm_mday, month, ts->tm_hour, ts->tm_min);
+	sprintf(ret_string, "%02d%02d%02d%02d%02d%02d", ts->tm_year-100, ts->tm_mon, ts->tm_mday, ts->tm_hour, ts->tm_min, ts->tm_wday);
+	
 	//WindowPrompt("Message", string, &okButton, NULL);
 	
 }

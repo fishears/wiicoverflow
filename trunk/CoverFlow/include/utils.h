@@ -15,7 +15,8 @@
 
 /* Prototypes */
 u32 swap32(u32);
-void sysdate();
+void setSysdate(char* ret_string);
+void getSysdate(char* now, char* ret_string);
 void ios_version_check();
 u8 CalculateFrameRate();
 void apply_settings();

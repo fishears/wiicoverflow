@@ -700,7 +700,10 @@ int DrawLoadGameDialog(bool load, bool hover)
 			CFreeTypeGX_DrawText(ttf16pt, 270, 253, TX.neverPlayed, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 		else
 		{
-			sprintf(tTemp, TX.played, gameSetting.lastPlayed);
+			char str[30];
+			getSysdate(gameSetting.lastPlayed, str);
+			//sprintf(tTemp, TX.played, gameSetting.lastPlayed);
+			sprintf(tTemp, TX.played, str);
 			CFreeTypeGX_DrawText(ttf16pt, 270, 253, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 		}
 	
@@ -994,7 +997,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		if(txt != NULL)
 		{
 			char* msg = malloc(strlen(txt)*sizeof(char));
-			sprintf(msg, txt);
+			//sprintf(msg, "Suca\nSono\nshals");
 			
 			pch = strtok(msg, "\n");
 			while (pch != NULL)
