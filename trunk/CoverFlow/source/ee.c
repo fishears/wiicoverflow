@@ -1,5 +1,6 @@
 #include "ee.h"
 
+extern s_settings settings;
 extern s_pointer pointer;
 extern const u8 toasty_png[];
 
@@ -10,6 +11,7 @@ void ee(){
 	//bool skip = false;
 
 	GRRLIB_2D_Init();
+        GRRLIB_SetBGColor(0); // set BG to BLACK
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
 	
@@ -125,6 +127,7 @@ void ee(){
 		GRRLIB_Render();
 		Sleep(1000);
 	}
+        GRRLIB_SetBGColor(settings.theme); // set BG back to user's theme
 }
 
 void eScreen(){
