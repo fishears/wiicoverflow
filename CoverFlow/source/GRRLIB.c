@@ -1422,7 +1422,7 @@ void GRRLIB_SetBGColor(int theme)
 	{
 		// clears the bg to color and clears the z buffer
 		GXColor background = { 0xCF, 0xCF, 0xCF, 0xFF };
-		GX_SetCopyClear (background, GX_MAX_Z24);
+		GX_SetCopyClear (background, GX_MAX_Z24);  // I don't know why it flashes to black here briefly...??
 		GRRLIB_Render();
 
 	}
@@ -1440,7 +1440,7 @@ void GRRLIB_3D_Init()
 {
     Mtx44 perspective;
 	
-	Vector cam = {0.0F, 0.0F, settings.coverZoom},
+	Vector cam = {settings.coverCamX, settings.coverCamY, settings.coverZoom},
 			up = {0.0F, 1.0F, 0.0F},
 		  look = {0.0F, 0.0F, 1.0F};
 	guLookAt(view, &cam, &up, &look);

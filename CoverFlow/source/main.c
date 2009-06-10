@@ -106,6 +106,9 @@ int main( int argc, char **argv )
     progress_step_texture = GRRLIB_LoadTexture(progress_step_png);
     progress_bar_texture  = GRRLIB_LoadTexture(progress_bar_png);
 
+	// Fade in from black to start the loading screen
+	Paint_Progress_FadeInStart();
+	
 	self.progress += .1;
 	sprintf(self.debugMsg, "Loading textures" );
 
@@ -167,12 +170,9 @@ int main( int argc, char **argv )
 #ifndef TEST_MODE
 	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
 #endif
-
-	
 	
 	BUFFER_InitBuffer();
 	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
-//	UpdateBufferedImages();
 	
 	float wait = 10; //ms
 	float prog = 2.1/wait;
@@ -183,13 +183,16 @@ int main( int argc, char **argv )
 		wait--;
 		self.progress += prog;
 		Paint_Progress(self.progress, self.debugMsg);
-		Sleep(10);
+		Sleep(20);
 	}
 	
-
-	// set the background
 	sprintf(self.debugMsg, TX.setBackground );
 	Paint_Progress(self.progress,self.debugMsg);
+
+	// Fade the loading screen to BG color (from settings)
+	Paint_Progress_FadeToBG();
+
+	// Set the background
 	if (settings.theme)
 	{	// black fonts for white theme
 		settings.fontColor = 0xFFFFFFFF; //temp until I fix the dialogs for the white theme
@@ -201,7 +204,7 @@ int main( int argc, char **argv )
 		settings.fontColor = 0xFFFFFFFF;
 		GRRLIB_SetBGColor(0);  // set BG to black
 	}
-
+	
 	self.selected        = false;
 	bool select_ready    = false;
 	bool dragging        = false;
@@ -210,8 +213,6 @@ int main( int argc, char **argv )
 	self.animate_slide_x = 0;
 	self.animate_flip    = 0;
 	
-	GRRLIB_FillScreen(0x000000FF);
-	GRRLIB_Render();
 #ifndef TEST_MODE
     ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
 #endif
@@ -220,9 +221,10 @@ int main( int argc, char **argv )
 	languageLoad();		    // load localization 
 	Label_Buttons();		// Localize buttons
 #ifdef ONE_AT_A_TIME
-        bool LEFT = false, RIGHT = false;
-        int L_CNT = 0, R_CNT = 0;
+	bool LEFT = false, RIGHT = false;
+    int L_CNT = 0, R_CNT = 0;
 #endif
+
 	//get last game played and select it as centre cover at startup
 	if(strcmp(settings.lastplayed,"")!=0){
 		int i;
@@ -241,6 +243,8 @@ int main( int argc, char **argv )
 		//ee();
 	//}
 
+	// Fly in the covers
+	DrawCoverFlyInStart();
 
 	//////////////////////////
 	// main screen gui loop //
@@ -729,7 +733,7 @@ int main( int argc, char **argv )
 				//TODO IF hiding scroll; don't let user click and drag it.
 				
 				// Draw the slider and corner buttons
-				DrawSlider(settings.theme);
+				DrawSlider(410, settings.theme);
 			}
 			
             if(!settings.parentalLock)
@@ -741,7 +745,7 @@ int main( int argc, char **argv )
 			if(settings.coverText && (!dragging && !twisting && select_ready))
 			{	
 				float t = 1.0; // add a configurable text size later
-				draw_game_title(self.gameSelected, t);
+				draw_game_title(410, self.gameSelected, t);
 			}
 			
 		}

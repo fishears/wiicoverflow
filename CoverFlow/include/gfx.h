@@ -212,16 +212,18 @@ void LoadTextures();
 void DrawBufferedCover(int i, float loc, float angle, float falloff );
 void Paint_Progress(float v, char* msg);
 void Paint_Progress_Generic(int v, int max, char* msg);
+void Paint_Progress_FadeToBG();
+void Paint_Progress_FadeInStart();
 void Init_Buttons();
 void Label_Buttons();
 void GRRLIB_Cover(float pos, int texture_id);
 void GetWiimoteData();
 void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 scaleY, u32 color);
-void DrawSlider(int theme_id);	   // takes a SETTING_theme, but defaults to black
+void DrawSlider(int yPos, int theme_id);	   // takes a SETTING_theme, but defaults to black
 int  DrawLoadGameDialog(bool load, bool hover);
-
+void DrawCoverFlyInStart();
 void draw_covers();
-void draw_game_title(int index, float textSize);
+void draw_game_title(int yPos, int index, float textSize);
 
 
 float change_scale_without_containing(float val, float in_min, float in_max, float out_min, float out_max);
