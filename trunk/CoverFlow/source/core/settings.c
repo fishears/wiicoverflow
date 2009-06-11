@@ -37,29 +37,24 @@ void SETTINGS_Init()
 	settings.coverFallOff = 0.0;
 	settings.drawWindow   = 7;
 	settings.coverText    = 1;
-	settings.theme		 = 0; // default to black
-	settings.fontColor    = 0xFFFFFFFF; // default to white
-	
+	settings.theme		  = 0; // default to black
 	settings.covers3d     = 0;
 	settings.hideScroll   = 1;
-	
-	settings.volume = 100;
-	
 	//General
-        settings.parentalLock = 0;
+	settings.parentalLock = 0;
+	settings.volume       = 100;
 	settings.sound        = 1;
 	settings.music        = 1;
 	settings.quickstart   = 0;
 	settings.enablepitch  = 0;
 	strcpy(settings.localLanguage, "default"); // en-US 
- 
-	//Global Game
+ 	//Global Game
 	settings.ocarina      = 0;
 	settings.hooktype     = 0;
 	settings.language     = 0;
 	settings.video        = 0;
 	settings.vipatch      = 0;
-        strcpy(settings.lastplayed,"");
+	strcpy(settings.lastplayed,"");
 };
 //called by reset button on graphics settings screen
 //button used to reset EVERYTHING
@@ -123,17 +118,6 @@ int SETTINGS_Load()
 			  settings.covers3d  = atoi(mxmlElementGetAttr(next_n,"3d"));
 		  if(mxmlElementGetAttr(next_n,"hideScroll"))
 			  settings.hideScroll  = atoi(mxmlElementGetAttr(next_n,"hideScroll"));
-			  
-		  if (settings.theme)
-		  {
-//			  settings.fontColor = 0x000000FF;
-			  settings.fontColor = 0xFFFFFFFF; //temp until I fix the dialogs for the white theme
-
-		  }
-		  else
-		  {
-			  settings.fontColor = 0xFFFFFFFF;
-		  }
 	  }
 	  else
 	  {

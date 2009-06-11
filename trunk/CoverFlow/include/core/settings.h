@@ -17,15 +17,12 @@ typedef struct {
     int drawWindow;
     int coverText;
     int theme;
-    int fontColor; // stores the hex val of the theme
 	
 	int covers3d;
 	int hideScroll;
-	
 
 	int volume;
-
-    int sound;
+	int sound;
     int music;
     int parentalLock;
     int rumble;

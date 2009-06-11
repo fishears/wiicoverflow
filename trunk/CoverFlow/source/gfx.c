@@ -184,17 +184,19 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 
 void Paint_Progress_FadeInStart()
 {
+	GRRLIB_2D_Init();
 	int tFade;
-	for(tFade=0xFF;tFade>=0;tFade-=8)
+	for(tFade=0xFF;tFade>=0x00;tFade-=8)
 	{
-		GRRLIB_2D_Init();
 		CFreeTypeGX_DrawText(ttf18pt, 320, 220, TX.welcomeMsg, (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
 		GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
 		GRRLIB_FillScreen(0x00000000|tFade);
 		GRRLIB_Render();
 	}
-	GRRLIB_FillScreen(0x000000FF);
+	CFreeTypeGX_DrawText(ttf18pt, 320, 220, TX.welcomeMsg, (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
+	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
+	GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
 	GRRLIB_Render();
 }
 
@@ -833,30 +835,34 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 	
 	if(choice_a == 0 && choice_b == 0)
 		doloop = false;
-	
+	if(choice_a != 0)
+		choice_a->hovering = false;
+	if(choice_b != 0)
+		choice_b->hovering = false;
 	/////////////////////////////////////
 	// Draw the intro - lower the dialog
 	int i = 1;
 	int fade = 0x00;
+	int slidetime = 30;
 	float moving_y;
 	
-	for(i = 0; i <= 20; i++)
+	for(i = 0; i <= slidetime; i++)
 	{
 		// Draw the covers in the back
 		draw_covers();
 		GRRLIB_2D_Init();
 		// Draw the screen fade
 		GRRLIB_FillScreen(0x00000000|fade);
-		fade+=8;
+		fade+=5;
 		// Draw the background panel
-		moving_y = change_scale(i, 0, 20, -202, 148);
+		moving_y = easeOutQuad(i, 148 - 350, +350.0, slidetime);
 		GRRLIB_Rectangle(108, moving_y, 424, 184, 0xffffffdd, true);
-		moving_y = change_scale(i, 0, 20, -200, 150);
+		moving_y = easeOutQuad(i, 150 - 350, +350.0, slidetime);
 		GRRLIB_Rectangle(110, moving_y, 420, 180, 0x737373FF, true);
-		moving_y = change_scale(i, 0, 20, -210, 140);
+		moving_y = easeOutQuad(i, 140 - 350, +350.0, slidetime);
 		GRRLIB_DrawImg(90, moving_y, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
 		// Draw buttons
-		moving_y = change_scale(i, 0, 20, -60, 290);
+		moving_y = easeOutQuad(i, 290 - 350, +350.0, slidetime);
 		if(choice_a != 0 && choice_b != 0)
 		{
 			choice_a->y = moving_y;
@@ -878,14 +884,14 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			}
 		}
 		// Draw Icon and reflection
-		moving_y = change_scale(i, 0, 20, -155, 195);
+		moving_y = easeOutQuad(i, 195 - 350, +350.0, slidetime);
 		GRRLIB_DrawImg(130, moving_y, dialog_box_icon_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImgReflection(130, moving_y + dialog_box_icon_texture.h + 4, dialog_box_icon_texture, 0, 1, 1, 0.7);
 		// Draw Dialog Box Title Text
-		moving_y = change_scale(i, 0, 20, -197, 153);
+		moving_y = easeOutQuad(i, 153 - 350, +350.0, slidetime);
 		CFreeTypeGX_DrawText(ttf16pt, 215, moving_y, title, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 		// Draw Dialog Box Body Text
-		moving_y = change_scale(i, 0, 20, -160, 190);
+		moving_y = easeOutQuad(i, 190 - 350, +350.0, slidetime);
 		int lsp = moving_y;
 		if(txt != NULL)
 		{
@@ -1020,14 +1026,14 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 	
 	/////////////////////////////////////
 	// Draw the outro - raise the menu
-	for(i = 0; i <= 20; i++)
+	for(i = 0; i <= slidetime; i++)
 	{
 		// Draw the covers in the back
 		draw_covers();
 		GRRLIB_2D_Init();
 		// Draw the screen fade
 		GRRLIB_FillScreen(0x00000000|fade);
-		fade-=8;
+		fade-=5;
 		// Draw the background panel
 		moving_y = change_scale(i, 0, 20, 148, -202);
 		GRRLIB_Rectangle(108, moving_y, 424, 184, 0xffffffdd, true);
@@ -1124,35 +1130,41 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 	}
 	if(choice_a == 0 && choice_b == 0)
 		doloop = false;
-
+	if(choice_a != 0)
+		choice_a->hovering = false;
+	if(choice_b != 0)
+		choice_b->hovering = false;
+	
 	/////////////////////////////////////
 	// Draw the intro - lower the dialog
 	int i = 1;
 	int fade = 0x00;
+	int slidetime = 30;
 	float moving_y;
 
-	for(i = 0; i <= 20; i++)
+	for(i = 0; i <= slidetime; i++)
 	{
 		// Draw the covers in the back
 		draw_covers();
 		GRRLIB_2D_Init();
 		// Draw the screen fade
 		GRRLIB_FillScreen(0x00000000|fade);
-		fade+=8;
+		fade+=5;
 		// Draw the background panel
-		moving_y = change_scale(i, 0, 20, -202, 148);
+		moving_y = easeOutQuad(i, 148 - 350, +350.0, slidetime);
 		GRRLIB_Rectangle(108, moving_y, 424, 184, 0xffffffdd, true);
-		moving_y = change_scale(i, 0, 20, -200, 150);
+		moving_y = easeOutQuad(i, 150 - 350, +350.0, slidetime);
 		GRRLIB_Rectangle(110, moving_y, 420, 180, 0x737373FF, true);
-		moving_y = change_scale(i, 0, 20, -210, 140);
+		moving_y = easeOutQuad(i, 140 - 350, +350.0, slidetime);
 		GRRLIB_DrawImg(90, moving_y, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
-                // Draw the cover image
+		// Draw the cover image
+		moving_y = easeOutQuad(i, 133 - 350, +350.0, slidetime);
 		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 			GRRLIB_DrawImg(85, moving_y, myTex, 0, (AR_16_9)*0.7, 0.7, 0xFFFFFFFF);
 		else
 			GRRLIB_DrawImg(85, moving_y, myTex, 0, 0.7, 0.7, 0xFFFFFFFF);
 		// Draw buttons
-		moving_y = change_scale(i, 0, 20, -60, 290);
+		moving_y = easeOutQuad(i, 290 - 350, +350.0, slidetime);
 		if(choice_a != 0 && choice_b != 0)
 		{
 			choice_a->y = moving_y;
@@ -1174,10 +1186,10 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 			}
 		}
 		// Draw Dialog Box Title Text
-		moving_y = change_scale(i, 0, 20, -197, 153);
+		moving_y = easeOutQuad(i, 153 - 350, +350.0, slidetime);
 		CFreeTypeGX_DrawText(ttf16pt, 215, moving_y, title, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 		// Draw Dialog Box Body Text
-		moving_y = change_scale(i, 0, 20, -160, 190);
+		moving_y = easeOutQuad(i, 190 - 350, +350.0, slidetime);
 		int lsp = moving_y;
 		if(txt != NULL)
 		{
@@ -1265,7 +1277,7 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 		GRRLIB_Rectangle(108, 148, 424, 184, 0xffffffdd, true);
 		GRRLIB_Rectangle(110, 150, 420, 180, 0x737373FF, true);
 		GRRLIB_DrawImg(90, 140, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
-                // Draw the cover image
+		// Draw the cover image
 		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 			GRRLIB_DrawImg(85, 133, myTex, 0, (AR_16_9)*0.7, 0.7, 0xFFFFFFFF);
 		else
@@ -1314,14 +1326,14 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 
 	/////////////////////////////////////
 	// Draw the outro - raise the menu
-	for(i = 0; i <= 20; i++)
+	for(i = 0; i <= slidetime; i++)
 	{
 		// Draw the covers in the back
 		draw_covers();
 		GRRLIB_2D_Init();
 		// Draw the screen fade
 		GRRLIB_FillScreen(0x00000000|fade);
-		fade-=8;
+		fade-=5;
 		// Draw the background panel
 		moving_y = change_scale(i, 0, 20, 148, -202);
 		GRRLIB_Rectangle(108, moving_y, 424, 184, 0xffffffdd, true);

@@ -29,5 +29,7 @@ void DragSlider(int xPos);
 int getRandomNum(int min, int max);
 float easeOutQuint(float t,float b , float c, float d);
 float easeInQuint(float t,float b , float c, float d);
+float easeOutQuad(float t,float b , float c, float d);
+float easeInQuad(float t,float b , float c, float d);
 
 #endif
