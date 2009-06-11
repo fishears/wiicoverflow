@@ -239,12 +239,11 @@ void Init_Buttons()
  	// Dialog Box Buttons
 	okButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 300, 290, TX.okB);
 	cancelButton			= Duplicate_Button_TTF(okButton, 414, 290, TX.cancelB);
-//	cancelButton			= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 414, 290, TX.cancelB);
-	yesButton               = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 300, 290, TX.yesB);
-    noButton                = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 414, 290, TX.noB);
+	yesButton               = Duplicate_Button_TTF(okButton, 300, 290, TX.yesB);
+    noButton                = Duplicate_Button_TTF(okButton, 414, 290, TX.noB);
 	// Game Launch Panel Buttons
-	loadButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 353, 335, TX.loadB);
-    backButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 468, 335, TX.backB);
+	loadButton				= Duplicate_Button_TTF(okButton, 353, 335, TX.loadB);
+    backButton				= Duplicate_Button_TTF(okButton, 468, 335, TX.backB);
 	lockButton			    = Button_Init(button_round_lock_png, button_round_lock_over_png, 543, 120);
 	unlockButton			= Button_Init(button_round_unlock_png, button_round_unlock_over_png, 543, 120);
 	deleteButton			= Button_Init(button_round_delete_png, button_round_delete_over_png, 505, 120);
@@ -266,8 +265,8 @@ void Init_Buttons()
     musicOnButton           = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 97);
     musicOffButton          = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 97);
     rumbleOnButton          = Duplicate_Button(musicOnButton, 310, 131);
-    rumbleOffButton         = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 131);
-    quickstartOnButton      = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 165);
+    rumbleOffButton         = Duplicate_Button(musicOffButton, 310, 131);
+    quickstartOnButton      = Duplicate_Button(musicOnButton, 310, 165);
     quickstartOffButton     = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 165);
     themeBlackButton        = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 310, 199, TX.blackB);
     themeWhiteButton        = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 422, 199, TX.whiteB);
@@ -1559,7 +1558,7 @@ void freeResources(){
 	FreeButtonResources(&addButton);
  	// Dialog Box Buttons
 	FreeButtonResources(&okButton);
-	//FreeButtonResources(&cancelButton);
+	FreeButtonResources(&cancelButton);
 	FreeButtonResources(&yesButton);
     FreeButtonResources(&noButton);
 	// Game Launch Panel Buttons
