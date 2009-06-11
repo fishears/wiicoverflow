@@ -339,7 +339,8 @@ int getRandomNum(int min, int max){
 // Penner's easing equations found here http://www.robertpenner.com/easing/
 float easeOutQuint(float t, float b , float c, float d)
 {
-	return c*((t=t/d-1)*t*t*t*t + 1) + b;
+	return c*((t=t/d-1)*t*t*t*t + 1) + b; //Quint
+
 
 // This is fun to watch... a bounce equation
 /*
@@ -361,5 +362,15 @@ float easeOutQuint(float t, float b , float c, float d)
 float easeInQuint(float t,float b , float c, float d)
 {
 	return c*(t/=d)*t*t*t*t + b;
+}
+
+float easeOutQuad(float t, float b , float c, float d)
+{
+	return -c *(t/=d)*(t-2) + b;
+}
+
+float easeInQuad(float t, float b , float c, float d)
+{
+	return c*(t/=d)*t + b;
 }
 

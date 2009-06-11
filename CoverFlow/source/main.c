@@ -44,6 +44,8 @@ void initVars()
     self.gameSelected=0;
     self.gameStart = 0;
 	self.selected = false;
+	self.animate_count   = 50;
+	self.animate_slide_x = 0;
 	self.animate_flip = 0.0;
 	self.animate_rotate = 0.0;
 	self.array_size = 0;
@@ -64,6 +66,7 @@ void initVars()
 	strcpy(self.ipAddress, "000.000.000.000");
 	
 	initGameSettings(&gameSetting);
+
 }
 
 
@@ -75,17 +78,8 @@ int main( int argc, char **argv )
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 #ifndef TEST_MODE
-	int ret;
-	int cfREV;		// CoverFloader rev
-	/* Load Custom IOS */
-    //ret = IOS_ReloadIOS(222);
-	
-    //if (ret < 0) 
-//	{
-        ret = IOS_ReloadIOS(249);
-//    }
-
-	/* Check if Custom IOS is loaded */
+	int ret = IOS_ReloadIOS(249);
+	// Check if Custom IOS is loaded
 	if (ret < 0)
 	{
 		printf("[+] ERROR:\n");
@@ -93,39 +87,45 @@ int main( int argc, char **argv )
 		return 0;
 	}
 #endif
-	u8 FPS = 0; // frames per second counter
+
+	u8 FPS = 0;			// frames per second counter
 	languageInit();     // loads default msgs
 	SETTINGS_Init();
 	LoadFonts();
 	initVars();
+
+	// Set up the buffer slots and load the progress bar textures
+	ClearBufferSlotMemory();
+    progress_step_texture = GRRLIB_LoadTexture(progress_step_png);
+    progress_bar_texture  = GRRLIB_LoadTexture(progress_bar_png);
 	
+	// Init GRRLIB and start from black
 	GRRLIB_Init();
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
-	
-    progress_step_texture = GRRLIB_LoadTexture(progress_step_png);
-    progress_bar_texture  = GRRLIB_LoadTexture(progress_bar_png);
 
 	// Fade in from black to start the loading screen
 	Paint_Progress_FadeInStart();
 	
 	self.progress += .1;
 	sprintf(self.debugMsg, "Loading textures" );
-
 	Paint_Progress(self.progress,self.debugMsg);
 	
-	ClearBufferSlotMemory();
 	LoadTextures();		// load textures
 	Init_Buttons();		// load buttons so they can be used for error msgs
+	languageLoad();		// load localization 
+	Label_Buttons();	// Localize buttons
 
 	self.progress += .1;
-	sprintf(self.debugMsg, "Init WPAD" );
-	Paint_Progress(self.progress,self.debugMsg);
+//	sprintf(self.debugMsg, "Init WPAD" );
+	Paint_Progress(self.progress,"Init WPAD");
 
 	sprintf(self.debugMsg, "Init USB" );
 	Paint_Progress(self.progress,self.debugMsg);
 
 #ifndef TEST_MODE
+	ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
+
 	if(!init_usbfs())
 	{
 		WindowPrompt("ERROR!", "Cannot init USBFS, quitting.", &okButton, 0);
@@ -136,22 +136,20 @@ int main( int argc, char **argv )
 	sprintf(self.debugMsg, "Initializing FileSystem" );
 	Paint_Progress(self.progress,self.debugMsg);
 	
-	self.my_wbfsDev = WBFS_DEVICE_USB;
-	
 	checkDirs();
 	checkFiles();
 	Sys_Init();
 	Subsystem_Init();
-	// I'll have to read a fair bit of code but this should be done as early as possible
 	initWBFS();
 	SOUND_Init();
-	// the pad needs to be init after a usb retry but before anything else
+
+	// The pad needs to be init after a usb retry but before anything else
 	PAD_Init();
-        /* Initialize Wiimote subsystem */
+    // Initialize Wiimote subsystem
 	Wpad_Init();
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 
-//moved here as it sets the self.usingTitlesTxt used in initUSBFS sorting
+	// Moved here as it sets the self.usingTitlesTxt used in initUSBFS sorting
 	int numLines = initTitle();
 	if(numLines > 0){
 		self.usingTitlesTxt = true;
@@ -161,23 +159,20 @@ int main( int argc, char **argv )
 	}
 
 	initUSBFS();
+
+	// Check that we're using at least build #578 for correct ver. of wiicoverflow.xml
+	int cfREV = getRevXML();
+	if (cfREV != -1) // 0 or rev
+		checkGameList578(cfREV);
+	
+	// Load user settings from xml file in SD:/usb-loader/
+	SETTINGS_Load();	
 	
 #else
 	PAD_Init();
 	self.gameCnt = 29;
 #endif
 
-	cfREV = getRevXML();
-	if (cfREV != -1) // 0 or rev
-	 {
-	  checkGameList578(cfREV);
-	  // other checks
-	 } 
-	
-#ifndef TEST_MODE
-	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
-#endif
-	
 	BUFFER_InitBuffer();
 	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
 	
@@ -201,71 +196,49 @@ int main( int argc, char **argv )
 
 	// Set the background
 	if (settings.theme)
-	{	// black fonts for white theme
-		settings.fontColor = 0xFFFFFFFF; //temp until I fix the dialogs for the white theme
-		//settings.fontColor = 0x000000FF;
 		GRRLIB_SetBGColor(1); // set BG to white
-	}
 	else
-	{   // white fonts for black theme
-		settings.fontColor = 0xFFFFFFFF;
 		GRRLIB_SetBGColor(0);  // set BG to black
-	}
 	
-	self.selected        = false;
-	bool select_ready    = false;
-	bool dragging        = false;
-	bool twisting        = false;
-	self.animate_count   = 50;
-	self.animate_slide_x = 0;
-	self.animate_flip    = 0;
-	
-#ifndef TEST_MODE
-    ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
-#endif
 
-	//ee();
-	languageLoad();		    // load localization 
-	Label_Buttons();		// Localize buttons
-#ifdef ONE_AT_A_TIME
-	bool LEFT = false, RIGHT = false;
-    int L_CNT = 0, R_CNT = 0;
-#endif
-
-	//get last game played and select it as centre cover at startup
-	if(strcmp(settings.lastplayed,"")!=0){
+	// Get last game played and select it as centre cover at startup
+	if (strcmp(settings.lastplayed,"") != 0)
+	{
 		int i;
 		char titleID[7];
-		for(i=0;i<=self.gameCnt;i++){
+		for (i=0;i<=self.gameCnt;i++)
+		{
 			struct discHdr *header = &self.gameList[i];
 			sprintf(titleID, "%s", header->id);
 			if(strcmp(titleID,settings.lastplayed)==0)
 				self.shift = (COVER_COUNT/2)-i;
 		}
 	}
-
-	//WPAD_ScanPads();
-	//GetWiimoteData();
-	//if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_1){
-		//ee();
-	//}
-
+	
 	// Fly in the covers
 	DrawCoverFlyInStart();
 
+	bool select_ready    = false;
+	bool dragging        = false;
+	bool twisting        = false;
+	
+#ifdef ONE_AT_A_TIME
+	bool LEFT = false, RIGHT = false;
+    int L_CNT = 0, R_CNT = 0;
+#endif
+	
 	//////////////////////////
 	// main screen gui loop //
 	//////////////////////////
 	while(1) 
 	{
 	  START_LOOP:
-	#ifndef TEST_MODE
+#ifndef TEST_MODE
 		WPAD_ScanPads();
 		GetWiimoteData();
-	#endif //_TEST_MODE
+#endif
 		PAD_ScanPads();
 		twisting = false;
-	
 	
 		if(CheckKonami())
 		{
@@ -433,7 +406,7 @@ int main( int argc, char **argv )
 		// Nothing is selected and nothing is flipped
 		else if (!self.selected && self.animate_flip == 0)
 		{       // Check for LEFT, flip cover left
-                        if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT)
+			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT)
 			{	
 				select_ready = false;
 				if ((int)self.shift < self.max_cover)
@@ -443,7 +416,7 @@ int main( int argc, char **argv )
 				else if ((int)self.shift <= self.min_cover)
 					self.shift = self.min_cover;
 			} // now check for right, flip cover right
-                        else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT)
+			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT)
 			{
 				select_ready = false;
 				if ((int)self.shift > self.min_cover)
@@ -454,38 +427,38 @@ int main( int argc, char **argv )
 					self.shift = self.min_cover;
 			}// Check for MINUS, flip cover left
 #ifdef ONE_AT_A_TIME
-                        else if (LEFT || WPAD_ButtonsHeld(0) & WPAD_BUTTON_MINUS)
+			else if (LEFT || WPAD_ButtonsHeld(0) & WPAD_BUTTON_MINUS)
 			{	
-                            LEFT = true;
-                            RIGHT = false;
-                            select_ready = false;
+				LEFT = true;
+				RIGHT = false;
+				select_ready = false;
 				if ((int)self.shift < self.max_cover){
-                                    self.shift += self.scroll_speed;
-                                    L_CNT++;
-                                    if(L_CNT==19){LEFT=false;L_CNT=0;}
-                                }
+					self.shift += self.scroll_speed;
+					L_CNT++;
+					if(L_CNT==19){LEFT=false;L_CNT=0;}
+				}
 				else if ((int)self.shift >= self.max_cover)
-                                {self.shift = self.max_cover; LEFT = false;L_CNT=0;}
+				{self.shift = self.max_cover; LEFT = false;L_CNT=0;}
 				else if ((int)self.shift <= self.min_cover)
-                                {self.shift = self.min_cover; LEFT = false;L_CNT=0;}
+				{self.shift = self.min_cover; LEFT = false;L_CNT=0;}
 			} // now check for PLUS, flip cover right
 			else if (RIGHT || WPAD_ButtonsHeld(0) & WPAD_BUTTON_PLUS)
 			{
-                            RIGHT = true;
-                            LEFT = false;
+				RIGHT = true;
+				LEFT = false;
 				select_ready = false;
 				if ((int)self.shift > self.min_cover){
 					self.shift -= self.scroll_speed;
-                                        R_CNT++;
-                                        if(R_CNT==19){RIGHT=false;R_CNT=0;}
-                                    }
-                                else if ((int)self.shift >= self.max_cover)
-                                {self.shift = self.max_cover; RIGHT = false;R_CNT=0;}
+					R_CNT++;
+					if(R_CNT==19){RIGHT=false;R_CNT=0;}
+				}
+				else if ((int)self.shift >= self.max_cover)
+				{self.shift = self.max_cover; RIGHT = false;R_CNT=0;}
 				else if ((int)self.shift <= self.min_cover)
-                                {self.shift = self.min_cover; RIGHT = false;R_CNT=0;}
+				{self.shift = self.min_cover; RIGHT = false;R_CNT=0;}
 			}
 #endif
-                        // Check for UP button held to zoom in
+			// Check for UP button held to zoom in
 			else if (!settings.parentalLock && (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsHeld(0) & PAD_BUTTON_UP))
 			{	
 				if (settings.coverZoom >= .69)
@@ -503,7 +476,7 @@ int main( int argc, char **argv )
 			else if (((WPAD_ButtonsHeld(0) & WPAD_BUTTON_B) || (PAD_ButtonsHeld(0) & PAD_BUTTON_B)) && (self.gameCnt > 1))
 			{	
 				pointer.p_type = 1; //set cursor to rotating hand
-
+				
 				if ((self.orient.roll < -10.0) || (self.orient.roll > 10.0)) // check for movement out of the -10.0 to 10.0 deg range (dead soze)
 				{
 					if ( ((self.shift > self.min_cover) && (self.shift < self.max_cover)) ||
@@ -701,41 +674,40 @@ int main( int argc, char **argv )
 		// Check to see if it's time to draw the game launch dialog panel
 		if(self.selected || self.animate_flip != 0)
 		{
-		
+			
 			if (settings.quickstart && !(settings.parentalLock && gameSetting.lock))
 			{
-				    // Quickstart used to load game, so save settings before launching
-                                    struct discHdr *header = &self.gameList[self.gameSelected];
-                                    char titleID[7];
-                                    sprintf(titleID, "%s", header->id);
-                                    strcpy(settings.lastplayed,titleID);//save this game as last game played
-                                    SETTINGS_Save();
-                                    if(getGameSettings(titleID, &gameSetting))
-                                            apply_settings();
-                                    setGameSettings(titleID, &gameSetting,1);
-                                    WiiLight(0); // turn off the slot light
-
-					if(!LaunchGame())
-					{
-						SETTINGS_Load(); //failed to launch so get the globals back
-						return 0;
-					}
-                                
+				// Quickstart used to load game, so save settings before launching
+				struct discHdr *header = &self.gameList[self.gameSelected];
+				char titleID[7];
+				sprintf(titleID, "%s", header->id);
+				strcpy(settings.lastplayed,titleID);//save this game as last game played
+				SETTINGS_Save();
+				if(getGameSettings(titleID, &gameSetting))
+					apply_settings();
+				setGameSettings(titleID, &gameSetting,1);
+				WiiLight(0); // turn off the slot light
+				
+				if(!LaunchGame())
+				{
+					SETTINGS_Load(); //failed to launch so get the globals back
+					return 0;
+				}
+				
 			}
 			else if(!(settings.parentalLock && gameSetting.lock))
 			{
-				 // Draw the Load Game Dialog panel
+				// Draw the Load Game Dialog panel
 				DrawLoadGameDialog(false, Button_Hover(&loadButton, pointer.p_x, pointer.p_y));
 			}
-                        else
-                        {
-                            self.animate_flip = 0;
-                            self.selected = false;
-                        }
+			else
+			{
+				self.animate_flip = 0;
+				self.selected = false;
+			}
 		}
 		else
 		{
-		
 			if(settings.hideScroll)
 			{
 				//TODO IF hiding scroll; don't let user click and drag it.
@@ -748,7 +720,7 @@ int main( int argc, char **argv )
                 Button_Theme_Paint(&addButton, settings.theme);
 			if(!settings.parentalLock)
 				Button_Theme_Paint(&settingsButton, settings.theme);
-
+			
 			// Draw Game Title
 			if(settings.coverText && (!dragging && !twisting && select_ready))
 			{	
