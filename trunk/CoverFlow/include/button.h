@@ -21,7 +21,9 @@ typedef struct Button {
 	bool	hovering;
 	bool	show_reflection;
 	struct	GRRLIB_texImg texture;
+	bool toFreeTexture;
 	struct	GRRLIB_texImg hoverTexture;
+	bool toFreeHoverTexture;
 } Button;
 
 // Button Init methods

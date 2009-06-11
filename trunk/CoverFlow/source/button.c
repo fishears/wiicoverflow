@@ -16,6 +16,8 @@ Button Button_Flag_Init(const unsigned char normal_img[], int x, int y, char *bu
 {
 	Button new_button;
 	new_button.texture		= GRRLIB_LoadTexture(normal_img);
+	new_button.toFreeTexture=true;
+	new_button.toFreeHoverTexture=false;
 	new_button.x = x;
 	new_button.y = y;
 	new_button.hovering = false;
@@ -29,7 +31,9 @@ Button Button_TTF_Init(const unsigned char normal_img[], const unsigned char hov
 {
 	Button new_button;
 	new_button.texture		= GRRLIB_LoadTexture(normal_img);
+	new_button.toFreeTexture=true;
 	new_button.hoverTexture = GRRLIB_LoadTexture(hover_img);
+	new_button.toFreeHoverTexture=true;
 	new_button.x = x;
 	new_button.y = y;
 	new_button.hovering = false;
@@ -44,8 +48,8 @@ Button Button_Init(const unsigned char normal_img[], const unsigned char hover_i
 	Button new_button;
 	new_button.texture = GRRLIB_LoadTexture(normal_img);
 	new_button.hoverTexture = GRRLIB_LoadTexture(hover_img);
-//	new_button.texture = BufferStaticImage(normal_img);
-//	new_button.hoverTexture = BufferStaticImage(hover_img);
+	new_button.toFreeTexture=true;
+	new_button.toFreeHoverTexture=true;
 	new_button.x = x;
 	new_button.y = y;
 	new_button.hovering = false;
@@ -58,6 +62,8 @@ Button Duplicate_Button(Button btn, int x, int y)
 	Button new_button;
 	new_button.texture = btn.texture;
 	new_button.hoverTexture = btn.hoverTexture;
+	new_button.toFreeTexture=false;
+	new_button.toFreeHoverTexture=false;
 	new_button.x = x;
 	new_button.y = y;
 	new_button.hovering = false;
@@ -70,6 +76,8 @@ Button Duplicate_Button_TTF(Button btn, int x, int y, char *button_label)
 	Button new_button;
 	new_button.texture = btn.texture;
 	new_button.hoverTexture = btn.hoverTexture;
+	new_button.toFreeTexture=false;
+	new_button.toFreeHoverTexture=false;
 	new_button.x = x;
 	new_button.y = y;
 	new_button.hovering = false;
@@ -296,7 +304,7 @@ void Button_TTF_Toggle_Paint(struct Button* btn1, struct Button* btn2, char *lef
 
 void FreeButtonResources(struct Button *btn)
 {
-	free(btn->texture.data);	
-	free(btn->hoverTexture.data);	
+	if (btn->toFreeTexture) free(btn->texture.data);	
+	if (btn->toFreeHoverTexture) free(btn->hoverTexture.data);	
 }
 
