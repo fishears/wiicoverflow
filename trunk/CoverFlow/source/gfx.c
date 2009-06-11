@@ -997,7 +997,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 		if(txt != NULL)
 		{
 			char* msg = malloc(strlen(txt)*sizeof(char));
-			//sprintf(msg, "Suca\nSono\nshals");
+			sprintf(msg, txt);
 			
 			pch = strtok(msg, "\n");
 			while (pch != NULL)
