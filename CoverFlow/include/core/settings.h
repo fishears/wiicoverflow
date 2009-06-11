@@ -49,4 +49,6 @@ int SETTINGS_Load();
 
 int SETTINGS_Save();
 
+int getRevXML();
+
 #endif

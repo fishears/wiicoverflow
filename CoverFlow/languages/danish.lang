@@ -149,11 +149,12 @@ covers3D = 3D Forsider
 gameText = Spil Titel
 gameSettings = Spil Indstillinger
 gameLanguage = Spillets Sprog
-Finnish = Finnish
-PortugueseBR = Portuguese BR
-Danish = Danish
-Catalan = Catalan
-MyLanguage = MyLanguage
+Finnish = Finsk
+PortugueseBR = Portugisisk BR
+Danish = Dansk
+Catalan = Katalansk
+MyLanguage = MitSprog
+Turkish = Tyrkisk
 
 ###########
 # Buttons #
