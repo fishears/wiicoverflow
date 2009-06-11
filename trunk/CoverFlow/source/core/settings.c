@@ -261,7 +261,9 @@ int SETTINGS_Save()
 
 	mxmlElementSetAttr(node, "localizeLang", settings.localLanguage);
 	
-	
+	sprintf(buffer, "%d", SVN_VERSION);
+	mxmlElementSetAttr(node, "rev", buffer);	
+
     //GLOBAL GAME SETTINGS
 	
 	node = mxmlNewElement(tree, "game");
@@ -300,3 +302,58 @@ int SETTINGS_Save()
 		return -1;
 	}
 }
+
+
+
+int getRevXML()
+{
+  FILE *fp;
+  mxml_node_t *xml;
+  int rev;
+  
+  fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
+  
+  if(fp == NULL)
+     return -1;
+  
+  xml = mxmlLoadFile(NULL, fp, MXML_NO_CALLBACK);
+ 
+  fclose(fp);
+		
+  if(xml != NULL)
+  {
+	  mxml_node_t *node;
+	  mxml_node_t *next_n;
+		
+	  node = mxmlFindElement(xml,xml, "wiicoverflow", NULL, NULL, MXML_DESCEND); 
+	  if(node == NULL) return -1;
+	  
+	  next_n = mxmlFindElement(node, node, "general", NULL, NULL, MXML_DESCEND); 
+	  
+	  if(next_n != NULL)
+	  {
+		  if(mxmlElementGetAttr(next_n,"rev"))
+			  {
+			   rev = atoi(mxmlElementGetAttr(next_n,"rev"));
+			  }
+		  else	
+			  {
+			   rev = 0;  //nil	
+              } 	
+	  }
+	  else
+	  {
+		 return -1;
+	  }
+	  return rev;
+  }
+  else
+  {
+	return -1;
+  }
+  
+  return -1;
+}
+
+
+

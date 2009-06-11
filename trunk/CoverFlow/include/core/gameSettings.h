@@ -30,5 +30,7 @@ bool getGameSettings(char* gameCode, s_gameSettings* gs);
 void succa(s_gameSettings* gs);
 void setGameSettings(char* gameCode, s_gameSettings* gs, int date);
 void createEmptyGameSettingsFile();
+int  checkGameList578(int);
 
 #endif
+

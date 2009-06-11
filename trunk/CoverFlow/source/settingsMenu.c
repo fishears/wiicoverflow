@@ -130,6 +130,10 @@ void Settings_Menu_Show()
 		// Draw the logo
 		Button_Paint(&menuLogoButton);
 		
+		// Check for screen shot
+		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))
+			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+		
 		// Check for B to save and exit
 		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)||(PAD_ButtonsDown(0) & PAD_BUTTON_B))
 		{
@@ -715,7 +719,7 @@ void Settings_Menu_Show()
 			{
 				GRRLIB_Rectangle(88, 88, 464, 306, 0xffffffdd, true);
 				GRRLIB_Rectangle(90, 90, 460, 302, 0x737373FF, true);
-
+			/*
 				CFreeTypeGX_DrawText(ttf20pt, 320, 140, "About CoverFloader", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 170, "Copyright 2009 Beardface", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 210, "Licensed under the terms of the", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
@@ -724,8 +728,22 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf18pt, 320, 310, "Additional Development By:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 330, "gitkua, scognito, fishears, afour98,", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 350, "blackbird399, LoudBob11, alexcarlosantao", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 450, "Covers courtesy of www.theotherzone.com.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
+			*/				
+				CFreeTypeGX_DrawText(ttf20pt, 320, 125, "About CoverFloader", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 155, "Copyright 2009 Beardface", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf14pt, 320, 180, "Licensed under the terms of the", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf14pt, 320, 195, "GNU GPL version 2", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf14pt, 320, 210, "http://code.google.com/p/wiicoverflow/", (GXColor){0x22, 022, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf18pt, 320, 260, "Additional Development By:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 280, "gitkua, scognito, F1SHE4RS, afour98,", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 300, "blackbird399, LoudBob11, alexcarlosantao", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+
+				CFreeTypeGX_DrawText(ttf16pt, 320, 340, "Many thanks to the translators:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf14pt, 320, 355, "basda, Spidy1000, nolodude, pepperoni,", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf14pt, 320, 370, "spinneur..., aHMET-, onyxdata", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				
 				CFreeTypeGX_DrawText(ttf16pt, 320, 430, "Flag icons courtesy of www.icondrawer.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 450, "Covers courtesy of www.theotherzone.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Check for button-pointer intersections, and rumble
 				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||

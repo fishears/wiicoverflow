@@ -76,7 +76,7 @@ int main( int argc, char **argv )
 //---------------------------------------------------------------------------------
 #ifndef TEST_MODE
 	int ret;
-	
+	int cfREV;		// CoverFloader rev
 	/* Load Custom IOS */
     //ret = IOS_ReloadIOS(222);
 	
@@ -166,6 +166,13 @@ int main( int argc, char **argv )
 	PAD_Init();
 	self.gameCnt = 29;
 #endif
+
+	cfREV = getRevXML();
+	if (cfREV != -1) // 0 or rev
+	 {
+	  checkGameList578(cfREV);
+	  // other checks
+	 } 
 	
 #ifndef TEST_MODE
 	SETTINGS_Load();	// load user settings from xml file in SD:/usb-loader/
