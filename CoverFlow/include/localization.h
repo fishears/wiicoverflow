@@ -33,26 +33,6 @@ extern u32 portuguesebr_lang_size;
 extern u8  danish_lang[];
 extern u32 danish_lang_size;
 
-//extern u8  schinese_lang[];
-//extern u32 schinese_lang_size;
-
-//extern u8  tchinese_lang[];
-//extern u32 tchinese_lang_size;
-
-//extern u8  japanese_lang[];
-//extern u32 japanese_lang_size;
-
-//extern u8  korean_lang[];
-//extern u32 korean_lang_size;
-
-//extern u8  norwegian_lang[];
-//extern u32 norwegian_lang_size;
-
-//extern u8  russian_lang[];
-//extern u32 russian_lang_size;
-
-
-
 
 
 struct LANGUAGE
@@ -214,8 +194,10 @@ struct LANGUAGE
 	char Catalan[15];				//155
 	char MyLanguage[15];			//156
 	char Turkish[15];				//157
+	char initWPAD[40];				//158
+	char initFS[40];				//159
 	
-// Buttons	
+	
 	char addB[15];					//B01
 	char deleteB[15];				//B02
 	char cancelB[15];				//B03

@@ -343,6 +343,16 @@ void Settings_Menu_Show()
 				}
 				Button_TTF_Paint(&themeBlackButton);
 				Button_TTF_Paint(&themeWhiteButton);
+				
+				if (settings.covers3d == 1)
+				{
+				 snprintf( coversButton.ttf_label, 15, TX.covers3D);
+				}
+				else
+				{
+				 snprintf( coversButton.ttf_label, 15, TX.coversB);
+				}
+								
 				Button_TTF_Paint(&coversButton);
 				Button_TTF_Paint(&titlesButton);
 				Button_TTF_Toggle_Paint(&vidtvoffButton, &vidtvonButton, TX.toggleOffB, TX.toggleOnB, settings.vipatch);

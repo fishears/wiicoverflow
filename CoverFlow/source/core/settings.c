@@ -162,7 +162,7 @@ int SETTINGS_Load()
 			  settings.video   = atof(mxmlElementGetAttr(next_n,"video"));
 		  if(mxmlElementGetAttr(next_n,"vipatch"))
 			  settings.vipatch     = atof(mxmlElementGetAttr(next_n,"vipatch"));
-                  if(mxmlElementGetAttr(next_n,"lastplayed"))
+          if(mxmlElementGetAttr(next_n,"lastplayed"))
 			  strcpy(settings.lastplayed, mxmlElementGetAttr(next_n,"lastplayed"));
 	  }
 	  else
@@ -290,11 +290,62 @@ int SETTINGS_Save()
 
 
 int getRevXML()
+ {
+   FILE *fp;
+   mxml_node_t *xml;
+   int rev;
+   
+   fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
+   
+   if(fp == NULL)
+      return -1;
+   
+   xml = mxmlLoadFile(NULL, fp, MXML_NO_CALLBACK);
+  
+   fclose(fp);
+                 
+   if(xml != NULL)
+    {
+	   mxml_node_t *node;
+	   mxml_node_t *next_n;
+			 
+	   node = mxmlFindElement(xml,xml, "wiicoverflow", NULL, NULL, MXML_DESCEND); 
+	   if(node == NULL) return -1;
+	   
+	   next_n = mxmlFindElement(node, node, "general", NULL, NULL, MXML_DESCEND); 
+	   
+	   if(next_n != NULL)
+	     {
+		   if(mxmlElementGetAttr(next_n,"rev"))
+			   {
+				rev = atoi(mxmlElementGetAttr(next_n,"rev"));
+			   }
+		   else  
+			   {
+				rev = 0;  //nil      
+			   }         
+	     }
+	   else
+	     {
+		   return -1;
+	     } 
+	   return rev;
+    }
+   else
+    {
+      return -1;
+    }
+   
+   return -1;
+ }
+ 
+
+
+int getLangXML()
 {
   FILE *fp;
   mxml_node_t *xml;
-  int rev;
-  
+    
   fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
   
   if(fp == NULL)
@@ -316,20 +367,22 @@ int getRevXML()
 	  
 	  if(next_n != NULL)
 	  {
-		  if(mxmlElementGetAttr(next_n,"rev"))
+		  
+		  if(mxmlElementGetAttr(next_n,"localizeLang"))
 			  {
-			   rev = atoi(mxmlElementGetAttr(next_n,"rev"));
+			   strcpy(settings.localLanguage, mxmlElementGetAttr(next_n,"localizeLang"));
+			   return 1;
 			  }
-		  else	
-			  {
-			   rev = 0;  //nil	
-              } 	
+		  else
+              {
+			   strcpy(settings.localLanguage, "default");
+			   return -1;
+			  }	
 	  }
 	  else
 	  {
 		 return -1;
 	  }
-	  return rev;
   }
   else
   {
@@ -338,6 +391,5 @@ int getRevXML()
   
   return -1;
 }
-
 
 
