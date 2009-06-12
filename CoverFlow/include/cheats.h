@@ -21,11 +21,21 @@ extern "C" {
     #define TXT_PATH "/txtcodes/"
     #define GCT_PATH "sd:/codes/"
     #define CODESITE "http://www.usbgecko.com/codes/codes/"
+    #define LINES_PER_PAGE 10
+    #define LINE_LENGTH 128
+    #define MAX_CODES 100
+
+    typedef struct {
+        char title[LINE_LENGTH]; //cheat description text
+        char codes[MAX_CODES][LINE_LENGTH]; //cheat codes block
+        int codelines; //number of lines of cheat codes
+    } CHEAT;
     
     bool check_txt(int id, struct discHdr *gameList);
     bool check_gct(int id, struct discHdr *gameList);
     bool download_txt(int id, struct discHdr *gameList);
     void manage_cheats(int id, struct discHdr *gameList);
+    bool is_code(char* line);
 
 #ifdef	__cplusplus
 }
