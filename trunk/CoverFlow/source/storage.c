@@ -15,14 +15,14 @@ bool init_usbfs()
 	Paint_Progress(self.progress, "Init Sys...");
 	
 	/* Initialize system */
-	Sys_Init();
+	//Sys_Init(); // it is called in main.c yet
 
 	///* Initialize subsystems */
 	//Wpad_Init();	
 
-	Paint_Progress(self.progress, "Init SDHC...");
+	//Paint_Progress(self.progress, "Init SDHC...");
 	/* Mount SDHC */
-	Fat_MountSDHC();
+	//Fat_MountSDHC(); //it is called in Subsystem_Init
 	
 	self.progress+=0.05;
 	Paint_Progress(self.progress, "Initializing USBFS...");
@@ -187,37 +187,37 @@ void initWBFS(){
 	{
 		while(1)
 		{
-                        /* Initialize Wiimote subsystem */
-                        Wpad_Init();
-                        WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 			if (retries==0)
 			{
-                                WPAD_ScanPads();
-                                DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
-                                GRRLIB_Render();
-                                //tell user that no drive was found
-                                if(WindowPrompt(TX.error, TX.errorNoUSBDrv, &okButton, &cancelButton))
-                                {
-                                    retries = 3;
-                                    //ask user to connect drive
-                                    WindowPrompt(TX.error, TX.connectUSBDrv, &okButton, 0);
-                                }
-                                else //pressed cancel so exit to system
-                                {
-                                    GRRLIB_Exit();
-                                    SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
-                                }
+				WPAD_ScanPads();
+				DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+				GRRLIB_Render();
+				//tell user that no drive was found
+				if(WindowPrompt(TX.error, TX.errorNoUSBDrv, &okButton, &cancelButton))
+				{
+					retries = 3;
+					//ask user to connect drive
+					WindowPrompt(TX.error, TX.connectUSBDrv, &okButton, 0);
+				}
+				else //pressed cancel so exit to system
+				{
+					GRRLIB_Exit();
+					SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
+				}
 			}
-                        //tries to connect 3 times before asking user again
-                        retries--;
-                        Subsystem_Close();
-                        WDVD_Close();
-                        IOS_ReloadIOS(249);
-                        Subsystem_Init();
-                        WDVD_Init();
-                        goto INIT_RETRY;
-                }
-        }
+			//tries to connect 3 times before asking user again
+			retries--;
+			Subsystem_Close();
+			WDVD_Close();
+			IOS_ReloadIOS(249);
+			Subsystem_Init();
+			WDVD_Init();
+			/* Initialize Wiimote subsystem */
+			Wpad_Init();
+			WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+			goto INIT_RETRY;
+		}
+	}
 }
 
 s32 __Menu_EntryCmp(const void *a, const void *b)
