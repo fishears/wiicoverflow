@@ -52,9 +52,6 @@ char selLanguages[20][7]=
 
 void languageInit()
 {
-	/*
-		// Inits
-    */
 	languageDefault();
 }
 
@@ -238,7 +235,9 @@ void languageDefault()
 	snprintf(TX.Catalan, sizeof(TX.Catalan), "Catalan" ); 
 	snprintf(TX.MyLanguage, sizeof(TX.MyLanguage), "MyLanguage" ); 
 	snprintf(TX.Turkish, sizeof(TX.Turkish), "Turkish" ); 
-	
+	snprintf(TX.initWPAD, sizeof(TX.initWPAD), "Init WPAD"); 
+	snprintf(TX.initFS, sizeof(TX.initFS), "Initializing FileSystem"); 							
+
 // Buttons	
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
 	snprintf(TX.deleteB, sizeof(TX.deleteB), "Delete");     		//B02
@@ -914,6 +913,15 @@ void languageSet(char *name, char *val)
 		strcopy(TX.Turkish, val, sizeof(TX.Turkish));
 		return;
 	}
+	if (strcmp(name, "initWPAD") == 0) {
+		strcopy(TX.initWPAD, val, sizeof(TX.initWPAD));
+		return;
+	}
+	if (strcmp(name, "initFS") == 0) {
+		strcopy(TX.initFS, val, sizeof(TX.initFS));
+		return;
+	}	
+	
 	
 //////////////// Buttons //////////////
 

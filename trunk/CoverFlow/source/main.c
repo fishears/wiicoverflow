@@ -89,8 +89,9 @@ int main( int argc, char **argv )
 #endif
 
 	u8 FPS = 0;			// frames per second counter
-	languageInit();     // loads default msgs
+
 	SETTINGS_Init();
+	languageInit();     // loads default msgs
 	LoadFonts();
 	initVars();
 
@@ -103,41 +104,46 @@ int main( int argc, char **argv )
 	GRRLIB_Init();
     GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
-
+	
 	// Fade in from black to start the loading screen
 	Paint_Progress_FadeInStart();
 	
 	self.progress += .1;
-	sprintf(self.debugMsg, "Loading textures" );
+	sprintf(self.debugMsg, TX.loadTextures );
 	Paint_Progress(self.progress,self.debugMsg);
 	
 	LoadTextures();		// load textures
 	Init_Buttons();		// load buttons so they can be used for error msgs
-	languageLoad();		// load localization 
-	Label_Buttons();	// Localize buttons
-
+ 
 	self.progress += .1;
 //	sprintf(self.debugMsg, "Init WPAD" );
-	Paint_Progress(self.progress,"Init WPAD");
-
-	sprintf(self.debugMsg, "Init USB" );
+	Paint_Progress(self.progress,TX.initWPAD);
+	
+	sprintf(self.debugMsg, TX.initUSB );
 	Paint_Progress(self.progress,self.debugMsg);
 
 #ifndef TEST_MODE
 	ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
 
+
 	if(!init_usbfs())
 	{
-		WindowPrompt("ERROR!", "Cannot init USBFS, quitting.", &okButton, 0);
+		WindowPrompt(TX.error, TX.errInitUSBFS, &okButton, 0);
 		return 0;
 	}
-	
-	//self.progress += .1;
-	sprintf(self.debugMsg, "Initializing FileSystem" );
-	Paint_Progress(self.progress,self.debugMsg);
-	
+
+	//***************  earliest access point for accessing files on SD-Card ******************
 	checkDirs();
 	checkFiles();
+	
+	SETTINGS_Load();	// Load user settings from xml file in SD:/usb-loader/
+	languageLoad();		// Load translated Messages 
+	Label_Buttons();	// Localize buttons	
+	
+	//self.progress += .1;
+	sprintf(self.debugMsg, TX.initFS );
+	Paint_Progress(self.progress,self.debugMsg);
+	
 	Sys_Init();
 	Subsystem_Init();
 	initWBFS();
@@ -149,6 +155,11 @@ int main( int argc, char **argv )
 	Wpad_Init();
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 
+	// we need PAD for WindowPrompt()
+	int cfREV = getRevXML(); // Check that we're using at least build #578 for correct ver. of gamelist.xml
+	if (cfREV != -1) // 0 or rev	
+		checkGameList578(cfREV);
+
 	// Moved here as it sets the self.usingTitlesTxt used in initUSBFS sorting
 	int numLines = initTitle();
 	if(numLines > 0){
@@ -159,15 +170,6 @@ int main( int argc, char **argv )
 	}
 
 	initUSBFS();
-
-	// Check that we're using at least build #578 for correct ver. of wiicoverflow.xml
-	int cfREV = getRevXML();
-	if (cfREV != -1) // 0 or rev
-		checkGameList578(cfREV);
-	
-	// Load user settings from xml file in SD:/usb-loader/
-	SETTINGS_Load();	
-	
 #else
 	PAD_Init();
 	self.gameCnt = 29;
@@ -179,7 +181,7 @@ int main( int argc, char **argv )
 	float wait = 10; //ms
 	float prog = 2.1/wait;
 	
-	sprintf(self.debugMsg, "Initializing Threaded Image Buffer..." );	
+	sprintf(self.debugMsg, TX.initBuffer );
 	while(wait > 0)
 	{
 		wait--;

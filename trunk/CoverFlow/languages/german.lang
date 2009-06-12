@@ -55,7 +55,7 @@ falloff = Tiefe:
 drawWindow = Fenster:
 gameTitle = Titel des Spiels:
 coverDownload = Cover Download
-opNoCancel = Dieser Vorgang kann nicht\nabgebrochen werden. Weiter?
+opNoCancel = Dieser Vorgang kann nicht \nabgebrochen werden. Weiter?
 cflowSettings = Einstellungen
 graphics = Grafik
 missingCovers = Fehlende Cover?:
@@ -155,6 +155,8 @@ Danish = Dänisch
 Catalan = Catalan
 MyLanguage = Meine Sprache
 Turkish = Türkisch
+initWPAD = Initialisiere WPAD
+initFS = Initialisiere Dateisystem
 
 ###########
 # Buttons #
@@ -171,11 +173,11 @@ loadB = Laden
 backB = Zurück
 toggleOnB = An
 toggleOffB = Aus
-whiteB = ws
-blackB = sw 
+whiteB = Weiß
+blackB = Schwarz 
 homeMenuTopB = Schließen
 wiimenuB = Wii Menü
-loaderB = HBLoader
+loaderB = hb channel
 languagesB = Sprachen
 coversB = Cover
 titlesB = Titel
