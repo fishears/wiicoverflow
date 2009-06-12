@@ -267,11 +267,11 @@ void Init_Buttons()
     rumbleOnButton          = Duplicate_Button(musicOnButton, 310, 131);
     rumbleOffButton         = Duplicate_Button(musicOffButton, 310, 131);
     quickstartOnButton      = Duplicate_Button(musicOnButton, 310, 165);
-    quickstartOffButton     = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 165);
-    themeBlackButton        = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 310, 199, TX.blackB);
-    themeWhiteButton        = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 422, 199, TX.whiteB);
-	coversButton			= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 310, 265, TX.coversB);
-	titlesButton		    = Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 422, 265, TX.titlesB);
+    quickstartOffButton     = Duplicate_Button(musicOffButton, 310, 165);
+    themeBlackButton        = Duplicate_Button_TTF(okButton, 310, 199, TX.blackB);
+    themeWhiteButton        = Duplicate_Button_TTF(okButton, 422, 199, TX.whiteB);
+	coversButton			= Duplicate_Button_TTF(okButton, 310, 265, TX.coversB);
+	titlesButton		    = Duplicate_Button_TTF(okButton, 422, 265, TX.titlesB);
     viddownButton			= Button_Init(button_minus_png, button_minus_over_png, 310,334);
 	vidupButton				= Button_Init(button_plus_png, button_plus_over_png, 338,334);
     vidtvonButton			= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 299);
