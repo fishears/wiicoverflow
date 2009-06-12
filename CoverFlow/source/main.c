@@ -125,6 +125,8 @@ int main( int argc, char **argv )
 #ifndef TEST_MODE
 	ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
 
+	Sys_Init();
+	Subsystem_Init();
 
 	if(!init_usbfs())
 	{
@@ -144,16 +146,19 @@ int main( int argc, char **argv )
 	sprintf(self.debugMsg, TX.initFS );
 	Paint_Progress(self.progress,self.debugMsg);
 	
-	Sys_Init();
-	Subsystem_Init();
+	//Sys_Init();
+	//Subsystem_Init();
+	
+	// Initialize Wiimote subsystem
+	Wpad_Init();
+	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+	
 	initWBFS();
 	SOUND_Init();
 
 	// The pad needs to be init after a usb retry but before anything else
 	PAD_Init();
-    // Initialize Wiimote subsystem
-	Wpad_Init();
-	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+    
 
 	// we need PAD for WindowPrompt()
 	int cfREV = getRevXML(); // Check that we're using at least build #578 for correct ver. of gamelist.xml
