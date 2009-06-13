@@ -1,4 +1,17 @@
 #labels Featured
+== RC7 (June XX 2009) ==
+
+-NEW-
+  * Improved GUI behaviour
+  
+-FIX-
+  * Other memory issues solved
+  * Minor bugs fixes
+
+-OTHER
+  * Internal cleanup, removing redundant init calls
+ 
+----
 == RC6 (June 07 2009) ==
 
 -NEW-
