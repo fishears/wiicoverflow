@@ -416,6 +416,7 @@ void Settings_Menu_Show()
 					{
 						settings.hideScroll = (settings.hideScroll) ? 0 : 1;
 					}
+					
 					else if (Button_Select(&windowdownButton, pointer.p_x, pointer.p_y))
 					{
 						if (settings.drawWindow > 1)
@@ -426,8 +427,12 @@ void Settings_Menu_Show()
 						if (settings.drawWindow < 40)
 							settings.drawWindow += 1;
 					}
+					
 					else if (Button_Select(&coverTextOnButton, pointer.p_x, pointer.p_y) || Button_Select(&coverTextOffButton, pointer.p_x, pointer.p_y))
 						settings.coverText = (settings.coverText) ? 0 : 1;
+					
+					else if (Button_Select(&resetButton, pointer.p_x, pointer.p_y))
+						graphics_SETTINGS_Init();
 				}
 				if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A)
 				{
@@ -477,6 +482,7 @@ void Settings_Menu_Show()
 						settings.coverFallOff -= 0.002;
 					else if(Button_Select(&falloffupButton, pointer.p_x, pointer.p_y))
 						settings.coverFallOff += 0.002;
+						
 				}
 				// Draw the wireframe background
 				GRRLIB_DrawImg(80, 130, menu_graphics_wireframe_texture, 0, 1, 1, 0xFFFFFFFF);
@@ -519,7 +525,8 @@ void Settings_Menu_Show()
 				Button_TTF_Toggle_Paint(&hidescrollOffButton, &hidescrollOnButton, TX.toggleOffB, TX.toggleOnB, settings.hideScroll);
 				Button_TTF_Toggle_Paint(&coverTextOffButton, &coverTextOnButton, TX.toggleOffB, TX.toggleOnB, settings.coverText);
 				Button_TTF_Toggle_Paint(&covers3dOffButton, &covers3dOnButton, TX.toggleOffB, TX.toggleOnB, settings.covers3d);
-				
+				// Draw Reset-Button
+				Button_TTF_Paint(&resetButton);
 				// Check for button-pointer intersections, and rumble
 				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
@@ -540,7 +547,8 @@ void Settings_Menu_Show()
 					Button_Hover(&covers3dOnButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&covers3dOffButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hidescrollOnButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&hidescrollOffButton, pointer.p_x, pointer.p_y))
+					Button_Hover(&hidescrollOffButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&resetButton, pointer.p_x, pointer.p_y))
 					
 				{
 					if (--self.rumbleAmt > 0) // Should we be rumbling?
