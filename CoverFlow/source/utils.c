@@ -340,23 +340,6 @@ int getRandomNum(int min, int max){
 float easeOutQuint(float t, float b , float c, float d)
 {
 	return c*((t=t/d-1)*t*t*t*t + 1) + b; //Quint
-
-
-// This is fun to watch... a bounce equation
-/*
-	if ((t/=d) < (1/2.75f)) {
-		return c*(7.5625f*t*t) + b;
-	} else if (t < (2/2.75f)) {
-		float postFix = t-=(1.5f/2.75f);
-		return c*(7.5625f*(postFix)*t + .75f) + b;
-	} else if (t < (2.5/2.75)) {
-		float postFix = t-=(2.25f/2.75f);
-		return c*(7.5625f*(postFix)*t + .9375f) + b;
-	} else {
-		float postFix = t-=(2.625f/2.75f);
-		return c*(7.5625f*(postFix)*t + .984375f) + b;
-	}
-*/
 }
 
 float easeInQuint(float t,float b , float c, float d)
@@ -373,4 +356,10 @@ float easeInQuad(float t, float b , float c, float d)
 {
 	return c*(t/=d)*t + b;
 }
+
+float easeOutCubic(float t, float b , float c, float d)
+{
+	return c*((t=t/d-1)*t*t + 1) + b;
+}
+
 
