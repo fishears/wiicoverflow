@@ -784,9 +784,40 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 	//Reflections
 	if(settings.covers3d)
 	{
-		dist = 2.0;
+		dist = 2.02;
+		// Draw Back cover reflection matte
+		if(theme) // white
+			GX_LoadTexObj(&matteGreyTex, GX_TEXMAP0);
+		else
+			GX_LoadTexObj(&matteBlackTex, GX_TEXMAP0);
+		GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+		GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+		GX_LoadPosMtxImm (mv, GX_PNMTX0);
+		
+		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+		GX_Position3f32(-width, -height-height*dist, thickness - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(0, 0);
+		
+		GX_Position3f32(-width, height-height*dist, thickness - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(0, 1);
+		
+		GX_Position3f32(width, height-height*dist, thickness - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(left, 1);
+		
+		GX_Position3f32(width, -height-height*dist, thickness - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(left, 0);
+		GX_End();
 		
 		// Draw Back cover reflection
+		GX_LoadTexObj(&texObj, GX_TEXMAP0);
+		GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+		GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+		GX_LoadPosMtxImm (mv, GX_PNMTX0);
+		
 		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
 		GX_Position3f32(-width, -height-height*dist, thickness - zpos);
 		GX_Color1u32(0xFFFFFF00);
@@ -803,6 +834,33 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 		GX_Position3f32(width, -height-height*dist, thickness - zpos);
 		GX_Color1u32(0xFFFFFF00);
 		GX_TexCoord2f32(left, 0);
+		GX_End();
+		
+		// Draw Right side reflection matte
+		if(theme) // white
+			GX_LoadTexObj(&matteGreyTex, GX_TEXMAP0);
+		else
+			GX_LoadTexObj(&matteBlackTex, GX_TEXMAP0);
+		GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+		GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+		GX_LoadPosMtxImm (mv, GX_PNMTX0);
+		
+		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+		GX_Position3f32(-width, -height-height*dist, 0 - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(1, 0);
+		
+		GX_Position3f32(-width, height-height*dist, 0 - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(1, 1);
+		
+		GX_Position3f32(-width, height-height*dist, thickness - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(0, 1);
+		
+		GX_Position3f32(-width, -height-height*dist, thickness - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(0, 0);
 		GX_End();
 		
 		// Draw Right side reflection
@@ -829,6 +887,33 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 		GX_TexCoord2f32(0, 0);
 		GX_End();
 
+		// Draw Left side reflection matte
+		if(theme) // white
+			GX_LoadTexObj(&matteGreyTex, GX_TEXMAP0);
+		else
+			GX_LoadTexObj(&matteBlackTex, GX_TEXMAP0);
+		GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+		GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+		GX_LoadPosMtxImm (mv, GX_PNMTX0);
+		
+		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+		GX_Position3f32(width, -height-height*dist, thickness - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(left, 0);
+		
+		GX_Position3f32(width, height-height*dist, thickness - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(left, 1);
+		
+		GX_Position3f32(width, height-height*dist, 0 - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(right, 1);
+		
+		GX_Position3f32(width, -height-height*dist, 0 - zpos);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(right, 0);
+		GX_End();
+		
 		// Draw Left side reflection
 		GX_LoadTexObj(&texObj, GX_TEXMAP0);
 		GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
