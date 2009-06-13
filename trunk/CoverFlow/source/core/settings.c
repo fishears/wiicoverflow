@@ -41,6 +41,7 @@ void SETTINGS_Init()
 	settings.coverText    = 1;
 	settings.theme		  = 0; // default to black
 	settings.covers3d     = 0;
+	settings.covers3dThickness = 0; //default to 0=Fat, 1=flat
 	settings.hideScroll   = 1;
 	//General
 	settings.parentalLock = 0;
@@ -142,6 +143,8 @@ int SETTINGS_Load()
 			  settings.enablepitch  = atoi(mxmlElementGetAttr(next_n,"enablepitch"));
 		  if(mxmlElementGetAttr(next_n,"3d"))
 			  settings.covers3d  = atoi(mxmlElementGetAttr(next_n,"3d"));
+		  if(mxmlElementGetAttr(next_n,"3dThickness"))
+			  settings.covers3dThickness  = atoi(mxmlElementGetAttr(next_n,"3dThickness"));
 		  if(mxmlElementGetAttr(next_n,"hideScroll"))
 			  settings.hideScroll  = atoi(mxmlElementGetAttr(next_n,"hideScroll"));
 	  }
@@ -245,6 +248,9 @@ int SETTINGS_Save()
 
 	sprintf(buffer, "%d", settings.covers3d);
 	mxmlElementSetAttr(node, "3d", buffer);
+
+	sprintf(buffer, "%d", settings.covers3dThickness);
+	mxmlElementSetAttr(node, "3dThickness", buffer);
 	
 	sprintf(buffer, "%d", settings.hideScroll);
 	mxmlElementSetAttr(node, "hideScroll", buffer);

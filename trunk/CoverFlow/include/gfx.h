@@ -182,6 +182,8 @@ Button musicOffButton;
 Button bookmarkOnButton;
 Button bookmarkOffButton;
 
+Button covers3dThinButton;
+Button covers3dFatButton;
 Button covers3dOnButton;
 Button covers3dOffButton;
 Button hidescrollOnButton;

@@ -295,9 +295,11 @@ void Init_Buttons()
     hidescrollOffButton		= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 101, 369);
     covers3dOnButton		= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 268, 369);
     covers3dOffButton		= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 268, 369);
+    covers3dFatButton		= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 268, 423);
+    covers3dThinButton		= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 268, 423);
     coverTextOnButton       = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 435, 369);
     coverTextOffButton      = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 435, 369);
-	resetButton				= Duplicate_Button_TTF(okButton, 268, 423, TX.resetB);
+	resetButton				= Duplicate_Button_TTF(okButton, 435, 423, TX.resetB);
 	restoreButton			= Duplicate_Button_TTF(okButton, 101, 423, TX.restoreB);
 
 // Language Settings Panel
@@ -1639,6 +1641,8 @@ void freeResources(){
     FreeButtonResources(&angleupButton);
     FreeButtonResources(&hidescrollOnButton);
     FreeButtonResources(&hidescrollOffButton);
+    FreeButtonResources(&covers3dThinButton);
+    FreeButtonResources(&covers3dFatButton);
     FreeButtonResources(&covers3dOnButton);
     FreeButtonResources(&covers3dOffButton);
     FreeButtonResources(&coverTextOnButton);

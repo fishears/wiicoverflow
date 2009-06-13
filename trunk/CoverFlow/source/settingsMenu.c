@@ -415,6 +415,10 @@ void Settings_Menu_Show()
 						settings.covers3d = (settings.covers3d) ? 0 : 1;
 						ResetBuffer();
 					}
+					else if (Button_Select(&covers3dThinButton, pointer.p_x, pointer.p_y) || Button_Select(&covers3dFatButton, pointer.p_x, pointer.p_y))
+					{
+						settings.covers3dThickness = (settings.covers3dThickness) ? 0 : 1;
+					}
 					else if (Button_Select(&hidescrollOnButton, pointer.p_x, pointer.p_y) || Button_Select(&hidescrollOffButton, pointer.p_x, pointer.p_y))
 					{
 						settings.hideScroll = (settings.hideScroll) ? 0 : 1;
@@ -531,6 +535,7 @@ void Settings_Menu_Show()
 				Button_TTF_Toggle_Paint(&hidescrollOffButton, &hidescrollOnButton, TX.toggleOffB, TX.toggleOnB, settings.hideScroll);
 				Button_TTF_Toggle_Paint(&coverTextOffButton, &coverTextOnButton, TX.toggleOffB, TX.toggleOnB, settings.coverText);
 				Button_TTF_Toggle_Paint(&covers3dOffButton, &covers3dOnButton, TX.toggleOffB, TX.toggleOnB, settings.covers3d);
+				Button_TTF_Toggle_Paint(&covers3dThinButton, &covers3dFatButton, "Fat", "Thin", settings.covers3dThickness);
 				// Draw Reset/Restore-Buttons
 				Button_TTF_Paint(&resetButton);
 				Button_TTF_Paint(&restoreButton);
@@ -554,6 +559,8 @@ void Settings_Menu_Show()
 					Button_Hover(&falloffdownButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&covers3dOnButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&covers3dOffButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&covers3dThinButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&covers3dFatButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hidescrollOnButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hidescrollOffButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&resetButton, pointer.p_x, pointer.p_y) ||
