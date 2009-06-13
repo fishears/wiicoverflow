@@ -265,6 +265,8 @@ void languageDefault()
 	snprintf(TX.coversB, sizeof(TX.coversB), "Covers" );  			//B19
 	snprintf(TX.titlesB, sizeof(TX.titlesB), "Titles" );  			//B20
 	snprintf(TX.restoreB, sizeof(TX.restoreB), "Restore"); 		//B21
+	snprintf(TX.fatB, sizeof(TX.fatB), "Fat" );  					//B22
+	snprintf(TX.thinB, sizeof(TX.thinB), "Thin"); 					//B23
 };
 
 
@@ -1033,8 +1035,15 @@ void languageSet(char *name, char *val)
 		strcopy(TX.restoreB, val, sizeof(TX.restoreB));
 		return;
 	}	
+	if (strcmp(name, "fatB") == 0) {
+		strcopy(TX.fatB, val, sizeof(TX.fatB));
+		return;
+	}
+	if (strcmp(name, "thinB") == 0) {
+		strcopy(TX.thinB, val, sizeof(TX.thinB));
+		return;
+	}
 }
-
 
 
 bool languageLoad()
