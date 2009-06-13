@@ -196,8 +196,15 @@ struct LANGUAGE
 	char Turkish[15];				//157
 	char initWPAD[40];				//158
 	char initFS[40];				//159
+	char obsoleteGL[100];			//160
+	char initSys[40];				//161
+	char initUSBFS[40];				//162
+	char initDisc[40];				//163
 	
 	
+	
+	
+// Buttons	
 	char addB[15];					//B01
 	char deleteB[15];				//B02
 	char cancelB[15];				//B03

@@ -157,10 +157,15 @@ MyLanguage = Meine Sprache
 Turkish = Türkisch
 initWPAD = Initialisiere WPAD
 initFS = Initialisiere Dateisystem
+initSys = Initialisiere System...
+initUSBFS = Initialisiere USBFS...
+initDisc = Initializing Disc...
+obsoleteGL = Die Datei gamelist.xml ist veraltet\nund wird erneuert.\nDrücke OK für Weiter.
 
 ###########
 # Buttons #
 ###########
+
 addB = Neu
 deleteB = Löschen
 cancelB = Abbruch

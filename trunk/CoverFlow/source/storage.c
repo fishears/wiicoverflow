@@ -12,7 +12,7 @@ bool init_usbfs()
    // __Disc_SetLowMem();
 	s32 ret;
 
-	Paint_Progress(self.progress, "Init Sys...");
+	Paint_Progress(self.progress, TX.initSys);
 	
 	/* Initialize system */
 	//Sys_Init(); // it is called in main.c yet
@@ -25,12 +25,12 @@ bool init_usbfs()
 	//Fat_MountSDHC(); //it is called in Subsystem_Init
 	
 	self.progress+=0.05;
-	Paint_Progress(self.progress, "Initializing USBFS...");
+	Paint_Progress(self.progress, TX.initUSBFS);
 	
 	/* Initialize DIP module */
 	ret = Disc_Init();
 	self.progress+=0.05;
-	Paint_Progress(self.progress, "Initializing Disc...");
+	Paint_Progress(self.progress, TX.initDisc);
 	
 	if (ret < 0) {
 		printf(TX.addError);
