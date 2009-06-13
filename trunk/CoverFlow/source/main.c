@@ -240,8 +240,6 @@ int main( int argc, char **argv )
 	DrawCoverFlyInStart();
 
 	bool select_ready    = false;
-//	bool dragging        = false;
-//	bool twisting        = false;
 	
 	//////////////////////////
 	// main screen gui loop //
@@ -302,7 +300,10 @@ int main( int argc, char **argv )
 			if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) //with the A button
 				DragSlider(pointer.p_x);
 			else
-				self.dragging = false; // they let go
+			{
+				self.dragging  = false; // they let go
+				self.scrolling = false;
+			}
 		}
 		
 	 	// Check for the A button action
@@ -332,6 +333,7 @@ int main( int argc, char **argv )
 			else if(Button_Select(&slideButton, pointer.p_x, pointer.p_y))
 			{
 				self.dragging = true;
+				self.scrolling = true;
 			}
 			else // user clicked A somewhere on the screen
 			{
@@ -484,25 +486,31 @@ int main( int argc, char **argv )
 			// adjustment is controlled by the setting sef.scroll_speed
 			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT) || (PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT))
 			{	
-				select_ready = false;
-				self.scrolling = true;
 				if ((int)self.shift < self.max_cover)
-					self.shift += self.scroll_speed;
-				else if ((int)self.shift >= self.max_cover)
-					self.shift = self.max_cover;
-				else if ((int)self.shift <= self.min_cover)
-					self.shift = self.min_cover;
+				{				
+					select_ready = false;
+					self.scrolling = true;
+					if ((int)self.shift < self.max_cover)
+						self.shift += self.scroll_speed;
+					else if ((int)self.shift >= self.max_cover)
+						self.shift = self.max_cover;
+					else if ((int)self.shift <= self.min_cover)
+						self.shift = self.min_cover;
+				}
 			} // now check for right, flip cover right
 			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT) ||	(PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT))
 			{
-				select_ready = false;
-				self.scrolling = true;
 				if ((int)self.shift > self.min_cover)
-					self.shift -= self.scroll_speed;
-				else if ((int)self.shift >= self.max_cover)
-					self.shift = self.max_cover;
-				else if ((int)self.shift <= self.min_cover)
-					self.shift = self.min_cover;
+				{				
+					select_ready = false;
+					self.scrolling = true;
+					if ((int)self.shift > self.min_cover)
+						self.shift -= self.scroll_speed;
+					else if ((int)self.shift >= self.max_cover)
+						self.shift = self.max_cover;
+					else if ((int)self.shift <= self.min_cover)
+						self.shift = self.min_cover;
+				}
 			}
 			// Check for UP button held to zoom in
 			else if (!settings.parentalLock && (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsHeld(0) & PAD_BUTTON_UP))
@@ -522,7 +530,8 @@ int main( int argc, char **argv )
 			else if (((WPAD_ButtonsHeld(0) & WPAD_BUTTON_B) || (PAD_ButtonsHeld(0) & PAD_BUTTON_B)) && (self.gameCnt > 1))
 			{	
 				pointer.p_type = 1; //set cursor to rotating hand
-				
+				self.twisting  = false;
+
 				if ((self.orient.roll < -10.0) || (self.orient.roll > 10.0)) // check for movement out of the -10.0 to 10.0 deg range (dead soze)
 				{
 					if ( ((self.shift > self.min_cover) && (self.shift < self.max_cover)) ||
@@ -533,15 +542,9 @@ int main( int argc, char **argv )
 						self.twisting = true;
 					}
 					else if (self.shift >= self.max_cover)
-					{
 						self.shift = self.max_cover;
-						self.twisting = true;
-					}
 					else if (self.shift <= self.min_cover)
-					{
 						self.shift = self.min_cover;
-						self.twisting = true;
-					}
 				}
 				if (settings.enablepitch)
 				{
