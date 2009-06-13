@@ -236,9 +236,14 @@ void languageDefault()
 	snprintf(TX.MyLanguage, sizeof(TX.MyLanguage), "MyLanguage" ); 
 	snprintf(TX.Turkish, sizeof(TX.Turkish), "Turkish" ); 
 	snprintf(TX.initWPAD, sizeof(TX.initWPAD), "Init WPAD"); 
-	snprintf(TX.initFS, sizeof(TX.initFS), "Initializing FileSystem"); 							
-
+	snprintf(TX.initFS, sizeof(TX.initFS), "Initializing FileSystem");
+	snprintf(TX.obsoleteGL, sizeof(TX.obsoleteGL), "Your config file is obsoleted and\nwill be removed.\nPress OK to continue");
+ 	snprintf(TX.initSys, sizeof(TX.initSys), "Init Sys...");
+	snprintf(TX.initUSBFS, sizeof(TX.initUSBFS), "Initializing USBFS...");
+	snprintf(TX.initDisc, sizeof(TX.initDisc), "Initializing Disc...");
+							
 // Buttons	
+
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
 	snprintf(TX.deleteB, sizeof(TX.deleteB), "Delete");     		//B02
 	snprintf(TX.cancelB, sizeof(TX.cancelB), "Cancel");     		//B03
@@ -921,7 +926,24 @@ void languageSet(char *name, char *val)
 		strcopy(TX.initFS, val, sizeof(TX.initFS));
 		return;
 	}	
+	if (strcmp(name, "obsoleteGL") == 0) {
+		strcopy(TX.obsoleteGL, val, sizeof(TX.obsoleteGL));
+		return;
+	}	
 	
+	if (strcmp(name, "initSys") == 0) {
+		strcopy(TX.initSys, val, sizeof(TX.initSys));
+		return;
+	}	
+	if (strcmp(name, "initUSBFS") == 0) {
+		strcopy(TX.initUSBFS, val, sizeof(TX.initUSBFS));
+		return;
+	}	
+	if (strcmp(name, "initDisc") == 0) {
+		strcopy(TX.initDisc, val, sizeof(TX.initDisc));
+		return;
+	}	
+
 	
 //////////////// Buttons //////////////
 

@@ -137,19 +137,20 @@ int main( int argc, char **argv )
 	Sys_Init();
 	Subsystem_Init();
 
-	if(!init_usbfs())
-	{
-		WindowPrompt(TX.error, TX.errInitUSBFS, &okButton, 0);
-		return 0;
-	}
+	//********  earliest access point for accessing files on SD-Card (after Fat_MountSDHC) ********
 
-	//***************  earliest access point for accessing files on SD-Card ******************
 	checkDirs();
 	checkFiles();
 	
 	SETTINGS_Load();	// Load user settings from xml file in SD:/usb-loader/
 	languageLoad();		// Load translated Messages 
 	Label_Buttons();	// Localize buttons	
+
+	if(!init_usbfs())
+	{
+		WindowPrompt(TX.error, TX.errInitUSBFS, &okButton, 0);
+		return 0;
+	}
 	
 	//self.progress += .1;
 	sprintf(self.debugMsg, TX.initFS );

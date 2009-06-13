@@ -306,7 +306,7 @@ int checkGameList578(int rev)
 {
 	if (rev < 578)
 	{
-		WindowPrompt("gamelist.xml","Your config file is obsoleted and\nwill be removed.\n\nPress OK to continue",&okButton,0);
+		WindowPrompt("gamelist.xml",TX.obsoleteGL,&okButton,0);
 		remove(USBLOADER_PATH "/gamelist.xml");
 		checkFiles();
 		return 0; // GameList removed and new created
