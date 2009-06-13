@@ -3,10 +3,13 @@
 
 -NEW-
   * Improved GUI behaviour
+  * Center cover 'pops' towards the user
+  * Easing in/out of covers and dialogs
   
 -FIX-
   * Other memory issues solved
-  * Minor bugs fixes
+  * Minor bug fixes
+  * Updated right edge 3D case graphic
 
 -OTHER
   * Internal cleanup, removing redundant init calls
