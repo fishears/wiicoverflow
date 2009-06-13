@@ -226,6 +226,8 @@ struct LANGUAGE
 	char coversB[15];				//B19
 	char titlesB[15];				//B20
 	char restoreB[15];				//B21
+	char fatB[15];					//B22
+	char thinB[15];					//B23
 };
 
 extern struct LANGUAGE TX;

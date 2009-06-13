@@ -27,12 +27,12 @@ bool Menu_Install()
 
 	ret = Disc_Wait();
 	if (ret < 0) {
-		WindowPrompt (TX.errorReadDisc,0,&cancelButton,0);
+		WindowPrompt (TX.error,TX.errorReadDisc,&cancelButton,0);
 		return false;
 	}
 	ret = Disc_Open();
 	if (ret < 0) {
-		WindowPrompt (TX.errorOpenDisc,0,&cancelButton,0);
+		WindowPrompt (TX.error,TX.errorOpenDisc,&cancelButton,0);
 		return false;
 	}
 
@@ -84,7 +84,7 @@ bool Menu_Install()
 	}
 	self.hdd = GetHddInfo();
 	if (!self.hdd) {
-		WindowPrompt (TX.noHDD, TX.error, &cancelButton,0);
+		WindowPrompt (TX.error, TX.noHDD, &cancelButton,0);
 		return false;
 		}
 
@@ -117,7 +117,7 @@ bool Menu_Install()
 			if (ret != 0) {
 				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
 				BUFFER_InitBuffer();
-				WindowPrompt (TX.errorInstall,0,&cancelButton,0);
+				WindowPrompt (TX.error, TX.errorInstall, &cancelButton, 0);
 				return false;
 			} else {
 				GetEntries();

@@ -1790,6 +1790,9 @@ void Label_Buttons()
 	strcopy( resetButton.ttf_label, TX.resetB, 15);
 	strcopy( restoreButton.ttf_label, TX.restoreB, 15);
 	
+	strcopy( covers3dFatButton.ttf_label, TX.fatB, 15);
+	strcopy( covers3dThinButton.ttf_label, TX.thinB, 15);
+	
 	strcpy( loadButton.ttf_label, TX.loadB);
 	strcpy( backButton.ttf_label, TX.backB);	
 	strcpy( gbackButton.ttf_label, TX.backB);

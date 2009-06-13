@@ -535,7 +535,7 @@ void Settings_Menu_Show()
 				Button_TTF_Toggle_Paint(&hidescrollOffButton, &hidescrollOnButton, TX.toggleOffB, TX.toggleOnB, settings.hideScroll);
 				Button_TTF_Toggle_Paint(&coverTextOffButton, &coverTextOnButton, TX.toggleOffB, TX.toggleOnB, settings.coverText);
 				Button_TTF_Toggle_Paint(&covers3dOffButton, &covers3dOnButton, TX.toggleOffB, TX.toggleOnB, settings.covers3d);
-				Button_TTF_Toggle_Paint(&covers3dThinButton, &covers3dFatButton, "Fat", "Thin", settings.covers3dThickness);
+				Button_TTF_Toggle_Paint(&covers3dThinButton, &covers3dFatButton, TX.fatB, TX.thinB, settings.covers3dThickness);
 				// Draw Reset/Restore-Buttons
 				Button_TTF_Paint(&resetButton);
 				Button_TTF_Paint(&restoreButton);
