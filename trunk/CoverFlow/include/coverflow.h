@@ -71,7 +71,6 @@
 
 //#define TEST_MODE 1
 #define DEBUG 1
-#define ONE_AT_A_TIME
 //#define CHEAT_MANAGER
 
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
@@ -185,7 +184,15 @@ typedef struct{
 	
 	int animate_count;
 	int animate_slide_x;
-		
+	// Single flip animation variables
+	int   singleFlipSpeed; // # of frames during a single cover flip animation
+	bool  movingLEFT;
+	bool  movingRIGHT;
+    int   L_CNT;
+	int   R_CNT;
+	float startingShift; // holds the starting shift position when doing a single flip animation
+	
+	
 	//bool firstTimeDownload;
 	//bool inetOk;
 	

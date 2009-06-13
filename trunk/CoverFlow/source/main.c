@@ -62,8 +62,17 @@ void initVars()
 	self.max_cover = 0;
 	self.min_cover = 0;
 	self.slot_glow = 0;
-	self.scroll_speed = 0.050;
+	self.scroll_speed = 0.075;
 	strcpy(self.ipAddress, "000.000.000.000");
+	// Single flip animation variables
+	self.singleFlipSpeed = 30; // # of frames during a single cover flip animation
+	self.movingLEFT  = false;
+	self.movingRIGHT = false;
+	self.L_CNT = 0;
+	self.R_CNT = 0;
+	self.startingShift = 0.0;
+	
+
 	
 	initGameSettings(&gameSetting);
 
@@ -228,11 +237,6 @@ int main( int argc, char **argv )
 	bool select_ready    = false;
 	bool dragging        = false;
 	bool twisting        = false;
-	
-#ifdef ONE_AT_A_TIME
-	bool LEFT = false, RIGHT = false;
-    int L_CNT = 0, R_CNT = 0;
-#endif
 	
 	//////////////////////////
 	// main screen gui loop //
@@ -412,8 +416,55 @@ int main( int argc, char **argv )
 		// Check for non-A activity
 		// Nothing is selected and nothing is flipped
 		else if (!self.selected && self.animate_flip == 0)
-		{       // Check for LEFT, flip cover left
-			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT || PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT)
+		{    
+			
+			
+			// Check for single flip animation in progress or new brief R/L button down
+			// Adjustment can be controlled with setting self.singleflipspeed
+			if (self.movingLEFT || (WPAD_ButtonsDown(0) & WPAD_BUTTON_LEFT))
+			{	
+				self.movingLEFT = true;
+				self.movingRIGHT = false;
+				select_ready = false;
+				if (self.L_CNT == 0) // first time through
+					self.startingShift = self.shift; //set the start shift #
+				if ((int)self.shift < self.max_cover)
+				{
+					float moving_amt = 0.0;
+					moving_amt = easeOutCubic(self.L_CNT+1, 0.0 , 1.0, self.singleFlipSpeed); // calc easing adjustment
+					self.shift = self.startingShift + moving_amt; // add it to our starting shift point
+					self.L_CNT++;
+					if(self.L_CNT == self.singleFlipSpeed){self.movingLEFT=false;self.L_CNT=0;}
+				}
+				else if ((int)self.shift >= self.max_cover)
+				{self.shift = self.max_cover; self.movingLEFT = false; self.L_CNT=0;}
+				else if ((int)self.shift <= self.min_cover)
+				{self.shift = self.min_cover; self.movingLEFT = false; self.L_CNT=0;}
+			}
+			else if (self.movingRIGHT || (WPAD_ButtonsDown(0) & WPAD_BUTTON_RIGHT))
+			{
+				self.movingRIGHT = true;
+				self.movingLEFT = false;
+				select_ready = false;
+				if (self.R_CNT == 0) // first time through
+					self.startingShift = self.shift; //set the start shift #
+				if ((int)self.shift > self.min_cover)
+				{
+					float moving_amt = 0.0;
+					moving_amt = easeOutCubic(self.R_CNT+1, 0.0 , 1.0, self.singleFlipSpeed); // calc easing adjustment
+					self.shift = self.startingShift - moving_amt; // subtract it from our starting shift point
+					self.R_CNT++;
+					if(self.R_CNT==self.singleFlipSpeed){self.movingRIGHT=false; self.R_CNT=0;}
+				}
+				else if ((int)self.shift >= self.max_cover)
+				{self.shift = self.max_cover; self.movingRIGHT = false; self.R_CNT=0;}
+				else if ((int)self.shift <= self.min_cover)
+				{self.shift = self.min_cover; self.movingRIGHT = false; self.R_CNT=0;}
+			}
+
+			// Now check to see if the R/L have been held down long enough to switch to fast scroll mode
+			// adjustment is controlled by the setting sef.scroll_speed
+			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT) || (PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT))
 			{	
 				select_ready = false;
 				if ((int)self.shift < self.max_cover)
@@ -423,7 +474,7 @@ int main( int argc, char **argv )
 				else if ((int)self.shift <= self.min_cover)
 					self.shift = self.min_cover;
 			} // now check for right, flip cover right
-			else if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT ||	PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT)
+			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT) ||	(PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT))
 			{
 				select_ready = false;
 				if ((int)self.shift > self.min_cover)
@@ -433,38 +484,10 @@ int main( int argc, char **argv )
 				else if ((int)self.shift <= self.min_cover)
 					self.shift = self.min_cover;
 			}// Check for MINUS, flip cover left
-#ifdef ONE_AT_A_TIME
-			else if (LEFT || WPAD_ButtonsHeld(0) & WPAD_BUTTON_MINUS)
-			{	
-				LEFT = true;
-				RIGHT = false;
-				select_ready = false;
-				if ((int)self.shift < self.max_cover){
-					self.shift += self.scroll_speed;
-					L_CNT++;
-					if(L_CNT==19){LEFT=false;L_CNT=0;}
-				}
-				else if ((int)self.shift >= self.max_cover)
-				{self.shift = self.max_cover; LEFT = false;L_CNT=0;}
-				else if ((int)self.shift <= self.min_cover)
-				{self.shift = self.min_cover; LEFT = false;L_CNT=0;}
-			} // now check for PLUS, flip cover right
-			else if (RIGHT || WPAD_ButtonsHeld(0) & WPAD_BUTTON_PLUS)
-			{
-				RIGHT = true;
-				LEFT = false;
-				select_ready = false;
-				if ((int)self.shift > self.min_cover){
-					self.shift -= self.scroll_speed;
-					R_CNT++;
-					if(R_CNT==19){RIGHT=false;R_CNT=0;}
-				}
-				else if ((int)self.shift >= self.max_cover)
-				{self.shift = self.max_cover; RIGHT = false;R_CNT=0;}
-				else if ((int)self.shift <= self.min_cover)
-				{self.shift = self.min_cover; RIGHT = false;R_CNT=0;}
-			}
-#endif
+			
+			
+			
+			
 			// Check for UP button held to zoom in
 			else if (!settings.parentalLock && (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsHeld(0) & PAD_BUTTON_UP))
 			{	
@@ -809,6 +832,7 @@ int main( int argc, char **argv )
 		}
 	
 #ifdef DEBUG
+//		char tDebugOut[100];
 // These won't work until they get switched over to use CFreeTypeGX_DrawText
 //		GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "Pitch: %f", self.orient.pitch);
 //		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "adjPitch: %f", (change_scale(self.orient.pitch, -90, 90, -0.5, 0.5)) );
@@ -816,9 +840,14 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(50, 20, font_texture, 0xAA0000FF, 1, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 //		GRRLIB_Printf(250, 20, font_texture, 0xAA0000FF, 1, "--DEBUG Build r%d--",SVN_VERSION);
 //		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
-//		GRRLIB_Printf(50, 20, font_texture, 0x808080FF, 1, "Shift        : %f", self.shift);
-//		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "gameCnt      : %d", self.gameCnt);
-//		GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "Min/Max cover: %d / %d", self.min_cover, self.max_cover);
+//		sprintf(tDebugOut, "Shift: %f", self.shift);
+//		CFreeTypeGX_DrawText(ttf16pt, 50, 20,  tDebugOut, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+//		sprintf(tDebugOut, "Game Count: %d", self.gameCnt);
+//		CFreeTypeGX_DrawText(ttf16pt, 50, 40,  tDebugOut, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+//		sprintf(tDebugOut, "Max Cover: %d", self.max_cover);
+//		CFreeTypeGX_DrawText(ttf16pt, 50, 60,  tDebugOut, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+//		sprintf(tDebugOut, "Min Cover: %d", self.min_cover);
+//		CFreeTypeGX_DrawText(ttf16pt, 50, 80,  tDebugOut, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 //		GRRLIB_Printf(50, 40, font_texture, 0x808080FF, 1, "Pointer: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
 //		GRRLIB_Printf(50, 60, font_texture, 0x808080FF, 1, "X: %d, %d", (int)pointer.p_x, (int)pointer.p_y);
 //		GRRLIB_Printf(50,20,font_texture,0x808080FF,1,"gameCnt:%d shift:%f lastplayed:%s lastsel: %d",self.gameCnt,self.shift,settings.lastplayed,self.lastGameSelected);
