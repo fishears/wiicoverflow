@@ -71,6 +71,9 @@ void initVars()
 	self.L_CNT = 0;
 	self.R_CNT = 0;
 	self.startingShift = 0.0;
+	self.dragging = false;
+	self.twisting = false;
+	self.scrolling = false;
 	
 
 	
@@ -236,8 +239,8 @@ int main( int argc, char **argv )
 	DrawCoverFlyInStart();
 
 	bool select_ready    = false;
-	bool dragging        = false;
-	bool twisting        = false;
+//	bool dragging        = false;
+//	bool twisting        = false;
 	
 	//////////////////////////
 	// main screen gui loop //
@@ -250,7 +253,8 @@ int main( int argc, char **argv )
 		GetWiimoteData();
 #endif
 		PAD_ScanPads();
-		twisting = false;
+		self.twisting = false;
+		self.scrolling = false;
 	
 		if(CheckKonami())
 		{
@@ -292,12 +296,12 @@ int main( int argc, char **argv )
 				self.selected = false;
 		}
 		
-		if(dragging) // if the user is dragging the slider
+		if(self.dragging) // if the user is dragging the slider
 		{
 			if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) //with the A button
 				DragSlider(pointer.p_x);
 			else
-				dragging = false; // they let go
+				self.dragging = false; // they let go
 		}
 		
 	 	// Check for the A button action
@@ -314,7 +318,7 @@ int main( int argc, char **argv )
 			}
 			else if(Button_Select(&slideButton, pointer.p_x, pointer.p_y))
 			{
-				dragging = true;
+				self.dragging = true;
 			}
 			else // user clicked A somewhere on the screen
 			{
@@ -468,6 +472,7 @@ int main( int argc, char **argv )
 			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT) || (PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT))
 			{	
 				select_ready = false;
+				self.scrolling = true;
 				if ((int)self.shift < self.max_cover)
 					self.shift += self.scroll_speed;
 				else if ((int)self.shift >= self.max_cover)
@@ -478,17 +483,14 @@ int main( int argc, char **argv )
 			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT) ||	(PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT))
 			{
 				select_ready = false;
+				self.scrolling = true;
 				if ((int)self.shift > self.min_cover)
 					self.shift -= self.scroll_speed;
 				else if ((int)self.shift >= self.max_cover)
 					self.shift = self.max_cover;
 				else if ((int)self.shift <= self.min_cover)
 					self.shift = self.min_cover;
-			}// Check for MINUS, flip cover left
-			
-			
-			
-			
+			}
 			// Check for UP button held to zoom in
 			else if (!settings.parentalLock && (WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP || PAD_ButtonsHeld(0) & PAD_BUTTON_UP))
 			{	
@@ -515,17 +517,17 @@ int main( int argc, char **argv )
 						((self.shift == self.max_cover) && (self.orient.roll > 0)) )
 					{
 						self.shift -= change_scale(self.orient.roll, -90.0, 90.0, -0.3, 0.3);
-						twisting = true;
+						self.twisting = true;
 					}
 					else if (self.shift >= self.max_cover)
 					{
 						self.shift = self.max_cover;
-						twisting = true;
+						self.twisting = true;
 					}
 					else if (self.shift <= self.min_cover)
 					{
 						self.shift = self.min_cover;
-						twisting = true;
+						self.twisting = true;
 					}
 				}
 				if (settings.enablepitch)
@@ -753,7 +755,7 @@ int main( int argc, char **argv )
 				Button_Theme_Paint(&settingsButton, settings.theme);
 			
 			// Draw Game Title
-			if(settings.coverText && (!dragging && !twisting && select_ready))
+			if(settings.coverText && (!self.dragging && !self.twisting && select_ready))
 			{	
 				float t = 1.0; // add a configurable text size later
 				draw_game_title(410, self.gameSelected, t);
@@ -843,9 +845,9 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(500, 20, font_texture, 0x808080FF, 1, "FPS: %d", FPS);
 //		sprintf(tDebugOut, "Shift: %f", self.shift);
 //		CFreeTypeGX_DrawText(ttf16pt, 50, 20,  tDebugOut, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
-//		sprintf(tDebugOut, "Game Count: %d", self.gameCnt);
+//		sprintf(tDebugOut, "Select Shift: %f", self.select_shift);
 //		CFreeTypeGX_DrawText(ttf16pt, 50, 40,  tDebugOut, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
-//		sprintf(tDebugOut, "Max Cover: %d", self.max_cover);
+//		sprintf(tDebugOut, "select_ready: %d", self.select_ready);
 //		CFreeTypeGX_DrawText(ttf16pt, 50, 60,  tDebugOut, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 //		sprintf(tDebugOut, "Min Cover: %d", self.min_cover);
 //		CFreeTypeGX_DrawText(ttf16pt, 50, 80,  tDebugOut, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);

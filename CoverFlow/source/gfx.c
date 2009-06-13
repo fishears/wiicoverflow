@@ -408,7 +408,8 @@ void GRRLIB_Cover(float pos, int texture_id)
 		}
 	}
 	float zpos = 0.0;
-	zpos = change_scale( abs(angle), 0, 45, 1.9, 0);
+	if (!self.scrolling && !self.dragging && !self.twisting)
+		zpos = change_scale( abs(angle), 0, 45, 1.9, 0.0);
 	DrawBufferedCover(texture_id, loc, zpos,  angle, falloff);
 }
 
