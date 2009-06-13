@@ -94,7 +94,7 @@ void GRRLIB_InitTileSet(struct GRRLIB_texImg *tex, unsigned int tilew, unsigned 
 
 inline void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color );
 inline void GRRLIB_DrawImgReflection(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, float dist);
-inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float scale, u32 color, float falloff, int theme);
+inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degrees, float scale, u32 color, float falloff, int theme);
 inline void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color, int frame);
 
 void GRRLIB_Printf(f32 xpos, f32 ypos, GRRLIB_texImg tex, u32 color, f32 zoom, const char *text, ...);

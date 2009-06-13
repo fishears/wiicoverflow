@@ -81,7 +81,7 @@ void LoadTextures()
 	flag_dk_texture = GRRLIB_LoadTexturePNG(flag_dk_png);
 }
 
-void DrawBufferedCover(int i, float loc, float angle, float falloff)
+void DrawBufferedCover(int i, float loc, float zpos, float angle, float falloff)
 {
 	if(i < MAX_BUFFERED_COVERS || i >= 0)
 	{
@@ -90,17 +90,17 @@ void DrawBufferedCover(int i, float loc, float angle, float falloff)
 			pthread_mutex_lock(&buffer_mutex[i]);
 			if(_texture_data[i].data)
 			{
-				GRRLIB_DrawCoverImg(loc*1.2,_texture_data[i],angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+				GRRLIB_DrawCoverImg(loc*1.2, zpos,_texture_data[i],angle,1.0,0xFFFFFFFF, falloff, settings.theme);
 			}
 			else
 			{
 				if(settings.covers3d)
 				{
-					GRRLIB_DrawCoverImg(loc*1.2,cover_texture_3d,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+					GRRLIB_DrawCoverImg(loc*1.2,zpos,cover_texture_3d,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
 				}
 				else
 				{
-					GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+					GRRLIB_DrawCoverImg(loc*1.2,zpos,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
 				}
 			}
 			pthread_mutex_unlock(&buffer_mutex[i]);
@@ -109,11 +109,11 @@ void DrawBufferedCover(int i, float loc, float angle, float falloff)
 		{
 			if(settings.covers3d)
 			{
-				GRRLIB_DrawCoverImg(loc*1.2,cover_texture_3d,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+				GRRLIB_DrawCoverImg(loc*1.2,zpos,cover_texture_3d,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
 			}
 			else
 			{
-				GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+				GRRLIB_DrawCoverImg(loc*1.2,zpos,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
 			}
 		}	
 	}
@@ -121,11 +121,11 @@ void DrawBufferedCover(int i, float loc, float angle, float falloff)
 	{
 		if(settings.covers3d)
 		{
-			GRRLIB_DrawCoverImg(loc*1.2,cover_texture_3d,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+			GRRLIB_DrawCoverImg(loc*1.2,zpos,cover_texture_3d,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
 		}
 		else
 		{
-			GRRLIB_DrawCoverImg(loc*1.2,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
+			GRRLIB_DrawCoverImg(loc*1.2,zpos,cover_texture,angle,1.0,0xFFFFFFFF, falloff, settings.theme);
 		}
 	}	
 
@@ -383,7 +383,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 	
 	scale = pow(pos + 1, -2);
 	angle = -1 * dir * change_scale(scale, 0, 1, settings.coverAngle, 0);
-		
+
 	if(settings.covers3d)
 	{
 		if(coverFlip[texture_id].flip)
@@ -407,8 +407,9 @@ void GRRLIB_Cover(float pos, int texture_id)
 			
 		}
 	}
-	
-	DrawBufferedCover(texture_id, loc, angle, falloff);
+	float zpos = 0.0;
+	zpos = change_scale( abs(angle), 0, 45, 1.9, 0);
+	DrawBufferedCover(texture_id, loc, zpos,  angle, falloff);
 }
 
 void DrawCoverFlyInStart()
@@ -797,7 +798,10 @@ int DrawLoadGameDialog(bool load, bool hover)
 	}
 	else
 	{
-		DrawBufferedCover(self.gameSelected, loc, angle,  0 );
+		// TODO: This still needs some work on the transition
+		float zpos = 0.0;
+		zpos = change_scale( abs(angle), 0, 90, 1.9, 0);
+		DrawBufferedCover(self.gameSelected, loc, zpos, angle, 0);
 	}
 	
 	return 0;
