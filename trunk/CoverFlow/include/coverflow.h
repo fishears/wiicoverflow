@@ -192,6 +192,9 @@ typedef struct{
 	int   R_CNT;
 	float startingShift; // holds the starting shift position when doing a single flip animation
 	
+	bool dragging;
+	bool twisting;
+	bool scrolling;
 	
 	//bool firstTimeDownload;
 	//bool inetOk;
