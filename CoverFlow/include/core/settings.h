@@ -19,6 +19,7 @@ typedef struct {
     int theme;
 	
 	int covers3d;
+	int covers3dThickness;
 	int hideScroll;
 
 	int volume;
