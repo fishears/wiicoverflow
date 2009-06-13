@@ -75,7 +75,7 @@ void initVars()
 	self.twisting = false;
 	self.scrolling = false;
 	
-
+	self.firstTimeGP = true;
 	
 	initGameSettings(&gameSetting);
 

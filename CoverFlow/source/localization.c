@@ -250,7 +250,7 @@ void languageDefault()
 	snprintf(TX.yesB, sizeof(TX.yesB), "Yes");     				//B04
 	snprintf(TX.noB, sizeof(TX.noB), "No");     					//B05
 	snprintf(TX.okB, sizeof(TX.okB), "OK");     					//B06
-	snprintf(TX.resetB, sizeof(TX.resetB), "reset");     			//B07
+	snprintf(TX.resetB, sizeof(TX.resetB), "Reset");     			//B07
 	snprintf(TX.downloadB, sizeof(TX.downloadB), "Download");     	//B08
 	snprintf(TX.loadB, sizeof(TX.loadB), "Load");     				//B09
 	snprintf(TX.backB, sizeof(TX.backB), "Back");     				//B10
@@ -262,8 +262,9 @@ void languageDefault()
 	snprintf(TX.wiimenuB, sizeof(TX.wiimenuB), "Wii Menu");        //B16
 	snprintf(TX.loaderB, sizeof(TX.loaderB), "HBLoader");     		//B17
 	snprintf(TX.languagesB, sizeof(TX.languagesB), "Languages" );  //B18
-	snprintf(TX.coversB, sizeof(TX.coversB), "Covers" );  			//B18
-	snprintf(TX.titlesB, sizeof(TX.titlesB), "Titles" );  			//B18
+	snprintf(TX.coversB, sizeof(TX.coversB), "Covers" );  			//B19
+	snprintf(TX.titlesB, sizeof(TX.titlesB), "Titles" );  			//B20
+	snprintf(TX.restoreB, sizeof(TX.restoreB), "Restore"); 		//B21
 };
 
 
@@ -1028,7 +1029,10 @@ void languageSet(char *name, char *val)
 		strcopy(TX.titlesB, val, sizeof(TX.titlesB));
 		return;
 	}
-
+	if (strcmp(name, "restoreB") == 0) {
+		strcopy(TX.restoreB, val, sizeof(TX.restoreB));
+		return;
+	}	
 }
 
 

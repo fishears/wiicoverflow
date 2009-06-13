@@ -39,8 +39,23 @@ typedef struct {
 } s_settings;
 
 
+typedef struct {
+    float coverZoom;
+	float coverCamY;
+	float coverCamX;
+    float coverAngle;
+    float coverSpacing;
+    float coverFallOff;
+    int drawWindow;
+    int coverText;
+    int hideScroll;
+} gp_settings;	
+
+
 void SETTINGS_Init(void);
 void graphics_SETTINGS_Init(void);
+void backup_gpSettings();
+void restore_gpSettings();
 
 int SETTINGS_Load();
 

@@ -157,6 +157,9 @@ void Settings_Menu_Show()
 				menuSettingsButton.selected  = false;
 				menuGraphicsButton.selected  = true;
 				menuLanguagesButton.selected = false;
+				if(self.firstTimeGP == true)
+					backup_gpSettings();  // backup old graphics settings
+				self.firstTimeGP = false;
 			}
 			else if (Button_Select(&menuLanguagesButton, pointer.p_x, pointer.p_y))
 			{
@@ -346,11 +349,11 @@ void Settings_Menu_Show()
 				
 				if (settings.covers3d == 1)
 				{
-				 snprintf( coversButton.ttf_label, 15, TX.covers3D);
+				 strcopy( coversButton.ttf_label, TX.covers3D, 15);
 				}
 				else
 				{
-				 snprintf( coversButton.ttf_label, 15, TX.coversB);
+				 strcopy( coversButton.ttf_label, TX.coversB, 15);
 				}
 								
 				Button_TTF_Paint(&coversButton);
@@ -403,7 +406,7 @@ void Settings_Menu_Show()
 			} // end case for 'settings' panel
 				
 			case graphicsPanel:		// Case for graphics
-			{
+			{				
 				// Handle Button A events
 				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
 				{
@@ -433,6 +436,9 @@ void Settings_Menu_Show()
 					
 					else if (Button_Select(&resetButton, pointer.p_x, pointer.p_y))
 						graphics_SETTINGS_Init();
+					
+					else if (Button_Select(&restoreButton, pointer.p_x, pointer.p_y))
+						restore_gpSettings();
 				}
 				if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A)
 				{
@@ -525,8 +531,10 @@ void Settings_Menu_Show()
 				Button_TTF_Toggle_Paint(&hidescrollOffButton, &hidescrollOnButton, TX.toggleOffB, TX.toggleOnB, settings.hideScroll);
 				Button_TTF_Toggle_Paint(&coverTextOffButton, &coverTextOnButton, TX.toggleOffB, TX.toggleOnB, settings.coverText);
 				Button_TTF_Toggle_Paint(&covers3dOffButton, &covers3dOnButton, TX.toggleOffB, TX.toggleOnB, settings.covers3d);
-				// Draw Reset-Button
+				// Draw Reset/Restore-Buttons
 				Button_TTF_Paint(&resetButton);
+				Button_TTF_Paint(&restoreButton);
+				
 				// Check for button-pointer intersections, and rumble
 				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
@@ -548,7 +556,8 @@ void Settings_Menu_Show()
 					Button_Hover(&covers3dOffButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hidescrollOnButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hidescrollOffButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&resetButton, pointer.p_x, pointer.p_y))
+					Button_Hover(&resetButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&restoreButton, pointer.p_x, pointer.p_y))
 					
 				{
 					if (--self.rumbleAmt > 0) // Should we be rumbling?

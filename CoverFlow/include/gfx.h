@@ -199,6 +199,7 @@ Button falloffdownButton;
 Button windowupButton;
 Button windowdownButton;
 Button resetButton;
+Button restoreButton;
 
 /*Home Menu Buttons*/
 Button homeMenuTopButton;

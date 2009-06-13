@@ -298,6 +298,8 @@ void Init_Buttons()
     coverTextOnButton       = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 435, 369);
     coverTextOffButton      = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 435, 369);
 	resetButton				= Duplicate_Button_TTF(okButton, 268, 423, TX.resetB);
+	restoreButton			= Duplicate_Button_TTF(okButton, 101, 423, TX.restoreB);
+
 // Language Settings Panel
 	langupButton			= Button_Init(button_plus_png, button_plus_over_png,321,90);
     langdownButton			= Button_Init(button_minus_png, button_minus_over_png, 293,90);
@@ -1631,6 +1633,7 @@ void freeResources(){
     FreeButtonResources(&coverTextOnButton);
     FreeButtonResources(&coverTextOffButton);
 	FreeButtonResources(&resetButton);
+	FreeButtonResources(&restoreButton);
 	// Language Settings Panel
 	FreeButtonResources(&langupButton);
     FreeButtonResources(&langdownButton);
@@ -1770,6 +1773,7 @@ void Label_Buttons()
 	strcpy( yesButton.ttf_label, TX.yesB);
 	strcpy( noButton.ttf_label, TX.noB);	
 	strcopy( resetButton.ttf_label, TX.resetB, 15);
+	strcopy( restoreButton.ttf_label, TX.restoreB, 15);
 	
 	strcpy( loadButton.ttf_label, TX.loadB);
 	strcpy( backButton.ttf_label, TX.backB);	

@@ -1,4 +1,4 @@
-iniNet = Valmistellaan verkkoyhteyttä
+﻿iniNet = Valmistellaan verkkoyhteyttä
 iniNetErr = Virhe verkkoyhteydessä
 error = VIRHE!
 iniNetReady = Verkkoyhteys valmis
@@ -145,7 +145,7 @@ batteryUnit = P%d
 basic = Perustiedot
 advanced = Lisätiedot
 hideScrollbar = Piilota palkki
-covers3D = 3D-kannet
+covers3D = 3D kannet
 gameText = Pelin nimi
 gameSettings = Pelin asetukset
 gameLanguage = Pelin kieli

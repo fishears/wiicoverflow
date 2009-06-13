@@ -3,6 +3,8 @@
 
 
 s_settings settings;
+gp_settings gpsettings;
+
 /* my save callback */
 const char* whitespace_cb(mxml_node_t *node, int where)
 {
@@ -71,6 +73,30 @@ void graphics_SETTINGS_Init()
 
 	settings.hideScroll   = 1;
 }
+
+
+void backup_gpSettings()
+{
+    gpsettings.coverZoom    = settings.coverZoom;
+	gpsettings.coverAngle   = settings.coverAngle;
+	gpsettings.coverSpacing = settings.coverSpacing;
+	gpsettings.coverFallOff = settings.coverFallOff;
+	gpsettings.drawWindow   = settings.drawWindow;
+	gpsettings.coverText    = settings.coverText;
+	gpsettings.hideScroll   = settings.hideScroll;
+}
+
+void restore_gpSettings()
+{
+    settings.coverZoom    = gpsettings.coverZoom;
+	settings.coverAngle   = gpsettings.coverAngle;
+	settings.coverSpacing = gpsettings.coverSpacing;
+	settings.coverFallOff = gpsettings.coverFallOff;
+	settings.drawWindow   = gpsettings.drawWindow;
+	settings.coverText    = gpsettings.coverText;
+	settings.hideScroll   = gpsettings.hideScroll;
+}
+
 
 int SETTINGS_Load()
 {
