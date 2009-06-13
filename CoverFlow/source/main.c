@@ -76,6 +76,7 @@ void initVars()
 	self.scrolling = false;
 	
 	self.firstTimeGP = true;
+	self.switched3dto2D = false;
 	
 	initGameSettings(&gameSetting);
 
@@ -310,7 +311,19 @@ int main( int argc, char **argv )
 			//First Check if any UI buttons or slider are selected
 			if((!settings.parentalLock) && (Button_Select(&addButton, pointer.p_x, pointer.p_y) || PAD_ButtonsDown(0) & PAD_TRIGGER_R))
 			{
+				if (settings.covers3d == 1 ) // switch back to covers2D
+				  {
+					settings.covers3d = 0;
+					ResetBuffer();
+					self.switched3dto2D = true;
+				  }
 				Menu_Install();
+				if (self.switched3dto2D == true ) // switch back to covers3D
+				  {
+					settings.covers3d = 1;
+					ResetBuffer();
+					self.switched3dto2D = false;
+				  }
 			}
 			else if((!settings.parentalLock) && Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
 			{

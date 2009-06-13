@@ -212,8 +212,8 @@ typedef struct{
 	
 	char ipAddress[16]; // 000.000.000.000\0
 	
-	bool firstTimeGP;  //First time on graphics panel, used by backup_gpSettings();
-	
+	bool firstTimeGP;  		// First time on graphics panel, used by backup_gpSettings();
+	bool switched3dto2D;	// When installing new games
 	int dummy;
 
 } s_self;
