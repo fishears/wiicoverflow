@@ -321,11 +321,20 @@ void DragSlider(int xPos)
 	float fx = change_scale(xPos, min_loc, max_loc, self.max_cover, self.min_cover);
 	
 	if ((fx > self.min_cover) && (fx < self.max_cover))
+	{
 		self.shift = fx;
+		self.scrolling = true;
+	}
 	else if (fx >= self.max_cover)
-		self.shift = self.max_cover;
+	{
+		self.shift    = self.max_cover;
+		self.scrolling = false;
+	}
 	else if (fx <= self.min_cover)
+	{
 		self.shift = self.min_cover;
+		self.scrolling = false;
+	}
 }
 
 int getRandomNum(int min, int max){
