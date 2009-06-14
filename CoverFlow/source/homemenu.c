@@ -86,7 +86,8 @@ void HomeMenu_Show()
 		moving_y = change_scale(i, 0, 26, 108, 0);
 		Do_Batteries(moving_y);
 		moving_y = change_scale(i, 0, 26, -38, 70);
-		CFreeTypeGX_DrawText(ttf24pt, 490, moving_y, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf24pt, 470, moving_y, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf24pt, 30, moving_y, TX.homeMenu, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
 
 		WPAD_ScanPads();
 		PAD_ScanPads();
@@ -116,7 +117,8 @@ void HomeMenu_Show()
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
 		// Draw the 'Cancel' text
-		CFreeTypeGX_DrawText(ttf24pt, 490, moving_y, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf24pt, 470, moving_y, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf24pt, 30, moving_y, TX.homeMenu, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
 		Do_Batteries(0);
 
 		Button_HomeMenu_Paint(&wiiMenuButton);
@@ -181,7 +183,7 @@ void HomeMenu_Show()
 		Button_Paint(&homeMenuTopButton);
 		Button_Paint(&homeMenuBottomButton);
 		// Draw the 'Cancel' text
-		CFreeTypeGX_DrawText(ttf24pt, 490, moving_y, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf24pt, 470, moving_y, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
 		Do_Batteries(0);
 
 		Button_HomeMenu_Paint(&wiiMenuButton);
@@ -214,8 +216,15 @@ void HomeMenu_Show()
 			self.rumbleAmt = 4;
 		}
 
+		if(Button_Hover(&homeMenuTopButton, pointer.p_x, pointer.p_y))
+			CFreeTypeGX_DrawText(ttf24pt, 30, moving_y, TX.homeMenu, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		else
+			CFreeTypeGX_DrawText(ttf24pt, 30, moving_y, TX.homeMenu, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		
+
 		if(Button_Hover(&homeMenuBottomButton, pointer.p_x, pointer.p_y))
 		{
+			CFreeTypeGX_DrawText(ttf20pt, 375, 440 , TX.homeWiimote, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER );
 			if(slide_wiimote > -20)
 			{
 				slide_wiimote--;
@@ -224,6 +233,7 @@ void HomeMenu_Show()
 		}
 		else
 		{
+			CFreeTypeGX_DrawText(ttf20pt, 375, 440 , TX.homeWiimote, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER );
 			if(slide_wiimote < 0)
 			{
 				slide_wiimote++;
@@ -261,7 +271,8 @@ void HomeMenu_Show()
 		Button_Paint(&homeMenuBottomButton);
 
 		// Draw the 'Cancel' text
-		CFreeTypeGX_DrawText(ttf24pt, 490, moving_y, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf24pt, 470, moving_y, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf24pt, 30, moving_y, TX.homeMenu, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
 		Do_Batteries(0);
 
 		Button_HomeMenu_Paint(&wiiMenuButton);
@@ -292,7 +303,8 @@ void HomeMenu_Show()
 		Button_Paint(&homeMenuBottomButton);
 		// Draw the 'Cancel' text
 		moving_y = change_scale(i, 0, 26, 70, -38);
-		CFreeTypeGX_DrawText(ttf24pt, 490, moving_y, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf24pt, 470, moving_y, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf24pt, 30, moving_y, TX.homeMenu, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
 		moving_y = change_scale(i, 0, 26, 4, 112);
 		Do_Batteries(moving_y);
 
@@ -320,7 +332,8 @@ void HomeMenu_Destroy()
 		GRRLIB_DrawImg(homeMenuTopButton.x, homeMenuTopButton.y, homeMenuTopButton.texture, 0, 1, 1, 0xFFFFFF00|i);
 		GRRLIB_DrawImg(homeMenuBottomButton.x, homeMenuBottomButton.y, homeMenuBottomButton.texture, 0, 1, 1, 0xFFFFFF00|i);
 		// Draw the 'Cancel' text
-		CFreeTypeGX_DrawText(ttf24pt, 490, 70, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf24pt, 470, 70, TX.homeMenuTopB, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf24pt, 30, 70, TX.homeMenu, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT | FTGX_ALIGN_MIDDLE);
 		GRRLIB_DrawImg(wiiMenuButton.x, wiiMenuButton.y, wiiMenuButton.texture, 0, 1, 1, 0xFFFFFF00|i);
 		CFreeTypeGX_DrawText(ttf24pt, (wiiMenuButton.x + (wiiMenuButton.texture.w / 2)), (wiiMenuButton.y + (wiiMenuButton.texture.h / 2)), wiiMenuButton.ttf_label, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 		GRRLIB_DrawImg(loaderButton.x, loaderButton.y, loaderButton.texture, 0, 1, 1, 0xFFFFFF00|i);
@@ -344,6 +357,10 @@ void Do_Batteries(int y_modifier)
 	u8 ret;
 	u8 level;
 	char tUnit[4];
+	
+	
+	CFreeTypeGX_DrawText(ttf20pt, 375, (440 + y_modifier), TX.homeWiimote, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER );
+
 	
 	for(x = 0; x <= 3; x++)
 	{

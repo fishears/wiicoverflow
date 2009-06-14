@@ -200,9 +200,8 @@ struct LANGUAGE
 	char initSys[40];				//161
 	char initUSBFS[40];				//162
 	char initDisc[40];				//163
-	
-	
-	
+	char homeMenu[20];				//164
+	char homeWiimote[30];			//165
 	
 // Buttons	
 	char addB[15];					//B01
