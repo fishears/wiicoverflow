@@ -21,16 +21,16 @@ Download and Help Forum : http://grrlib.santo.fr
 
 extern const u8 matte_black_png[];
 extern const u8 matte_grey_png[];
+extern const u8 case_right_png[];
+extern const u8 case_3d_shadow_png[];
 GRRLIB_texImg   matteBlackTexture;
 GRRLIB_texImg   matteGreyTexture;
+GRRLIB_texImg   rightTexture;
+GRRLIB_texImg   case3DShadowTexture;
 GXTexObj        matteBlackTex;
 GXTexObj        matteGreyTex;
-
-extern const u8 case_right_png[];
-
-GRRLIB_texImg rightTexture;
-   
-GXTexObj rightSideTex;
+GXTexObj        rightSideTex;
+GXTexObj        case3DShadowTex;
 
 extern s_settings settings;
 
@@ -565,7 +565,7 @@ inline void GRRLIB_DrawFlatCoverImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float
 
 	if (tex.data==0) return;
 
-	float right = .515;
+	float right = .527;
 	
     GX_InitTexObj(&texObj, tex.data, tex.w, tex.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     //GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
@@ -741,6 +741,7 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 
 		GX_LoadPosMtxImm (mv, GX_PNMTX0);
 
+		// Draw the Front Cover
 		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
 		GX_Position3f32(-width, -height, 0- zpos);
 		GX_Color1u32(color);
@@ -754,6 +755,73 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 		GX_Color1u32(color);
 		GX_TexCoord2f32(right, 0);
 
+		GX_Position3f32(-width, height, 0- zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(1, 0);
+		GX_End();
+		
+		// Draw the 3D shadow mask
+		// Load the texture
+		GX_LoadTexObj(&case3DShadowTex, GX_TEXMAP0);
+		GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
+		GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+		GX_LoadPosMtxImm (mv, GX_PNMTX0);
+		//Draw over the back cover
+		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+		GX_Position3f32(-width, -height, thickness - zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(0, 1);
+		
+		GX_Position3f32(-width, height, thickness - zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(0, 0);
+		
+		GX_Position3f32(width, height, thickness - zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(left, 0);
+		
+		GX_Position3f32(width, -height, thickness - zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(left, 1);
+		GX_End();
+
+		GX_LoadPosMtxImm (mv, GX_PNMTX0);
+		
+		//Draw over the left spine
+		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+		GX_Position3f32(width, -height, thickness - zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(left, 1);
+		
+		GX_Position3f32(width, height, thickness - zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(left, 0);
+		
+		GX_Position3f32(width, height, 0 - zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(right, 0);
+		
+		GX_Position3f32(width, -height, 0 - zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(right, 1);
+		GX_End();
+		
+		GX_LoadPosMtxImm (mv, GX_PNMTX0);
+
+		//Draw over the front cover
+		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+		GX_Position3f32(-width, -height, 0- zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(1, 1);
+		
+		GX_Position3f32(width, -height, 0- zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(right, 1);
+		
+		GX_Position3f32(width, height, 0- zpos);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(right, 0);
+		
 		GX_Position3f32(-width, height, 0- zpos);
 		GX_Color1u32(color);
 		GX_TexCoord2f32(1, 0);
@@ -1490,14 +1558,14 @@ void GRRLIB_Init() {
 
 	GRRLIB_2D_Init();
 	
-	rightTexture = GRRLIB_LoadTexture(case_right_png);	
-	GX_InitTexObj(&rightSideTex, rightTexture.data, rightTexture.w, rightTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-
-
 	matteBlackTexture = GRRLIB_LoadTexture(matte_black_png);
 	matteGreyTexture = GRRLIB_LoadTexture(matte_grey_png);
+	rightTexture = GRRLIB_LoadTexture(case_right_png);
+	case3DShadowTexture = GRRLIB_LoadTexture(case_3d_shadow_png);
     GX_InitTexObj(&matteBlackTex, matteBlackTexture.data, matteBlackTexture.w, matteBlackTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GX_InitTexObj(&matteGreyTex, matteGreyTexture.data, matteGreyTexture.w, matteGreyTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+	GX_InitTexObj(&rightSideTex, rightTexture.data, rightTexture.w, rightTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+	GX_InitTexObj(&case3DShadowTex, case3DShadowTexture.data, case3DShadowTexture.w, case3DShadowTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 	
 	//Video_ManualSet(xfb[0], rmode);
 
