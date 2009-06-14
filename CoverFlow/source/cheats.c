@@ -17,7 +17,7 @@ extern s_self self;
 
 bool check_txt(int id, struct discHdr *gameList)
 {
-    //check to see if the game has a txt file
+    //check to see if the game has a txt cheat file
     char buffer[500][128]; //500 lines of cheat codes at 128 chars per line
     char filename[10];
     char titleID[7];
@@ -47,7 +47,7 @@ bool check_txt(int id, struct discHdr *gameList)
 
 bool check_gct(int id, struct discHdr *gameList)
 {
-    //check to see if the game has a gct file
+    //check to see if the game has a gct cheat file
     char buffer[500][128]; //500 lines of cheat codes at 128 chars per line
     char filename[10];
     char titleID[7];
@@ -75,7 +75,7 @@ bool check_gct(int id, struct discHdr *gameList)
 
 bool download_txt(int id, struct discHdr *gameList)
 {
-    //attempt to download the game's txt file from www.usbgecko.com
+    //attempt to download the game's txt cheat file from www.usbgecko.com
     if(networkInit(self.ipAddress)){
         char url[100];
         char titleID[7];
@@ -90,7 +90,7 @@ bool download_txt(int id, struct discHdr *gameList)
             sprintf(url, "%s%c/%C%c%c%c.txt", CODESITE, header->id[0], header->id[0], header->id[1],header->id[2],header->id[3]);
             file = downloadfile(url);
         }
-        if(file.data != NULL)
+        if(file.data != NULL) // if we got data back, save that sucka
         {
             WindowPrompt(titleID,"txt codes downloaded",&okButton,0);
             sprintf(imgpath,"%s%s%s.txt",USBLOADER_PATH,TXT_PATH,titleID);
@@ -98,7 +98,7 @@ bool download_txt(int id, struct discHdr *gameList)
             free(file.data);
             return true;
         }
-        else
+        else //no data so report the HTTP error
         {
 //            if(file.size<204)
 //                sprintf(file.error,"Cheats not available");
@@ -106,14 +106,16 @@ bool download_txt(int id, struct discHdr *gameList)
             return false;
         }
     }
+    //network failed to initialize
     WindowPrompt("ERROR",TX.errEstablishConn,&okButton,0);
     return false;
 }
 
 void manage_cheats(int id, struct discHdr *gameList)
 {
-    //allow enable/disable of individual codes in the gct
-    CHEAT cheat[500]; //set an ambitious limit to the number of cheats for each game
+    //parses the txt file and allows user to enable/disable cheats
+    //then turns enabled codes into a gct file to be used with ocarina
+    CHEAT cheat[MAX_CHEATS]; //set an ambitious limit to the number of cheats for each game
     char buffer[LINE_LENGTH]; //dummy line for tests
     char filename[10];
     //char gctname[10];
@@ -144,6 +146,7 @@ void manage_cheats(int id, struct discHdr *gameList)
             {
                 sprintf(cheat[i].title,buffer); //write it as a title
                 cheat[i-1].codelines = codecounter-1; //write the number of codelines for the previous title
+                cheat[i-1].enabled = false;
                 codecounter = 0; //reset the codecounter
                 if(cheat[i-1].codelines > 0 || i==0) //if not first title && the previous title really WAS a title, move on
                     i++;
@@ -156,71 +159,88 @@ void manage_cheats(int id, struct discHdr *gameList)
             memset(&buffer, 0, sizeof(buffer));
         }
 
-
-/*
-        while(!feof(txtfile)) //read the rest of the txt file into buffer array
-        {
-            fgets(buffer[i],sizeof buffer[i],txtfile);
-            if(strlen(buffer[i])==1) //take out any empty lines
-                i--;
-            i++;
-
-        }
-        bufflines = i;
-        sprintf(tTemp,"%d",i)
-*/
         char tTemp[135];
         int pages = 0;
-        int currpage = 0;
-;
+        int currpage = 1;
+        int display;
+        int n;
+        for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
+        {
+            cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],44,64+(n*28));
+            cheatDisabled[n] = Duplicate_Button(cheatDisabled[0],44,64+(n*28));
+        }
         fclose(txtfile);
-        pages = (i/LINES_PER_PAGE);
+        pages = (i/LINES_PER_PAGE)+1;
 
-
-        
-        while(1)
+        while(1) //cheat manager GUI loop
         {
             WPAD_ScanPads();
             GetWiimoteData();
-            if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B))
+            if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)) //b or home to exit
             {
+                //int x;
+                //for(x=0;x<MAX_CHEATS;x++)
+                //{
+                //    memset(&cheat[x], 0, sizeof(cheat[x])); //clear the cheats
+                //}
                 return;
             }
-            else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_PLUS))
+            else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
+            {
+                int buttcheck; //great name for a variable!
+                for(n=0;n<LINES_PER_PAGE;n++) //test the cheat buttons
+                {
+                    buttcheck = n+((currpage-1)*LINES_PER_PAGE); //so that we check the right cheat status
+                    if(Button_Select(&cheatEnabled[n], pointer.p_x, pointer.p_y) || Button_Select(&cheatDisabled[n], pointer.p_x, pointer.p_y))
+                        cheat[buttcheck].enabled = (cheat[buttcheck].enabled) ? false : true;
+                }
+            }
+            else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_PLUS)) //page forward
             {
                 if(currpage<pages)
                     currpage++;
                 else
-                    currpage = 0;
+                    currpage = 1;
             }
-            else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_MINUS))
+            else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_MINUS)) //page back
             {
-                if(currpage>0)
+                if(currpage>1)
                     currpage--;
                 else
                     currpage = pages;
             }
 
         draw_covers();
-        GRRLIB_Rectangle(40, 56, 560, 376, 0xffffffdd, true); //draw a box
+        GRRLIB_Rectangle(40, 56, 560, 376, 0xffffffdd, true); //draw a big boring box
         GRRLIB_Rectangle(42, 58, 556, 372, 0x737373FF, true);
-        int step = 20;
-        sprintf(tTemp,"%d/%d",currpage,pages);
+        int step = 0;
+        sprintf(tTemp,"%d/%d",currpage,pages); //report page x of xx
         CFreeTypeGX_DrawText(ttf14pt, 550, 80, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
         for(i=0;i<LINES_PER_PAGE;i++)
         {
-            if(cheat[i+(currpage*10)].codelines >0) //got codes so it is a title
+            display = i+((currpage-1)*LINES_PER_PAGE);
+            if(cheat[display].codelines >0) //got codes so it is a title
             {
-                sprintf(tTemp,"%d:%s has %d codes",i+(currpage*10),cheat[i+(currpage*10)].title,cheat[i+(currpage*10)].codelines);
-                CFreeTypeGX_DrawText(ttf14pt, 50, 60+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+                sprintf(tTemp,"%d:%s has %d codes",display,cheat[(display)].title,cheat[display].codelines);
+                CFreeTypeGX_DrawText(ttf14pt, 90, 80+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
                 step +=28;
+                if(cheat[display].enabled) //paint the appropriate cheat button state
+                    Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],0);
+                else
+                    Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],1);
             }
         }
-        DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
+        for(n=0;n<display;n++) //hover the buttons
+        {
+            Button_Hover(&cheatEnabled[n],cheatEnabled[n].x,cheatEnabled[n].y);
+            Button_Hover(&cheatDisabled[n],cheatDisabled[n].x,cheatDisabled[n].y);
+        }
+        DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF); //HAND!
         GRRLIB_Render();
         }
     }
-        return;
+    memset(&cheat, 0, sizeof(cheat));
+    return;
 
 
 
@@ -355,25 +375,25 @@ void manage_cheats(int id, struct discHdr *gameList)
 
 bool is_code(char* line)
 {
+    //checks the line to see if it's a code line
     char* pch;
     char* msg = malloc(strlen(line)*sizeof(char));
     sprintf(msg, line);
     pch = strtok(msg, " ");
     while(pch!=NULL)
     {
-        //WindowPrompt("true",pch,&okButton,0);
-        if(strlen(pch) == 8) //test for a block of 8 characters
+        if(strlen(pch) == 8) //test for a block of 8 characters to SPACE
         {
             pch = strtok(NULL,"\n");
-            if(strlen(pch)==8) //test for second block of 8 characters
+            if(strlen(pch)==8) //test for second block of 8 characters to NEWLINE
             {
                 free(msg);
-                return true;
+                return true; //it's a code line (or a good copy)
             }
         }
         free(msg);
-        //WindowPrompt("false",pch,&okButton,0);
-        return false;
+        return false; 
     }
     return false;
 }
+

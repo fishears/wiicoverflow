@@ -24,9 +24,11 @@ extern "C" {
     #define LINES_PER_PAGE 10
     #define LINE_LENGTH 128
     #define MAX_CODES 100
+    #define MAX_CHEATS 500
 
     typedef struct {
         char title[LINE_LENGTH]; //cheat description text
+        bool enabled; //is the cheat active
         char codes[MAX_CODES][LINE_LENGTH]; //cheat codes block
         int codelines; //number of lines of cheat codes
     } CHEAT;
