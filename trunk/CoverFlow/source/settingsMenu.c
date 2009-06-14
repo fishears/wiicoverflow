@@ -158,7 +158,7 @@ void Settings_Menu_Show()
 				menuGraphicsButton.selected  = true;
 				menuLanguagesButton.selected = false;
 				if(self.firstTimeGP == true)
-					backup_gpSettings();  // backup old graphics settings
+					backup_gpSettings();  // backup 'old' graphics settings
 				self.firstTimeGP = false;
 			}
 			else if (Button_Select(&menuLanguagesButton, pointer.p_x, pointer.p_y))
@@ -404,8 +404,9 @@ void Settings_Menu_Show()
 				
 				break;
 			} // end case for 'settings' panel
-				
+	/////////////////////////////////////////////////////////			
 			case graphicsPanel:		// Case for graphics
+	/////////////////////////////////////////////////////////		
 			{				
 				// Handle Button A events
 				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
@@ -535,7 +536,9 @@ void Settings_Menu_Show()
 				Button_TTF_Toggle_Paint(&hidescrollOffButton, &hidescrollOnButton, TX.toggleOffB, TX.toggleOnB, settings.hideScroll);
 				Button_TTF_Toggle_Paint(&coverTextOffButton, &coverTextOnButton, TX.toggleOffB, TX.toggleOnB, settings.coverText);
 				Button_TTF_Toggle_Paint(&covers3dOffButton, &covers3dOnButton, TX.toggleOffB, TX.toggleOnB, settings.covers3d);
-				Button_TTF_Toggle_Paint(&covers3dThinButton, &covers3dFatButton, TX.fatB, TX.thinB, settings.covers3dThickness);
+				if(settings.covers3d == 1) 
+					Button_TTF_Toggle_Paint(&covers3dThinButton, &covers3dFatButton, TX.fatB, TX.thinB, settings.covers3dThickness);
+			
 				// Draw Reset/Restore-Buttons
 				Button_TTF_Paint(&resetButton);
 				Button_TTF_Paint(&restoreButton);
@@ -559,13 +562,12 @@ void Settings_Menu_Show()
 					Button_Hover(&falloffdownButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&covers3dOnButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&covers3dOffButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&covers3dThinButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&covers3dFatButton, pointer.p_x, pointer.p_y) ||
+					((settings.covers3d == 1) ? Button_Hover(&covers3dThinButton, pointer.p_x, pointer.p_y) : false) ||				
+					((settings.covers3d == 1) ? Button_Hover(&covers3dFatButton , pointer.p_x, pointer.p_y) : false) ||
 					Button_Hover(&hidescrollOnButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hidescrollOffButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&resetButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&restoreButton, pointer.p_x, pointer.p_y))
-					
 				{
 					if (--self.rumbleAmt > 0) // Should we be rumbling?
 					{
@@ -583,8 +585,9 @@ void Settings_Menu_Show()
 				
 				break;
 			} // end case for 'graphics' panel
-				
+	///////////////////////////////////////////////////			
 			case langPanel:		// Case for languages
+	//////////////////////////////////////////////////		
 			{
 				// Handle Button A events
 				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for screen shot
@@ -748,8 +751,9 @@ void Settings_Menu_Show()
 				
 				break;
 			}// end case for 'language' panel
-				
+	/////////////////////////////////////////////////////////			
 			case aboutPanel:		// Case for About panel
+	/////////////////////////////////////////////////////////
 			{
 				GRRLIB_Rectangle(88, 88, 464, 306, 0xffffffdd, true);
 				GRRLIB_Rectangle(90, 90, 460, 302, 0x737373FF, true);
