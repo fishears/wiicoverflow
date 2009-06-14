@@ -32,6 +32,5 @@ float easeInQuint(float t,float b , float c, float d);
 float easeOutQuad(float t,float b , float c, float d);
 float easeInQuad(float t,float b , float c, float d);
 float easeOutCubic(float t,float b , float c, float d);
-float easeInOutCubic(float t,float b , float c, float d);
 
 #endif
