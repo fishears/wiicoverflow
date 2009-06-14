@@ -330,6 +330,8 @@ void Init_Buttons()
     gviddownButton          = Button_Init(button_minus_png, button_minus_over_png, 360, 300);
 	gvidupButton            = Button_Init(button_plus_png, button_plus_over_png, 388, 300);
 	gbackButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 468, 335, TX.backB);
+        cheatEnabled[0]			= Button_Init(button_cheat_on_png, button_cheat_off_png, 44, 80);
+        cheatDisabled[0]			= Button_Init(button_cheat_off_png, button_cheat_on_png, 44, 80);
 } // End Init_Buttons();
 
 void DrawSlider(int yPos, int theme_id)

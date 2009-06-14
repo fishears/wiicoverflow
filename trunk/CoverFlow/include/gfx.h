@@ -70,6 +70,8 @@ extern const u8 flag_fi_png[];		// finnish
 extern const u8 flag_MyLang_png[];	// MyLang
 extern const u8 flag_dk_png[];		// danish
 extern const u8 flag_tr_png[];		// turkish
+extern const u8 button_cheat_on_png[];  //for cheat manager
+extern const u8 button_cheat_off_png[];  //for cheat manager
 
 GRRLIB_texImg menu_button_texture;
 GRRLIB_texImg menu_button_over_texture;
@@ -111,6 +113,9 @@ Button flagCTButton;
 Button flagFIButton;
 Button flagMyLangButton;
 Button flagDKButton;
+
+Button cheatEnabled[10];
+Button cheatDisabled[10];
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg cover_texture_3d;
