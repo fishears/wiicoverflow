@@ -50,6 +50,7 @@ typedef struct {
     int drawWindow;
     int coverText;
     int hideScroll;
+	int covers3dThickness;
 } gp_settings;	
 
 

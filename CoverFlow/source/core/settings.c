@@ -63,39 +63,41 @@ void SETTINGS_Init()
 //button used to reset EVERYTHING
 void graphics_SETTINGS_Init()
 {
-    settings.coverZoom    = -2.0;
-    settings.coverCamY    = 0.0;
-    settings.coverCamX   = 0.0;
-	settings.coverAngle   = 90;
-	settings.coverSpacing = 3.1;
-	settings.coverFallOff = 0.0;
-	settings.drawWindow   = 7;
-	settings.coverText    = 1;
-
-	settings.hideScroll   = 1;
+    settings.coverZoom    		= -2.0;
+    settings.coverCamY    		= 0.0;
+    settings.coverCamX   		= 0.0;
+	settings.coverAngle   		= 90;
+	settings.coverSpacing 		= 3.1;
+	settings.coverFallOff 		= 0.0;
+	settings.drawWindow   		= 7;
+	settings.coverText    		= 1;
+	settings.hideScroll   		= 1;
+	settings.covers3dThickness 	= 0;
 }
 
 
 void backup_gpSettings()
 {
-    gpsettings.coverZoom    = settings.coverZoom;
-	gpsettings.coverAngle   = settings.coverAngle;
-	gpsettings.coverSpacing = settings.coverSpacing;
-	gpsettings.coverFallOff = settings.coverFallOff;
-	gpsettings.drawWindow   = settings.drawWindow;
-	gpsettings.coverText    = settings.coverText;
-	gpsettings.hideScroll   = settings.hideScroll;
+    gpsettings.coverZoom    	 = settings.coverZoom;
+	gpsettings.coverAngle   	 = settings.coverAngle;
+	gpsettings.coverSpacing 	 = settings.coverSpacing;
+	gpsettings.coverFallOff 	 = settings.coverFallOff;
+	gpsettings.drawWindow   	 = settings.drawWindow;
+	gpsettings.coverText    	 = settings.coverText;
+	gpsettings.hideScroll   	 = settings.hideScroll;
+	gpsettings.covers3dThickness = settings.covers3dThickness;
 }
 
 void restore_gpSettings()
 {
-    settings.coverZoom    = gpsettings.coverZoom;
-	settings.coverAngle   = gpsettings.coverAngle;
-	settings.coverSpacing = gpsettings.coverSpacing;
-	settings.coverFallOff = gpsettings.coverFallOff;
-	settings.drawWindow   = gpsettings.drawWindow;
-	settings.coverText    = gpsettings.coverText;
-	settings.hideScroll   = gpsettings.hideScroll;
+    settings.coverZoom    		= gpsettings.coverZoom;
+	settings.coverAngle   		= gpsettings.coverAngle;
+	settings.coverSpacing 		= gpsettings.coverSpacing;
+	settings.coverFallOff 		= gpsettings.coverFallOff;
+	settings.drawWindow   		= gpsettings.drawWindow;
+	settings.coverText    		= gpsettings.coverText;
+	settings.hideScroll   		= gpsettings.hideScroll;
+	settings.covers3dThickness  = gpsettings.covers3dThickness;
 }
 
 
