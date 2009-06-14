@@ -427,11 +427,11 @@ void GRRLIB_Cover(float pos, int texture_id)
 	if (!self.scrolling && slowTwist)
 	{
 		if (abs(angle) < 45)
-			zpos = easeInOutCubic( abs(angle), 1.9, -1.9, 45);
+			zpos = easeOutCubic( abs(angle), 1.9, -1.9, 45);
 		else if ((abs(angle) >135) && (abs(angle) <= 180))
-			zpos = easeInOutCubic( (180 - abs(angle)), -1.9, 1.9, 45);
+			zpos = easeOutCubic( (180 - abs(angle)), -1.9, 1.9, 45);
 		else if ((abs(angle) >180) && (abs(angle) <= 225))
-			zpos = easeInOutCubic( (225 - abs(angle)), 0, -1.9, 45);
+			zpos = easeOutCubic( (225 - abs(angle)), 0, -1.9, 45);
 	}
 
 	// Draw the cover
