@@ -143,10 +143,10 @@ int SETTINGS_Load()
 			  settings.theme		   = atoi(mxmlElementGetAttr(next_n,"theme"));
 		  if(mxmlElementGetAttr(next_n,"enablepitch"))
 			  settings.enablepitch  = atoi(mxmlElementGetAttr(next_n,"enablepitch"));
-		  if(mxmlElementGetAttr(next_n,"3d"))
-			  settings.covers3d  = atoi(mxmlElementGetAttr(next_n,"3d"));
-		  if(mxmlElementGetAttr(next_n,"3dThickness"))
-			  settings.covers3dThickness  = atoi(mxmlElementGetAttr(next_n,"3dThickness"));
+		  if(mxmlElementGetAttr(next_n,"c3d"))
+			  settings.covers3d  = atoi(mxmlElementGetAttr(next_n,"c3d"));
+		  if(mxmlElementGetAttr(next_n,"c3dThickness"))
+			  settings.covers3dThickness  = atoi(mxmlElementGetAttr(next_n,"c3dThickness"));
 		  if(mxmlElementGetAttr(next_n,"hideScroll"))
 			  settings.hideScroll  = atoi(mxmlElementGetAttr(next_n,"hideScroll"));
 	  }
@@ -249,10 +249,10 @@ int SETTINGS_Save()
 	mxmlElementSetAttr(node, "theme", buffer);
 
 	sprintf(buffer, "%d", settings.covers3d);
-	mxmlElementSetAttr(node, "3d", buffer);
+	mxmlElementSetAttr(node, "c3d", buffer);
 
 	sprintf(buffer, "%d", settings.covers3dThickness);
-	mxmlElementSetAttr(node, "3dThickness", buffer);
+	mxmlElementSetAttr(node, "c3dThickness", buffer);
 	
 	sprintf(buffer, "%d", settings.hideScroll);
 	mxmlElementSetAttr(node, "hideScroll", buffer);
