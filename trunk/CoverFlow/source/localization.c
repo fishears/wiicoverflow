@@ -241,6 +241,8 @@ void languageDefault()
  	snprintf(TX.initSys, sizeof(TX.initSys), "Init Sys...");
 	snprintf(TX.initUSBFS, sizeof(TX.initUSBFS), "Initializing USBFS...");
 	snprintf(TX.initDisc, sizeof(TX.initDisc), "Initializing Disc...");
+	snprintf(TX.homeMenu, sizeof(TX.homeMenu), "HOME Menu");
+	snprintf(TX.homeWiimote, sizeof(TX.homeWiimote), "Wiimote Information");
 							
 // Buttons	
 
@@ -946,7 +948,14 @@ void languageSet(char *name, char *val)
 		strcopy(TX.initDisc, val, sizeof(TX.initDisc));
 		return;
 	}	
-
+	if (strcmp(name, "homeMenu") == 0) {
+		strcopy(TX.homeMenu, val, sizeof(TX.homeMenu));
+		return;
+	}	
+	if (strcmp(name, "homeWiimote") == 0) {
+		strcopy(TX.homeWiimote, val, sizeof(TX.homeWiimote));
+		return;
+	}	
 	
 //////////////// Buttons //////////////
 
