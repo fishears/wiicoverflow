@@ -1490,7 +1490,6 @@ void ShowProgress (s32 done, s32 total)
 int ProgressWindow(wbfs_t *hdd, char* title, char* msg)
 {
 	//Freeze Buffer thread during install
-	pthread_mutex_lock(&lock_thread_mutex);
 	
 	/*TODO Draw Window*/
 	_title = title;
@@ -1502,7 +1501,6 @@ int ProgressWindow(wbfs_t *hdd, char* title, char* msg)
 	self.progress = 0.0;
 	
 	//Resume Buffer Thread
-	pthread_mutex_unlock(&lock_thread_mutex);
 	Sleep(1);
 	
 	return ret;

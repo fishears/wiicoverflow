@@ -153,9 +153,9 @@ bool BUFFER_IsCoverReady(int index)
 	
 	if(index < MAX_BUFFERED_COVERS)
 	{
-		pthread_mutex_lock(&queue_mutex);
+		pthread_mutex_lock(&buffer_mutex[index]);
 		retval = _cq.ready[index];
-		pthread_mutex_unlock(&queue_mutex);
+		pthread_mutex_unlock(&buffer_mutex[index]);
 	}
 	
 	return retval;
@@ -167,9 +167,9 @@ bool BUFFER_IsCoverQueued(int index)
 	
 	if(index < MAX_BUFFERED_COVERS)
 	{
-		pthread_mutex_lock(&queue_mutex);
+		pthread_mutex_lock(&buffer_mutex[index]);
 		retval = _cq.request[index];
-		pthread_mutex_unlock(&queue_mutex);
+		pthread_mutex_unlock(&buffer_mutex[index]);
 	}
 	
 	return retval;
@@ -183,9 +183,9 @@ bool BUFFER_IsCoverMissing(int index)
 	
 	if(index < MAX_BUFFERED_COVERS)
 	{
-		pthread_mutex_lock(&queue_mutex);
+		pthread_mutex_lock(&buffer_mutex[index]);
 		retval = _cq.coverMissing[index];
-		pthread_mutex_unlock(&queue_mutex);
+		pthread_mutex_unlock(&buffer_mutex[index]);
 	}
 	
 	return retval;
@@ -221,13 +221,9 @@ void HandleLoadRequest(int index,int threadNo)
 	if(index >= nCovers)
 		return ;
 		
-//	pthread_mutex_lock(&buffer_mutex[index]);
-	
 	/*Definitely dont need to load the same texture twice*/
 	if(!_cq.ready[index] && !_cq.coverMissing[index])
 	{
-		
-		//void *imgData=0;
 		
 		char * filepath=GetSlotBufferAddress(threadNo);
 		s32  ret;
@@ -272,7 +268,7 @@ void HandleLoadRequest(int index,int threadNo)
 				// a garbled image will not cause an issue here
 				_texture_data[index] = GRRLIB_LoadTexturePNGToMemorySized((const unsigned char*)imgDataAddress, (void *)thisDataMem2Address, tW * tH * 4);
 				GRRLIB_texImg textureData=_texture_data[index];
-				pthread_mutex_lock(&queue_mutex);
+				pthread_mutex_lock(&buffer_mutex[index]);
 				if (!(textureData.h ==tH && textureData.w == tW && textureData.data!=0)) // sanity check
 				{
 					_cq.coverMissing[index]=true; // bad image size
@@ -282,14 +278,14 @@ void HandleLoadRequest(int index,int threadNo)
 				{
 					_cq.ready[index]   = true;
 				}
-				pthread_mutex_unlock(&queue_mutex);
+				pthread_mutex_unlock(&buffer_mutex[index]);
 			}
 			//free(imgData);
 			
 		}
 		else // no cover file
 		{
-			pthread_mutex_lock(&queue_mutex);
+			pthread_mutex_lock(&buffer_mutex[index]);
 			if (_cq.permaBufferPosition[index]!=-1)
 			{
 				int floatingPosition=GetFLoatingQueuePosition(index);
@@ -300,7 +296,7 @@ void HandleLoadRequest(int index,int threadNo)
 			}
 			_cq.coverMissing[index]=true;
 			_cq.ready[index]   = false;
-			pthread_mutex_unlock(&queue_mutex);
+			pthread_mutex_unlock(&buffer_mutex[index]);
 		}
 		
 	}
@@ -311,7 +307,7 @@ void HandleLoadRequest(int index,int threadNo)
 int GetPrioritisedCover(int selection)
 {
 	int i,j,ret=-1;
-	for(i = 0; i <= (nCoversInWindow+1)/2; i++)
+	for(i = 0; i <= (nCoversInWindow+1); i++)
 	{
 		for (j=0;j<2;j++)
 		{
@@ -350,17 +346,14 @@ void* process(void *arg)
 				if (index==-1) index= (nCovers+1)/2 +i*(j*2-1);
 				if (index>=0 && index<=nCovers)
 				{
-					pthread_mutex_lock(&lock_thread_mutex);
-					
+
+					pthread_mutex_lock(&buffer_mutex[index]);
 					/*Handle Load Requests*/
-					pthread_mutex_lock(&queue_mutex);
 					b = _cq.request[index] && !_cq.ready[index];
 					if (b) _cq.request[index]=false;
-					pthread_mutex_unlock(&queue_mutex);
+					pthread_mutex_unlock(&buffer_mutex[index]);
 					
 					if(b) HandleLoadRequest(index,thread);
-					
-					pthread_mutex_unlock(&lock_thread_mutex);
 					
 					pthread_mutex_lock(&quit_mutex);
 					if(_requestQuit)
@@ -601,7 +594,7 @@ void CoversDownloaded()
 	//recheck all the missing covers
 	for (i=0;i<nCovers;i++)
 	{
-		pthread_mutex_lock(&queue_mutex);
+		pthread_mutex_lock(&buffer_mutex[i]);
 		if (_cq.coverMissing[i])
 		{
 			_cq.coverMissing[i]=false;
@@ -610,7 +603,7 @@ void CoversDownloaded()
 				RequestForCache(i);
 			}
 		}
-		pthread_mutex_unlock(&queue_mutex);
+		pthread_mutex_unlock(&buffer_mutex[i]);
 	}
 }
 
