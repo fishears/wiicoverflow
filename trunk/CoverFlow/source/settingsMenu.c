@@ -130,7 +130,8 @@ void Settings_Menu_Show()
 		// Draw the logo
 		Button_Paint(&menuLogoButton);
 		
-		// Check for screen shot
+		// Check for screen shot   
+		// here it works for all cases
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))
 			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 		
@@ -185,8 +186,6 @@ void Settings_Menu_Show()
 			case settingsPanel:		// Case for Settings Panel
 			{
 				// Handle Button events
-				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for screen shot
-					GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
 				{
 					if (Button_Select(&settingsButton, pointer.p_x, pointer.p_y))
@@ -237,50 +236,50 @@ void Settings_Menu_Show()
 						if (WindowPrompt(TX.coverDownload, TX.opNoCancel , &okButton, &cancelButton))
 						{
 							WPAD_Rumble(0,0); //sometimes rumble remain active
-                                                        if(check_write_access())
-                                                        {
-                                                            if(networkInit(self.ipAddress))
-                                                            {
-                                                                    batchDownloadCover(self.gameList);
-                                                                    CoversDownloaded();
-                                                            }
-                                                            else
-                                                                    WindowPrompt(TX.error, TX.iniNetErr , &okButton, 0);
-                                                        }
+							if(check_write_access())
+							{
+								if(networkInit(self.ipAddress))
+								{
+										batchDownloadCover(self.gameList);
+										CoversDownloaded();
+								}
+								else
+										WindowPrompt(TX.error, TX.iniNetErr , &okButton, 0);
+							}
 						}
 					}
 					else if(Button_Select(&titlesButton, pointer.p_x, pointer.p_y))
 					{
 						WPAD_Rumble(0,0); //sometimes rumble remain active
-                                                if(check_write_access())
-                                                {
-                                                    if(networkInit(self.ipAddress)){
-                                                            if(!downloadTitles())
-                                                                    WindowPrompt( TX.error, TX.errTitles, &okButton, 0);
-                                                            else
-                                                            {
-                                                                    if(self.usingTitlesTxt){
-                                                                            self.usingTitlesTxt = false;
-                                                                            self.titlesTxtSize = 0;
-                                                                            free(titleList);
-                                                                    }
+						if(check_write_access())
+						{
+							if(networkInit(self.ipAddress)){
+									if(!downloadTitles())
+											WindowPrompt( TX.error, TX.errTitles, &okButton, 0);
+									else
+									{
+											if(self.usingTitlesTxt){
+													self.usingTitlesTxt = false;
+													self.titlesTxtSize = 0;
+													free(titleList);
+											}
 
-                                                                    int numLines = initTitle();
-                                                                    if(numLines > 0){
-                                                                            self.usingTitlesTxt = true;
-                                                                            self.titlesTxtSize = numLines;
-                                                                            titleList = (s_title *) malloc (numLines * sizeof(s_title));
-                                                                            fillTitleStruct(titleList, numLines);
-                                                                            char numLinesTxt[250];
-                                                                            sprintf(numLinesTxt, TX.successTitles, numLines);
-                                                                            WindowPrompt(TX.Success, numLinesTxt, &okButton, 0);
-                                                                    }
-                                                            }
-                                                    }
-                                                    else
-                                                            WindowPrompt(TX.error, TX.errNetTitles, &okButton, 0);
-                                                }
-					}
+											int numLines = initTitle();
+											if(numLines > 0){
+													self.usingTitlesTxt = true;
+													self.titlesTxtSize = numLines;
+													titleList = (s_title *) malloc (numLines * sizeof(s_title));
+													fillTitleStruct(titleList, numLines);
+													char numLinesTxt[250];
+													sprintf(numLinesTxt, TX.successTitles, numLines);
+													WindowPrompt(TX.Success, numLinesTxt, &okButton, 0);
+											}
+									}
+							}
+							else
+									WindowPrompt(TX.error, TX.errNetTitles, &okButton, 0);
+						}
+}
 					else if (Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
 					{
 						if (settings.theme)
@@ -333,7 +332,7 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 300,285, TX.getAddData, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,318, TX.patchVIDTV, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,352, TX.videoMode, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-				CFreeTypeGX_DrawText(ttf16pt, 450,352, vidmodes[settings.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 455,352, vidmodes[settings.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 300,387, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 510,387, hooks[settings.hooktype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Draw buttons
@@ -596,9 +595,6 @@ void Settings_Menu_Show()
 	//////////////////////////////////////////////////		
 			{
 				// Handle Button A events
-				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))// Check for screen shot
-					GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
-				// TODO make the flag based selection work
 				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
 				{
 					if (Button_Select(&langdownButton, pointer.p_x, pointer.p_y))
@@ -619,7 +615,7 @@ void Settings_Menu_Show()
 				
 				// Draw Game Language changer
 		        CFreeTypeGX_DrawText(ttf18pt, 197, 110, TX.gameLanguage, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf18pt, 439, 110, languages[settings.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf18pt, 455, 110, languages[settings.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				//CFreeTypeGX_DrawText(ttf16pt, 320, 430, "The Flag selections do not work yet...", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
 				Button_Paint(&langupButton);
 				Button_Paint(&langdownButton);
