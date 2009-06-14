@@ -168,6 +168,22 @@ void checkFiles(){
 		fclose(fp);
 }
 
+bool check_write_access(){
+    FILE* fp;
+    fp = fopen(USBLOADER_PATH "/temp.txt","wb");
+    if(fp==NULL)
+    {
+        WindowPrompt(TX.error,"SD card can not be written to",&okButton,0);
+        return false;
+    }
+    else
+    {
+        chdir(USBLOADER_PATH);
+        remove("temp.txt");
+        return true;
+    }
+}
+
 void initWBFS(){
 
 	int retries = 3;

@@ -237,43 +237,49 @@ void Settings_Menu_Show()
 						if (WindowPrompt(TX.coverDownload, TX.opNoCancel , &okButton, &cancelButton))
 						{
 							WPAD_Rumble(0,0); //sometimes rumble remain active
-							if(networkInit(self.ipAddress))
-							{
-								batchDownloadCover(self.gameList);
-								CoversDownloaded();
-							}
-							else
-								WindowPrompt(TX.error, TX.iniNetErr , &okButton, 0);
+                                                        if(check_write_access())
+                                                        {
+                                                            if(networkInit(self.ipAddress))
+                                                            {
+                                                                    batchDownloadCover(self.gameList);
+                                                                    CoversDownloaded();
+                                                            }
+                                                            else
+                                                                    WindowPrompt(TX.error, TX.iniNetErr , &okButton, 0);
+                                                        }
 						}
 					}
 					else if(Button_Select(&titlesButton, pointer.p_x, pointer.p_y))
 					{
 						WPAD_Rumble(0,0); //sometimes rumble remain active
-						if(networkInit(self.ipAddress)){
-							if(!downloadTitles())
-								WindowPrompt( TX.error, TX.errTitles, &okButton, 0);
-							else
-							{
-								if(self.usingTitlesTxt){
-									self.usingTitlesTxt = false;
-									self.titlesTxtSize = 0;
-									free(titleList);
-								}
-								
-								int numLines = initTitle();
-								if(numLines > 0){
-									self.usingTitlesTxt = true;
-									self.titlesTxtSize = numLines;
-									titleList = (s_title *) malloc (numLines * sizeof(s_title));
-									fillTitleStruct(titleList, numLines);
-									char numLinesTxt[250];
-									sprintf(numLinesTxt, TX.successTitles, numLines);
-									WindowPrompt(TX.Success, numLinesTxt, &okButton, 0);
-								}
-							}
-						}
-						else
-							WindowPrompt(TX.error, TX.errNetTitles, &okButton, 0);
+                                                if(check_write_access())
+                                                {
+                                                    if(networkInit(self.ipAddress)){
+                                                            if(!downloadTitles())
+                                                                    WindowPrompt( TX.error, TX.errTitles, &okButton, 0);
+                                                            else
+                                                            {
+                                                                    if(self.usingTitlesTxt){
+                                                                            self.usingTitlesTxt = false;
+                                                                            self.titlesTxtSize = 0;
+                                                                            free(titleList);
+                                                                    }
+
+                                                                    int numLines = initTitle();
+                                                                    if(numLines > 0){
+                                                                            self.usingTitlesTxt = true;
+                                                                            self.titlesTxtSize = numLines;
+                                                                            titleList = (s_title *) malloc (numLines * sizeof(s_title));
+                                                                            fillTitleStruct(titleList, numLines);
+                                                                            char numLinesTxt[250];
+                                                                            sprintf(numLinesTxt, TX.successTitles, numLines);
+                                                                            WindowPrompt(TX.Success, numLinesTxt, &okButton, 0);
+                                                                    }
+                                                            }
+                                                    }
+                                                    else
+                                                            WindowPrompt(TX.error, TX.errNetTitles, &okButton, 0);
+                                                }
 					}
 					else if (Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
 					{
