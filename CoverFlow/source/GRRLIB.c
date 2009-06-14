@@ -665,7 +665,7 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 	float thickness = 0.15;
 	if (settings.covers3dThickness) // true = flat 3d covers
 		thickness = 0.01;
-	float left = .475;
+	float left = .470;
 	float right = .527;
 		
 	if(settings.covers3d)
