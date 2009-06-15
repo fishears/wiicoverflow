@@ -10,7 +10,7 @@ someErrors = Une erreur s'est produite
 checkNextCover = Vérification de la jaquette suivante...%s
 opFinished = Opération terminée!
 pressA = Appuyez sur A pour continuer
-configError = Erreur de configuration, MAX_DNS_ENTRIES atteint alors que la liste est vide\n
+configError = Erreur de configuration, MAX_DNS_ENTRIES atteint alors que la liste est vide|
 errorsaveGL = Ne peut pas enregistrer gamelist.xml
 errorcreateGL = Impossible de créer le fichier gamelist !
 consoleDefault =  Console par défault
@@ -39,14 +39,14 @@ ocarina = Ocarina:
 language = Langue
 videoMode = Mode Video:
 patchVIDTV = Patcher VIDTV:
-errorConnect = Erreur de connexion de net_read() Code Erreur: %i\n
-URLnoBegin = URL '%s' ne commence pas avec 'http://'\n
-URLnoPath = URL '%s' ne contient pas d'indication de chemin\n
-URLnoDomain = URL '%s' ne contient pas d'indication de domaine\n
-errorDomain = \ndomain %s ne peut être résolu
+errorConnect = Erreur de connexion de net_read() Code Erreur: %i|
+URLnoBegin = URL '%s' ne commence pas avec 'http://'|
+URLnoPath = URL '%s' ne contient pas d'indication de chemin|
+URLnoDomain = URL '%s' ne contient pas d'indication de domaine|
+errorDomain = |domain %s ne peut être résolu
 errEstablishConn = Erreur lors de l'établissement de la connexion
-HTTPnoFile = Réponse HTTP sans fichier \n
-noMemCopy = Plus de mémoire pour copier le fichier de réponse HTTP\n
+HTTPnoFile = Réponse HTTP sans fichier |
+noMemCopy = Plus de mémoire pour copier le fichier de réponse HTTP|
 graphicSetting = Paramètres Graphiques
 zoom = Zoom
 spacing = Espace
@@ -86,7 +86,7 @@ successDelete = Supprimé avec succès.
 pressOkContinue = Appuyez sur OK pour continuer.
 noLocalIP = Impossible d'obtenir l'adresse IP locale.
 addError = [+] ERREUR: 
-errorCIOS = Custom IOS ne peut pas être chargé ! (ret = %d)\n
+errorCIOS = Custom IOS ne peut pas être chargé ! (ret = %d)|
 loadTextures = Chargement des textures
 initUSB = Initialise USB
 errInitUSBFS = L'USBFS ne peut pas être initialisé, opération annulée.
@@ -108,12 +108,9 @@ setBackground = Configuration du thème...
 freeTextures = Libreation des textures inutilisées...
 parentalCtrl = Contrôle Parental
 enableParentCtrl = Voulez-vous activer le contrôle parental ?
-errorDIP = Impossible d'initialiser le module DIP! (ret = %d)\n
+errorDIP = Impossible d'initialiser le module DIP! (ret = %d)|
 errorReadDir = Impossible de créer des répertoires. Les Jaquettes ne seront pas enregistrées.
 errorCreateDir = Impossible de créer des répertoires. Les Jaquettes ne seront pas enregistrées. 
-initWPAD = Init WPAD
-initFS = Initialisation Mémoire Système
-obsoleteGL = Le fichier de configuration \ n est obsolète, il sera effacé. Appuyez sur OK pour continuer
 Sun = Dim
 Mon = Lun
 Tue = Mar
@@ -155,13 +152,22 @@ gameLanguage = Langue
 Finnish = Finnois
 PortugueseBR = Portugais
 Danish = Dannois
-Turkish = Turc
 Catalan = Catalan
 MyLanguage = Ma langue
+Turkish = Turc
+initWPAD = Init WPAD
+initFS = Initialisation Mémoire Système
+initSys = Init Sys...
+initUSBFS = Initializing USBFS...
+initDisc = Initializing Disc...
+obsoleteGL = Le fichier de configuration \ n est obsolète, il sera effacé. Appuyez sur OK pour continuer
+homeMenu = HOME Menu
+homeWiimote = Wiimote Information
 
 ###########
 # Buttons #
 ###########
+
 addB = Ajouter
 deleteB = Supprimer
 cancelB = Annuler
@@ -182,3 +188,6 @@ loaderB = HBLoader
 languagesB = Langues
 coversB = Jaquettes
 titlesB = Titres
+restoreB = Restore
+fatB = Fat
+thinB = Thin

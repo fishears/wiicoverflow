@@ -928,11 +928,11 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			char* msg = malloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 			
-			pch = strtok(msg, "\n");
+			pch = strtok(msg, "|\n");
 			while (pch != NULL)
 			{
 				CFreeTypeGX_DrawText(ttf16pt, 220, lsp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				pch  = strtok(NULL, "\n");
+				pch  = strtok(NULL, "|\n");
 				lsp += 16;
 			}
 			free(msg);
@@ -1035,11 +1035,11 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			char* msg = malloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 			
-			pch = strtok(msg, "\n");
+			pch = strtok(msg, "|\n");
 			while (pch != NULL)
 			{
 				CFreeTypeGX_DrawText(ttf16pt, 220, y+sp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				pch = strtok(NULL, "\n");
+				pch = strtok(NULL, "|\n");
 				sp+=16;
 			}
 			free(msg);
@@ -1108,11 +1108,11 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 			char* msg = malloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 			
-			pch = strtok(msg, "\n");
+			pch = strtok(msg, "|\n");
 			while (pch != NULL)
 			{
 				CFreeTypeGX_DrawText(ttf16pt, 220, lsp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				pch  = strtok(NULL, "\n");
+				pch  = strtok(NULL, "|\n");
 				lsp += 16;
 			}
 			free(msg);
@@ -1226,11 +1226,11 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 			char* msg = malloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 
-			pch = strtok(msg, "\n");
+			pch = strtok(msg, "|\n");
 			while (pch != NULL)
 			{
 				CFreeTypeGX_DrawText(ttf16pt, 220, lsp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				pch  = strtok(NULL, "\n");
+				pch  = strtok(NULL, "|\n");
 				lsp += 16;
 			}
 			free(msg);
@@ -1335,11 +1335,11 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 			char* msg = malloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 
-			pch = strtok(msg, "\n");
+			pch = strtok(msg, "|\n");
 			while (pch != NULL)
 			{
 				CFreeTypeGX_DrawText(ttf16pt, 220, y+sp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				pch = strtok(NULL, "\n");
+				pch = strtok(NULL, "|\n");
 				sp+=16;
 			}
 			free(msg);
@@ -1409,11 +1409,11 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 			char* msg = malloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 
-			pch = strtok(msg, "\n");
+			pch = strtok(msg, "|\n");
 			while (pch != NULL)
 			{
 				CFreeTypeGX_DrawText(ttf16pt, 220, lsp, pch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				pch  = strtok(NULL, "\n");
+				pch  = strtok(NULL, "|\n");
 				lsp += 16;
 			}
 			free(msg);

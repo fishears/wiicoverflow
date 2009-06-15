@@ -10,7 +10,7 @@ someErrors = hi ha hagut un error desconegut
 checkNextCover = Comprovant la següent portada... %s
 opFinished = Operació finalitzada!
 pressA = Prem A per continuar
-configError = Error de configuració, s'ha arribat a MAX_DNS_ENTRIES mentre la llista està buida\n
+configError = Error de configuració, s'ha arribat a MAX_DNS_ENTRIES mentre la llista està buida|
 errorsaveGL = Impossible desar gamelist.xml
 errorcreateGL = No puc crear el fitxer gamelist!
 consoleDefault = Predeterminat per la consola
@@ -39,14 +39,14 @@ ocarina = Ocarina:
 language = Llengua:
 videoMode = Mode de vídeo:
 patchVIDTV = Pedaç VIDTV:
-errorConnect = Error de connexió des de net_read()  Codi: %i\n
-URLnoBegin = La URL '%s' no comença per 'http://'\n
-URLnoPath = La URL '%s' no té conté cap ruta\n
-URLnoDomain = No hi ha cap domini a la URL '%s'\n
-errorDomain = \nEl domini %s no s'ha pogut resoldre
+errorConnect = Error de connexió des de net_read()  Codi: %i|
+URLnoBegin = La URL '%s' no comença per 'http://'|
+URLnoPath = La URL '%s' no té conté cap ruta|
+URLnoDomain = No hi ha cap domini a la URL '%s'|
+errorDomain = |El domini %s no s'ha pogut resoldre
 errEstablishConn = Error establint la connexió
-HTTPnoFile = La resposta HTTP no conté cap fitxer\n
-noMemCopy = No queda memòria per copiar l'arxiu de la resposta HTTP\n
+HTTPnoFile = La resposta HTTP no conté cap fitxer|
+noMemCopy = No queda memòria per copiar l'arxiu de la resposta HTTP|
 graphicSetting = Configuració gràfica
 zoom = Zoom:
 spacing = Espai:
@@ -86,7 +86,7 @@ successDelete = Esborrat correctament.
 pressOkContinue = Prem OK per continuar.
 noLocalIP = No he pogut obtenir la direcció IP.
 addError = [+] ERROR:
-errorCIOS = El IOS modificat no s'ha pogut carregar! (ret = %d)\n
+errorCIOS = El IOS modificat no s'ha pogut carregar! (ret = %d)|
 loadTextures = Carregant textures
 initUSB = Inicialització del USB
 errInitUSBFS = No he pogut iniciar el USBFS, sortint.
@@ -108,7 +108,7 @@ setBackground = Establint tema de fons...
 freeTextures = Alliberant textures no emprades...
 parentalCtrl = Control parental
 enableParentCtrl = Vols activar les funcions de control parental?
-errorDIP = No he pogut inicialitzar el mòdul DIP! (ret = %d)\n
+errorDIP = No he pogut inicialitzar el mòdul DIP! (ret = %d)|
 errorReadDir = No puc llegir els directoris. Les portades no es desaran.
 errorCreateDir = No puc crear directoris. Les portades no es desaran.
 Sun = Du
@@ -136,9 +136,9 @@ noFreeSpace = No hi ha suficient espai lliure!
 formatPartition = Formatant partició %s
 addAGame =  Si us plau, afegeix un joc...
 getAddData = Obtenir més informació
-errTitles = Error al descarregar Titles.txt\n S'ha produït un error mentres descarregava/guardava el fitxer.
+errTitles = Error al descarregar Titles.txt| S'ha produït un error mentres descarregava/guardava el fitxer.
 successTitles = S'han importat %d títols correctament!
-errNetTitles = Error de xarxa a l'inicialitzar\nEl fitxer Titles.txt no es pot descarregar.
+errNetTitles = Error de xarxa a l'inicialitzar|El fitxer Titles.txt no es pot descarregar.
 Success = Correcte!
 welcomeMsg = Benvingut a CoverFloader
 batteryUnit = P%d
@@ -155,10 +155,19 @@ Danish = Danès
 Catalan = Català
 MyLanguage = LaMevaLlengua
 Turkish = Turc
+initWPAD = Iniciar WPAD
+initFS = Inicialitzant Sistema de Fitxers
+obsoleteGL = El teu fitxer de configuració és obsolet|i s'esborrarà.|Prem D'acord per continuar.
+initSys = Init Sys...
+initUSBFS = Initializing USBFS...
+initDisc = Initializing Disc...
+homeMenu = HOME Menu
+homeWiimote = Wiimote Information
 
 ###########
 # Buttons #
 ###########
+
 addB = afegir
 deleteB = esborrar
 cancelB = cancel·lar
@@ -179,3 +188,6 @@ loaderB = Carregador
 languagesB = Llengües
 coversB = Portades
 titlesB = Títols
+restoreB = Restore
+fatB = Fat
+thinB = Thin

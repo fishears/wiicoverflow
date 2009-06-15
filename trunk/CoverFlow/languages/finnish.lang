@@ -10,7 +10,7 @@ someErrors = määrittelemätön virhe
 checkNextCover = Seuraava kansikuva...%s
 opFinished = Toiminto valmis!
 pressA = Paina A jatkaaksesi
-configError = Virhe asetuksissa, MAX_DNS_ENTRIES\n saavutettu vaikka lista on tyhjä\n
+configError = Virhe asetuksissa, MAX_DNS_ENTRIES| saavutettu vaikka lista on tyhjä|
 errorsaveGL = Pelilistan tallennus epäonnistui!
 errorcreateGL = Pelilistan luonti epäonnistui!
 consoleDefault = Konsolin asetus
@@ -39,14 +39,14 @@ ocarina = Ocarina:
 language = Kieli:
 videoMode = Videotila:
 patchVIDTV = VIDTV-korjaus:
-errorConnect = Funktio net_read() palautti virheen.  Virhekoodi: %i\n
-URLnoBegin = URL:sta '%s' puuttuu 'http://'\n
-URLnoPath = URL:sta '%s' puuttuu polku\n
-URLnoDomain = URL:sta '%s' puuttuu domain\n
-errorDomain = \ndomainia %s ei löytynyt
+errorConnect = Funktio net_read() palautti virheen.  Virhekoodi: %i|
+URLnoBegin = URL:sta '%s' puuttuu 'http://'|
+URLnoPath = URL:sta '%s' puuttuu polku|
+URLnoDomain = URL:sta '%s' puuttuu domain|
+errorDomain = |domainia %s ei löytynyt
 errEstablishConn = Virhe verkkoyhteydessä
-HTTPnoFile = HTTP:stä ei saatu tiedostoa\n
-noMemCopy = Ei vapaata muistia tiedoston\n tallentamiseen HTTP:stä\n
+HTTPnoFile = HTTP:stä ei saatu tiedostoa|
+noMemCopy = Ei vapaata muistia tiedoston| tallentamiseen HTTP:stä|
 graphicSetting = Grafiikka-asetukset
 zoom = Zoom
 spacing = Välit
@@ -86,7 +86,7 @@ successDelete = Poistettu.
 pressOkContinue = Paina OK jatkaaksesi.
 noLocalIP = IP-osoitetta ei saatu luettua.
 addError = [+] VIRHE:
-errorCIOS = Custom IOS:ia ei voitu ladata! (ret = %d)\n
+errorCIOS = Custom IOS:ia ei voitu ladata! (ret = %d)|
 loadTextures = Ladataan tekstuureja
 initUSB = Käynnistetään USB...
 errInitUSBFS = USBFS:an valmistelu epäonnistui, lopetetaan.
@@ -108,9 +108,9 @@ setBackground = Asetetaan taustateema...
 freeTextures = Vapautetaan käyttämättömät tekstuurit...
 parentalCtrl = Lapsisuojaus
 enableParentCtrl = Asetetaanko lapsisuojaus?
-errorDIP = DIP-modulia ei voitu valmistella! (ret = %d)\n
-errorReadDir = Hakemistoja ei voitu lukea.\n Kansikuvia ei tallenneta.
-errorCreateDir = Hakemistoja ei voitu luoda.\n Kansikuvia ei tallenneta.
+errorDIP = DIP-modulia ei voitu valmistella! (ret = %d)|
+errorReadDir = Hakemistoja ei voitu lukea.| Kansikuvia ei tallenneta.
+errorCreateDir = Hakemistoja ei voitu luoda.| Kansikuvia ei tallenneta.
 Sun = Su
 Mon = Ma
 Tue = Ti
@@ -136,9 +136,9 @@ noFreeSpace = Ei vapaata tilaa!
 formatPartition = Alustetaan osio %s
 addAGame = Lisää peli...
 getAddData = Hae tietoja:
-errTitles = Virhe haettaessa Titles.txt.\nTiedostoa ei voitu hakea tai tallentaa.
+errTitles = Virhe haettaessa Titles.txt.|Tiedostoa ei voitu hakea tai tallentaa.
 successTitles = Tuotiin %d nimeä!
-errNetTitles = Verkkovirhe.\nTitles.txt:iä ei voitu hakea.
+errNetTitles = Verkkovirhe.|Titles.txt:iä ei voitu hakea.
 Success = Tehty!
 welcomeMsg = Tervetuloa CoverFloaderiin
 batteryUnit = P%d
@@ -157,11 +157,17 @@ MyLanguage = Oma kieli
 Turkish = Turkki
 initWPAD = Käynnistetään WPAD...
 initFS = Käynnistetään tiedostojärjestelmä...
-obsoleteGL = Asetustiedosto on\nvanhentunut, joten se poistetaan.\nPaina OK jatkaaksesi.
+obsoleteGL = Asetustiedosto on|vanhentunut, joten se poistetaan.|Paina OK jatkaaksesi.
+initSys = Init Sys...
+initUSBFS = Initializing USBFS...
+initDisc = Initializing Disc...
+homeMenu = HOME Menu
+homeWiimote = Wiimote Information
 
 ###########
 # Buttons #
 ###########
+
 addB = Lisää
 deleteB = Poista
 cancelB = Keskeytä
@@ -182,3 +188,7 @@ loaderB = Loader
 languagesB = Kielet
 coversB = Kannet
 titlesB = Nimet
+restoreB = Restore
+fatB = Fat
+thinB = Thin
+
