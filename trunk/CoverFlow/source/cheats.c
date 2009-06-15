@@ -18,7 +18,6 @@ extern s_self self;
 bool check_txt(int id, struct discHdr *gameList)
 {
     //check to see if the game has a txt cheat file
-    char buffer[500][128]; //500 lines of cheat codes at 128 chars per line
     char filename[10];
     char titleID[7];
     char path[50];
@@ -33,14 +32,13 @@ bool check_txt(int id, struct discHdr *gameList)
     txtfile = fopen(filename, "r");
     if(txtfile)
     {
-        fgets ( buffer[0], sizeof buffer[0], txtfile );
-        WindowPrompt(filename,"txt codes found on SD",&okButton,0);
-        fclose(txtfile);
-        return true;
+            //WindowPrompt(filename,"txt codes found on SD",&okButton,0);
+            fclose(txtfile);
+            return true;
     }
     else
     {
-        WindowPrompt(filename,"txt codes not found",&okButton,0);
+        //WindowPrompt(filename,"txt codes not found",&okButton,0);
         return false;
     }
 }
@@ -76,38 +74,45 @@ bool check_gct(int id, struct discHdr *gameList)
 bool download_txt(int id, struct discHdr *gameList)
 {
     //attempt to download the game's txt cheat file from www.usbgecko.com
-    if(networkInit(self.ipAddress)){
-        char url[100];
-        char titleID[7];
-        char imgpath[50];
-        struct block file;
-        struct discHdr *header = &gameList[id];
-        sprintf(titleID,"%s",header->id);
-        sprintf(url, "%s%c/%s.txt", CODESITE, header->id[0] , titleID); //try 6-digit ID first
-        file = downloadfile(url);
-        if(file.data) //nothing, so try 4-digit ID
-        {
-            sprintf(url, "%s%c/%C%c%c%c.txt", CODESITE, header->id[0], header->id[0], header->id[1],header->id[2],header->id[3]);
+    if(check_write_access())
+    {
+        if(networkInit(self.ipAddress)){
+            char url[100];
+            char titleID[7];
+            char imgpath[50];
+            struct block file;
+            struct discHdr *header = &gameList[id];
+            sprintf(titleID,"%s",header->id);
+            sprintf(url, "%s%c/%s.txt", CODESITE, header->id[0] , titleID); //try 6-digit ID first
             file = downloadfile(url);
-        }
-        if(file.data != NULL) // if we got data back, save that sucka
-        {
-            WindowPrompt(titleID,"txt codes downloaded",&okButton,0);
-            sprintf(imgpath,"%s%s%s.txt",USBLOADER_PATH,TXT_PATH,titleID);
-            saveFile(imgpath, file);
-            free(file.data);
-            return true;
-        }
-        else //no data so report the HTTP error
-        {
-//            if(file.size<204)
-//                sprintf(file.error,"Cheats not available");
-            WindowPrompt("HTTP ERROR",file.error,&okButton,0);
-            return false;
+            if(file.data == NULL) //nothing, so try 4-digit ID
+            {
+                sprintf(url, "%s%c/%c%c%c%c.txt", CODESITE, header->id[0], header->id[0], header->id[1],header->id[2],header->id[3]);
+                file = downloadfile(url);
+            }
+            if(file.data != NULL) // if we got data back, save that sucka
+            {
+                sprintf(imgpath,"%s%s%s.txt",USBLOADER_PATH,TXT_PATH,titleID);
+                saveFile(imgpath, file);
+                free(file.data);
+                if(check_download(titleID))
+                {
+                    WindowPrompt(titleID,"txt codes downloaded",&okButton,0);
+                    return true;
+                }
+                else
+                {
+                    WindowPrompt(TX.error,"txt codes not available",&okButton,0);
+                    return false;
+                }
+            }
+            else //no data so report the HTTP error
+            {
+                WindowPrompt("HTTP ERROR",file.error,&okButton,0);
+                return false;
+            }
         }
     }
-    //network failed to initialize
-    WindowPrompt("ERROR",TX.errEstablishConn,&okButton,0);
     return false;
 }
 
@@ -115,8 +120,9 @@ void manage_cheats(int id, struct discHdr *gameList)
 {
     //parses the txt file and allows user to enable/disable cheats
     //then turns enabled codes into a gct file to be used with ocarina
-    CHEAT cheat[MAX_CHEATS]; //set an ambitious limit to the number of cheats for each game
+    CHEAT cheat;
     char buffer[LINE_LENGTH]; //dummy line for tests
+    char lastline[LINE_LENGTH]; //hold the game name (which also appears at end of file)
     char filename[10];
     //char gctname[10];
     char titleID[7];
@@ -133,37 +139,49 @@ void manage_cheats(int id, struct discHdr *gameList)
     txtfile = fopen(filename, "r");
     if(txtfile)
     {
-        for(i=0;i<3;i++) //read in the first three lines and discard them (id,name,blank line)
-        {
-            fgets (buffer, sizeof buffer, txtfile );
-            memset(&buffer, 0, sizeof(buffer));
-        }
+        fgets (buffer, sizeof buffer, txtfile ); //discard 1st line -> titleID
+        memset(&buffer, 0, sizeof(buffer));
+        memset(&lastline,0,LINE_LENGTH);
+        fgets(lastline, sizeof lastline, txtfile); //keep the 2nd line for testing against last line
+        fgets (buffer, sizeof buffer, txtfile ); //discard 3rd line -> ""
+        memset(&buffer, 0, sizeof(buffer));
         i = 0;
-        while(!feof(txtfile)) //parse the rest of the txt file
+        while(!feof(txtfile) && strcmp(lastline,buffer)!=0) //parse the rest of the txt file
         {
             fgets(buffer,sizeof buffer,txtfile); //get a line into buffer
             if(!is_code(buffer) && strlen(buffer)!=1) //if its not a code and not a blank line
             {
-                sprintf(cheat[i].title,buffer); //write it as a title
-                cheat[i-1].codelines = codecounter-1; //write the number of codelines for the previous title
-                cheat[i-1].enabled = false;
+                sprintf(cheat[i].title,buffer); //write it as a new title
+                cheat[i].codelines = 0; //set new title codelines to zero
+                if(i>0) //only write codelines if this isn't the first title
+                {
+                    cheat[i-1].codelines = codecounter-1; //write the number of codelines for the previous title
+                    cheat[i-1].enabled = false;
+                }
+                if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
+                {
+                    i--;
+                    memset(&cheat[i].title, 0, LINE_LENGTH);
+                    memcpy(&cheat[i].title,&buffer,sizeof(&buffer)); //write THIS title over THAT title
+                }
                 codecounter = 0; //reset the codecounter
-                if(cheat[i-1].codelines > 0 || i==0) //if not first title && the previous title really WAS a title, move on
-                    i++;
+                i++;
             }
             else
             {
                 sprintf(cheat[i].codes[codecounter],buffer);
                 codecounter++;
             }
-            memset(&buffer, 0, sizeof(buffer));
+            memset(&buffer, 0, LINE_LENGTH);
         }
+        memset(&lastline,0,LINE_LENGTH);
 
         char tTemp[135];
         int pages = 0;
         int currpage = 1;
         int display;
         int n;
+        int maxlines = i;
         for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
         {
             cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],44,64+(n*28));
@@ -178,11 +196,6 @@ void manage_cheats(int id, struct discHdr *gameList)
             GetWiimoteData();
             if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)) //b or home to exit
             {
-                //int x;
-                //for(x=0;x<MAX_CHEATS;x++)
-                //{
-                //    memset(&cheat[x], 0, sizeof(cheat[x])); //clear the cheats
-                //}
                 return;
             }
             else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
@@ -219,7 +232,7 @@ void manage_cheats(int id, struct discHdr *gameList)
         for(i=0;i<LINES_PER_PAGE;i++)
         {
             display = i+((currpage-1)*LINES_PER_PAGE);
-            if(cheat[display].codelines >0) //got codes so it is a title
+            if(display < (maxlines-1)) //only show up to the number of lines available
             {
                 sprintf(tTemp,"%d:%s has %d codes",display,cheat[(display)].title,cheat[display].codelines);
                 CFreeTypeGX_DrawText(ttf14pt, 90, 80+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
@@ -397,3 +410,36 @@ bool is_code(char* line)
     return false;
 }
 
+bool check_download(char* titleID)
+{
+    //checks txt file to see if it's valid
+    char buffer[128];
+    char filename[20];
+    char path [100];
+    chdir("/");
+    sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+    chdir(path);
+    sprintf(filename, "%s.txt", titleID);
+    FILE *txtfile;
+    txtfile = fopen(filename, "r");
+    fgets( buffer, sizeof buffer, txtfile );
+    char* pch;
+    char* msg = malloc(strlen(buffer)*sizeof(char));
+    sprintf(msg, buffer);
+    pch = strtok(msg, " ");
+    while(pch!=NULL)
+    {
+        if(strcmp(pch,"<!DOCTYPE")==0) //test for a bad file
+        {
+            remove(filename); //it's bad so delete it
+            return false;
+        }
+        else
+        {
+            fclose(txtfile); //it's good so close it
+            return true;
+        }
+    }
+    fclose(txtfile); //it's good so close it
+    return true;
+}

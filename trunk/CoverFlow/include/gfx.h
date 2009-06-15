@@ -116,6 +116,7 @@ Button flagDKButton;
 
 Button cheatEnabled[10];
 Button cheatDisabled[10];
+Button manageCheatsButton;
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg cover_texture_3d;

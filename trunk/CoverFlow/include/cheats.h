@@ -26,18 +26,19 @@ extern "C" {
     #define MAX_CODES 100
     #define MAX_CHEATS 500
 
-    typedef struct {
+typedef struct {
         char title[LINE_LENGTH]; //cheat description text
         bool enabled; //is the cheat active
         char codes[MAX_CODES][LINE_LENGTH]; //cheat codes block
         int codelines; //number of lines of cheat codes
-    } CHEAT;
+} CHEAT[MAX_CHEATS];
     
     bool check_txt(int id, struct discHdr *gameList);
     bool check_gct(int id, struct discHdr *gameList);
     bool download_txt(int id, struct discHdr *gameList);
     void manage_cheats(int id, struct discHdr *gameList);
     bool is_code(char* line);
+    bool check_download(char* titleID);
 
 #ifdef	__cplusplus
 }
