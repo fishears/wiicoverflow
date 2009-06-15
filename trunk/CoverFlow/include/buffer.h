@@ -7,7 +7,7 @@
 
 #define MAX_BUFFERED_COVERS  500
 
-#define MAX_THREADS 5
+#define MAX_THREADS 3
 #define GRAPHIC_MODES 2
 
 #include "core/disc.h"

@@ -12,6 +12,9 @@
 #define DENSITY_METHOD 1
 #define ALL_CACHED 2
 
+#define COVER_REQUESTED 1
+#define COVER_PROCESSING 2
+
 // this is the start adrress of MEM2 see http://wiibrew.org/wiki/Memory_Map
 #define MEM2_START_ADDRESS 0x90100000
 //this is lower than the extent address of MEM2 which should be 54394880 (0x33E0000) - but there is a crash before that point
@@ -23,7 +26,7 @@
 typedef struct COVERQUEUE 
 {
 	bool ready[MAX_BUFFERED_COVERS];
-	bool request[MAX_BUFFERED_COVERS];
+	int request[MAX_BUFFERED_COVERS];
 	struct discHdr *requestId[MAX_BUFFERED_COVERS];
 	bool remove[MAX_BUFFERED_COVERS];
 	int permaBufferPosition[MAX_BUFFERED_COVERS];
@@ -168,7 +171,7 @@ bool BUFFER_IsCoverQueued(int index)
 	if(index < MAX_BUFFERED_COVERS)
 	{
 		pthread_mutex_lock(&buffer_mutex[index]);
-		retval = _cq.request[index];
+		retval = _cq.request[index]>0;
 		pthread_mutex_unlock(&buffer_mutex[index]);
 	}
 	
@@ -273,9 +276,11 @@ void HandleLoadRequest(int index,int threadNo)
 				{
 					_cq.coverMissing[index]=true; // bad image size
 					_cq.ready[index]   = false;
+					_cq.request[index]=0;
 				}
 				else
 				{
+					_cq.request[index]=0;
 					_cq.ready[index]   = true;
 				}
 				pthread_mutex_unlock(&buffer_mutex[index]);
@@ -296,6 +301,7 @@ void HandleLoadRequest(int index,int threadNo)
 			}
 			_cq.coverMissing[index]=true;
 			_cq.ready[index]   = false;
+			_cq.request[index]=0;
 			pthread_mutex_unlock(&buffer_mutex[index]);
 		}
 		
@@ -307,7 +313,7 @@ void HandleLoadRequest(int index,int threadNo)
 int GetPrioritisedCover(int selection)
 {
 	int i,j,ret=-1;
-	for(i = 0; i <= (nCoversInWindow+1); i++)
+	for(i = 0; i <= (nCoversInWindow+1)/2; i++)
 	{
 		for (j=0;j<2;j++)
 		{
@@ -317,7 +323,7 @@ int GetPrioritisedCover(int selection)
 				if(index >= MAX_BUFFERED_COVERS)
 					return -1;
 		
-				if (_cq.request[index] && !_cq.ready[index]) return index;
+				if (_cq.request[index]==COVER_REQUESTED && !_cq.ready[index]) return index;
 			}
 		}
 	}
@@ -331,7 +337,7 @@ void* process(void *arg)
 	int i,j = 0;
 	bool b = false;
 	/*Main Buffering Thread*/
-	//Fat_MountSDHC();
+	usleep(thread*50);
 	
 	while(1)
 	{
@@ -349,8 +355,8 @@ void* process(void *arg)
 
 					pthread_mutex_lock(&buffer_mutex[index]);
 					/*Handle Load Requests*/
-					b = _cq.request[index] && !_cq.ready[index];
-					if (b) _cq.request[index]=false;
+					b = _cq.request[index]==COVER_REQUESTED && !_cq.ready[index];
+					if (b) _cq.request[index]|=COVER_PROCESSING;
 					pthread_mutex_unlock(&buffer_mutex[index]);
 					
 					if(b) HandleLoadRequest(index,thread);
@@ -397,7 +403,7 @@ void RemoveFromCache(int index)
 	if (_cq.floatingQueuePosition[FloatingCacheCovers[index]] != -1)
 	{
 		_cq.ready[FloatingCacheCovers[index]] = false;
-		_cq.request[FloatingCacheCovers[index]] = false;
+		_cq.request[FloatingCacheCovers[index]] = 0;
 		_texture_data[FloatingCacheCovers[index]].data=0;
 		_cq.floatingQueuePosition[FloatingCacheCovers[index]]=-1;
 		
@@ -448,6 +454,7 @@ void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
 {
 	int i=0;
 	int extra = 0;
+	
 	CurrentSelection=nCovers-index;
 	
 	if (doNotRemoveFromFloating) extra = 1;
@@ -464,7 +471,7 @@ void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
 				if (_cq.permaBufferPosition[i] == -1) SetFloatingCacheItem(CurrentSelection,i);
 				
 				_cq.requestId[i]=&CoverList[i];
-				_cq.request[i] = true;
+				_cq.request[i] = COVER_REQUESTED;
 				_cq.ready[i] = false;
 			}
 			
@@ -487,7 +494,7 @@ void ResetQueueItem(int index)
 		return;
 		
 	_cq.ready[index]=false;
-	_cq.request[index]=false;
+	_cq.request[index]=0;
 	_cq.requestId[index]=0;
 	_cq.remove[index]=false;
 	_cq.permaBufferPosition[index]=-1;
@@ -505,7 +512,7 @@ void RequestForCache(int index)
 		return;
 		
 	_cq.requestId[index]=&CoverList[index];
-	_cq.request[index]=true;
+	_cq.request[index]=COVER_REQUESTED;
 }
 
 // call at start, on add or on delete - kill the buffer first
