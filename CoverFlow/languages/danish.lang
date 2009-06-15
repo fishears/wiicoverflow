@@ -10,7 +10,7 @@ someErrors = der er sket en fejl
 checkNextCover = Undersøger næste forside...%s
 opFinished = Operation fuldført!
 pressA = Tryk A for at fortsætte
-configError = Konfigurationsfejl, MAX_DNS_ENTRIES nået mens listen er tom\n
+configError = Konfigurationsfejl, MAX_DNS_ENTRIES nået mens listen er tom|
 errorsaveGL = Kan ikke gemme gamelist.xml
 errorcreateGL = Kan ikke oprette gamelist fil!
 consoleDefault = Konsol Standard
@@ -39,14 +39,14 @@ ocarina = Snydekoder
 language = Sprog
 videoMode = Video Tilstand
 patchVIDTV = VIDTV Patch
-errorConnect = Forbindelse fejl fra net_read()  Errorcode: %i\n
-URLnoBegin = URL '%s' starter ikke med 'http://'\n
-URLnoPath = URL '%s' har ingen STI del\n
-URLnoDomain = Ingen domæne del i URL '%s'\n
-errorDomain = \ndomæne %s kunne ikke forløses
+errorConnect = Forbindelse fejl fra net_read()  Errorcode: %i|
+URLnoBegin = URL '%s' starter ikke med 'http://'|
+URLnoPath = URL '%s' har ingen STI del|
+URLnoDomain = Ingen domæne del i URL '%s'|
+errorDomain = |domæne %s kunne ikke forløses
 errEstablishConn = Fejl under oprettelse af forbindelse
-HTTPnoFile = HTTP Svar indeholdt ingen fil\n
-noMemCopy = Ikke nok hukommelse til at gemme fil fra HTTP svaret\n
+HTTPnoFile = HTTP Svar indeholdt ingen fil|
+noMemCopy = Ikke nok hukommelse til at gemme fil fra HTTP svaret|
 graphicSetting = Grafik Indstillinger
 zoom = Zoom
 spacing = Mellemrum
@@ -86,7 +86,7 @@ successDelete = Slettet.
 pressOkContinue = Tryk OK for at fortsætte.
 noLocalIP = Kan ikke hente lokal IP adresse.
 addError = [+] FEJL:
-errorCIOS = Custom IOS kunne ikke åbnes! (ret = %d)\n
+errorCIOS = Custom IOS kunne ikke åbnes! (ret = %d)|
 loadTextures = Åbner for teksturer
 initUSB = Initiér USB
 errInitUSBFS = Kan ikke initiere USBFS, afslutter.
@@ -107,10 +107,10 @@ initBuffer = Initialiserer Trådet Billede Buffer...
 setBackground = Indstiller baggrundstema...
 freeTextures = Frigørelse af ubrugte teksturer...
 parentalCtrl = Børnesikring
-enableParentCtrl = Kunne du tænke dig at\n aktivere børnesikring?
-errorDIP = Kunne ikke initialisere DIP modul! (ret = %d)\n
+enableParentCtrl = Kunne du tænke dig at| aktivere børnesikring?
+errorDIP = Kunne ikke initialisere DIP modul! (ret = %d)|
 errorReadDir = Kan ikke læse mapper. Forsider vil ikke blive gemt.
-errorCreateDir = Kan ikke oprette mapper.\n Forsider vil ikke blive gemt.
+errorCreateDir = Kan ikke oprette mapper.| Forsider vil ikke blive gemt.
 Sun = Søn
 Mon = Man
 Tue = Tir
@@ -136,9 +136,9 @@ noFreeSpace = Ikke nok ledig plads!
 formatPartition = Formaterer Partition %s
 addAGame = Tilføj et spil...
 getAddData = Hent ned
-errTitles = Fejl under hentning af Titles.txt\nEn en fejl er sket under nedhentningen af en fil.
+errTitles = Fejl under hentning af Titles.txt|En en fejl er sket under nedhentningen af en fil.
 successTitles = Nu er %d titler importeret!
-errNetTitles = Fejl under netværksinitialisering\nTitles.txt kan ikke hentes.
+errNetTitles = Fejl under netværksinitialisering|Titles.txt kan ikke hentes.
 Success = Succés!
 welcomeMsg = Velkommen til CoverFloader
 batteryUnit = P%d
@@ -155,10 +155,19 @@ Danish = Dansk
 Catalan = Katalansk
 MyLanguage = MitSprog
 Turkish = Tyrkisk
+initWPAD = Init WPAD
+initFS = Initializing FileSystem
+initSys = Init Sys...
+initUSBFS = Initializing USBFS...
+initDisc = Initializing Disc...
+obsoleteGL = Your config file is obsoleted and|will be removed.|Press OK to continue
+homeMenu = HOME Menu
+homeWiimote = Wiimote Information
 
 ###########
 # Buttons #
 ###########
+
 addB = tilføj
 deleteB = Slet
 cancelB = Annullér
@@ -179,3 +188,6 @@ loaderB = HBLoader
 languagesB = Sprog
 coversB = Forsider
 titlesB = Titler
+restoreB = Restore
+fatB = Fat
+thinB = Thin

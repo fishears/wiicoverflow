@@ -10,7 +10,7 @@ someErrors = algum erro ocorreu
 checkNextCover = Checando próxima capa...%s
 opFinished = Operação terminada !
 pressA = Pressione A para continuar
-configError = Erro de configuração, MAX_DNS_ENTRIES alcançado enquando a lista está vazia\n
+configError = Erro de configuração, MAX_DNS_ENTRIES alcançado enquando a lista está vazia|
 errorsaveGL = Não foi possível gravar gamelist.xml
 errorcreateGL = Não foi possível criar o arquivo gamelist!
 consoleDefault = Padrão do Console
@@ -39,14 +39,14 @@ ocarina = Ocarina:
 language = Língua:
 videoMode = Modo de Vídeo:
 patchVIDTV = Patch VIDTV:
-errorConnect = Erro de conexão de net_read()  Código: %i\n
-URLnoBegin = URL '%s' não começa com 'http://'\n
-URLnoPath = URL '%s' não possui a parte do CAMINHO\n
-URLnoDomain = Nenhum domínio na URL '%s'\n
-errorDomain = \nO domínio %s não pôde ser encontrado
+errorConnect = Erro de conexão de net_read()  Código: %i|
+URLnoBegin = URL '%s' não começa com 'http://'|
+URLnoPath = URL '%s' não possui a parte do CAMINHO|
+URLnoDomain = Nenhum domínio na URL '%s'|
+errorDomain = |O domínio %s não pôde ser encontrado
 errEstablishConn = Erro ao estabelecer conexão
-HTTPnoFile = Resposta HTTP sem arquivo\n
-noMemCopy = Sem memória para copiar arquivo da resposta HTTP\n
+HTTPnoFile = Resposta HTTP sem arquivo|
+noMemCopy = Sem memória para copiar arquivo da resposta HTTP|
 graphicSetting = Configurações dos Gráficos
 zoom = Zoom
 spacing = Espaçamento
@@ -86,7 +86,7 @@ successDelete = Jogo removido !
 pressOkContinue = Pressione OK para continuar.
 noLocalIP = Não foi possível recuperar endereço IP local.
 addError = [+] ERRO:
-errorCIOS = Custom IOS não pôde ser carregado! (ret = %d)\n
+errorCIOS = Custom IOS não pôde ser carregado! (ret = %d)|
 loadTextures = Carregando texturas
 initUSB = Iniciando USB
 errInitUSBFS = Erro ao inicializar USBFS, saindo.
@@ -108,9 +108,9 @@ setBackground = Configurando tema...
 freeTextures = Liberando texturas não utilizadas...
 parentalCtrl = Controle Parental
 enableParentCtrl = Você deseja habilitar controle parental ?
-errorDIP = Não foi possível inicializar o módulo DIP! (ret = %d)\n
+errorDIP = Não foi possível inicializar o módulo DIP! (ret = %d)|
 errorReadDir = Não foi possível ler os diretórios. As capas não serão gravadas.
-errorCreateDir = Não foi possível criar os diretórios.\n As capas não serão gravadas.
+errorCreateDir = Não foi possível criar os diretórios.| As capas não serão gravadas.
 Sun = Dom
 Mon = Seg
 Tue = Ter
@@ -136,9 +136,9 @@ noFreeSpace = Espaço em disco insuficiente !
 formatPartition = Formatando partição %s
 addAGame = Por favor, adicione um jogo...
 getAddData = Baixar
-errTitles = Erro ao baixar Titles.txt\nUm erro ocorreu ao tentar baixar ou gravar o arquivo.
+errTitles = Erro ao baixar Titles.txt|Um erro ocorreu ao tentar baixar ou gravar o arquivo.
 successTitles = Importação de %d títulos foi feita com sucesso!
-errNetTitles = Erro ao inicializar a rede\nTitles.txt não pode ser baixado.
+errNetTitles = Erro ao inicializar a rede|Titles.txt não pode ser baixado.
 Success = Sucesso!
 welcomeMsg = Bem vindo ao CoverFloader
 batteryUnit = P%d
@@ -154,10 +154,20 @@ PortugueseBR = Portuguese BR
 Danish = Danish
 Catalan = Catalan
 MyLanguage = MyLanguage
+Turkish = Turkish
+initWPAD = Init WPAD
+initFS = Initializing FileSystem
+initSys = Init Sys...
+initUSBFS = Initializing USBFS...
+initDisc = Initializing Disc...
+obsoleteGL = Your config file is obsoleted and|will be removed.|Press OK to continue
+homeMenu = HOME Menu
+homeWiimote = Wiimote Information
 
 ###########
 # Buttons #
 ###########
+
 addB = Adicionar
 deleteB = Remover
 cancelB = Cancelar
@@ -178,3 +188,6 @@ loaderB = HBLoader
 languagesB = Línguas
 coversB = Capas
 titlesB = Títulos
+restoreB = Restore
+fatB = Fat
+thinB = Thin

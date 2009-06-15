@@ -38,6 +38,13 @@ void CFreeTypeGX_DrawText(const CFreeTypeGX *ftgx, uint16_t x, uint16_t y, char 
 
 	delete strWChar;
 }
+
+void CFreeTypeGX_DrawWideText(const CFreeTypeGX *ftgx, uint16_t x, uint16_t y, wchar_t *text, GXColor color, uint16_t textStyling)
+{
+	FreeTypeGX *f = (FreeTypeGX*)ftgx;
+	f->drawText(x,y,text,color,textStyling);
+}
+
 	
 void CFreeTypeGX_DrawTextWithShadow(const CFreeTypeGX *ftgx, uint16_t x, uint16_t y, char *text, GXColor color, GXColor shadowColor, uint16_t textStyling)
 {
