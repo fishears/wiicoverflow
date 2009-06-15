@@ -250,15 +250,19 @@ s32 Apploader_Run(entry_point *entry)
 	/* Initialize apploader */
 	appldr_init(__noprint);
 
-//	if (CFG.ocarina)
-//    {
-		// copy kenobiwii code into tempoarary memory area
-		memset((void*)0x80001800,0,kenobiwii_size);
-		memcpy((void*)0x80001800,kenobiwii,kenobiwii_size);
-		DCFlushRange((void*)0x80001800,kenobiwii_size);
-                //SCO CFG.hooktype = 1;   //prep for adding hooktype to improve ocarina compatibility
-		memcpy((void*)0x80001800, (char*)0x80000000, 6);	// For WiiRD
-//	}
+	//002 fix per Wiipower @ http://gbatemp.net/index.php?showtopic=158885
+	// working with CIOS 13a
+	*(u32 *)0x80003140 = *(u32 *)0x80003188; 
+
+	// copy kenobiwii code into tempoarary memory area
+	memset((void*)0x80001800,0,kenobiwii_size);
+	memcpy((void*)0x80001800,kenobiwii,kenobiwii_size);
+
+	DCFlushRange((void*)0x80001800,kenobiwii_size);
+
+	//SCO CFG.hooktype = 1;   //prep for adding hooktype to improve ocarina compatibility
+	memcpy((void*)0x80001800, (char*)0x80000000, 6);	// For WiiRD
+
 	for (;;) {
 		void *dst = NULL;
 		s32   len = 0, offset = 0;
@@ -308,7 +312,7 @@ s32 Apploader_Run(entry_point *entry)
 			vidolpatcher(dst,len);
 
 		langpatcher(dst,len);
-                *(u32 *)0x80003140 = *(u32 *)0x80003188; /* 002 Fix by Wiipower */
+		//*(u32 *)0x80003140 = *(u32 *)0x80003188; /* 002 Fix by Wiipower */ // note: this wasn't working for me (afour) here, so moved it up
 		DCFlushRange(dst, len);
     }
 
