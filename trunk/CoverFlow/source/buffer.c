@@ -55,7 +55,7 @@ int GraphicModes[GRAPHIC_MODES][2] =
 };
 
 // this is the chunk of MEM2 allocated for other tasks (i.e. things that don't fit in normal memory)
-#define BUFFER_SLOTS 8
+#define BUFFER_SLOTS 10
 unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	{
 	128,//0 string buffer for thread 0
@@ -66,6 +66,8 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	512*340*4, // 5 3d no cover
 	240*480*4, //6 ambilight
 	160*224*4, //7 no cover
+	500, //8 Cheat Manager Array 1
+	1800, //9 Cheat Manager Array 2
 	0};
 
 // returns the offset to the memory slot required
