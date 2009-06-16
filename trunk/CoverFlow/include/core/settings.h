@@ -65,4 +65,5 @@ int SETTINGS_Save();
 
 int getRevXML();
 int getLangXML();
+void createEmptyWiiCoverFlowFile();
 #endif
