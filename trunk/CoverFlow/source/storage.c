@@ -197,6 +197,7 @@ bool check_write_access(){
 void initWBFS(){
 
 	int retries = 3;
+	int retried =0;
 	int ret;
 	
 	self.progress += .1;
@@ -219,9 +220,20 @@ void initWBFS(){
 				DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 				GRRLIB_Render();
 				//tell user that no drive was found
-				if(WindowPrompt(TX.error, TX.errorNoUSBDrv, &okButton, &cancelButton))
+				int NoDrive;
+				if (retried<2)
+				{
+					NoDrive=WindowPrompt(TX.error, TX.errorNoUSBDrv, &okButton, &cancelButton);
+				}
+				else
+				{
+					NoDrive=WindowPrompt(TX.error, TX.errorNoUSBDrv, 0, &cancelButton);
+				}
+				
+				if(NoDrive)
 				{
 					retries = 3;
+					retried++;
 					//ask user to connect drive
 					WindowPrompt(TX.error, TX.connectUSBDrv, &okButton, 0);
 				}
@@ -239,7 +251,6 @@ void initWBFS(){
 			Subsystem_Init();
 			WDVD_Init();
 			/* Initialize Wiimote subsystem */
-			Wpad_Init();
 			WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 			goto INIT_RETRY;
 		}
