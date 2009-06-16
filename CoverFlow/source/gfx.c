@@ -332,7 +332,7 @@ void Init_Buttons()
 	gbackButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 468, 335, TX.backB);
     cheatEnabled[0]			= Button_Init(button_cheat_on_png, button_cheat_off_png, 44, 80);
     cheatDisabled[0]		= Button_Init(button_cheat_off_png, button_cheat_on_png, 44, 80);
-    manageCheatsButton        = Duplicate_Button_TTF(okButton, 468, 198, "Manage");
+    manageCheatsButton      = Duplicate_Button_TTF(okButton, 468, 198, "Manage");
 } // End Init_Buttons();
 
 void DrawSlider(int yPos, int theme_id)
@@ -1679,7 +1679,8 @@ void freeResources(){
 	FreeButtonResources(&gbackButton);
 	FreeButtonResources(&cheatEnabled[0]);
 	FreeButtonResources(&cheatDisabled[0]);
-
+	FreeButtonResources(&manageCheatsButton);
+	
 /* //  CFreeTypeGX_delete function make the games don't boot, removed temporary (it wass addedd in r533)
 
 	CFreeTypeGX_delete(ttf14pt);

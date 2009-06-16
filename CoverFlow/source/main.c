@@ -647,7 +647,8 @@ int main( int argc, char **argv )
 						/*Hitting 1 causes crash right now...*/
 						//sysdate();
 						//quit();
-						WindowPrompt("Titolo", "This is a long message using\nthe character \\n as escape sequence.\nAlso now buttons title and message are\naligned now. :)", &okButton, &cancelButton);
+						
+						//WindowPrompt("Titolo", "This is a long message using\nthe character \\n as escape sequence.\nAlso now buttons title and message are\naligned now. :)", &okButton, &cancelButton);
 			}
 			else if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_2) || (PAD_ButtonsDown(0) & PAD_BUTTON_Y))// Check for button 1 hold
 			{
