@@ -247,19 +247,19 @@ void Init_Buttons()
 	lockButton			    = Button_Init(button_round_lock_png, button_round_lock_over_png, 543, 120);
 	unlockButton			= Button_Init(button_round_unlock_png, button_round_unlock_over_png, 543, 120);
 	deleteButton			= Button_Init(button_round_delete_png, button_round_delete_over_png, 505, 120);
-    gsettingsButton			= Button_Init(button_round_gear_png, button_round_gear_over_png, 543, 120);
+    gsettingsButton			= Duplicate_Button(settingsButton, 543, 120);
 	bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 515, 140);  
     bookmarkOffButton       = Button_Init(star_off_png, star_on_png, 515, 140);
 	// 'Home' button menu buttons
     homeMenuTopButton       = Button_Init(menu_home_top_png,     menu_home_top_over_png, 0, 0);
     homeMenuBottomButton    = Button_Init(menu_home_bottom_png,  menu_home_bottom_over_png, 0, 376);
     wiiMenuButton           = Button_TTF_Init(menu_home_button_png,  menu_home_button_over_png, 46, 187, TX.wiimenuB);
-    loaderButton            = Button_TTF_Init(menu_home_button_png,  menu_home_button_over_png, 186, 187, TX.loaderB);
+    loaderButton            = Duplicate_Button_TTF(wiiMenuButton, 186, 187, TX.loaderB);
     wiimoteButton           = Button_Init(menu_home_wiimote_png, menu_home_wiimote_png, 54, 400);
 	// Settings Panels Header Buttons
     menuSettingsButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 160, 20, TX.cflowSettings); 
-	menuGraphicsButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 320, 20, TX.graphics);
-    menuLanguagesButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 480, 20, TX.languagesB); 
+	menuGraphicsButton		= Duplicate_Button_TTF(menuSettingsButton, 320, 20, TX.graphics);
+    menuLanguagesButton		= Duplicate_Button_TTF(menuSettingsButton, 480, 20, TX.languagesB); 
 	menuLogoButton			= Button_Init(menu_logo_png, menu_logo_png, 30, 20);
 	// General Settings Panel
     musicOnButton           = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 97);
@@ -274,37 +274,37 @@ void Init_Buttons()
 	titlesButton		    = Duplicate_Button_TTF(okButton, 422, 265, TX.titlesB);
     viddownButton			= Button_Init(button_minus_png, button_minus_over_png, 310,334);
 	vidupButton				= Button_Init(button_plus_png, button_plus_over_png, 338,334);
-    vidtvonButton			= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 299);
-    vidtvoffButton			= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 299);
-    cheatonButton			= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310,367);
-    cheatoffButton			= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310,367);
-    hookdownButton			= Button_Init(button_minus_png, button_minus_over_png, 422,367);
-    hookupButton			= Button_Init(button_plus_png, button_plus_over_png, 450,367);
+    vidtvonButton			= Duplicate_Button(musicOnButton, 310, 299);
+    vidtvoffButton			= Duplicate_Button(musicOffButton, 310, 299);
+    cheatonButton			= Duplicate_Button(musicOnButton, 310,367);
+    cheatoffButton			= Duplicate_Button(musicOffButton, 310,367);
+    hookdownButton			= Duplicate_Button(viddownButton, 422,367);
+    hookupButton			= Duplicate_Button(vidupButton, 450,367);
 	// Graphic Settings Panel
-    falloffdownButton       = Button_Init(button_minus_png, button_minus_over_png, 99,123);
-    falloffupButton         = Button_Init(button_plus_png, button_plus_over_png,127,123);
-    windowdownButton        = Button_Init(button_minus_png, button_minus_over_png, 195,110);
-    windowupButton          = Button_Init(button_plus_png, button_plus_over_png, 223, 110);
-    zoomdownButton          = Button_Init(button_minus_png, button_minus_over_png, 292,110);
-    zoomupButton            = Button_Init(button_plus_png, button_plus_over_png, 320,110);
-    spacingdownButton       = Button_Init(button_minus_png, button_minus_over_png, 386,110);
-    spacingupButton         = Button_Init(button_plus_png, button_plus_over_png, 414,110);
-    angledownButton         = Button_Init(button_minus_png, button_minus_over_png, 484,123);
-    angleupButton           = Button_Init(button_plus_png, button_plus_over_png, 512,123);
-    hidescrollOnButton		= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 101,369);
-    hidescrollOffButton		= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 101, 369);
-    covers3dOnButton		= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 268, 369);
-    covers3dOffButton		= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 268, 369);
-    covers3dFatButton		= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 268, 423);
-    covers3dThinButton		= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 268, 423);
-    coverTextOnButton       = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 435, 369);
-    coverTextOffButton      = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 435, 369);
+    falloffdownButton       = Duplicate_Button(viddownButton, 99,123);
+    falloffupButton         = Duplicate_Button(vidupButton,127,123);
+    windowdownButton        = Duplicate_Button(viddownButton, 195,110);
+    windowupButton          = Duplicate_Button(vidupButton, 223, 110);
+    zoomdownButton          = Duplicate_Button(viddownButton, 292,110);
+    zoomupButton            = Duplicate_Button(vidupButton, 320,110);
+    spacingdownButton       = Duplicate_Button(viddownButton, 386,110);
+    spacingupButton         = Duplicate_Button(vidupButton, 414,110);
+    angledownButton         = Duplicate_Button(viddownButton, 484,123);
+    angleupButton           = Duplicate_Button(vidupButton, 512,123);
+    hidescrollOnButton		= Duplicate_Button(musicOnButton, 101,369);
+    hidescrollOffButton		= Duplicate_Button(musicOffButton, 101, 369);
+    covers3dOnButton		= Duplicate_Button(musicOnButton, 268, 369);
+    covers3dOffButton		= Duplicate_Button(musicOffButton, 268, 369);
+    covers3dFatButton		= Duplicate_Button(musicOnButton, 268, 423);
+    covers3dThinButton		= Duplicate_Button(musicOffButton, 268, 423);
+    coverTextOnButton       = Duplicate_Button(musicOnButton, 435, 369);
+    coverTextOffButton      = Duplicate_Button(musicOffButton, 435, 369);
 	resetButton				= Duplicate_Button_TTF(okButton, 435, 423, TX.resetB);
 	restoreButton			= Duplicate_Button_TTF(okButton, 101, 423, TX.restoreB);
 
 // Language Settings Panel
-	langupButton			= Button_Init(button_plus_png, button_plus_over_png,321,90);
-    langdownButton			= Button_Init(button_minus_png, button_minus_over_png, 293,90);
+	langupButton			= Duplicate_Button(vidupButton,321,90);
+    langdownButton			= Duplicate_Button(viddownButton, 293,90);
 	flagUSButton			= Button_Flag_Init(flag_us_png, 166, 150, TX.English); 
 	flagITButton			= Button_Flag_Init(flag_it_png, 296, 150, TX.Italian); 
 	flagDEButton			= Button_Flag_Init(flag_de_png, 426, 150, TX.German);
@@ -319,22 +319,22 @@ void Init_Buttons()
 	flagMyLangButton 		= Button_Flag_Init(flag_MyLang_png, 426, 360, TX.MyLanguage);
 			
 	// Game Settings Screen Buttons
-    gvidtvonButton          = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 360, 164);
-    gvidtvoffButton         = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 360, 164);
-	gcheatonButton			= Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 360, 198);
-    gcheatoffButton			= Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 360, 198);
-    ghookdownButton         = Button_Init(button_minus_png, button_minus_over_png, 360, 232);
-    ghookupButton           = Button_Init(button_plus_png, button_plus_over_png, 388, 232);
-    glangdownButton         = Button_Init(button_minus_png, button_minus_over_png, 360,266);
-	glangupButton           = Button_Init(button_plus_png, button_plus_over_png,388,266);
-    gviddownButton          = Button_Init(button_minus_png, button_minus_over_png, 360, 300);
-	gvidupButton            = Button_Init(button_plus_png, button_plus_over_png, 388, 300);
-	gbackButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 468, 335, TX.backB);
+    gvidtvonButton          = Duplicate_Button(musicOnButton,  360, 164);
+    gvidtvoffButton         = Duplicate_Button(musicOffButton, 360, 164);
+	gcheatonButton			= Duplicate_Button(musicOnButton, 360, 198);
+    gcheatoffButton			= Duplicate_Button(musicOffButton, 360, 198);
+    ghookdownButton         = Duplicate_Button(viddownButton, 360, 232);
+    ghookupButton           = Duplicate_Button(vidupButton, 388, 232);
+    glangdownButton         = Duplicate_Button(viddownButton, 360,266);
+	glangupButton           = Duplicate_Button(vidupButton,388,266);
+    gviddownButton          = Duplicate_Button(viddownButton, 360, 300);
+	gvidupButton            = Duplicate_Button(vidupButton, 388, 300);
+	gbackButton				= Duplicate_Button_TTF(okButton, 468, 335, TX.backB);
     cheatEnabled[0]			= Button_Init(button_cheat_on_png, button_cheat_off_png, 44, 80);
     cheatDisabled[0]		= Button_Init(button_cheat_off_png, button_cheat_on_png, 44, 80);
     manageCheatsButton      = Duplicate_Button_TTF(okButton, 468, 198, TX.manageB);
-    pageUpButton            = Duplicate_Button(hookupButton,508,60);
-    pageDownButton          = Duplicate_Button(hookdownButton,480,60);
+	pageUpButton            = Duplicate_Button(vidupButton,508,60);
+    pageDownButton          = Duplicate_Button(viddownButton,480,60);
 } // End Init_Buttons();
 
 void DrawSlider(int yPos, int theme_id)
@@ -1681,9 +1681,6 @@ void freeResources(){
 	FreeButtonResources(&gbackButton);
 	FreeButtonResources(&cheatEnabled[0]);
 	FreeButtonResources(&cheatDisabled[0]);
-	FreeButtonResources(&manageCheatsButton);
-	FreeButtonResources(&pageUpButton);
-	FreeButtonResources(&pageDownButton);
 
 /* //  CFreeTypeGX_delete function make the games don't boot, removed temporary (it wass addedd in r533)
 
@@ -1803,11 +1800,9 @@ void Label_Buttons()
 	
 	strcpy( loadButton.ttf_label, TX.loadB);
 	strcpy( backButton.ttf_label, TX.backB);	
-	
 	strcpy( gbackButton.ttf_label, TX.backB);
-	strcopy( manageCheatsButton.ttf_label, TX.manageB, 15);
 	
-	strcpy( wiiMenuButton.ttf_label, TX.wiimenuB);	 
+	strcpy( wiiMenuButton.ttf_label, TX.wiimenuB);	
 	strcpy( loaderButton.ttf_label, TX.loaderB);
 	
 	strcopy( menuSettingsButton.ttf_label, TX.cflowSettings, 15);	
