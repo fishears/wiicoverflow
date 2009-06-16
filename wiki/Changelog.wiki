@@ -13,6 +13,7 @@
 
 -OTHER
   * Internal cleanup, removing redundant init calls
+  * Faster Cover Caching
  
 ----
 == RC6 (June 07 2009) ==
