@@ -1803,9 +1803,11 @@ void Label_Buttons()
 	
 	strcpy( loadButton.ttf_label, TX.loadB);
 	strcpy( backButton.ttf_label, TX.backB);	
-	strcpy( gbackButton.ttf_label, TX.backB);
 	
-	strcpy( wiiMenuButton.ttf_label, TX.wiimenuB);	
+	strcpy( gbackButton.ttf_label, TX.backB);
+	strcopy( manageCheatsButton.ttf_label, TX.manageB, 15);
+	
+	strcpy( wiiMenuButton.ttf_label, TX.wiimenuB);	 
 	strcpy( loaderButton.ttf_label, TX.loaderB);
 	
 	strcopy( menuSettingsButton.ttf_label, TX.cflowSettings, 15);	
