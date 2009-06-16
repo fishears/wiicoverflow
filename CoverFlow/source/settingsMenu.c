@@ -936,19 +936,16 @@ void Game_Settings_Menu_Show()
                                 {
                                     if(!check_txt(self.gameSelected,self.gameList)) //no txt file so try downloading
                                     {
-                                        download_txt(self.gameSelected,self.gameList);
+                                        if(!download_txt(self.gameSelected,self.gameList))
+                                            gameSetting.ocarina = 0;
                                     }
-                                    if(check_gct(self.gameSelected,self.gameList))
-                                        gameSetting.ocarina = 1;
-                                    else
-                                        gameSetting.ocarina = 0;
-
                                 }
                                 #endif
 			}
+                        #ifdef CHEAT_MANAGER
                         else if (Button_Select(&manageCheatsButton, pointer.p_x, pointer.p_y) && gameSetting.ocarina==1)
                         {
-                            if(check_txt(self.gameSelected,self.gameList)) //no txt file so try downloading
+                            if(check_txt(self.gameSelected,self.gameList))
                                     {
                                        manage_cheats(self.gameSelected,self.gameList); 
                                     }
@@ -957,6 +954,7 @@ void Game_Settings_Menu_Show()
                                 manage_cheats(self.gameSelected,self.gameList);
                             }
                         }
+                        #endif
 			else if (Button_Select(&gvidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&gvidtvoffButton, pointer.p_x, pointer.p_y))
 			{
 				gameSetting.vipatch = (gameSetting.vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
@@ -1171,9 +1169,10 @@ void Game_Settings_Menu_Show()
 		Button_Paint(&ghookdownButton);
 		Button_TTF_Toggle_Paint(&gcheatoffButton, &gcheatonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.ocarina);
 		Button_TTF_Toggle_Paint(&gvidtvoffButton, &gvidtvonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.vipatch);
-		
-        if(gameSetting.ocarina)
-            Button_TTF_Paint(&manageCheatsButton);
+		#ifdef CHEAT_MANAGER
+                if(gameSetting.ocarina)
+                    Button_TTF_Paint(&manageCheatsButton);
+                #endif
 		if(gameSetting.lock)
 			Button_Paint(&lockButton);
 		else
@@ -1192,9 +1191,11 @@ void Game_Settings_Menu_Show()
 			 Button_Hover(&gvidtvonButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&ghookupButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y) ||
-			 ((gameSetting.lock) ? Button_Hover(&unlockButton, pointer.p_x, pointer.p_y) : Button_Hover(&lockButton, pointer.p_x, pointer.p_y) ) ||
-			 ((gameSetting.ocarina == 1) ? Button_Hover(&manageCheatsButton, pointer.p_x, pointer.p_y) : false)	 
-		   )
+			 ((gameSetting.lock) ? Button_Hover(&unlockButton, pointer.p_x, pointer.p_y) : Button_Hover(&lockButton, pointer.p_x, pointer.p_y) )
+                        #ifdef CHEAT_MANAGER
+                        || ((gameSetting.ocarina == 1) ? Button_Hover(&manageCheatsButton, pointer.p_x, pointer.p_y) : false)
+                        #endif
+                     )
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
