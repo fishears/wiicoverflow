@@ -156,13 +156,13 @@ Catalan = Katalanca
 Turkish = Türkçe
 MyLanguage = Benim Lisanım
 initWPAD = WPAD'ı başlat
-initFS = FS Başlatılıyor
-initSys = Init Sys...
-initUSBFS = Initializing USBFS...
-initDisc = Initializing Disc...
+initFS = FS Başlatılıyor...
+initSys = Sistem Başlatılıyor...
+initUSBFS = USBFS Başlatılıyor...
+initDisc = Disk Başlatılıyor...
 obsoleteGL = Konfigürasyon dosyanız eskimiş|ve silinecektir.|Devam etmek için OK'a basınız 
-homeMenu = HOME Menu
-homeWiimote = Wiimote Information
+homeMenu = Ana Menü
+homeWiimote = Wiimote Bilgileri
 
 ###########
 # Buttons #
@@ -188,6 +188,6 @@ loaderB = HB Yükleyicisi
 languagesB = Lisanlar
 coversB = Kapaklar
 titlesB = Oyun Adları
-restoreB = Restore
-fatB = Fat
-thinB = Thin
+restoreB = Geri Yükle
+fatB = Kalın
+thinB = İnce

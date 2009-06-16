@@ -243,7 +243,12 @@ void languageDefault()
 	snprintf(TX.initDisc, sizeof(TX.initDisc), "Initializing Disc...");
 	snprintf(TX.homeMenu, sizeof(TX.homeMenu), "HOME Menu");
 	snprintf(TX.homeWiimote, sizeof(TX.homeWiimote), "Wiimote Information");
-							
+	snprintf(TX.errorSD, sizeof(TX.errorSD), "SD card can not be written to");
+	snprintf(TX.gettingGL, sizeof(TX.gettingGL), "Getting game list");
+	snprintf(TX.sortingGL, sizeof(TX.sortingGL), "Sorting game list");
+	snprintf(TX.initWBFS_GL, sizeof(TX.initWBFS_GL), "Initialize WBFS Game List...");
+	snprintf(TX.getEntryWBFS, sizeof(TX.getEntryWBFS), "Getting Entries...");
+						
 // Buttons	
 
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
@@ -269,6 +274,8 @@ void languageDefault()
 	snprintf(TX.restoreB, sizeof(TX.restoreB), "Restore"); 		//B21
 	snprintf(TX.fatB, sizeof(TX.fatB), "Fat" );  					//B22
 	snprintf(TX.thinB, sizeof(TX.thinB), "Thin"); 					//B23
+	snprintf(TX.manageB, sizeof(TX.manageB), "Cheats");			//B24
+	
 };
 
 
@@ -956,7 +963,32 @@ void languageSet(char *name, char *val)
 		strcopy(TX.homeWiimote, val, sizeof(TX.homeWiimote));
 		return;
 	}	
-	
+	if (strcmp(name, "errorSD") == 0) {
+		strcopy(TX.errorSD, val, sizeof(TX.errorSD));
+		return;
+	}	
+	if (strcmp(name, "gettingGL") == 0) {
+		strcopy(TX.gettingGL, val, sizeof(TX.gettingGL));
+		return;
+	}	
+	if (strcmp(name, "sortingGL") == 0) {
+		strcopy(TX.sortingGL, val, sizeof(TX.sortingGL));
+		return;
+	}	
+	if (strcmp(name, "initWBFS_GL") == 0) {
+		strcopy(TX.initWBFS_GL, val, sizeof(TX.initWBFS_GL));
+		return;
+	}	
+	if (strcmp(name, "getEntryWBFS") == 0) {
+		strcopy(TX.getEntryWBFS, val, sizeof(TX.getEntryWBFS));
+		return;
+	}	
+
+
+
+
+
+
 //////////////// Buttons //////////////
 
 	
@@ -1050,6 +1082,10 @@ void languageSet(char *name, char *val)
 	}
 	if (strcmp(name, "thinB") == 0) {
 		strcopy(TX.thinB, val, sizeof(TX.thinB));
+		return;
+	}
+	if (strcmp(name, "manageB") == 0) {
+		strcopy(TX.manageB, val, sizeof(TX.manageB));
 		return;
 	}
 }

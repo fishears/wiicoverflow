@@ -1170,9 +1170,9 @@ void Game_Settings_Menu_Show()
 		Button_TTF_Toggle_Paint(&gcheatoffButton, &gcheatonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.ocarina);
 		Button_TTF_Toggle_Paint(&gvidtvoffButton, &gvidtvonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.vipatch);
 		#ifdef CHEAT_MANAGER
-                if(gameSetting.ocarina)
-                    Button_TTF_Paint(&manageCheatsButton);
-                #endif
+		if(gameSetting.ocarina)
+			Button_TTF_Paint(&manageCheatsButton);
+		#endif
 		if(gameSetting.lock)
 			Button_Paint(&lockButton);
 		else
@@ -1192,10 +1192,10 @@ void Game_Settings_Menu_Show()
 			 Button_Hover(&ghookupButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y) ||
 			 ((gameSetting.lock) ? Button_Hover(&unlockButton, pointer.p_x, pointer.p_y) : Button_Hover(&lockButton, pointer.p_x, pointer.p_y) )
-                        #ifdef CHEAT_MANAGER
-                        || ((gameSetting.ocarina == 1) ? Button_Hover(&manageCheatsButton, pointer.p_x, pointer.p_y) : false)
-                        #endif
-                     )
+			 #ifdef CHEAT_MANAGER
+			 || ((gameSetting.ocarina == 1) ? Button_Hover(&manageCheatsButton, pointer.p_x, pointer.p_y) : false)
+			 #endif
+		   )
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
