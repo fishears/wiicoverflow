@@ -664,7 +664,7 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 	
 	float thickness = 0.15;
 	if (settings.covers3dThickness) // true = flat 3d covers
-		thickness = 0.01;
+		thickness = 0.0001;
 	float left = .470;
 	float right = .527;
 		
@@ -829,7 +829,7 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 	}
 	else
 	{
-		// Draw the Front Cover
+		// Draw the Front Cover in 2D
 		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
 		GX_Position3f32(-width, -height, 0 - zpos);
 		GX_Color1u32(color);
