@@ -7,6 +7,7 @@
   * Easing in/out of covers and dialogs
   
 -FIX-
+  * 002 Fix from WiiPower working with CIOS 13a (Indy, MySimsRacing, GBusters all work)
   * Other memory issues solved
   * Minor bug fixes
   * Updated right edge 3D case graphic
