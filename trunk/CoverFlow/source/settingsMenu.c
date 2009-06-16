@@ -1172,19 +1172,16 @@ void Game_Settings_Menu_Show()
 		Button_TTF_Toggle_Paint(&gcheatoffButton, &gcheatonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.ocarina);
 		Button_TTF_Toggle_Paint(&gvidtvoffButton, &gvidtvonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.vipatch);
 		
-                if(gameSetting.ocarina)
-                    Button_TTF_Paint(&manageCheatsButton);
+        if(gameSetting.ocarina)
+            Button_TTF_Paint(&manageCheatsButton);
 		if(gameSetting.lock)
 			Button_Paint(&lockButton);
 		else
 			Button_Paint(&unlockButton);
 			
-		// Draw the default pointer hand
-		 Button_Hover(&lockButton, pointer.p_x, pointer.p_y);
-		 Button_Hover(&unlockButton, pointer.p_x, pointer.p_y);
-		 
 		// Check for button-pointer intersections, and rumble
-		if ((Button_Hover(&gbackButton, pointer.p_x, pointer.p_y) ||
+		if ( 
+		     Button_Hover(&gbackButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&glangupButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&glangdownButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&gvidupButton, pointer.p_x, pointer.p_y) ||
@@ -1195,9 +1192,9 @@ void Game_Settings_Menu_Show()
 			 Button_Hover(&gvidtvonButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&ghookupButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y) ||
-			 Button_Hover(&lockButton, pointer.p_x, pointer.p_y) ||
-			 Button_Hover(&unlockButton, pointer.p_x, pointer.p_y) ||
-                         Button_Hover(&manageCheatsButton,pointer.p_x, pointer.p_y)))
+			 ((gameSetting.lock) ? Button_Hover(&unlockButton, pointer.p_x, pointer.p_y) : Button_Hover(&lockButton, pointer.p_x, pointer.p_y) ) ||
+			 ((gameSetting.ocarina == 1) ? Button_Hover(&manageCheatsButton, pointer.p_x, pointer.p_y) : false)	 
+		   )
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
