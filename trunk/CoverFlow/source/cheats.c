@@ -124,7 +124,6 @@ void manage_cheats(int id, struct discHdr *gameList)
     char buffer[LINE_LENGTH]; //dummy line for tests
     char lastline[LINE_LENGTH]; //hold the game name (which also appears at end of file)
     char filename[10];
-    //char gctname[10];
     char titleID[7];
     char path[50];
     int i, codecounter = 0;;
@@ -133,9 +132,8 @@ void manage_cheats(int id, struct discHdr *gameList)
     sprintf(filename, "%s.txt", titleID);
     chdir("/");
     sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
-    //sprintf(gctname,"%s.gct",titleID); this screws filename... don't see why though...
     chdir(path);
-    FILE *txtfile;
+    FILE *txtfile=NULL;
     txtfile = fopen(filename, "r");
     if(txtfile)
     {
@@ -157,20 +155,21 @@ void manage_cheats(int id, struct discHdr *gameList)
                 {
                     cheat[i-1].codelines = codecounter-1; //write the number of codelines for the previous title
                     cheat[i-1].enabled = false;
-                }
-                if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
-                {
-                    i--;
-                    memset(&cheat[i].title, 0, LINE_LENGTH);
-                    memcpy(&cheat[i].title,&buffer,sizeof(&buffer)); //write THIS title over THAT title
+    
+                    if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
+                    {
+                        i--;
+                        memset(&cheat[i].title, 0, LINE_LENGTH);
+                        memcpy(&cheat[i].title,&buffer,sizeof(&buffer)); //write THIS title over THAT title
+                    }
                 }
                 codecounter = 0; //reset the codecounter
                 i++;
             }
             else
             {
-                sprintf(cheat[i].codes[codecounter],buffer);
-                codecounter++;
+                sprintf(cheat[i-1].codes[codecounter],buffer); //write the codeline
+                codecounter++; //we got another codeline
             }
             memset(&buffer, 0, LINE_LENGTH);
         }
@@ -184,8 +183,8 @@ void manage_cheats(int id, struct discHdr *gameList)
         int maxlines = i;
         for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
         {
-            cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],44,64+(n*28));
-            cheatDisabled[n] = Duplicate_Button(cheatDisabled[0],44,64+(n*28));
+            cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],44,114+(n*28));
+            cheatDisabled[n] = Duplicate_Button(cheatDisabled[0],44,114+(n*28));
         }
         fclose(txtfile);
         pages = (i/LINES_PER_PAGE)+1;
@@ -196,6 +195,12 @@ void manage_cheats(int id, struct discHdr *gameList)
             GetWiimoteData();
             if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)) //b or home to exit
             {
+                if(WindowPrompt(TX.ocarina,"Use these codes?",&yesButton,&noButton))
+                {
+                    struct discHdr *header = &gameList[id];
+                    sprintf(titleID,"%s",header->id);
+                    create_gct(cheat, maxlines,titleID); //go and make the gct file for the enabled cheats
+                }
                 return;
             }
             else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
@@ -207,6 +212,23 @@ void manage_cheats(int id, struct discHdr *gameList)
                     if(Button_Select(&cheatEnabled[n], pointer.p_x, pointer.p_y) || Button_Select(&cheatDisabled[n], pointer.p_x, pointer.p_y))
                         cheat[buttcheck].enabled = (cheat[buttcheck].enabled) ? false : true;
                 }
+                 if(pages>1)
+                 {
+                    if(Button_Select(&pageUpButton, pointer.p_x, pointer.p_y))
+                    {
+                        if(currpage<pages)
+                            currpage++;
+                        else
+                            currpage = 1;
+                    }
+                    else if(Button_Select(&pageDownButton, pointer.p_x, pointer.p_y))
+                    {
+                        if(currpage>1)
+                            currpage--;
+                        else
+                            currpage = pages;
+                    }
+                 }
             }
             else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_PLUS)) //page forward
             {
@@ -223,167 +245,47 @@ void manage_cheats(int id, struct discHdr *gameList)
                     currpage = pages;
             }
 
-        draw_covers();
-        GRRLIB_Rectangle(40, 56, 560, 376, 0xffffffdd, true); //draw a big boring box
-        GRRLIB_Rectangle(42, 58, 556, 372, 0x737373FF, true);
-        int step = 0;
-        sprintf(tTemp,"%d/%d",currpage,pages); //report page x of xx
-        CFreeTypeGX_DrawText(ttf14pt, 550, 80, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-        for(i=0;i<LINES_PER_PAGE;i++)
-        {
-            display = i+((currpage-1)*LINES_PER_PAGE);
-            if(display < (maxlines-1)) //only show up to the number of lines available
+            //draw_covers();
+            GRRLIB_Rectangle(40, 56, 560, 326, 0xffffffdd, true); //draw a big boring box
+            GRRLIB_Rectangle(42, 58, 556, 322, 0x737373FF, true);
+            int step = 0;
+            if(pages>1)
             {
-                sprintf(tTemp,"%d:%s has %d codes",display,cheat[(display)].title,cheat[display].codelines);
-                CFreeTypeGX_DrawText(ttf14pt, 90, 80+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-                step +=28;
-                if(cheat[display].enabled) //paint the appropriate cheat button state
-                    Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],0);
-                else
-                    Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],1);
+                sprintf(tTemp,"%d/%d",currpage,pages); //report page x of xx
+                CFreeTypeGX_DrawText(ttf14pt, 550, 80, tTemp, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
             }
-        }
-        for(n=0;n<display;n++) //hover the buttons
-        {
-            Button_Hover(&cheatEnabled[n],cheatEnabled[n].x,cheatEnabled[n].y);
-            Button_Hover(&cheatDisabled[n],cheatDisabled[n].x,cheatDisabled[n].y);
-        }
-        DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF); //HAND!
-        GRRLIB_Render();
+            for(i=0;i<LINES_PER_PAGE;i++)
+            {
+                display = i+((currpage-1)*LINES_PER_PAGE);
+                if(display < (maxlines-1)) //only show up to the number of lines available
+                {
+                sprintf(tTemp,"%s",cheat[(display)].title);
+                CFreeTypeGX_DrawText(ttf14pt, 90, 130+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+                    step +=28;
+                    if(cheat[display].enabled) //paint the appropriate cheat button state
+                        Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],0);
+                    else
+                        Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],1);
+                }
+            }
+            if(pages>1)
+            {
+                Button_Paint(&pageUpButton);
+                Button_Paint(&pageDownButton);
+                Button_Hover(&pageDownButton,pageDownButton.x,pageDownButton.y);
+                Button_Hover(&pageUpButton,pageUpButton.x,pageUpButton.y);
+            }
+            for(n=0;n<display;n++) //hover the buttons
+            {
+                Button_Hover(&cheatEnabled[n],cheatEnabled[n].x,cheatEnabled[n].y);
+                Button_Hover(&cheatDisabled[n],cheatDisabled[n].x,cheatDisabled[n].y);
+            }
+            DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF); //HAND!
+            GRRLIB_Render();
         }
     }
-    memset(&cheat, 0, sizeof(cheat));
-    return;
 
-
-
-        chdir("/");
-        chdir("GCT_PATH");
-
-
-
-
-        //cheat encoding by brkirch
-/*
-        FILE *codesFile, *gctFile;
-        char tempCode[16];
-        int vaildCharCount = 0, isComment = 0, currentChar, enableAll = 0, codeEnable = 0, i;
-        enableAll = 1;
-        codesFile = fopen("temp.txt", "r");
-        gctFile = fopen(gctname, "w");
-        fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0x00, 0xD0, 0xC0, 0xDE, 0x00, 0xD0, 0xC0, 0xDE);
-        currentChar = getc(codesFile);
-        if (!enableAll)
-            codeEnable = 0;
-        else
-            codeEnable = 1;
-        while (currentChar != EOF)
-        {
-            if (((currentChar >= 'a') && (currentChar <= 'z')) || ((currentChar >= 'A') && (currentChar <= 'Z')) || ((currentChar >= '0') && (currentChar <= '9')) || (currentChar == 10) || (currentChar == 13) || (currentChar == ' ') || (currentChar == '*'))
-            {
-                if ((currentChar == 10) || (currentChar == 13))
-                {
-                    if (vaildCharCount != 16)
-                    {
-                        vaildCharCount = 0;
-                        isComment = 0;
-                        if (!enableAll)
-                            codeEnable = 0;
-                        else
-                            codeEnable = 1;
-                    }
-                }
-                else if (((currentChar >= 'a') && (currentChar <= 'f')) || ((currentChar >= 'A') && (currentChar <= 'F')) || ((currentChar >= '0') && (currentChar <= '9')))
-                {
-                    if (codeEnable && !isComment && (vaildCharCount < 16))
-                        tempCode[vaildCharCount++] = currentChar;
-                    else if (vaildCharCount == 16)
-                        isComment = 1;
-                }
-                else if (currentChar == '*')
-                {
-                    codeEnable = 1;
-                    if (vaildCharCount != 0)
-                        isComment = 1;
-                }
-                else if (currentChar == ' ')
-                {
-                    if ((vaildCharCount != 0) && (vaildCharCount != 8) && (vaildCharCount != 16))
-                        isComment = 1;
-                }
-                else
-                {
-                    if (vaildCharCount != 0)
-                        isComment = 1;
-                }
-                if ((currentChar == ' ') || (currentChar == 10) || (currentChar == 13))
-                {
-                    if (vaildCharCount == 16 && !isComment)
-                    {
-                        if ((currentChar == 10) || (currentChar == 13))
-                        {
-                            vaildCharCount = 0;
-                            isComment = 0;
-                            if (enableAll == 0)
-                                codeEnable = 0;
-                            else
-                                codeEnable = 1;
-                        }
-                        else
-                            isComment = 1;
-                        currentChar = 0;
-                        for (i = 0; i < 16; i++)
-                        {
-                            if ((tempCode[i] >= 'a') && (tempCode[i] <= 'f'))
-                                currentChar += 10 + tempCode[i] - 'a';
-                            if ((tempCode[i] >= 'A') && (tempCode[i] <= 'F'))
-                                currentChar += 10 + tempCode[i] - 'A';
-                            if ((tempCode[i] >= '0') && (tempCode[i] <= '9'))
-                                currentChar += tempCode[i] - '0';
-                            if (i % 2 == 0)
-                            {
-                                currentChar *= 16;
-                            }
-                            else
-                            {
-                                fprintf(gctFile, "%c", currentChar);
-                                currentChar = 0;
-                            }
-                        }
-                    }
-                }
-            }
-            else if ((currentChar != 0) && (vaildCharCount != 0))
-                isComment = 1;
-            currentChar = getc(codesFile);
-        }
-        if (vaildCharCount == 16 && !isComment)
-        {
-            currentChar = 0;
-            for (i = 0; i < 16; i++)
-            {
-                if ((tempCode[i] >= 'a') && (tempCode[i] <= 'f'))
-                    currentChar += 10 + tempCode[i] - 'a';
-                if ((tempCode[i] >= 'A') && (tempCode[i] <= 'F'))
-                    currentChar += 10 + tempCode[i] - 'A';
-                if ((tempCode[i] >= '0') && (tempCode[i] <= '9'))
-                    currentChar += tempCode[i] - '0';
-                if (i % 2 == 0)
-                {
-                    currentChar *= 16;
-                }
-                else
-                {
-                    fprintf(gctFile, "%c", currentChar);
-                    currentChar = 0;
-                }
-            }
-        }
-        fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
-        fclose(codesFile);
-        fclose(gctFile);
-*/
-    
+    return;    
 }
 
 bool is_code(char* line)
@@ -443,3 +345,179 @@ bool check_download(char* titleID)
     fclose(txtfile); //it's good so close it
     return true;
 }
+
+void create_gct(CHEAT cheat,int cheatcount, char* titleID)
+{
+    //this is where we parse the selected cheat data into a gct file for ocarina
+    //cheat encoding by brkirch
+    char gctname[10];
+    sprintf(gctname,"%s.gct",titleID);
+    chdir("/");
+    chdir(GCT_PATH);
+    FILE *gctFile;
+    char tempCode[16];
+    int i,n;
+    gctFile = fopen(gctname, "wb");
+    fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0x00, 0xD0, 0xC0, 0xDE, 0x00, 0xD0, 0xC0, 0xDE); //gct header
+
+    for(i=0;i<cheatcount;i++) //main loop for checking each cheat
+    {
+        if(cheat[i].enabled) //if this cheat is enabled...
+        {
+            for(n=0;n<cheat[i].codelines;n++) //sub loop for getting the enabled codes
+            {
+                //pch = strtok(cheat[i].codes[n], " ");
+                char delims[] = " ";
+                char *pch = NULL;
+                pch = strtok( cheat[i].codes[n], delims );
+                while( pch != NULL )
+                {
+                    strcat(tempCode,pch); //get the whole 16 character code
+                    pch = strtok( NULL, delims );
+                }
+                int currentChar = 0;
+                int x;
+                for (x = 0; x < 16; x++) //HEXify the codeline
+                {
+                    if ((tempCode[x] >= 'a') && (tempCode[x] <= 'f'))
+                        currentChar += 10 + tempCode[x] - 'a';
+                    if ((tempCode[x] >= 'A') && (tempCode[x] <= 'F'))
+                        currentChar += 10 + tempCode[x] - 'A';
+                    if ((tempCode[x] >= '0') && (tempCode[x] <= '9'))
+                        currentChar += tempCode[x] - '0';
+                    if (x % 2 == 0)
+                    {
+                        currentChar *= 16;
+                    }
+                    else
+                    {
+                        fprintf(gctFile, "%c", currentChar); //write out the HEXified character
+                        currentChar = 0;
+                    }
+                }
+                memset(&tempCode, 0, sizeof(tempCode)); //clear the line
+            }
+        }
+    }
+    fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00); //gct footer
+    fclose(gctFile);
+    return;
+    
+/*
+    int vaildCharCount = 0, isComment = 0, currentChar, enableAll = 0, codeEnable = 0, i;
+    enableAll = 1;
+    gctFile = fopen(gctname, "w");
+    fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0x00, 0xD0, 0xC0, 0xDE, 0x00, 0xD0, 0xC0, 0xDE);
+   // currentChar = getc(codesFile);
+    if (!enableAll)
+        codeEnable = 0;
+    else
+        codeEnable = 1;
+    while (currentChar != EOF)
+    {
+        if (((currentChar >= 'a') && (currentChar <= 'z')) || ((currentChar >= 'A') && (currentChar <= 'Z')) || ((currentChar >= '0') && (currentChar <= '9')) || (currentChar == 10) || (currentChar == 13) || (currentChar == ' ') || (currentChar == '*'))
+        {
+            if ((currentChar == 10) || (currentChar == 13))
+            {
+                if (vaildCharCount != 16)
+                {
+                    vaildCharCount = 0;
+                    isComment = 0;
+                    if (!enableAll)
+                        codeEnable = 0;
+                    else
+                        codeEnable = 1;
+                }
+            }
+            else if (((currentChar >= 'a') && (currentChar <= 'f')) || ((currentChar >= 'A') && (currentChar <= 'F')) || ((currentChar >= '0') && (currentChar <= '9')))
+            {
+                if (cheat[i].enabled && cheat[1].codelines>0 && (vaildCharCount < 16))
+                    tempCode[vaildCharCount++] = currentChar;
+                else if (vaildCharCount == 16)
+                    isComment = 1;
+            }
+            else if (currentChar == '*')
+            {
+                codeEnable = 1;
+                if (vaildCharCount != 0)
+                    isComment = 1;
+            }
+            else if (currentChar == ' ')
+            {
+                if ((vaildCharCount != 0) && (vaildCharCount != 8) && (vaildCharCount != 16))
+                    isComment = 1;
+            }
+            else
+            {
+                if (vaildCharCount != 0)
+                    isComment = 1;
+            }
+            if ((currentChar == ' ') || (currentChar == 10) || (currentChar == 13))
+            {
+                if (vaildCharCount == 16 && !isComment)
+                {
+                    if ((currentChar == 10) || (currentChar == 13))
+                    {
+                        vaildCharCount = 0;
+                        isComment = 0;
+                        if (enableAll == 0)
+                            codeEnable = 0;
+                        else
+                            codeEnable = 1;
+                    }
+                    else
+                        isComment = 1;
+                    currentChar = 0;
+                    for (i = 0; i < 16; i++)
+                    {
+                        if ((tempCode[i] >= 'a') && (tempCode[i] <= 'f'))
+                            currentChar += 10 + tempCode[i] - 'a';
+                        if ((tempCode[i] >= 'A') && (tempCode[i] <= 'F'))
+                            currentChar += 10 + tempCode[i] - 'A';
+                        if ((tempCode[i] >= '0') && (tempCode[i] <= '9'))
+                            currentChar += tempCode[i] - '0';
+                        if (i % 2 == 0)
+                        {
+                            currentChar *= 16;
+                        }
+                        else
+                        {
+                            fprintf(gctFile, "%c", currentChar);
+                            currentChar = 0;
+                        }
+                    }
+                }
+            }
+        }
+        else if ((currentChar != 0) && (vaildCharCount != 0))
+            isComment = 1;
+        //currentChar = getc(codesFile);
+    }
+    if (vaildCharCount == 16 && !isComment)
+    {
+        currentChar = 0;
+        for (i = 0; i < 16; i++)
+        {
+            if ((tempCode[i] >= 'a') && (tempCode[i] <= 'f'))
+                currentChar += 10 + tempCode[i] - 'a';
+            if ((tempCode[i] >= 'A') && (tempCode[i] <= 'F'))
+                currentChar += 10 + tempCode[i] - 'A';
+            if ((tempCode[i] >= '0') && (tempCode[i] <= '9'))
+                currentChar += tempCode[i] - '0';
+            if (i % 2 == 0)
+            {
+                currentChar *= 16;
+            }
+            else
+            {
+                fprintf(gctFile, "%c", currentChar);
+                currentChar = 0;
+            }
+        }
+    }
+    fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
+    fclose(gctFile);
+    return;
+*/
+}
+

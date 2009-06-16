@@ -22,7 +22,7 @@ extern "C" {
     #define GCT_PATH "sd:/codes/"
     #define CODESITE "http://www.usbgecko.com/codes/codes/"
     #define LINES_PER_PAGE 10
-    #define LINE_LENGTH 128
+    #define LINE_LENGTH 50
     #define MAX_CODES 100
     #define MAX_CHEATS 500
 
@@ -39,6 +39,7 @@ typedef struct {
     void manage_cheats(int id, struct discHdr *gameList);
     bool is_code(char* line);
     bool check_download(char* titleID);
+    void create_gct(CHEAT cheat, int cheatcount,char* titleID);
 
 #ifdef	__cplusplus
 }
