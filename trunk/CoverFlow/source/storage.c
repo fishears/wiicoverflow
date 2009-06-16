@@ -173,12 +173,13 @@ bool check_write_access(){
     fp = fopen(USBLOADER_PATH "/temp.txt","wb");
     if(fp==NULL)
     {
-        WindowPrompt(TX.error,"SD card can not be written to",&okButton,0);
+        WindowPrompt(TX.error, TX.errorSD, &okButton,0);
         return false;
     }
     else
     {
-        chdir(USBLOADER_PATH);
+        fclose(fp);
+		chdir(USBLOADER_PATH);
         remove("temp.txt");
         return true;
     }
@@ -285,7 +286,7 @@ s32 GetEntries()
 	memset(buffer, 0, len);
 
 	self.progress+=0.05;
-	sprintf(self.debugMsg, "Getting game list" );
+	sprintf(self.debugMsg, TX.gettingGL );
 	Paint_Progress(self.progress, self.debugMsg);
 	
 	/* Get header list */
@@ -294,7 +295,7 @@ s32 GetEntries()
 		goto err;
 
 	self.progress+=0.05;
-	sprintf(self.debugMsg,"Sorting game list" );
+	sprintf(self.debugMsg, TX.sortingGL );
 	Paint_Progress(self.progress, self.debugMsg);
 	
 	/* Sort entries */
@@ -361,14 +362,14 @@ err:
 
 bool Init_Game_List(){
 
-	Paint_Progress(self.progress, "Initialize WBFS Game List...");
+	Paint_Progress(self.progress, TX.initWBFS_GL);
 	
 	/* Try to open device */
 	if (WBFS_Open() >= 0) {
 		/* Get game list */
 		
 		self.progress+=0.05;
-		Paint_Progress(self.progress, "Getting Entries...");
+		Paint_Progress(self.progress, TX.getEntryWBFS);
 		GetEntries();
 		return true;
 	}

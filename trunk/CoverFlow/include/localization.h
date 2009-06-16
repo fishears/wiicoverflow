@@ -202,6 +202,11 @@ struct LANGUAGE
 	char initDisc[40];				//163
 	char homeMenu[20];				//164
 	char homeWiimote[30];			//165
+	char errorSD[80];				//166
+	char gettingGL[30];				//167
+	char sortingGL[30];				//168
+	char initWBFS_GL[50];			//169
+	char getEntryWBFS[50];			//170
 	
 // Buttons	
 	char addB[15];					//B01
@@ -227,6 +232,7 @@ struct LANGUAGE
 	char restoreB[15];				//B21
 	char fatB[15];					//B22
 	char thinB[15];					//B23
+	char manageB[15];				//B24
 };
 
 extern struct LANGUAGE TX;
