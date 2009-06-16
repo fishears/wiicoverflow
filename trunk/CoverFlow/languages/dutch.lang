@@ -158,11 +158,11 @@ Turkish = Turks
 initWPAD = Init WPAD
 initFS = Initialiseren BestandsSysteem
 initSys = Init Sys...
-initUSBFS = Initializing USBFS...
-initDisc = Initializing Disc...
+initUSBFS = Initialiseren USBFS...
+initDisc = Initialiseren Disc...
 obsoleteGL = Uw config file is verouderd en|zal verwijderd worden.|Druk OK om door te gaan 
 homeMenu = HOME Menu
-homeWiimote = Wiimote Information
+homeWiimote = Wiimote Informatie
 
 ###########
 # Buttons #
@@ -182,12 +182,12 @@ toggleOnB = aan
 toggleOffB = uit
 whiteB = wit
 blackB = zwart
-homeMenuTopB = afsluiten
+homeMenuTopB = Sluiten
 wiimenuB = Wii menu
 loaderB = Lader
 languagesB = Talen
 coversB = Hoesjes
 titlesB = Titels
-restoreB = Restore
-fatB = Fat
-thinB = Thin
+restoreB = Herstel
+fatB = Dik
+thinB = Dun
