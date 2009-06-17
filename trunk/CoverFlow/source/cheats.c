@@ -358,6 +358,13 @@ void create_gct(CHEAT cheat,int cheatcount, char* titleID)
     char tempCode[16];
     int i,n;
     gctFile = fopen(gctname, "wb");
+	
+	if(!gctFile)
+	{
+		WindowPrompt("Error","Could not create GCT.",&okButton,0);
+		return;
+	}
+	
     fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0x00, 0xD0, 0xC0, 0xDE, 0x00, 0xD0, 0xC0, 0xDE); //gct header
 
     for(i=0;i<cheatcount;i++) //main loop for checking each cheat
