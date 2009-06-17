@@ -123,10 +123,11 @@ void manage_cheats(int id, struct discHdr *gameList)
     CHEAT cheat;
     char buffer[LINE_LENGTH]; //dummy line for tests
     char lastline[LINE_LENGTH]; //hold the game name (which also appears at end of file)
-    char filename[10];
+    char filename[12];
     char titleID[7];
     char path[50];
-    int i, codecounter = 0;;
+    int i, codecounter = 0;
+	bool doloop = true;
     struct discHdr *header = &gameList[id];
     sprintf(titleID,"%s",header->id);
     sprintf(filename, "%s.txt", titleID);
@@ -134,9 +135,12 @@ void manage_cheats(int id, struct discHdr *gameList)
     sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
     chdir(path);
     FILE *txtfile=NULL;
+	//WindowPrompt("DEBUG","File About to open",&yesButton,&noButton);
     txtfile = fopen(filename, "r");
+	
     if(txtfile)
     {
+		//WindowPrompt("DEBUG","File Open",&yesButton,&noButton);
         fgets (buffer, sizeof buffer, txtfile ); //discard 1st line -> titleID
         memset(&buffer, 0, sizeof(buffer));
         memset(&lastline,0,LINE_LENGTH);
@@ -144,35 +148,44 @@ void manage_cheats(int id, struct discHdr *gameList)
         fgets (buffer, sizeof buffer, txtfile ); //discard 3rd line -> ""
         memset(&buffer, 0, sizeof(buffer));
         i = 0;
-        while(!feof(txtfile) && strcmp(lastline,buffer)!=0) //parse the rest of the txt file
+		//WindowPrompt("DEBUG","Parsing File",&yesButton,&noButton);
+        while(!feof(txtfile) && strcmp(lastline,buffer)!=0 && doloop) //parse the rest of the txt file
         {
-            fgets(buffer,sizeof buffer,txtfile); //get a line into buffer
-            if(!is_code(buffer) && strlen(buffer)!=1) //if its not a code and not a blank line
-            {
-                sprintf(cheat[i].title,buffer); //write it as a new title
-                cheat[i].codelines = 0; //set new title codelines to zero
-                if(i>0) //only write codelines if this isn't the first title
-                {
-                    cheat[i-1].codelines = codecounter-1; //write the number of codelines for the previous title
-                    cheat[i-1].enabled = false;
-    
-                    if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
-                    {
-                        i--;
-                        memset(&cheat[i].title, 0, LINE_LENGTH);
-                        memcpy(&cheat[i].title,&buffer,sizeof(&buffer)); //write THIS title over THAT title
-                    }
-                }
-                codecounter = 0; //reset the codecounter
-                i++;
-            }
-            else
-            {
-                sprintf(cheat[i-1].codes[codecounter],buffer); //write the codeline
-                codecounter++; //we got another codeline
-            }
-            memset(&buffer, 0, LINE_LENGTH);
+			if(i < MAX_CHEATS)
+			{
+				fgets(buffer,sizeof buffer,txtfile); //get a line into buffer
+				if(!is_code(buffer) && strlen(buffer)!=1) //if its not a code and not a blank line
+				{
+					sprintf(cheat[i].title,buffer); //write it as a new title
+					cheat[i].codelines = 0; //set new title codelines to zero
+					if(i>0) //only write codelines if this isn't the first title
+					{
+						cheat[i-1].codelines = codecounter-1; //write the number of codelines for the previous title
+						cheat[i-1].enabled = false;
+		
+						if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
+						{
+							i--;
+							memset(&cheat[i].title, 0, LINE_LENGTH);
+							memcpy(&cheat[i].title,&buffer,sizeof(&buffer)); //write THIS title over THAT title
+						}
+					}
+					codecounter = 0; //reset the codecounter
+					i++;
+				}
+				else
+				{
+					sprintf(cheat[i-1].codes[codecounter],buffer); //write the codeline
+					codecounter++; //we got another codeline
+				}
+				memset(&buffer, 0, LINE_LENGTH);
+			}
+			else
+			{
+				doloop = false;
+			}
         }
+		//WindowPrompt("DEBUG","Cheats parsed",&yesButton,&noButton);
         memset(&lastline,0,LINE_LENGTH);
 
         char tTemp[135];
@@ -181,12 +194,14 @@ void manage_cheats(int id, struct discHdr *gameList)
         int display;
         int n;
         int maxlines = i;
+		//WindowPrompt("DEBUG","Create Buttons",&yesButton,&noButton);
         for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
         {
             cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],44,114+(n*28));
             cheatDisabled[n] = Duplicate_Button(cheatDisabled[0],44,114+(n*28));
         }
         fclose(txtfile);
+		//WindowPrompt("DEBUG","File Closed",&yesButton,&noButton);
         pages = (i/LINES_PER_PAGE)+1;
 
         while(1) //cheat manager GUI loop
@@ -350,7 +365,9 @@ void create_gct(CHEAT cheat,int cheatcount, char* titleID)
 {
     //this is where we parse the selected cheat data into a gct file for ocarina
     //cheat encoding by brkirch
-    char gctname[10];
+    char gctname[12]; //i dont think 10 is enough... (7 + 4 = 11 (Yes i know byte 7 should be 0x00))
+    memset(&gctname, 0, sizeof(gctname));
+	
     sprintf(gctname,"%s.gct",titleID);
     chdir("/");
     chdir(GCT_PATH);
@@ -361,7 +378,7 @@ void create_gct(CHEAT cheat,int cheatcount, char* titleID)
 	
 	if(!gctFile)
 	{
-		WindowPrompt("Error","Could not create GCT.",&okButton,0);
+		WindowPrompt("Error","Could not create (or Open) GCT.",&okButton,0);
 		return;
 	}
 	
