@@ -360,7 +360,7 @@ void create_gct(CHEAT cheat,int cheatcount, char* titleID)
     //this is where we parse the selected cheat data into a gct file for ocarina
     //char to hex by brkirch
     char gctname[12]; //i dont think 10 is enough... (7 + 4 = 11 (Yes i know byte 7 should be 0x00))
-    memset(&gctname, 0, sizeof(gctname));
+    memset(gctname, 0, sizeof(gctname));
 	
     sprintf(gctname,"%s.gct",titleID);
     chdir("/");
@@ -410,7 +410,7 @@ void create_gct(CHEAT cheat,int cheatcount, char* titleID)
                         currentChar = 0;
                     }
                 }
-                memset(&tempCode, 0, sizeof(tempCode)); //clear the line
+                memset(tempCode, 0, sizeof(tempCode)); //clear the line
             }
         }
     }
