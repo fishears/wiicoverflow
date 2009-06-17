@@ -34,6 +34,21 @@ typedef struct {
         int codelines; //number of lines of cheat codes
 } CHEAT[MAX_CHEATS];
 
+struct llCODE{
+        unsigned int FirstBit; //first hex number
+        unsigned int SecondBit; //second hex number
+        struct llCODE * parent; 
+        struct llCODE * child; 
+};
+
+struct llCHEAT{
+        char title[LINE_LENGTH]; //cheat description text
+        bool enabled; //is the cheat active
+        struct llCODE * CodeList; //cheat codes list
+        struct llCHEAT * parent; 
+        struct llCHEAT * child; 
+};
+
     
     bool check_txt(int id, struct discHdr *gameList);
     bool check_gct(int id, struct discHdr *gameList);
