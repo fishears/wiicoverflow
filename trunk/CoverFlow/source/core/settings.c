@@ -347,7 +347,7 @@ void createEmptyWiiCoverFlowFile()
 		fclose(fp);
 	}
 	else
-		WindowPrompt(TX.error, "can't create wiicoverflow.xml ", 0, &okButton);
+		WindowPrompt(TX.error, TX.noCreateWCFXML, 0, &okButton);
 }
 
 

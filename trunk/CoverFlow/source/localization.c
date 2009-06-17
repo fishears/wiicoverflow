@@ -248,7 +248,8 @@ void languageDefault()
 	snprintf(TX.sortingGL, sizeof(TX.sortingGL), "Sorting game list");
 	snprintf(TX.initWBFS_GL, sizeof(TX.initWBFS_GL), "Initialize WBFS Game List...");
 	snprintf(TX.getEntryWBFS, sizeof(TX.getEntryWBFS), "Getting Entries...");
-						
+	snprintf(TX.noCreateWCFXML, sizeof(TX.noCreateWCFXML), "can't create wiicoverflow.xml");
+			
 // Buttons	
 
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
@@ -983,10 +984,10 @@ void languageSet(char *name, char *val)
 		strcopy(TX.getEntryWBFS, val, sizeof(TX.getEntryWBFS));
 		return;
 	}	
-
-
-
-
+	if (strcmp(name, "noCreateWCFXML") == 0) {
+		strcopy(TX.noCreateWCFXML, val, sizeof(TX.noCreateWCFXML));
+		return;
+	}	
 
 
 //////////////// Buttons //////////////

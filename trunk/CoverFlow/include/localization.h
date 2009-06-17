@@ -207,7 +207,7 @@ struct LANGUAGE
 	char sortingGL[30];				//168
 	char initWBFS_GL[50];			//169
 	char getEntryWBFS[50];			//170
-	
+	char noCreateWCFXML[80];		//171
 // Buttons	
 	char addB[15];					//B01
 	char deleteB[15];				//B02
