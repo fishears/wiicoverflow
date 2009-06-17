@@ -127,7 +127,6 @@ void manage_cheats(int id, struct discHdr *gameList)
     char titleID[7];
     char path[50];
     int i, codecounter = 0;
-	bool doloop = true;
     struct discHdr *header = &gameList[id];
     sprintf(titleID,"%s",header->id);
     sprintf(filename, "%s.txt", titleID);
@@ -143,47 +142,41 @@ void manage_cheats(int id, struct discHdr *gameList)
 		//WindowPrompt("DEBUG","File Open",&yesButton,&noButton);
         fgets (buffer, sizeof buffer, txtfile ); //discard 1st line -> titleID
         memset(&buffer, 0, sizeof(buffer));
-        memset(&lastline,0,LINE_LENGTH);
+        memset(&lastline,0,sizeof lastline);
         fgets(lastline, sizeof lastline, txtfile); //keep the 2nd line for testing against last line
         fgets (buffer, sizeof buffer, txtfile ); //discard 3rd line -> ""
         memset(&buffer, 0, sizeof(buffer));
         i = 0;
 		//WindowPrompt("DEBUG","Parsing File",&yesButton,&noButton);
-        while(!feof(txtfile) && strcmp(lastline,buffer)!=0 && doloop) //parse the rest of the txt file
+        while(!feof(txtfile) && strcmp(lastline,buffer) && i<MAX_CHEATS) //parse the rest of the txt file
         {
-			if(i < MAX_CHEATS)
-			{
-				fgets(buffer,sizeof buffer,txtfile); //get a line into buffer
-				if(!is_code(buffer) && strlen(buffer)!=1) //if its not a code and not a blank line
-				{
-					sprintf(cheat[i].title,buffer); //write it as a new title
-					cheat[i].codelines = 0; //set new title codelines to zero
-					if(i>0) //only write codelines if this isn't the first title
-					{
-						cheat[i-1].codelines = codecounter-1; //write the number of codelines for the previous title
-						cheat[i-1].enabled = false;
-		
-						if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
-						{
-							i--;
-							memset(&cheat[i].title, 0, LINE_LENGTH);
-							memcpy(&cheat[i].title,&buffer,sizeof(&buffer)); //write THIS title over THAT title
-						}
-					}
-					codecounter = 0; //reset the codecounter
-					i++;
-				}
-				else
-				{
-					sprintf(cheat[i-1].codes[codecounter],buffer); //write the codeline
-					codecounter++; //we got another codeline
-				}
-				memset(&buffer, 0, LINE_LENGTH);
-			}
-			else
-			{
-				doloop = false;
-			}
+
+            fgets(buffer,sizeof buffer,txtfile); //get a line into buffer
+            if(!is_code(buffer) && strlen(buffer)!=1) //if its not a code and not a blank line
+            {
+                    sprintf(cheat[i].title,buffer); //write it as a new title
+                    cheat[i].codelines = 0; //set new title codelines to zero
+                    if(i>0) //only write codelines if this isn't the first title
+                    {
+                            cheat[i-1].codelines = codecounter-1; //write the number of codelines for the previous title
+                            cheat[i-1].enabled = false;
+
+                            if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
+                            {
+                                    i--;
+                                    memset(&cheat[i].title, 0, LINE_LENGTH);
+                                    memcpy(&cheat[i].title,&buffer,sizeof(&buffer)); //write THIS title over THAT title
+                            }
+                    }
+                    codecounter = 0; //reset the codecounter
+                    i++;
+            }
+            else
+            {
+                    sprintf(cheat[i-1].codes[codecounter],buffer); //write the codeline
+                    codecounter++; //we got another codeline
+            }
+            memset(&buffer, 0, LINE_LENGTH);
         }
 		//WindowPrompt("DEBUG","Cheats parsed",&yesButton,&noButton);
         memset(&lastline,0,LINE_LENGTH);
@@ -274,7 +267,8 @@ void manage_cheats(int id, struct discHdr *gameList)
                 display = i+((currpage-1)*LINES_PER_PAGE);
                 if(display < (maxlines-1)) //only show up to the number of lines available
                 {
-                sprintf(tTemp,"%s",cheat[(display)].title);
+                //sprintf(tTemp,"%s",cheat[(display)].title);
+                sprintf(tTemp,"%s has %d codes",cheat[(display)].title,cheat[display].codelines);
                 CFreeTypeGX_DrawText(ttf14pt, 90, 130+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
                     step +=28;
                     if(cheat[display].enabled) //paint the appropriate cheat button state
@@ -364,7 +358,7 @@ bool check_download(char* titleID)
 void create_gct(CHEAT cheat,int cheatcount, char* titleID)
 {
     //this is where we parse the selected cheat data into a gct file for ocarina
-    //cheat encoding by brkirch
+    //char to hex by brkirch
     char gctname[12]; //i dont think 10 is enough... (7 + 4 = 11 (Yes i know byte 7 should be 0x00))
     memset(&gctname, 0, sizeof(gctname));
 	
@@ -375,13 +369,11 @@ void create_gct(CHEAT cheat,int cheatcount, char* titleID)
     char tempCode[16];
     int i,n;
     gctFile = fopen(gctname, "wb");
-	
-	if(!gctFile)
-	{
-		WindowPrompt("Error","Could not create (or Open) GCT.",&okButton,0);
-		return;
-	}
-	
+    if(!gctFile)
+    {
+            WindowPrompt("Error","Could not create (or Open) GCT.",&okButton,0);
+            return;
+    }
     fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0x00, 0xD0, 0xC0, 0xDE, 0x00, 0xD0, 0xC0, 0xDE); //gct header
 
     for(i=0;i<cheatcount;i++) //main loop for checking each cheat
@@ -390,14 +382,13 @@ void create_gct(CHEAT cheat,int cheatcount, char* titleID)
         {
             for(n=0;n<cheat[i].codelines;n++) //sub loop for getting the enabled codes
             {
-                //pch = strtok(cheat[i].codes[n], " ");
-                char delims[] = " ";
                 char *pch = NULL;
-                pch = strtok( cheat[i].codes[n], delims );
+                const char delim[] = " ";
+                pch = strtok( cheat[i].codes[n], delim);
                 while( pch != NULL )
                 {
-                    strcat(tempCode,pch); //get the whole 16 character code
-                    pch = strtok( NULL, delims );
+                    strcat(tempCode,pch);
+                    pch = strtok( NULL, delim);
                 }
                 int currentChar = 0;
                 int x;
@@ -427,121 +418,6 @@ void create_gct(CHEAT cheat,int cheatcount, char* titleID)
     fclose(gctFile);
     return;
     
-/*
-    int vaildCharCount = 0, isComment = 0, currentChar, enableAll = 0, codeEnable = 0, i;
-    enableAll = 1;
-    gctFile = fopen(gctname, "w");
-    fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0x00, 0xD0, 0xC0, 0xDE, 0x00, 0xD0, 0xC0, 0xDE);
-   // currentChar = getc(codesFile);
-    if (!enableAll)
-        codeEnable = 0;
-    else
-        codeEnable = 1;
-    while (currentChar != EOF)
-    {
-        if (((currentChar >= 'a') && (currentChar <= 'z')) || ((currentChar >= 'A') && (currentChar <= 'Z')) || ((currentChar >= '0') && (currentChar <= '9')) || (currentChar == 10) || (currentChar == 13) || (currentChar == ' ') || (currentChar == '*'))
-        {
-            if ((currentChar == 10) || (currentChar == 13))
-            {
-                if (vaildCharCount != 16)
-                {
-                    vaildCharCount = 0;
-                    isComment = 0;
-                    if (!enableAll)
-                        codeEnable = 0;
-                    else
-                        codeEnable = 1;
-                }
-            }
-            else if (((currentChar >= 'a') && (currentChar <= 'f')) || ((currentChar >= 'A') && (currentChar <= 'F')) || ((currentChar >= '0') && (currentChar <= '9')))
-            {
-                if (cheat[i].enabled && cheat[1].codelines>0 && (vaildCharCount < 16))
-                    tempCode[vaildCharCount++] = currentChar;
-                else if (vaildCharCount == 16)
-                    isComment = 1;
-            }
-            else if (currentChar == '*')
-            {
-                codeEnable = 1;
-                if (vaildCharCount != 0)
-                    isComment = 1;
-            }
-            else if (currentChar == ' ')
-            {
-                if ((vaildCharCount != 0) && (vaildCharCount != 8) && (vaildCharCount != 16))
-                    isComment = 1;
-            }
-            else
-            {
-                if (vaildCharCount != 0)
-                    isComment = 1;
-            }
-            if ((currentChar == ' ') || (currentChar == 10) || (currentChar == 13))
-            {
-                if (vaildCharCount == 16 && !isComment)
-                {
-                    if ((currentChar == 10) || (currentChar == 13))
-                    {
-                        vaildCharCount = 0;
-                        isComment = 0;
-                        if (enableAll == 0)
-                            codeEnable = 0;
-                        else
-                            codeEnable = 1;
-                    }
-                    else
-                        isComment = 1;
-                    currentChar = 0;
-                    for (i = 0; i < 16; i++)
-                    {
-                        if ((tempCode[i] >= 'a') && (tempCode[i] <= 'f'))
-                            currentChar += 10 + tempCode[i] - 'a';
-                        if ((tempCode[i] >= 'A') && (tempCode[i] <= 'F'))
-                            currentChar += 10 + tempCode[i] - 'A';
-                        if ((tempCode[i] >= '0') && (tempCode[i] <= '9'))
-                            currentChar += tempCode[i] - '0';
-                        if (i % 2 == 0)
-                        {
-                            currentChar *= 16;
-                        }
-                        else
-                        {
-                            fprintf(gctFile, "%c", currentChar);
-                            currentChar = 0;
-                        }
-                    }
-                }
-            }
-        }
-        else if ((currentChar != 0) && (vaildCharCount != 0))
-            isComment = 1;
-        //currentChar = getc(codesFile);
-    }
-    if (vaildCharCount == 16 && !isComment)
-    {
-        currentChar = 0;
-        for (i = 0; i < 16; i++)
-        {
-            if ((tempCode[i] >= 'a') && (tempCode[i] <= 'f'))
-                currentChar += 10 + tempCode[i] - 'a';
-            if ((tempCode[i] >= 'A') && (tempCode[i] <= 'F'))
-                currentChar += 10 + tempCode[i] - 'A';
-            if ((tempCode[i] >= '0') && (tempCode[i] <= '9'))
-                currentChar += tempCode[i] - '0';
-            if (i % 2 == 0)
-            {
-                currentChar *= 16;
-            }
-            else
-            {
-                fprintf(gctFile, "%c", currentChar);
-                currentChar = 0;
-            }
-        }
-    }
-    fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
-    fclose(gctFile);
-    return;
-*/
+
 }
 
