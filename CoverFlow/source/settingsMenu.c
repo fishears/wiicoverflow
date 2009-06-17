@@ -279,7 +279,7 @@ void Settings_Menu_Show()
 							else
 									WindowPrompt(TX.error, TX.errNetTitles, &okButton, 0);
 						}
-}
+					}
 					else if (Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
 					{
 						if (settings.theme)

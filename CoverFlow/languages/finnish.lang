@@ -10,7 +10,7 @@ someErrors = määrittelemätön virhe
 checkNextCover = Seuraava kansikuva...%s
 opFinished = Toiminto valmis!
 pressA = Paina A jatkaaksesi
-configError = Virhe asetuksissa, MAX_DNS_ENTRIES| saavutettu vaikka lista on tyhjä|
+configError = Virhe asetuksissa, MAX_DNS_ENTRIES saavutettu vaikka lista on tyhjä
 errorsaveGL = Pelilistan tallennus epäonnistui!
 errorcreateGL = Pelilistan luonti epäonnistui!
 consoleDefault = Konsolin asetus
@@ -39,7 +39,7 @@ ocarina = Ocarina:
 language = Kieli:
 videoMode = Videotila:
 patchVIDTV = VIDTV-korjaus:
-errorConnect = Funktio net_read() palautti virheen.  Virhekoodi: %i|
+errorConnect = Funktio net_read() palautti virheen.  Virhekoodi: %i
 URLnoBegin = URL:sta '%s' puuttuu 'http://'|
 URLnoPath = URL:sta '%s' puuttuu polku|
 URLnoDomain = URL:sta '%s' puuttuu domain|
@@ -158,11 +158,11 @@ Turkish = Turkki
 initWPAD = Käynnistetään WPAD...
 initFS = Käynnistetään tiedostojärjestelmä...
 obsoleteGL = Asetustiedosto on|vanhentunut, joten se poistetaan.|Paina OK jatkaaksesi.
-initSys = Init Sys...
-initUSBFS = Initializing USBFS...
-initDisc = Initializing Disc...
+initSys = Käynnistetään järjestelmä...
+initUSBFS = Käynnistetään USBFS...
+initDisc = Käynnistetään levy...
 homeMenu = HOME Menu
-homeWiimote = Wiimote Information
+homeWiimote = Wiimote-tiedot
 
 ###########
 # Buttons #
@@ -188,7 +188,6 @@ loaderB = Loader
 languagesB = Kielet
 coversB = Kannet
 titlesB = Nimet
-restoreB = Restore
-fatB = Fat
-thinB = Thin
-
+restoreB = Palauta
+fatB = Leveä
+thinB = Ohut
