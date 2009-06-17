@@ -21,27 +21,16 @@ extern "C" {
     #define TXT_PATH "/txtcodes/"
     #define GCT_PATH "sd:/codes/"
     #define CODESITE "http://www.usbgecko.com/codes/codes/"
-    #define LINES_PER_PAGE 10
-    #define LINE_LENGTH 50
-    #define MAX_CODES 100
-    #define MAX_CHEATS 10 /*I Changed this from 500 to 10 just to get it working*/
+    #define LINES_PER_PAGE 9 //lines per page to display
+    #define LINE_LENGTH 50 //max title line length
+    #define MAX_CODES 50 //max number of cheat codes
+    #define CHEAT_LINE 20 //cheat codeline length
+    #define MAX_CHEATS 30 //maximum number of cheats per game
 
-
-/*
-   Wow... lots of mem hogged here...
-   Every time you call "manage_cheats" you try to reserve
-   500*(100 + 500*100) bytes
-   500*50K = 25000K or ~25 MB
-   
-   Is my math right?
-   
-   No wonder I'm getting code dumps on the call :) Changed max cheats to 10 for now
-   
- */
 typedef struct {
         char title[LINE_LENGTH]; //cheat description text
         bool enabled; //is the cheat active
-        char codes[MAX_CODES][LINE_LENGTH]; //cheat codes block
+        char codes[MAX_CODES][CHEAT_LINE]; //cheat codes block
         int codelines; //number of lines of cheat codes
 } CHEAT[MAX_CHEATS];
 
