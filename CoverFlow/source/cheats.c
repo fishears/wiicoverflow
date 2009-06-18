@@ -270,7 +270,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                 display = i+((currpage-1)*LINES_PER_PAGE);
                 if(display < (maxlines-1)) //only show up to the number of lines available
                 {
-                sprintf(tTemp,"%s",cheat[display]);
+                sprintf(tTemp,"%s",cheat[display].title);
                 CFreeTypeGX_DrawText(ttf14pt, 90, 130+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
                     step +=28;
                     if(cheat[display].enabled) //paint the appropriate cheat button state
@@ -347,15 +347,18 @@ bool check_download(char* titleID)
         if(strcmp(pch,"<!DOCTYPE")==0) //test for a bad file
         {
             remove(filename); //it's bad so delete it
+			free(msg);
             return false;
         }
         else
         {
             fclose(txtfile); //it's good so close it
+			free(msg);
             return true;
         }
     }
     fclose(txtfile); //it's good so close it
+	free(msg);
     return true;
 }
 
