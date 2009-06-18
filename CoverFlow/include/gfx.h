@@ -119,6 +119,7 @@ Button cheatDisabled[10];
 Button manageCheatsButton;
 Button pageUpButton;
 Button pageDownButton;
+Button cheatDoneButton;
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg cover_texture_3d;

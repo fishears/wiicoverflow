@@ -335,6 +335,8 @@ void Init_Buttons()
     manageCheatsButton      = Duplicate_Button_TTF(okButton, 468, 198, TX.manageB);
 	pageUpButton            = Duplicate_Button(vidupButton,508,60);
     pageDownButton          = Duplicate_Button(viddownButton,480,60);
+    cheatDoneButton         = Duplicate_Button_TTF(okButton,44,60,TX.done);
+
 } // End Init_Buttons();
 
 void DrawSlider(int yPos, int theme_id)

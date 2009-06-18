@@ -166,16 +166,7 @@ void checkFiles(){
 		createEmptyGameSettingsFile();
 	else
 		fclose(fp);
-		
-		
-	fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
-	
-	if(fp == NULL)
-		createEmptyWiiCoverFlowFile();
-	else
-		fclose(fp);	
 }
-
 
 bool check_write_access(){
     FILE* fp;
