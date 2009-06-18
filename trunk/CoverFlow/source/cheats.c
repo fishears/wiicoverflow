@@ -32,13 +32,13 @@ bool check_txt(int id, struct discHdr *gameList)
     txtfile = fopen(filename, "r");
     if(txtfile)
     {
-            //WindowPrompt(filename,"txt codes found on SD",&okButton,0);
+            WindowPrompt(filename,"txt codes found on SD",&okButton,0);
             fclose(txtfile);
             return true;
     }
     else
     {
-        //WindowPrompt(filename,"txt codes not found",&okButton,0);
+        WindowPrompt(filename,"txt codes not found",&okButton,0);
         return false;
     }
 }
@@ -46,10 +46,8 @@ bool check_txt(int id, struct discHdr *gameList)
 bool check_gct(int id, struct discHdr *gameList)
 {
     //check to see if the game has a gct cheat file
-    char buffer[500][128]; //500 lines of cheat codes at 128 chars per line
     char filename[10];
     char titleID[7];
-    //int i;
     struct discHdr *header = &gameList[id];
     sprintf(titleID,"%s",header->id);
     sprintf(filename, "%s.gct", titleID);
@@ -59,7 +57,6 @@ bool check_gct(int id, struct discHdr *gameList)
     txtfile = fopen(filename, "r");
     if(txtfile)
     {
-        fgets ( buffer[0], sizeof buffer[0], txtfile );
         WindowPrompt(filename,"gct file found",&okButton,0);
         fclose(txtfile);
         return true;
@@ -123,7 +120,7 @@ void manage_cheats(int id, struct discHdr *gameList)
     CHEAT cheat;
     char buffer[LINE_LENGTH]; //dummy line for tests
     char lastline[LINE_LENGTH]; //hold the game name (which also appears at end of file)
-    char filename[12];
+    char filename[10];
     char titleID[7];
     char path[50];
     int i, codecounter = 0;
@@ -141,11 +138,11 @@ void manage_cheats(int id, struct discHdr *gameList)
     {
 		//WindowPrompt("DEBUG","File Open",&yesButton,&noButton);
         fgets (buffer, sizeof buffer, txtfile ); //discard 1st line -> titleID
-        memset(&buffer, 0, sizeof(buffer));
-        memset(&lastline,0,sizeof lastline);
+        memset(buffer, 0, sizeof(buffer));
+        memset(lastline,0,sizeof lastline);
         fgets(lastline, sizeof lastline, txtfile); //keep the 2nd line for testing against last line
         fgets (buffer, sizeof buffer, txtfile ); //discard 3rd line -> ""
-        memset(&buffer, 0, sizeof(buffer));
+        memset(buffer, 0, sizeof(buffer));
         i = 0;
 		//WindowPrompt("DEBUG","Parsing File",&yesButton,&noButton);
         while(!feof(txtfile) && strcmp(lastline,buffer) && i<MAX_CHEATS) //parse the rest of the txt file
@@ -164,7 +161,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                             if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
                             {
                                     i--;
-                                    memset(&cheat[i].title, 0, LINE_LENGTH);
+                                    memset(cheat[i].title, 0, LINE_LENGTH);
                                     memcpy(&cheat[i].title,&buffer,sizeof(&buffer)); //write THIS title over THAT title
                             }
                     }
@@ -176,7 +173,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                     sprintf(cheat[i-1].codes[codecounter],buffer); //write the codeline
                     codecounter++; //we got another codeline
             }
-            memset(&buffer, 0, LINE_LENGTH);
+            memset(buffer, 0, LINE_LENGTH);
         }
 		//WindowPrompt("DEBUG","Cheats parsed",&yesButton,&noButton);
         memset(&lastline,0,LINE_LENGTH);
@@ -205,9 +202,7 @@ void manage_cheats(int id, struct discHdr *gameList)
             {
                 if(WindowPrompt(TX.ocarina,"Use these codes?",&yesButton,&noButton))
                 {
-                    struct discHdr *header = &gameList[id];
-                    sprintf(titleID,"%s",header->id);
-                    create_gct(cheat, maxlines,titleID); //go and make the gct file for the enabled cheats
+                    create_gct(cheat, maxlines, gameList, id); //go and make the gct file for the enabled cheats
                 }
                 return;
             }
@@ -237,6 +232,14 @@ void manage_cheats(int id, struct discHdr *gameList)
                             currpage = pages;
                     }
                  }
+                if(Button_Select(&cheatDoneButton, pointer.p_x, pointer.p_y))
+                {
+                    if(WindowPrompt(TX.ocarina,"Use these codes?",&yesButton,&noButton))
+                    {
+                        create_gct(cheat, maxlines, gameList, id); //go and make the gct file for the enabled cheats
+                    }
+                    return;
+                }
             }
             else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_PLUS)) //page forward
             {
@@ -267,8 +270,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                 display = i+((currpage-1)*LINES_PER_PAGE);
                 if(display < (maxlines-1)) //only show up to the number of lines available
                 {
-                //sprintf(tTemp,"%s",cheat[(display)].title);
-                sprintf(tTemp,"%s has %d codes",cheat[(display)].title,cheat[display].codelines);
+                sprintf(tTemp,"%s",cheat[display]);
                 CFreeTypeGX_DrawText(ttf14pt, 90, 130+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
                     step +=28;
                     if(cheat[display].enabled) //paint the appropriate cheat button state
@@ -277,6 +279,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                         Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],1);
                 }
             }
+            Button_TTF_Paint(&cheatDoneButton);
             if(pages>1)
             {
                 Button_Paint(&pageUpButton);
@@ -284,7 +287,8 @@ void manage_cheats(int id, struct discHdr *gameList)
                 Button_Hover(&pageDownButton,pageDownButton.x,pageDownButton.y);
                 Button_Hover(&pageUpButton,pageUpButton.x,pageUpButton.y);
             }
-            for(n=0;n<display;n++) //hover the buttons
+            Button_Hover(&cheatDoneButton,cheatDoneButton.x,cheatDoneButton.y);
+            for(n=0;n<display;n++) //hover the selection buttons
             {
                 Button_Hover(&cheatEnabled[n],cheatEnabled[n].x,cheatEnabled[n].y);
                 Button_Hover(&cheatDisabled[n],cheatDisabled[n].x,cheatDisabled[n].y);
@@ -355,25 +359,28 @@ bool check_download(char* titleID)
     return true;
 }
 
-void create_gct(CHEAT cheat,int cheatcount, char* titleID)
+void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
 {
     //this is where we parse the selected cheat data into a gct file for ocarina
     //char to hex by brkirch
-    char gctname[12]; //i dont think 10 is enough... (7 + 4 = 11 (Yes i know byte 7 should be 0x00))
-    memset(gctname, 0, sizeof(gctname));
-	
+    char gctname[10];
+    char titleID[7];
+    struct discHdr *header = &gameList[id];
+    sprintf(titleID,"%s",header->id);
     sprintf(gctname,"%s.gct",titleID);
+    //memset(newcheatfilename, 0, sizeof(newcheatfilename));
     chdir("/");
     chdir(GCT_PATH);
     FILE *gctFile;
-    char tempCode[16];
-    int i,n;
-    gctFile = fopen(gctname, "wb");
+    gctFile = fopen(gctname,"wb");
     if(!gctFile)
     {
             WindowPrompt("Error","Could not create (or Open) GCT.",&okButton,0);
             return;
     }
+    char tempCode[16];
+    memset(tempCode, 0, sizeof(tempCode));
+    int i,n;
     fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0x00, 0xD0, 0xC0, 0xDE, 0x00, 0xD0, 0xC0, 0xDE); //gct header
 
     for(i=0;i<cheatcount;i++) //main loop for checking each cheat
