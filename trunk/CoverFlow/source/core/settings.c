@@ -14,8 +14,8 @@ const char* whitespace_cb(mxml_node_t *node, int where)
 	if (!strcmp(name, "wiicoverflow"))
 		return ("\n");	
 	else if (!strcmp(name, "graphics") ||
-			 !strcmp(name, "general"))// ||
-			 //!strcmp(name, "game"))
+			 !strcmp(name, "general")) ||
+			 !strcmp(name, "game"))
 	{
 		if (where == MXML_WS_BEFORE_OPEN)
 			return ("\t");
@@ -334,8 +334,8 @@ void createEmptyWiiCoverFlowFile()
 	tree = mxmlNewElement(xml, "wiicoverflow");
 	node = mxmlNewElement(tree, "graphics");
 	node = mxmlNewElement(tree, "general");
-		sprintf(buf, "%d", SVN_VERSION);
-		mxmlElementSetAttr(node, "rev", buf);	
+	sprintf(buf, "%d", SVN_VERSION);
+	mxmlElementSetAttr(node, "rev", buf);	
 	node = mxmlNewElement(tree, "game");
 	
 	fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "w");
@@ -345,7 +345,7 @@ void createEmptyWiiCoverFlowFile()
 		fclose(fp);
 	}
 	else
-		WindowPrompt(TX.error, "can't create wiicoverflow.xml ", 0, &okButton);
+		WindowPrompt(TX.error, TX.noCreateWCFXML, 0, &okButton);
 }
 
 

@@ -40,13 +40,13 @@ language = Kieli:
 videoMode = Videotila:
 patchVIDTV = VIDTV-korjaus:
 errorConnect = Funktio net_read() palautti virheen.  Virhekoodi: %i
-URLnoBegin = URL:sta '%s' puuttuu 'http://'|
-URLnoPath = URL:sta '%s' puuttuu polku|
-URLnoDomain = URL:sta '%s' puuttuu domain|
-errorDomain = |domainia %s ei löytynyt
+URLnoBegin = URL:sta '%s' puuttuu 'http://'
+URLnoPath = URL:sta '%s' puuttuu polku
+URLnoDomain = URL:sta '%s' puuttuu domain
+errorDomain = domainia %s ei löytynyt
 errEstablishConn = Virhe verkkoyhteydessä
-HTTPnoFile = HTTP:stä ei saatu tiedostoa|
-noMemCopy = Ei vapaata muistia tiedoston| tallentamiseen HTTP:stä|
+HTTPnoFile = HTTP:stä ei saatu tiedostoa
+noMemCopy = Ei vapaata muistia tiedoston tallentamiseen HTTP:stä
 graphicSetting = Grafiikka-asetukset
 zoom = Zoom
 spacing = Välit
@@ -86,7 +86,7 @@ successDelete = Poistettu.
 pressOkContinue = Paina OK jatkaaksesi.
 noLocalIP = IP-osoitetta ei saatu luettua.
 addError = [+] VIRHE:
-errorCIOS = Custom IOS:ia ei voitu ladata! (ret = %d)|
+errorCIOS = Custom IOS:ia ei voitu ladata! (ret = %d)
 loadTextures = Ladataan tekstuureja
 initUSB = Käynnistetään USB...
 errInitUSBFS = USBFS:an valmistelu epäonnistui, lopetetaan.
@@ -108,9 +108,9 @@ setBackground = Asetetaan taustateema...
 freeTextures = Vapautetaan käyttämättömät tekstuurit...
 parentalCtrl = Lapsisuojaus
 enableParentCtrl = Asetetaanko lapsisuojaus?
-errorDIP = DIP-modulia ei voitu valmistella! (ret = %d)|
-errorReadDir = Hakemistoja ei voitu lukea.| Kansikuvia ei tallenneta.
-errorCreateDir = Hakemistoja ei voitu luoda.| Kansikuvia ei tallenneta.
+errorDIP = DIP-modulia ei voitu valmistella! (ret = %d)
+errorReadDir = Hakemistoja ei voitu lukea.|Kansikuvia ei tallenneta.
+errorCreateDir = Hakemistoja ei voitu luoda.|Kansikuvia ei tallenneta.
 Sun = Su
 Mon = Ma
 Tue = Ti
@@ -144,7 +144,7 @@ welcomeMsg = Tervetuloa CoverFloaderiin
 batteryUnit = P%d
 basic = Perustiedot
 advanced = Lisätiedot
-hideScrollbar = Piilota palkki
+hideScrollbar = Vierityspalkki
 covers3D = 3D kannet
 gameText = Pelin nimi
 gameSettings = Pelin asetukset
@@ -157,12 +157,18 @@ MyLanguage = Oma kieli
 Turkish = Turkki
 initWPAD = Käynnistetään WPAD...
 initFS = Käynnistetään tiedostojärjestelmä...
-obsoleteGL = Asetustiedosto on|vanhentunut, joten se poistetaan.|Paina OK jatkaaksesi.
+obsoleteGL = Asetustiedosto on vanhentunut,|joten se poistetaan.|Paina OK jatkaaksesi.
 initSys = Käynnistetään järjestelmä...
 initUSBFS = Käynnistetään USBFS...
 initDisc = Käynnistetään levy...
 homeMenu = HOME Menu
 homeWiimote = Wiimote-tiedot
+errorSD = SD-muistikortille ei voi tallentaa.
+gettingGL = Haetaan pelilista
+sortingGL = Järjestetään pelilista
+initWBFS_GL = Käynnistetään WBFS pelilista...
+getEntryWBFS = Haetaan...
+noCreateWCFXML = Tiedoston wiicoverflow.xml|kirjoitus epäonnistui.
 
 ###########
 # Buttons #
