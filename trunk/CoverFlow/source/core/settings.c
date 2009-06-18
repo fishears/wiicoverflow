@@ -14,7 +14,7 @@ const char* whitespace_cb(mxml_node_t *node, int where)
 	if (!strcmp(name, "wiicoverflow"))
 		return ("\n");	
 	else if (!strcmp(name, "graphics") ||
-			 !strcmp(name, "general")) ||
+			 !strcmp(name, "general")  ||
 			 !strcmp(name, "game"))
 	{
 		if (where == MXML_WS_BEFORE_OPEN)
