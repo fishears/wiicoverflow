@@ -321,6 +321,34 @@ int SETTINGS_Save()
 	}
 }
 
+void createEmptyWiiCoverFlowFile()
+{
+	char buf[30];
+	mxml_node_t *xml;
+	mxml_node_t *tree;
+	mxml_node_t *node;
+	
+	FILE *fp;
+	
+	xml = mxmlNewXML("1.0");
+	tree = mxmlNewElement(xml, "wiicoverflow");
+	node = mxmlNewElement(tree, "graphics");
+	node = mxmlNewElement(tree, "general");
+		sprintf(buf, "%d", SVN_VERSION);
+		mxmlElementSetAttr(node, "rev", buf);	
+	node = mxmlNewElement(tree, "game");
+	
+	fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "w");
+        
+	if(fp != NULL){
+		mxmlSaveFile(xml, fp, whitespace_cb);
+		fclose(fp);
+	}
+	else
+		WindowPrompt(TX.error, "can't create wiicoverflow.xml ", 0, &okButton);
+}
+
+
 int getRevXML()
  {
    FILE *fp;
