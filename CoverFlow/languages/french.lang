@@ -10,7 +10,7 @@ someErrors = Une erreur s'est produite
 checkNextCover = Vérification de la jaquette suivante...%s
 opFinished = Opération terminée!
 pressA = Appuyez sur A pour continuer
-configError = Erreur de configuration, MAX_DNS_ENTRIES atteint alors que la liste est vide|
+configError = Erreur de configuration, MAX_DNS_ENTRIES atteint alors que la liste est vide
 errorsaveGL = Ne peut pas enregistrer gamelist.xml
 errorcreateGL = Impossible de créer le fichier gamelist !
 consoleDefault =  Console par défault
@@ -39,14 +39,14 @@ ocarina = Ocarina:
 language = Langue
 videoMode = Mode Video:
 patchVIDTV = Patcher VIDTV:
-errorConnect = Erreur de connexion de net_read() Code Erreur: %i|
-URLnoBegin = URL '%s' ne commence pas avec 'http://'|
-URLnoPath = URL '%s' ne contient pas d'indication de chemin|
-URLnoDomain = URL '%s' ne contient pas d'indication de domaine|
-errorDomain = |domain %s ne peut être résolu
+errorConnect = Erreur de connexion de net_read() Code Erreur: %i
+URLnoBegin = URL '%s' ne commence pas avec 'http://'
+URLnoPath = URL '%s' ne contient pas d'indication de chemin
+URLnoDomain = URL '%s' ne contient pas d'indication de domaine
+errorDomain = domain %s ne peut être résolu
 errEstablishConn = Erreur lors de l'établissement de la connexion
-HTTPnoFile = Réponse HTTP sans fichier|
-noMemCopy = Plus de mémoire pour copier le fichier de réponse HTTP|
+HTTPnoFile = Réponse HTTP sans fichier
+noMemCopy = Plus de mémoire pour copier le fichier de réponse HTTP
 graphicSetting = Paramètres Graphiques
 zoom = Zoom
 spacing = Espace
@@ -86,7 +86,7 @@ successDelete = Supprimé avec succès.
 pressOkContinue = Appuyez sur OK pour continuer.
 noLocalIP = Impossible d'obtenir l'adresse IP locale.
 addError = [+] ERREUR: 
-errorCIOS = Custom IOS ne peut pas être chargé ! (ret = %d)|
+errorCIOS = Custom IOS ne peut pas être chargé ! (ret = %d)
 loadTextures = Chargement des textures
 initUSB = Initialise USB
 errInitUSBFS = L'USBFS ne peut pas être initialisé, opération annulée.
@@ -108,7 +108,7 @@ setBackground = Configuration du thème...
 freeTextures = Libreation des textures inutilisées...
 parentalCtrl = Contrôle Parental
 enableParentCtrl = Voulez-vous activer le contrôle parental ?
-errorDIP = Impossible d'initialiser le module DIP! (ret = %d)|
+errorDIP = Impossible d'initialiser le module DIP! (ret = %d)
 errorReadDir = Impossible de créer des répertoires. Les Jaquettes ne seront pas enregistrées.
 errorCreateDir = Impossible de créer des répertoires. Les Jaquettes ne seront pas enregistrées. 
 Sun = Dim
@@ -138,7 +138,7 @@ addAGame = Ajouter un jeu
 getAddData = Ajouter données:
 errTitles = Erreur téléchargement titres
 successTitles = Importés avec succès %d titres!
-errNetTitles = Erreur d'initialisation du réseau : Titles.txt ne peut pas être téléchargé
+errNetTitles = Erreur d'initialisation du réseau: Titles.txt ne peut pas être téléchargé
 Success = Succès
 welcomeMsg = Bienvenue à CoverFloader
 batteryUnit = P%d
@@ -160,9 +160,16 @@ initFS = Initialisation Mémoire Système
 initSys = Initialisation du système
 initUSBFS = Initialisation USBFS
 initDisc = Initialisation du Disque
-obsoleteGL = Le fichier de configuration |est obsolète, il sera effacé.|Appuyez sur OK pour continuer
+obsoleteGL = Le fichier de configuration|est obsolète, il sera effacé.|Appuyez sur OK pour continuer
 homeMenu = Menu HOME
 homeWiimote = Paramètres
+errorSD = Impossible d'écrire sur la carte SD
+gettingGL = Obtenir liste des jeux
+sortingGL = Trier la liste des jeux
+initWBFS_GL = Initialiser la liste des jeux WBFS ...
+getEntryWBFS = Obtenir des entrées...
+noCreateWCFXML = Impossible de créer le fichier|wiicoverflow.xml
+
 
 ###########
 # Buttons #
