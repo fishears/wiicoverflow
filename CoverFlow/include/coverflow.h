@@ -214,6 +214,7 @@ typedef struct{
 	
 	bool firstTimeGP;  		// First time on graphics panel, used by backup_gpSettings();
 	bool switched3dto2D;	// When installing new games
+	bool waiting;			// when waiting, for showing icon
 	int dummy;
 
 } s_self;
