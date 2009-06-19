@@ -398,7 +398,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 		pos *= -1;
 	}
 
-	if(abs(pos) <= settings.falldist)
+	if(abs(pos) < settings.falldist)
 	{
 		loc = settings.coverSpacing * dir * (pow(pos + 1, -1) - 1);
 	}
@@ -447,7 +447,7 @@ void GRRLIB_Cover(float pos, int texture_id)
 
 	if(abs(pos) < 1)
 	{
-		zpos = settings.mainCoverZoom-((pos*pos)*settings.mainCoverZoom);
+		zpos = settings.mainCoverZoom-((pos)*settings.mainCoverZoom);
 	}
 	
 	//if (!self.scrolling && slowTwist)

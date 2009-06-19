@@ -459,6 +459,20 @@ void Settings_Menu_Show()
 					
 					else if (Button_Select(&restoreButton, pointer.p_x, pointer.p_y))
 						restore_gpSettings();
+					else if	(Button_Select(&falldistupButton, pointer.p_x, pointer.p_y))
+					{
+						if (settings.falldist >= 10)
+							settings.falldist  = 10; // sanity check
+						else
+							settings.falldist += 1;
+					}	
+					else if	(Button_Select(&falldistdownButton, pointer.p_x, pointer.p_y))
+					{
+						if (settings.falldist <= 1)
+							settings.falldist  = 1; // sanity check
+						else
+							settings.falldist -= 1;
+					}	
 				}
 				if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A)
 				{
@@ -508,21 +522,6 @@ void Settings_Menu_Show()
 						settings.coverFallOff -= 0.002;
 					else if(Button_Select(&falloffupButton, pointer.p_x, pointer.p_y))
 						settings.coverFallOff += 0.002;
-						
-					else if	(Button_Select(&falldistupButton, pointer.p_x, pointer.p_y))
-					{
-						if (settings.falldist >= 10)
-							settings.falldist  = 10; // sanity check
-						else
-							settings.falldist += 1;
-					}	
-					else if	(Button_Select(&falldistdownButton, pointer.p_x, pointer.p_y))
-					{
-						if (settings.falldist <= 1)
-							settings.falldist  = 1; // sanity check
-						else
-							settings.falldist -= 1;
-					}	
 					else if	(Button_Select(&coverzoomupButton, pointer.p_x, pointer.p_y))
 					{
 						if (settings.mainCoverZoom >= 10.0)
