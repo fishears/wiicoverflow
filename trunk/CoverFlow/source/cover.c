@@ -170,11 +170,11 @@ void Download_Cover(char* id, int v, int max)
 
 			if(!(settings.covers3d))
 			{
-				sprintf(url, "http://www.theotherzone.com/wii/resize/%s/160/224/%s.png", region, id);
+				sprintf(url, "http://www.wiiboxart.com/resize/%s/160/224/%s.png", region, id);
 			}
 			else
 			{
-				sprintf(url, "http://www.theotherzone.com/wii/fullcover/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
+				sprintf(url, "http://www.wiiboxart.com/fullcover/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
 			}
 			
 			sprintf(self.debugMsg, TX.getting, url);
@@ -207,7 +207,7 @@ void Download_Cover(char* id, int v, int max)
 			Paint_Progress_Generic(v, max,self.debugMsg);
 		}
 		else{
-			sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
+			sprintf(url, "http://www.wiiboxart.com/diskart/160/160/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
 			sprintf(self.debugMsg, TX.getting, url);
 			Paint_Progress_Generic(v, max,self.debugMsg);
 			
@@ -223,7 +223,7 @@ void Download_Cover(char* id, int v, int max)
 				if (file.data != NULL) free(file.data);
 				
 				snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c.png", USBLOADER_PATH,  id[0], id[1], id[2]);
-				sprintf(url, "http://www.theotherzone.com/wii/diskart/160/160/%c%c%c.png", id[0], id[1], id[2]);
+				sprintf(url, "http://www.wiiboxart.com/diskart/160/160/%c%c%c.png", id[0], id[1], id[2]);
 				sprintf(self.debugMsg, TX.getting, url);
 				Paint_Progress_Generic(v, max,self.debugMsg);
 				

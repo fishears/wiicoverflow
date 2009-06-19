@@ -207,7 +207,7 @@ int main( int argc, char **argv )
 		wait--;
 		self.progress += prog;
 		Paint_Progress(self.progress, self.debugMsg);
-		Sleep(20);
+		Sleep(200);
 	}
 	
 	sprintf(self.debugMsg, TX.setBackground );
