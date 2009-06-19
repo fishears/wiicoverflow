@@ -32,13 +32,13 @@ bool check_txt(int id, struct discHdr *gameList)
     txtfile = fopen(filename, "r");
     if(txtfile)
     {
-            WindowPrompt(filename,"txt codes found on SD",&okButton,0);
+            //WindowPrompt(filename,"txt codes found on SD",&okButton,0);
             fclose(txtfile);
             return true;
     }
     else
     {
-        WindowPrompt(filename,"txt codes not found",&okButton,0);
+        //WindowPrompt(filename,"txt codes not found",&okButton,0);
         return false;
     }
 }
@@ -57,19 +57,26 @@ bool check_gct(int id, struct discHdr *gameList)
     txtfile = fopen(filename, "r");
     if(txtfile)
     {
-        WindowPrompt(filename,"gct file found",&okButton,0);
+        //WindowPrompt(filename,"gct file found",&okButton,0);
         fclose(txtfile);
         return true;
     }
     else
     {
-        WindowPrompt(filename,"gct file not found",&okButton,0);
+        //WindowPrompt(filename,"gct file not found",&okButton,0);
         return false;
     }
 }
 
 bool download_txt(int id, struct discHdr *gameList)
 {
+    if(!(WindowPrompt("Download?","Download missing cheat file?",&okButton, &cancelButton)))
+	{
+		return false;
+	}
+	
+	
+
     //attempt to download the game's txt cheat file from www.usbgecko.com
     if(check_write_access())
     {
@@ -80,6 +87,7 @@ bool download_txt(int id, struct discHdr *gameList)
             struct block file;
             struct discHdr *header = &gameList[id];
             sprintf(titleID,"%s",header->id);
+			WindowPrompt(titleID,"Please Wait...",0, 0);
             sprintf(url, "%s%c/%s.txt", CODESITE, header->id[0] , titleID); //try 6-digit ID first
             file = downloadfile(url);
             if(file.data == NULL) //nothing, so try 4-digit ID
@@ -94,7 +102,7 @@ bool download_txt(int id, struct discHdr *gameList)
                 free(file.data);
                 if(check_download(titleID))
                 {
-                    WindowPrompt(titleID,"txt codes downloaded",&okButton,0);
+                    WindowPrompt(titleID,"Download Complete",&okButton,0);
                     return true;
                 }
                 else

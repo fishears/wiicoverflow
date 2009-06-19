@@ -115,7 +115,7 @@ void languageDefault()
 	strcopy(TX.installing, "Installing... (%0.2f%%) Time left: %d:%02d:%02d", sizeof(TX.installing));
 	strcopy(TX.setting, "Settings", sizeof(TX.setting));
 	snprintf(TX.hook, sizeof(TX.hook), "Hook"); 										//M037
-  	snprintf(TX.ocarina, sizeof(TX.ocarina), "Ocarina"); 								//M135
+  	snprintf(TX.ocarina, sizeof(TX.ocarina), "Cheats"); 								//M135
 	snprintf(TX.language, sizeof(TX.language), "Language");   						//M038
 	snprintf(TX.videoMode, sizeof(TX.videoMode), "Video Mode");   					//M039
 	snprintf(TX.patchVIDTV, sizeof(TX.patchVIDTV), "VIDTV Patch");   					//M040
@@ -275,7 +275,7 @@ void languageDefault()
 	snprintf(TX.restoreB, sizeof(TX.restoreB), "Restore"); 		//B21
 	snprintf(TX.fatB, sizeof(TX.fatB), "Fat" );  					//B22
 	snprintf(TX.thinB, sizeof(TX.thinB), "Thin"); 					//B23
-	snprintf(TX.manageB, sizeof(TX.manageB), "Cheats");			//B24
+	snprintf(TX.manageB, sizeof(TX.manageB), "Manage");			//B24
 	
 };
 
