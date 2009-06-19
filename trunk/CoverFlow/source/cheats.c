@@ -119,7 +119,7 @@ void manage_cheats(int id, struct discHdr *gameList)
     //parses the txt file and allows user to enable/disable cheats
     //then turns enabled codes into a gct file to be used with ocarina
     CHEAT cheat;
-    char buffer[LINE_LENGTH]; //dummy line for tests
+    char buffer[LINE_LENGTH+1]; //dummy line for tests
     char lastline[LINE_LENGTH]; //hold the game name (which also appears at end of file)
     char filename[10];
     char titleID[7];
@@ -152,29 +152,31 @@ void manage_cheats(int id, struct discHdr *gameList)
             fgets(buffer,sizeof buffer,txtfile); //get a line into buffer
             if(!is_code(buffer) && strlen(buffer)!=1) //if its not a code and not a blank line
             {
-                    sprintf(cheat[i].title,buffer); //write it as a new title
-                    cheat[i].codelines = 0; //set new title codelines to zero
-                    if(i>0) //only write codelines if this isn't the first title
-                    {
-                            cheat[i-1].codelines = codecounter-1; //write the number of codelines for the previous title
-                            cheat[i-1].enabled = false;
+                memset(cheat[i].title, 0, LINE_LENGTH);
+                strncpy(cheat[i].title,buffer,strlen(buffer)-1); //write a title line
+                
+                cheat[i].codelines = 0; //set new title codelines to zero
+                if(i>0) //only write codelines if this isn't the first title
+                {
+                        cheat[i-1].codelines = codecounter-1; //write the number of codelines for the previous title
+                        cheat[i-1].enabled = false;
 
-                            if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
-                            {
-                                    i--;
-                                    memset(cheat[i].title, 0, LINE_LENGTH);
-                                    memcpy(&cheat[i].title,&buffer,sizeof(&buffer)); //write THIS title over THAT title
-                            }
-                    }
-                    codecounter = 0; //reset the codecounter
-                    i++;
+                        if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
+                        {
+                                i--;
+                                memset(cheat[i].title, 0, LINE_LENGTH);
+                                strncpy(cheat[i].title,buffer,strlen(buffer)-1); //write THIS title over THAT title
+                        }
+                }
+                codecounter = 0; //reset the codecounter
+                i++;
             }
             else
             {
-                    sprintf(cheat[i-1].codes[codecounter],buffer); //write the codeline
+                    sprintf(cheat[i-1].codes[codecounter],"%s",buffer); //write the codeline
                     codecounter++; //we got another codeline
             }
-            memset(buffer, 0, LINE_LENGTH);
+            memset(buffer, 0, sizeof(buffer));
         }
 		//WindowPrompt("DEBUG","Cheats parsed",&yesButton,&noButton);
         memset(&lastline,0,LINE_LENGTH);
@@ -201,9 +203,16 @@ void manage_cheats(int id, struct discHdr *gameList)
             GetWiimoteData();
             if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)) //b or home to exit
             {
-                if(WindowPrompt(TX.ocarina,"Use these codes?",&yesButton,&noButton))
+                for(n=0;n<maxlines;n++)
                 {
-                    create_gct(cheat, maxlines, gameList, id); //go and make the gct file for the enabled cheats
+                   if(cheat[n].enabled==true) //check for any enabled cheats to use
+                   {
+                       if(WindowPrompt(TX.ocarina,"Use these codes?",&yesButton,&noButton))
+                       {
+                            create_gct(cheat, maxlines, gameList, id); //go and make the gct file for the enabled cheats
+                       }
+                       return;
+                    }
                 }
                 return;
             }
@@ -235,9 +244,16 @@ void manage_cheats(int id, struct discHdr *gameList)
                  }
                 if(Button_Select(&cheatDoneButton, pointer.p_x, pointer.p_y))
                 {
-                    if(WindowPrompt(TX.ocarina,"Use these codes?",&yesButton,&noButton))
+                   for(n=0;n<maxlines;n++)
                     {
-                        create_gct(cheat, maxlines, gameList, id); //go and make the gct file for the enabled cheats
+                       if(cheat[n].enabled==true) //check for any enabled cheats to use
+                       {
+                           if(WindowPrompt(TX.ocarina,"Use these codes?",&yesButton,&noButton))
+                           {
+                                create_gct(cheat, maxlines, gameList, id); //go and make the gct file for the enabled cheats
+                           }
+                           return;
+                        }
                     }
                     return;
                 }
@@ -271,13 +287,13 @@ void manage_cheats(int id, struct discHdr *gameList)
                 display = i+((currpage-1)*LINES_PER_PAGE);
                 if(display < (maxlines-1)) //only show up to the number of lines available
                 {
-                sprintf(tTemp,"%s",cheat[display].title);
+                sprintf(tTemp,"%s has %d codes",cheat[display].title, cheat[display].codelines);
                 CFreeTypeGX_DrawText(ttf14pt, 90, 130+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-                    step +=28;
-                    if(cheat[display].enabled) //paint the appropriate cheat button state
-                        Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],0);
-                    else
-                        Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],1);
+                step +=28;
+                if(cheat[display].enabled) //paint the appropriate cheat button state
+                    Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],0);
+                else
+                    Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],1);
                 }
             }
             Button_TTF_Paint(&cheatDoneButton);
@@ -285,14 +301,14 @@ void manage_cheats(int id, struct discHdr *gameList)
             {
                 Button_Paint(&pageUpButton);
                 Button_Paint(&pageDownButton);
-                Button_Hover(&pageDownButton,pageDownButton.x,pageDownButton.y);
-                Button_Hover(&pageUpButton,pageUpButton.x,pageUpButton.y);
+                Button_Hover(&pageDownButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&pageUpButton, pointer.p_x, pointer.p_y);
             }
-            Button_Hover(&cheatDoneButton,cheatDoneButton.x,cheatDoneButton.y);
+            Button_Hover(&cheatDoneButton, pointer.p_x, pointer.p_y);
             for(n=0;n<display;n++) //hover the selection buttons
             {
-                Button_Hover(&cheatEnabled[n],cheatEnabled[n].x,cheatEnabled[n].y);
-                Button_Hover(&cheatDisabled[n],cheatDisabled[n].x,cheatDisabled[n].y);
+                Button_Hover(&cheatEnabled[n], pointer.p_x, pointer.p_y);
+                Button_Hover(&cheatDisabled[n], pointer.p_x, pointer.p_y);
             }
             DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF); //HAND!
             GRRLIB_Render();
@@ -372,7 +388,6 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
     struct discHdr *header = &gameList[id];
     sprintf(titleID,"%s",header->id);
     sprintf(gctname,"%s.gct",titleID);
-    //memset(newcheatfilename, 0, sizeof(newcheatfilename));
     chdir("/");
     chdir(GCT_PATH);
     FILE *gctFile;
@@ -393,32 +408,29 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
         {
             for(n=0;n<cheat[i].codelines;n++) //sub loop for getting the enabled codes
             {
-                char *pch = NULL;
-                const char delim[] = " ";
-                pch = strtok( cheat[i].codes[n], delim);
-                while( pch != NULL )
+                if(cheat[i].codes[n] !=NULL)
                 {
-                    strcat(tempCode,pch);
-                    pch = strtok( NULL, delim);
-                }
-                int currentChar = 0;
-                int x;
-                for (x = 0; x < 16; x++) //HEXify the codeline
-                {
-                    if ((tempCode[x] >= 'a') && (tempCode[x] <= 'f'))
-                        currentChar += 10 + tempCode[x] - 'a';
-                    if ((tempCode[x] >= 'A') && (tempCode[x] <= 'F'))
-                        currentChar += 10 + tempCode[x] - 'A';
-                    if ((tempCode[x] >= '0') && (tempCode[x] <= '9'))
-                        currentChar += tempCode[x] - '0';
-                    if (x % 2 == 0)
+                    sprintf(tempCode,cheat[1].codes[n]);
+                    int currentChar = 0;
+                    int x;
+                    for (x = 0; x < 17; x++) //HEXify the codeline
                     {
-                        currentChar *= 16;
-                    }
-                    else
-                    {
-                        fprintf(gctFile, "%c", currentChar); //write out the HEXified character
-                        currentChar = 0;
+                        if ((tempCode[x] >= 'a') && (tempCode[x] <= 'f'))
+                            currentChar += 10 + tempCode[x] - 'a';
+                        if ((tempCode[x] >= 'A') && (tempCode[x] <= 'F'))
+                            currentChar += 10 + tempCode[x] - 'A';
+                        if ((tempCode[x] >= '0') && (tempCode[x] <= '9'))
+                            currentChar += tempCode[x] - '0';
+                        if (x % 2 == 0)
+                        {
+                            currentChar *= 16;
+                        }
+                        else
+                        {
+                            if ((tempCode[x] != ' '))
+                                fprintf(gctFile, "%c", currentChar); //write out the HEXified character
+                            currentChar = 0;
+                        }
                     }
                 }
                 memset(tempCode, 0, sizeof(tempCode)); //clear the line
