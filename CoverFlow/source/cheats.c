@@ -113,6 +113,7 @@ bool download_txt(int id, struct discHdr *gameList)
     return false;
 }
 
+ #ifdef CHEAT_MANAGER
 void manage_cheats(int id, struct discHdr *gameList)
 {
     //parses the txt file and allows user to enable/disable cheats
@@ -300,7 +301,7 @@ void manage_cheats(int id, struct discHdr *gameList)
 
     return;    
 }
-
+#endif
 bool is_code(char* line)
 {
     //checks the line to see if it's a code line

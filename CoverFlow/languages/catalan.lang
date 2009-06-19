@@ -39,14 +39,14 @@ ocarina = Ocarina:
 language = Llengua:
 videoMode = Mode de vídeo:
 patchVIDTV = Pedaç VIDTV:
-errorConnect = Error de connexió des de net_read()  Codi: %i|
-URLnoBegin = La URL '%s' no comença per 'http://'|
-URLnoPath = La URL '%s' no té conté cap ruta|
-URLnoDomain = No hi ha cap domini a la URL '%s'|
-errorDomain = |El domini %s no s'ha pogut resoldre
+errorConnect = Error de connexió des de net_read()  Codi: %i
+URLnoBegin = La URL '%s' no comença per 'http://'
+URLnoPath = La URL '%s' no té conté cap ruta
+URLnoDomain = No hi ha cap domini a la URL '%s'
+errorDomain = El domini %s no s'ha pogut resoldre
 errEstablishConn = Error establint la connexió
-HTTPnoFile = La resposta HTTP no conté cap fitxer|
-noMemCopy = No queda memòria per copiar l'arxiu de la resposta HTTP|
+HTTPnoFile = La resposta HTTP no conté cap fitxer
+noMemCopy = No queda memòria per copiar l'arxiu de la resposta HTTP
 graphicSetting = Configuració gràfica
 zoom = Zoom:
 spacing = Espai:
@@ -86,7 +86,7 @@ successDelete = Esborrat correctament.
 pressOkContinue = Prem OK per continuar.
 noLocalIP = No he pogut obtenir la direcció IP.
 addError = [+] ERROR:
-errorCIOS = El IOS modificat no s'ha pogut carregar! (ret = %d)|
+errorCIOS = El IOS modificat no s'ha pogut carregar! (ret = %d)
 loadTextures = Carregant textures
 initUSB = Inicialització del USB
 errInitUSBFS = No he pogut iniciar el USBFS, sortint.
@@ -108,7 +108,7 @@ setBackground = Establint tema de fons...
 freeTextures = Alliberant textures no emprades...
 parentalCtrl = Control parental
 enableParentCtrl = Vols activar les funcions de control parental?
-errorDIP = No he pogut inicialitzar el mòdul DIP! (ret = %d)|
+errorDIP = No he pogut inicialitzar el mòdul DIP! (ret = %d)
 errorReadDir = No puc llegir els directoris. Les portades no es desaran.
 errorCreateDir = No puc crear directoris. Les portades no es desaran.
 Sun = Du
@@ -158,11 +158,17 @@ Turkish = Turc
 initWPAD = Iniciar WPAD
 initFS = Inicialitzant Sistema de Fitxers
 obsoleteGL = El teu fitxer de configuració és obsolet|i s'esborrarà.|Prem D'acord per continuar.
-initSys = Init Sys...
-initUSBFS = Initializing USBFS...
-initDisc = Initializing Disc...
-homeMenu = HOME Menu
-homeWiimote = Wiimote Information
+initSys = Inicialitzant Sys...
+initUSBFS = Inicialitzant USBFS...
+initDisc = Inicialitzant Disc...
+homeMenu = Menú HOME
+homeWiimote = Informació del Wiimote
+errorSD = No puc escriure a la targeta SD
+gettingGL =  Recuperant llista de jocs
+sortingGL = Ordenant llista de jocs
+initWBFS_GL = Inicialitzant llista de jocs WBFS...
+getEntryWBFS = Recuperant entrades...
+noCreateWCFXML = No puc crear wiicoverflow.xml
 
 ###########
 # Buttons #
@@ -188,6 +194,6 @@ loaderB = Carregador
 languagesB = Llengües
 coversB = Portades
 titlesB = Títols
-restoreB = Restore
-fatB = Fat
-thinB = Thin
+restoreB = Restaurar
+fatB = Ample
+thinB = Estret

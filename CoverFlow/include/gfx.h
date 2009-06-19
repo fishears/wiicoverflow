@@ -57,6 +57,7 @@ extern const u8 menu_button_over_png[];					// Large menu hover
 extern const u8 menu_header_png[];						// Header bar for settings screens
 extern const u8 menu_logo_png[];						// CoverFloader logo
 extern const u8 menu_panel_png[];						// Settings screen background panel (TODO replace with GRRLIB rectangle)
+extern const u8 menu_loading_png[];					    // blue circle when loading
 
 extern const u8 flag_br_png[];							// Flags...
 extern const u8 flag_da_png[];
@@ -78,6 +79,7 @@ GRRLIB_texImg menu_button_over_texture;
 GRRLIB_texImg menu_header_texture;
 GRRLIB_texImg menu_header_vflip_texture;
 GRRLIB_texImg menu_logo_texture;
+GRRLIB_texImg menu_loading_texture;
 GRRLIB_texImg dialog_box_titlebar_texture;
 GRRLIB_texImg dialog_box_titlebar_long_texture;
 GRRLIB_texImg dialog_box_icon_texture;
@@ -88,6 +90,7 @@ Button menuSettingsButton;
 Button menuGraphicsButton;
 Button menuLanguagesButton;
 Button menuLogoButton;
+Button menuLoadingButton;
 GRRLIB_texImg flag_br_texture; // Brazil flag
 GRRLIB_texImg flag_da_texture; // Netherlands Flag
 GRRLIB_texImg flag_de_texture; // Germany Flag
