@@ -14,6 +14,7 @@ typedef struct {
     float coverAngle;
     float coverSpacing;
     float coverFallOff;
+	int falldist;
     int drawWindow;
     int coverText;
     int theme;
@@ -47,6 +48,7 @@ typedef struct {
     float coverAngle;
     float coverSpacing;
     float coverFallOff;
+	int falldist;
     int drawWindow;
     int coverText;
     int hideScroll;

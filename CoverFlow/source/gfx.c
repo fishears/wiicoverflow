@@ -392,7 +392,14 @@ void GRRLIB_Cover(float pos, int texture_id)
 		pos *= -1;
 	}
 
-	loc = settings.coverSpacing * dir * (pow(pos + 1, -1) - 1);
+	if(abs(pos) <= settings.falldist)
+	{
+		loc = settings.coverSpacing * dir * (pow(pos + 1, -1) - 1);
+	}
+	else
+	{
+		loc = (settings.coverSpacing * dir * (pow((settings.falldist) + 1, -1) - 1))+(pos-settings.falldist)*((settings.coverSpacing * dir * (pow((settings.falldist) + 1, -1) - 1)) - (settings.coverSpacing * dir * (pow((settings.falldist-1) + 1, -1) - 1)));
+	}
 	
 	falloff = (pos)*2*settings.coverFallOff;
 	

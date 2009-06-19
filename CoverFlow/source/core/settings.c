@@ -37,7 +37,8 @@ void SETTINGS_Init()
 	settings.coverAngle   = 90;
 	settings.coverSpacing = 3.1;
 	settings.coverFallOff = 0.0;
-	settings.drawWindow   = 7;
+	settings.falldist     = 4;
+	settings.drawWindow   = 13;
 	settings.coverText    = 1;
 	settings.theme		  = 0; // default to black
 	settings.covers3d     = 0;
@@ -69,6 +70,7 @@ void graphics_SETTINGS_Init()
 	settings.coverAngle   		= 90;
 	settings.coverSpacing 		= 3.1;
 	settings.coverFallOff 		= 0.0;
+	settings.falldist           = 4;
 	settings.drawWindow   		= 7;
 	settings.coverText    		= 1;
 	settings.hideScroll   		= 1;
@@ -82,6 +84,7 @@ void backup_gpSettings()
 	gpsettings.coverAngle   	 = settings.coverAngle;
 	gpsettings.coverSpacing 	 = settings.coverSpacing;
 	gpsettings.coverFallOff 	 = settings.coverFallOff;
+	gpsettings.falldist          = settings.falldist;
 	gpsettings.drawWindow   	 = settings.drawWindow;
 	gpsettings.coverText    	 = settings.coverText;
 	gpsettings.hideScroll   	 = settings.hideScroll;
@@ -94,6 +97,7 @@ void restore_gpSettings()
 	settings.coverAngle   		= gpsettings.coverAngle;
 	settings.coverSpacing 		= gpsettings.coverSpacing;
 	settings.coverFallOff 		= gpsettings.coverFallOff;
+	settings.falldist           = gpsettings.falldist;
 	settings.drawWindow   		= gpsettings.drawWindow;
 	settings.coverText    		= gpsettings.coverText;
 	settings.hideScroll   		= gpsettings.hideScroll;
@@ -135,6 +139,8 @@ int SETTINGS_Load()
 			  settings.coverZoom    = atof(mxmlElementGetAttr(next_n,"zoom"));
 		  if(mxmlElementGetAttr(next_n,"falloff"))
 			  settings.coverFallOff = atof(mxmlElementGetAttr(next_n,"falloff"));
+		  if(mxmlElementGetAttr(next_n,"falldist"))
+			  settings.falldist = atoi(mxmlElementGetAttr(next_n,"falldist"));
 		  if(mxmlElementGetAttr(next_n,"drawWindow"))
 			  settings.drawWindow   = atoi(mxmlElementGetAttr(next_n,"drawWindow"));
 		  if(mxmlElementGetAttr(next_n,"coverText"))
@@ -238,6 +244,9 @@ int SETTINGS_Save()
 	
 	sprintf(buffer, "%f", settings.coverFallOff);
 	mxmlElementSetAttr(node, "falloff", buffer);
+	
+	sprintf(buffer, "%d", settings.falldist);
+	mxmlElementSetAttr(node, "falldist", buffer);
 	
 	sprintf(buffer, "%d", settings.drawWindow);
 	mxmlElementSetAttr(node, "drawWindow", buffer);
