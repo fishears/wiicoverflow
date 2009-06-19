@@ -509,10 +509,41 @@ void Settings_Menu_Show()
 					else if(Button_Select(&falloffupButton, pointer.p_x, pointer.p_y))
 						settings.coverFallOff += 0.002;
 						
+					else if	(Button_Select(&falldistupButton, pointer.p_x, pointer.p_y))
+					{
+						if (settings.falldist >= 10)
+							settings.falldist  = 10; // sanity check
+						else
+							settings.falldist += 1;
+					}	
+					else if	(Button_Select(&falldistdownButton, pointer.p_x, pointer.p_y))
+					{
+						if (settings.falldist <= 1)
+							settings.falldist  = 1; // sanity check
+						else
+							settings.falldist -= 1;
+					}	
+					else if	(Button_Select(&coverzoomupButton, pointer.p_x, pointer.p_y))
+					{
+						if (settings.mainCoverZoom >= 10.0)
+							settings.mainCoverZoom  = 10.0; // sanity check
+						else
+							settings.mainCoverZoom += 0.1;
+					}		
+					else if	(Button_Select(&coverzoomdownButton, pointer.p_x, pointer.p_y))
+					{
+						if (settings.mainCoverZoom <= 0.0)
+							settings.mainCoverZoom  = 0.0; // sanity check
+						else
+							settings.mainCoverZoom -= 0.1;
+					}	
+									
 				}
 				// Draw the wireframe background
 				GRRLIB_DrawImg(80, 130, menu_graphics_wireframe_texture, 0, 1, 1, 0xFFFFFFFF);
-				// Draw the 5 Top boxes (falloff, window, zoom, spacaing, angle)
+				
+				// Draw the 5+2 Top boxes (falloff, window, zoom, spacaing, angle)
+				
 				GRRLIB_DrawImg(80, 94, menu_graphics_box1_texture, 0, 1, 1, 0xFFFFFFFF);
 				CFreeTypeGX_DrawText(ttf16pt, 126, 113, TX.falloff, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				GRRLIB_DrawImg(177, 80, menu_graphics_box1_texture, 0, 1, 1, 0xFFFFFFFF);
@@ -523,6 +554,13 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 414, 99, TX.spacing, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				GRRLIB_DrawImg(465, 94, menu_graphics_box1_texture, 0, 1, 1, 0xFFFFFFFF);
 				CFreeTypeGX_DrawText(ttf16pt, 511, 113, TX.angle, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+
+				GRRLIB_DrawImg(274, 210, menu_graphics_box1_texture, 0, 1, 1, 0xFFFFFFFF);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 229, "CovZoom", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				GRRLIB_DrawImg(80, 210, menu_graphics_box1_texture, 0, 1, 1, 0xFFFFFFFF);
+				CFreeTypeGX_DrawText(ttf16pt, 126, 229, "FallDist", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				
+				
 				// Draw the 3 bottom boxes (scrollbar, 3D covers, title)
 				GRRLIB_DrawImg(81, 341, menu_graphics_box2_texture, 0, 1, 1, 0xFFFFFFFF);
 				CFreeTypeGX_DrawText(ttf16pt, 153,360, TX.hideScrollbar, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
@@ -547,6 +585,10 @@ void Settings_Menu_Show()
 				Button_Paint(&falloffdownButton);
 				Button_Paint(&windowupButton);
 				Button_Paint(&windowdownButton);
+				Button_Paint(&falldistupButton);
+				Button_Paint(&falldistdownButton);
+				Button_Paint(&coverzoomupButton);
+				Button_Paint(&coverzoomdownButton);
 				// Draw the toggle buttons
 				Button_TTF_Toggle_Paint(&hidescrollOffButton, &hidescrollOnButton, TX.toggleOffB, TX.toggleOnB, settings.hideScroll);
 				Button_TTF_Toggle_Paint(&coverTextOffButton, &coverTextOnButton, TX.toggleOffB, TX.toggleOnB, settings.coverText);
@@ -577,6 +619,10 @@ void Settings_Menu_Show()
 					Button_Hover(&falloffdownButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&covers3dOnButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&covers3dOffButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&falldistupButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&falldistdownButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&coverzoomupButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&coverzoomdownButton, pointer.p_x, pointer.p_y) ||
 					((settings.covers3d == 1) ? Button_Hover(&covers3dThinButton, pointer.p_x, pointer.p_y) : false) ||				
 					((settings.covers3d == 1) ? Button_Hover(&covers3dFatButton , pointer.p_x, pointer.p_y) : false) ||
 					Button_Hover(&hidescrollOnButton, pointer.p_x, pointer.p_y) ||

@@ -293,6 +293,12 @@ void Init_Buttons()
     spacingupButton         = Duplicate_Button(vidupButton, 414,110);
     angledownButton         = Duplicate_Button(viddownButton, 484,123);
     angleupButton           = Duplicate_Button(vidupButton, 512,123);
+	
+	falldistdownButton		= Duplicate_Button(viddownButton,  99,240);
+	falldistupButton		= Duplicate_Button(vidupButton, 127,240);
+	coverzoomdownButton		= Duplicate_Button(viddownButton, 292,240);
+	coverzoomupButton		= Duplicate_Button(vidupButton, 320,240);
+	
     hidescrollOnButton		= Duplicate_Button(musicOnButton, 101,369);
     hidescrollOffButton		= Duplicate_Button(musicOffButton, 101, 369);
     covers3dOnButton		= Duplicate_Button(musicOnButton, 268, 369);
@@ -1661,6 +1667,11 @@ void freeResources(){
     FreeButtonResources(&spacingupButton);
     FreeButtonResources(&angledownButton);
     FreeButtonResources(&angleupButton);
+	FreeButtonResources(&falldistupButton);
+	FreeButtonResources(&falldistdownButton);
+	FreeButtonResources(&coverzoomupButton);
+	FreeButtonResources(&coverzoomdownButton);
+	
     FreeButtonResources(&hidescrollOnButton);
     FreeButtonResources(&hidescrollOffButton);
     FreeButtonResources(&covers3dThinButton);
