@@ -193,5 +193,5 @@ void showCredits(){
 	start += step;
 	CFreeTypeGX_DrawText(ttf14pt, 10, start, "Alexcarlosantao", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 	start += step;
-	CFreeTypeGX_DrawText(ttf14pt, 10, start, "Djtaz and theotherzone.com crew for the cover service", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+	CFreeTypeGX_DrawText(ttf14pt, 10, start, "Djtaz and wiiboxart.com crew for the cover service", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 }
