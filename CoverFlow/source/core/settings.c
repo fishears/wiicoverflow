@@ -34,6 +34,7 @@ void SETTINGS_Init()
 {
 	//Graphics
 	settings.coverZoom    = -2.0;
+	settings.mainCoverZoom = 2.0;
 	settings.coverAngle   = 90;
 	settings.coverSpacing = 3.1;
 	settings.coverFallOff = 0.0;
@@ -65,6 +66,7 @@ void SETTINGS_Init()
 void graphics_SETTINGS_Init()
 {
     settings.coverZoom    		= -2.0;
+	settings.mainCoverZoom		= 2.0;
     settings.coverCamY    		= 0.0;
     settings.coverCamX   		= 0.0;
 	settings.coverAngle   		= 90;
@@ -81,6 +83,7 @@ void graphics_SETTINGS_Init()
 void backup_gpSettings()
 {
     gpsettings.coverZoom    	 = settings.coverZoom;
+    gpsettings.mainCoverZoom     = settings.mainCoverZoom;
 	gpsettings.coverAngle   	 = settings.coverAngle;
 	gpsettings.coverSpacing 	 = settings.coverSpacing;
 	gpsettings.coverFallOff 	 = settings.coverFallOff;
@@ -94,6 +97,7 @@ void backup_gpSettings()
 void restore_gpSettings()
 {
     settings.coverZoom    		= gpsettings.coverZoom;
+    settings.mainCoverZoom    		= gpsettings.mainCoverZoom;
 	settings.coverAngle   		= gpsettings.coverAngle;
 	settings.coverSpacing 		= gpsettings.coverSpacing;
 	settings.coverFallOff 		= gpsettings.coverFallOff;
@@ -135,6 +139,8 @@ int SETTINGS_Load()
 			  settings.coverSpacing = atof(mxmlElementGetAttr(next_n,"spacing"));
 		  if(mxmlElementGetAttr(next_n,"angle"))
 			  settings.coverAngle   = atof(mxmlElementGetAttr(next_n,"angle"));
+		  if(mxmlElementGetAttr(next_n,"coverzoom"))
+			  settings.mainCoverZoom  = atof(mxmlElementGetAttr(next_n,"coverzoom"));
 		  if(mxmlElementGetAttr(next_n,"zoom"))
 			  settings.coverZoom    = atof(mxmlElementGetAttr(next_n,"zoom"));
 		  if(mxmlElementGetAttr(next_n,"falloff"))
@@ -241,6 +247,9 @@ int SETTINGS_Save()
 	
 	sprintf(buffer, "%f", settings.coverZoom);
 	mxmlElementSetAttr(node, "zoom", buffer);
+	
+	sprintf(buffer, "%f", settings.mainCoverZoom);
+	mxmlElementSetAttr(node, "coverzoom", buffer);
 	
 	sprintf(buffer, "%f", settings.coverFallOff);
 	mxmlElementSetAttr(node, "falloff", buffer);

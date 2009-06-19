@@ -9,6 +9,7 @@
 
 typedef struct {
     float coverZoom;
+	float mainCoverZoom;
 	float coverCamY;
 	float coverCamX;
     float coverAngle;
@@ -43,6 +44,7 @@ typedef struct {
 
 typedef struct {
     float coverZoom;
+	float mainCoverZoom;
 	float coverCamY;
 	float coverCamX;
     float coverAngle;
