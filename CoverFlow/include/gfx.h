@@ -212,6 +212,12 @@ Button falloffupButton;
 Button falloffdownButton;
 Button windowupButton;
 Button windowdownButton;
+
+Button falldistupButton;
+Button falldistdownButton;
+Button coverzoomupButton;
+Button coverzoomdownButton;
+
 Button resetButton;
 Button restoreButton;
 
