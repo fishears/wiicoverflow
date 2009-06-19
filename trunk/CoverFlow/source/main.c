@@ -77,6 +77,7 @@ void initVars()
 	
 	self.firstTimeGP = true;
 	self.switched3dto2D = false;
+	self.waiting = false;
 	
 	initGameSettings(&gameSetting);
 

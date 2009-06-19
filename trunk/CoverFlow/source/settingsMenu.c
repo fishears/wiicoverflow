@@ -248,14 +248,18 @@ void Settings_Menu_Show()
 							}
 						}
 					}
-					else if(Button_Select(&titlesButton, pointer.p_x, pointer.p_y))
+					else if(Button_Select(&titlesButton, pointer.p_x, pointer.p_y) )
 					{
 						WPAD_Rumble(0,0); //sometimes rumble remain active
+											
 						if(check_write_access())
 						{
-							if(networkInit(self.ipAddress)){
+							if(networkInit(self.ipAddress))
+							{
 									if(!downloadTitles())
-											WindowPrompt( TX.error, TX.errTitles, &okButton, 0);
+											{
+											 WindowPrompt( TX.error, TX.errTitles, &okButton, 0);
+											}
 									else
 									{
 											if(self.usingTitlesTxt){
@@ -277,7 +281,9 @@ void Settings_Menu_Show()
 									}
 							}
 							else
-									WindowPrompt(TX.error, TX.errNetTitles, &okButton, 0);
+							{
+							 WindowPrompt(TX.error, TX.errNetTitles, &okButton, 0);
+							}
 						}
 					}
 					else if (Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
@@ -369,7 +375,11 @@ void Settings_Menu_Show()
 				Button_TTF_Toggle_Paint(&cheatoffButton, &cheatonButton, TX.toggleOffB, TX.toggleOnB, settings.ocarina);
 				Button_Paint(&hookupButton);
 				Button_Paint(&hookdownButton);
-				
+				if(self.waiting == true)    // not set as yet
+					{
+					 Button_Paint(&menuLoadingButton);
+				     CFreeTypeGX_DrawText(ttf20pt, 370, 440, TX.pleaseWait, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+					}
 				// Check for button-pointer intersections, and rumble
 				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||

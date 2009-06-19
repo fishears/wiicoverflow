@@ -61,6 +61,7 @@ void LoadTextures()
 	menu_header_vflip_texture	= GRRLIB_CreateEmptyTexture(menu_header_texture.w, menu_header_texture.h);
 	GRRLIB_BMFX_FlipV(menu_header_texture, menu_header_vflip_texture);
 	menu_logo_texture			= GRRLIB_LoadTexturePNG(menu_logo_png);
+	menu_loading_texture		= GRRLIB_LoadTexturePNG(menu_loading_png);
 	dialog_box_titlebar_texture	= GRRLIB_LoadTexturePNG(dialog_box_titlebar_png);
 	dialog_box_titlebar_long_texture	= GRRLIB_LoadTexturePNG(dialog_box_titlebar_long_png);
 	dialog_box_icon_texture		= GRRLIB_LoadTexturePNG(dialog_box_icon_png);
@@ -280,6 +281,7 @@ void Init_Buttons()
     cheatoffButton			= Duplicate_Button(musicOffButton, 310,367);
     hookdownButton			= Duplicate_Button(viddownButton, 422,367);
     hookupButton			= Duplicate_Button(vidupButton, 450,367);
+	menuLoadingButton		= Button_Init(menu_loading_png, menu_loading_png, 310, 414); 
 	// Graphic Settings Panel
     falloffdownButton       = Duplicate_Button(viddownButton, 99,123);
     falloffupButton         = Duplicate_Button(vidupButton,127,123);
@@ -332,11 +334,12 @@ void Init_Buttons()
 	gbackButton				= Duplicate_Button_TTF(okButton, 468, 335, TX.backB);
     cheatEnabled[0]			= Button_Init(button_cheat_on_png, button_cheat_off_png, 44, 80);
     cheatDisabled[0]		= Button_Init(button_cheat_off_png, button_cheat_on_png, 44, 80);
+  #ifdef CHEAT_MANAGER
     manageCheatsButton      = Duplicate_Button_TTF(okButton, 468, 198, TX.manageB);
 	pageUpButton            = Duplicate_Button(vidupButton,508,60);
     pageDownButton          = Duplicate_Button(viddownButton,480,60);
     cheatDoneButton         = Duplicate_Button_TTF(okButton,44,60,TX.done);
-
+  #endif
 } // End Init_Buttons();
 
 void DrawSlider(int yPos, int theme_id)
@@ -1565,6 +1568,7 @@ void freeResources(){
 	free(menu_header_texture.data);
 	free(menu_header_vflip_texture.data);
 	free(menu_logo_texture.data);
+	free(menu_loading_texture.data);
 	free(dialog_box_titlebar_texture.data);
 	free(dialog_box_titlebar_long_texture.data);
 	free(dialog_box_icon_texture.data);
@@ -1633,6 +1637,7 @@ void freeResources(){
     FreeButtonResources(&cheatoffButton);
     FreeButtonResources(&hookdownButton);
     FreeButtonResources(&hookupButton);
+	FreeButtonResources(&menuLoadingButton);
 	// Graphic Settings Panel
     FreeButtonResources(&falloffdownButton);
     FreeButtonResources(&falloffupButton);
@@ -1683,7 +1688,12 @@ void freeResources(){
 	FreeButtonResources(&gbackButton);
 	FreeButtonResources(&cheatEnabled[0]);
 	FreeButtonResources(&cheatDisabled[0]);
-
+ #ifdef CHEAT_MANAGER
+    FreeButtonResources(&manageCheatsButton);
+	FreeButtonResources(&pageUpButton);
+    FreeButtonResources(&pageDownButton);
+    FreeButtonResources(&cheatDoneButton);
+ #endif
 /* //  CFreeTypeGX_delete function make the games don't boot, removed temporary (it wass addedd in r533)
 
 	CFreeTypeGX_delete(ttf14pt);
@@ -1827,7 +1837,10 @@ void Label_Buttons()
 	strcopy( flagDKButton.ttf_label, TX.Danish, 15);
 	strcopy( flagESButton.ttf_label, TX.Spanish, 15);	
 	strcopy( flagCTButton.ttf_label, TX.Catalan, 15);
-	strcopy( flagMyLangButton.ttf_label, TX.MyLanguage, 15);	
+	strcopy( flagMyLangButton.ttf_label, TX.MyLanguage, 15);
+ #ifdef CHEAT_MANAGER
+	strcopy( manageCheatsButton.ttf_label, TX.manageB, 15);
+ #endif	
 }
 
 
