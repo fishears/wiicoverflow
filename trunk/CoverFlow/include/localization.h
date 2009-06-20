@@ -208,6 +208,15 @@ struct LANGUAGE
 	char initWBFS_GL[50];			//169
 	char getEntryWBFS[50];			//170
 	char noCreateWCFXML[80];		//171
+	char downloadCheatFile[50];		//172
+	char downloadComplete[40];		//173
+	char noTxtCodes[50];			//174
+	char errorHTTP[30];				//175
+	char useCodes[40];				//176
+	char errOpenGCT[100];			//177
+	char coverZoom[20];				//178
+	char fallDist[20];				//179
+	
 // Buttons	
 	char addB[15];					//B01
 	char deleteB[15];				//B02

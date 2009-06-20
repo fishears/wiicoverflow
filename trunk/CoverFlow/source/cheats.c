@@ -70,7 +70,7 @@ bool check_gct(int id, struct discHdr *gameList)
 
 bool download_txt(int id, struct discHdr *gameList)
 {
-    if(!(WindowPrompt("Download?","Download missing cheat file?",&okButton, &cancelButton)))
+    if(!(WindowPrompt(TX.downloadB, TX.downloadCheatFile,&okButton, &cancelButton)))
 	{
 		return false;
 	}
@@ -87,7 +87,7 @@ bool download_txt(int id, struct discHdr *gameList)
             struct block file;
             struct discHdr *header = &gameList[id];
             sprintf(titleID,"%s",header->id);
-			WindowPrompt(titleID,"Please Wait...",0, 0);
+			WindowPrompt(titleID, TX.pleaseWait, 0, 0);
             sprintf(url, "%s%c/%s.txt", CODESITE, header->id[0] , titleID); //try 6-digit ID first
             file = downloadfile(url);
             if(file.data == NULL) //nothing, so try 4-digit ID
@@ -102,18 +102,18 @@ bool download_txt(int id, struct discHdr *gameList)
                 free(file.data);
                 if(check_download(titleID))
                 {
-                    WindowPrompt(titleID,"Download Complete",&okButton,0);
+                    WindowPrompt(titleID, TX.downloadComplete, &okButton,0);
                     return true;
                 }
                 else
                 {
-                    WindowPrompt(TX.error,"txt codes not available",&okButton,0);
+                    WindowPrompt(TX.error, TX.noTxtCodes, &okButton,0);
                     return false;
                 }
             }
             else //no data so report the HTTP error
             {
-                WindowPrompt("HTTP ERROR",file.error,&okButton,0);
+                WindowPrompt(TX.errorHTTP, file.error, &okButton,0);
                 return false;
             }
         }
@@ -220,7 +220,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                 {
                    if(cheat[n].enabled==true) //check for any enabled cheats to use
                    {
-                       if(WindowPrompt(TX.ocarina,"Use these codes?",&yesButton,&noButton))
+                       if(WindowPrompt(TX.ocarina, TX.useCodes, &yesButton, &noButton))
                        {
                             create_gct(cheat, maxlines, gameList, id); //go and make the gct file for the enabled cheats
                        }
@@ -261,7 +261,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                     {
                        if(cheat[n].enabled==true) //check for any enabled cheats to use
                        {
-                           if(WindowPrompt(TX.ocarina,"Use these codes?",&yesButton,&noButton))
+                           if(WindowPrompt(TX.ocarina, TX.useCodes,&yesButton,&noButton))
                            {
                                 create_gct(cheat, maxlines, gameList, id); //go and make the gct file for the enabled cheats
                            }
@@ -422,7 +422,7 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
     gctFile = fopen(gctname,"wb");
     if(!gctFile)
     {
-            WindowPrompt("Error","Could not create (or Open) GCT.",&okButton,0);
+            WindowPrompt(TX.error,TX.errOpenGCT, &okButton,0);
             return;
     }
     char tempCode[16];

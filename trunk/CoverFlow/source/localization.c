@@ -249,7 +249,15 @@ void languageDefault()
 	snprintf(TX.initWBFS_GL, sizeof(TX.initWBFS_GL), "Initialize WBFS Game List...");
 	snprintf(TX.getEntryWBFS, sizeof(TX.getEntryWBFS), "Getting Entries...");
 	snprintf(TX.noCreateWCFXML, sizeof(TX.noCreateWCFXML), "can't create wiicoverflow.xml");
-			
+	snprintf(TX.downloadCheatFile, sizeof(TX.downloadCheatFile), "Download missing cheat file?");
+	snprintf(TX.downloadComplete, sizeof(TX.downloadComplete), "Download Complete");
+	snprintf(TX.noTxtCodes, sizeof(TX.noTxtCodes), "txt codes not available");
+	snprintf(TX.errorHTTP, sizeof(TX.errorHTTP), "HTTP ERROR");
+	snprintf(TX.useCodes, sizeof(TX.useCodes), "Use these codes?");
+	snprintf(TX.errOpenGCT, sizeof(TX.errOpenGCT), "Could not create (or Open) GCT.");
+	snprintf(TX.coverZoom, sizeof(TX.coverZoom), "CovZoom:");
+	snprintf(TX.fallDist, sizeof(TX.fallDist), "FallDist:");
+		
 // Buttons	
 
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
@@ -988,7 +996,38 @@ void languageSet(char *name, char *val)
 		strcopy(TX.noCreateWCFXML, val, sizeof(TX.noCreateWCFXML));
 		return;
 	}	
-
+	if (strcmp(name, "downloadCheatFile") == 0) {
+		strcopy(TX.downloadCheatFile, val, sizeof(TX.downloadCheatFile));
+		return;
+	}	
+	if (strcmp(name, "downloadComplete") == 0) {
+		strcopy(TX.downloadComplete, val, sizeof(TX.downloadComplete));
+		return;
+	}	
+	if (strcmp(name, "noTxtCodes") == 0) {
+		strcopy(TX.noTxtCodes, val, sizeof(TX.noTxtCodes));
+		return;
+	}	
+	if (strcmp(name, "errorHTTP") == 0) {
+		strcopy(TX.errorHTTP, val, sizeof(TX.errorHTTP));
+		return;
+	}	
+	if (strcmp(name, "useCodes") == 0) {
+		strcopy(TX.useCodes, val, sizeof(TX.useCodes));
+		return;
+	}	
+	if (strcmp(name, "errOpenGCT") == 0) {
+		strcopy(TX.errOpenGCT, val, sizeof(TX.errOpenGCT));
+		return;
+	}	
+	if (strcmp(name, "coverZoom") == 0) {
+		strcopy(TX.coverZoom, val, sizeof(TX.coverZoom));
+		return;
+	}	
+	if (strcmp(name, "fallDist") == 0) {
+		strcopy(TX.fallDist, val, sizeof(TX.fallDist));
+		return;
+	}	
 
 //////////////// Buttons //////////////
 
