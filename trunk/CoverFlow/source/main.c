@@ -832,24 +832,36 @@ int main( int argc, char **argv )
 			//ResetBuffer();
 		//}
 		
-		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1))  // Button2 is the 'Get Info' button
+		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1))  // Button1 is the 'Get Info' button
 		{
 			char tIOS[20];
 			char tAppInfo[30];
+			char tHDDInfo[80];
+			char tGamesCount[40];
+			f32 freespace, used;
+			
+			WBFS_DiskSpace(&used, &freespace);
+			sprintf(tHDDInfo, "HDD Info:  %.2f GB used,  %.2f GB free", used, freespace);
+			sprintf(tGamesCount, "Installed Games: %d", self.gameCnt);
+			
 			sprintf(tIOS, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 			sprintf(tAppInfo, "CoverFloader r%d %s", SVN_VERSION, RELEASE);
+			
 			if (settings.theme) // black text on white matte
 			{
-				CFreeTypeGX_DrawText(ttf18pt, 320, 30,  tAppInfo, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 70, 30,  tIOS, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf18pt, 320, 35,  tAppInfo, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt,  15, 35,  tIOS, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf18pt,  15, 55,  tHDDInfo, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf18pt,  15, 75,  tGamesCount, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 			}
 			else //white text on black matte
 			{
-				CFreeTypeGX_DrawText(ttf18pt, 320, 30,  tAppInfo, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 70, 30,  tIOS, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf18pt, 320, 35,  tAppInfo, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt,  15, 35,  tIOS, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf18pt,  15, 55,  tHDDInfo, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf18pt,  15, 75,  tGamesCount, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 			}
 			//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
-
 		}
 	
 #ifdef DEBUG
