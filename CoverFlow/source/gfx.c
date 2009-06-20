@@ -338,13 +338,17 @@ void Init_Buttons()
     gviddownButton          = Duplicate_Button(viddownButton, 360, 300);
 	gvidupButton            = Duplicate_Button(vidupButton, 388, 300);
 	gbackButton				= Duplicate_Button_TTF(okButton, 468, 335, TX.backB);
-    cheatEnabled[0]			= Button_Init(button_cheat_on_png, button_cheat_off_png, 44, 80);
-    cheatDisabled[0]		= Button_Init(button_cheat_off_png, button_cheat_on_png, 44, 80);
+
   #ifdef CHEAT_MANAGER
+    //cheat manager buttons
+    cheatEnabled[0]         = Button_Init(button_cheat_on_png, button_cheat_off_png, 44, 80);
+    cheatDisabled[0]        = Button_Init(button_cheat_off_png, button_cheat_on_png, 44, 80);
     manageCheatsButton      = Duplicate_Button_TTF(okButton, 468, 198, TX.manageB);
-	pageUpButton            = Duplicate_Button(vidupButton,508,60);
+    pageUpButton            = Duplicate_Button(vidupButton,508,60);
     pageDownButton          = Duplicate_Button(viddownButton,480,60);
     cheatDoneButton         = Duplicate_Button_TTF(okButton,44,60,TX.done);
+    selectAllButton         = Duplicate_Button(cheatEnabled[0],44,90);
+    deselectAllButton       = Duplicate_Button(cheatDisabled[0],44,90);
   #endif
 } // End Init_Buttons();
 
@@ -1709,13 +1713,15 @@ void freeResources(){
     FreeButtonResources(&gviddownButton);
 	FreeButtonResources(&gvidupButton);
 	FreeButtonResources(&gbackButton);
+ #ifdef CHEAT_MANAGER
 	FreeButtonResources(&cheatEnabled[0]);
 	FreeButtonResources(&cheatDisabled[0]);
- #ifdef CHEAT_MANAGER
-    FreeButtonResources(&manageCheatsButton);
+        FreeButtonResources(&manageCheatsButton);
 	FreeButtonResources(&pageUpButton);
     FreeButtonResources(&pageDownButton);
     FreeButtonResources(&cheatDoneButton);
+    FreeButtonResources(&selectAllButton);
+    FreeButtonResources(&deselectAllButton);
  #endif
 
 /* //  CFreeTypeGX_delete function make the games don't boot, removed temporary (it wass addedd in r533)
