@@ -257,7 +257,9 @@ void languageDefault()
 	snprintf(TX.errOpenGCT, sizeof(TX.errOpenGCT), "Could not create (or Open) GCT.");
 	snprintf(TX.coverZoom, sizeof(TX.coverZoom), "CovZoom:");
 	snprintf(TX.fallDist, sizeof(TX.fallDist), "FallDist:");
-		
+	strcopy(TX.infoHDD, "HDD Info:  %.2f GB used,  %.2f GB free", sizeof(TX.infoHDD));
+	strcopy(TX.instGames, "Installed Games: %d", sizeof(TX.instGames));
+	
 // Buttons	
 
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
@@ -1026,6 +1028,14 @@ void languageSet(char *name, char *val)
 	}	
 	if (strcmp(name, "fallDist") == 0) {
 		strcopy(TX.fallDist, val, sizeof(TX.fallDist));
+		return;
+	}	
+	if (strcmp(name, "infoHDD") == 0) {
+		strcopy(TX.infoHDD, val, sizeof(TX.infoHDD));
+		return;
+	}	
+	if (strcmp(name, "instGames") == 0) {
+		strcopy(TX.instGames, val, sizeof(TX.instGames));
 		return;
 	}	
 
