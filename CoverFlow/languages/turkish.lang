@@ -163,6 +163,12 @@ initDisc = Disk Başlatılıyor...
 obsoleteGL = Konfigürasyon dosyanız eskimiş|ve silinecektir.|Devam etmek için OK'a basınız 
 homeMenu = Ana Menü
 homeWiimote = Wiimote Bilgileri
+errorSD = SD Karta yazılamıyor
+gettingGL = Oyun listesi alınıyor
+sortingGL = Oyun listesi sıralanıyor
+initWBFS_GL = WBFS oyun listesi başlatılıyor
+getEntryWBFS = Girişler alınıyor
+noCreateWCFXML = wiicoverflow.xml oluşturulamıyor
 
 ###########
 # Buttons #

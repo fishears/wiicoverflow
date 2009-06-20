@@ -553,13 +553,11 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 414, 99, TX.spacing, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				GRRLIB_DrawImg(465, 94, menu_graphics_box1_texture, 0, 1, 1, 0xFFFFFFFF);
 				CFreeTypeGX_DrawText(ttf16pt, 511, 113, TX.angle, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
-
 				GRRLIB_DrawImg(274, 210, menu_graphics_box1_texture, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 229, "CovZoom", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 229, TX.coverZoom, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				GRRLIB_DrawImg(80, 210, menu_graphics_box1_texture, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawText(ttf16pt, 126, 229, "FallDist", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
-				
-				
+				CFreeTypeGX_DrawText(ttf16pt, 126, 229, TX.fallDist, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+							
 				// Draw the 3 bottom boxes (scrollbar, 3D covers, title)
 				GRRLIB_DrawImg(81, 341, menu_graphics_box2_texture, 0, 1, 1, 0xFFFFFFFF);
 				CFreeTypeGX_DrawText(ttf16pt, 153,360, TX.hideScrollbar, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
