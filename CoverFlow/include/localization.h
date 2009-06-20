@@ -216,6 +216,8 @@ struct LANGUAGE
 	char errOpenGCT[100];			//177
 	char coverZoom[20];				//178
 	char fallDist[20];				//179
+	char infoHDD[60];				//180
+	char instGames[40];				//181
 	
 // Buttons	
 	char addB[15];					//B01

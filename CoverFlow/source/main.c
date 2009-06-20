@@ -841,8 +841,8 @@ int main( int argc, char **argv )
 			f32 freespace, used;
 			
 			WBFS_DiskSpace(&used, &freespace);
-			sprintf(tHDDInfo, "HDD Info:  %.2f GB used,  %.2f GB free", used, freespace);
-			sprintf(tGamesCount, "Installed Games: %d", self.gameCnt);
+			sprintf(tHDDInfo, TX.infoHDD, used, freespace);
+			sprintf(tGamesCount, TX.instGames, self.gameCnt);
 			
 			sprintf(tIOS, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 			sprintf(tAppInfo, "CoverFloader r%d %s", SVN_VERSION, RELEASE);

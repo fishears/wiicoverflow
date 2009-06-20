@@ -169,6 +169,16 @@ sortingGL = Sortiere die Spiele-Liste
 initWBFS_GL = Initialisiere WBFS Spiele-Liste
 getEntryWBFS = Erhalte WBFS Einträge...
 noCreateWCFXML = Die Datei wiicoverflow.xml|konnte nicht erstellt werden.
+downloadCheatFile = Fehlende Cheat-Datei downloaden?
+downloadComplete = Download vollständig!
+noTxtCodes = Keine txt-Codes vorhanden!
+errorHTTP = HTTP Fehler
+useCodes = Diese Codes verwenden?
+errOpenGCT = GCT konnte nicht erstellt|bzw. geöffnet werden.
+coverZoom = Zoom Cov.
+fallDist = fallDist
+infoHDD = HDD Info:  %.2f GB belegt,  %.2f GB frei
+instGames = Anzahl Spiele: %d
 
 ###########
 # Buttons #
@@ -197,3 +207,4 @@ titlesB = Titel
 restoreB = Restore
 fatB = dick
 thinB = dünn
+manageB = Verwalten
