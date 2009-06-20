@@ -117,12 +117,15 @@ Button flagFIButton;
 Button flagMyLangButton;
 Button flagDKButton;
 
+//cheat manager buttons
 Button cheatEnabled[10];
 Button cheatDisabled[10];
 Button manageCheatsButton;
 Button pageUpButton;
 Button pageDownButton;
 Button cheatDoneButton;
+Button selectAllButton;
+Button deselectAllButton;
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg cover_texture_3d;

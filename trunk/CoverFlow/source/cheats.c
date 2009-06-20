@@ -154,7 +154,7 @@ void manage_cheats(int id, struct discHdr *gameList)
         memset(buffer, 0, sizeof(buffer));
         i = 0;
 		//WindowPrompt("DEBUG","Parsing File",&yesButton,&noButton);
-        while(!feof(txtfile) && strcmp(lastline,buffer) && i<MAX_CHEATS) //parse the rest of the txt file
+        while(!feof(txtfile) && strcmp(lastline,buffer)!=0 && i<MAX_CHEATS) //parse the rest of the txt file
         {
 
             fgets(buffer,sizeof buffer,txtfile); //get a line into buffer
@@ -166,7 +166,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                 cheat[i].codelines = 0; //set new title codelines to zero
                 if(i>0) //only write codelines if this isn't the first title
                 {
-                        cheat[i-1].codelines = codecounter-1; //write the number of codelines for the previous title
+                        cheat[i-1].codelines = codecounter; //write the number of codelines for the previous title
                         cheat[i-1].enabled = false;
 
                         if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
@@ -179,10 +179,11 @@ void manage_cheats(int id, struct discHdr *gameList)
                 codecounter = 0; //reset the codecounter
                 i++;
             }
-            else
+            else if(strlen(buffer)!=1)//it must be a code
             {
                     sprintf(cheat[i-1].codes[codecounter],"%s",buffer); //write the codeline
                     codecounter++; //we got another codeline
+                    cheat[i-1].codelines = codecounter; //write the number of codelines
             }
             memset(buffer, 0, sizeof(buffer));
         }
@@ -195,15 +196,19 @@ void manage_cheats(int id, struct discHdr *gameList)
         int display;
         int n;
         int maxlines = i;
+        bool selectAll = false;
 		//WindowPrompt("DEBUG","Create Buttons",&yesButton,&noButton);
         for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
         {
-            cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],44,114+(n*28));
-            cheatDisabled[n] = Duplicate_Button(cheatDisabled[0],44,114+(n*28));
+            cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],44,118+(n*28));
+            cheatDisabled[n] = Duplicate_Button(cheatDisabled[0],44,118+(n*28));
         }
         fclose(txtfile);
 		//WindowPrompt("DEBUG","File Closed",&yesButton,&noButton);
-        pages = (i/LINES_PER_PAGE)+1;
+        if(maxlines<=LINES_PER_PAGE)
+            pages = 1;
+        else
+            pages = (maxlines/LINES_PER_PAGE)+1;
 
         while(1) //cheat manager GUI loop
         {
@@ -265,6 +270,14 @@ void manage_cheats(int id, struct discHdr *gameList)
                     }
                     return;
                 }
+                else if(Button_Select(&selectAllButton,pointer.p_x,pointer.p_y) || Button_Select(&selectAllButton,pointer.p_x,pointer.p_y))
+                {
+                    selectAll = selectAll ? false : true;
+                    for(n=(currpage-1)*LINES_PER_PAGE;n<(currpage)*LINES_PER_PAGE && n<maxlines;n++)
+                    {
+                        cheat[n].enabled = selectAll;
+                    }
+                }
             }
             else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_PLUS)) //page forward
             {
@@ -293,17 +306,24 @@ void manage_cheats(int id, struct discHdr *gameList)
             for(i=0;i<LINES_PER_PAGE;i++)
             {
                 display = i+((currpage-1)*LINES_PER_PAGE);
-                if(display < (maxlines-1)) //only show up to the number of lines available
+                if(display < (maxlines)-1) //only show up to the number of lines available
                 {
-                sprintf(tTemp,"%s has %d codes",cheat[display].title, cheat[display].codelines);
-                CFreeTypeGX_DrawText(ttf14pt, 90, 130+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-                step +=28;
-                if(cheat[display].enabled) //paint the appropriate cheat button state
-                    Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],0);
-                else
-                    Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],1);
+                    //sprintf(tTemp,"%s has %d codes",cheat[display].title, cheat[display].codelines);
+                    sprintf(tTemp,"%s",cheat[display].title);
+                    CFreeTypeGX_DrawText(ttf14pt, 90, 134+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+                    step +=28;
+                    if(cheat[display].enabled) //paint the appropriate cheat button state
+                        Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],0);
+                    else
+                        Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],1);
                 }
             }
+            if(selectAll) //paint the "de/select all" button
+                Button_Toggle_Paint(&selectAllButton,&deselectAllButton,1);
+            else
+                Button_Toggle_Paint(&selectAllButton,&deselectAllButton,0);
+            Button_Hover(&selectAllButton,pointer.p_x,pointer.p_y);
+            Button_Hover(&selectAllButton,pointer.p_x,pointer.p_y);
             Button_TTF_Paint(&cheatDoneButton);
             if(pages>1)
             {
@@ -435,7 +455,7 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
                         }
                         else
                         {
-                            if ((tempCode[x] != ' '))
+                            if ((tempCode[x] != ' ' && tempCode[x] != 'X'))
                                 fprintf(gctFile, "%c", currentChar); //write out the HEXified character
                             currentChar = 0;
                         }
