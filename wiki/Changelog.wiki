@@ -5,6 +5,7 @@
   * Improved GUI behaviour
   * Center cover 'pops' towards the user
   * Easing in/out of covers and dialogs
+  * Added information window
   
 -FIX-
   * Anti_002_fix from WiiPower working with cIOS rev10
