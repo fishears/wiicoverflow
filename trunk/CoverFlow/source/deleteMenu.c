@@ -54,6 +54,7 @@ bool Menu_Delete(){
 			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
 			BUFFER_InitBuffer();
 			WindowPrompt(TX.successDelete, TX.pressOkContinue, &okButton, 0);
+			WBFS_DiskSpace(&self.usedSpace, &self.freeSpace);
 			return true;
 		}
 	}

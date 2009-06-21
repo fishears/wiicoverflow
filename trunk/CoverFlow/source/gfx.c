@@ -80,6 +80,9 @@ void LoadTextures()
 	flag_fi_texture = GRRLIB_LoadTexturePNG(flag_fi_png);
 	flag_MyLang_texture = GRRLIB_LoadTexturePNG(flag_MyLang_png);
 	flag_dk_texture = GRRLIB_LoadTexturePNG(flag_dk_png);
+	hdspace_texture                 = GRRLIB_LoadTexturePNG(hdspace_png);
+	button_round_info_texture       = GRRLIB_LoadTexturePNG(button_round_info_png);
+	button_round_info_over_texture	= GRRLIB_LoadTexturePNG(button_round_info_over_png);	
 }
 
 void DrawBufferedCover(int i, float loc, float zpos, float angle, float falloff)
@@ -338,6 +341,8 @@ void Init_Buttons()
     gviddownButton          = Duplicate_Button(viddownButton, 360, 300);
 	gvidupButton            = Duplicate_Button(vidupButton, 388, 300);
 	gbackButton				= Duplicate_Button_TTF(okButton, 468, 335, TX.backB);
+
+    infoButton				= Button_Init(button_round_info_png, button_round_info_over_png, 580, 54);
 
   #ifdef CHEAT_MANAGER
     //cheat manager buttons

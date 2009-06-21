@@ -73,6 +73,9 @@ extern const u8 flag_dk_png[];		// danish
 extern const u8 flag_tr_png[];		// turkish
 extern const u8 button_cheat_on_png[];  //for cheat manager
 extern const u8 button_cheat_off_png[];  //for cheat manager
+extern const u8 hdspace_png[];
+extern const u8 button_round_info_png[];
+extern const u8 button_round_info_over_png[];
 
 GRRLIB_texImg menu_button_texture;
 GRRLIB_texImg menu_button_over_texture;
@@ -103,6 +106,8 @@ GRRLIB_texImg flag_ct_texture; // Catalan Flag
 GRRLIB_texImg flag_fi_texture; // Finnland Flag
 GRRLIB_texImg flag_MyLang_texture; // MyLang Flag
 GRRLIB_texImg flag_dk_texture; // Denmark Flag
+GRRLIB_texImg button_round_info_texture;
+GRRLIB_texImg button_round_info_over_texture;
 
 Button flagBRButton;
 Button flagDAButton;
@@ -116,6 +121,8 @@ Button flagCTButton;
 Button flagFIButton;
 Button flagMyLangButton;
 Button flagDKButton;
+
+Button infoButton;
 
 //cheat manager buttons
 Button cheatEnabled[10];
@@ -142,6 +149,7 @@ GRRLIB_texImg battery;
 GRRLIB_texImg battery_dead;
 GRRLIB_texImg battery_bar;
 GRRLIB_texImg battery_bar_red;
+GRRLIB_texImg hdspace_texture;
 
 Button addButton;
 Button slideButton;
