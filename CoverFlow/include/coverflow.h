@@ -71,7 +71,7 @@
 
 //#define TEST_MODE 1
 #define DEBUG 1
-//#define CHEAT_MANAGER
+#define CHEAT_MANAGER
 
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 
@@ -215,6 +215,7 @@ typedef struct{
 	bool firstTimeGP;  		// First time on graphics panel, used by backup_gpSettings();
 	bool switched3dto2D;	// When installing new games
 	bool waiting;			// when waiting, for showing icon
+	bool isCIOS10;			// cIOS10 ?
 	int dummy;
 
 } s_self;
