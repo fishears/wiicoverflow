@@ -144,7 +144,7 @@ welcomeMsg = Welkom bij CoverFloader
 batteryUnit = P%d
 basic = Standaard
 advanced = Geavanceerd
-hideScrollbar = Scrollbar
+hideScrollbar = Schuifbalk
 covers3D = 3D Hoesjes
 gameText =  Spel Titel
 gameSettings = Spel Instellingen
@@ -163,6 +163,12 @@ initDisc = Initialiseren Disc...
 obsoleteGL = Uw config file is verouderd en|zal verwijderd worden.|Druk OK om door te gaan 
 homeMenu = HOME Menu
 homeWiimote = Wiimote Informatie
+errorSD = Schrijven naar SD-kaart niet mogelijk 
+gettingGL =  Spel-lijst ophalen
+sortingGL = Sorteren spel-lijst
+initWBFS_GL = Initialiseren WBFS Spel-lijst...
+getEntryWBFS = Inhoud ophalen...
+noCreateWCFXML = Kan wiicoverflow.xml niet aanmaken
 
 ###########
 # Buttons #
