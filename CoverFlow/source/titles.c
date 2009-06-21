@@ -55,6 +55,10 @@ void fillTitleStruct(s_title* titleList, int len){
 			snprintf(titleList[i].id, 5, "%s",line);
 			sprintf(titleList[i].name, "%s",line+7);
 			titleList[i].name[strlen(titleList[i].name)-1] = '\0';
+			if (titleList[i].name[strlen(titleList[i].name)-1]==0x0d) // playing with notepad = stupid titles
+			{
+				titleList[i].name[strlen(titleList[i].name)-1] = '\0';
+			}
 			//i++;
 			//break;
 		}
