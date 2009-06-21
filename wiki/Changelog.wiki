@@ -7,6 +7,7 @@
   * Easing in/out of covers and dialogs
   
 -FIX-
+  * Anti_002_fix from WiiPower working with cIOS rev10
   * 002 Fix from WiiPower working with CIOS 13a (Indy, MySimsRacing, GBusters all work)
   * Other memory issues solved
   * Minor bug fixes
