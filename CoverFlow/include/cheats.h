@@ -23,8 +23,8 @@ extern "C" {
     #define CODESITE "http://www.usbgecko.com/codes/codes/"
     #define LINES_PER_PAGE 9 //lines per page to display
     #define LINE_LENGTH 50 //max title line length
-    #define MAX_CODES 50 //max number of cheat codes
-    #define CHEAT_LINE 20 //cheat codeline length
+    #define MAX_CODES 20 //max number of cheat codes
+    #define CHEAT_LINE 18 //cheat codeline length
     #define MAX_CHEATS 30 //maximum number of cheats per game
 
 typedef struct {

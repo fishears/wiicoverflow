@@ -126,9 +126,10 @@ void manage_cheats(int id, struct discHdr *gameList)
 {
     //parses the txt file and allows user to enable/disable cheats
     //then turns enabled codes into a gct file to be used with ocarina
+    //TODO: editable codelines, viewable comment lines, heading lines... so much work!!!
     CHEAT cheat;
-    char buffer[LINE_LENGTH+1]; //dummy line for tests
-    char lastline[LINE_LENGTH]; //hold the game name (which also appears at end of file)
+    char buffer[128]; //dummy line for tests
+    char lastline[128]; //hold the game name (which also appears at end of file)
     char filename[10];
     char titleID[7];
     char path[50];
@@ -156,12 +157,16 @@ void manage_cheats(int id, struct discHdr *gameList)
 		//WindowPrompt("DEBUG","Parsing File",&yesButton,&noButton);
         while(!feof(txtfile) && strcmp(lastline,buffer)!=0 && i<MAX_CHEATS) //parse the rest of the txt file
         {
-
-            fgets(buffer,sizeof buffer,txtfile); //get a line into buffer
+                //WindowPrompt("DEBUG","get 1st line",&yesButton,&noButton);
+            fgets(buffer,sizeof(buffer),txtfile); //get a line into buffer
+                //WindowPrompt("DEBUG","GOT 1st line",&yesButton,&noButton);
             if(!is_code(buffer) && strlen(buffer)!=1) //if its not a code and not a blank line
             {
+                    //WindowPrompt("DEBUG","not a code",&yesButton,&noButton);
                 memset(cheat[i].title, 0, LINE_LENGTH);
-                strncpy(cheat[i].title,buffer,strlen(buffer)-1); //write a title line
+                buffer[strlen(buffer)-1]='\0'; //get rid of the end of line
+                sprintf(cheat[i].title,buffer); //write a title line
+                    //WindowPrompt("title1",cheat[i].title,&okButton,0);
                 
                 cheat[i].codelines = 0; //set new title codelines to zero
                 if(i>0) //only write codelines if this isn't the first title
@@ -173,7 +178,9 @@ void manage_cheats(int id, struct discHdr *gameList)
                         {
                                 i--;
                                 memset(cheat[i].title, 0, LINE_LENGTH);
-                                strncpy(cheat[i].title,buffer,strlen(buffer)-1); //write THIS title over THAT title
+                                sprintf(cheat[i].title,buffer); //write THIS title over THAT title
+                                    //WindowPrompt("title2",cheat[i].title,&okButton,0);
+                                cheat[i].codelines = 0; //set new title codelines to zero
                         }
                 }
                 codecounter = 0; //reset the codecounter
@@ -181,6 +188,7 @@ void manage_cheats(int id, struct discHdr *gameList)
             }
             else if(strlen(buffer)!=1)//it must be a code
             {
+                        //WindowPrompt("DEBUG","is a code",&yesButton,&noButton);
                     sprintf(cheat[i-1].codes[codecounter],"%s",buffer); //write the codeline
                     codecounter++; //we got another codeline
                     cheat[i-1].codelines = codecounter; //write the number of codelines
@@ -196,7 +204,7 @@ void manage_cheats(int id, struct discHdr *gameList)
         int display;
         int n;
         int maxlines = i;
-        bool selectAll = false;
+        //bool selectAll = false;
 		//WindowPrompt("DEBUG","Create Buttons",&yesButton,&noButton);
         for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
         {
@@ -270,6 +278,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                     }
                     return;
                 }
+/*
                 else if(Button_Select(&selectAllButton,pointer.p_x,pointer.p_y) || Button_Select(&selectAllButton,pointer.p_x,pointer.p_y))
                 {
                     selectAll = selectAll ? false : true;
@@ -278,6 +287,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                         cheat[n].enabled = selectAll;
                     }
                 }
+*/
             }
             else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_PLUS)) //page forward
             {
@@ -309,6 +319,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                 if(display < (maxlines)-1) //only show up to the number of lines available
                 {
                     //sprintf(tTemp,"%s has %d codes",cheat[display].title, cheat[display].codelines);
+                    //strncpy(tTemp,cheat[display].title,strlen((cheat[display].title)-1));
                     sprintf(tTemp,"%s",cheat[display].title);
                     CFreeTypeGX_DrawText(ttf14pt, 90, 134+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
                     step +=28;
@@ -318,12 +329,14 @@ void manage_cheats(int id, struct discHdr *gameList)
                         Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],1);
                 }
             }
+/*
             if(selectAll) //paint the "de/select all" button
                 Button_Toggle_Paint(&selectAllButton,&deselectAllButton,1);
             else
                 Button_Toggle_Paint(&selectAllButton,&deselectAllButton,0);
             Button_Hover(&selectAllButton,pointer.p_x,pointer.p_y);
             Button_Hover(&selectAllButton,pointer.p_x,pointer.p_y);
+*/
             Button_TTF_Paint(&cheatDoneButton);
             if(pages>1)
             {
@@ -349,23 +362,27 @@ void manage_cheats(int id, struct discHdr *gameList)
 bool is_code(char* line)
 {
     //checks the line to see if it's a code line
-    char* pch;
-    char* msg = malloc(strlen(line)*sizeof(char));
-    sprintf(msg, line);
-    pch = strtok(msg, " ");
-    while(pch!=NULL)
+    //TODO: parse the code at this stage to tag it as having editable values if any non-hex chars found
+    if(strlen(line)>16) //don't mess about if it's just too short to be a code then it't NOT a code
     {
-        if(strlen(pch) == 8) //test for a block of 8 characters to SPACE
+        char* pch;
+        char* msg = malloc(strlen(line)*sizeof(char));
+        sprintf(msg, line);
+        pch = strtok(msg, " ");
+        while(pch!=NULL)
         {
-            pch = strtok(NULL,"\n");
-            if(strlen(pch)==8) //test for second block of 8 characters to NEWLINE
+            if(strlen(pch) == 8) //test for a block of 8 characters to SPACE
             {
-                free(msg);
-                return true; //it's a code line (or a good copy)
+                pch = strtok(NULL,"\n");
+                if(strlen(pch)==8) //test for second block of 8 characters to NEWLINE
+                {
+                    free(msg);
+                    return true; //it's a code line (or a good copy)
+                }
             }
+            free(msg);
+            return false;
         }
-        free(msg);
-        return false; 
     }
     return false;
 }
