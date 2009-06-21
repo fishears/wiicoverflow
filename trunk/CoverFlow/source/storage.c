@@ -194,9 +194,10 @@ bool check_write_access(){
 
 void initWBFS(){
 
-	int retries = 3;
+	int retries = 10;
 	int retried =0;
 	int ret;
+	bool init=true;
 	
 	self.progress += .1;
 	sprintf(self.debugMsg, TX.initWBFS);
@@ -214,12 +215,20 @@ void initWBFS(){
 		{
 			if (retries==0)
 			{
+				if (!init)
+				{
+					Subsystem_Init();
+					WDVD_Init();
+					/* Initialize Wiimote subsystem */
+					WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+					init=true;
+				}
 				WPAD_ScanPads();
 				DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 				GRRLIB_Render();
 				//tell user that no drive was found
 				int NoDrive;
-				if (retried<2)
+				if (retried<7) // if this is any bigger it'll dump
 				{
 					NoDrive=WindowPrompt(TX.error, TX.errorNoUSBDrv, &okButton, &cancelButton);
 				}
@@ -241,17 +250,24 @@ void initWBFS(){
 					SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
 				}
 			}
-			//tries to connect 3 times before asking user again
+			//tries to connect 10 times before asking user again
 			retries--;
-			Subsystem_Close();
-			WDVD_Close();
-			IOS_ReloadIOS(249);
-			Subsystem_Init();
-			WDVD_Init();
-			/* Initialize Wiimote subsystem */
-			WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+			if (init)
+			{
+				Subsystem_Close();
+				WDVD_Close();
+				init=false;
+			}
+			if (retries>4) IOS_ReloadIOS(249);  // from NeoGamma 4 (don't reload cIOS everytime)
 			goto INIT_RETRY;
 		}
+	}
+	if (!init)
+	{
+		Subsystem_Init();
+		WDVD_Init();
+		/* Initialize Wiimote subsystem */
+		WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 	}
 }
 
