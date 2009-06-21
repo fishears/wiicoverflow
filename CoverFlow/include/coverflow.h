@@ -47,6 +47,7 @@
 #include "ee.h"
 #include "konami.h"
 #include "cheats.h"
+#include "info.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -217,6 +218,9 @@ typedef struct{
 	bool waiting;			// when waiting, for showing icon
 	bool isCIOS10;			// cIOS10 ?
 	int dummy;
+	
+	f32 freeSpace;
+	f32 usedSpace;
 
 } s_self;
 

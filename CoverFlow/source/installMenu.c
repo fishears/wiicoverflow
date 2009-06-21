@@ -126,6 +126,7 @@ bool Menu_Install()
 				
 				WiiLight(1);
 				WindowPromptInstall((char*)headerdisc.id, name, TX.successInstall, &okButton,0);
+				WBFS_DiskSpace(&self.usedSpace, &self.freeSpace);
 				//WindowPrompt (TX.successInstall, name,&okButton,0);
 				WiiLight(0);
 				return true;

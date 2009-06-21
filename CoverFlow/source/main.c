@@ -81,6 +81,8 @@ void initVars()
 	self.isCIOS10 = false;
 	initGameSettings(&gameSetting);
 
+	self.freeSpace = 0;
+	self.usedSpace = 0;
 }
 
 
@@ -246,6 +248,8 @@ int main( int argc, char **argv )
 	if(iosrev < (u32)12)
 		self.isCIOS10 = true;
 	
+	WBFS_DiskSpace(&self.usedSpace, &self.freeSpace);
+	
 	//////////////////////////
 	// main screen gui loop //
 	//////////////////////////
@@ -340,6 +344,10 @@ int main( int argc, char **argv )
 				self.dragging = true;
 				self.scrolling = true;
 			}
+			else if(Button_Select(&infoButton, pointer.p_x, pointer.p_y)){
+				showInfoWindow();
+			}
+			
 			else // user clicked A somewhere on the screen
 			{
 				if(self.gameCnt) // any games?
@@ -776,6 +784,8 @@ int main( int argc, char **argv )
 			if(!settings.parentalLock)
 				Button_Theme_Paint(&settingsButton, settings.theme);
 			
+			Button_Theme_Paint(&infoButton, settings.theme);
+			
 			// Draw Game Title
 			if(settings.coverText && (!self.dragging && !self.twisting && select_ready))
 			{	
@@ -795,7 +805,8 @@ int main( int argc, char **argv )
 			 (((!settings.parentalLock) && (Button_Hover(&deleteButton, pointer.p_x, pointer.p_y) 
 			                              || Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y))) ||
 			  (Button_Hover(&loadButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&backButton, pointer.p_x, pointer.p_y))) ))
+			   Button_Hover(&backButton, pointer.p_x, pointer.p_y))) )
+			   || Button_Hover(&infoButton, pointer.p_x, pointer.p_y))
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
@@ -838,15 +849,20 @@ int main( int argc, char **argv )
 		
 		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1))  // Button1 is the 'Get Info' button
 		{
+			showInfoWindow();
+			/*
 			char tIOS[20];
 			char tAppInfo[30];
 			char tHDDInfo[80];
 			char tGamesCount[40];
+			char tTotalSize[40];
+			
 			f32 freespace, used;
 			
 			WBFS_DiskSpace(&used, &freespace);
 			sprintf(tHDDInfo, TX.infoHDD, used, freespace);
 			sprintf(tGamesCount, TX.instGames, self.gameCnt);
+			sprintf(tTotalSize, "%d (%2f)", (int)(freespace + used), (used / (freespace + used) * 100));
 			
 			sprintf(tIOS, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
 			sprintf(tAppInfo, "CoverFloader r%d %s", SVN_VERSION, RELEASE);
@@ -864,8 +880,10 @@ int main( int argc, char **argv )
 				CFreeTypeGX_DrawText(ttf16pt,  15, 35,  tIOS, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf18pt,  15, 55,  tHDDInfo, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf18pt,  15, 75,  tGamesCount, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf18pt,  15, 95,  tTotalSize, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 			}
 			//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+			*/
 		}
 	
 #ifdef DEBUG
