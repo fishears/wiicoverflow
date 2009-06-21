@@ -1615,11 +1615,13 @@ void freeResources(){
 	free(flag_fi_texture.data);
 	free(flag_MyLang_texture.data);
 	if (coverLoaded)free(current_cover_texture.data); // is this always available?
+	free(hdspace_texture.data);
 	
 	//buttons
 	FreeButtonResources(&slideButton);
 	FreeButtonResources(&settingsButton);
 	FreeButtonResources(&addButton);
+	FreeButtonResources(&infoButton);
  	// Dialog Box Buttons
 	FreeButtonResources(&okButton);
 	FreeButtonResources(&cancelButton);
@@ -1721,7 +1723,7 @@ void freeResources(){
  #ifdef CHEAT_MANAGER
 	FreeButtonResources(&cheatEnabled[0]);
 	FreeButtonResources(&cheatDisabled[0]);
-        FreeButtonResources(&manageCheatsButton);
+	FreeButtonResources(&manageCheatsButton);
 	FreeButtonResources(&pageUpButton);
     FreeButtonResources(&pageDownButton);
     FreeButtonResources(&cheatDoneButton);
