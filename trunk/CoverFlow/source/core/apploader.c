@@ -10,7 +10,7 @@
 #include "settings.h"
 
 extern s_settings settings;
-
+extern s_self self;
 
 /*KENOBI! - FISHEARS*/
 extern const unsigned char kenobiwii[];
@@ -218,6 +218,27 @@ bool Search_and_patch_Video_Modes(void *Address, u32 Size, GXRModeObj* Table[])
 	return found;
 }
 
+
+/** Anti 002 fix for IOS 249 rev < 12 thanks to WiiPower **/
+void Anti_002_fix(void *Address, int Size)
+{
+	u8 SearchPattern[12] = 	{ 0x2C, 0x00, 0x00, 0x00, 0x48, 0x00, 0x02, 0x14, 0x3C, 0x60, 0x80, 0x00 };
+	u8 PatchData[12] = 		{ 0x2C, 0x00, 0x00, 0x00, 0x40, 0x82, 0x02, 0x14, 0x3C, 0x60, 0x80, 0x00 };
+
+	void *Addr = Address;
+	void *Addr_end = Address+Size;
+
+	while(Addr <= Addr_end-sizeof(SearchPattern))
+	{
+		if(memcmp(Addr, SearchPattern, sizeof(SearchPattern))==0)
+		{
+			memcpy(Addr,PatchData,sizeof(PatchData));
+		}
+		Addr += 4;
+	}
+}
+
+
 s32 Apploader_Run(entry_point *entry)
 {
 	app_entry appldr_entry;
@@ -252,6 +273,9 @@ s32 Apploader_Run(entry_point *entry)
 
 	//002 fix per Wiipower @ http://gbatemp.net/index.php?showtopic=158885
 	// working with CIOS 13a
+	
+	/* ERROR 002 fix (thanks to WiiPower for sharing this)*/
+
 	*(u32 *)0x80003140 = *(u32 *)0x80003188; 
 
 	// copy kenobiwii code into tempoarary memory area
@@ -276,6 +300,10 @@ s32 Apploader_Run(entry_point *entry)
 		/* Read data from DVD */
 		WDVD_Read(dst, len, (u64)(offset << 2));
 
+		// with cIOS rev10 use Anti_002_fix AND ERROR_002_fix. Thx WiiPower
+		if (self.isCIOS10 == true )
+			Anti_002_fix(dst, len);
+		
 		if (settings.video == 1) // patch
 
 		{

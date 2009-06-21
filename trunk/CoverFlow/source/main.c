@@ -78,7 +78,7 @@ void initVars()
 	self.firstTimeGP = true;
 	self.switched3dto2D = false;
 	self.waiting = false;
-	
+	self.isCIOS10 = false;
 	initGameSettings(&gameSetting);
 
 }
@@ -241,6 +241,10 @@ int main( int argc, char **argv )
 	DrawCoverFlyInStart();
 
 	bool select_ready    = false;
+	
+	u32 iosrev = IOS_GetRevision();
+	if(iosrev < (u32)12)
+		self.isCIOS10 = true;
 	
 	//////////////////////////
 	// main screen gui loop //
