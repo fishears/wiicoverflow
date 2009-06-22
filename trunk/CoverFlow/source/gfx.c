@@ -349,11 +349,11 @@ void Init_Buttons()
     cheatEnabled[0]         = Button_Init(button_cheat_on_png, button_cheat_off_png, 44, 80);
     cheatDisabled[0]        = Button_Init(button_cheat_off_png, button_cheat_on_png, 44, 80);
     manageCheatsButton      = Duplicate_Button_TTF(okButton, 468, 198, TX.manageB);
-    pageUpButton            = Duplicate_Button(vidupButton,508,60);
-    pageDownButton          = Duplicate_Button(viddownButton,480,60);
-    cheatDoneButton         = Duplicate_Button_TTF(okButton,44,60,TX.done);
-    selectAllButton         = Duplicate_Button(cheatEnabled[0],44,90);
-    deselectAllButton       = Duplicate_Button(cheatDisabled[0],44,90);
+    pageUpButton            = Duplicate_Button(vidupButton,478,82);
+    pageDownButton          = Duplicate_Button(viddownButton,450,82);
+    cheatDoneButton         = Duplicate_Button_TTF(okButton,84,82,TX.done);
+    selectAllButton         = Duplicate_Button(cheatEnabled[0],84,120);
+    deselectAllButton       = Duplicate_Button(cheatDisabled[0],84,120);
   #endif
 } // End Init_Buttons();
 

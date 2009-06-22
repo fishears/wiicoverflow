@@ -72,7 +72,7 @@
 
 //#define TEST_MODE 1
 #define DEBUG 1
-//#define CHEAT_MANAGER
+#define CHEAT_MANAGER
 
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 

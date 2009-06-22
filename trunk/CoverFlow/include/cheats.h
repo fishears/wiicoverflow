@@ -24,30 +24,35 @@ extern "C" {
     #define LINES_PER_PAGE 9 //lines per page to display
     #define LINE_LENGTH 50 //max title line length
     #define MAX_CODES 20 //max number of cheat codes
-    #define CHEAT_LINE 18 //cheat codeline length
+    #define CHEAT_LINE 20 //cheat codeline length
     #define MAX_CHEATS 30 //maximum number of cheats per game
 
 typedef struct {
-        char title[LINE_LENGTH]; //cheat description text
-        bool enabled; //is the cheat active
-        char codes[MAX_CODES][CHEAT_LINE]; //cheat codes block
-        int codelines; //number of lines of cheat codes
+    char title[LINE_LENGTH]; //cheat description text
+    bool enabled; //is the cheat active
+    char codes[MAX_CODES][CHEAT_LINE]; //cheat codes block
+    int codelines; //number of lines of cheat codes
 } CHEAT[MAX_CHEATS];
 
-struct llCODE{
-        unsigned int FirstBit; //first hex number
-        unsigned int SecondBit; //second hex number
-        struct llCODE * parent; 
-        struct llCODE * child; 
-};
+typedef struct {
+    bool selectAll; //select all/de-select all stus of page
+} PAGE;
 
-struct llCHEAT{
-        char title[LINE_LENGTH]; //cheat description text
-        bool enabled; //is the cheat active
-        struct llCODE * CodeList; //cheat codes list
-        struct llCHEAT * parent; 
-        struct llCHEAT * child; 
-};
+
+//struct llCODE{
+//        unsigned int FirstBit; //first hex number
+//        unsigned int SecondBit; //second hex number
+//        struct llCODE * parent;
+//        struct llCODE * child;
+//};
+//
+//struct llCHEAT{
+//        char title[LINE_LENGTH]; //cheat description text
+//        bool enabled; //is the cheat active
+//        struct llCODE * CodeList; //cheat codes list
+//        struct llCHEAT * parent;
+//        struct llCHEAT * child;
+//};
 
     
     bool check_txt(int id, struct discHdr *gameList);

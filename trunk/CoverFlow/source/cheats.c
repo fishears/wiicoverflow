@@ -70,14 +70,11 @@ bool check_gct(int id, struct discHdr *gameList)
 
 bool download_txt(int id, struct discHdr *gameList)
 {
+    //attempt to download the game's txt cheat file from www.usbgecko.com
     if(!(WindowPrompt(TX.downloadB, TX.downloadCheatFile,&okButton, &cancelButton)))
 	{
 		return false;
 	}
-	
-	
-
-    //attempt to download the game's txt cheat file from www.usbgecko.com
     if(check_write_access())
     {
         if(networkInit(self.ipAddress)){
@@ -141,12 +138,10 @@ void manage_cheats(int id, struct discHdr *gameList)
     sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
     chdir(path);
     FILE *txtfile=NULL;
-	//WindowPrompt("DEBUG","File About to open",&yesButton,&noButton);
     txtfile = fopen(filename, "r");
 	
     if(txtfile)
     {
-		//WindowPrompt("DEBUG","File Open",&yesButton,&noButton);
         fgets (buffer, sizeof buffer, txtfile ); //discard 1st line -> titleID
         memset(buffer, 0, sizeof(buffer));
         memset(lastline,0,sizeof lastline);
@@ -154,15 +149,11 @@ void manage_cheats(int id, struct discHdr *gameList)
         fgets (buffer, sizeof buffer, txtfile ); //discard 3rd line -> ""
         memset(buffer, 0, sizeof(buffer));
         i = 0;
-		//WindowPrompt("DEBUG","Parsing File",&yesButton,&noButton);
         while(!feof(txtfile) && strcmp(lastline,buffer)!=0 && i<MAX_CHEATS) //parse the rest of the txt file
         {
-                //WindowPrompt("DEBUG","get 1st line",&yesButton,&noButton);
             fgets(buffer,sizeof(buffer),txtfile); //get a line into buffer
-                //WindowPrompt("DEBUG","GOT 1st line",&yesButton,&noButton);
             if(!is_code(buffer) && strlen(buffer)!=1) //if its not a code and not a blank line
             {
-                    //WindowPrompt("DEBUG","not a code",&yesButton,&noButton);
                 memset(cheat[i].title, 0, LINE_LENGTH);
                 buffer[strlen(buffer)-1]='\0'; //get rid of the end of line
                 sprintf(cheat[i].title,buffer); //write a title line
@@ -188,14 +179,13 @@ void manage_cheats(int id, struct discHdr *gameList)
             }
             else if(strlen(buffer)!=1)//it must be a code
             {
-                        //WindowPrompt("DEBUG","is a code",&yesButton,&noButton);
-                    sprintf(cheat[i-1].codes[codecounter],"%s",buffer); //write the codeline
+                    sprintf(cheat[i-1].codes[codecounter],"%18s",buffer); //write the codeline
+                    //WindowPrompt("code",cheat[i-1].codes[codecounter],&okButton,0);
                     codecounter++; //we got another codeline
                     cheat[i-1].codelines = codecounter; //write the number of codelines
             }
-            memset(buffer, 0, sizeof(buffer));
+            memset(buffer, 0, 128);
         }
-		//WindowPrompt("DEBUG","Cheats parsed",&yesButton,&noButton);
         memset(&lastline,0,LINE_LENGTH);
 
         char tTemp[135];
@@ -204,19 +194,21 @@ void manage_cheats(int id, struct discHdr *gameList)
         int display;
         int n;
         int maxlines = i;
-        //bool selectAll = false;
-		//WindowPrompt("DEBUG","Create Buttons",&yesButton,&noButton);
         for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
         {
-            cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],44,118+(n*28));
-            cheatDisabled[n] = Duplicate_Button(cheatDisabled[0],44,118+(n*28));
+            cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],84,148+(n*28));
+            cheatDisabled[n] = Duplicate_Button(cheatDisabled[0],84,148+(n*28));
         }
         fclose(txtfile);
-		//WindowPrompt("DEBUG","File Closed",&yesButton,&noButton);
         if(maxlines<=LINES_PER_PAGE)
             pages = 1;
         else
             pages = (maxlines/LINES_PER_PAGE)+1;
+        PAGE page[pages]; //initialize the pages
+        for(n=1;n<=pages;n++)
+        {
+            page[n].selectAll = false;
+        }
 
         while(1) //cheat manager GUI loop
         {
@@ -262,7 +254,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                         else
                             currpage = pages;
                     }
-                 }
+                }
                 if(Button_Select(&cheatDoneButton, pointer.p_x, pointer.p_y))
                 {
                    for(n=0;n<maxlines;n++)
@@ -278,16 +270,14 @@ void manage_cheats(int id, struct discHdr *gameList)
                     }
                     return;
                 }
-/*
-                else if(Button_Select(&selectAllButton,pointer.p_x,pointer.p_y) || Button_Select(&selectAllButton,pointer.p_x,pointer.p_y))
+                else if(Button_Select(&selectAllButton,pointer.p_x,pointer.p_y) || Button_Select(&deselectAllButton,pointer.p_x,pointer.p_y))
                 {
-                    selectAll = selectAll ? false : true;
+                    page[currpage].selectAll = page[currpage].selectAll ? false : true;
                     for(n=(currpage-1)*LINES_PER_PAGE;n<(currpage)*LINES_PER_PAGE && n<maxlines;n++)
                     {
-                        cheat[n].enabled = selectAll;
+                        cheat[n].enabled = page[currpage].selectAll;
                     }
                 }
-*/
             }
             else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_PLUS)) //page forward
             {
@@ -304,24 +294,24 @@ void manage_cheats(int id, struct discHdr *gameList)
                     currpage = pages;
             }
 
-            //draw_covers();
-            GRRLIB_Rectangle(40, 56, 560, 326, 0xffffffdd, true); //draw a big boring box
-            GRRLIB_Rectangle(42, 58, 556, 322, 0x737373FF, true);
+            draw_covers();
+            GRRLIB_Rectangle(70, 76, 500, 346, 0xffffffdd, true); //draw a big boring box
+            GRRLIB_Rectangle(72, 78, 496, 342, 0x737373FF, true);
             int step = 0;
+            CFreeTypeGX_DrawText(ttf18pt, 320, 100, "Cheat Manager", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
             if(pages>1)
             {
                 sprintf(tTemp,"%d/%d",currpage,pages); //report page x of xx
-                CFreeTypeGX_DrawText(ttf14pt, 550, 80, tTemp, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+                CFreeTypeGX_DrawText(ttf14pt, 520, 100, tTemp, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
             }
             for(i=0;i<LINES_PER_PAGE;i++)
             {
                 display = i+((currpage-1)*LINES_PER_PAGE);
                 if(display < (maxlines)-1) //only show up to the number of lines available
                 {
-                    //sprintf(tTemp,"%s has %d codes",cheat[display].title, cheat[display].codelines);
-                    //strncpy(tTemp,cheat[display].title,strlen((cheat[display].title)-1));
+                    //sprintf(tTemp,"%s:%d",cheat[display].title, cheat[display].codelines);
                     sprintf(tTemp,"%s",cheat[display].title);
-                    CFreeTypeGX_DrawText(ttf14pt, 90, 134+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+                    CFreeTypeGX_DrawText(ttf14pt, 130, 164+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
                     step +=28;
                     if(cheat[display].enabled) //paint the appropriate cheat button state
                         Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],0);
@@ -329,14 +319,12 @@ void manage_cheats(int id, struct discHdr *gameList)
                         Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],1);
                 }
             }
-/*
-            if(selectAll) //paint the "de/select all" button
+            if(page[currpage].selectAll) //paint the "de/select all" button
                 Button_Toggle_Paint(&selectAllButton,&deselectAllButton,1);
             else
                 Button_Toggle_Paint(&selectAllButton,&deselectAllButton,0);
             Button_Hover(&selectAllButton,pointer.p_x,pointer.p_y);
-            Button_Hover(&selectAllButton,pointer.p_x,pointer.p_y);
-*/
+            Button_Hover(&deselectAllButton,pointer.p_x,pointer.p_y);
             Button_TTF_Paint(&cheatDoneButton);
             if(pages>1)
             {
@@ -442,7 +430,7 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
             WindowPrompt(TX.error,TX.errOpenGCT, &okButton,0);
             return;
     }
-    char tempCode[16];
+    char tempCode[17];
     memset(tempCode, 0, sizeof(tempCode));
     int i,n;
     fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0x00, 0xD0, 0xC0, 0xDE, 0x00, 0xD0, 0xC0, 0xDE); //gct header
@@ -455,27 +443,41 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
             {
                 if(cheat[i].codes[n] !=NULL)
                 {
-                    sprintf(tempCode,cheat[1].codes[n]);
-                    int currentChar = 0;
                     int x;
-                    for (x = 0; x < 17; x++) //HEXify the codeline
+                    char* pch;
+                    //sprintf(tempCode,cheat[i].codes[n]);
+                    char* msg = malloc(strlen(cheat[i].codes[n])*sizeof(char));
+                    sprintf(msg, cheat[i].codes[n]);
+
+                    pch = strtok(msg, " |\n"); //chomp out the space from the middle
+                    while (pch != NULL)
                     {
-                        if ((tempCode[x] >= 'a') && (tempCode[x] <= 'f'))
-                            currentChar += 10 + tempCode[x] - 'a';
-                        if ((tempCode[x] >= 'A') && (tempCode[x] <= 'F'))
-                            currentChar += 10 + tempCode[x] - 'A';
-                        if ((tempCode[x] >= '0') && (tempCode[x] <= '9'))
-                            currentChar += tempCode[x] - '0';
-                        if (x % 2 == 0)
-                        {
-                            currentChar *= 16;
-                        }
-                        else
-                        {
-                            if ((tempCode[x] != ' ' && tempCode[x] != 'X'))
+                            strcat(tempCode,pch);
+                            pch  = strtok(NULL, " |\n");
+                    }
+                    free(msg);
+                    //WindowPrompt("debug",tempCode, &okButton,0);
+                    int currentChar = 0;
+                    
+                    for (x = 0; x < 16; x++) //HEXify the codeline
+                    {
+                            if ((tempCode[x] >= 'a') && (tempCode[x] <= 'f'))
+                                currentChar += 10 + tempCode[x] - 'a';
+                            if ((tempCode[x] >= 'A') && (tempCode[x] <= 'F'))
+                                currentChar += 10 + tempCode[x] - 'A';
+                            if ((tempCode[x] >= '0') && (tempCode[x] <= '9'))
+                                currentChar += tempCode[x] - '0';
+                            if(tempCode[x] == 'X' || tempCode[x] == 'x')
+                                currentChar += '0';
+                            if (x % 2 == 0)
+                            {
+                                currentChar *= 16;
+                            }
+                            else
+                            {
                                 fprintf(gctFile, "%c", currentChar); //write out the HEXified character
-                            currentChar = 0;
-                        }
+                                currentChar = 0;
+                            }
                     }
                 }
                 memset(tempCode, 0, sizeof(tempCode)); //clear the line
