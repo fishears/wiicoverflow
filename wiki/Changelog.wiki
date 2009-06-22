@@ -1,5 +1,13 @@
 #labels Featured
-== RC7 (June XX 2009) ==
+== RC? (?) ==
+
+-NEW-
+
+-FIX-
+
+-OTHER-
+
+== RC7 (June 22 2009) ==
 
 -NEW-
   * Improved GUI behaviour
