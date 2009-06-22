@@ -259,6 +259,10 @@ void languageDefault()
 	snprintf(TX.fallDist, sizeof(TX.fallDist), "FallDist:");
 	strcopy(TX.infoHDD, "HDD Info:  %.2f GB used,  %.2f GB free", sizeof(TX.infoHDD));
 	strcopy(TX.instGames, "Installed Games: %d", sizeof(TX.instGames));
+	snprintf(TX.sysInfo, sizeof(TX.sysInfo), "System information");
+	snprintf(TX.ipAddress, sizeof(TX.ipAddress), "IP Address:");
+	snprintf(TX.noConnect, sizeof(TX.noConnect), "not connected");
+	strcopy(TX.spaceUsed, "Space used %.1f%%", sizeof(TX.spaceUsed));
 	
 // Buttons	
 
@@ -1036,6 +1040,22 @@ void languageSet(char *name, char *val)
 	}	
 	if (strcmp(name, "instGames") == 0) {
 		strcopy(TX.instGames, val, sizeof(TX.instGames));
+		return;
+	}	
+	if (strcmp(name, "sysInfo") == 0) {
+		strcopy(TX.sysInfo, val, sizeof(TX.sysInfo));
+		return;
+	}	
+	if (strcmp(name, "ipAddress") == 0) {
+		strcopy(TX.ipAddress, val, sizeof(TX.ipAddress));
+		return;
+	}	
+	if (strcmp(name, "noConnect") == 0) {
+		strcopy(TX.noConnect, val, sizeof(TX.noConnect));
+		return;
+	}	
+	if (strcmp(name, "spaceUsed") == 0) {
+		strcopy(TX.spaceUsed, val, sizeof(TX.spaceUsed));
 		return;
 	}	
 
