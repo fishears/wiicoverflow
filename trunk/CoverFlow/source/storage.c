@@ -239,7 +239,7 @@ void initWBFS(){
 				
 				if(NoDrive)
 				{
-					retries = 3;
+					retries = 10;
 					retried++;
 					//ask user to connect drive
 					WindowPrompt(TX.error, TX.connectUSBDrv, &okButton, 0);
@@ -258,7 +258,7 @@ void initWBFS(){
 				WDVD_Close();
 				init=false;
 			}
-			if (retries>4) IOS_ReloadIOS(249);  // from NeoGamma 4 (don't reload cIOS everytime)
+			if (retries<5) IOS_ReloadIOS(249);  // from NeoGamma 4 (don't reload cIOS everytime)
 			goto INIT_RETRY;
 		}
 	}
