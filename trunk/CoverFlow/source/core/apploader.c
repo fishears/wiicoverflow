@@ -276,7 +276,8 @@ s32 Apploader_Run(entry_point *entry)
 	
 	/* ERROR 002 fix (thanks to WiiPower for sharing this)*/
 
-	*(u32 *)0x80003140 = *(u32 *)0x80003188; 
+	if (self.isCIOS10 != true )
+		*(u32 *)0x80003140 = *(u32 *)0x80003188; 
 
 	// copy kenobiwii code into tempoarary memory area
 	memset((void*)0x80001800,0,kenobiwii_size);
@@ -300,9 +301,13 @@ s32 Apploader_Run(entry_point *entry)
 		/* Read data from DVD */
 		WDVD_Read(dst, len, (u64)(offset << 2));
 
+
+		//Seriuosly? Why do we need an "Anti fix"... Why not just DONT use the 002 fix if
+		//running cios 10? Am i missing something? --beardface
+		
 		// with cIOS rev10 use Anti_002_fix AND ERROR_002_fix. Thx WiiPower
-		if (self.isCIOS10 == true )
-			Anti_002_fix(dst, len);
+		//if (self.isCIOS10 == true )
+		//	Anti_002_fix(dst, len);
 		
 		if (settings.video == 1) // patch
 
@@ -340,7 +345,7 @@ s32 Apploader_Run(entry_point *entry)
 			vidolpatcher(dst,len);
 
 		langpatcher(dst,len);
-		//*(u32 *)0x80003140 = *(u32 *)0x80003188; /* 002 Fix by Wiipower */ // note: this wasn't working for me (afour) here, so moved it up
+		
 		DCFlushRange(dst, len);
     }
 
