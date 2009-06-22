@@ -34,7 +34,7 @@ void SETTINGS_Init()
 {
 	//Graphics
 	settings.coverZoom    = -2.0;
-	settings.mainCoverZoom = 2.0;
+	settings.mainCoverZoom = 0.0;
 	settings.coverAngle   = 90;
 	settings.coverSpacing = 3.1;
 	settings.coverFallOff = 0.0;
@@ -66,7 +66,7 @@ void SETTINGS_Init()
 void graphics_SETTINGS_Init()
 {
     settings.coverZoom    		= -2.0;
-	settings.mainCoverZoom		= 2.0;
+	settings.mainCoverZoom		= 0.0;
     settings.coverCamY    		= 0.0;
     settings.coverCamX   		= 0.0;
 	settings.coverAngle   		= 90;
