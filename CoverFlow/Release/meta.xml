@@ -2,8 +2,8 @@
   <app version="1.0">
     <name>CoverFloader</name>
     <coder>Many Talented People</coder>
-    <version>Release X.X</version>
-    <release_date>N/A</release_date>
+    <version>Release RC7</version>
+    <release_date>June 22nd, 2009</release_date>
     <short_description>USB ISO Loader</short_description>
     <long_description>Many thanks to the developers:
 Scognito
@@ -11,12 +11,12 @@ AFour98
 F1SHE4RS
 GC@Blackbird
 LoudBob11
-alexcarlosantao
-and I suppose thanks to myself, beardface.
+beardface
 
 Other thanks to:
 Gitkua (images)
 brwest85 (HBC Icon)
+alexcarlosantao
 djtaz and theotherzone.com crew for the cover service
 and others (please ask if we forgot someone!)
 
