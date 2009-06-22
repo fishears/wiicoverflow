@@ -17,8 +17,8 @@
   * Cheat Manager (beta). Downloads cheats and lets you select which to use
   
 -FIX-
-  * Anti_002_fix from WiiPower working with cIOS rev10
-  * 002 Fix from WiiPower working with CIOS 13a (Indy, MySimsRacing, GBusters all work)
+  * Anti_002_fix from WiiPower working with cIOS rev10  (Indiana Jones, MySims Racing, Ghostbusters, Punch-up all work)
+  * error 002 fix from WiiPower working with cIOS rev13a (Indy, MySimsRacing, GBusters all work)
   * Other memory issues solved
   * Minor bug fixes
   * Updated right edge 3D case graphic
