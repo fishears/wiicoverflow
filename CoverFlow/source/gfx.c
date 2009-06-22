@@ -240,6 +240,7 @@ void Init_Buttons()
 	slideButton				= Button_Init(slide_png, slide_hover_png, 260, 426);
 	settingsButton	    	= Button_Init(button_round_gear_png, button_round_gear_over_png, 30, 427);
 	addButton				= Button_Init(button_round_add_png,  button_round_add_over_png, 580, 427);
+    infoButton				= Button_Init(button_round_info_png, button_round_info_over_png, 580, 44);
  	// Dialog Box Buttons
 	okButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 300, 290, TX.okB);
 	cancelButton			= Duplicate_Button_TTF(okButton, 414, 290, TX.cancelB);
@@ -342,7 +343,6 @@ void Init_Buttons()
 	gvidupButton            = Duplicate_Button(vidupButton, 388, 300);
 	gbackButton				= Duplicate_Button_TTF(okButton, 468, 335, TX.backB);
 
-    infoButton				= Button_Init(button_round_info_png, button_round_info_over_png, 580, 54);
 
   #ifdef CHEAT_MANAGER
     //cheat manager buttons
@@ -480,6 +480,7 @@ void DrawCoverFlyInStart()
 	float yEndTitle = 410.0;
 	float yEndSlider = 410.0; 
 	float yEndButtons = 427.0;
+	float yEndButtonInfo =44.0;
 	int   q;
 	int tFade;
 	float moving_y;
@@ -501,6 +502,10 @@ void DrawCoverFlyInStart()
 			Button_Theme_Paint(&addButton, settings.theme);
 			Button_Theme_Paint(&settingsButton, settings.theme);
 		}
+		// Float in InfoButton
+		moving_y = easeOutQuint(q, yEndButtonInfo - 70, +70.0, 192);
+		infoButton.y = moving_y;
+		Button_Theme_Paint(&infoButton, settings.theme);
 		// Float in the game title
 		if(settings.coverText)
 		{

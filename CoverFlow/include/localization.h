@@ -218,6 +218,10 @@ struct LANGUAGE
 	char fallDist[20];				//179
 	char infoHDD[60];				//180
 	char instGames[40];				//181
+	char sysInfo[30];				//182
+	char ipAddress[30];				//183
+	char noConnect[30];				//184
+	char spaceUsed[40];				//185
 	
 // Buttons	
 	char addB[15];					//B01

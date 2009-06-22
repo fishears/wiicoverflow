@@ -34,7 +34,7 @@ void showInfoWindow(){
 		GRRLIB_Rectangle(82, 60, 476, 360, 0x737373FF, true);
 		GRRLIB_DrawImg(62, 50, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
 		
-		CFreeTypeGX_DrawText(ttf16pt, 177, 63, "System information", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+		CFreeTypeGX_DrawText(ttf16pt, 177, 63, TX.sysInfo, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 
 		sprintf(temp, "Version: %s (r%d)", RELEASE, SVN_VERSION);
 		CFreeTypeGX_DrawText(ttf16pt, x, y+sp, temp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
@@ -44,9 +44,10 @@ void showInfoWindow(){
 		CFreeTypeGX_DrawText(ttf16pt, x, y+sp, temp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 		sp+=step;
 		
-		sprintf(temp, "IP Address: ");
+		sprintf(temp, TX.ipAddress);
+		strcat(temp," ");
 		if(strcmp(self.ipAddress, "000.000.000.000") == 0)
-			strcat(temp, "not connected");
+			strcat(temp, TX.noConnect);
 		else
 			strcat(temp, self.ipAddress);
 		CFreeTypeGX_DrawText(ttf16pt, x, y+sp, temp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
@@ -60,7 +61,7 @@ void showInfoWindow(){
 		CFreeTypeGX_DrawText(ttf16pt, x, y+sp, temp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 		sp+=step;
 		
-		sprintf(temp, "Space used %.1f%%", (self.usedSpace/hdSize)*100);
+		sprintf(temp, TX.spaceUsed, (self.usedSpace/hdSize)*100);
 		CFreeTypeGX_DrawText(ttf16pt, x, y+sp, temp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 		//sp+=step;
 

@@ -175,10 +175,14 @@ noTxtCodes = Keine txt-Codes vorhanden!
 errorHTTP = HTTP Fehler
 useCodes = Diese Codes verwenden?
 errOpenGCT = GCT konnte nicht erstellt|bzw. geöffnet werden.
-coverZoom = Zoom Cov.
-fallDist = fallDist
+coverZoom = ZoomCover
+fallDist = Abst.Tiefe
 infoHDD = HDD Info:  %.2f GB belegt,  %.2f GB frei
 instGames = Anzahl Spiele: %d
+sysInfo = System Informationen
+ipAddress = IP Adresse:
+noConnect = nicht verbunden
+spaceUsed = belegt:  %.1f%%
 
 ###########
 # Buttons #
