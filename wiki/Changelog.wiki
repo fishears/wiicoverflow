@@ -6,6 +6,7 @@
   * Center cover 'pops' towards the user
   * Easing in/out of covers and dialogs
   * Added information window
+  * Cheat Manager (beta). Downloads cheats and lets you select which to use
   
 -FIX-
   * Anti_002_fix from WiiPower working with cIOS rev10
