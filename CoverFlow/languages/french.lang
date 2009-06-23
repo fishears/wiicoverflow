@@ -10,7 +10,7 @@ someErrors = Une erreur s'est produite
 checkNextCover = Vérification de la jaquette suivante...%s
 opFinished = Opération terminée!
 pressA = Appuyez sur A pour continuer
-configError = Erreur de configuration, MAX_DNS_ENTRIES atteint alors que la liste est vide
+configError = Erreur de configuration, MAX_DNS_ENTRIES atteint alors que la liste est vide|
 errorsaveGL = Ne peut pas enregistrer gamelist.xml
 errorcreateGL = Impossible de créer le fichier gamelist !
 consoleDefault =  Console par défault
@@ -109,8 +109,8 @@ freeTextures = Libreation des textures inutilisées...
 parentalCtrl = Contrôle Parental
 enableParentCtrl = Voulez-vous activer le contrôle parental ?
 errorDIP = Impossible d'initialiser le module DIP! (ret = %d)
-errorReadDir = Impossible de créer des répertoires. Les Jaquettes ne seront pas enregistrées.
-errorCreateDir = Impossible de créer des répertoires. Les Jaquettes ne seront pas enregistrées. 
+errorReadDir = Impossible de créer des répertoires.|Les Jaquettes ne seront pas enregistrées.
+errorCreateDir = Impossible de créer des répertoires.|Les Jaquettes ne seront pas enregistrées. 
 Sun = Dim
 Mon = Lun
 Tue = Mar
@@ -138,7 +138,7 @@ addAGame = Ajouter un jeu
 getAddData = Ajouter données:
 errTitles = Erreur téléchargement titres
 successTitles = Importés avec succès %d titres!
-errNetTitles = Erreur d'initialisation du réseau: Titles.txt ne peut pas être téléchargé
+errNetTitles = Erreur d'initialisation du réseau|Titles.txt ne peut pas être téléchargé
 Success = Succès
 welcomeMsg = Bienvenue à CoverFloader
 batteryUnit = P%d
@@ -169,7 +169,20 @@ sortingGL = Trier la liste des jeux
 initWBFS_GL = Initialiser la liste des jeux WBFS ...
 getEntryWBFS = Obtenir des entrées...
 noCreateWCFXML = Impossible de créer le fichier|wiicoverflow.xml
-
+downloadCheatFile = Télécharger le code?  
+downloadComplete = Téléchargement completé!
+noTxtCodes = txt codes non disponible!
+errorHTTP = Erreur HTTP
+useCodes = Utiliser ces codes?
+errOpenGCT = Impossible de créer|ouvrir GCT.
+coverZoom = Zoom jaquette
+fallDist = FallDist
+infoHDD = Information Disque dur:% .2 f GB utilisé, % .2 f GB disponible
+instGames = Jeux installés:%d
+sysInfo = Information système
+ipAddress = Adresse IP: 
+noConnect = Pas de connection
+spaceUsed = Espace utilisé %.1f%%
 
 ###########
 # Buttons #
