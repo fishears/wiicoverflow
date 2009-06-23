@@ -103,6 +103,9 @@
 #define CFG_LANG_COUNT   11
 #define CFG_FIX_COUNT	 3
 
+/* Y-Offset for gameSettings-Dialogbox */
+#define YOS_GSDB	-15
+
 enum {
 	FX_BG_MUSIC = 0,
 	FX_COVER_FLIP,

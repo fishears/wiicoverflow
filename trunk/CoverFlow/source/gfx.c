@@ -249,8 +249,6 @@ void Init_Buttons()
 	// Game Launch Panel Buttons
 	loadButton				= Duplicate_Button_TTF(okButton, 353, 335, TX.loadB);
     backButton				= Duplicate_Button_TTF(okButton, 468, 335, TX.backB);
-	lockButton			    = Button_Init(button_round_lock_png, button_round_lock_over_png, 543, 120);
-	unlockButton			= Button_Init(button_round_unlock_png, button_round_unlock_over_png, 543, 120);
 	deleteButton			= Button_Init(button_round_delete_png, button_round_delete_over_png, 505, 120);
     gsettingsButton			= Duplicate_Button(settingsButton, 543, 120);
 	bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 515, 140);  
@@ -332,25 +330,27 @@ void Init_Buttons()
 	flagMyLangButton 		= Button_Flag_Init(flag_MyLang_png, 426, 360, TX.MyLanguage);
 			
 	// Game Settings Screen Buttons
-    gvidtvonButton          = Duplicate_Button(musicOnButton,  360, 164);
-    gvidtvoffButton         = Duplicate_Button(musicOffButton, 360, 164);
-	gcheatonButton			= Duplicate_Button(musicOnButton, 360, 198);
-    gcheatoffButton			= Duplicate_Button(musicOffButton, 360, 198);
-    ghookdownButton         = Duplicate_Button(viddownButton, 360, 232);
-    ghookupButton           = Duplicate_Button(vidupButton, 388, 232);
-    glangdownButton         = Duplicate_Button(viddownButton, 360,266);
-	glangupButton           = Duplicate_Button(vidupButton,388,266);
-    gviddownButton          = Duplicate_Button(viddownButton, 360, 300);
-	gvidupButton            = Duplicate_Button(vidupButton, 388, 300);
-    gfixdownButton          = Duplicate_Button(viddownButton, 360, 334);
-    gfixupButton            = Duplicate_Button(vidupButton, 388, 334);
-	gbackButton				= Duplicate_Button_TTF(okButton, 68, 368, TX.backB);
-
+	lockButton			    = Button_Init(button_round_lock_png, button_round_lock_over_png, 543, 120 + YOS_GSDB);
+	unlockButton			= Button_Init(button_round_unlock_png, button_round_unlock_over_png, 543, 120 + YOS_GSDB);
+    gvidtvonButton          = Duplicate_Button(musicOnButton,  360, 164 + YOS_GSDB);
+    gvidtvoffButton         = Duplicate_Button(musicOffButton, 360, 164 + YOS_GSDB);
+	gcheatonButton			= Duplicate_Button(musicOnButton, 360, 198 + YOS_GSDB);
+    gcheatoffButton			= Duplicate_Button(musicOffButton, 360, 198 + YOS_GSDB);
+    ghookdownButton         = Duplicate_Button(viddownButton, 360, 232 + YOS_GSDB);
+    ghookupButton           = Duplicate_Button(vidupButton, 388, 232 + YOS_GSDB);
+    glangdownButton         = Duplicate_Button(viddownButton, 360,266 + YOS_GSDB);
+	glangupButton           = Duplicate_Button(vidupButton,388,266 + YOS_GSDB);
+    gviddownButton          = Duplicate_Button(viddownButton, 360, 300 + YOS_GSDB);
+	gvidupButton            = Duplicate_Button(vidupButton, 388, 300 + YOS_GSDB);
+    gfixdownButton          = Duplicate_Button(viddownButton, 360, 334 + YOS_GSDB);
+    gfixupButton            = Duplicate_Button(vidupButton, 388, 334 + YOS_GSDB);
+	gbackButton				= Duplicate_Button_TTF(okButton, 266, 368 + YOS_GSDB, TX.backB);
   #ifdef CHEAT_MANAGER
-    //cheat manager buttons
+    manageCheatsButton      = Duplicate_Button_TTF(okButton, 468, 198 + YOS_GSDB, TX.manageB);
+
+	//cheat manager buttons
     cheatEnabled[0]         = Button_Init(button_cheat_on_png, button_cheat_off_png, 44, 80);
     cheatDisabled[0]        = Button_Init(button_cheat_off_png, button_cheat_on_png, 44, 80);
-    manageCheatsButton      = Duplicate_Button_TTF(okButton, 468, 198, TX.manageB);
     pageUpButton            = Duplicate_Button(vidupButton,478,82);
     pageDownButton          = Duplicate_Button(viddownButton,450,82);
     cheatDoneButton         = Duplicate_Button_TTF(okButton,84,82,TX.done);
