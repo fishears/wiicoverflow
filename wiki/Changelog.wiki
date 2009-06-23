@@ -2,6 +2,7 @@
 == RC? (?) ==
 
 -NEW-
+ * Online cheat blocker - if you cheat, you can't go online in the game
 
 -FIX-
 
