@@ -68,13 +68,19 @@ bool check_gct(int id, struct discHdr *gameList)
     }
 }
 
-bool download_txt(int id, struct discHdr *gameList)
+bool download_txt(int id, int mode, struct discHdr *gameList)
 {
     //attempt to download the game's txt cheat file from www.usbgecko.com
-    if(!(WindowPrompt(TX.downloadB, TX.downloadCheatFile,&okButton, &cancelButton)))
-	{
-		return false;
-	}
+    //TODO tidy this up a bit
+    //TODO add a batch download function like for covers
+    //TODO get the 4-digit bit to kick in after a bad download on 6-digit not just after NULL data
+    if(mode==0)
+    {
+        if(!(WindowPrompt(TX.downloadB, TX.downloadCheatFile,&okButton, &cancelButton)))
+            {
+                    return false;
+            }
+    }
     if(check_write_access())
     {
         if(networkInit(self.ipAddress)){
@@ -84,7 +90,8 @@ bool download_txt(int id, struct discHdr *gameList)
             struct block file;
             struct discHdr *header = &gameList[id];
             sprintf(titleID,"%s",header->id);
-			WindowPrompt(titleID, TX.pleaseWait, 0, 0);
+            if(mode==0)
+                WindowPrompt(titleID, TX.pleaseWait, 0, 0);
             sprintf(url, "%s%c/%s.txt", CODESITE, header->id[0] , titleID); //try 6-digit ID first
             file = downloadfile(url);
             if(file.data == NULL) //nothing, so try 4-digit ID
@@ -99,12 +106,14 @@ bool download_txt(int id, struct discHdr *gameList)
                 free(file.data);
                 if(check_download(titleID))
                 {
-                    WindowPrompt(titleID, TX.downloadComplete, &okButton,0);
+                    if(mode==0)
+                        WindowPrompt(titleID, TX.downloadComplete, &okButton,0);
                     return true;
                 }
                 else
                 {
-                    WindowPrompt(TX.error, TX.noTxtCodes, &okButton,0);
+                    if(mode==0)
+                        WindowPrompt(TX.error, TX.noTxtCodes, &okButton,0);
                     return false;
                 }
             }
@@ -116,6 +125,26 @@ bool download_txt(int id, struct discHdr *gameList)
         }
     }
     return false;
+}
+
+void batch_download_txt(struct discHdr *gameList)
+{
+	int i;
+	char id[7];
+
+	for(i = 0; i < self.gameCnt; i++)
+	{
+		struct discHdr *header = &gameList[i];
+
+		if(self.array_size < MAX_COVERS)
+		{
+			sprintf(id, "%s", header->id);
+			sprintf(self.debugMsg, "Check next cheat: %s", header->id);
+			Paint_Progress_Generic(i, self.gameCnt, self.debugMsg);
+			download_txt(i, 1, self.gameList);
+		}
+	}
+	WindowPrompt (TX.opFinished, TX.pressA, &okButton, 0);
 }
 
  #ifdef CHEAT_MANAGER

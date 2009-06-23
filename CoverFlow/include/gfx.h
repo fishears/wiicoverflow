@@ -209,6 +209,7 @@ Button musicOnButton;
 Button musicOffButton;
 Button bookmarkOnButton;
 Button bookmarkOffButton;
+Button cheatDownButton;
 
 Button covers3dThinButton;
 Button covers3dFatButton;
