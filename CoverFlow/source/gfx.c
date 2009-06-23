@@ -342,11 +342,9 @@ void Init_Buttons()
 	glangupButton           = Duplicate_Button(vidupButton,388,266);
     gviddownButton          = Duplicate_Button(viddownButton, 360, 300);
 	gvidupButton            = Duplicate_Button(vidupButton, 388, 300);
-	gerror002onButton		= Duplicate_Button(musicOnButton, 360, 334);
-	gerror002offButton		= Duplicate_Button(musicOffButton,360, 334);
-	ganti002onButton		= Duplicate_Button(musicOnButton, 360, 368);
-	ganti002offButton		= Duplicate_Button(musicOffButton,360, 368);
-	gbackButton				= Duplicate_Button_TTF(okButton, 70, 399, TX.backB);
+    gfixdownButton          = Duplicate_Button(viddownButton, 360, 334);
+    gfixupButton            = Duplicate_Button(vidupButton, 388, 334);
+	gbackButton				= Duplicate_Button_TTF(okButton, 68, 368, TX.backB);
 
   #ifdef CHEAT_MANAGER
     //cheat manager buttons
@@ -1729,10 +1727,8 @@ void freeResources(){
     FreeButtonResources(&gviddownButton);
 	FreeButtonResources(&gvidupButton);
 	FreeButtonResources(&gbackButton);
-	FreeButtonResources(&gerror002onButton);
-	FreeButtonResources(&gerror002offButton);
-	FreeButtonResources(&ganti002onButton);
-	FreeButtonResources(&ganti002offButton);
+	FreeButtonResources(&gfixdownButton);
+	FreeButtonResources(&gfixupButton);
 	
  #ifdef CHEAT_MANAGER
 	FreeButtonResources(&cheatEnabled[0]);

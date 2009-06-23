@@ -14,8 +14,7 @@ void initGameSettings(s_gameSettings* gs){
 	
 	gs->lock = 0;
 	
-	gs->error002fix = -1;
-	gs->anti002fix  = -1;
+	gs->fixtype = 0;
 
 	gs->changed  = false;
 	
@@ -126,14 +125,11 @@ bool getGameSettings(char* gameCode, s_gameSettings* gs){
 								gs->favorite = atoi(mxmlElementGetAttr(next_n,"favorite"));
 							else
 								gs->favorite = 0;
-							if(mxmlElementGetAttr(next_n,"error002fix"))
-								gs->error002fix = atoi(mxmlElementGetAttr(next_n,"error002fix"));
+							
+							if(mxmlElementGetAttr(next_n,"fixtype"))
+								gs->fixtype = atoi(mxmlElementGetAttr(next_n,"fixtype"));
 							else
-								gs->error002fix = -1;
-							if(mxmlElementGetAttr(next_n,"anti002fix"))
-								gs->anti002fix = atoi(mxmlElementGetAttr(next_n,"anti002fix"));
-							else
-								gs->anti002fix = -1;
+								gs->fixtype = 0;
 							
 							return true;
 						}
@@ -227,12 +223,9 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 								sprintf(temp, "%d", gs->lock);
 								mxmlElementSetAttr(next_n, "lock", temp);
 								
-								sprintf(temp, "%d", gs->error002fix);
-								mxmlElementSetAttr(next_n, "error002fix", temp);
-								
-								sprintf(temp, "%d", gs->anti002fix);
-								mxmlElementSetAttr(next_n, "anti002fix", temp);
-								
+								sprintf(temp, "%d", gs->fixtype);
+								mxmlElementSetAttr(next_n, "fixtype", temp);
+	
 							if(date == 1){
 								setSysdate(temp);
 								mxmlElementSetAttr(next_n, "lastplayed", temp);
@@ -264,10 +257,8 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 						mxmlElementSetAttr(next_n, "favorite", temp);
 						sprintf(temp, "%d", gs->lock);
 						mxmlElementSetAttr(next_n, "lock", temp);
-						sprintf(temp, "%d", gs->error002fix);
-						mxmlElementSetAttr(next_n, "error002fix", temp);
-						sprintf(temp, "%d", gs->anti002fix);
-						mxmlElementSetAttr(next_n, "anti002fix", temp);
+						sprintf(temp, "%d", gs->fixtype);
+						mxmlElementSetAttr(next_n, "fixtype", temp);
 						if(date == 1)
 						{
 							//sysdate(temp);

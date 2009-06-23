@@ -101,6 +101,7 @@
 #define CFG_VIDEO_COUNT  6
 #define CFG_HOOK_COUNT   3
 #define CFG_LANG_COUNT   11
+#define CFG_FIX_COUNT	 3
 
 enum {
 	FX_BG_MUSIC = 0,

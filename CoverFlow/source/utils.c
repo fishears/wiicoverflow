@@ -246,8 +246,25 @@ void apply_settings()
         settings.video = gameSetting.video;
         settings.vipatch = gameSetting.vipatch;
     }
-	self.enableError002Fix = (gameSetting.error002fix == 1) ? true : false;
-	self.enableAnti002Fix  = (gameSetting.anti002fix  == 1) ? true : false;
+	
+	switch (gameSetting.fixtype)
+	{
+		case 0:
+			self.enableError002Fix = false;
+			self.enableAnti002Fix  = false;
+			break;
+		case 1:
+			self.enableError002Fix = true;
+			self.enableAnti002Fix  = false;
+			break;
+		case 2:
+			self.enableError002Fix = true;
+			self.enableAnti002Fix  = true;
+			break;
+		default:
+			self.enableError002Fix = false;
+			self.enableAnti002Fix  = false;
+	}
 }
 
 bool networkInit(char *ip)

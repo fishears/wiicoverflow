@@ -180,10 +180,8 @@ Button gvidtvonButton;
 Button gvidtvoffButton;
 Button gcheatonButton;
 Button gcheatoffButton;
-Button gerror002onButton;
-Button gerror002offButton;
-Button ganti002onButton;
-Button ganti002offButton;
+Button gfixupButton;
+Button gfixdownButton;
 
 Button coverTextOnButton;
 Button coverTextOffButton;
