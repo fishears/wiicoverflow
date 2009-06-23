@@ -910,6 +910,9 @@ void Settings_Menu_Show()
 	
 } // Settings_Menu_Show()
 
+
+
+
 //////////////////////////////////
 // Shows the Game Settings Menu //
 //////////////////////////////////
@@ -952,6 +955,8 @@ void Game_Settings_Menu_Show()
         gameSetting.video    = 0;
         gameSetting.vipatch  = 0;
         gameSetting.lock     = 0;
+		gameSetting.error002fix = 0;
+		gameSetting.anti002fix  = 0;
     }
 	
     bool doloop = true;
@@ -1012,6 +1017,21 @@ void Game_Settings_Menu_Show()
 			{
 				gameSetting.vipatch = (gameSetting.vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
 			}
+			else if (Button_Select(&gerror002onButton, pointer.p_x, pointer.p_y) || Button_Select(&gerror002offButton, pointer.p_x, pointer.p_y))
+			{
+				gameSetting.error002fix = (gameSetting.error002fix) ? 0 : 1; // Clicked the error002fix button, toggle state
+				if (gameSetting.error002fix == 0) //Logic
+					gameSetting.anti002fix  = 0;
+			}
+			else if (Button_Select(&ganti002onButton, pointer.p_x, pointer.p_y) || Button_Select(&ganti002offButton, pointer.p_x, pointer.p_y))
+			{
+				gameSetting.anti002fix = (gameSetting.anti002fix) ? 0 : 1; // Clicked the anti002fix button, toggle state
+				if (gameSetting.anti002fix == 1)  //Logic
+					gameSetting.error002fix  = 1;  
+			}
+			
+			
+			
 			else if (Button_Select(&glangdownButton, pointer.p_x, pointer.p_y))
 			{ // Clicked on the language buttons
 				if (gameSetting.language > 0)
@@ -1090,8 +1110,13 @@ void Game_Settings_Menu_Show()
 		// Draw the covers behind the dialog
 		draw_covers();
 		// Draw the dialog panel
-		GRRLIB_Rectangle(40, 106, 560, 276, 0xffffffdd, true);
-		GRRLIB_Rectangle(42, 108, 556, 272, 0x737373FF, true);
+		//GRRLIB_Rectangle(40, 106, 560, 276, 0xffffffdd, true);
+		//GRRLIB_Rectangle(42, 108, 556, 272, 0x737373FF, true);
+		
+		GRRLIB_Rectangle(40, 106, 560, 336, 0xffffffdd, true);
+		GRRLIB_Rectangle(42, 108, 556, 332, 0x737373FF, true);
+
+
 		// Draw the game cover
 		if(self.gameSelected < MAX_BUFFERED_COVERS || self.gameSelected >= 0)
 		{
@@ -1211,6 +1236,8 @@ void Game_Settings_Menu_Show()
 		CFreeTypeGX_DrawText(ttf16pt, 500, 285, languages[gameSetting.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 319, TX.videoMode, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 500, 319, vidmodes[gameSetting.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 355, 355, "error002fix", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+		CFreeTypeGX_DrawText(ttf16pt, 355, 391, "anti002fix", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 
 		// Draw the buttons
 		Button_TTF_Paint(&gbackButton);
@@ -1222,6 +1249,9 @@ void Game_Settings_Menu_Show()
 		Button_Paint(&ghookdownButton);
 		Button_TTF_Toggle_Paint(&gcheatoffButton, &gcheatonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.ocarina);
 		Button_TTF_Toggle_Paint(&gvidtvoffButton, &gvidtvonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.vipatch);
+		Button_TTF_Toggle_Paint(&gerror002offButton, &gerror002onButton, TX.toggleOffB, TX.toggleOnB, gameSetting.error002fix);
+		Button_TTF_Toggle_Paint(&ganti002offButton,  &ganti002onButton,  TX.toggleOffB, TX.toggleOnB, gameSetting.anti002fix);
+		
 		#ifdef CHEAT_MANAGER
 		if(gameSetting.ocarina)
 			Button_TTF_Paint(&manageCheatsButton);
@@ -1244,6 +1274,10 @@ void Game_Settings_Menu_Show()
 			 Button_Hover(&gvidtvonButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&ghookupButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y) ||
+			 Button_Hover(&gerror002offButton, pointer.p_x, pointer.p_y) ||
+			 Button_Hover(&gerror002onButton,  pointer.p_x, pointer.p_y) ||
+			 Button_Hover(&ganti002offButton,  pointer.p_x, pointer.p_y) ||
+			 Button_Hover(&ganti002onButton,   pointer.p_x, pointer.p_y) ||
 			 ((gameSetting.lock) ? Button_Hover(&unlockButton, pointer.p_x, pointer.p_y) : Button_Hover(&lockButton, pointer.p_x, pointer.p_y) )
 			 #ifdef CHEAT_MANAGER
 			 || ((gameSetting.ocarina == 1) ? Button_Hover(&manageCheatsButton, pointer.p_x, pointer.p_y) : false)

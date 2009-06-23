@@ -20,6 +20,10 @@ typedef struct{
 	
 	//parental lock 
 	int lock;
+	// fixes
+	int error002fix;
+	int anti002fix;
+	
 	
 	/*Used for lookup and saving game setting*/
 	bool changed;
