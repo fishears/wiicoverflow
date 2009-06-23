@@ -222,6 +222,8 @@ struct LANGUAGE
 	char ipAddress[30];				//183
 	char noConnect[30];				//184
 	char spaceUsed[40];				//185
+	char noFixes[15];				//186
+	char gameFix[25];				//187
 	
 // Buttons	
 	char addB[15];					//B01

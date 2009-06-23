@@ -38,11 +38,11 @@ char ghooks[3][9] =
 {" Wii Pad"},
 {" GC Pad"}};
 
-char gFixes[3][10] =
+char gFixes[3][16] =
 {
- {"  none"},
- {"Error002"},
- {"AntiError"}
+ {""},          // none
+ {"Error_002"},
+ {"Anti_002"}
 }; 
  
  
@@ -1263,7 +1263,7 @@ void Game_Settings_Menu_Show()
 		CFreeTypeGX_DrawText(ttf16pt, 500, 285 + YOS_GSDB, languages[gameSetting.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 319 + YOS_GSDB, TX.videoMode, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 500, 319 + YOS_GSDB, vidmodes[gameSetting.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-		CFreeTypeGX_DrawText(ttf16pt, 355, 355 + YOS_GSDB, "Game Fix:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+		CFreeTypeGX_DrawText(ttf16pt, 355, 355 + YOS_GSDB, TX.gameFix, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 500, 355 + YOS_GSDB, gFixes[gameSetting.fixtype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		// Draw the buttons
 		Button_TTF_Paint(&gbackButton);
