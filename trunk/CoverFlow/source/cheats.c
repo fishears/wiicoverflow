@@ -413,9 +413,11 @@ bool is_code(char* line)
                                     checkFlag=false;
                             }
                     }
-                    free(msg);
                     if(checkFlag)
+					{
+						free(msg);
                         return true; //it's a code line (or a good copy)
+					}
                 }
             }
             free(msg);

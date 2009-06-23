@@ -164,7 +164,7 @@ struct block downloadfile(const char *url)
 	domain[domainlength] = '\0';
 	
 	//Parsing of the URL is done, start making an actual connection
-	u32 ipaddress = getipbynamecached(domain);
+	u32 ipaddress = getipbyname(domain); //slower but doesn't leak memory
 	
 	if(ipaddress == 0)
 	{
