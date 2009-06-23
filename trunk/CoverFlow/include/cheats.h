@@ -57,7 +57,8 @@ typedef struct {
     
     bool check_txt(int id, struct discHdr *gameList);
     bool check_gct(int id, struct discHdr *gameList);
-    bool download_txt(int id, struct discHdr *gameList);
+    bool download_txt(int id, int mode, struct discHdr *gameList);
+    void batch_download_txt(struct discHdr *gameList);
     void manage_cheats(int id, struct discHdr *gameList);
     bool is_code(char* line);
     bool check_download(char* titleID);

@@ -281,11 +281,12 @@ void Init_Buttons()
 	vidupButton				= Button_Init(button_plus_png, button_plus_over_png, 338,334);
     vidtvonButton			= Duplicate_Button(musicOnButton, 310, 299);
     vidtvoffButton			= Duplicate_Button(musicOffButton, 310, 299);
-    cheatonButton			= Duplicate_Button(musicOnButton, 310,367);
-    cheatoffButton			= Duplicate_Button(musicOffButton, 310,367);
+    cheatonButton			= Duplicate_Button(musicOnButton, 198,367);
+    cheatoffButton			= Duplicate_Button(musicOffButton, 198,367);
     hookdownButton			= Duplicate_Button(viddownButton, 422,367);
     hookupButton			= Duplicate_Button(vidupButton, 450,367);
-	menuLoadingButton		= Button_Init(menu_loading_png, menu_loading_png, 310, 414); 
+	menuLoadingButton		= Button_Init(menu_loading_png, menu_loading_png, 310, 414);
+        cheatDownButton     = Duplicate_Button_TTF(okButton,310,367,TX.downloadB);
 	// Graphic Settings Panel
     falloffdownButton       = Duplicate_Button(viddownButton, 99,123);
     falloffupButton         = Duplicate_Button(vidupButton,127,123);

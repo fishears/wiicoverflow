@@ -248,6 +248,12 @@ void Settings_Menu_Show()
 							}
 						}
 					}
+                                        else if(Button_Select(&cheatDownButton, pointer.p_x,pointer.p_y))
+                                        {
+                                            WPAD_Rumble(0,0); //sometimes rumble remain active
+                                            batch_download_txt(self.gameList);
+                                        }
+
 					else if(Button_Select(&titlesButton, pointer.p_x, pointer.p_y) )
 					{
 						WPAD_Rumble(0,0); //sometimes rumble remain active
@@ -339,7 +345,7 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 300,318, TX.patchVIDTV, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,352, TX.videoMode, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 455,352, vidmodes[settings.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 300,387, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 188,387, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 510,387, hooks[settings.hooktype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Draw buttons
 				Button_TTF_Toggle_Paint(&musicOffButton, &musicOnButton, TX.toggleOffB, TX.toggleOnB, settings.music);
@@ -373,6 +379,7 @@ void Settings_Menu_Show()
 				Button_Paint(&vidupButton);
 				Button_Paint(&viddownButton);
 				Button_TTF_Toggle_Paint(&cheatoffButton, &cheatonButton, TX.toggleOffB, TX.toggleOnB, settings.ocarina);
+                                Button_TTF_Paint(&cheatDownButton);
 				Button_Paint(&hookupButton);
 				Button_Paint(&hookdownButton);
 				if(self.waiting == true)    // not set as yet
@@ -400,6 +407,7 @@ void Settings_Menu_Show()
 					Button_Hover(&viddownButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&cheatoffButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y) ||
+                                        Button_Hover(&cheatDownButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hookupButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hookdownButton, pointer.p_x, pointer.p_y) )
 				{
@@ -994,7 +1002,7 @@ void Game_Settings_Menu_Show()
                                 {
                                     if(!check_txt(self.gameSelected,self.gameList)) //no txt file so try downloading
                                     {
-                                        if(!download_txt(self.gameSelected,self.gameList))
+                                        if(!download_txt(self.gameSelected,0,self.gameList))
                                             gameSetting.ocarina = 0;
                                     }
                                 }
@@ -1007,7 +1015,7 @@ void Game_Settings_Menu_Show()
                                     {
                                        manage_cheats(self.gameSelected,self.gameList); 
                                     }
-                            else if (download_txt(self.gameSelected,self.gameList))
+                            else if (download_txt(self.gameSelected,0,self.gameList))
                             {
                                 manage_cheats(self.gameSelected,self.gameList);
                             }
