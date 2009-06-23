@@ -520,7 +520,7 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
                                 currentChar += tempCode[x] - '0';
                             //set known code variables to zero until they can be edited in a future release
                             if(tempCode[x] =='x' || tempCode[x] =='X' || tempCode[x] =='R' || tempCode[x] =='G' || tempCode[x] =='B')
-                                currentChar += '0';
+                                currentChar = 0;
                             if (x % 2 == 0)
                             {
                                 currentChar *= 16;
