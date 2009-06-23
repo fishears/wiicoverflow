@@ -1140,8 +1140,8 @@ void Game_Settings_Menu_Show()
 		//GRRLIB_Rectangle(40, 106, 560, 276, 0xffffffdd, true);
 		//GRRLIB_Rectangle(42, 108, 556, 272, 0x737373FF, true);
 		
-		GRRLIB_Rectangle(40, 106, 560, 306, 0xffffffdd, true);
-		GRRLIB_Rectangle(42, 108, 556, 302, 0x737373FF, true);
+		GRRLIB_Rectangle(40, 106 + YOS_GSDB, 560, 306, 0xffffffdd, true);
+		GRRLIB_Rectangle(42, 108 + YOS_GSDB, 556, 302, 0x737373FF, true);
 
 
 		// Draw the game cover
@@ -1156,22 +1156,22 @@ void Game_Settings_Menu_Show()
 					{
 						if(settings.covers3d)
 						{
-							GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+							GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
 						}
 						else
 						{
-							GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+							GRRLIB_DrawImg(60, 131 + YOS_GSDB, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
 						}
 					}
 					else
 					{
 						if(settings.covers3d)
 						{
-							GRRLIB_DrawFlatCoverImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+							GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
 						}
 						else
 						{
-							GRRLIB_DrawImg(60, 131, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+							GRRLIB_DrawImg(60, 131 + YOS_GSDB, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
 						}
 					}
 				}
@@ -1181,22 +1181,22 @@ void Game_Settings_Menu_Show()
 					{
 						if(settings.covers3d)
 						{
-							GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
+							GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
 						}
 						else
 						{
-							GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+							GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 						}
 					}
 					else
 					{
 						if(settings.covers3d)
 						{
-							GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+							GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
 						}
 						else
 						{
-							GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+							GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 						}
 					}
 				}
@@ -1208,22 +1208,22 @@ void Game_Settings_Menu_Show()
 			{
 				if(settings.covers3d)
 				{
-					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, AR_16_9, 0xFFFFFFFF);
+					GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, 1, AR_16_9, 0xFFFFFFFF);
 				}
 				else
 				{
-					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
+					GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
 				}
 			}
 			else
 			{
 				if(settings.covers3d)
 				{
-					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+					GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
 				}
 				else
 				{
-					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+					GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 				}
 			}
 			}
@@ -1234,37 +1234,37 @@ void Game_Settings_Menu_Show()
 			{
 				if(settings.covers3d)
 				{
-					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
+					GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
 				}
 				else
 				{
-					GRRLIB_DrawImg(60, 131, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+					GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 				}
 			}
 			else
 			{
 				if(settings.covers3d)
 				{
-					GRRLIB_DrawFlatCoverImg(60, 131, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+					GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
 				}
 				else
 				{
-					GRRLIB_DrawImg(60, 131, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+					GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 				}
 			}
 		}
 		// Draw the attributes labels
-		CFreeTypeGX_DrawText(ttf20pt, 420, 140, TX.gameSettings, (GXColor){0x00, 0x00, 0x00F, 0xff}, FTGX_JUSTIFY_CENTER);
-		CFreeTypeGX_DrawText(ttf16pt, 355, 183, TX.patchVIDTV, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-		CFreeTypeGX_DrawText(ttf16pt, 355, 219, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-		CFreeTypeGX_DrawText(ttf16pt, 355, 251, TX.hook, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-		CFreeTypeGX_DrawText(ttf16pt, 500, 251, ghooks[gameSetting.hooktype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-		CFreeTypeGX_DrawText(ttf16pt, 355, 285, TX.language, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-		CFreeTypeGX_DrawText(ttf16pt, 500, 285, languages[gameSetting.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-		CFreeTypeGX_DrawText(ttf16pt, 355, 319, TX.videoMode, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-		CFreeTypeGX_DrawText(ttf16pt, 500, 319, vidmodes[gameSetting.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-		CFreeTypeGX_DrawText(ttf16pt, 355, 355, "Fix:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-		CFreeTypeGX_DrawText(ttf16pt, 500, 355, gFixes[gameSetting.fixtype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf20pt, 420, 140 + YOS_GSDB, TX.gameSettings, (GXColor){0x00, 0x00, 0x00F, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 355, 183 + YOS_GSDB, TX.patchVIDTV, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+		CFreeTypeGX_DrawText(ttf16pt, 355, 219 + YOS_GSDB, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+		CFreeTypeGX_DrawText(ttf16pt, 355, 251 + YOS_GSDB, TX.hook, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+		CFreeTypeGX_DrawText(ttf16pt, 500, 251 + YOS_GSDB, ghooks[gameSetting.hooktype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 355, 285 + YOS_GSDB, TX.language, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+		CFreeTypeGX_DrawText(ttf16pt, 500, 285 + YOS_GSDB, languages[gameSetting.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 355, 319 + YOS_GSDB, TX.videoMode, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+		CFreeTypeGX_DrawText(ttf16pt, 500, 319 + YOS_GSDB, vidmodes[gameSetting.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 355, 355 + YOS_GSDB, "Game Fix:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+		CFreeTypeGX_DrawText(ttf16pt, 500, 355 + YOS_GSDB, gFixes[gameSetting.fixtype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		// Draw the buttons
 		Button_TTF_Paint(&gbackButton);
 		Button_Paint(&glangupButton);
