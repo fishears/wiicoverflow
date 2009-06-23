@@ -39,7 +39,8 @@ void __Disc_SetLowMem(void)
 	*(vu32 *)0x800000FC = 0x2B73A840;
 
 	/* Copy disc ID */
-	memcpy((void *)0x80003180, (void *)0x80000000, 4);
+        if(!settings.ocarina)
+        	memcpy((void *)0x80003180, (void *)0x80000000, 4);
 
 	/* Flush cache */
 	DCFlushRange((void *)0x80000000, 0x3F00);
