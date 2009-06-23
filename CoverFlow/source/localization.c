@@ -24,6 +24,7 @@ struct LANGUAGE TX;
 
 extern char	languages[11][30];
 extern char	vidmodes[6][30];
+extern char gFixes[3][16];
 
 char selLanguages[20][7]=
 {
@@ -263,7 +264,10 @@ void languageDefault()
 	snprintf(TX.ipAddress, sizeof(TX.ipAddress), "IP Address:");
 	snprintf(TX.noConnect, sizeof(TX.noConnect), "not connected");
 	strcopy(TX.spaceUsed, "Space used %.1f%%", sizeof(TX.spaceUsed));
-	
+	snprintf(TX.noFixes, sizeof(TX.noFixes), "none"); 
+	snprintf(gFixes[0],  sizeof(TX.noFixes), "%s", TX.noFixes);
+	snprintf(TX.gameFix, sizeof(TX.gameFix), "Game Fix:"); 
+
 // Buttons	
 
 	snprintf(TX.addB, sizeof(TX.addB), "add");     				//B01
@@ -1056,6 +1060,15 @@ void languageSet(char *name, char *val)
 	}	
 	if (strcmp(name, "spaceUsed") == 0) {
 		strcopy(TX.spaceUsed, val, sizeof(TX.spaceUsed));
+		return;
+	}	
+	if (strcmp(name, "noFixes") == 0) {
+		strcopy(TX.noFixes, val, sizeof(TX.noFixes));
+		snprintf(gFixes[0], sizeof(TX.noFixes), "%s", TX.noFixes);
+		return;
+	}	
+	if (strcmp(name, "gameFix") == 0) {
+		strcopy(TX.gameFix, val, sizeof(TX.gameFix));
 		return;
 	}	
 

@@ -183,6 +183,8 @@ sysInfo = System Informationen
 ipAddress = IP Adresse:
 noConnect = nicht verbunden
 spaceUsed = belegt:  %.1f%%
+gameFix = Spiel Fix:
+noFixes = ohne
 
 ###########
 # Buttons #
