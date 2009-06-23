@@ -71,6 +71,7 @@ bool check_gct(int id, struct discHdr *gameList)
 bool download_txt(int id, int mode, struct discHdr *gameList)
 {
     //attempt to download the game's txt cheat file from www.usbgecko.com
+    // call with mode=1 to suppress messages, mode=0 for verbose mode
     //TODO tidy this up a bit
     //TODO add a batch download function like for covers
     //TODO get the 4-digit bit to kick in after a bad download on 6-digit not just after NULL data
@@ -129,22 +130,23 @@ bool download_txt(int id, int mode, struct discHdr *gameList)
 
 void batch_download_txt(struct discHdr *gameList)
 {
-	int i;
-	char id[7];
+    //calls download_txt with every titleID in the list
+    int i;
+    char id[7];
 
-	for(i = 0; i < self.gameCnt; i++)
-	{
-		struct discHdr *header = &gameList[i];
+    for(i = 0; i < self.gameCnt; i++)
+    {
+            struct discHdr *header = &gameList[i];
 
-		if(self.array_size < MAX_COVERS)
-		{
-			sprintf(id, "%s", header->id);
-			sprintf(self.debugMsg, "Check next cheat: %s", header->id);
-			Paint_Progress_Generic(i, self.gameCnt, self.debugMsg);
-			download_txt(i, 1, self.gameList);
-		}
-	}
-	WindowPrompt (TX.opFinished, TX.pressA, &okButton, 0);
+            if(self.array_size < MAX_COVERS)
+            {
+                    sprintf(id, "%s", header->id);
+                    sprintf(self.debugMsg, "Check next cheat: %s", header->id);
+                    Paint_Progress_Generic(i, self.gameCnt, self.debugMsg);
+                    download_txt(i, 1, self.gameList);
+            }
+    }
+    WindowPrompt (TX.opFinished, TX.pressA, &okButton, 0);
 }
 
  #ifdef CHEAT_MANAGER
@@ -153,6 +155,8 @@ void manage_cheats(int id, struct discHdr *gameList)
     //parses the txt file and allows user to enable/disable cheats
     //then turns enabled codes into a gct file to be used with ocarina
     //TODO: editable codelines, viewable comment lines, heading lines... so much work!!!
+
+    WPAD_Rumble(0,0); //sometimes rumble remain active
     CHEAT cheat;
     char buffer[128]; //dummy line for tests
     char lastline[128]; //hold the game name (which also appears at end of file)
@@ -382,19 +386,36 @@ bool is_code(char* line)
     //TODO: parse the code at this stage to tag it as having editable values if any non-hex chars found
     if(strlen(line)>16) //don't mess about if it's just too short to be a code then it't NOT a code
     {
+        char tempCode[17];
+        int x;
+        memset(tempCode, 0, sizeof(tempCode));
+        bool checkFlag = true;
         char* pch;
         char* msg = malloc(strlen(line)*sizeof(char));
         sprintf(msg, line);
         pch = strtok(msg, " ");
+        strcat(tempCode,pch);
         while(pch!=NULL)
         {
             if(strlen(pch) == 8) //test for a block of 8 characters to SPACE
             {
-                pch = strtok(NULL,"\n");
-                if(strlen(pch)==8) //test for second block of 8 characters to NEWLINE
+                pch = strtok(NULL," \n");
+                if(strlen(pch)==8) //test for second block of 8 characters to SPACE or NEWLINE
                 {
+                    strcat(tempCode,pch);
+                    //have we REALLY got a code line??
+                    for (x = 0; x < 16; x++) //check for characters outside the scope of a pukka code
+                    {
+                            if (((tempCode[x] >= 'g') && (tempCode[x] <= 'z')) ||((tempCode[x] >= 'G') && (tempCode[x] <= 'Z')))
+                            {
+                                //don't include known code variables
+                                if(tempCode[x] !='x' && tempCode[x] !='X' && tempCode[x] !='R' && tempCode[x] !='G' && tempCode[x] !='B')
+                                    checkFlag=false;
+                            }
+                    }
                     free(msg);
-                    return true; //it's a code line (or a good copy)
+                    if(checkFlag)
+                        return true; //it's a code line (or a good copy)
                 }
             }
             free(msg);
@@ -479,11 +500,12 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
                     sprintf(msg, cheat[i].codes[n]);
 
                     pch = strtok(msg, " |\n"); //chomp out the space from the middle
-                    while (pch != NULL)
-                    {
-                            strcat(tempCode,pch);
+                    //while (pch != NULL)
+                    //{
+                            strcat(tempCode,pch); //part one
                             pch  = strtok(NULL, " |\n");
-                    }
+                            strcat(tempCode,pch); //part two
+                    //}
                     free(msg);
                     //WindowPrompt("debug",tempCode, &okButton,0);
                     int currentChar = 0;
@@ -496,7 +518,8 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
                                 currentChar += 10 + tempCode[x] - 'A';
                             if ((tempCode[x] >= '0') && (tempCode[x] <= '9'))
                                 currentChar += tempCode[x] - '0';
-                            if(tempCode[x] == 'X' || tempCode[x] == 'x')
+                            //set known code variables to zero until they can be edited in a future release
+                            if(tempCode[x] =='x' || tempCode[x] =='X' || tempCode[x] =='R' || tempCode[x] =='G' || tempCode[x] =='B')
                                 currentChar += '0';
                             if (x % 2 == 0)
                             {
