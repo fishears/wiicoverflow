@@ -4,7 +4,7 @@
 -NEW-
   * Game fixes are selectable per game, 'none' is default setting
   * Online cheat blocker - if you cheat, you can't go online in the game
-
+  * Batch cheat download in settings menu... (No longer have to do each individually)
 -FIX-
 
 -OTHER-
