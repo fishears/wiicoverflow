@@ -221,6 +221,9 @@ typedef struct{
 	
 	f32 freeSpace;
 	f32 usedSpace;
+	
+	bool enableError002Fix;
+	bool enableAnti002Fix;
 
 } s_self;
 

@@ -275,8 +275,7 @@ s32 Apploader_Run(entry_point *entry)
 	// working with CIOS 13a
 	
 	/* ERROR 002 fix (thanks to WiiPower for sharing this)*/
-
-	if (self.isCIOS10 != true )
+	if((self.enableError002Fix == true) || (self.enableAnti002Fix == true))
 		*(u32 *)0x80003140 = *(u32 *)0x80003188; 
 
 	// copy kenobiwii code into tempoarary memory area
@@ -300,17 +299,12 @@ s32 Apploader_Run(entry_point *entry)
 
 		/* Read data from DVD */
 		WDVD_Read(dst, len, (u64)(offset << 2));
-
-
-		//Seriuosly? Why do we need an "Anti fix"... Why not just DONT use the 002 fix if
-		//running cios 10? Am i missing something? --beardface
 		
 		// with cIOS rev10 use Anti_002_fix AND ERROR_002_fix. Thx WiiPower
-		//if (self.isCIOS10 == true )
-		//	Anti_002_fix(dst, len);
+		if(self.enableAnti002Fix == true)
+			Anti_002_fix(dst, len);
 		
 		if (settings.video == 1) // patch
-
 		{
 			switch(CONF_GetVideo())
 			{
