@@ -1739,6 +1739,7 @@ void freeResources(){
     FreeButtonResources(&cheatDoneButton);
     FreeButtonResources(&selectAllButton);
     FreeButtonResources(&deselectAllButton);
+    FreeButtonResources(&cheatDownButton);
  #endif
 
  //  CFreeTypeGX_delete function make the games don't boot, removed temporary (it wass addedd in r533)
