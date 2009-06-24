@@ -24,7 +24,7 @@ struct LANGUAGE TX;
 
 extern char	languages[11][30];
 extern char	vidmodes[6][30];
-extern char gFixes[3][16];
+extern char gFixes[CFG_FIX_COUNT][16];
 
 char selLanguages[20][7]=
 {
