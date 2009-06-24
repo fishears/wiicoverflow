@@ -5,7 +5,9 @@
   * Game fixes are selectable per game, 'none' is default setting
   * Online cheat blocker - if you cheat, you can't go online in the game
   * Batch cheat download in settings menu... (No longer have to do each individually)
+  * Buttons auto hide on main screen when not hovering nearby. (Turn on/off auto hide in config file)
 -FIX-
+  * Hide info button when parental controls on
 
 -OTHER-
 
