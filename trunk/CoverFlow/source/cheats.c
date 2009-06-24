@@ -164,6 +164,7 @@ void manage_cheats(int id, struct discHdr *gameList)
     char titleID[7];
     char path[50];
     int i, codecounter = 0;
+    bool lastiscode = false;
     struct discHdr *header = &gameList[id];
     sprintf(titleID,"%s",header->id);
     sprintf(filename, "%s.txt", titleID);
@@ -182,9 +183,11 @@ void manage_cheats(int id, struct discHdr *gameList)
         fgets (buffer, sizeof buffer, txtfile ); //discard 3rd line -> ""
         memset(buffer, 0, sizeof(buffer));
         i = 0;
+            //WindowPrompt("lastline",lastline,&okButton,0);
         while(!feof(txtfile) && strcmp(lastline,buffer)!=0 && i<MAX_CHEATS) //parse the rest of the txt file
         {
             fgets(buffer,sizeof(buffer),txtfile); //get a line into buffer
+            lastiscode = false;
             if(!is_code(buffer) && strlen(buffer)!=1) //if its not a code and not a blank line
             {
                 memset(cheat[i].title, 0, LINE_LENGTH);
@@ -213,13 +216,19 @@ void manage_cheats(int id, struct discHdr *gameList)
             else if(strlen(buffer)!=1)//it must be a code
             {
                     sprintf(cheat[i-1].codes[codecounter],"%18s",buffer); //write the codeline
-                    //WindowPrompt("code",cheat[i-1].codes[codecounter],&okButton,0);
+                        //WindowPrompt("code",cheat[i-1].codes[codecounter],&okButton,0);
                     codecounter++; //we got another codeline
                     cheat[i-1].codelines = codecounter; //write the number of codelines
+                    lastiscode = true;
             }
             memset(buffer, 0, 128);
         }
         memset(&lastline,0,LINE_LENGTH);
+        if(lastiscode) //we reached feof but the last line was a code NOT the game title
+        {
+            cheat[i-1].enabled = false;
+            i++;
+        }
 
         char tTemp[135];
         int pages = 0;
@@ -408,9 +417,8 @@ bool is_code(char* line)
                     {
                             if (((tempCode[x] >= 'g') && (tempCode[x] <= 'z')) ||((tempCode[x] >= 'G') && (tempCode[x] <= 'Z')))
                             {
-                                //don't include known code variables
+                                //exclude known code variables
                                 if(tempCode[x] !='x' && tempCode[x] !='X' && tempCode[x] !='R' && tempCode[x] !='G' && tempCode[x] !='B' && tempCode[x] !='Y')
-                                //if(tempCode[x] >='0' && tempCode[x] <='9') //alt: check for numbers and set TRUE if found
                                     checkFlag=false;
                             }
                     }
