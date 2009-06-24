@@ -342,12 +342,12 @@ int main( int argc, char **argv )
 			{
 				Settings_Menu_Show();
 			}
-			else if(Button_Select(&slideButton, pointer.p_x, pointer.p_y))
+			else if(settings.hideScroll && Button_Select(&slideButton, pointer.p_x, pointer.p_y))
 			{
 				self.dragging = true;
 				self.scrolling = true;
 			}
-			else if(Button_Select(&infoButton, pointer.p_x, pointer.p_y)){
+			else if((!settings.parentalLock) && Button_Select(&infoButton, pointer.p_x, pointer.p_y)){
 				showInfoWindow();
 			}
 			
@@ -594,8 +594,6 @@ int main( int argc, char **argv )
 				// Take a screen shot
 				//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 
-				//Beardfaces stuff
-					
 			
 				//
 				// SCOGNITO'S TRASH TEST CORNER
@@ -776,8 +774,6 @@ int main( int argc, char **argv )
 		{
 			if(settings.hideScroll)
 			{
-				//TODO IF hiding scroll; don't let user click and drag it.
-				
 				// Draw the slider and corner buttons
 				DrawSlider(410, settings.theme);
 			}
@@ -787,7 +783,8 @@ int main( int argc, char **argv )
 			if(!settings.parentalLock)
 				Button_Theme_Paint(&settingsButton, settings.theme);
 			
-			Button_Theme_Paint(&infoButton, settings.theme);
+			if(!settings.parentalLock)
+				Button_Theme_Paint(&infoButton, settings.theme);
 			
 			// Draw Game Title
 			if(settings.coverText && (!self.dragging && !self.twisting && select_ready))
@@ -802,14 +799,15 @@ int main( int argc, char **argv )
 		if ((!self.selected && // main screen button only
 			 (((!settings.parentalLock) && Button_Hover(&addButton, pointer.p_x, pointer.p_y)) ||
 			  Button_Hover(&settingsButton, pointer.p_x, pointer.p_y) ||
-			  Button_Hover(&slideButton, pointer.p_x, pointer.p_y))) 
+			  (settings.hideScroll && Button_Hover(&slideButton, pointer.p_x, pointer.p_y)))) 
 			||
 			(self.selected && // game load panel is showing
 			 (((!settings.parentalLock) && (Button_Hover(&deleteButton, pointer.p_x, pointer.p_y) 
-			                              || Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y))) ||
+			                              || Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y) 
+										  || Button_Hover(&infoButton, pointer.p_x, pointer.p_y))) ||
 			  (Button_Hover(&loadButton, pointer.p_x, pointer.p_y) ||
-			   Button_Hover(&backButton, pointer.p_x, pointer.p_y))) )
-			   || Button_Hover(&infoButton, pointer.p_x, pointer.p_y))
+			   Button_Hover(&backButton, pointer.p_x, pointer.p_y))))
+			)
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
@@ -853,40 +851,6 @@ int main( int argc, char **argv )
 		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1))  // Button1 is the 'Get Info' button
 		{
 			showInfoWindow();
-			/*
-			char tIOS[20];
-			char tAppInfo[30];
-			char tHDDInfo[80];
-			char tGamesCount[40];
-			char tTotalSize[40];
-			
-			f32 freespace, used;
-			
-			WBFS_DiskSpace(&used, &freespace);
-			sprintf(tHDDInfo, TX.infoHDD, used, freespace);
-			sprintf(tGamesCount, TX.instGames, self.gameCnt);
-			sprintf(tTotalSize, "%d (%2f)", (int)(freespace + used), (used / (freespace + used) * 100));
-			
-			sprintf(tIOS, "IOS%d rev%d", IOS_GetVersion(), IOS_GetRevision());
-			sprintf(tAppInfo, "CoverFloader r%d %s", SVN_VERSION, RELEASE);
-			
-			if (settings.theme) // black text on white matte
-			{
-				CFreeTypeGX_DrawText(ttf18pt, 320, 35,  tAppInfo, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt,  15, 35,  tIOS, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				CFreeTypeGX_DrawText(ttf18pt,  15, 55,  tHDDInfo, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				CFreeTypeGX_DrawText(ttf18pt,  15, 75,  tGamesCount, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-			}
-			else //white text on black matte
-			{
-				CFreeTypeGX_DrawText(ttf18pt, 320, 35,  tAppInfo, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt,  15, 35,  tIOS, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
-				CFreeTypeGX_DrawText(ttf18pt,  15, 55,  tHDDInfo, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
-				CFreeTypeGX_DrawText(ttf18pt,  15, 75,  tGamesCount, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
-				CFreeTypeGX_DrawText(ttf18pt,  15, 95,  tTotalSize, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
-			}
-			//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
-			*/
 		}
 	
 #ifdef DEBUG
