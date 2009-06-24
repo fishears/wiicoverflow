@@ -418,7 +418,7 @@ bool is_code(char* line)
                             if (((tempCode[x] >= 'g') && (tempCode[x] <= 'z')) ||((tempCode[x] >= 'G') && (tempCode[x] <= 'Z')))
                             {
                                 //exclude known code variables
-                                if(tempCode[x] !='x' && tempCode[x] !='X' && tempCode[x] !='R' && tempCode[x] !='G' && tempCode[x] !='B' && tempCode[x] !='Y')
+                                if(tempCode[x] !='x' && tempCode[x] !='X' && tempCode[x] !='R' && tempCode[x] !='G' && tempCode[x] !='B' && tempCode[x] !='Y' && tempCode[x] !='y')
                                     checkFlag=false;
                             }
                     }
