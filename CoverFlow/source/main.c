@@ -107,6 +107,8 @@ int main( int argc, char **argv )
 	}
 #endif
 
+	int offsetButtonX = 0;
+
 	u8 FPS = 0;			// frames per second counter
 
 	SETTINGS_Init();
@@ -778,13 +780,42 @@ int main( int argc, char **argv )
 				DrawSlider(410, settings.theme);
 			}
 			
+			
+			if(settings.auto_hide)
+			{
+				if((pointer.p_x > 0   && pointer.p_x < 140) ||
+				   (pointer.p_x > 500 && pointer.p_x < 640) ||
+				   (pointer.p_y > 0   && pointer.p_y < 140) ||
+				   (pointer.p_y > 340 && pointer.p_y < 480))
+				{
+					/*Slide in buttons*/
+					if(offsetButtonX > 0)
+						offsetButtonX--;
+					else
+						offsetButtonX = 0;
+				}
+				else
+				{
+					/*Slide out buttons*/
+					if(offsetButtonX < 140)
+						offsetButtonX++;
+					else
+						offsetButtonX = 140;
+				}
+			}
+			else
+			{
+				offsetButtonX = 0;
+			}
+			
             if(!settings.parentalLock)
-                Button_Theme_Paint(&addButton, settings.theme);
+                Button_Theme_Paint_Offset(&addButton, settings.theme, offsetButtonX, 0);
+				
 			if(!settings.parentalLock)
-				Button_Theme_Paint(&settingsButton, settings.theme);
+				Button_Theme_Paint_Offset(&settingsButton, settings.theme, -1*offsetButtonX, 0);
 			
 			if(!settings.parentalLock)
-				Button_Theme_Paint(&infoButton, settings.theme);
+				Button_Theme_Paint_Offset(&infoButton, settings.theme, offsetButtonX, 0);
 			
 			// Draw Game Title
 			if(settings.coverText && (!self.dragging && !self.twisting && select_ready))

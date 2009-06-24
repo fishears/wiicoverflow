@@ -213,6 +213,11 @@ void Button_Paint(struct Button* btn)
 
 void Button_Theme_Paint(struct Button* btn, int theme_id)
 {
+	Button_Theme_Paint_Offset(btn, theme_id, 0, 0);
+}
+
+void Button_Theme_Paint_Offset(struct Button* btn, int theme_id, int x_offset, int y_offset)
+{
 	if(btn == 0)
 		return;
 		
@@ -221,13 +226,13 @@ void Button_Theme_Paint(struct Button* btn, int theme_id)
 		switch (theme_id)
 		{
 			case 0: // black theme
-				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
 				break;
 			case 1: // white theme
-				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->texture, 0, 1, 1, 0xFFFFFFFF);
 				break;
 			default:
-				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
 				break;
 		}
 	}
@@ -236,13 +241,13 @@ void Button_Theme_Paint(struct Button* btn, int theme_id)
 		switch (theme_id)
 		{
 			case 0: // black theme
-				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->texture, 0, 1, 1, 0xFFFFFFFF);
 				break;
 			case 1: // white theme
-				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
 				break;
 			default:
-				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->texture, 0, 1, 1, 0xFFFFFFFF);
 				break;
 		}
 		
