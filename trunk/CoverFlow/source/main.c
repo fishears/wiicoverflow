@@ -790,7 +790,7 @@ int main( int argc, char **argv )
 				{
 					/*Slide in buttons*/
 					if(offsetButtonX > 0)
-						offsetButtonX--;
+						offsetButtonX-=10;
 					else
 						offsetButtonX = 0;
 				}
@@ -798,7 +798,7 @@ int main( int argc, char **argv )
 				{
 					/*Slide out buttons*/
 					if(offsetButtonX < 140)
-						offsetButtonX++;
+						offsetButtonX+=10;
 					else
 						offsetButtonX = 140;
 				}
