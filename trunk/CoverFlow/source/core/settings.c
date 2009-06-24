@@ -52,6 +52,8 @@ void SETTINGS_Init()
 	settings.music        = 1;
 	settings.quickstart   = 0;
 	settings.enablepitch  = 0;
+	settings.auto_hide    = 1;
+	
 	strcpy(settings.localLanguage, "default"); // en-US 
  	//Global Game
 	settings.ocarina      = 0;
@@ -97,7 +99,7 @@ void backup_gpSettings()
 void restore_gpSettings()
 {
     settings.coverZoom    		= gpsettings.coverZoom;
-    settings.mainCoverZoom    		= gpsettings.mainCoverZoom;
+    settings.mainCoverZoom    	= gpsettings.mainCoverZoom;
 	settings.coverAngle   		= gpsettings.coverAngle;
 	settings.coverSpacing 		= gpsettings.coverSpacing;
 	settings.coverFallOff 		= gpsettings.coverFallOff;
@@ -153,6 +155,8 @@ int SETTINGS_Load()
 			  settings.coverText    = atoi(mxmlElementGetAttr(next_n,"coverText"));
 		  if(mxmlElementGetAttr(next_n,"theme"))
 			  settings.theme		   = atoi(mxmlElementGetAttr(next_n,"theme"));
+		  if(mxmlElementGetAttr(next_n,"autohide"))
+			  settings.auto_hide 	   = atoi(mxmlElementGetAttr(next_n,"autohide"));
 		  if(mxmlElementGetAttr(next_n,"enablepitch"))
 			  settings.enablepitch  = atoi(mxmlElementGetAttr(next_n,"enablepitch"));
 		  if(mxmlElementGetAttr(next_n,"c3d"))
@@ -266,6 +270,9 @@ int SETTINGS_Save()
 	sprintf(buffer, "%d", settings.theme);
 	mxmlElementSetAttr(node, "theme", buffer);
 
+	sprintf(buffer, "%d", settings.auto_hide);
+	mxmlElementSetAttr(node, "autohide", buffer);
+	
 	sprintf(buffer, "%d", settings.covers3d);
 	mxmlElementSetAttr(node, "c3d", buffer);
 

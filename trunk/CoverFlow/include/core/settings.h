@@ -20,6 +20,8 @@ typedef struct {
     int coverText;
     int theme;
 	
+	int auto_hide;
+	
 	int covers3d;
 	int covers3dThickness;
 	int hideScroll;
