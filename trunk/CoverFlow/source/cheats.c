@@ -409,15 +409,16 @@ bool is_code(char* line)
                             if (((tempCode[x] >= 'g') && (tempCode[x] <= 'z')) ||((tempCode[x] >= 'G') && (tempCode[x] <= 'Z')))
                             {
                                 //don't include known code variables
-                                if(tempCode[x] !='x' && tempCode[x] !='X' && tempCode[x] !='R' && tempCode[x] !='G' && tempCode[x] !='B')
+                                if(tempCode[x] !='x' && tempCode[x] !='X' && tempCode[x] !='R' && tempCode[x] !='G' && tempCode[x] !='B' && tempCode[x] !='Y')
+                                //if(tempCode[x] >='0' && tempCode[x] <='9') //alt: check for numbers and set TRUE if found
                                     checkFlag=false;
                             }
                     }
                     if(checkFlag)
-					{
-						free(msg);
+                    {
+                        free(msg);
                         return true; //it's a code line (or a good copy)
-					}
+                    }
                 }
             }
             free(msg);
@@ -521,7 +522,7 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
                             if ((tempCode[x] >= '0') && (tempCode[x] <= '9'))
                                 currentChar += tempCode[x] - '0';
                             //set known code variables to zero until they can be edited in a future release
-                            if(tempCode[x] =='x' || tempCode[x] =='X' || tempCode[x] =='R' || tempCode[x] =='G' || tempCode[x] =='B')
+                            if(tempCode[x] =='x' || tempCode[x] =='X' || tempCode[x] =='R' || tempCode[x] =='G' || tempCode[x] =='B' || tempCode[x] =='Y')
                                 currentChar = 0;
                             if (x % 2 == 0)
                             {
