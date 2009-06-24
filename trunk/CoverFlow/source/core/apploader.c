@@ -279,8 +279,8 @@ s32 Apploader_Run(entry_point *entry)
 		*(u32 *)0x80003140 = *(u32 *)0x80003188; 
 
 	// Fix for Sam & Max. thx WiiPower
-	if (self.enableSamMAxFix == true)
-		*(vu32*)0x80003184	= 0x80000000; // Game ID Address
+	//if (self.enableSamMAxFix == true)
+	//	*(vu32*)0x80003184	= 0x80000000; // Game ID Address
 
 	// copy kenobiwii code into tempoarary memory area
 	memset((void*)0x80001800,0,kenobiwii_size);

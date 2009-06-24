@@ -86,7 +86,6 @@ void initVars()
 	////////// Fixes //////////////
 	self.enableError002Fix = false;
 	self.enableAnti002Fix = false;
-	self.enableSamMAxFix = false;
 }
 
 

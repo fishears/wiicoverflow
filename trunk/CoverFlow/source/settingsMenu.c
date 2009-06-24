@@ -42,8 +42,7 @@ char gFixes[CFG_FIX_COUNT][16] =
 {
  {""},          // none
  {"Error_002"},
- {"Anti_002"},
- {"Sam & Max"}
+ {"Anti_002"}
 }; 
  
  
