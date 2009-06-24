@@ -38,11 +38,12 @@ char ghooks[3][9] =
 {" Wii Pad"},
 {" GC Pad"}};
 
-char gFixes[3][16] =
+char gFixes[CFG_FIX_COUNT][16] =
 {
  {""},          // none
  {"Error_002"},
- {"Anti_002"}
+ {"Anti_002"},
+ {"Sam & Max"}
 }; 
  
  
