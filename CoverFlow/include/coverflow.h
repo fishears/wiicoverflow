@@ -101,7 +101,7 @@
 #define CFG_VIDEO_COUNT  6
 #define CFG_HOOK_COUNT   3
 #define CFG_LANG_COUNT   11
-#define CFG_FIX_COUNT	 4
+#define CFG_FIX_COUNT	 3
 
 /* Y-Offset for gameSettings-Dialogbox */
 #define YOS_GSDB	-15
@@ -228,7 +228,6 @@ typedef struct{
 	
 	bool enableError002Fix;
 	bool enableAnti002Fix;
-    bool enableSamMAxFix;
 } s_self;
 
 

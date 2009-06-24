@@ -252,27 +252,18 @@ void apply_settings()
 		case 0:  // None
 			self.enableError002Fix = false;
 			self.enableAnti002Fix  = false;
-			self.enableSamMAxFix   = false;
 			break;
 		case 1:  // error_002
 			self.enableError002Fix = true;
 			self.enableAnti002Fix  = false;
-			self.enableSamMAxFix   = false;
 			break;
 		case 2:  // Anti_002
 			self.enableError002Fix = true;
 			self.enableAnti002Fix  = true;
-			self.enableSamMAxFix   = false;
-			break;
-		case 3:  // Sam & Max     //runs with cIOS 10 and 13a
-			self.enableError002Fix = true;
-			self.enableAnti002Fix  = true;
-			self.enableSamMAxFix   = true;
 			break;
 		default:
 			self.enableError002Fix = false;
 			self.enableAnti002Fix  = false;
-			self.enableSamMAxFix   = false;
 	}
 }
 
