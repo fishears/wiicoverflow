@@ -191,24 +191,28 @@ void manage_cheats(int id, struct discHdr *gameList)
             if(!is_code(buffer) && strlen(buffer)!=1) //if its not a code and not a blank line
             {
                 memset(cheat[i].title, 0, LINE_LENGTH);
-                buffer[strlen(buffer)-1]='\0'; //get rid of the end of line
                 sprintf(cheat[i].title,buffer); //write a title line
+                if(strlen(buffer)>LINE_LENGTH)
+                    cheat[i].title[LINE_LENGTH-1]='\0'; //get rid of the end of line
+                else
+                    cheat[i].title[strlen(cheat[i].title)-1]='\0';
                     //WindowPrompt("title1",cheat[i].title,&okButton,0);
-                
                 cheat[i].codelines = 0; //set new title codelines to zero
                 if(i>0) //only write codelines if this isn't the first title
                 {
-                        cheat[i-1].codelines = codecounter; //write the number of codelines for the previous title
-                        cheat[i-1].enabled = false;
-
-                        if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
-                        {
-                                i--;
-                                memset(cheat[i].title, 0, LINE_LENGTH);
-                                sprintf(cheat[i].title,buffer); //write THIS title over THAT title
-                                    //WindowPrompt("title2",cheat[i].title,&okButton,0);
-                                cheat[i].codelines = 0; //set new title codelines to zero
-                        }
+                    cheat[i-1].codelines = codecounter; //write the number of codelines for the previous title
+                    if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
+                    {
+                            i--;
+                            memset(cheat[i].title, 0, LINE_LENGTH);
+                            sprintf(cheat[i].title,buffer); //write THIS title over THAT title
+                            if(strlen(buffer)>LINE_LENGTH)
+                                cheat[i].title[LINE_LENGTH-1]='\0'; //get rid of the end of line
+                            else
+                                cheat[i].title[strlen(cheat[i].title)-1]='\0';
+                                //WindowPrompt("title2",cheat[i].title,&okButton,0);
+                            cheat[i].codelines = 0; //set new title codelines to zero
+                    }
                 }
                 codecounter = 0; //reset the codecounter
                 i++;
@@ -223,19 +227,24 @@ void manage_cheats(int id, struct discHdr *gameList)
             }
             memset(buffer, 0, 128);
         }
-        memset(&lastline,0,LINE_LENGTH);
+        memset(buffer, 0, 128);
+        memset(&lastline,0,128);
         if(lastiscode) //we reached feof but the last line was a code NOT the game title
         {
-            cheat[i-1].enabled = false;
             i++;
         }
 
-        char tTemp[135];
+
+        char tTemp[LINE_LENGTH];
         int pages = 0;
         int currpage = 1;
         int display;
         int n;
         int maxlines = i;
+        for(n=0;n<maxlines;n++)
+        {
+            cheat[n].enabled=false;
+        }
         for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
         {
             cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],84,148+(n*28));
@@ -351,8 +360,10 @@ void manage_cheats(int id, struct discHdr *gameList)
                 display = i+((currpage-1)*LINES_PER_PAGE);
                 if(display < (maxlines)-1) //only show up to the number of lines available
                 {
-                    //sprintf(tTemp,"%s:%d",cheat[display].title, cheat[display].codelines);
+                    memset(tTemp,0,LINE_LENGTH);
                     sprintf(tTemp,"%s",cheat[display].title);
+                    //sprintf(tTemp,"%s:%d",cheat[display].title, cheat[display].codelines);
+                    
                     CFreeTypeGX_DrawText(ttf14pt, 130, 164+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
                     step +=28;
                     if(cheat[display].enabled) //paint the appropriate cheat button state
@@ -408,20 +419,21 @@ bool is_code(char* line)
         {
             if(strlen(pch) == 8) //test for a block of 8 characters to SPACE
             {
+                //have we REALLY got a code line??
+                for (x = 0; x < 8; x++) //check for characters outside the scope of a pukka code
+                {
+                    if (((tempCode[x] >= 'g') && (tempCode[x] <= 'z')) ||((tempCode[x] >= 'G') && (tempCode[x] <= 'Z')))
+                    {
+                        //exclude known code variables
+                        if(tempCode[x] !='x' && tempCode[x] !='X' && tempCode[x] !='R' && tempCode[x] !='G' && tempCode[x] !='Y' && tempCode[x] !='y')
+                            checkFlag=false;
+                    }
+                }
+                
                 pch = strtok(NULL," \n");
                 if(strlen(pch)==8) //test for second block of 8 characters to SPACE or NEWLINE
                 {
                     strcat(tempCode,pch);
-                    //have we REALLY got a code line??
-                    for (x = 0; x < 16; x++) //check for characters outside the scope of a pukka code
-                    {
-                            if (((tempCode[x] >= 'g') && (tempCode[x] <= 'z')) ||((tempCode[x] >= 'G') && (tempCode[x] <= 'Z')))
-                            {
-                                //exclude known code variables
-                                if(tempCode[x] !='x' && tempCode[x] !='X' && tempCode[x] !='R' && tempCode[x] !='G' && tempCode[x] !='B' && tempCode[x] !='Y' && tempCode[x] !='y')
-                                    checkFlag=false;
-                            }
-                    }
                     if(checkFlag)
                     {
                         free(msg);
@@ -530,7 +542,7 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
                             if ((tempCode[x] >= '0') && (tempCode[x] <= '9'))
                                 currentChar += tempCode[x] - '0';
                             //set known code variables to zero until they can be edited in a future release
-                            if(tempCode[x] =='x' || tempCode[x] =='X' || tempCode[x] =='R' || tempCode[x] =='G' || tempCode[x] =='B' || tempCode[x] =='Y')
+                            if(tempCode[x] =='x' || tempCode[x] =='X' || tempCode[x] =='R' || tempCode[x] =='G' || tempCode[x] =='Y' || tempCode[x] =='y')
                                 currentChar = 0;
                             if (x % 2 == 0)
                             {
