@@ -2,8 +2,8 @@
   <app version="1.0">
     <name>CoverFloader</name>
     <coder>Many Talented People</coder>
-    <version>Release RC7</version>
-    <release_date>June 22nd, 2009</release_date>
+    <version>Release RC7U1</version>
+    <release_date>June 25nd, 2009</release_date>
     <short_description>USB ISO Loader</short_description>
     <long_description>Many thanks to the developers:
 Scognito
@@ -17,7 +17,7 @@ Other thanks to:
 Gitkua (images)
 brwest85 (HBC Icon)
 alexcarlosantao
-djtaz and theotherzone.com crew for the cover service
+djtaz and wiiboxart.com crew for the cover service
 and others (please ask if we forgot someone!)
 
 wiicoverflow.googlecode.com
