@@ -415,6 +415,7 @@ int main( int argc, char **argv )
 								
 								if(getGameSettings(titleID, &gameSetting))
 									apply_settings();
+								apply_fixsettings();
 								setGameSettings(titleID, &gameSetting,1);
 								
 								WiiLight(0); // turn off the slot light
@@ -751,6 +752,7 @@ int main( int argc, char **argv )
 				SETTINGS_Save();
 				if(getGameSettings(titleID, &gameSetting))
 					apply_settings();
+				apply_fixsettings();
 				setGameSettings(titleID, &gameSetting,1);
 				WiiLight(0); // turn off the slot light
 				

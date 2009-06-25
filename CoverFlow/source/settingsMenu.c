@@ -972,7 +972,7 @@ void Game_Settings_Menu_Show()
         gameSetting.video    = 0;
         gameSetting.vipatch  = 0;
         gameSetting.lock     = 0;
-		gameSetting.fixtype  = 0;
+		gameSetting.fixtype  = settings.presetFix;
     }
 	
     bool doloop = true;
