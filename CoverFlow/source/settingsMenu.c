@@ -1208,11 +1208,11 @@ void Game_Settings_Menu_Show()
 			{
 				if(settings.covers3d)
 				{
-					GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, 1, AR_16_9, 0xFFFFFFFF);
+					GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
 				}
 				else
 				{
-					GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, 1, AR_16_9, 0xFFFFFFFF);
+					GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 				}
 			}
 			else
