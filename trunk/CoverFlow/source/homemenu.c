@@ -389,7 +389,7 @@ void Do_Batteries(int y_modifier)
 				
 				for(i = 0; i < level; i++)
 				{
-					GRRLIB_DrawImg(221+((107*x)+(8*i)), (385 + y_modifier), battery_bar, 0, 1, 1, 0xFFFFFFFF); //draw the bars
+					GRRLIB_DrawImg(221+((106*x)+(8*i)), (385 + y_modifier), battery_bar, 0, 1, 1, 0xFFFFFFFF); //draw the bars
 				}
 			}
 		}
