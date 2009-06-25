@@ -1,7 +1,6 @@
 #include "settings.h"
 #include "mxml.h"
 
-
 s_settings settings;
 gp_settings gpsettings;
 
@@ -62,6 +61,7 @@ void SETTINGS_Init()
 	settings.video        = 0;
 	settings.vipatch      = 0;
 	strcpy(settings.lastplayed,"");
+	settings.presetFix	  = 0;
 };
 //called by reset button on graphics settings screen
 //button used to reset EVERYTHING
@@ -199,6 +199,7 @@ int SETTINGS_Load()
 
 	  if(next_n != NULL)
 	  {
+		  
 		  if(mxmlElementGetAttr(next_n,"ocarina"))
 			  settings.ocarina = atoi(mxmlElementGetAttr(next_n,"ocarina"));
 		  if(mxmlElementGetAttr(next_n,"hooktype"))
@@ -211,6 +212,13 @@ int SETTINGS_Load()
 			  settings.vipatch     = atof(mxmlElementGetAttr(next_n,"vipatch"));
           if(mxmlElementGetAttr(next_n,"lastplayed"))
 			  strcpy(settings.lastplayed, mxmlElementGetAttr(next_n,"lastplayed"));
+		  if(mxmlElementGetAttr(next_n,"presetFix"))
+		  {
+			  settings.presetFix = atoi(mxmlElementGetAttr(next_n,"presetFix"));
+			  if ( (settings.presetFix < 0) || (settings.presetFix > (CFG_FIX_COUNT -1)) )
+				settings.presetFix = 0;
+		  }
+	  
 	  }
 	  else
 	  {
@@ -308,7 +316,7 @@ int SETTINGS_Save()
 	mxmlElementSetAttr(node, "rev", buffer);	
 
     //GLOBAL GAME SETTINGS
-	
+
 	node = mxmlNewElement(tree, "game");
 	sprintf(buffer, "%d", settings.ocarina);
 	mxmlElementSetAttr(node, "ocarina", buffer);
@@ -326,6 +334,9 @@ int SETTINGS_Save()
 	mxmlElementSetAttr(node, "vipatch", buffer);
 
 	mxmlElementSetAttr(node, "lastplayed", settings.lastplayed);
+
+	sprintf(buffer, "%d", settings.presetFix);
+	mxmlElementSetAttr(node, "presetFix", buffer);
 
 	
 	FILE *fp;
@@ -362,7 +373,6 @@ void createEmptyWiiCoverFlowFile()
 	sprintf(buf, "%d", SVN_VERSION);
 	mxmlElementSetAttr(node, "rev", buf);	
 	node = mxmlNewElement(tree, "game");
-	
 	fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "w");
         
 	if(fp != NULL){

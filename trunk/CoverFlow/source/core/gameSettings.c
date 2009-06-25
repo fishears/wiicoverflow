@@ -14,7 +14,7 @@ void initGameSettings(s_gameSettings* gs){
 	
 	gs->lock = 0;
 	
-	gs->fixtype = 0;
+	gs->fixtype = settings.presetFix;
 
 	gs->changed  = false;
 	
@@ -129,7 +129,7 @@ bool getGameSettings(char* gameCode, s_gameSettings* gs){
 							if(mxmlElementGetAttr(next_n,"fixtype"))
 								gs->fixtype = atoi(mxmlElementGetAttr(next_n,"fixtype"));
 							else
-								gs->fixtype = 0;
+								gs->fixtype = settings.presetFix;
 							
 							return true;
 						}

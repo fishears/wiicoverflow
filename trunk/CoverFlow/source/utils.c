@@ -234,19 +234,10 @@ u8 CalculateFrameRate()
     return FPS;
 }
 
-void apply_settings()
+
+
+void apply_fixsettings()
 {
-    //called after global settings are saved and right before game is launched
-    //this overwrites global settings with the per-game settings
-    if(gameSetting.ocarina != -1)
-    {
-        settings.ocarina = gameSetting.ocarina;
-        settings.hooktype = gameSetting.hooktype;
-        settings.language = gameSetting.language;
-        settings.video = gameSetting.video;
-        settings.vipatch = gameSetting.vipatch;
-    }
-	
 	switch (gameSetting.fixtype)
 	{
 		case 0:  // None
@@ -265,6 +256,23 @@ void apply_settings()
 			self.enableError002Fix = false;
 			self.enableAnti002Fix  = false;
 	}
+}
+
+
+
+void apply_settings()
+{
+    //called after global settings are saved and right before game is launched
+    //this overwrites global settings with the per-game settings
+    if(gameSetting.ocarina != -1)
+    {
+        settings.ocarina = gameSetting.ocarina;
+        settings.hooktype = gameSetting.hooktype;
+        settings.language = gameSetting.language;
+        settings.video = gameSetting.video;
+        settings.vipatch = gameSetting.vipatch;
+    }
+	
 }
 
 bool networkInit(char *ip)

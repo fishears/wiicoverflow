@@ -41,6 +41,7 @@ typedef struct {
     int vipatch;
     char lastplayed[7];
     char localLanguage[7];
+	int presetFix;  // preset gamefix, default 0
 } s_settings;
 
 
