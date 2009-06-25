@@ -1,13 +1,15 @@
 #labels Featured
-== RC? (?) ==
+== RC7U1 (June 25 2009) ==
 
 -NEW-
   * Game fixes are selectable per game, 'none' is default setting
+  * "presetFix" in wiicoverflow.xml, (read about r701)
   * Online cheat blocker - if you cheat, you can't go online in the game
   * Batch cheat download in settings menu... (No longer have to do each individually)
   * Buttons auto hide on main screen when not hovering nearby. (Turn on/off auto hide in config file)
 -FIX-
   * Hide info button when parental controls on
+  * Minor bug fixes
 
 -OTHER-
 
