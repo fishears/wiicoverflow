@@ -163,7 +163,7 @@ void manage_cheats(int id, struct discHdr *gameList)
     char filename[10];
     char titleID[7];
     char path[50];
-    int i, codecounter = 0;
+    int i, codecounter = 0,ret;
     bool lastiscode = false;
     struct discHdr *header = &gameList[id];
     sprintf(titleID,"%s",header->id);
@@ -188,7 +188,8 @@ void manage_cheats(int id, struct discHdr *gameList)
         {
             fgets(buffer,sizeof(buffer),txtfile); //get a line into buffer
             lastiscode = false;
-            if(!is_code(buffer) && strlen(buffer)!=1) //if its not a code and not a blank line
+            ret=is_code(buffer);
+            if(ret == 0 && strlen(buffer)!=1) //if its not a code and not a blank line
             {
                 memset(cheat[i].title, 0, LINE_LENGTH);
                 sprintf(cheat[i].title,buffer); //write a title line
@@ -198,6 +199,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                     cheat[i].title[strlen(cheat[i].title)-1]='\0';
                     //WindowPrompt("title1",cheat[i].title,&okButton,0);
                 cheat[i].codelines = 0; //set new title codelines to zero
+                cheat[i].editable = false;
                 if(i>0) //only write codelines if this isn't the first title
                 {
                     cheat[i-1].codelines = codecounter; //write the number of codelines for the previous title
@@ -212,6 +214,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                                 cheat[i].title[strlen(cheat[i].title)-1]='\0';
                                 //WindowPrompt("title2",cheat[i].title,&okButton,0);
                             cheat[i].codelines = 0; //set new title codelines to zero
+                            cheat[i].editable = false;
                     }
                 }
                 codecounter = 0; //reset the codecounter
@@ -222,6 +225,9 @@ void manage_cheats(int id, struct discHdr *gameList)
                     sprintf(cheat[i-1].codes[codecounter],"%18s",buffer); //write the codeline
                         //WindowPrompt("code",cheat[i-1].codes[codecounter],&okButton,0);
                     codecounter++; //we got another codeline
+                    if(cheat[i-1].editable==false && ret == 2)
+                        cheat[i-1].editable=true;
+
                     cheat[i-1].codelines = codecounter; //write the number of codelines
                     lastiscode = true;
             }
@@ -241,7 +247,7 @@ void manage_cheats(int id, struct discHdr *gameList)
         int display;
         int n;
         int maxlines = i;
-        for(n=0;n<maxlines;n++)
+        for(n=0;n<maxlines;n++) //set all lines to disabled
         {
             cheat[n].enabled=false;
         }
@@ -365,6 +371,8 @@ void manage_cheats(int id, struct discHdr *gameList)
                     //sprintf(tTemp,"%s:%d",cheat[display].title, cheat[display].codelines);
                     
                     CFreeTypeGX_DrawText(ttf14pt, 130, 164+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+                    if(cheat[display].editable)
+                        CFreeTypeGX_DrawText(ttf14pt, 116, 164+step, "+", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
                     step +=28;
                     if(cheat[display].enabled) //paint the appropriate cheat button state
                         Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],0);
@@ -400,16 +408,19 @@ void manage_cheats(int id, struct discHdr *gameList)
     return;    
 }
 #endif
-bool is_code(char* line)
+int is_code(char* line)
 {
     //checks the line to see if it's a code line
-    //TODO: parse the code at this stage to tag it as having editable values if any non-hex chars found
+    //returns
+    //0 if NOT a codeline
+    //1 if it is a codeline
+    //2 if it is an editable codeline
     if(strlen(line)>16) //don't mess about if it's just too short to be a code then it't NOT a code
     {
         char tempCode[17];
         int x;
         memset(tempCode, 0, sizeof(tempCode));
-        bool checkFlag = true;
+        bool checkFlag = true, editable = false;
         char* pch;
         char* msg = malloc(strlen(line)*sizeof(char));
         sprintf(msg, line);
@@ -420,12 +431,12 @@ bool is_code(char* line)
             if(strlen(pch) == 8) //test for a block of 8 characters to SPACE
             {
                 //have we REALLY got a code line??
-                for (x = 0; x < 8; x++) //check for characters outside the scope of a pukka code
+                for (x = 0; x < 8; x++) //check for characters outside the scope of a pukka code in 1st block
                 {
                     if (((tempCode[x] >= 'g') && (tempCode[x] <= 'z')) ||((tempCode[x] >= 'G') && (tempCode[x] <= 'Z')))
                     {
                         //exclude known code variables
-                        if(tempCode[x] !='x' && tempCode[x] !='X' && tempCode[x] !='R' && tempCode[x] !='G' && tempCode[x] !='Y' && tempCode[x] !='y')
+                        //if(tempCode[x] !='x' && tempCode[x] !='X' && tempCode[x] !='R' && tempCode[x] !='G' && tempCode[x] !='Y' && tempCode[x] !='y')
                             checkFlag=false;
                     }
                 }
@@ -434,18 +445,31 @@ bool is_code(char* line)
                 if(strlen(pch)==8) //test for second block of 8 characters to SPACE or NEWLINE
                 {
                     strcat(tempCode,pch);
+                    for (x = 0; x < 8; x++) //check for characters outside the scope of a pukka code
+                    {
+                        //known code variables
+                        if(pch[x] =='x' || pch[x] =='X' || pch[x] =='R' || pch[x] =='G' || pch[x] =='Y' || pch[x] =='y')
+                            editable = true;
+                    }
                     if(checkFlag)
                     {
                         free(msg);
-                        return true; //it's a code line (or a good copy)
+                        if(editable)
+                        {
+                            return 2; //it's a code line (editable)
+                        }
+                        else
+                        {
+                            return 1; //it's a code line (not editable)
+                        }
                     }
                 }
             }
             free(msg);
-            return false;
+            return 0;
         }
     }
-    return false;
+    return 0;
 }
 
 bool check_download(char* titleID)

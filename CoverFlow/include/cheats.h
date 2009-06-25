@@ -23,7 +23,7 @@ extern "C" {
     #define CODESITE "http://www.usbgecko.com/codes/codes/"
     #define LINES_PER_PAGE 9 //lines per page to display
     #define LINE_LENGTH 50 //max title line length
-    #define MAX_CODES 15 //max number of cheat codes
+    #define MAX_CODES 20 //max number of cheat codes
     #define CHEAT_LINE 18 //cheat codeline length
     #define MAX_CHEATS 30 //maximum number of cheats per game
 
@@ -61,7 +61,7 @@ typedef struct {
     bool download_txt(int id, int mode, struct discHdr *gameList);
     void batch_download_txt(struct discHdr *gameList);
     void manage_cheats(int id, struct discHdr *gameList);
-    bool is_code(char* line);
+    int is_code(char* line);
     bool check_download(char* titleID);
     void create_gct(CHEAT cheat, int cheatcount,struct discHdr *gameList, int id);
 
