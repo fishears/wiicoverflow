@@ -8,18 +8,16 @@ void showInfoWindow(){
 	bool doloop = true;
 	int fade = 5;
 	int y, sp;
-	int step = 40;
+	int step = 35;
 	char temp[256];
 	int hdSize = self.freeSpace + self.usedSpace;
 	int x = 92;
 	
 	u32 filledColor = 0xff9510FF;
 	u32 emptyColor = 0xe4e4e4FF;
-	
-	
 
 	do{
-		y = 140;
+		y = 115;
 		sp = 0;
 		
 		WPAD_ScanPads();
@@ -35,6 +33,10 @@ void showInfoWindow(){
 		GRRLIB_DrawImg(62, 50, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
 		
 		CFreeTypeGX_DrawText(ttf16pt, 177, 63, TX.sysInfo, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+
+		sprintf(temp, "DeviceID: %u", self.deviceID);
+		CFreeTypeGX_DrawText(ttf16pt, x, y+sp, temp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+		sp+=step;
 
 		sprintf(temp, "Version: %s (r%d)", RELEASE, SVN_VERSION);
 		CFreeTypeGX_DrawText(ttf16pt, x, y+sp, temp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);

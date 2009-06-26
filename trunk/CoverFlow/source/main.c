@@ -82,6 +82,7 @@ void initVars()
 
 	self.freeSpace = 0;
 	self.usedSpace = 0;
+	self.deviceID  = 0;
 	////////// Fixes //////////////
 	self.enableError002Fix = false;
 	self.enableAnti002Fix = false;
@@ -254,7 +255,7 @@ int main( int argc, char **argv )
 	bool select_ready    = false;
 	
 	WBFS_DiskSpace(&self.usedSpace, &self.freeSpace);
-	
+	ES_GetDeviceID(&self.deviceID);
 	
 	self.wba_fileexist = wbaFileExist();
 	if (self.wba_fileexist)
