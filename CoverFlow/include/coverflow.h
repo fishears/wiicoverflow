@@ -48,6 +48,7 @@
 #include "konami.h"
 #include "cheats.h"
 #include "info.h"
+#include "wbaLogin.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -85,6 +86,7 @@
 #define BUFFER_WINDOW        15
 #define BUFFER_THREAD_COUNT  1
 #define USBLOADER_PATH       "SD:/usb-loader"
+#define WIIBOXART_PASS		 "SD:/usb-loader/wiiboxart.pass"
 #define MAX_COVERS           15
 
 #define RELEASE              "RC7"
@@ -220,7 +222,6 @@ typedef struct{
 	bool firstTimeGP;  		// First time on graphics panel, used by backup_gpSettings();
 	bool switched3dto2D;	// When installing new games
 	bool waiting;			// when waiting, for showing icon
-	bool isCIOS10;			// cIOS10 ?
 	int dummy;
 	
 	f32 freeSpace;
@@ -228,6 +229,10 @@ typedef struct{
 	
 	bool enableError002Fix;
 	bool enableAnti002Fix;
+	 
+	char wba_username[40];  //wiiboxart.com
+	char wba_password[40];
+	bool wba_fileexist;
 } s_self;
 
 
