@@ -78,7 +78,6 @@ void initVars()
 	self.firstTimeGP = true;
 	self.switched3dto2D = false;
 	self.waiting = false;
-	self.isCIOS10 = false;
 	initGameSettings(&gameSetting);
 
 	self.freeSpace = 0;
@@ -86,6 +85,11 @@ void initVars()
 	////////// Fixes //////////////
 	self.enableError002Fix = false;
 	self.enableAnti002Fix = false;
+	///// wiiboxart login data /////
+	strcpy(self.wba_username, "");
+	strcpy(self.wba_password, "");
+	self.wba_fileexist = false;
+	
 }
 
 
@@ -249,11 +253,17 @@ int main( int argc, char **argv )
 
 	bool select_ready    = false;
 	
-	u32 iosrev = IOS_GetRevision();
-	if(iosrev < (u32)12)
-		self.isCIOS10 = true;
-	
 	WBFS_DiskSpace(&self.usedSpace, &self.freeSpace);
+	
+	
+	self.wba_fileexist = wbaFileExist();
+	if (self.wba_fileexist)
+		{
+		getWBA_LoginData();
+//		char string[100];
+//		sprintf(string, "user: %s\npw: %s",self.wba_username, self.wba_password);
+//		WindowPrompt("wiiboxart", string, &okButton,0);
+		}
 	
 	//////////////////////////
 	// main screen gui loop //
