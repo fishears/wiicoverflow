@@ -226,6 +226,7 @@ typedef struct{
 	
 	f32 freeSpace;
 	f32 usedSpace;
+	u32 deviceID; 
 	
 	bool enableError002Fix;
 	bool enableAnti002Fix;
