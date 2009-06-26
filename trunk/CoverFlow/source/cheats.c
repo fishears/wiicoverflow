@@ -255,6 +255,7 @@ void manage_cheats(int id, struct discHdr *gameList)
         {
             cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],84,148+(n*28));
             cheatDisabled[n] = Duplicate_Button(cheatDisabled[0],84,148+(n*28));
+            cheatEditButton[n] = Duplicate_Button(cheatEditButton[0],108,148+(n*28));
         }
         fclose(txtfile);
         if(maxlines<=LINES_PER_PAGE)
@@ -370,10 +371,10 @@ void manage_cheats(int id, struct discHdr *gameList)
                     sprintf(tTemp,"%s",cheat[display].title);
                     //sprintf(tTemp,"%s:%d",cheat[display].title, cheat[display].codelines);
                     
-                    CFreeTypeGX_DrawText(ttf14pt, 130, 164+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-                    if(cheat[display].editable)
-                        CFreeTypeGX_DrawText(ttf14pt, 116, 164+step, "+", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+                    CFreeTypeGX_DrawText(ttf14pt, 135, 164+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
                     step +=28;
+                    if(cheat[display].editable)
+                        Button_Paint(&cheatEditButton[i]);
                     if(cheat[display].enabled) //paint the appropriate cheat button state
                         Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],0);
                     else
@@ -395,8 +396,10 @@ void manage_cheats(int id, struct discHdr *gameList)
                 Button_Hover(&pageUpButton, pointer.p_x, pointer.p_y);
             }
             Button_Hover(&cheatDoneButton, pointer.p_x, pointer.p_y);
-            for(n=0;n<display;n++) //hover the selection buttons
+            for(n=0;n<=display;n++) //hover the selection buttons
             {
+                if(cheat[n+((currpage-1)*LINES_PER_PAGE)].editable)
+                    Button_Hover(&cheatEditButton[n], pointer.p_x, pointer.p_y);
                 Button_Hover(&cheatEnabled[n], pointer.p_x, pointer.p_y);
                 Button_Hover(&cheatDisabled[n], pointer.p_x, pointer.p_y);
             }

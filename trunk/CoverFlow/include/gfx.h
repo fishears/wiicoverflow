@@ -73,6 +73,8 @@ extern const u8 flag_dk_png[];		// danish
 extern const u8 flag_tr_png[];		// turkish
 extern const u8 button_cheat_on_png[];  //for cheat manager
 extern const u8 button_cheat_off_png[];  //for cheat manager
+extern const u8 button_cheat_edit_png[];
+extern const u8 button_cheat_edit_over_png[];
 extern const u8 hdspace_png[];
 extern const u8 button_round_info_png[];
 extern const u8 button_round_info_over_png[];
@@ -127,6 +129,7 @@ Button infoButton;
 //cheat manager buttons
 Button cheatEnabled[10];
 Button cheatDisabled[10];
+Button cheatEditButton[10];
 Button manageCheatsButton;
 Button pageUpButton;
 Button pageDownButton;
