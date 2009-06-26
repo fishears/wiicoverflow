@@ -351,6 +351,7 @@ void Init_Buttons()
 	//cheat manager buttons
     cheatEnabled[0]         = Button_Init(button_cheat_on_png, button_cheat_off_png, 44, 80);
     cheatDisabled[0]        = Button_Init(button_cheat_off_png, button_cheat_on_png, 44, 80);
+    cheatEditButton[0]      = Button_Init(button_cheat_edit_png, button_cheat_edit_over_png, 68, 80);
     pageUpButton            = Duplicate_Button(vidupButton,478,82);
     pageDownButton          = Duplicate_Button(viddownButton,450,82);
     cheatDoneButton         = Duplicate_Button_TTF(okButton,84,82,TX.done);
@@ -1731,8 +1732,14 @@ void freeResources(){
 	FreeButtonResources(&gfixupButton);
 	
  #ifdef CHEAT_MANAGER
-	FreeButtonResources(&cheatEnabled[0]);
-	FreeButtonResources(&cheatDisabled[0]);
+        int n;
+        for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
+        {
+            FreeButtonResources(&cheatEnabled[n]);
+	FreeButtonResources(&cheatDisabled[n]);
+        FreeButtonResources(&cheatEditButton[n]);
+        }
+	
 	FreeButtonResources(&manageCheatsButton);
 	FreeButtonResources(&pageUpButton);
     FreeButtonResources(&pageDownButton);
