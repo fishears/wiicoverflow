@@ -219,7 +219,15 @@ void Download_Cover(char* id, int v, int max)
 			Paint_Progress_Generic(v, max,self.debugMsg);
 		}
 		else{
+		
+#ifdef WBA_BY_FILE		
+			if (self.wba_fileexist)
+				{
+				sprintf(url, "http://www.wiiboxart.com/diskartloader/160/160/%s/%s/%c%c%c%c.png", self.wba_username, self.wba_password, id[0], id[1], id[2], id[3]);
+				}
+#else
 			sprintf(url, "http://www.wiiboxart.com/diskart/160/160/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
+#endif	
 			sprintf(self.debugMsg, TX.getting, url);
 			Paint_Progress_Generic(v, max,self.debugMsg);
 			
@@ -235,7 +243,14 @@ void Download_Cover(char* id, int v, int max)
 				if (file.data != NULL) free(file.data);
 				
 				snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c.png", USBLOADER_PATH,  id[0], id[1], id[2]);
+#ifdef WBA_BY_FILE	
+				if (self.wba_fileexist)
+					{
+					sprintf(url, "http://www.wiiboxart.com/diskartloader/160/160/%s/%s/%c%c%c.png", self.wba_username, self.wba_password, id[0], id[1], id[2]);
+					}
+#else
 				sprintf(url, "http://www.wiiboxart.com/diskart/160/160/%c%c%c.png", id[0], id[1], id[2]);
+#endif
 				sprintf(self.debugMsg, TX.getting, url);
 				Paint_Progress_Generic(v, max,self.debugMsg);
 				

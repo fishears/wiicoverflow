@@ -10,6 +10,7 @@
 #include "wbaLogin.h"
 #include "fileParser.h"
 
+#ifdef WBA_BY_FILE
 extern s_self self;
 
 
@@ -47,7 +48,7 @@ void storeWBA_LoginData(char *name, char *val)
 	}
 }
 
-
+#endif
 
 
 
