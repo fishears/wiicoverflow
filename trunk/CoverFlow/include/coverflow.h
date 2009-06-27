@@ -74,7 +74,11 @@
 //#define TEST_MODE 1
 #define DEBUG 1
 #define CHEAT_MANAGER
-#define WBA_BY_FILE
+#define WBA_BY_FILE		/* Access to wiiboxart with data from file */
+
+#ifdef WBA_BY_FILE
+	#define WIIBOXART_PASS	 "SD:/usb-loader/wiiboxart.pass"
+#endif
 
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 
@@ -87,8 +91,9 @@
 #define BUFFER_WINDOW        15
 #define BUFFER_THREAD_COUNT  1
 #define USBLOADER_PATH       "SD:/usb-loader"
-#define WIIBOXART_PASS		 "SD:/usb-loader/wiiboxart.pass"
 #define MAX_COVERS           15
+
+
 
 #define RELEASE              "RC7"
 
@@ -231,10 +236,11 @@ typedef struct{
 	
 	bool enableError002Fix;
 	bool enableAnti002Fix;
-	 
+#ifdef WBA_BY_FILE	 
 	char wba_username[40];  //wiiboxart.com
 	char wba_password[40];
 	bool wba_fileexist;
+#endif	
 } s_self;
 
 
