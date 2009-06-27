@@ -1,12 +1,13 @@
 #labels Featured
-== RC? (? ? 2009) ==
+== RC7U2 (June 27 2009) ==
 
 -NEW-
-  *
+  * members of wiiboxart.com can download covers again
+  * DeviceID at System Infos
 -FIX-
-  *
+  * Minor bug fixes
 -OTHER-
-  *
+ 
 
 == RC7U1 (June 25 2009) ==
 
