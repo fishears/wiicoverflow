@@ -74,6 +74,7 @@
 //#define TEST_MODE 1
 #define DEBUG 1
 #define CHEAT_MANAGER
+#define WBA_BY_FILE
 
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 

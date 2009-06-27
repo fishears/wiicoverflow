@@ -167,7 +167,19 @@ void Download_Cover(char* id, int v, int max)
 			Paint_Progress_Generic(v, max,self.debugMsg);
 		}
 		else{
-
+#ifdef WBA_BY_FILE
+			if (self.wba_fileexist)
+				{
+				if(!(settings.covers3d))
+					{
+					sprintf(url, "http://www.wiiboxart.com/beardface/%s/%s/%s.png", self.wba_username, self.wba_password, id);
+					}
+				else
+					{
+					sprintf(url, "http://www.wiiboxart.com/hibern/%s/%s/%c%c%c%c.png", self.wba_username, self.wba_password, id[0], id[1], id[2], id[3]);
+					}
+				}
+#else
 			if(!(settings.covers3d))
 			{
 				sprintf(url, "http://www.wiiboxart.com/resize/%s/160/224/%s.png", region, id);
@@ -176,7 +188,7 @@ void Download_Cover(char* id, int v, int max)
 			{
 				sprintf(url, "http://www.wiiboxart.com/fullcover/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
 			}
-			
+#endif			
 			sprintf(self.debugMsg, TX.getting, url);
 			Paint_Progress_Generic(v, max,self.debugMsg);
 		
