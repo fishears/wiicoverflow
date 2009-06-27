@@ -125,6 +125,8 @@ void Download_Cover(char* id, int v, int max)
 		/*try to download image */
 			
 		char url[100];
+		char urlShow[100];
+		
 		struct block file;
 	
 		char region[4];
@@ -171,12 +173,14 @@ void Download_Cover(char* id, int v, int max)
 			if (self.wba_fileexist)
 				{
 				if(!(settings.covers3d))
-					{
-					sprintf(url, "http://www.wiiboxart.com/beardface/%s/%s/%s.png", self.wba_username, self.wba_password, id);
+					{  
+					sprintf(url,    "http://www.wiiboxart.com/beardface/%s/%s/%s.png", self.wba_username, self.wba_password, id);
+					sprintf(urlShow,"http://www.wiiboxart.com/../../../%s.png",id);
 					}
 				else
 					{
-					sprintf(url, "http://www.wiiboxart.com/hibern/%s/%s/%c%c%c%c.png", self.wba_username, self.wba_password, id[0], id[1], id[2], id[3]);
+					sprintf(url,    "http://www.wiiboxart.com/hibern/%s/%s/%c%c%c%c.png", self.wba_username, self.wba_password, id[0], id[1], id[2], id[3]);
+					sprintf(urlShow,"http://www.wiiboxart.com/../../../%c%c%c%c.png",id[0], id[1], id[2], id[3]);
 					}
 				}
 #else
@@ -188,8 +192,10 @@ void Download_Cover(char* id, int v, int max)
 			{
 				sprintf(url, "http://www.wiiboxart.com/fullcover/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
 			}
+			strcopy(urlShow, url, sizeof(url));
+
 #endif			
-			sprintf(self.debugMsg, TX.getting, url);
+			sprintf(self.debugMsg, TX.getting, urlShow);
 			Paint_Progress_Generic(v, max,self.debugMsg);
 		
 			file = downloadfile(url);
@@ -223,12 +229,14 @@ void Download_Cover(char* id, int v, int max)
 #ifdef WBA_BY_FILE		
 			if (self.wba_fileexist)
 				{
-				sprintf(url, "http://www.wiiboxart.com/diskartloader/160/160/%s/%s/%c%c%c%c.png", self.wba_username, self.wba_password, id[0], id[1], id[2], id[3]);
+				sprintf(url,     "http://www.wiiboxart.com/diskartloader/160/160/%s/%s/%c%c%c%c.png", self.wba_username, self.wba_password, id[0], id[1], id[2], id[3]);
+				sprintf(urlShow, "http://www.wiiboxart.com/diskartloader/160/160/../../%c%c%c%c.png", id[0], id[1], id[2], id[3]);
 				}
 #else
 			sprintf(url, "http://www.wiiboxart.com/diskart/160/160/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
+			strcopy(urlShow, url, sizeof(url));
 #endif	
-			sprintf(self.debugMsg, TX.getting, url);
+			sprintf(self.debugMsg, TX.getting, urlShow);
 			Paint_Progress_Generic(v, max,self.debugMsg);
 			
 			file = downloadfile(url);
@@ -246,12 +254,14 @@ void Download_Cover(char* id, int v, int max)
 #ifdef WBA_BY_FILE	
 				if (self.wba_fileexist)
 					{
-					sprintf(url, "http://www.wiiboxart.com/diskartloader/160/160/%s/%s/%c%c%c.png", self.wba_username, self.wba_password, id[0], id[1], id[2]);
+					sprintf(url,     "http://www.wiiboxart.com/diskartloader/160/160/%s/%s/%c%c%c.png", self.wba_username, self.wba_password, id[0], id[1], id[2]);
+					sprintf(urlShow, "http://www.wiiboxart.com/diskartloader/160/160/../../%c%c%c.png", id[0], id[1], id[2]);
 					}
 #else
 				sprintf(url, "http://www.wiiboxart.com/diskart/160/160/%c%c%c.png", id[0], id[1], id[2]);
+				strcopy(urlShow, url, sizeof(url));
 #endif
-				sprintf(self.debugMsg, TX.getting, url);
+				sprintf(self.debugMsg, TX.getting, urlShow);
 				Paint_Progress_Generic(v, max,self.debugMsg);
 				
 				file = downloadfile(url);
