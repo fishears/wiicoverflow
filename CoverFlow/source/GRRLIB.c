@@ -426,21 +426,19 @@ void GRRLIB_CreateEmptyTexture(GRRLIB_texImg * my_texture,unsigned int w, unsign
  * @param h height of the new texture to create.
  * @return A GRRLIB_texImg structure newly created.
  */
-GRRLIB_texImg GRRLIB_DuplicateTexture(GRRLIB_texImg tex, unsigned int w, unsigned int h) {
+void GRRLIB_DuplicateTexture(GRRLIB_texImg * destination_texture, GRRLIB_texImg tex, unsigned int w, unsigned int h) {
     unsigned int x, y;
-    GRRLIB_texImg my_texture;
 
-    my_texture.data = memalign (32, h * w * 4);
-    my_texture.w = w;
-    my_texture.h = h;
+    destination_texture->data = memalign (32, h * w * 4);
+    destination_texture->w = w;
+    destination_texture->h = h;
     // Initialize the texture
     for(y=0; y<h; y++) {
         for(x=0; x<w; x++) {
-            GRRLIB_SetPixelTotexImg(x, y, my_texture, GRRLIB_GetPixelFromtexImg(x, y, tex));
+            GRRLIB_SetPixelTotexImg(x, y, *destination_texture, GRRLIB_GetPixelFromtexImg(x, y, tex));
         }
     }
-    GRRLIB_FlushTex(my_texture);
-    return my_texture;
+    GRRLIB_FlushTex(*destination_texture);
 }
 
 /**

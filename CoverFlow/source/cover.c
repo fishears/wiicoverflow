@@ -48,13 +48,13 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 		}
 		else
 		{
-			current_cover_texture = no_disc_texture;
+			GRRLIB_DuplicateTexture(&current_cover_texture, no_disc_texture, no_disc_texture.w, no_disc_texture.h);
 			coverLoaded=false;
 		}
 	}
 	
 	#else
-	current_cover_texture = no_disc_texture;
+	GRRLIB_DuplicateTexture(&current_cover_texture, no_disc_texture, no_disc_texture.w, no_disc_texture.h);
 	#endif
 }
 
