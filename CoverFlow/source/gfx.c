@@ -39,50 +39,50 @@ void LoadFonts()
 
 void LoadTextures()
 {
-	pointer_texture				= GRRLIB_LoadTexturePNG(pointer_basic_png);
-	pointer_shadow_texture		= GRRLIB_LoadTexturePNG(pointer_shadow_png);
-	turn_point_texture			= GRRLIB_LoadTexturePNG(pointer_turning_png); // can't find free
-	cover_texture				= BufferImageToSlot(no_cover_png,7);
-	cover_texture_3d			= BufferImageToSlot(full_cover_png,5); // read notes for MEM2_EXTENT before removing
-	no_disc_texture				= GRRLIB_LoadTexturePNG(no_disc_png);
-	slidebar_texture			= GRRLIB_LoadTexturePNG(slidebar_png);  // can't find free
-	slidebar_white_texture		= GRRLIB_CreateEmptyTexture(slidebar_texture.w, slidebar_texture.h);
+	GRRLIB_LoadTexturePNG(&pointer_texture, pointer_basic_png);
+	GRRLIB_LoadTexturePNG(&pointer_shadow_texture,pointer_shadow_png);
+	GRRLIB_LoadTexturePNG(&turn_point_texture,pointer_turning_png); // can't find free
+	BufferImageToSlot(&cover_texture,no_cover_png,7);
+	BufferImageToSlot(&cover_texture_3d,full_cover_png,5); // read notes for MEM2_EXTENT before removing
+	GRRLIB_LoadTexturePNG(&no_disc_texture,no_disc_png);
+	GRRLIB_LoadTexturePNG(&slidebar_texture,slidebar_png);  // can't find free
+	GRRLIB_CreateEmptyTexture(&slidebar_white_texture,slidebar_texture.w, slidebar_texture.h);
 	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white
-	ambientlight_texture		= BufferImageToSlot(ambientlight_png,6);   // read notes for MEM2_EXTENT before removing
-	ambientlight_white_texture	= GRRLIB_CreateEmptyTexture(ambientlight_texture.w, ambientlight_texture.h);
+	BufferImageToSlot(&ambientlight_texture,ambientlight_png,6);   // read notes for MEM2_EXTENT before removing
+	GRRLIB_CreateEmptyTexture(&ambientlight_white_texture,ambientlight_texture.w, ambientlight_texture.h);
 	GRRLIB_BMFX_Invert(ambientlight_texture, ambientlight_white_texture); //invert the fade from black to white
-	battery_bar					= GRRLIB_LoadTexturePNG(battery_bar_png);  // can't find free
-    battery_bar_red				= GRRLIB_LoadTexturePNG(battery_bar_red_png);  // can't find free
-    battery						= GRRLIB_LoadTexturePNG(battery_png);  // can't find free
-    battery_dead				= GRRLIB_LoadTexturePNG(battery_dead_png);  // can't find free
-	menu_button_texture			= GRRLIB_LoadTexturePNG(menu_button_png);
-	menu_button_over_texture	= GRRLIB_LoadTexturePNG(menu_button_over_png);	
-	menu_header_texture			= GRRLIB_LoadTexturePNG(menu_header_png);
-	menu_header_vflip_texture	= GRRLIB_CreateEmptyTexture(menu_header_texture.w, menu_header_texture.h);
+	GRRLIB_LoadTexturePNG(&battery_bar,battery_bar_png);  // can't find free
+    GRRLIB_LoadTexturePNG(&battery_bar_red,battery_bar_red_png);  // can't find free
+    GRRLIB_LoadTexturePNG(&battery,battery_png);  // can't find free
+    GRRLIB_LoadTexturePNG(&battery_dead,battery_dead_png);  // can't find free
+	GRRLIB_LoadTexturePNG(&menu_button_texture,menu_button_png);
+	GRRLIB_LoadTexturePNG(&menu_button_over_texture,menu_button_over_png);	
+	GRRLIB_LoadTexturePNG(&menu_header_texture,menu_header_png);
+	GRRLIB_CreateEmptyTexture(&menu_header_vflip_texture,menu_header_texture.w, menu_header_texture.h);
 	GRRLIB_BMFX_FlipV(menu_header_texture, menu_header_vflip_texture);
-	menu_logo_texture			= GRRLIB_LoadTexturePNG(menu_logo_png);
-	menu_loading_texture		= GRRLIB_LoadTexturePNG(menu_loading_png);
-	dialog_box_titlebar_texture	= GRRLIB_LoadTexturePNG(dialog_box_titlebar_png);
-	dialog_box_titlebar_long_texture	= GRRLIB_LoadTexturePNG(dialog_box_titlebar_long_png);
-	dialog_box_icon_texture		= GRRLIB_LoadTexturePNG(dialog_box_icon_png);
-	menu_graphics_wireframe_texture	= GRRLIB_LoadTexturePNG(menu_graphics_wireframe_png);
-	menu_graphics_box1_texture	= GRRLIB_LoadTexturePNG(menu_graphics_box1_png);
-	menu_graphics_box2_texture	= GRRLIB_LoadTexturePNG(menu_graphics_box2_png);
-	flag_br_texture = GRRLIB_LoadTexturePNG(flag_br_png);
-	flag_da_texture = GRRLIB_LoadTexturePNG(flag_da_png);
-	flag_de_texture = GRRLIB_LoadTexturePNG(flag_de_png);
-	flag_fr_texture = GRRLIB_LoadTexturePNG(flag_fr_png);
-	flag_it_texture = GRRLIB_LoadTexturePNG(flag_it_png);
-	flag_tr_texture = GRRLIB_LoadTexturePNG(flag_tr_png);
-	flag_us_texture = GRRLIB_LoadTexturePNG(flag_us_png);
-	flag_es_texture = GRRLIB_LoadTexturePNG(flag_es_png);
-	flag_ct_texture = GRRLIB_LoadTexturePNG(flag_ct_png);
-	flag_fi_texture = GRRLIB_LoadTexturePNG(flag_fi_png);
-	flag_MyLang_texture = GRRLIB_LoadTexturePNG(flag_MyLang_png);
-	flag_dk_texture = GRRLIB_LoadTexturePNG(flag_dk_png);
-	hdspace_texture                 = GRRLIB_LoadTexturePNG(hdspace_png);
-	button_round_info_texture       = GRRLIB_LoadTexturePNG(button_round_info_png);
-	button_round_info_over_texture	= GRRLIB_LoadTexturePNG(button_round_info_over_png);	
+	GRRLIB_LoadTexturePNG(&menu_logo_texture,menu_logo_png);
+	GRRLIB_LoadTexturePNG(&menu_loading_texture,menu_loading_png);
+	GRRLIB_LoadTexturePNG(&dialog_box_titlebar_texture,dialog_box_titlebar_png);
+	GRRLIB_LoadTexturePNG(&dialog_box_titlebar_long_texture,dialog_box_titlebar_long_png);
+	GRRLIB_LoadTexturePNG(&dialog_box_icon_texture,dialog_box_icon_png);
+	GRRLIB_LoadTexturePNG(&menu_graphics_wireframe_texture,menu_graphics_wireframe_png);
+	GRRLIB_LoadTexturePNG(&menu_graphics_box1_texture,menu_graphics_box1_png);
+	GRRLIB_LoadTexturePNG(&menu_graphics_box2_texture,menu_graphics_box2_png);
+	GRRLIB_LoadTexturePNG(&flag_br_texture,flag_br_png);
+	GRRLIB_LoadTexturePNG(&flag_da_texture,flag_da_png);
+	GRRLIB_LoadTexturePNG(&flag_de_texture,flag_de_png);
+	GRRLIB_LoadTexturePNG(&flag_fr_texture,flag_fr_png);
+	GRRLIB_LoadTexturePNG(&flag_it_texture,flag_it_png);
+	GRRLIB_LoadTexturePNG(&flag_tr_texture,flag_tr_png);
+	GRRLIB_LoadTexturePNG(&flag_us_texture,flag_us_png);
+	GRRLIB_LoadTexturePNG(&flag_es_texture,flag_es_png);
+	GRRLIB_LoadTexturePNG(&flag_ct_texture,flag_ct_png);
+	GRRLIB_LoadTexturePNG(&flag_fi_texture,flag_fi_png);
+	GRRLIB_LoadTexturePNG(&flag_MyLang_texture,flag_MyLang_png);
+	GRRLIB_LoadTexturePNG(&flag_dk_texture,flag_dk_png);
+	GRRLIB_LoadTexturePNG(&hdspace_texture,hdspace_png);
+	GRRLIB_LoadTexturePNG(&button_round_info_texture,button_round_info_png);
+	GRRLIB_LoadTexturePNG(&button_round_info_over_texture,button_round_info_over_png);	
 }
 
 void DrawBufferedCover(int i, float loc, float zpos, float angle, float falloff)
@@ -237,126 +237,126 @@ void Init_Buttons()
 {
 	/////////////////////////////////
 	// Main screen
-	slideButton				= Button_Init(slide_png, slide_hover_png, 260, 426);
-	settingsButton	    	= Button_Init(button_round_gear_png, button_round_gear_over_png, 30, 427);
-	addButton				= Button_Init(button_round_add_png,  button_round_add_over_png, 580, 427);
-    infoButton				= Button_Init(button_round_info_png, button_round_info_over_png, 580, 44);
+	Button_Init(&slideButton,slide_png, slide_hover_png, 260, 426);
+	Button_Init(&settingsButton, button_round_gear_png, button_round_gear_over_png, 30, 427);
+	Button_Init(&addButton, button_round_add_png,  button_round_add_over_png, 580, 427);
+    Button_Init(&infoButton, button_round_info_png, button_round_info_over_png, 580, 44);
  	// Dialog Box Buttons
-	okButton				= Button_TTF_Init(button_bar_h28w104_black_png, button_bar_h28w104_white_png, 300, 290, TX.okB);
-	cancelButton			= Duplicate_Button_TTF(okButton, 414, 290, TX.cancelB);
-	yesButton               = Duplicate_Button_TTF(okButton, 300, 290, TX.yesB);
-    noButton                = Duplicate_Button_TTF(okButton, 414, 290, TX.noB);
+	Button_TTF_Init(&okButton, button_bar_h28w104_black_png, button_bar_h28w104_white_png, 300, 290, TX.okB);
+	Duplicate_Button_TTF(&cancelButton, okButton, 414, 290, TX.cancelB);
+	Duplicate_Button_TTF(&yesButton, okButton, 300, 290, TX.yesB);
+    Duplicate_Button_TTF(&noButton, okButton, 414, 290, TX.noB);
 	// Game Launch Panel Buttons
-	loadButton				= Duplicate_Button_TTF(okButton, 353, 335, TX.loadB);
-    backButton				= Duplicate_Button_TTF(okButton, 468, 335, TX.backB);
-	deleteButton			= Button_Init(button_round_delete_png, button_round_delete_over_png, 505, 120);
-    gsettingsButton			= Duplicate_Button(settingsButton, 543, 120);
-	bookmarkOnButton        = Button_Init(star_on_png, star_on_png, 515, 140);  
-    bookmarkOffButton       = Button_Init(star_off_png, star_on_png, 515, 140);
+	Duplicate_Button_TTF(&loadButton, okButton, 353, 335, TX.loadB);
+    Duplicate_Button_TTF(&backButton, okButton, 468, 335, TX.backB);
+	Button_Init(&deleteButton, button_round_delete_png, button_round_delete_over_png, 505, 120);
+    Duplicate_Button(&gsettingsButton, settingsButton, 543, 120);
+	Button_Init(&bookmarkOnButton, star_on_png, star_on_png, 515, 140);  
+    Button_Init(&bookmarkOffButton, star_off_png, star_on_png, 515, 140);
 	// 'Home' button menu buttons
-    homeMenuTopButton       = Button_Init(menu_home_top_png,     menu_home_top_over_png, 0, 0);
-    homeMenuBottomButton    = Button_Init(menu_home_bottom_png,  menu_home_bottom_over_png, 0, 376);
-    wiiMenuButton           = Button_TTF_Init(menu_home_button_png,  menu_home_button_over_png, 46, 187, TX.wiimenuB);
-    loaderButton            = Duplicate_Button_TTF(wiiMenuButton, 186, 187, TX.loaderB);
-    wiimoteButton           = Button_Init(menu_home_wiimote_png, menu_home_wiimote_png, 54, 400);
+    Button_Init(&homeMenuTopButton, menu_home_top_png,     menu_home_top_over_png, 0, 0);
+    Button_Init(&homeMenuBottomButton, menu_home_bottom_png,  menu_home_bottom_over_png, 0, 376);
+    Button_TTF_Init(&wiiMenuButton, menu_home_button_png,  menu_home_button_over_png, 46, 187, TX.wiimenuB);
+    Duplicate_Button_TTF(&loaderButton, wiiMenuButton, 186, 187, TX.loaderB);
+    Button_Init(&wiimoteButton, menu_home_wiimote_png, menu_home_wiimote_png, 54, 400);
 	// Settings Panels Header Buttons
-    menuSettingsButton		= Button_TTF_Init(menu_button_png, menu_button_over_png, 160, 20, TX.cflowSettings); 
-	menuGraphicsButton		= Duplicate_Button_TTF(menuSettingsButton, 320, 20, TX.graphics);
-    menuLanguagesButton		= Duplicate_Button_TTF(menuSettingsButton, 480, 20, TX.languagesB); 
-	menuLogoButton			= Button_Init(menu_logo_png, menu_logo_png, 30, 20);
+    Button_TTF_Init(&menuSettingsButton, menu_button_png, menu_button_over_png, 160, 20, TX.cflowSettings); 
+	Duplicate_Button_TTF(&menuGraphicsButton, menuSettingsButton, 320, 20, TX.graphics);
+    Duplicate_Button_TTF(&menuLanguagesButton, menuSettingsButton, 480, 20, TX.languagesB); 
+	Button_Init(&menuLogoButton, menu_logo_png, menu_logo_png, 30, 20);
 	// General Settings Panel
-    musicOnButton           = Button_Init(button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 97);
-    musicOffButton          = Button_Init(button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 97);
-    rumbleOnButton          = Duplicate_Button(musicOnButton, 310, 131);
-    rumbleOffButton         = Duplicate_Button(musicOffButton, 310, 131);
-    quickstartOnButton      = Duplicate_Button(musicOnButton, 310, 165);
-    quickstartOffButton     = Duplicate_Button(musicOffButton, 310, 165);
-    themeBlackButton        = Duplicate_Button_TTF(okButton, 310, 199, TX.blackB);
-    themeWhiteButton        = Duplicate_Button_TTF(okButton, 422, 199, TX.whiteB);
-	coversButton			= Duplicate_Button_TTF(okButton, 310, 265, TX.coversB);
-	titlesButton		    = Duplicate_Button_TTF(okButton, 422, 265, TX.titlesB);
-    viddownButton			= Button_Init(button_minus_png, button_minus_over_png, 310,334);
-	vidupButton				= Button_Init(button_plus_png, button_plus_over_png, 338,334);
-    vidtvonButton			= Duplicate_Button(musicOnButton, 310, 299);
-    vidtvoffButton			= Duplicate_Button(musicOffButton, 310, 299);
-    cheatonButton			= Duplicate_Button(musicOnButton, 198,367);
-    cheatoffButton			= Duplicate_Button(musicOffButton, 198,367);
-    hookdownButton			= Duplicate_Button(viddownButton, 422,367);
-    hookupButton			= Duplicate_Button(vidupButton, 450,367);
-	menuLoadingButton		= Button_Init(menu_loading_png, menu_loading_png, 310, 414);
-        cheatDownButton     = Duplicate_Button_TTF(okButton,310,367,TX.downloadB);
+    Button_Init(&musicOnButton, button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 97);
+    Button_Init(&musicOffButton, button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 97);
+    Duplicate_Button(&rumbleOnButton, musicOnButton, 310, 131);
+    Duplicate_Button(&rumbleOffButton, musicOffButton, 310, 131);
+    Duplicate_Button(&quickstartOnButton, musicOnButton, 310, 165);
+    Duplicate_Button(&quickstartOffButton, musicOffButton, 310, 165);
+    Duplicate_Button_TTF(&themeBlackButton, okButton, 310, 199, TX.blackB);
+    Duplicate_Button_TTF(&themeWhiteButton, okButton, 422, 199, TX.whiteB);
+	Duplicate_Button_TTF(&coversButton, okButton, 310, 265, TX.coversB);
+	Duplicate_Button_TTF(&titlesButton, okButton, 422, 265, TX.titlesB);
+    Button_Init(&viddownButton, button_minus_png, button_minus_over_png, 310,334);
+	Button_Init(&vidupButton, button_plus_png, button_plus_over_png, 338,334);
+    Duplicate_Button(&vidtvonButton, musicOnButton, 310, 299);
+    Duplicate_Button(&vidtvoffButton, musicOffButton, 310, 299);
+    Duplicate_Button(&cheatonButton, musicOnButton, 198,367);
+    Duplicate_Button(&cheatoffButton, musicOffButton, 198,367);
+    Duplicate_Button(&hookdownButton, viddownButton, 422,367);
+    Duplicate_Button(&hookupButton, vidupButton, 450,367);
+	Button_Init(&menuLoadingButton, menu_loading_png, menu_loading_png, 310, 414);
+    Duplicate_Button_TTF(&cheatDownButton, okButton,310,367,TX.downloadB);
 	// Graphic Settings Panel
-    falloffdownButton       = Duplicate_Button(viddownButton, 99,123);
-    falloffupButton         = Duplicate_Button(vidupButton,127,123);
-    windowdownButton        = Duplicate_Button(viddownButton, 195,110);
-    windowupButton          = Duplicate_Button(vidupButton, 223, 110);
-    zoomdownButton          = Duplicate_Button(viddownButton, 292,110);
-    zoomupButton            = Duplicate_Button(vidupButton, 320,110);
-    spacingdownButton       = Duplicate_Button(viddownButton, 386,110);
-    spacingupButton         = Duplicate_Button(vidupButton, 414,110);
-    angledownButton         = Duplicate_Button(viddownButton, 484,123);
-    angleupButton           = Duplicate_Button(vidupButton, 512,123);
+    Duplicate_Button(&falloffdownButton, viddownButton, 99,123);
+    Duplicate_Button(&falloffupButton, vidupButton,127,123);
+    Duplicate_Button(&windowdownButton, viddownButton, 195,110);
+    Duplicate_Button(&windowupButton, vidupButton, 223, 110);
+    Duplicate_Button(&zoomdownButton, viddownButton, 292,110);
+    Duplicate_Button(&zoomupButton, vidupButton, 320,110);
+    Duplicate_Button(&spacingdownButton, viddownButton, 386,110);
+    Duplicate_Button(&spacingupButton, vidupButton, 414,110);
+    Duplicate_Button(&angledownButton, viddownButton, 484,123);
+    Duplicate_Button(&angleupButton, vidupButton, 512,123);
 	
-	falldistdownButton		= Duplicate_Button(viddownButton,  99,240);
-	falldistupButton		= Duplicate_Button(vidupButton, 127,240);
-	coverzoomdownButton		= Duplicate_Button(viddownButton, 292,240);
-	coverzoomupButton		= Duplicate_Button(vidupButton, 320,240);
+	Duplicate_Button(&falldistdownButton, viddownButton,  99,240);
+	Duplicate_Button(&falldistupButton, vidupButton, 127,240);
+	Duplicate_Button(&coverzoomdownButton, viddownButton, 292,240);
+	Duplicate_Button(&coverzoomupButton, vidupButton, 320,240);
 	
-    hidescrollOnButton		= Duplicate_Button(musicOnButton, 101,369);
-    hidescrollOffButton		= Duplicate_Button(musicOffButton, 101, 369);
-    covers3dOnButton		= Duplicate_Button(musicOnButton, 268, 369);
-    covers3dOffButton		= Duplicate_Button(musicOffButton, 268, 369);
-    covers3dFatButton		= Duplicate_Button(musicOnButton, 268, 423);
-    covers3dThinButton		= Duplicate_Button(musicOffButton, 268, 423);
-    coverTextOnButton       = Duplicate_Button(musicOnButton, 435, 369);
-    coverTextOffButton      = Duplicate_Button(musicOffButton, 435, 369);
-	resetButton				= Duplicate_Button_TTF(okButton, 435, 423, TX.resetB);
-	restoreButton			= Duplicate_Button_TTF(okButton, 101, 423, TX.restoreB);
+    Duplicate_Button(&hidescrollOnButton, musicOnButton, 101,369);
+    Duplicate_Button(&hidescrollOffButton, musicOffButton, 101, 369);
+    Duplicate_Button(&covers3dOnButton, musicOnButton, 268, 369);
+    Duplicate_Button(&covers3dOffButton, musicOffButton, 268, 369);
+    Duplicate_Button(&covers3dFatButton, musicOnButton, 268, 423);
+    Duplicate_Button(&covers3dThinButton, musicOffButton, 268, 423);
+    Duplicate_Button(&coverTextOnButton, musicOnButton, 435, 369);
+    Duplicate_Button(&coverTextOffButton, musicOffButton, 435, 369);
+	Duplicate_Button_TTF(&resetButton, okButton, 435, 423, TX.resetB);
+	Duplicate_Button_TTF(&restoreButton, okButton, 101, 423, TX.restoreB);
 
 // Language Settings Panel
-	langupButton			= Duplicate_Button(vidupButton,321,90);
-    langdownButton			= Duplicate_Button(viddownButton, 293,90);
-	flagUSButton			= Button_Flag_Init(flag_us_png, 166, 150, TX.English); 
-	flagITButton			= Button_Flag_Init(flag_it_png, 296, 150, TX.Italian); 
-	flagDEButton			= Button_Flag_Init(flag_de_png, 426, 150, TX.German);
-	flagTRButton			= Button_Flag_Init(flag_tr_png, 166, 220, TX.Turkish); 
-	flagBRButton			= Button_Flag_Init(flag_br_png, 296, 220, TX.PortugueseBR); 
-	flagFRButton			= Button_Flag_Init(flag_fr_png, 426, 220, TX.French);
-	flagDAButton			= Button_Flag_Init(flag_da_png, 166, 290, TX.Dutch);
-	flagFIButton			= Button_Flag_Init(flag_fi_png, 296, 290, TX.Finnish); 
-	flagDKButton			= Button_Flag_Init(flag_dk_png, 426, 290, TX.Danish); 
-	flagESButton			= Button_Flag_Init(flag_es_png, 166, 360, TX.Spanish); 
-	flagCTButton			= Button_Flag_Init(flag_ct_png, 296, 360, TX.Catalan); 
-	flagMyLangButton 		= Button_Flag_Init(flag_MyLang_png, 426, 360, TX.MyLanguage);
+	Duplicate_Button(&langupButton, vidupButton,321,90);
+    Duplicate_Button(&langdownButton, viddownButton, 293,90);
+	Button_Flag_Init(&flagUSButton, flag_us_png, 166, 150, TX.English); 
+	Button_Flag_Init(&flagITButton, flag_it_png, 296, 150, TX.Italian); 
+	Button_Flag_Init(&flagDEButton, flag_de_png, 426, 150, TX.German);
+	Button_Flag_Init(&flagTRButton, flag_tr_png, 166, 220, TX.Turkish); 
+	Button_Flag_Init(&flagBRButton, flag_br_png, 296, 220, TX.PortugueseBR); 
+	Button_Flag_Init(&flagFRButton, flag_fr_png, 426, 220, TX.French);
+	Button_Flag_Init(&flagDAButton, flag_da_png, 166, 290, TX.Dutch);
+	Button_Flag_Init(&flagFIButton, flag_fi_png, 296, 290, TX.Finnish); 
+	Button_Flag_Init(&flagDKButton, flag_dk_png, 426, 290, TX.Danish); 
+	Button_Flag_Init(&flagESButton, flag_es_png, 166, 360, TX.Spanish); 
+	Button_Flag_Init(&flagCTButton, flag_ct_png, 296, 360, TX.Catalan); 
+	Button_Flag_Init(&flagMyLangButton, flag_MyLang_png, 426, 360, TX.MyLanguage);
 			
 	// Game Settings Screen Buttons
-	lockButton			    = Button_Init(button_round_lock_png, button_round_lock_over_png, 543, 120 + YOS_GSDB);
-	unlockButton			= Button_Init(button_round_unlock_png, button_round_unlock_over_png, 543, 120 + YOS_GSDB);
-    gvidtvonButton          = Duplicate_Button(musicOnButton,  360, 164 + YOS_GSDB);
-    gvidtvoffButton         = Duplicate_Button(musicOffButton, 360, 164 + YOS_GSDB);
-	gcheatonButton			= Duplicate_Button(musicOnButton, 360, 198 + YOS_GSDB);
-    gcheatoffButton			= Duplicate_Button(musicOffButton, 360, 198 + YOS_GSDB);
-    ghookdownButton         = Duplicate_Button(viddownButton, 360, 232 + YOS_GSDB);
-    ghookupButton           = Duplicate_Button(vidupButton, 388, 232 + YOS_GSDB);
-    glangdownButton         = Duplicate_Button(viddownButton, 360,266 + YOS_GSDB);
-	glangupButton           = Duplicate_Button(vidupButton,388,266 + YOS_GSDB);
-    gviddownButton          = Duplicate_Button(viddownButton, 360, 300 + YOS_GSDB);
-	gvidupButton            = Duplicate_Button(vidupButton, 388, 300 + YOS_GSDB);
-    gfixdownButton          = Duplicate_Button(viddownButton, 360, 334 + YOS_GSDB);
-    gfixupButton            = Duplicate_Button(vidupButton, 388, 334 + YOS_GSDB);
-	gbackButton				= Duplicate_Button_TTF(okButton, 266, 368 + YOS_GSDB, TX.backB);
+	Button_Init(&lockButton, button_round_lock_png, button_round_lock_over_png, 543, 120 + YOS_GSDB);
+	Button_Init(&unlockButton, button_round_unlock_png, button_round_unlock_over_png, 543, 120 + YOS_GSDB);
+    Duplicate_Button(&gvidtvonButton, musicOnButton,  360, 164 + YOS_GSDB);
+    Duplicate_Button(&gvidtvoffButton, musicOffButton, 360, 164 + YOS_GSDB);
+	Duplicate_Button(&gcheatonButton, musicOnButton, 360, 198 + YOS_GSDB);
+    Duplicate_Button(&gcheatoffButton, musicOffButton, 360, 198 + YOS_GSDB);
+    Duplicate_Button(&ghookdownButton, viddownButton, 360, 232 + YOS_GSDB);
+    Duplicate_Button(&ghookupButton, vidupButton, 388, 232 + YOS_GSDB);
+    Duplicate_Button(&glangdownButton, viddownButton, 360,266 + YOS_GSDB);
+	Duplicate_Button(&glangupButton, vidupButton,388,266 + YOS_GSDB);
+    Duplicate_Button(&gviddownButton, viddownButton, 360, 300 + YOS_GSDB);
+	Duplicate_Button(&gvidupButton, vidupButton, 388, 300 + YOS_GSDB);
+    Duplicate_Button(&gfixdownButton, viddownButton, 360, 334 + YOS_GSDB);
+    Duplicate_Button(&gfixupButton, vidupButton, 388, 334 + YOS_GSDB);
+	Duplicate_Button_TTF(&gbackButton, okButton, 266, 368 + YOS_GSDB, TX.backB);
   #ifdef CHEAT_MANAGER
-    manageCheatsButton      = Duplicate_Button_TTF(okButton, 468, 198 + YOS_GSDB, TX.manageB);
+    Duplicate_Button_TTF(&manageCheatsButton, okButton, 468, 198 + YOS_GSDB, TX.manageB);
 
 	//cheat manager buttons
-    cheatEnabled[0]         = Button_Init(button_cheat_on_png, button_cheat_off_png, 44, 80);
-    cheatDisabled[0]        = Button_Init(button_cheat_off_png, button_cheat_on_png, 44, 80);
-    cheatEditButton[0]      = Button_Init(button_cheat_edit_png, button_cheat_edit_over_png, 68, 80);
-    pageUpButton            = Duplicate_Button(vidupButton,478,82);
-    pageDownButton          = Duplicate_Button(viddownButton,450,82);
-    cheatDoneButton         = Duplicate_Button_TTF(okButton,84,82,TX.done);
-    selectAllButton         = Duplicate_Button(cheatEnabled[0],84,120);
-    deselectAllButton       = Duplicate_Button(cheatDisabled[0],84,120);
+    Button_Init(&cheatEnabled[0], button_cheat_on_png, button_cheat_off_png, 44, 80);
+    Button_Init(&cheatDisabled[0], button_cheat_off_png, button_cheat_on_png, 44, 80);
+    Button_Init(&cheatEditButton[0], button_cheat_edit_png, button_cheat_edit_over_png, 68, 80);
+    Duplicate_Button(&pageUpButton, vidupButton,478,82);
+    Duplicate_Button(&pageDownButton, viddownButton,450,82);
+    Duplicate_Button_TTF(&cheatDoneButton, okButton,84,82,TX.done);
+    Duplicate_Button(&selectAllButton, cheatEnabled[0],84,120);
+    Duplicate_Button(&deselectAllButton, cheatDisabled[0],84,120);
   #endif
 } // End Init_Buttons();
 
@@ -1189,7 +1189,7 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 		int ret = Fat_ReadFileToBuffer(filepath, (void*)buffer, 160 * 224 * 4);
 		if(ret > 0)
 		{
-			myTex = GRRLIB_LoadTexturePNG(buffer);
+			GRRLIB_LoadTexturePNG(&myTex,buffer);
 		}
 		else
 		{

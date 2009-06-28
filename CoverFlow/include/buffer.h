@@ -79,5 +79,5 @@ void * GetSlotBufferAddress(int slot);
 	Pass the ordinal to this and it will give you a consistent address for your need
 	The memory does not need to be freed as there is no associated malloc
 */
-GRRLIB_texImg BufferImageToSlot(const unsigned char* pngDataAddress,int slot);
+void BufferImageToSlot(GRRLIB_texImg * my_texture,const unsigned char* pngDataAddress,int slot);
 #endif

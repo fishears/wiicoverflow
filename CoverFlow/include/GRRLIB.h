@@ -80,12 +80,12 @@ void GRRLIB_NGone(Vector v[], u32 color, long n);
 void GRRLIB_NGoneFilled(Vector v[], u32 color, long n);
 
 inline void GRRLIB_DrawFlatCoverImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color );
-GRRLIB_texImg GRRLIB_CreateEmptyTexture(unsigned int, unsigned int);
+void GRRLIB_CreateEmptyTexture(GRRLIB_texImg * my_texture, unsigned int, unsigned int);
 GRRLIB_texImg GRRLIB_DuplicateTexture(GRRLIB_texImg tex, unsigned int w, unsigned int h);
-inline GRRLIB_texImg GRRLIB_LoadTexturePNG(const unsigned char my_img[]);
-GRRLIB_texImg GRRLIB_LoadTexturePNGToMemory(const unsigned char my_png[], void * textureAddress);
-GRRLIB_texImg GRRLIB_LoadTexturePNGToMemorySized(const unsigned char my_png[], void * textureAddress,int Size);
-GRRLIB_texImg GRRLIB_LoadTexture(const unsigned char my_img[]);
+void GRRLIB_LoadTexturePNG(GRRLIB_texImg * my_texture, const unsigned char my_img[]);
+void GRRLIB_LoadTexturePNGToMemory(GRRLIB_texImg * my_texture, const unsigned char my_png[], void * textureAddress);
+void GRRLIB_LoadTexturePNGToMemorySized(GRRLIB_texImg * my_texture, const unsigned char my_png[], void * textureAddress,int Size);
+void GRRLIB_LoadTexture(GRRLIB_texImg * my_texture, const unsigned char my_img[]);
 
 GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]);
 void GRRLIB_FreeBMF(GRRLIB_bytemapFont bmf);

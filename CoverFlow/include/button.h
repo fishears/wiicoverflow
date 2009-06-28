@@ -27,11 +27,11 @@ typedef struct Button {
 } Button;
 
 // Button Init methods
-Button Button_Init(const unsigned char normal_img[], const unsigned char hover_img[], int x, int y);
-Button Button_TTF_Init(const unsigned char normal_img[], const unsigned char hover_img[], int x, int y, char *button_label);
-Button Button_Flag_Init(const unsigned char normal_img[], int x, int y, char *button_label);
-Button Duplicate_Button(Button btn, int x, int y);
-Button Duplicate_Button_TTF(Button btn, int x, int y, char *button_label);
+void Button_Init(Button * new_button, const unsigned char normal_img[], const unsigned char hover_img[], int x, int y);
+void Button_TTF_Init(Button * new_button, const unsigned char normal_img[], const unsigned char hover_img[], int x, int y, char *button_label);
+void Button_Flag_Init(Button * new_button, const unsigned char normal_img[], int x, int y, char *button_label);
+void Duplicate_Button(Button * destination_button, Button btn, int x, int y);
+void Duplicate_Button_TTF(Button * destination_button, Button btn, int x, int y, char *button_label);
 // Button actions
 bool Button_Hover(struct Button* btn, int x, int y);
 bool Button_Select(struct Button* btn, int x, int y);

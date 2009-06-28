@@ -11,22 +11,23 @@ void ee(){
 	//bool skip = false;
 
 	GRRLIB_2D_Init();
-        GRRLIB_SetBGColor(0); // set BG to BLACK
+    GRRLIB_SetBGColor(0); // set BG to BLACK
 	GRRLIB_FillScreen(0x000000FF);
 	GRRLIB_Render();
 	
-	Button toastyButton = Button_Init(toasty_png, toasty_png, 640, 320);
+	Button toastyButton;
+	Button_Init(&toastyButton, toasty_png, toasty_png, 640, 320);
 	
 	Button buttonArray[AUTHORS_LEN];
 	s_vars speedArray[AUTHORS_LEN];
 	
-	buttonArray[0] = (Button) Button_Init(ee_sco_png, ee_sco_png, getRandomNum(0, 480), getRandomNum(0, 320));
-	buttonArray[1] = (Button) Button_Init(ee_justin_png, ee_justin_png, getRandomNum(0, 480), getRandomNum(0, 320));
-	buttonArray[2] = (Button) Button_Init(ee_fishears_png, ee_fishears_png, getRandomNum(0, 480), getRandomNum(0, 320));
-	buttonArray[3] = (Button) Button_Init(ee_alex_png, ee_alex_png, getRandomNum(0, 480), getRandomNum(0, 320));
-	buttonArray[4] = (Button) Button_Init(ee_bob_png, ee_bob_png, getRandomNum(0, 480), getRandomNum(0, 320));
-	buttonArray[5] = (Button) Button_Init(ee_bbird_png, ee_bbird_png, getRandomNum(0, 480), getRandomNum(0, 320));
-	buttonArray[6] = (Button) Button_Init(ee_afour_png, ee_afour_png, getRandomNum(0, 480), getRandomNum(0, 320));
+	Button_Init(&buttonArray[0],ee_sco_png, ee_sco_png, getRandomNum(0, 480), getRandomNum(0, 320));
+	Button_Init(&buttonArray[1],ee_justin_png, ee_justin_png, getRandomNum(0, 480), getRandomNum(0, 320));
+	Button_Init(&buttonArray[2],ee_fishears_png, ee_fishears_png, getRandomNum(0, 480), getRandomNum(0, 320));
+	Button_Init(&buttonArray[3],ee_alex_png, ee_alex_png, getRandomNum(0, 480), getRandomNum(0, 320));
+	Button_Init(&buttonArray[4],ee_bob_png, ee_bob_png, getRandomNum(0, 480), getRandomNum(0, 320));
+	Button_Init(&buttonArray[5],ee_bbird_png, ee_bbird_png, getRandomNum(0, 480), getRandomNum(0, 320));
+	Button_Init(&buttonArray[6],ee_afour_png, ee_afour_png, getRandomNum(0, 480), getRandomNum(0, 320));
 	
 	for(i=0; i<AUTHORS_LEN; i++){
 		speedArray[i].sx = getRandomNum(4, 7);

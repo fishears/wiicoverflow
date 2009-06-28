@@ -124,8 +124,8 @@ int main( int argc, char **argv )
 
 	// Set up the buffer slots and load the progress bar textures
 	ClearBufferSlotMemory();
-    progress_step_texture = GRRLIB_LoadTexture(progress_step_png);
-    progress_bar_texture  = GRRLIB_LoadTexture(progress_bar_png);
+    GRRLIB_LoadTexture(&progress_step_texture,progress_step_png);
+    GRRLIB_LoadTexture(&progress_bar_texture,progress_bar_png);
 	
 	// Init GRRLIB and start from black
 	GRRLIB_Init();

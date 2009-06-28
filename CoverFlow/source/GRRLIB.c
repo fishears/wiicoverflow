@@ -149,23 +149,22 @@ void GRRLIB_InitTileSet(struct GRRLIB_texImg *tex, unsigned int tilew, unsigned 
  * @param my_png the PNG buffer to load.
  * @return A GRRLIB_texImg structure filled with PNG informations.
  */
-GRRLIB_texImg GRRLIB_LoadTexturePNG(const unsigned char my_png[]) {
+void GRRLIB_LoadTexturePNG(GRRLIB_texImg * my_texture, const unsigned char my_png[]) {
     PNGUPROP imgProp;
     IMGCTX ctx;
 	void * textureAddress;
-    GRRLIB_texImg my_texture;
 
     ctx = PNGU_SelectImageFromBuffer(my_png);
     PNGU_GetImageProperties (ctx, &imgProp);
 	textureAddress= memalign (32, imgProp.imgWidth * imgProp.imgHeight * 4);
 	if (textureAddress>0)
 	{
-		my_texture.data = textureAddress;
-		PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture.data, 255);
+		my_texture->data = textureAddress;
+		PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture->data, 255);
 		PNGU_ReleaseImageContext (ctx);
-		my_texture.w = imgProp.imgWidth;
-		my_texture.h = imgProp.imgHeight;
-		GRRLIB_FlushTex(my_texture);
+		my_texture->w = imgProp.imgWidth;
+		my_texture->h = imgProp.imgHeight;
+		GRRLIB_FlushTex(*my_texture);
 	}
 	else // out of memory
 	{
@@ -173,11 +172,10 @@ GRRLIB_texImg GRRLIB_LoadTexturePNG(const unsigned char my_png[]) {
 		// and there'd be issues when free was called (i.e. it'd crash)
 		// at least no someone will notice a missing image (if it doesn't crash -
 		// won't find out till memory runs out).  Still better than nothing
-		my_texture.data=NULL; 
-		my_texture.w=0;
-		my_texture.h=0;
+		my_texture->data=NULL; 
+		my_texture->w=0;
+		my_texture->h=0;
 	}
-    return my_texture;
 }
 
 /**
@@ -186,20 +184,18 @@ GRRLIB_texImg GRRLIB_LoadTexturePNG(const unsigned char my_png[]) {
  * @param textureAddress the destination address.
  * @return A GRRLIB_texImg structure filled with PNG informations.
  */
-GRRLIB_texImg GRRLIB_LoadTexturePNGToMemory(const unsigned char my_png[], void * textureAddress) {
+void GRRLIB_LoadTexturePNGToMemory(GRRLIB_texImg * my_texture, const unsigned char my_png[], void * textureAddress) {
     PNGUPROP imgProp;
     IMGCTX ctx;
-    GRRLIB_texImg my_texture;
 
     ctx = PNGU_SelectImageFromBuffer(my_png);
     PNGU_GetImageProperties (ctx, &imgProp);
-    my_texture.data = textureAddress;
-    PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture.data, 255);
+    my_texture->data = textureAddress;
+    PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture->data, 255);
     PNGU_ReleaseImageContext (ctx);
-    my_texture.w = imgProp.imgWidth;
-    my_texture.h = imgProp.imgHeight;
-    GRRLIB_FlushTex(my_texture);
-    return my_texture;
+    my_texture->w = imgProp.imgWidth;
+    my_texture->h = imgProp.imgHeight;
+    GRRLIB_FlushTex(*my_texture);
 }
 
 /**
@@ -208,22 +204,20 @@ GRRLIB_texImg GRRLIB_LoadTexturePNGToMemory(const unsigned char my_png[], void *
  * @param textureAddress the destination address.
  * @return A GRRLIB_texImg structure filled with PNG informations.
  */
-GRRLIB_texImg GRRLIB_LoadTexturePNGToMemorySized(const unsigned char my_png[], void * textureAddress,int Size) {
+void GRRLIB_LoadTexturePNGToMemorySized(GRRLIB_texImg * my_texture, const unsigned char my_png[], void * textureAddress,int Size) {
     PNGUPROP imgProp;
     IMGCTX ctx;
-    GRRLIB_texImg my_texture;
-
+ 
     ctx = PNGU_SelectImageFromBuffer(my_png);
     PNGU_GetImageProperties (ctx, &imgProp);
-    my_texture.data = 0;
-	if (Size != imgProp.imgWidth * imgProp.imgHeight * 4) return my_texture;
-    my_texture.data = textureAddress;
-    PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture.data, 255);
+    my_texture->data = 0;
+	if (Size != imgProp.imgWidth * imgProp.imgHeight * 4) return;
+    my_texture->data = textureAddress;
+    PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture->data, 255);
     PNGU_ReleaseImageContext (ctx);
-    my_texture.w = imgProp.imgWidth;
-    my_texture.h = imgProp.imgHeight;
-    GRRLIB_FlushTex(my_texture);
-    return my_texture;
+    my_texture->w = imgProp.imgWidth;
+    my_texture->h = imgProp.imgHeight;
+    GRRLIB_FlushTex(*my_texture);
 }
 
 /**
@@ -286,7 +280,8 @@ void GRRLIB_PrintBMF(f32 xpos, f32 ypos, GRRLIB_bytemapFont bmf, f32 zoom, const
     size = vsprintf(tmp, text, argp);
     va_end(argp);
 
-    GRRLIB_texImg tex_BMfont = GRRLIB_CreateEmptyTexture(800, 600);
+	GRRLIB_texImg tex_BMfont;
+    GRRLIB_CreateEmptyTexture(&tex_BMfont,800, 600);
 
 
     for(i=0; i<size; i++) {
@@ -392,14 +387,14 @@ void GRRLIB_FreeBMF(GRRLIB_bytemapFont bmf)
  * @param my_img the JPEG or PNG buffer to load.
  * @return A GRRLIB_texImg structure filled with imgage informations.
  */
-GRRLIB_texImg GRRLIB_LoadTexture(const unsigned char my_img[]) {
+void GRRLIB_LoadTexture(GRRLIB_texImg * my_texture, const unsigned char my_img[]) {
 
     if(my_img[0]==0xFF && my_img[1]==0xD8 && my_img[2]==0xFF) {
 	    /*Invalid PNG... return empty texture*/
-        return(GRRLIB_CreateEmptyTexture(12,12));
+        GRRLIB_CreateEmptyTexture(my_texture,12,12);
     }
     else {
-        return(GRRLIB_LoadTexturePNG(my_img));
+        GRRLIB_LoadTexturePNG(my_texture,my_img);
     }
 }
 
@@ -409,21 +404,20 @@ GRRLIB_texImg GRRLIB_LoadTexture(const unsigned char my_img[]) {
  * @param h height of the new texture to create.
  * @return A GRRLIB_texImg structure newly created.
  */
-GRRLIB_texImg GRRLIB_CreateEmptyTexture(unsigned int w, unsigned int h) {
+void GRRLIB_CreateEmptyTexture(GRRLIB_texImg * my_texture,unsigned int w, unsigned int h) {
     unsigned int x, y;
-    GRRLIB_texImg my_texture;
 
-    my_texture.data = memalign (32, h * w * 4);
-    my_texture.w = w;
-    my_texture.h = h;
+
+    my_texture->data = memalign (32, h * w * 4);
+    my_texture->w = w;
+    my_texture->h = h;
     // Initialize the texture
     for(y=0; y<h; y++) {
         for(x=0; x<w; x++) {
-            GRRLIB_SetPixelTotexImg(x, y, my_texture, 0x00000000);
+            GRRLIB_SetPixelTotexImg(x, y, *my_texture, 0x00000000);
         }
     }
-    GRRLIB_FlushTex(my_texture);
-    return my_texture;
+    GRRLIB_FlushTex(*my_texture);
 }
 
 /**
@@ -1558,10 +1552,10 @@ void GRRLIB_Init() {
 
 	GRRLIB_2D_Init();
 	
-	matteBlackTexture = GRRLIB_LoadTexture(matte_black_png);
-	matteGreyTexture = GRRLIB_LoadTexture(matte_grey_png);
-	rightTexture = GRRLIB_LoadTexture(case_right_png);
-	case3DShadowTexture = GRRLIB_LoadTexture(case_3d_shadow_png);
+	GRRLIB_LoadTexture(&matteBlackTexture,matte_black_png);
+	GRRLIB_LoadTexture(&matteGreyTexture,matte_grey_png);
+	GRRLIB_LoadTexture(&rightTexture,case_right_png);
+	GRRLIB_LoadTexture(&case3DShadowTexture,case_3d_shadow_png);
     GX_InitTexObj(&matteBlackTex, matteBlackTexture.data, matteBlackTexture.w, matteBlackTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GX_InitTexObj(&matteGreyTex, matteGreyTexture.data, matteGreyTexture.w, matteGreyTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 	GX_InitTexObj(&rightSideTex, rightTexture.data, rightTexture.w, rightTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
