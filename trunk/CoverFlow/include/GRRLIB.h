@@ -81,7 +81,7 @@ void GRRLIB_NGoneFilled(Vector v[], u32 color, long n);
 
 inline void GRRLIB_DrawFlatCoverImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color );
 void GRRLIB_CreateEmptyTexture(GRRLIB_texImg * my_texture, unsigned int, unsigned int);
-GRRLIB_texImg GRRLIB_DuplicateTexture(GRRLIB_texImg tex, unsigned int w, unsigned int h);
+void GRRLIB_DuplicateTexture(GRRLIB_texImg * destination_texture, GRRLIB_texImg tex, unsigned int w, unsigned int h);
 void GRRLIB_LoadTexturePNG(GRRLIB_texImg * my_texture, const unsigned char my_img[]);
 void GRRLIB_LoadTexturePNGToMemory(GRRLIB_texImg * my_texture, const unsigned char my_png[], void * textureAddress);
 void GRRLIB_LoadTexturePNGToMemorySized(GRRLIB_texImg * my_texture, const unsigned char my_png[], void * textureAddress,int Size);
