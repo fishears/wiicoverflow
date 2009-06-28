@@ -273,7 +273,7 @@ void HandleLoadRequest(int index,int threadNo)
 			if (thisDataMem2Address!=-1) // we have a slot, load the texture to it
 			{
 				// a garbled image will not cause an issue here
-				_texture_data[index] = GRRLIB_LoadTexturePNGToMemorySized((const unsigned char*)imgDataAddress, (void *)thisDataMem2Address, tW * tH * 4);
+				GRRLIB_LoadTexturePNGToMemorySized(&_texture_data[index],(const unsigned char*)imgDataAddress, (void *)thisDataMem2Address, tW * tH * 4);
 				GRRLIB_texImg textureData=_texture_data[index];
 				pthread_mutex_lock(&buffer_mutex[index]);
 				if (!(textureData.h ==tH && textureData.w == tW && textureData.data!=0)) // sanity check
@@ -626,22 +626,20 @@ void ClearBufferSlotMemory()
 }
 
 // put an image in the pre allocated slot (must be in the FreeMemorySlots array with the correct number of bytes) bad data = exit to HBC
-GRRLIB_texImg BufferImageToSlot(const unsigned char* pngDataAddress,int slot)
+void BufferImageToSlot(GRRLIB_texImg * my_texture,const unsigned char* pngDataAddress,int slot)
 {
 	int i=0;
 	unsigned int offset=0;
-	GRRLIB_texImg ret;
-	if ((slot>BUFFER_SLOTS)) return ret;
+	if ((slot>BUFFER_SLOTS)) return;
 	for (i=0;i<slot;i++)
 	{
 		offset+=FreeMemorySlots[i];
 	}
 	// start half way up cache till all the calls are changed
-	ret = GRRLIB_LoadTexturePNGToMemory(pngDataAddress, GetSlotBufferAddress(slot));
-	if (FreeMemorySlots[slot]!=ret.w*ret.h*4)
+	GRRLIB_LoadTexturePNGToMemory(my_texture, pngDataAddress, GetSlotBufferAddress(slot));
+	if (FreeMemorySlots[slot]!=my_texture->w*my_texture->h*4)
 	{
-		exit(0);
+		exit(0); // if this happens the space allocated is wrong
 	}
-	return ret;
 }
 

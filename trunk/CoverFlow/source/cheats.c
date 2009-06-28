@@ -253,9 +253,9 @@ void manage_cheats(int id, struct discHdr *gameList)
         }
         for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
         {
-            cheatEnabled[n] = Duplicate_Button(cheatEnabled[0],84,148+(n*28));
-            cheatDisabled[n] = Duplicate_Button(cheatDisabled[0],84,148+(n*28));
-            cheatEditButton[n] = Duplicate_Button(cheatEditButton[0],108,148+(n*28));
+            Duplicate_Button(&cheatEnabled[n], cheatEnabled[0],84,148+(n*28));
+            Duplicate_Button(&cheatDisabled[n],cheatDisabled[0],84,148+(n*28));
+            Duplicate_Button(&cheatEditButton[n],cheatEditButton[0],108,148+(n*28));
         }
         fclose(txtfile);
         if(maxlines<=LINES_PER_PAGE)

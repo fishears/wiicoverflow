@@ -31,7 +31,7 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 	
 	if (ret > 0)
 	{
-		current_cover_texture = GRRLIB_LoadTexture((const unsigned char*)imgData);
+		GRRLIB_LoadTexture(&current_cover_texture,(const unsigned char*)imgData);
 		coverLoaded=true;
 		free(imgData);
 	}
@@ -42,7 +42,7 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 		
 		if (ret > 0)
 		{
-			current_cover_texture = GRRLIB_LoadTexture((const unsigned char*)imgData);
+			GRRLIB_LoadTexture(&current_cover_texture,(const unsigned char*)imgData);
 			coverLoaded=true;
 			free(imgData);
 		}
