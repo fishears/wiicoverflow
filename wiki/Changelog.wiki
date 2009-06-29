@@ -1,4 +1,13 @@
 #labels Featured
+== RC?? (TBA) ==
+
+-NEW-
+  * Cheat Manager remembers last used cheats.
+-FIX-
+  * 
+-OTHER-
+ 
+----
 == RC7U2 (June 27 2009) ==
 
 -NEW-
@@ -8,7 +17,7 @@
   * Minor bug fixes
 -OTHER-
  
-
+----
 == RC7U1 (June 25 2009) ==
 
 -NEW-
@@ -23,6 +32,7 @@
 
 -OTHER-
 
+----
 == RC7 (June 22 2009) ==
 
 -NEW-
