@@ -120,8 +120,10 @@ bool downloadTitles(){
                 if(strcmp(pch,"<!DOCTYPE")==0) //test for a bad file
                 {
                     free(msg);
+                    free(file.data);
                     return false;
                 }
+                free(msg);
                 unlink(titlesPath);
                 if(saveFile(titlesPath, file))
                 {
