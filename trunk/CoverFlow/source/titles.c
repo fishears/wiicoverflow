@@ -110,16 +110,28 @@ bool downloadTitles(){
 	
 	snprintf(titlesPath, sizeof(titlesPath), "%s/titles.txt", USBLOADER_PATH);
 	
-	file = downloadfile("http://www.wiiboxart.com/titles.txt");
+	file = downloadfile("http://www.wiiboxart.com/titlesx.txt");
 	if(file.data != NULL){
-		unlink(titlesPath);
-		if(saveFile(titlesPath, file)){
-			free(file.data);
-			return true;
-		}
-		else
-			free(file.data);
-	}
-	
-	return false;
+		
+                char* pch;
+                char* msg = malloc(20*sizeof(char));
+                strncpy(msg, file.data,20);
+                pch = strtok(msg, " ");
+                if(strcmp(pch,"<!DOCTYPE")==0) //test for a bad file
+                {
+                    free(msg);
+                    return false;
+                }
+                unlink(titlesPath);
+                if(saveFile(titlesPath, file))
+                {
+                        free(file.data);
+                        return true;
+                }
+                else{
+                    free(file.data);
+                    return false;
+                }
+        }
+    return false;
 }
