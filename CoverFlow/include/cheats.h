@@ -63,7 +63,8 @@ typedef struct {
     void manage_cheats(int id, struct discHdr *gameList);
     int is_code(char* line);
     bool check_download(char* titleID);
-    void create_gct(CHEAT cheat, int cheatcount,struct discHdr *gameList, int id);
+    void create_gct(CHEAT cheat, int cheatcount,struct discHdr *gameList, int id, int cheatCount);
+    void edit_codes(CHEAT cheat, int cheatNum);
 
 #ifdef	__cplusplus
 }

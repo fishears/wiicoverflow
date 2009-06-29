@@ -1736,8 +1736,8 @@ void freeResources(){
         for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
         {
             FreeButtonResources(&cheatEnabled[n]);
-	FreeButtonResources(&cheatDisabled[n]);
-        FreeButtonResources(&cheatEditButton[n]);
+            FreeButtonResources(&cheatDisabled[n]);
+            FreeButtonResources(&cheatEditButton[n]);
         }
 	
 	FreeButtonResources(&manageCheatsButton);
