@@ -155,6 +155,8 @@ void manage_cheats(int id, struct discHdr *gameList)
     //parses the txt file and allows user to enable/disable cheats
     //then turns enabled codes into a gct file to be used with ocarina
     //TODO: editable codelines, viewable comment lines, heading lines... so much work!!!
+    //TODO: save a txt file containing a list of cheat lines enabled
+    //TODO: parse back in if found so enabled cheats are remembered
 
     WPAD_Rumble(0,0); //sometimes rumble remain active
     CHEAT cheat;
@@ -165,6 +167,7 @@ void manage_cheats(int id, struct discHdr *gameList)
     char path[50];
     int i, codecounter = 0,ret;
     bool lastiscode = false;
+    bool tamper = false;
     struct discHdr *header = &gameList[id];
     sprintf(titleID,"%s",header->id);
     sprintf(filename, "%s.txt", titleID);
@@ -240,7 +243,6 @@ void manage_cheats(int id, struct discHdr *gameList)
             i++;
         }
 
-
         char tTemp[LINE_LENGTH];
         int pages = 0;
         int currpage = 1;
@@ -251,6 +253,26 @@ void manage_cheats(int id, struct discHdr *gameList)
         {
             cheat[n].enabled=false;
         }
+        //get stored cheat status
+        char ming[3];
+        sprintf(titleID,"%s",header->id);
+        sprintf(filename, "%sx.txt", titleID);
+        chdir("/");
+        sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+        chdir(path);
+        FILE *txtfile=NULL;
+        txtfile = fopen(filename, "r");
+        if(txtfile)
+        {
+            int n;
+            while(!feof(txtfile))
+            {
+                fgets(ming,3,txtfile);
+                n=atoi(ming);
+                cheat[n].enabled =true;
+            }
+        }
+        fclose(txtfile);
         for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
         {
             Duplicate_Button(&cheatEnabled[n], cheatEnabled[0],84,148+(n*28));
@@ -276,13 +298,13 @@ void manage_cheats(int id, struct discHdr *gameList)
             {
                 for(n=0;n<maxlines;n++)
                 {
-                   if(cheat[n].enabled==true) //check for any enabled cheats to use
+                   if(cheat[n].enabled==true  && tamper) //check for any enabled cheats to use, & have we changed any
                    {
-                       if(WindowPrompt(TX.ocarina, TX.useCodes, &yesButton, &noButton))
+                    if(WindowPrompt(TX.ocarina, TX.useCodes, &yesButton, &noButton))
                        {
-                            create_gct(cheat, maxlines, gameList, id); //go and make the gct file for the enabled cheats
+                            create_gct(cheat, maxlines, gameList, id, maxlines); //go and make the gct file for the enabled cheats
                        }
-                       return;
+                        return;
                     }
                 }
                 return;
@@ -294,7 +316,12 @@ void manage_cheats(int id, struct discHdr *gameList)
                 {
                     buttcheck = n+((currpage-1)*LINES_PER_PAGE); //so that we check the right cheat status
                     if(Button_Select(&cheatEnabled[n], pointer.p_x, pointer.p_y) || Button_Select(&cheatDisabled[n], pointer.p_x, pointer.p_y))
+                    {
                         cheat[buttcheck].enabled = (cheat[buttcheck].enabled) ? false : true;
+                        tamper = true;
+                    }
+                    else if(Button_Select(&cheatEditButton[n], pointer.p_x, pointer.p_y) && cheat[buttcheck].editable==true)
+                        edit_codes(cheat,buttcheck);
                 }
                  if(pages>1)
                  {
@@ -316,14 +343,14 @@ void manage_cheats(int id, struct discHdr *gameList)
                 if(Button_Select(&cheatDoneButton, pointer.p_x, pointer.p_y))
                 {
                    for(n=0;n<maxlines;n++)
-                    {
-                       if(cheat[n].enabled==true) //check for any enabled cheats to use
-                       {
+                   {
+                      if(cheat[n].enabled==true && tamper) //check for any enabled cheats to use, and have we changed any
+                      {
                            if(WindowPrompt(TX.ocarina, TX.useCodes,&yesButton,&noButton))
-                           {
-                                create_gct(cheat, maxlines, gameList, id); //go and make the gct file for the enabled cheats
-                           }
-                           return;
+                            {
+                                create_gct(cheat, maxlines, gameList, id, maxlines); //go and make the gct file for the enabled cheats
+                          }
+                          return;
                         }
                     }
                     return;
@@ -334,6 +361,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                     for(n=(currpage-1)*LINES_PER_PAGE;n<(currpage)*LINES_PER_PAGE && n<maxlines;n++)
                     {
                         cheat[n].enabled = page[currpage].selectAll;
+                        tamper = true;
                     }
                 }
             }
@@ -512,7 +540,7 @@ bool check_download(char* titleID)
     return true;
 }
 
-void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
+void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id, int cheatCount)
 {
     //this is where we parse the selected cheat data into a gct file for ocarina
     //char to hex by brkirch
@@ -588,8 +616,126 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id)
     }
     fprintf(gctFile, "%c%c%c%c%c%c%c%c", 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00); //gct footer
     fclose(gctFile);
+    //store enabled cheat data
+    char path[50];
+    char filename[11];
+    char ming[3];
+    sprintf(titleID,"%s",header->id);
+    sprintf(filename, "%sx.txt", titleID);
+    chdir("/");
+    sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+    chdir(path);
+    FILE *txtfile=NULL;
+    txtfile = fopen(filename, "w");
+
+    for(n=0;n<cheatCount;n++)
+    {
+        if(cheat[n].enabled ==true)
+        {
+            sprintf(ming,"%d\n",n);
+            fputs(ming,txtfile);
+        }
+    }
+    fclose(txtfile);
     return;
     
 
+}
+
+void edit_codes(CHEAT cheat, int cheatNum)
+{
+    //allows cheat lines with variables to be edited and saved for the current cheat
+    //TODO add hex keyboard
+    int currpage = 1;
+    int pages=0;
+    int i;
+    char tTemp[128];
+    if(cheat[cheatNum].codelines<=LINES_PER_PAGE)
+        pages = 1;
+    else
+        pages = (cheat[cheatNum].codelines/LINES_PER_PAGE)+1;
+    while(1) //edit codes GUI loop
+        {
+            WPAD_ScanPads();
+            GetWiimoteData();
+            if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)) //b or home to exit
+            {
+                return;
+            }
+            else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
+            {
+                if(Button_Select(&cheatDoneButton, pointer.p_x, pointer.p_y))
+                {
+                    return;
+                }
+                 if(pages>1)
+                 {
+                    if(Button_Select(&pageUpButton, pointer.p_x, pointer.p_y))
+                    {
+                        if(currpage<pages)
+                            currpage++;
+                        else
+                            currpage = 1;
+                    }
+                    else if(Button_Select(&pageDownButton, pointer.p_x, pointer.p_y))
+                    {
+                        if(currpage>1)
+                            currpage--;
+                        else
+                            currpage = pages;
+                    }
+                }
+            }
+            else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_PLUS)) //page forward
+            {
+                if(currpage<pages)
+                    currpage++;
+                else
+                    currpage = 1;
+            }
+            else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_MINUS)) //page back
+            {
+                if(currpage>1)
+                    currpage--;
+                else
+                    currpage = pages;
+            }
+
+            draw_covers();
+            GRRLIB_Rectangle(70, 76, 500, 346, 0xffffffdd, true); //draw a big boring box
+            GRRLIB_Rectangle(72, 78, 496, 342, 0x737373FF, true);
+            int step = 0;
+            CFreeTypeGX_DrawText(ttf18pt, 320, 100, "COMING SOON...", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+            CFreeTypeGX_DrawText(ttf14pt, 320, 136, cheat[cheatNum].title, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+            if(pages>1)
+            {
+                sprintf(tTemp,"%d/%d",currpage,pages); //report page x of xx
+                CFreeTypeGX_DrawText(ttf14pt, 520, 100, tTemp, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+            }
+            int ret;
+            for(i=0;i<cheat[cheatNum].codelines;i++)
+            {
+                ret=is_code(cheat[cheatNum].codes[i]);
+                if(ret==2)
+                {
+                    sprintf(tTemp,"%s",cheat[cheatNum].codes[i]);
+                    tTemp[17]='\0';
+                    CFreeTypeGX_DrawText(ttf14pt, 135, 164+step,tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+                    step +=28;
+                }
+            }
+            if(pages>1)
+            {
+                Button_Paint(&pageUpButton);
+                Button_Paint(&pageDownButton);
+                Button_Hover(&pageDownButton, pointer.p_x, pointer.p_y);
+                Button_Hover(&pageUpButton, pointer.p_x, pointer.p_y);
+            }
+            Button_TTF_Paint(&cheatDoneButton);
+            Button_Hover(&cheatDoneButton, pointer.p_x, pointer.p_y);
+            DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF); //HAND!
+            GRRLIB_Render();
+        }
+    return;
 }
 
