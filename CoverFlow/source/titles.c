@@ -110,7 +110,7 @@ bool downloadTitles(){
 	
 	snprintf(titlesPath, sizeof(titlesPath), "%s/titles.txt", USBLOADER_PATH);
 	
-	file = downloadfile("http://www.wiiboxart.com/titlesx.txt");
+	file = downloadfile("http://www.wiiboxart.com/titles.txt");
 	if(file.data != NULL){
 		
                 char* pch;
