@@ -1622,7 +1622,7 @@ void freeResources(){
 	free(flag_ct_texture.data);
 	free(flag_fi_texture.data);
 	free(flag_MyLang_texture.data);
-	if (coverLoaded)free(current_cover_texture.data); // is this always available?
+	//if (coverLoaded)free(current_cover_texture.data); // now in mem2
 	free(hdspace_texture.data);
 	
 	//buttons

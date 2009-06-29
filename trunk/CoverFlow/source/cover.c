@@ -23,16 +23,10 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 	sprintf(titleID, "%s", header->id);
 	getGameSettings(titleID, &gameSetting);
 	
-	if (coverLoaded)
-	{
-		free(current_cover_texture.data);  //should be freed if loading another
-		coverLoaded=false;
-	}
-	
 	if (ret > 0)
 	{
-		GRRLIB_LoadTexture(&current_cover_texture,(const unsigned char*)imgData);
-		coverLoaded=true;
+		BufferImageToSlot(&current_cover_texture,(const unsigned char*)imgData,10);
+
 		free(imgData);
 	}
 	else
@@ -42,19 +36,17 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 		
 		if (ret > 0)
 		{
-			GRRLIB_LoadTexture(&current_cover_texture,(const unsigned char*)imgData);
-			coverLoaded=true;
+			BufferImageToSlot(&current_cover_texture,(const unsigned char*)imgData,10);
 			free(imgData);
 		}
 		else
 		{
-			GRRLIB_DuplicateTexture(&current_cover_texture, no_disc_texture, no_disc_texture.w, no_disc_texture.h);
-			coverLoaded=false;
+			BufferImageToSlot(&current_cover_texture,no_disc_png,10);
 		}
 	}
 	
 	#else
-	GRRLIB_DuplicateTexture(&current_cover_texture, no_disc_texture, no_disc_texture.w, no_disc_texture.h);
+	BufferImageToSlot(&current_cover_texture,no_disc_png,10);
 	#endif
 }
 
@@ -69,7 +61,6 @@ void AddCover(GRRLIB_texImg tex)
 
 void Init_Covers()
 {
-	coverLoaded=false;
 	#ifdef TEST_MODE
 	self.progress+=0.05;
 	Paint_Progress(self.progress, "Initializing Covers...");
