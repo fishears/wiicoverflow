@@ -315,6 +315,7 @@ s32 GetEntries()
 	if (self.gameList)
 	{
 		free(self.gameList);
+		self.gameList=NULL;
 	}
 
 	/* Allocate memory */
