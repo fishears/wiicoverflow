@@ -244,6 +244,47 @@ void Button_Theme_Paint_Offset(struct Button* btn, int theme_id, int x_offset, i
 	}	
 }
 
+void Button_Theme_Paint_Fade(struct Button* btn, int theme_id, int fade)
+{
+	if(btn == 0)
+		return;
+		
+	
+	u32 color = 0xFFFFFF00|fade;
+		
+	if(btn->hovering)
+	{
+		switch (theme_id)
+		{
+			case 0: // black theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, color);
+				break;
+			case 1: // white theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, color);
+				break;
+			default:
+				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, color);
+				break;
+		}
+	}
+	else
+	{
+		switch (theme_id)
+		{
+			case 0: // black theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, color);
+				break;
+			case 1: // white theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, color);
+				break;
+			default:
+				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, color);
+				break;
+		}
+		
+	}	
+}
+
 // When passed two buttons and a toggle int, 0=draw the first , 1=draws the second
 void Button_Toggle_Paint(struct Button* btn1, struct Button* btn2, int toggle_state)
 {

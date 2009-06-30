@@ -113,7 +113,7 @@ int main( int argc, char **argv )
 	}
 #endif
 
-	int offsetButtonX = 0;
+	int fadeButton = 255;
 
 	u8 FPS = 0;			// frames per second counter
 
@@ -798,39 +798,37 @@ int main( int argc, char **argv )
 			
 			if(settings.auto_hide)
 			{
-				if((pointer.p_x > 0   && pointer.p_x < 140) ||
-				   (pointer.p_x > 500 && pointer.p_x < 640) ||
-				   (pointer.p_y > 0   && pointer.p_y < 140) ||
-				   (pointer.p_y > 340 && pointer.p_y < 480))
+				if((pointer.p_x > 120   && pointer.p_x < 520) &&
+				   (pointer.p_y > 60   && pointer.p_y < 420))
 				{
 					/*Slide in buttons*/
-					if(offsetButtonX > 0)
-						offsetButtonX-=10;
+					if(fadeButton > 0)
+						fadeButton-=15;
 					else
-						offsetButtonX = 0;
+						fadeButton = 0;
 				}
 				else
 				{
 					/*Slide out buttons*/
-					if(offsetButtonX < 140)
-						offsetButtonX+=10;
+					if(fadeButton < 255)
+						fadeButton+=15;
 					else
-						offsetButtonX = 140;
+						fadeButton = 255;
 				}
 			}
 			else
 			{
-				offsetButtonX = 0;
+				fadeButton = 0;
 			}
 			
             if(!settings.parentalLock)
-                Button_Theme_Paint_Offset(&addButton, settings.theme, offsetButtonX, 0);
+                Button_Theme_Paint_Fade(&addButton, settings.theme, fadeButton);
 				
 			if(!settings.parentalLock)
-				Button_Theme_Paint_Offset(&settingsButton, settings.theme, -1*offsetButtonX, 0);
+				Button_Theme_Paint_Fade(&settingsButton, settings.theme, fadeButton);
 			
 			if(!settings.parentalLock)
-				Button_Theme_Paint_Offset(&infoButton, settings.theme, offsetButtonX, 0);
+				Button_Theme_Paint_Fade(&infoButton, settings.theme, fadeButton);
 			
 			// Draw Game Title
 			if(settings.coverText && (!self.dragging && !self.twisting && select_ready))
@@ -840,6 +838,8 @@ int main( int argc, char **argv )
 			}
 			
 		}
+		
+		Button_Hover(&infoButton, pointer.p_x, pointer.p_y);
 		
 		// Check for button-pointer intersections, and rumble
 		if ((!self.selected && // main screen button only
