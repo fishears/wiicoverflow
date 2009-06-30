@@ -115,7 +115,7 @@ bool downloadTitles(){
 		
                 char* pch;
                 char* msg = malloc(20*sizeof(char));
-                strncpy(msg, file.data,20);
+                strncpy(msg, (char*)file.data,20);
                 pch = strtok(msg, " ");
                 if(strcmp(pch,"<!DOCTYPE")==0) //test for a bad file
                 {
