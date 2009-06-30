@@ -139,7 +139,7 @@ void HomeMenu_Show()
 		PAD_ScanPads();
 		GetWiimoteData();
 
-		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)||(PAD_ButtonsDown(0) & PAD_TRIGGER_Z))
+		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)||(PAD_ButtonsDown(0) & PAD_TRIGGER_Z))
 		{
 			WPAD_Rumble(0,0); // Kill the rumble
 			doloop = false;

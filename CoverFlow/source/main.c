@@ -443,8 +443,8 @@ int main( int argc, char **argv )
 						else if((!settings.parentalLock) && Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
 						{
 							// User clicked delete button
-							Menu_Delete();
-                            //self.selected = false;
+							if(Menu_Delete())
+								self.selected = false;
 						}
 						else if(Button_Select(&backButton, pointer.p_x, pointer.p_y)) // back
 						{
