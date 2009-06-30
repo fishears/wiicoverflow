@@ -37,6 +37,12 @@ bool Menu_Boot(){
 	/* Set WBFS mode */
 	Disc_SetWBFS(WBFS_DEVICE_USB,header->id);
 		
+	if (self.gameList)
+	{
+		free(self.gameList);
+		self.gameList=NULL;
+	}
+
 	s32 ret;
 	
 	/* Open disc */
@@ -81,6 +87,12 @@ bool Menu_Boot(){
 			header->id, settings.ocarina, settings.hooktype, settings.language,
 			settings.video, settings.vipatch);
 	
+	if (self.gameList)
+	{
+		free(self.gameList);
+		self.gameList=NULL;
+	}
+
 	CAPPDOL_Launch(bootloader_dol, (const char *)cmdLine);	
 
 	#endif
