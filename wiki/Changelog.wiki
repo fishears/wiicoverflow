@@ -4,7 +4,7 @@
 -NEW-
   * 
 -FIX-
-  * Fix code dump on adding new games
+  * Fix code dump on adding new games if cover was not found
   * Fix some minor bugs
 -OTHER-
 
