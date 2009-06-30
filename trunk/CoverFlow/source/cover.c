@@ -120,7 +120,7 @@ void Download_Cover(char* id, int v, int max)
 		
 		struct block file;
 	
-		char region[4];
+		char region[5];
 		switch(id[3]){
 	
 		case 'E':
