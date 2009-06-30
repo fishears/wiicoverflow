@@ -1,4 +1,14 @@
 #labels Featured
+== RC8U1 (? ? 2009) ==
+
+-NEW-
+  * 
+-FIX-
+  * Fix code dump on adding new games
+  * Fix some minor bugs
+-OTHER-
+
+
 == RC8 (June 29 2009) ==
 
 -NEW-
