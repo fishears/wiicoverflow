@@ -1176,8 +1176,9 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 	bool returnVal = false;
 	bool doloop = true;
 	char* pch;
-        GRRLIB_texImg myTex;
+    GRRLIB_texImg myTex;
 	unsigned char buffer[160 * 224 * 4 * 10];
+	
 	WPAD_Rumble(0,0); //sometimes rumble remain active
 	if(networkInit(self.ipAddress))
 	{
@@ -1193,12 +1194,14 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 		}
 		else
 		{
-			myTex = cover_texture;//GRRLIB_LoadTexture(no_cover_png);
+			//myTex = cover_texture;//GRRLIB_LoadTexture(no_cover_png);
+			GRRLIB_DuplicateTexture(&myTex, cover_texture, cover_texture.w, cover_texture.h);
 		}
 	}
 	else // no network
 	{
-		myTex = cover_texture;//GRRLIB_LoadTexture(no_cover_png);
+		//myTex = cover_texture;//GRRLIB_LoadTexture(no_cover_png);
+		GRRLIB_DuplicateTexture(&myTex, cover_texture, cover_texture.w, cover_texture.h);
 	}
 	if(choice_a == 0 && choice_b == 0)
 		doloop = false;
