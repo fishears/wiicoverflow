@@ -99,8 +99,13 @@ void showInfoWindow(){
 			self.rumbleAmt = 5;
 		}
 		
-		if(Button_Select(&okButton, pointer.p_x, pointer.p_y) && WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
-			doloop = false;
+		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
+		{
+			if(Button_Select(&okButton, pointer.p_x, pointer.p_y))
+			{
+				doloop = false;
+			}
+		}
 		
 		GRRLIB_Render();
 		
