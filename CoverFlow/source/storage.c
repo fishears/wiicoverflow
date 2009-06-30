@@ -311,13 +311,6 @@ s32 GetEntries()
 	/* Buffer length */
 	len = sizeof(struct discHdr) * cnt;
 
-	/* Free old buffer if this is being called after an install or delete */
-	if (self.gameList)
-	{
-		free(self.gameList);
-		self.gameList=NULL;
-	}
-
 	/* Allocate memory */
 	buffer = (struct discHdr *)memalign(32, len);
 	if (!buffer)
