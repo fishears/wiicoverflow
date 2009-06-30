@@ -1,10 +1,12 @@
 #labels Featured
-== RC?? (TBA) ==
+== RC8 (June 29 2009) ==
 
 -NEW-
   * Cheat Manager remembers last used cheats.
+  * Fade of buttons on main screen
 -FIX-
   * Use improved libfat instead of devkitpro lib fat. (Cover Load Speed Fix)
+  * Fix some issues with info button/screen
 -OTHER-
  
 ----
