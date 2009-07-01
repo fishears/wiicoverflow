@@ -283,8 +283,8 @@ s32 __Menu_EntryCmp(const void *a, const void *b)
 		char title1[MAX_TITLE_LEN];
 		char title2[MAX_TITLE_LEN];
 	
-		sprintf(title1, "%s", hdr1->id);
-		sprintf(title2, "%s", hdr2->id);
+		sprintf(title1, "%s", hdr1->title);
+		sprintf(title2, "%s", hdr2->title);
 		
 		getTitle(titleList, (char*)hdr1->id, title1);
 		getTitle(titleList, (char*)hdr2->id, title2);
