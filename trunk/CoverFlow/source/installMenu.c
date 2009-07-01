@@ -103,7 +103,7 @@ bool Menu_Install()
 	sprintf(tsize, TX.gameSize, gamesize);
 	
 	//if(WindowPrompt(headerdisc.id, ttext,tsize,&okButton,&cancelButton))
-	if(WindowPromptInstall((char*)headerdisc.id, name, tsize,&okButton,&cancelButton))
+	if(WindowPromptInstall((char*)headerdisc.id, name, tsize,&okButton,&cancelButton,0))
 	{
 		if (gamesize > freespace) {
 			char errortxt[50];
@@ -125,7 +125,7 @@ bool Menu_Install()
 				BUFFER_InitBuffer();
 				
 				WiiLight(1);
-				WindowPromptInstall((char*)headerdisc.id, name, TX.successInstall, &okButton,0);
+				WindowPromptInstall((char*)headerdisc.id, name, TX.successInstall, &okButton,0, 0);
 				WBFS_DiskSpace(&self.usedSpace, &self.freeSpace);
 				//WindowPrompt (TX.successInstall, name,&okButton,0);
 				WiiLight(0);

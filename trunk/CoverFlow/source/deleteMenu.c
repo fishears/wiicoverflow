@@ -39,7 +39,8 @@ bool Menu_Delete(){
 		strncat(gameName, "...", 3);
 	}
 
-	if(WindowPrompt(TX.askDelete, gameName, &yesButton, &noButton))
+	//if(WindowPrompt(TX.askDelete, gameName, &yesButton, &noButton))
+	if(WindowPromptInstall((char*)header->id, gameName, TX.askDelete, &yesButton, &noButton, 1))
 	{
 		BUFFER_KillBuffer();
 		if(0 > WBFS_RemoveGame(header->id))
