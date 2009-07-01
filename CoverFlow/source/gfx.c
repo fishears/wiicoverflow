@@ -1171,23 +1171,46 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 	return returnVal;
 }
 
-int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
+int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a, struct Button* choice_b, int option)
 {
 	bool returnVal = false;
 	bool doloop = true;
 	char* pch;
     GRRLIB_texImg myTex;
 	unsigned char buffer[160 * 224 * 4 * 10];
+	char filepath[255];
+	int ret;
+	
+	sprintf(filepath, USBLOADER_PATH "/covers/%s.png", id);
+	
 	
 	WPAD_Rumble(0,0); //sometimes rumble remain active
-	if(networkInit(self.ipAddress))
+	
+	if(option == 0){
+		if(networkInit(self.ipAddress))
+		{
+			Download_Cover(id, 1, self.gameCnt);
+			//CoversDownloaded();
+			ret = Fat_ReadFileToBuffer(filepath, (void*)buffer, 160 * 224 * 4);
+			if(ret > 0)
+			{
+				GRRLIB_LoadTexturePNG(&myTex,buffer);
+			}
+			else
+			{
+				//myTex = cover_texture;//GRRLIB_LoadTexture(no_cover_png);
+				GRRLIB_DuplicateTexture(&myTex, cover_texture, cover_texture.w, cover_texture.h);
+			}
+		}
+		else // no network
+		{
+			//myTex = cover_texture;//GRRLIB_LoadTexture(no_cover_png);
+			GRRLIB_DuplicateTexture(&myTex, cover_texture, cover_texture.w, cover_texture.h);
+		}
+	}
+	else
 	{
-		Download_Cover(id, 1, self.gameCnt);
-		//CoversDownloaded();
-
-		char filepath[255];
-		sprintf(filepath, USBLOADER_PATH "/covers/%s.png", id);
-		int ret = Fat_ReadFileToBuffer(filepath, (void*)buffer, 160 * 224 * 4);
+		ret = Fat_ReadFileToBuffer(filepath, (void*)buffer, 160 * 224 * 4);
 		if(ret > 0)
 		{
 			GRRLIB_LoadTexturePNG(&myTex,buffer);
@@ -1198,11 +1221,7 @@ int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a
 			GRRLIB_DuplicateTexture(&myTex, cover_texture, cover_texture.w, cover_texture.h);
 		}
 	}
-	else // no network
-	{
-		//myTex = cover_texture;//GRRLIB_LoadTexture(no_cover_png);
-		GRRLIB_DuplicateTexture(&myTex, cover_texture, cover_texture.w, cover_texture.h);
-	}
+	
 	if(choice_a == 0 && choice_b == 0)
 		doloop = false;
 	if(choice_a != 0)
