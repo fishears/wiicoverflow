@@ -33,6 +33,8 @@ extern u32 portuguesebr_lang_size;
 extern u8  danish_lang[];
 extern u32 danish_lang_size;
 
+extern u8  hungarian_lang[];
+extern u32 hungarian_lang_size;
 
 
 struct LANGUAGE
@@ -224,7 +226,7 @@ struct LANGUAGE
 	char spaceUsed[40];				//185
 	char noFixes[15];				//186
 	char gameFix[25];				//187
-	
+	char Hungarian[15];				//188
 // Buttons	
 	char addB[15];					//B01
 	char deleteB[15];				//B02

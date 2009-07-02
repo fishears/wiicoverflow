@@ -71,6 +71,7 @@ extern const u8 flag_fi_png[];		// finnish
 extern const u8 flag_MyLang_png[];	// MyLang
 extern const u8 flag_dk_png[];		// danish
 extern const u8 flag_tr_png[];		// turkish
+extern const u8 flag_hu_png[];		// hungarian
 extern const u8 button_cheat_on_png[];  //for cheat manager
 extern const u8 button_cheat_off_png[];  //for cheat manager
 extern const u8 button_cheat_edit_png[];
@@ -108,6 +109,7 @@ GRRLIB_texImg flag_ct_texture; // Catalan Flag
 GRRLIB_texImg flag_fi_texture; // Finnland Flag
 GRRLIB_texImg flag_MyLang_texture; // MyLang Flag
 GRRLIB_texImg flag_dk_texture; // Denmark Flag
+GRRLIB_texImg flag_hu_texture; // Hungary Flag
 GRRLIB_texImg button_round_info_texture;
 GRRLIB_texImg button_round_info_over_texture;
 
@@ -123,7 +125,7 @@ Button flagCTButton;
 Button flagFIButton;
 Button flagMyLangButton;
 Button flagDKButton;
-
+Button flagHUButton;
 Button infoButton;
 
 //cheat manager buttons

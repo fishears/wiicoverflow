@@ -26,7 +26,7 @@ extern char	languages[11][30];
 extern char	vidmodes[6][30];
 extern char gFixes[CFG_FIX_COUNT][16];
 
-char selLanguages[20][7]=
+char selLanguages[21][7]=
 {
 	{"default"},
 	{"ca-CAT"},		
@@ -47,6 +47,7 @@ char selLanguages[20][7]=
 	{"zh-CN"},
 	{"zh-TW"},		
 	{"pt-POR"},
+	{"hu-HUN"},
 	{"myLANG"}		
 };
 
@@ -267,6 +268,7 @@ void languageDefault()
 	snprintf(TX.noFixes, sizeof(TX.noFixes), "none"); 
 	snprintf(gFixes[0],  sizeof(TX.noFixes), "%s", TX.noFixes);
 	snprintf(TX.gameFix, sizeof(TX.gameFix), "Game Fix:"); 
+	snprintf(TX.Hungarian, sizeof(TX.Hungarian), "Hungarian"); 
 
 // Buttons	
 
@@ -1071,6 +1073,10 @@ void languageSet(char *name, char *val)
 		strcopy(TX.gameFix, val, sizeof(TX.gameFix));
 		return;
 	}	
+	if (strcmp(name, "Hungarian") == 0) {
+		strcopy(TX.Hungarian, val, sizeof(TX.Hungarian));
+		return;
+	}	
 
 //////////////// Buttons //////////////
 
@@ -1209,6 +1215,9 @@ bool languageLoad()
 		}
 	if (strcmp(settings.localLanguage, "pt-BR") == 0) {
 		return parseMemFile( (char*)portuguesebr_lang, portuguesebr_lang_size, &languageSet);
+		}
+	if (strcmp(settings.localLanguage, "hu-HUN") == 0) {
+		return parseMemFile( (char*)hungarian_lang, hungarian_lang_size, &languageSet);
 		}
 	if (strcmp(settings.localLanguage, "myLANG") == 0) {
 		if (!cfg_parsefile(USBLOADER_PATH "/MyLanguage.lang", &languageSet)) {
