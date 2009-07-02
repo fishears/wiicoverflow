@@ -363,6 +363,8 @@ void Init_Buttons()
     Duplicate_Button_TTF(&cheatDoneButton, okButton,84,82,TX.done);
     Duplicate_Button(&selectAllButton, cheatEnabled[0],84,120);
     Duplicate_Button(&deselectAllButton, cheatDisabled[0],84,120);
+    Button_Init(&charUpButton[0],button_char_up_png,button_char_up_over_png,100,100);
+    Button_Init(&charDownButton[0],button_char_down_png,button_char_down_over_png,100,100);
   #endif
 } // End Init_Buttons();
 

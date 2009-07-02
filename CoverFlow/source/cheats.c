@@ -479,7 +479,9 @@ int is_code(char* line)
                     for (x = 0; x < 8; x++) //check for characters outside the scope of a pukka code
                     {
                         //known code variables
-                        if(pch[x] =='x' || pch[x] =='X' || pch[x] =='R' || pch[x] =='G' || pch[x] =='Y' || pch[x] =='y')
+                        if(pch[x] =='x' || pch[x] =='X' || pch[x] =='R' || pch[x] =='G' || pch[x] =='Y' || pch[x] =='y' 
+                                || (pch[x-1] =='b' && pch[x] =='b') || (pch[x] =='b' && pch[x+1] =='b') //sneaky B
+                                || (pch[x-1] =='B' && pch[x] =='B') || (pch[x] =='B' && pch[x+1] =='B')) // B is used in LOZTP
                             editable = true;
                     }
                     if(checkFlag)
@@ -573,7 +575,6 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id, in
                 {
                     int x;
                     char* pch;
-                    //sprintf(tempCode,cheat[i].codes[n]);
                     char* msg = malloc(strlen(cheat[i].codes[n])*sizeof(char));
                     sprintf(msg, cheat[i].codes[n]);
 
@@ -648,12 +649,13 @@ void edit_codes(CHEAT cheat, int cheatNum)
     //TODO add hex keyboard
     int currpage = 1;
     int pages=0;
-    int i;
+    int i,n;
     char tTemp[128];
     if(cheat[cheatNum].codelines<=LINES_PER_PAGE)
         pages = 1;
     else
         pages = (cheat[cheatNum].codelines/LINES_PER_PAGE)+1;
+
     while(1) //edit codes GUI loop
         {
             WPAD_ScanPads();
@@ -667,6 +669,15 @@ void edit_codes(CHEAT cheat, int cheatNum)
                 if(Button_Select(&cheatDoneButton, pointer.p_x, pointer.p_y))
                 {
                     return;
+                }
+                for(n=0;n<cheat[cheatNum].codelines;n++) //test the cheat buttons
+                {
+                    if(Button_Select(&cheatEditButton[n], pointer.p_x, pointer.p_y) && is_code(cheat[cheatNum].codes[n])==2)
+                    {
+                        sprintf(tTemp,"%s",cheat[cheatNum].codes[n]);
+                        tTemp[17]='\0';
+                        edit_variables(tTemp);
+                    }
                 }
                  if(pages>1)
                  {
@@ -705,19 +716,23 @@ void edit_codes(CHEAT cheat, int cheatNum)
             GRRLIB_Rectangle(70, 76, 500, 346, 0xffffffdd, true); //draw a big boring box
             GRRLIB_Rectangle(72, 78, 496, 342, 0x737373FF, true);
             int step = 0;
-            CFreeTypeGX_DrawText(ttf18pt, 320, 100, "COMING SOON...", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+            CFreeTypeGX_DrawText(ttf18pt, 320, 100, "Edit Variables", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
             CFreeTypeGX_DrawText(ttf14pt, 320, 136, cheat[cheatNum].title, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
             if(pages>1)
             {
                 sprintf(tTemp,"%d/%d",currpage,pages); //report page x of xx
                 CFreeTypeGX_DrawText(ttf14pt, 520, 100, tTemp, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
             }
-            int ret;
+            int ret,count=0;
             for(i=0;i<cheat[cheatNum].codelines;i++)
             {
                 ret=is_code(cheat[cheatNum].codes[i]);
                 if(ret==2)
                 {
+                    Duplicate_Button(&cheatEditButton[i],cheatEditButton[0],108,148+(count*28));
+                    count++;
+                    Button_Paint(&cheatEditButton[i]);
+                    Button_Hover(&cheatEditButton[i], pointer.p_x, pointer.p_y);
                     sprintf(tTemp,"%s",cheat[cheatNum].codes[i]);
                     tTemp[17]='\0';
                     CFreeTypeGX_DrawText(ttf14pt, 135, 164+step,tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
@@ -739,3 +754,63 @@ void edit_codes(CHEAT cheat, int cheatNum)
     return;
 }
 
+void edit_variables(char* line)
+{
+    //lets you edit the variable values found in the codeline
+    //char hexlist[17] = {'X','0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+    int editable[8] = {0,0,0,0,0,0,0,0}; //holds 1 if character is editable
+    int x;
+    char editline[8]; //holds the second block of codeline (the bit with variables)
+    char* screen;
+    char* pch;
+    char* msg = malloc(strlen(line)*sizeof(char));
+    sprintf(msg, line);
+    pch = strtok(msg, " "); //locate & ignore the first 8 chars of the codeline
+    pch = strtok(NULL," \n\0");
+    if(strlen(pch)==8) //test for second block of 8 characters to SPACE or NEWLINE
+    {
+        strncpy(editline,pch,8);
+        for (x = 0; x < 8; x++)
+        {
+            //look for known code variables
+            if(pch[x] =='x' || pch[x] =='X' || pch[x] =='R' || pch[x] =='G' || pch[x] =='Y' || pch[x] =='y'
+                    || (pch[x-1] =='b' && pch[x] =='b') || (pch[x] =='b' && pch[x+1] =='b') //sneaky B
+                    || (pch[x-1] =='B' && pch[x] =='B') || (pch[x] =='B' && pch[x+1] =='B')) // B is used in LOZTP
+                editable[x]=1; //found a variable so store it's position
+        }
+    }
+    free(msg);
+    WindowPrompt("Coming Soon",editline,&okButton,0);
+    return;
+
+    while(1) //edit variables GUI loop
+    {
+        WPAD_ScanPads();
+        GetWiimoteData();
+        if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)) //b or home to exit
+        {
+            return;
+        }
+        else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
+        {
+             return;
+        }
+
+        draw_covers();
+        GRRLIB_Rectangle(150, 156, 350, 206, 0xffffffdd, true); //draw a big boring box
+        GRRLIB_Rectangle(152, 158, 352, 202, 0x737373FF, true);
+
+        int step = 0;
+        for(x=0;x<8;x++)
+        {
+            sprintf(screen,"%c",editline[x]);
+            CFreeTypeGX_DrawText(ttf14pt, 210+step, 190,screen, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+            step +=24;
+        }
+
+
+        DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF); //HAND!
+        GRRLIB_Render();
+    }
+    return;
+}

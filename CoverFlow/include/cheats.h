@@ -23,9 +23,9 @@ extern "C" {
     #define CODESITE "http://www.usbgecko.com/codes/codes/"
     #define LINES_PER_PAGE 9 //lines per page to display
     #define LINE_LENGTH 50 //max title line length
-    #define MAX_CODES 20 //max number of cheat codes
+    #define MAX_CODES 30 //max number of cheat codes
     #define CHEAT_LINE 18 //cheat codeline length
-    #define MAX_CHEATS 30 //maximum number of cheats per game
+    #define MAX_CHEATS 35 //maximum number of cheats per game
 
 typedef struct {
     char title[LINE_LENGTH]; //cheat description text
@@ -38,33 +38,17 @@ typedef struct {
 typedef struct {
     bool selectAll; //select all/de-select all stus of page
 } PAGE;
-
-
-//struct llCODE{
-//        unsigned int FirstBit; //first hex number
-//        unsigned int SecondBit; //second hex number
-//        struct llCODE * parent;
-//        struct llCODE * child;
-//};
-//
-//struct llCHEAT{
-//        char title[LINE_LENGTH]; //cheat description text
-//        bool enabled; //is the cheat active
-//        struct llCODE * CodeList; //cheat codes list
-//        struct llCHEAT * parent;
-//        struct llCHEAT * child;
-//};
-
     
-    bool check_txt(int id, struct discHdr *gameList);
-    bool check_gct(int id, struct discHdr *gameList);
-    bool download_txt(int id, int mode, struct discHdr *gameList);
-    void batch_download_txt(struct discHdr *gameList);
-    void manage_cheats(int id, struct discHdr *gameList);
-    int is_code(char* line);
-    bool check_download(char* titleID);
-    void create_gct(CHEAT cheat, int cheatcount,struct discHdr *gameList, int id, int cheatCount);
-    void edit_codes(CHEAT cheat, int cheatNum);
+    bool check_txt(int id, struct discHdr *gameList); //check for txt cheat file on sd
+    bool check_gct(int id, struct discHdr *gameList); //check for gct cheat file on sd
+    bool download_txt(int id, int mode, struct discHdr *gameList); //download txt cheat file
+    void batch_download_txt(struct discHdr *gameList); // download txt cheat files for all games
+    void manage_cheats(int id, struct discHdr *gameList); //main cheat manager gui and parser
+    int is_code(char* line); //check if line is a code line & if it is an editable code line
+    bool check_download(char* titleID); //check downloaded txt cheat file for validity
+    void create_gct(CHEAT cheat, int cheatcount,struct discHdr *gameList, int id, int cheatCount); //parse selected cheats into a gct
+    void edit_codes(CHEAT cheat, int cheatNum); //main code line editor gui
+    void edit_variables(char* line); //lets you edit the variable values in a codeline
 
 #ifdef	__cplusplus
 }

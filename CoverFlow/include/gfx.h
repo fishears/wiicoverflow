@@ -79,6 +79,10 @@ extern const u8 button_cheat_edit_over_png[];
 extern const u8 hdspace_png[];
 extern const u8 button_round_info_png[];
 extern const u8 button_round_info_over_png[];
+extern const u8 button_char_up_png[];
+extern const u8 button_char_up_over_png[];
+extern const u8 button_char_down_png[];
+extern const u8 button_char_down_over_png[];
 
 GRRLIB_texImg menu_button_texture;
 GRRLIB_texImg menu_button_over_texture;
@@ -138,6 +142,8 @@ Button pageDownButton;
 Button cheatDoneButton;
 Button selectAllButton;
 Button deselectAllButton;
+Button charUpButton[8];
+Button charDownButton[8];
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg cover_texture_3d;
