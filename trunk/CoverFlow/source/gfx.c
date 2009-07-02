@@ -1762,7 +1762,9 @@ void freeResources(){
 	FreeButtonResources(&gbackButton);
 	FreeButtonResources(&gfixdownButton);
 	FreeButtonResources(&gfixupButton);
-	
+	FreeButtonResources(&charUpButton[0]);
+	FreeButtonResources(&charDownButton[0]);
+		
  #ifdef CHEAT_MANAGER
         int n;
         for(n=0;n<LINES_PER_PAGE;n++) //create the buttons
