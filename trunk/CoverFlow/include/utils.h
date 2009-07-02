@@ -20,7 +20,6 @@ void getSysdate(char* now, char* ret_string);
 void ios_version_check();
 u8 CalculateFrameRate();
 void apply_settings();
-void apply_fixsettings();
 //bool ifConfig(char *ip);
 bool networkInit(char *ip);
 void quit();
