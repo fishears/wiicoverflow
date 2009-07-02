@@ -163,6 +163,29 @@ initDisc = Initializing Disc...
 obsoleteGL = Your config file is obsoleted and|will be removed.|Press OK to continue
 homeMenu = HOME Menu
 homeWiimote = Wiimote Information
+errorSD = SD card can not be written to
+gettingGL = Getting game list
+sortingGL = Sorting game list
+initWBFS_GL = Initialize WBFS Game List...
+getEntryWBFS = Getting Entries...
+noCreateWCFXML = can't create wiicoverflow.xml
+downloadCheatFile = Download missing cheat file?
+downloadComplete = Download Complete
+noTxtCodes = txt codes not available
+errorHTTP = HTTP ERROR
+useCodes = Use these codes?
+errOpenGCT = Could not create (or Open) GCT.
+coverZoom = CovZoom:
+fallDist = FallDist:
+infoHDD = HDD Info:  %.2f GB used,  %.2f GB free
+instGames = Installed Games: %d
+sysInfo = System information
+ipAddress = IP Address:
+noConnect = not connected
+spaceUsed = Space used %.1f%%
+gameFix = Game Fix:
+noFixes = none
+Hungarian = Hungarian
 
 ###########
 # Buttons #
@@ -191,3 +214,4 @@ titlesB = Titoli
 restoreB = Restore
 fatB = Fat
 thinB = Thin
+manageB = Manage

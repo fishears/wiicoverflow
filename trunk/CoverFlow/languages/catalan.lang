@@ -169,6 +169,23 @@ sortingGL = Ordenant llista de jocs
 initWBFS_GL = Inicialitzant llista de jocs WBFS...
 getEntryWBFS = Recuperant entrades...
 noCreateWCFXML = No puc crear wiicoverflow.xml
+downloadCheatFile = Download missing cheat file?
+downloadComplete = Download Complete
+noTxtCodes = txt codes not available
+errorHTTP = HTTP ERROR
+useCodes = Use these codes?
+errOpenGCT = Could not create (or Open) GCT.
+coverZoom = CovZoom:
+fallDist = FallDist:
+infoHDD = HDD Info:  %.2f GB used,  %.2f GB free
+instGames = Installed Games: %d
+sysInfo = System information
+ipAddress = IP Address:
+noConnect = not connected
+spaceUsed = Space used %.1f%%
+gameFix = Game Fix:
+noFixes = none
+Hungarian = Hungarian
 
 ###########
 # Buttons #
@@ -197,3 +214,4 @@ titlesB = Títols
 restoreB = Restaurar
 fatB = Ample
 thinB = Estret
+manageB = Manage

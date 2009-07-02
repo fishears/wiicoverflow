@@ -183,6 +183,9 @@ sysInfo = Information système
 ipAddress = Adresse IP: 
 noConnect = Pas de connection
 spaceUsed = Espace utilisé %.1f%%
+gameFix = Game Fix:
+noFixes = none
+Hungarian = Hungarian
 
 ###########
 # Buttons #
@@ -211,3 +214,4 @@ titlesB = Titres
 restoreB = Restaurer
 fatB = Gros
 thinB = Plat
+manageB = Manage
