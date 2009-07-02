@@ -705,6 +705,12 @@ void Settings_Menu_Show()
 						languageLoad();
 						Label_Buttons();
 					}
+					else if (Button_Select(&flagHUButton, pointer.p_x, pointer.p_y))
+					{
+						strcpy(settings.localLanguage, "hu-HUN");
+						languageLoad();
+						Label_Buttons();
+					}
 					else if (Button_Select(&flagITButton, pointer.p_x, pointer.p_y))
 					{
 						strcpy(settings.localLanguage, "it-ITA");
@@ -784,6 +790,7 @@ void Settings_Menu_Show()
 				Button_Flag_Paint(&flagDKButton);
 				Button_Flag_Paint(&flagESButton);
 				Button_Flag_Paint(&flagCTButton);
+				Button_Flag_Paint(&flagHUButton);
 				if (bMyFile) Button_Flag_Paint(&flagMyLangButton);
 				
 				// Check for button-pointer intersections, and rumble
@@ -804,6 +811,7 @@ void Settings_Menu_Show()
 					Button_Hover(&flagDKButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagESButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&flagCTButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&flagHUButton, pointer.p_x, pointer.p_y) ||
 					(bMyFile == true) ? Button_Hover(&flagMyLangButton, pointer.p_x, pointer.p_y) : false
 				   )
 				{

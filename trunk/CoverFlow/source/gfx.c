@@ -80,6 +80,7 @@ void LoadTextures()
 	GRRLIB_LoadTexturePNG(&flag_fi_texture,flag_fi_png);
 	GRRLIB_LoadTexturePNG(&flag_MyLang_texture,flag_MyLang_png);
 	GRRLIB_LoadTexturePNG(&flag_dk_texture,flag_dk_png);
+	GRRLIB_LoadTexturePNG(&flag_hu_texture,flag_hu_png);
 	GRRLIB_LoadTexturePNG(&hdspace_texture,hdspace_png);
 	GRRLIB_LoadTexturePNG(&button_round_info_texture,button_round_info_png);
 	GRRLIB_LoadTexturePNG(&button_round_info_over_texture,button_round_info_over_png);	
@@ -316,19 +317,24 @@ void Init_Buttons()
 // Language Settings Panel
 	Duplicate_Button(&langupButton, vidupButton,321,90);
     Duplicate_Button(&langdownButton, viddownButton, 293,90);
-	Button_Flag_Init(&flagUSButton, flag_us_png, 166, 150, TX.English); 
-	Button_Flag_Init(&flagITButton, flag_it_png, 296, 150, TX.Italian); 
-	Button_Flag_Init(&flagDEButton, flag_de_png, 426, 150, TX.German);
-	Button_Flag_Init(&flagTRButton, flag_tr_png, 166, 220, TX.Turkish); 
-	Button_Flag_Init(&flagBRButton, flag_br_png, 296, 220, TX.PortugueseBR); 
-	Button_Flag_Init(&flagFRButton, flag_fr_png, 426, 220, TX.French);
-	Button_Flag_Init(&flagDAButton, flag_da_png, 166, 290, TX.Dutch);
-	Button_Flag_Init(&flagFIButton, flag_fi_png, 296, 290, TX.Finnish); 
-	Button_Flag_Init(&flagDKButton, flag_dk_png, 426, 290, TX.Danish); 
-	Button_Flag_Init(&flagESButton, flag_es_png, 166, 360, TX.Spanish); 
-	Button_Flag_Init(&flagCTButton, flag_ct_png, 296, 360, TX.Catalan); 
-	Button_Flag_Init(&flagMyLangButton, flag_MyLang_png, 426, 360, TX.MyLanguage);
-			
+	Button_Flag_Init(&flagUSButton, flag_us_png, 108, 150, TX.English); 
+	Button_Flag_Init(&flagDEButton, flag_de_png, 233, 150, TX.German);
+	Button_Flag_Init(&flagITButton, flag_it_png, 358, 150, TX.Italian); 
+	Button_Flag_Init(&flagFRButton, flag_fr_png, 483, 150, TX.French);
+	
+	Button_Flag_Init(&flagDAButton, flag_da_png, 108, 220, TX.Dutch);
+	Button_Flag_Init(&flagESButton, flag_es_png, 233, 220, TX.Spanish); 
+	Button_Flag_Init(&flagDKButton, flag_dk_png, 358, 220, TX.Danish); 
+	Button_Flag_Init(&flagFIButton, flag_fi_png, 483, 220, TX.Finnish);
+	
+	Button_Flag_Init(&flagBRButton, flag_br_png, 108, 290, TX.PortugueseBR); 
+	Button_Flag_Init(&flagCTButton, flag_ct_png, 233, 290, TX.Catalan); 
+	Button_Flag_Init(&flagTRButton, flag_tr_png, 358, 290, TX.Turkish); 
+	Button_Flag_Init(&flagHUButton, flag_hu_png, 483, 290, TX.Hungarian); 
+	
+	Button_Flag_Init(&flagMyLangButton, flag_MyLang_png, 483, 360, TX.MyLanguage);
+
+		
 	// Game Settings Screen Buttons
 	Button_Init(&lockButton, button_round_lock_png, button_round_lock_over_png, 543, 120 + YOS_GSDB);
 	Button_Init(&unlockButton, button_round_unlock_png, button_round_unlock_over_png, 543, 120 + YOS_GSDB);
@@ -1643,6 +1649,7 @@ void freeResources(){
 	free(flag_es_texture.data);
 	free(flag_ct_texture.data);
 	free(flag_fi_texture.data);
+	free(flag_hu_texture.data);
 	free(flag_MyLang_texture.data);
 	//if (coverLoaded)free(current_cover_texture.data); // now in mem2
 	free(hdspace_texture.data);
@@ -1737,6 +1744,7 @@ void freeResources(){
 	FreeButtonResources(&flagDKButton);
 	FreeButtonResources(&flagESButton);
 	FreeButtonResources(&flagCTButton);
+	FreeButtonResources(&flagHUButton);
 	FreeButtonResources(&flagMyLangButton);
 	// Game Settings Screen Buttons
     FreeButtonResources(&gvidtvonButton);
@@ -1913,6 +1921,7 @@ void Label_Buttons()
 	strcopy( flagDKButton.ttf_label, TX.Danish, 15);
 	strcopy( flagESButton.ttf_label, TX.Spanish, 15);	
 	strcopy( flagCTButton.ttf_label, TX.Catalan, 15);
+	strcopy( flagHUButton.ttf_label, TX.Hungarian, 15);
 	strcopy( flagMyLangButton.ttf_label, TX.MyLanguage, 15);
  #ifdef CHEAT_MANAGER
 	strcopy( manageCheatsButton.ttf_label, TX.manageB, 15);
