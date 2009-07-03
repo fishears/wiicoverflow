@@ -16,7 +16,7 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 	s32  ret;
 	struct discHdr *header = &gameList[id];
 
-	sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c%c.png", header->id[0],header->id[1],header->id[2],header->id[3]);
+	sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c%c%c%c.png", header->id[0],header->id[1],header->id[2],header->id[3],header->id[4],header->id[5]);
 
 	ret = Fat_ReadFile(filepath, &imgData);
 	
@@ -31,7 +31,7 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 	}
 	else
 	{
-		sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c.png", header->id[0],header->id[1],header->id[2]);
+		sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c%c%c%c.png", header->id[0],header->id[1],header->id[2], header->id[3],header->id[4],header->id[5]);
 		ret = Fat_ReadFile(filepath, &imgData);
 		
 		if (ret > 0)
@@ -142,7 +142,7 @@ void Download_Cover(char* id, int v, int max)
 		} 
 		else
 		{
-			snprintf(imgPath, sizeof(imgPath), "%s/3dcovers/%c%c%c%c.png", USBLOADER_PATH, id[0], id[1], id[2], id[3]);
+			snprintf(imgPath, sizeof(imgPath), "%s/3dcovers/%c%c%c%c%c%c.png", USBLOADER_PATH, id[0], id[1], id[2], id[3], id[4], id[5]);
 		}
 		
 		sprintf(self.debugMsg, TX.checkPresence, imgPath);
@@ -177,11 +177,14 @@ void Download_Cover(char* id, int v, int max)
 #else
 			if(!(settings.covers3d))
 			{
-				sprintf(url, "http://www.wiiboxart.com/resize/%s/160/224/%s.png", region, id);
+				sprintf(url,"http://wiitdb.com/wiitdb/artwork/cover/EN/%c%c%c%c%c%c.png", id[0], id[1], id[2], id[3], id[4], id[5]);
+				//sprintf(url, "http://www.wiiboxart.com/resize/%s/160/224/%s.png", region, id);
 			}
 			else
 			{
-				sprintf(url, "http://www.wiiboxart.com/fullcover/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
+				sprintf(url, "http://wiitdb.com/wiitdb/artwork/coverfull/EN/%s.png", id);
+				//sprintf(url, "http://wiicover.gateflorida.com/sites/default/files/cover/Full%%20Cover/%c%c%c%c%c%c.PNG", id[0], id[1], id[2], id[3], id[4], id[5]);
+				//sprintf(url, "http://www.wiiboxart.com/fullcover/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
 			}
 			strcopy(urlShow, url, sizeof(url));
 
@@ -191,7 +194,7 @@ void Download_Cover(char* id, int v, int max)
 		
 			file = downloadfile(url);
 			
-			if(file.data != NULL && file.size != 7386 && file.size != 36864 && file.size >= 1024){ //site return a black image of 184 bytes if the image is not found
+			if(file.data != NULL && file.size != 3745 && file.size != 7386 && file.size != 36864 && file.size >= 1024){ //site return a black image of 184 bytes if the image is not found
 				saveFile(imgPath, file);
 				free(file.data);
 				sprintf(self.debugMsg, TX.done );
@@ -204,7 +207,7 @@ void Download_Cover(char* id, int v, int max)
 			}
 		}
 		
-		snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c%c.png", USBLOADER_PATH,  id[0], id[1], id[2], id[3]);
+		snprintf(imgPath, sizeof(imgPath), "%s/disks/%c%c%c%c%c%c.png", USBLOADER_PATH, id[0], id[1], id[2], id[3], id[4], id[5]);
 		sprintf(self.debugMsg, TX.checkPresence, imgPath);
 		Paint_Progress_Generic(v, max,self.debugMsg);
 		
@@ -224,7 +227,8 @@ void Download_Cover(char* id, int v, int max)
 				sprintf(urlShow, "http://www.wiiboxart.com/diskartloader/160/160/../../%c%c%c%c.png", id[0], id[1], id[2], id[3]);
 				}
 #else
-			sprintf(url, "http://www.wiiboxart.com/diskart/160/160/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
+			//sprintf(url, "http://www.wiiboxart.com/diskart/160/160/%c%c%c%c.png", id[0], id[1], id[2], id[3]);
+			sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/EN/%c%c%c%c%c%c.png", id[0], id[1], id[2], id[3], id[4], id[5]);
 			strcopy(urlShow, url, sizeof(url));
 #endif	
 			sprintf(self.debugMsg, TX.getting, urlShow);
@@ -232,7 +236,7 @@ void Download_Cover(char* id, int v, int max)
 			
 			file = downloadfile(url);
 			
-			if(file.data != NULL && file.size != 7386 && file.size != 36864 && file.size >= 1024){ //site return a generic of 7386 bytes image is not found
+			if(file.data != NULL && file.size != 3745 && file.size != 7386 && file.size != 36864 && file.size >= 1024){ //site return a generic of 7386 bytes image is not found
 				saveFile(imgPath, file);
 				free(file.data);
 				sprintf(self.debugMsg, TX.done );
@@ -249,7 +253,8 @@ void Download_Cover(char* id, int v, int max)
 					sprintf(urlShow, "http://www.wiiboxart.com/diskartloader/160/160/../../%c%c%c.png", id[0], id[1], id[2]);
 					}
 #else
-				sprintf(url, "http://www.wiiboxart.com/diskart/160/160/%c%c%c.png", id[0], id[1], id[2]);
+				//sprintf(url, "http://www.wiiboxart.com/diskart/160/160/%c%c%c.png", id[0], id[1], id[2]);
+				sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/EN/%c%c%c%c%c%c.png", id[0], id[1], id[2], id[3], id[4], id[5]);
 				strcopy(urlShow, url, sizeof(url));
 #endif
 				sprintf(self.debugMsg, TX.getting, urlShow);
@@ -257,7 +262,7 @@ void Download_Cover(char* id, int v, int max)
 				
 				file = downloadfile(url);
 			
-				if(file.data != NULL && file.size != 7386 && file.size != 36864 && file.size >= 1024){ //site return a generic of 7386 bytes image is not found
+				if(file.data != NULL && file.size != 3745 && file.size != 7386 && file.size != 36864 && file.size >= 1024){ //site return a generic of 7386 bytes image is not found
 					saveFile(imgPath, file);
 					free(file.data);
 					sprintf(self.debugMsg, TX.done );

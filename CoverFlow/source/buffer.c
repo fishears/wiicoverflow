@@ -246,7 +246,8 @@ void HandleLoadRequest(int index,int threadNo)
 		}
 		else
 		{
-			snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
+			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
+			snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%s.png", _cq.requestId[index]->id);
 		}
 		
 		int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
