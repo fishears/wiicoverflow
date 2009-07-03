@@ -1,12 +1,13 @@
 #labels Featured
 == RC9 (July ? 2009) ==
 
--NEW-
-  * 
 -FIX-
   * Fix code dump on adding new games if cover was not found
   * Fix bug that corrupted xml files
   * Fix some minor bugs
+-OTHER-
+  * Changed default cover server, current one is www.wiitdb.com
+  * All images (2d/3d cover and disc art are 6 digits only)
 
 ----
 == RC8 (June 29 2009) ==
