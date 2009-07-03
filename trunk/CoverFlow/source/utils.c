@@ -242,12 +242,18 @@ void apply_settings()
     //this overwrites global settings with the per-game settings
     if(gameSetting.ocarina != -1)
     {
-        settings.ocarina = gameSetting.ocarina;
+		settings.ocarina = gameSetting.ocarina;
         settings.hooktype = gameSetting.hooktype;
         settings.language = gameSetting.language;
         settings.video = gameSetting.video;
         settings.vipatch = gameSetting.vipatch;
-        switch (gameSetting.fixtype)
+    }
+	
+}
+
+void apply_fixsettings()
+{
+	switch (gameSetting.fixtype)
 	{
 		case 0:  // None
 			self.enableError002Fix = false;
@@ -265,9 +271,10 @@ void apply_settings()
 			self.enableError002Fix = false;
 			self.enableAnti002Fix  = false;
 	}
-    }
-	
 }
+
+
+
 
 bool networkInit(char *ip)
 {
