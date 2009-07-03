@@ -862,7 +862,7 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf14pt, 320, 370, "Xtend, aHMET, onyxdata, Tusk", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
 				
 				CFreeTypeGX_DrawText(ttf16pt, 320, 430, "Flag icons courtesy of www.icondrawer.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 450, "Covers courtesy of www.wiiboxart.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 450, "Covers courtesy of www.wiitdb.com and www.wiiboxart.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Check for button-pointer intersections, and rumble
 				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
