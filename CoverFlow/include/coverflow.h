@@ -95,7 +95,7 @@
 
 
 
-#define RELEASE              "RC8"
+#define RELEASE              "RC9"
 
 #define ANIMATE_SPEED 0
 #define FLIP_SPEED  0.016

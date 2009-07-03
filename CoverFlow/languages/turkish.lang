@@ -136,7 +136,7 @@ noFreeSpace = Gerekli boş alan yok!
 formatPartition = %s Bölümü Biçimlendiriliyor
 addAGame = Lütfen bir oyun yükleyin...
 getAddData = İndir
-errTitles = Titles.txt indirmede hata|Dosya indirilirken veya| kaydedilirken hata oluştu!
+errTitles = Titles.txt indirmede hata|Dosya indirilirken veya|kaydedilirken hata oluştu!
 successTitles = %d oyun başarıyla alındı!
 errNetTitles = Ağa bağlantıda hata|Titles.txt indirilemez.
 Success = Başarılı!
@@ -169,27 +169,27 @@ sortingGL = Oyun listesi sıralanıyor
 initWBFS_GL = WBFS oyun listesi başlatılıyor
 getEntryWBFS = Girişler alınıyor
 noCreateWCFXML = wiicoverflow.xml oluşturulamıyor
-downloadCheatFile = Download missing cheat file?
-downloadComplete = Download Complete
-noTxtCodes = txt codes not available
-errorHTTP = HTTP ERROR
-useCodes = Use these codes?
-errOpenGCT = Could not create (or Open) GCT.
+downloadCheatFile = Eksik hile dosyasını indir?
+downloadComplete = İndirme Tamamlandı
+noTxtCodes = txt kodları kullanılabilir değil
+errorHTTP = HTTP HATASI
+useCodes = Bu kodları kullan?
+errOpenGCT = GCT oluşturulamıyor veya açılamıyor.
 coverZoom = CovZoom:
 fallDist = FallDist:
-infoHDD = HDD Info:  %.2f GB used,  %.2f GB free
-instGames = Installed Games: %d
-sysInfo = System information
-ipAddress = IP Address:
-noConnect = not connected
-spaceUsed = Space used %.1f%%
-gameFix = Game Fix:
-noFixes = none
-Hungarian = Hungarian
+infoHDD = HDD Bilgisi:  %.2f GB dolu,  %.2f GB boş
+instGames = Kurulu Oyun: %d
+sysInfo = Sistem Bilgisi
+ipAddress = IP Adresi:
+noConnect = bağlı değil
+spaceUsed = Kullanılan alan %.1f%%
+gameFix = Oyun Düzeltmesi:
+noFixes = yok
+Hungarian = Macarca
 
-###########
-# Buttons #
-###########
+############
+# Butonlar #
+############
 
 addB = ekle
 deleteB = Sil
@@ -214,4 +214,4 @@ titlesB = Oyun Adları
 restoreB = Geri Yükle
 fatB = Kalın
 thinB = İnce
-manageB = Manage
+manageB = Yönet
