@@ -1,14 +1,14 @@
 #labels Featured
-== RC8U1 (? ? 2009) ==
+== RC9 (July ? 2009) ==
 
 -NEW-
   * 
 -FIX-
   * Fix code dump on adding new games if cover was not found
+  * Fix bug that corrupted xml files
   * Fix some minor bugs
--OTHER-
 
-
+----
 == RC8 (June 29 2009) ==
 
 -NEW-
@@ -17,7 +17,6 @@
 -FIX-
   * Use improved libfat instead of devkitpro lib fat. (Cover Load Speed Fix)
   * Fix some issues with info button/screen
--OTHER-
  
 ----
 == RC7U2 (June 27 2009) ==
@@ -27,7 +26,6 @@
   * DeviceID at System Infos
 -FIX-
   * Minor bug fixes
--OTHER-
  
 ----
 == RC7U1 (June 25 2009) ==
@@ -41,8 +39,6 @@
 -FIX-
   * Hide info button when parental controls on
   * Minor bug fixes
-
--OTHER-
 
 ----
 == RC7 (June 22 2009) ==
