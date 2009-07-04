@@ -789,6 +789,9 @@ int DrawLoadGameDialog(bool load, bool hover)
 		sprintf(tTemp, TX.size, self.gsize);
 		CFreeTypeGX_DrawText(ttf16pt, 270, 278, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 		
+		sprintf(tTemp, "GameID:  %s", (char*)header->id);
+		CFreeTypeGX_DrawText(ttf16pt, 270, 303, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+		
 		// Draw the cover image
 		if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 			GRRLIB_DrawImg(86+self.animate_slide_x+self.animate_load,170, current_cover_texture, self.animate_rotate, AR_16_9, AR_16_9, 0xFFFFFFFF);
