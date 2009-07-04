@@ -1,5 +1,5 @@
 #labels Featured
-== RC9 - Independece Day Edition (July 4 2009) ==
+== RC9 - Independence Day Edition (July 4 2009) ==
 
 -NEW-
   * Support for country specific covers (falling back to EN for PAL games, or US for NTSC if covers are not found)
