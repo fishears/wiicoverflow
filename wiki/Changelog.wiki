@@ -9,7 +9,7 @@
   * Fix some minor bugs
 -OTHER-
   * Changed default cover server, current one is www.wiitdb.com
-  * All images (2d/3d cover and disc art are 6 digits only)
+  * All images (2d/3d cover and disc art) are 6 digits only
 
 ----
 == RC8 (June 29 2009) ==
