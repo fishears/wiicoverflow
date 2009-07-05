@@ -88,9 +88,8 @@ void Download_Cover(char* id, int v, int max)
 		return;
 		
 	char url[100];
-	char urlShow[100];
 	
-	struct block file;
+	//struct block file;
 
 	/*
 	char region[5];
@@ -110,8 +109,9 @@ void Download_Cover(char* id, int v, int max)
 	*/
 	
 	char country[3];
+	char systemLang[3];
 	
-	switch (id[3]){
+	switch(id[3]){
 		case 'J':
 			sprintf(country, "JA");
 			break;
@@ -136,6 +136,40 @@ void Download_Cover(char* id, int v, int max)
 			break;
 		default:
 			sprintf(country, "EN");
+	}
+
+	switch(CONF_GetLanguage()){
+		
+		case CONF_LANG_JAPANESE:
+			sprintf(systemLang, "JA");
+			break;
+		case CONF_LANG_ENGLISH:
+			sprintf(systemLang, "EN");
+			break;
+		case CONF_LANG_GERMAN:
+			sprintf(systemLang, "DE");
+			break;
+		case CONF_LANG_FRENCH:
+			sprintf(systemLang, "FR");
+			break;		
+		case CONF_LANG_SPANISH:
+			sprintf(systemLang, "ES");
+			break;
+		case CONF_LANG_ITALIAN:
+			sprintf(systemLang, "IT");
+			break;
+		case CONF_LANG_DUTCH:
+			sprintf(systemLang, "NL");
+			break;
+		case CONF_LANG_SIMP_CHINESE:
+			sprintf(systemLang, "EN");   // default to EN for chinese
+			break;
+		case CONF_LANG_TRAD_CHINESE:
+			sprintf(systemLang, "EN");   // default to EN for chinese
+			break;
+		case CONF_LANG_KOREAN:
+			sprintf(systemLang, "NL");
+			break;
 	}
 
 	if(!(settings.covers3d))
@@ -167,54 +201,31 @@ void Download_Cover(char* id, int v, int max)
 			sprintf(url,"http://wiitdb.com/wiitdb/artwork/cover/%s/%s.png", country, id);
 		else
 			sprintf(url, "http://wiitdb.com/wiitdb/artwork/coverfull/%s/%s.png", country, id);
-			
-		strcopy(urlShow, url, sizeof(url));
-	
-		sprintf(self.debugMsg, TX.getting, urlShow);
-		Paint_Progress_Generic(v, max,self.debugMsg);
-	
-		file = downloadfile(url);
 		
-		//if(file.data != NULL && file.size != 3745 && file.size != 7386 && file.size != 36864 && file.size >= 1024){ //site return a black image of 184 bytes if the image is not found
-		if(file.data != NULL && file.size >= 1024){
-			saveFile(imgPath, file);
-			free(file.data);
-			sprintf(self.debugMsg, TX.done );
-			Paint_Progress_Generic(v, max,self.debugMsg);
-		}
-		else {
-			if(file.data != NULL)
-				free(file.data);
-				
-			sprintf(self.debugMsg, TX.someErrors );
-			Paint_Progress_Generic(v, max,self.debugMsg);
+		if(!getCoverFromServer(url, imgPath, v, max)){
 			
-			//FALLBACK (ugly code)
-			if(id[3] != 'E' && id[3] != 'J'){ //PAL default to EN
-				if(!(settings.covers3d))
-					sprintf(url,"http://wiitdb.com/wiitdb/artwork/cover/EN/%s.png", id);
-				else
-					sprintf(url, "http://wiitdb.com/wiitdb/artwork/coverfull/EN/%s.png", id);
-			}
-			else{
-				if(!(settings.covers3d))
-					sprintf(url,"http://wiitdb.com/wiitdb/artwork/cover/US/%s.png", id);
-				else
-					sprintf(url, "http://wiitdb.com/wiitdb/artwork/coverfull/US/%s.png", id);
-			}
+			if(!(settings.covers3d))
+				sprintf(url,"http://wiitdb.com/wiitdb/artwork/cover/%s/%s.png", systemLang, id);
+			else
+				sprintf(url, "http://wiitdb.com/wiitdb/artwork/coverfull/%s/%s.png", systemLang, id);
 			
-			strcopy(urlShow, url, sizeof(url));
-	
-			sprintf(self.debugMsg, TX.getting, urlShow);
-			Paint_Progress_Generic(v, max,self.debugMsg);
+			if(!getCoverFromServer(url, imgPath, v, max)){
+			
+				//FALLBACK (ugly code)
+				if(id[3] != 'E' && id[3] != 'J'){ //PAL default to EN
+					if(!(settings.covers3d))
+						sprintf(url,"http://wiitdb.com/wiitdb/artwork/cover/EN/%s.png", id);
+					else
+						sprintf(url, "http://wiitdb.com/wiitdb/artwork/coverfull/EN/%s.png", id);
+				}
+				else{
+					if(!(settings.covers3d))
+						sprintf(url,"http://wiitdb.com/wiitdb/artwork/cover/US/%s.png", id);
+					else
+						sprintf(url, "http://wiitdb.com/wiitdb/artwork/coverfull/US/%s.png", id);
+				}
 		
-			file = downloadfile(url);
-
-			if(file.data != NULL && file.size >= 1024){
-				saveFile(imgPath, file);
-				free(file.data);
-				sprintf(self.debugMsg, TX.done );
-				Paint_Progress_Generic(v, max,self.debugMsg);
+				getCoverFromServer(url, imgPath, v, max);
 			}
 		}
 	}
@@ -228,59 +239,53 @@ void Download_Cover(char* id, int v, int max)
 	Paint_Progress_Generic(v, max,self.debugMsg);
 	
 	fp = fopen(imgPath, "rb");
-	if (fp)
+	if(fp)
 	{
 		fclose (fp);
 		sprintf(self.debugMsg, TX.noDownload, imgPath);
 		Paint_Progress_Generic(v, max,self.debugMsg);
 	}
-	else{
-	
+	else
+	{	
 		sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/%s/%s.png", country, id);
-		strcopy(urlShow, url, sizeof(url));
 		
-		sprintf(self.debugMsg, TX.getting, urlShow);
-		Paint_Progress_Generic(v, max,self.debugMsg);
-		
-		file = downloadfile(url);
-		
-		//if(file.data != NULL && file.size != 3745 && file.size != 7386 && file.size != 36864 && file.size >= 1024){ //site return a generic of 7386 bytes image is not found
-		if(file.data != NULL && file.size >= 1024){
-			saveFile(imgPath, file);
-			free(file.data);
-			sprintf(self.debugMsg, TX.done );
-			Paint_Progress_Generic(v, max,self.debugMsg);
-		}
-		else{
+		if(!getCoverFromServer(url, imgPath, v, max))
+		{
+			sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/%s/%s.png", systemLang, id);
 			
-			if(file.data != NULL)
-				free(file.data);
+			if(!getCoverFromServer(url, imgPath, v, max)){
+				//FALLBACK (ugly code)
+				if(id[3] != 'E' && id[3] != 'J') //PAL default to EN
+					sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/EN/%s.png", id);
+				else
+					sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/US/%s.png", id);
 				
-			sprintf(self.debugMsg, TX.someErrors );
-			Paint_Progress_Generic(v, max,self.debugMsg);
-			
-			//FALLBACK (ugly code)
-			if(id[3] != 'E' && id[3] != 'J') //PAL default to EN
-				sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/EN/%s.png", id);
-			else
-				sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/US/%s.png", id);
-				
-			strcopy(urlShow, url, sizeof(url));
-	
-			sprintf(self.debugMsg, TX.getting, urlShow);
-			Paint_Progress_Generic(v, max,self.debugMsg);
-		
-			file = downloadfile(url);
-
-			if(file.data != NULL && file.size >= 1024){
-				saveFile(imgPath, file);
-				free(file.data);
-				sprintf(self.debugMsg, TX.done );
-				Paint_Progress_Generic(v, max,self.debugMsg);
+				getCoverFromServer(url, imgPath, v, max);
 			}
 		}
 	}
 } /* end download */
+
+
+bool getCoverFromServer(char* url, char* imgPath, int v, int max){
+
+	struct block file;
+
+	sprintf(self.debugMsg, TX.getting, url);
+	Paint_Progress_Generic(v, max,self.debugMsg);
+
+	file = downloadfile(url);
+
+	if(file.data != NULL && file.size >= 1024){
+		saveFile(imgPath, file);
+		free(file.data);
+		sprintf(self.debugMsg, TX.done );
+		Paint_Progress_Generic(v, max,self.debugMsg);
+		return true;
+	}
+	
+	return false;
+}
 
 void batchDownloadCover(struct discHdr *gameList)
 {
