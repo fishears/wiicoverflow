@@ -447,9 +447,10 @@ char * ParseTokenedUrl(char * url, char* username, char* password, char * lang, 
 	char * ret;
 	int nChars=0;
 	char * token;
-	ret=(char *)malloc(MAX_URL_SIZE);
-	token=(char *)malloc(MAX_URL_SIZE);
-	if (token<0) return NULL;
+	ret=(char *)GetSlotBufferAddress(11);
+	memset(ret,0,128);
+	token=(char *)GetSlotBufferAddress(12);
+	memset(token,0,128);
 	int i,pos=0;
 	int tokenPos=0;
 	bool inToken=false;
@@ -489,7 +490,7 @@ char * ParseTokenedUrl(char * url, char* username, char* password, char * lang, 
 
 		}
 	}
-	free(token);
+	//free(token);
 	return ret;
 }
 

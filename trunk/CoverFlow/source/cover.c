@@ -1,5 +1,9 @@
 #include "cover.h"
+#include "utils.h"
 
+#define COVERS_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/cover/[Lang]/[GameID].png"
+#define COVERS_LOCATION_LANG_FULL "http://wiitdb.com/wiitdb/artwork/coverfull/[Lang]/[GameID].png"
+#define DISKART_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/disk/[Lang]/[GameID].png"
 extern s_self self;
 extern s_settings settings;
 extern s_gameSettings gameSetting;
@@ -87,11 +91,8 @@ void Download_Cover(char* id, int v, int max)
 	if (!id)
 		return;
 		
-	char url[100];
-	
 	//struct block file;
 
-	/*
 	char region[5];
 	
 	switch(id[3]){
@@ -106,7 +107,6 @@ void Download_Cover(char* id, int v, int max)
 			sprintf(region,"pal");
 			break;
 	}
-	*/
 	
 	char country[3];
 	char systemLang[3];
@@ -187,6 +187,7 @@ void Download_Cover(char* id, int v, int max)
 	FILE *fp=NULL;
 	if (!BUFFER_IsCoverMissing(v)) // don't try and read the file if the cover is bad
 		fp = fopen(imgPath, "rb");
+		char * parsedUrl;
 		
 	if (fp)
 	{
@@ -198,34 +199,49 @@ void Download_Cover(char* id, int v, int max)
 	else{ // cover not found, we try to download it
 
 		if(!(settings.covers3d))
-			sprintf(url,"http://wiitdb.com/wiitdb/artwork/cover/%s/%s.png", country, id);
+		{
+			parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword",systemLang,region,id);
+		}
 		else
-			sprintf(url, "http://wiitdb.com/wiitdb/artwork/coverfull/%s/%s.png", country, id);
-		
-		if(!getCoverFromServer(url, imgPath, v, max)){
-			
+		{
+			parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword",systemLang,region,id);
+		}
+
+		if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
 			if(!(settings.covers3d))
-				sprintf(url,"http://wiitdb.com/wiitdb/artwork/cover/%s/%s.png", systemLang, id);
+			{
+				parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword",country,region,id);
+			}
 			else
-				sprintf(url, "http://wiitdb.com/wiitdb/artwork/coverfull/%s/%s.png", systemLang, id);
+			{
+				parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword",country,region,id);
+			}
 			
-			if(!getCoverFromServer(url, imgPath, v, max)){
+			if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
 			
 				//FALLBACK (ugly code)
 				if(id[3] != 'E' && id[3] != 'J'){ //PAL default to EN
 					if(!(settings.covers3d))
-						sprintf(url,"http://wiitdb.com/wiitdb/artwork/cover/EN/%s.png", id);
+					{
+						parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword","EN",region,id);
+					}
 					else
-						sprintf(url, "http://wiitdb.com/wiitdb/artwork/coverfull/EN/%s.png", id);
+					{
+						parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword","EN",region,id);
+					}
 				}
 				else{
 					if(!(settings.covers3d))
-						sprintf(url,"http://wiitdb.com/wiitdb/artwork/cover/US/%s.png", id);
+					{
+						parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword","US",region,id);
+					}
 					else
-						sprintf(url, "http://wiitdb.com/wiitdb/artwork/coverfull/US/%s.png", id);
+					{
+						parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword","US",region,id);
+					}
 				}
-		
-				getCoverFromServer(url, imgPath, v, max);
+	
+				getCoverFromServer(parsedUrl, imgPath, v, max);
 			}
 		}
 	}
@@ -246,21 +262,22 @@ void Download_Cover(char* id, int v, int max)
 		Paint_Progress_Generic(v, max,self.debugMsg);
 	}
 	else
-	{	
-		sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/%s/%s.png", country, id);
+	{
+		parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword",systemLang,region,id);
 		
-		if(!getCoverFromServer(url, imgPath, v, max))
+		if(!getCoverFromServer(parsedUrl, imgPath, v, max))
 		{
-			sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/%s/%s.png", systemLang, id);
+
+			parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword",country,region,id);
 			
-			if(!getCoverFromServer(url, imgPath, v, max)){
+			if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
 				//FALLBACK (ugly code)
 				if(id[3] != 'E' && id[3] != 'J') //PAL default to EN
-					sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/EN/%s.png", id);
+					parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword","EN",region,id);
 				else
-					sprintf(url, "http://wiitdb.com/wiitdb/artwork/disc/US/%s.png", id);
+					parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword","US",region,id);
 				
-				getCoverFromServer(url, imgPath, v, max);
+				getCoverFromServer(parsedUrl, imgPath, v, max);
 			}
 		}
 	}

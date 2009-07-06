@@ -55,7 +55,7 @@ int GraphicModes[GRAPHIC_MODES][2] =
 };
 
 // this is the chunk of MEM2 allocated for other tasks (i.e. things that don't fit in normal memory)
-#define BUFFER_SLOTS 11
+#define BUFFER_SLOTS 13
 
 
 unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
@@ -71,6 +71,8 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	512, //8 Cheat Manager Array 1
 	1920, //9 Cheat Manager Array 2
 	160*160*4, //10 current_cover_texture
+	128,//11 string buffer tokenurlParsing
+	128,//12 string buffer tokenurlParsing
 	0};
 
 // returns the offset to the memory slot required
