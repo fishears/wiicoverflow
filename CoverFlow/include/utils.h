@@ -33,5 +33,6 @@ float easeInQuint(float t,float b , float c, float d);
 float easeOutQuad(float t,float b , float c, float d);
 float easeInQuad(float t,float b , float c, float d);
 float easeOutCubic(float t,float b , float c, float d);
+char * ParseTokenedUrl(char * url, char* username, char* password, char * lang, char * region, char *id);
 
 #endif
