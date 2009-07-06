@@ -109,11 +109,13 @@ void Download_Cover(char* id, int v, int max)
 	}
 	
 	char country[3];
-	char systemLang[3];
 	
 	switch(id[3]){
 		case 'J':
 			sprintf(country, "JA");
+			break;
+		case 'I':
+			sprintf(country, "IT");
 			break;
 		case 'K':
 		case 'T':
@@ -129,47 +131,34 @@ void Download_Cover(char* id, int v, int max)
 		case 'P':
 		case 'X':
 		case 'Y':
-			sprintf(country, "EN");
-			break;
+			switch(CONF_GetLanguage()){
+			case CONF_LANG_ENGLISH:
+				sprintf(country, "EN");
+				break;
+			case CONF_LANG_GERMAN:
+				sprintf(country, "DE");
+				break;
+			case CONF_LANG_FRENCH:
+				sprintf(country, "FR");
+				break;		
+			case CONF_LANG_SPANISH:
+				sprintf(country, "ES");
+				break;
+			case CONF_LANG_ITALIAN:
+				sprintf(country, "IT");
+				break;
+			case CONF_LANG_DUTCH:
+				sprintf(country, "NL");
+				break;
+			default:
+				sprintf(country, "EN");
+				break;
+			}
 		case 'E':
 			sprintf(country, "US");
 			break;
 		default:
 			sprintf(country, "EN");
-	}
-
-	switch(CONF_GetLanguage()){
-		
-		case CONF_LANG_JAPANESE:
-			sprintf(systemLang, "JA");
-			break;
-		case CONF_LANG_ENGLISH:
-			sprintf(systemLang, "EN");
-			break;
-		case CONF_LANG_GERMAN:
-			sprintf(systemLang, "DE");
-			break;
-		case CONF_LANG_FRENCH:
-			sprintf(systemLang, "FR");
-			break;		
-		case CONF_LANG_SPANISH:
-			sprintf(systemLang, "ES");
-			break;
-		case CONF_LANG_ITALIAN:
-			sprintf(systemLang, "IT");
-			break;
-		case CONF_LANG_DUTCH:
-			sprintf(systemLang, "NL");
-			break;
-		case CONF_LANG_SIMP_CHINESE:
-			sprintf(systemLang, "EN");   // default to EN for chinese
-			break;
-		case CONF_LANG_TRAD_CHINESE:
-			sprintf(systemLang, "EN");   // default to EN for chinese
-			break;
-		case CONF_LANG_KOREAN:
-			sprintf(systemLang, "NL");
-			break;
 	}
 
 	if(!(settings.covers3d))
@@ -208,41 +197,30 @@ void Download_Cover(char* id, int v, int max)
 		}
 
 		if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
-			if(!(settings.covers3d))
-			{
-				parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword",systemLang,region,id);
-			}
-			else
-			{
-				parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword",systemLang,region,id);
-			}
 			
-			if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
-			
-				//FALLBACK (ugly code)
-				if(id[3] != 'E' && id[3] != 'J'){ //PAL default to EN
-					if(!(settings.covers3d))
-					{
-						parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword","EN",region,id);
-					}
-					else
-					{
-						parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword","EN",region,id);
-					}
+			//FALLBACK (ugly code)
+			if(id[3] != 'E' && id[3] != 'J'){ //PAL default to EN
+				if(!(settings.covers3d))
+				{
+					parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword","EN",region,id);
 				}
-				else{
-					if(!(settings.covers3d))
-					{
-						parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword","US",region,id);
-					}
-					else
-					{
-						parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword","US",region,id);
-					}
+				else
+				{
+					parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword","EN",region,id);
 				}
+			}
+			else{
+				if(!(settings.covers3d))
+				{
+					parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword","US",region,id);
+				}
+				else
+				{
+					parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword","US",region,id);
+				}
+			}
 	
-				getCoverFromServer(parsedUrl, imgPath, v, max);
-			}
+			getCoverFromServer(parsedUrl, imgPath, v, max);
 		}
 	}
 	
@@ -268,17 +246,13 @@ void Download_Cover(char* id, int v, int max)
 		if(!getCoverFromServer(parsedUrl, imgPath, v, max))
 		{
 
-			parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword",systemLang,region,id);
+			//FALLBACK (ugly code)
+			if(id[3] != 'E' && id[3] != 'J') //PAL default to EN
+				parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword","EN",region,id);
+			else
+				parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword","US",region,id);
 			
-			if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
-				//FALLBACK (ugly code)
-				if(id[3] != 'E' && id[3] != 'J') //PAL default to EN
-					parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword","EN",region,id);
-				else
-					parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword","US",region,id);
-				
-				getCoverFromServer(parsedUrl, imgPath, v, max);
-			}
+			getCoverFromServer(parsedUrl, imgPath, v, max);
 		}
 	}
 } /* end download */
