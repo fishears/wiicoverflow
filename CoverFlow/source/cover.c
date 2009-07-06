@@ -200,21 +200,21 @@ void Download_Cover(char* id, int v, int max)
 
 		if(!(settings.covers3d))
 		{
-			parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword",systemLang,region,id);
+			parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword",country,region,id);
 		}
 		else
 		{
-			parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword",systemLang,region,id);
+			parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword",country,region,id);
 		}
 
 		if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
 			if(!(settings.covers3d))
 			{
-				parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword",country,region,id);
+				parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword",systemLang,region,id);
 			}
 			else
 			{
-				parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword",country,region,id);
+				parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword",systemLang,region,id);
 			}
 			
 			if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
@@ -263,12 +263,12 @@ void Download_Cover(char* id, int v, int max)
 	}
 	else
 	{
-		parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword",systemLang,region,id);
+		parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword",country,region,id);
 		
 		if(!getCoverFromServer(parsedUrl, imgPath, v, max))
 		{
 
-			parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword",country,region,id);
+			parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword",systemLang,region,id);
 			
 			if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
 				//FALLBACK (ugly code)
