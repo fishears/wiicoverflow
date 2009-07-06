@@ -132,28 +132,29 @@ void Download_Cover(char* id, int v, int max)
 		case 'X':
 		case 'Y':
 			switch(CONF_GetLanguage()){
-			case CONF_LANG_ENGLISH:
-				sprintf(country, "EN");
-				break;
-			case CONF_LANG_GERMAN:
-				sprintf(country, "DE");
-				break;
-			case CONF_LANG_FRENCH:
-				sprintf(country, "FR");
-				break;		
-			case CONF_LANG_SPANISH:
-				sprintf(country, "ES");
-				break;
-			case CONF_LANG_ITALIAN:
-				sprintf(country, "IT");
-				break;
-			case CONF_LANG_DUTCH:
-				sprintf(country, "NL");
-				break;
-			default:
-				sprintf(country, "EN");
-				break;
+				case CONF_LANG_ENGLISH:
+					sprintf(country, "EN");
+					break;
+				case CONF_LANG_GERMAN:
+					sprintf(country, "DE");
+					break;
+				case CONF_LANG_FRENCH:
+					sprintf(country, "FR");
+					break;		
+				case CONF_LANG_SPANISH:
+					sprintf(country, "ES");
+					break;
+				case CONF_LANG_ITALIAN:
+					sprintf(country, "IT");
+					break;
+				case CONF_LANG_DUTCH:
+					sprintf(country, "NL");
+					break;
+				default:
+					sprintf(country, "EN");
+					break;
 			}
+			break;
 		case 'E':
 			sprintf(country, "US");
 			break;
