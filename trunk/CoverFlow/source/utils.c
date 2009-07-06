@@ -1,5 +1,8 @@
 #include "utils.h"
 
+#define MAX_URL_SIZE 256
+
+
 extern s_settings settings;
 extern s_gameSettings gameSetting;
 extern s_self self;
@@ -398,4 +401,96 @@ float easeOutCubic(float t, float b , float c, float d)
 {
 	return c*((t=t/d-1)*t*t + 1) + b;
 }
+
+char * GetTokenValue(char * token, char* username, char* password, char * lang, char * region, char * id, int * nChars)
+{
+	char * ret;
+	int ovnChars=0;
+	int thisnChars=0;
+	if (token[strlen(token)-1]>='0' && token[strlen(token)-1]<='9') 
+	{
+		ovnChars=token[strlen(token)-1]-'0';
+		token[strlen(token)-1]=0;
+	}
+	if (strcasecmp(token,"username")==0)
+	{
+		ret=username;
+		thisnChars=strlen(username);
+	}
+	if (strcasecmp(token,"password")==0)
+	{
+		ret=password;
+		thisnChars=strlen(password);
+	}
+	if (strcasecmp(token,"gameID")==0)
+	{
+		ret=id;
+		thisnChars=strlen(id);
+	}
+	if (strcasecmp(token,"lang")==0)
+	{
+		ret=lang;
+		thisnChars=strlen(lang);;
+	}
+	if (strcasecmp(token,"region")==0)
+	{
+		ret=region;
+		thisnChars=strlen(region);
+	}
+	if (ovnChars>0) *nChars=ovnChars;
+	else *nChars=thisnChars;
+	return ret;
+}
+
+char * ParseTokenedUrl(char * url, char* username, char* password, char * lang, char * region, char *id)
+{
+	char * ret;
+	int nChars=0;
+	char * token;
+	ret=(char *)malloc(MAX_URL_SIZE);
+	token=(char *)malloc(MAX_URL_SIZE);
+	if (token<0) return NULL;
+	int i,pos=0;
+	int tokenPos=0;
+	bool inToken=false;
+
+	for (i=0;i<strlen(url);i++)
+	{
+		if (!inToken)
+		{
+			if (url[i]=='[')
+			{
+				inToken=true;
+			}
+			else
+			{
+				ret[pos++]=url[i];
+			}
+		}
+		else
+		{
+			if (url[i]==']')
+			{
+
+				inToken=false;
+				token[tokenPos]=0;
+				char * tokenVal=GetTokenValue(token,username,password,lang,region,id,&nChars);
+				int j;
+				for (j=0;j<nChars;j++)
+				{
+					ret[pos++]=tokenVal[j];
+				}
+				tokenPos=0;
+			}
+			else
+			{
+				token[tokenPos++]=url[i];
+			}
+
+		}
+	}
+	free(token);
+	return ret;
+}
+
 
