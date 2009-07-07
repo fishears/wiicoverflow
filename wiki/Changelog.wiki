@@ -3,8 +3,8 @@
 
 -NEW-
   * Preliminary gamecube games support! (use the konami code after cover are loaded)
-  * Channel available!  (thanks to Davi92 and DjSim1)
-  * Forwader available! (thanks to Davi92 and DjSim1)
+  * Channel available!  (thanks to Davi92 and DjSim1 )
+  * Forwader available! (thanks to Davi92 and DjSim1 )
 
 -FIX-
   * Improved regional cover download (thanks to frederic.martini)
