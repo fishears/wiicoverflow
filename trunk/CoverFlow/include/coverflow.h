@@ -242,6 +242,7 @@ typedef struct{
 	char url_password[40];
 	bool url_fileexist;
 #endif	
+	bool isInit2D;
 } s_self;
 
 
