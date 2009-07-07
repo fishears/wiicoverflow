@@ -86,11 +86,11 @@ void initVars()
 	////////// Fixes //////////////
 	self.enableError002Fix = false;
 	self.enableAnti002Fix = false;
-#ifdef WBA_BY_FILE
-	///// wiiboxart login data /////
-	strcpy(self.wba_username, "");
-	strcpy(self.wba_password, "");
-	self.wba_fileexist = false;
+#ifdef URLBOXART_PASS
+	///// urlboxart login data /////
+	strcpy(self.url_username, "");
+	strcpy(self.url_password, "");
+	self.url_fileexist = false;
 #endif	
 }
 
@@ -257,14 +257,11 @@ int main( int argc, char **argv )
 	
 	WBFS_DiskSpace(&self.usedSpace, &self.freeSpace);
 	ES_GetDeviceID(&self.deviceID);
-#ifdef WBA_BY_FILE	
-	self.wba_fileexist = wbaFileExist();
-	if (self.wba_fileexist)
+#ifdef URLBOXART_PASS	
+	self.url_fileexist = urlFileExist();
+	if (self.url_fileexist)
 		{
-		getWBA_LoginData();
-//		char string[100];
-//		sprintf(string, "user: %s\npw: %s",self.wba_username, self.wba_password);
-//		WindowPrompt("wiiboxart", string, &okButton,0);
+		getURL_LoginData();
 		}
 #endif
 	
