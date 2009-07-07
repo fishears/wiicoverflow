@@ -88,8 +88,6 @@ void LoadTextures()
 
 void DrawBufferedCover(int i, float loc, float zpos, float angle, float falloff)
 {
-	self.isInit2D = false;
-
 	if(i < MAX_BUFFERED_COVERS || i >= 0)
 	{
 		if(BUFFER_IsCoverReady(i))
@@ -146,10 +144,8 @@ void Paint_Progress(float v, char* msg)
 	if(count > 26)
 		count = 26;
 	
-	if (!self.isInit2D){
-		GRRLIB_2D_Init();
-		self.isInit2D = true;
-		}
+	GRRLIB_2D_Init();
+
 	CFreeTypeGX_DrawText(ttf18pt, 320, 220, TX.welcomeMsg, (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
 	for(i = 0; i < count; i++)
 	{
@@ -174,10 +170,7 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 	if(count > 26)
 		count = 26;
 	
-	if (!self.isInit2D){
-		GRRLIB_2D_Init();
-		self.isInit2D = true;
-		}
+	GRRLIB_2D_Init();
 
 	int i;
 	for(i = 0; i < count; i++)
@@ -198,10 +191,7 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 
 void Paint_Progress_FadeInStart()
 {
-	if (!self.isInit2D){
-		GRRLIB_2D_Init();
-		self.isInit2D = true;
-		}
+    GRRLIB_2D_Init();
 
 	int tFade;
 	for(tFade=0xFF;tFade>=0x00;tFade-=8)
@@ -223,10 +213,7 @@ void Paint_Progress_FadeToBG()
 	int tFade;
 	for(tFade=0x00;tFade<=255;tFade+=8)
 	{
-		if (!self.isInit2D){
-			GRRLIB_2D_Init();
-			self.isInit2D = true;
-			}
+		GRRLIB_2D_Init();
 		CFreeTypeGX_DrawText(ttf18pt, 320, 220, TX.welcomeMsg, (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
 		GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
 		GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);

@@ -92,7 +92,6 @@ void initVars()
 	strcpy(self.url_password, "");
 	self.url_fileexist = false;
 #endif
-	self.isInit2D = false;	
 }
 
 
@@ -126,7 +125,7 @@ int main( int argc, char **argv )
 	// Set up the buffer slots 
 	ClearBufferSlotMemory();
     
-	// load the progress bar textures
+	// Init GRRLIB and load the progress bar textures
 	GRRLIB_Init();
 	GRRLIB_LoadTexture(&progress_step_texture,progress_step_png);
     GRRLIB_LoadTexture(&progress_bar_texture,progress_bar_png);
@@ -223,8 +222,9 @@ int main( int argc, char **argv )
 		wait--;
 		self.progress += prog;
 		Paint_Progress(self.progress, self.debugMsg);
-		Sleep(200);
+		Sleep(20);  // fixes progressbar
 	}
+	Sleep(1000);    // fixes progressbar
 	
 	sprintf(self.debugMsg, TX.setBackground );
 	Paint_Progress(self.progress,self.debugMsg);
