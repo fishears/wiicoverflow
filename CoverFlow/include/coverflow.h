@@ -48,6 +48,7 @@
 #include "konami.h"
 #include "cheats.h"
 #include "info.h"
+#include "urlLogin.h"
 
 
 /*DOL TEST*/
@@ -74,7 +75,12 @@
 //#define TEST_MODE 1
 #define DEBUG 1
 #define CHEAT_MANAGER
-
+//#define WBA_BY_FILE           /* Access to wiiboxart with data from file */ 
+  
+ #ifdef WBA_BY_FILE 
+       #define URLBOXART_PASS   "SD:/usb-loader/wiiboxart.pass" 
+ #endif 
+ 
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 
 #define KB_SIZE         1024.0
@@ -231,10 +237,10 @@ typedef struct{
 	
 	bool enableError002Fix;
 	bool enableAnti002Fix;
-#ifdef WBA_BY_FILE	 
-	char wba_username[40];  //wiiboxart.com
-	char wba_password[40];
-	bool wba_fileexist;
+#ifdef URLBOXART_PASS	 
+	char url_username[40];  //wiiboxart.com
+	char url_password[40];
+	bool url_fileexist;
 #endif	
 } s_self;
 
