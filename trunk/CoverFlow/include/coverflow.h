@@ -48,7 +48,7 @@
 #include "konami.h"
 #include "cheats.h"
 #include "info.h"
-#include "wbaLogin.h"
+
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -74,11 +74,6 @@
 //#define TEST_MODE 1
 #define DEBUG 1
 #define CHEAT_MANAGER
-//#define WBA_BY_FILE		/* Access to wiiboxart with data from file */
-
-#ifdef WBA_BY_FILE
-	#define WIIBOXART_PASS	 "SD:/usb-loader/wiiboxart.pass"
-#endif
 
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 
