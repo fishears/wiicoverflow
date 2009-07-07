@@ -2,11 +2,11 @@
 == v1.0  (July ? 2009) ==
 
 -NEW-
-  * 
+  * Channel available!
+
 -FIX-
-  * 
--OTHER-
-  * 
+  * Improved regional cover download (thanks to frederic.martini)
+
 ----
 == RC9 - Independence Day Edition (July 4 2009) ==
 
