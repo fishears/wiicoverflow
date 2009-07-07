@@ -1,4 +1,13 @@
 #labels Featured
+== v1.0  (July ? 2009) ==
+
+-NEW-
+  * 
+-FIX-
+  * 
+-OTHER-
+  * 
+----
 == RC9 - Independence Day Edition (July 4 2009) ==
 
 -NEW-
