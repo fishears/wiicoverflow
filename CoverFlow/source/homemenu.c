@@ -169,10 +169,12 @@ void HomeMenu_Show()
 				launchTitle(0x0001000148415858LL, 0); //launch system menu
 				//exit(1);        // eventually, return a value.
 			}
+			/*
 			else if (Button_Select(&homeMenuBottomButton, pointer.p_x, pointer.p_y))
 			{
 				//TODO Show control Screen
 			}
+			*/
 		//}
 		
 		draw_covers();
