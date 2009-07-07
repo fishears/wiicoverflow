@@ -172,7 +172,7 @@ void eScreen(){
 
 void showCredits(){
 
-	int start = 20;
+	int start = 10;
 	int step = 30;
 	
 	start += step;
@@ -197,4 +197,6 @@ void showCredits(){
 	CFreeTypeGX_DrawText(ttf14pt, 10, start, "zorglub07 and wiitdb.com crew for the cover service", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 	start += step;
 	CFreeTypeGX_DrawText(ttf14pt, 10, start, "Djtaz and wiiboxart.com crew for the cover service", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
+	start += step;
+	CFreeTypeGX_DrawText(ttf14pt, 10, start, "Davi92 and DjSim1 for the channel and forwarder", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 }

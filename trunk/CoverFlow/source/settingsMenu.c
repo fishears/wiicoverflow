@@ -857,9 +857,9 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 320, 280, "gitkua, scognito, F1SHE4RS, afour98,", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 300, "blackbird399, LoudBob11, alexcarlosantao", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
 
-				CFreeTypeGX_DrawText(ttf16pt, 320, 340, "Many thanks to the translators:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 340, "Many thanks to:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf14pt, 320, 355, "basda, Spidy1000, nolodude, pepperoni,", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf14pt, 320, 370, "Xtend, aHMET, onyxdata, Tusk", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf14pt, 320, 370, "Xtend, aHMET, onyxdata, Tusk, Davi92, DjSim1", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
 				
 				CFreeTypeGX_DrawText(ttf16pt, 320, 430, "Flag icons courtesy of www.icondrawer.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 450, "Covers courtesy of www.wiitdb.com and www.wiiboxart.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
