@@ -91,7 +91,8 @@ void initVars()
 	strcpy(self.url_username, "");
 	strcpy(self.url_password, "");
 	self.url_fileexist = false;
-#endif	
+#endif
+	self.isInit2D = false;	
 }
 
 
@@ -122,14 +123,16 @@ int main( int argc, char **argv )
 	LoadFonts();
 	initVars();
 
-	// Set up the buffer slots and load the progress bar textures
+	// Set up the buffer slots 
 	ClearBufferSlotMemory();
-    GRRLIB_LoadTexture(&progress_step_texture,progress_step_png);
+    
+	// load the progress bar textures
+	GRRLIB_Init();
+	GRRLIB_LoadTexture(&progress_step_texture,progress_step_png);
     GRRLIB_LoadTexture(&progress_bar_texture,progress_bar_png);
 	
-	// Init GRRLIB and start from black
-	GRRLIB_Init();
-    GRRLIB_FillScreen(0x000000FF);
+	// start from black
+	GRRLIB_FillScreen(0x000000FF);
     GRRLIB_Render();
 	
 	// Fade in from black to start the loading screen
