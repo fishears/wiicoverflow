@@ -1,9 +1,4 @@
-#Here are the answers to common questions
-
-= Introduction =
-
-Answers to common issues and questions 
-
+Here are the answers to common questions
 
 = Details =
 
