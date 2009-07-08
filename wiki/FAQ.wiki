@@ -1,3 +1,4 @@
+#labels Featured
 Here are the answers to common questions
 
 = Details =
