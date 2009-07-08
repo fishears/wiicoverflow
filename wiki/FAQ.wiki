@@ -1,0 +1,11 @@
+#Here are the answers to common questions
+
+= Introduction =
+
+Answers to common issues and questions 
+
+
+= Details =
+
+  * Q: Game xxx doesn't work
+  * A: Not all games work, in addition try using the game fix options to see if that resolves your issue.  The fix options can get some games, which don't normally work, to play.  Conversely if you don't need the fix, don't use it - you can stop games from working.
