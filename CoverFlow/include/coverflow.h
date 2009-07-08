@@ -49,7 +49,7 @@
 #include "cheats.h"
 #include "info.h"
 #include "urlLogin.h"
-
+#include "gameinfo.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -80,6 +80,8 @@
  #ifdef WBA_BY_FILE 
        #define URLBOXART_PASS   "SD:/usb-loader/wiiboxart.pass" 
  #endif 
+ 
+//#define SCROLLTEXT_DEMO
  
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 

@@ -896,7 +896,11 @@ int main( int argc, char **argv )
 		
 		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1))  // Button1 is the 'Get Info' button
 		{
+#ifdef SCROLLTEXT_DEMO
+		   	showGameInfoWindow();
+#else
 			showInfoWindow();
+#endif
 		}
 	
 #ifdef DEBUG
