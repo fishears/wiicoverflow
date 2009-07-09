@@ -1,4 +1,17 @@
 #labels Featured
+== v1.0.1  (July ? 2009) ==
+
+-NEW-
+  * 
+
+-FIX-
+  * Fix typo in url-path for diskarts
+  * Fix bug in wbfs_estimate_disc() (issue321) (thx hend...@freenet.de)
+
+-OTHER-
+  * 
+
+----
 == v1.0  (July 7 2009) ==
 
 -NEW-
