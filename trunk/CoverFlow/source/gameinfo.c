@@ -5,14 +5,14 @@ extern s_self self;
 extern s_pointer pointer;
 
 //////////////
-ScrollBox sb1;
+ScrollBox sb1;			// creates scrollBox
 //////////////
 
 char *mytext[]= { 
 "@devs:" ,
 "",
 "This is a demo for a TextBox with",
-"autoScrolling text.",
+"     autoScrolling text.",
 "",
 "I think we could use it for AboutWindow",
 "or synopsis-entries from wiitdb.xml",
@@ -31,12 +31,15 @@ char *mytext[]= {
 "   LoudBob11",
 "",
 "",
-"...and REPEAT  -->",
-"",
-""
+"...and REPEAT  -->"
 };
 
-
+// ttf_size ( // 14, 16, 18, 20, 24 ( 0 -> Default = 16 )
+int myFormat[] = { 	20, 0, 0,24, 0,
+					 0, 0, 0, 0, 0,
+					 0, 0,20,20,20,
+					20,20, 0, 0,18,
+					 0, 0,14};
 
 void showGameInfoWindow(){
 
@@ -45,7 +48,12 @@ void showGameInfoWindow(){
 	int y, sp;
 ///////////////////////////////////////
 	ScrollBox_Init( &sb1, 100, 140, 440, 150, 2, 0x000000FF, 0xFFFFFFFF );
-	ScrollBox_SetText(&sb1, mytext, 25, 4, true);
+	ScrollBox_SetText(&sb1, mytext, 23);
+	ScrollBox_SetTextStyling( &sb1, FTGX_JUSTIFY_LEFT);	//optional
+	ScrollBox_SetTextFormat( &sb1, myFormat, 23);		//optional
+	ScrollBox_SetLineSpace( &sb1, 3);					//optional	  
+	ScrollBox_SetSpeed(&sb1, 4);						//optional
+	ScrollBox_SetRepeat(&sb1, true);					//optional
 ///////////////////////////////////////
 	do{
 		y = 115;
@@ -66,7 +74,7 @@ void showGameInfoWindow(){
 		CFreeTypeGX_DrawText(ttf16pt, 177, 63, "ScrollText Demo", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 
 ///////////////////////////////		
-		ScrollBox_Paint(&sb1);
+		ScrollBox_Paint(&sb1);			//scrolls text in box
 ///////////////////////////////		
 		
 		GRRLIB_DrawImg(430, 80, menu_logo_texture, 0, 1, 1, 0xFFFFFFFF);
