@@ -13,6 +13,7 @@
  */
 #include "settingsMenu.h"
 #include "localization.h"
+#include "useScrollBox.h"
 
 extern s_self         self;
 extern s_pointer      pointer;
@@ -72,6 +73,8 @@ void Settings_Menu_Show()
 	int fade = 0x00;
 	float moving_y;
 	bMyFile = checkMyLanguageFile(USBLOADER_PATH "/MyLanguage.lang");
+	Init_sbAbout();
+	Config_sbAbout();
 	
 	for(i = 0; i <= 20; i++)
 	{
@@ -837,30 +840,24 @@ void Settings_Menu_Show()
 			{
 				GRRLIB_Rectangle(88, 88, 464, 306, 0xffffffdd, true);
 				GRRLIB_Rectangle(90, 90, 460, 302, 0x737373FF, true);
-			/*
-				CFreeTypeGX_DrawText(ttf20pt, 320, 140, "About CoverFloader", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 170, "Copyright 2009 Beardface", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 210, "Licensed under the terms of the", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 230, "GNU GPL version 2", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 250, "http://code.google.com/p/wiicoverflow/", (GXColor){0x22, 022, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf18pt, 320, 310, "Additional Development By:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 330, "gitkua, scognito, fishears, afour98,", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 350, "blackbird399, LoudBob11, alexcarlosantao", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-			*/				
-				CFreeTypeGX_DrawText(ttf20pt, 320, 125, "About CoverFloader", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 155, "Copyright 2009 Beardface", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf14pt, 320, 180, "Licensed under the terms of the", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf14pt, 320, 195, "GNU GPL version 2", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf14pt, 320, 210, "http://code.google.com/p/wiicoverflow/", (GXColor){0x22, 022, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-                                CFreeTypeGX_DrawText(ttf14pt, 320, 230, "CoverFloader uses the power of GRRLib", (GXColor){0x22, 022, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf18pt, 320, 260, "Additional Development By:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 280, "gitkua, scognito, F1SHE4RS, afour98,", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 300, "blackbird399, LoudBob11, alexcarlosantao", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-
-				CFreeTypeGX_DrawText(ttf16pt, 320, 340, "Many thanks to:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf14pt, 320, 355, "basda, Spidy1000, nolodude, pepperoni,", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf14pt, 320, 370, "Xtend, aHMET, onyxdata, Tusk, Davi92, DjSim1", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+			
+				ScrollBox_Paint(&sbAbout);	
 				
+				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
+				{
+					if(ScrollBox_Select(&sbAbout, pointer.p_x, pointer.p_y))
+					{
+						sbAbout.selected = (sbAbout.selected == true) ? false : true;
+					}	
+			    }
+				CFreeTypeGX_DrawText(ttf20pt, 320, 120, "About CoverFloader", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 150, "Copyright 2009 Beardface", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf14pt, 320, 175, "Licensed under the terms of the", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf14pt, 320, 190, "GNU GPL version 2", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf18pt, 320, 215, "Additional Development By:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 235, "scognito, F1SHE4RS, afour98,", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 255, "blackbird399, LoudBob11", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 281, "Many thanks to:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 430, "Flag icons courtesy of www.icondrawer.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 450, "Covers courtesy of www.wiitdb.com and www.wiiboxart.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Check for button-pointer intersections, and rumble
