@@ -25,7 +25,7 @@ char *mytext[]= {
 "this control for fine adjustment,",
 "dynamic memory usage, same speed",
 "with all video modes or adding",
-"scollbars for manual scrolling...",
+"scrollbars for manual scrolling...",
 "",
 "Regards,",
 "   LoudBob11",
@@ -54,6 +54,9 @@ void showGameInfoWindow(){
 	ScrollBox_SetLineSpace( &sb1, 3);					//optional	  
 	ScrollBox_SetSpeed(&sb1, 4);						//optional
 	ScrollBox_SetRepeat(&sb1, true);					//optional
+	ScrollBox_SetStartPos(&sb1, SB_TOP );				//optional	
+	ScrollBox_SetDelay(&sb1, 5 );						//optional
+	ScrollBox_SetTextColor(&sb1, (GXColor){0xff, 0x00, 0x00, 0xaa} ); //optional
 ///////////////////////////////////////
 	do{
 		y = 115;
@@ -109,6 +112,12 @@ void showGameInfoWindow(){
 			{
 				doloop = false;
 			}
+////////////////////////////////////////////
+			else if(ScrollBox_Select(&sb1, pointer.p_x, pointer.p_y))
+			{
+				sb1.selected = (sb1.selected == true) ? false : true;
+			}
+////////////////////////////////////////////			
 		}
 		
 		GRRLIB_Render();
