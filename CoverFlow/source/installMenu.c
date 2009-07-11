@@ -91,7 +91,7 @@ bool Menu_Install()
 	f32 freespace, used;
 
 	WBFS_DiskSpace(&used, &freespace);
-	u32 estimation = wbfs_estimate_disc(self.hdd, __WBFS_ReadDVD, NULL, ONLY_GAME_PARTITION);
+	u64 estimation = wbfs_estimate_disc(self.hdd, __WBFS_ReadDVD, NULL, ONLY_GAME_PARTITION);
 	f32 gamesize = ((f32) estimation)/1073741824;
 	char gametxt[50];
 	
