@@ -913,7 +913,7 @@ float change_scale(float val, float in_min, float in_max, float out_min, float o
 	return change_scale_without_containing(val, in_min, in_max, out_min, out_max);
 }
 
-int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
+bool WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b)
 {
 	bool returnVal = false;
 	bool doloop = true;
@@ -1185,7 +1185,7 @@ int WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button*
 	return returnVal;
 }
 
-int WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a, struct Button* choice_b, int option)
+bool WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_a, struct Button* choice_b, int option)
 {
 	bool returnVal = false;
 	bool doloop = true;

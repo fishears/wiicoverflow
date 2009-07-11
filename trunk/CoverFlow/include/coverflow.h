@@ -49,7 +49,8 @@
 #include "cheats.h"
 #include "info.h"
 #include "urlLogin.h"
-
+#include "pthread.h"
+#include "updater.h"
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -241,7 +242,9 @@ typedef struct{
 	char url_username[40];  //wiiboxart.com
 	char url_password[40];
 	bool url_fileexist;
-#endif	
+#endif
+	
+	bool updateAvailable;
 
 } s_self;
 
