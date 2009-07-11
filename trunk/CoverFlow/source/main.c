@@ -231,6 +231,8 @@ int main( int argc, char **argv )
 
 	// Fade the loading screen to BG color (from settings)
 	Paint_Progress_FadeToBG();
+	
+	//InitNetworkThread();
 
 	// Set the background
 	if (settings.theme)

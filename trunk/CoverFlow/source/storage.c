@@ -99,7 +99,8 @@ void checkDirs(){
 			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
 			mkdir("covers", S_ISVTX);
 			mkdir("games", S_ISVTX);
-                        mkdir("txtcodes",S_ISVTX);
+            mkdir("txtcodes", S_ISVTX);
+			mkdir("codes", S_ISVTX);
 		}
 		else{
 			WindowPrompt(TX.error, TX.errorReadDir, &okButton, NULL);
@@ -144,6 +145,15 @@ void checkDirs(){
 	//		WindowPrompt("Cover download",USBLOADER_PATH "/txtcodes/", &okButton, NULL);
 			if(dir == NULL) {
 				mkdir("txtcodes", S_ISVTX);
+			}
+			else{
+				dirclose(dir);
+			}
+			
+			//WindowPrompt("Codes test",USBLOADER_PATH "/txtcodes/", &okButton, NULL);
+			dir = diropen("codes");
+			if(dir == NULL) {
+				mkdir("codes", S_ISVTX);
 			}
 			else{
 				dirclose(dir);
