@@ -13,6 +13,8 @@
 
 #include "GRRLIB.h"
 
+#define NEWS_TEST   /* uncomment manually */
+
 typedef struct Button {
 	int		x;
 	int		y;
@@ -25,6 +27,38 @@ typedef struct Button {
 	struct	GRRLIB_texImg hoverTexture;
 	bool toFreeHoverTexture;
 } Button;
+
+
+#ifdef NEWS_TEST
+typedef struct Button3 {
+	int		x;
+	int		y;
+	char	ttf_label[15];
+	bool	selected;	
+	bool	hovering;
+	bool	show_reflection;
+	struct	GRRLIB_texImg texture;
+	struct	GRRLIB_texImg hoverTexture;
+	struct	GRRLIB_texImg TriStateTexture;
+	bool 	toFreeTexture;
+	bool 	toFreeHoverTexture;
+	bool	toFreeTriStateTexture;
+} Button3;
+
+// Button3 Init method
+void Button3_Init(Button3 * new_button, const unsigned char normal_img[], const unsigned char hover_img[], const unsigned char triState_img[], int x, int y);
+// Button3 actions
+bool Button3_Hover(struct Button3* btn, int x, int y);
+bool Button3_Select(struct Button3* btn, int x, int y);
+// Button3 drawing
+void Button3_Theme_Paint(struct Button3* btn, int theme_id); // Flips the state of the button based on theme
+void Button3_Theme_Paint_Offset(struct Button3* btn, int theme_id, int x_offset, int y_offset); // Flips the state of the button based on theme
+void Button3_Theme_Paint_Fade(struct Button3* btn, int theme_id, int fade); // Flips the state of the button based on theme
+
+void FreeButton3Resources(struct Button3 *btn);
+#endif
+
+
 
 // Button Init methods
 void Button_Init(Button * new_button, const unsigned char normal_img[], const unsigned char hover_img[], int x, int y);
@@ -51,4 +85,5 @@ void Button_Theme_Paint_Fade(struct Button* btn, int theme_id, int fade); // Fli
 void FreeButtonResources(struct Button *btn);
 
 #endif //_BUTTON_H_
+
 

@@ -84,6 +84,18 @@ extern const u8 button_char_up_over_png[];
 extern const u8 button_char_down_png[];
 extern const u8 button_char_down_over_png[];
 
+#ifdef NEWS_TEST
+extern const u8 button_round_news_png[];
+extern const u8 button_round_news_over_png[];
+extern const u8 button_round_news_blue_png[];
+
+GRRLIB_texImg button_round_news_texture;
+GRRLIB_texImg button_round_news_over_texture;
+GRRLIB_texImg button_round_news_blue_texture;
+
+Button3 newsButton;
+#endif
+
 GRRLIB_texImg menu_button_texture;
 GRRLIB_texImg menu_button_over_texture;
 GRRLIB_texImg menu_header_texture;
@@ -117,6 +129,7 @@ GRRLIB_texImg flag_hu_texture; // Hungary Flag
 GRRLIB_texImg button_round_info_texture;
 GRRLIB_texImg button_round_info_over_texture;
 
+
 Button flagBRButton;
 Button flagDAButton;
 Button flagDEButton;
@@ -130,6 +143,7 @@ Button flagFIButton;
 Button flagMyLangButton;
 Button flagDKButton;
 Button flagHUButton;
+
 Button infoButton;
 
 //cheat manager buttons
