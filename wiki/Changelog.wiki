@@ -1,5 +1,5 @@
 #labels Featured
-== v1.0.1  (July ? 2009) ==
+== v1.1  (July ? 2009) ==
 
 -NEW-
   * 
@@ -7,9 +7,10 @@
 -FIX-
   * Fix typo in url-path for diskarts
   * Fix bug in wbfs_estimate_disc() (issue321) (thx hend...@freenet.de)
+  * Fix bug that doesn't create codes directory for cheats (issue326 thanks to Richard)
 
 -OTHER-
-  * 
+  * Titles.txt is now taken from wiitdb.com
 
 ----
 == v1.0  (July 7 2009) ==
