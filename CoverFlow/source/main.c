@@ -31,6 +31,8 @@ s_gameSettings gameSetting;
 s_coverFlip    coverFlip[500];
 //static s_Filter gameFilter;
 
+extern struct gameXMLinfo gameinfo;
+
 void initVars()
 {
 	pointer.p_x = 0;
@@ -397,6 +399,15 @@ int main( int argc, char **argv )
 								self.gsize = size;
 								
 								LoadCurrentCover(self.gameSelected, self.gameList);
+								
+								//Try to load current game info
+								int ret = GetGameInfo(header->id);
+								
+								if(ret == true)
+									WindowPrompt("Game Info Loaded!", gameinfo.synopsis, &okButton, 0);
+								// Else.... not so much :)
+								
+								//TODO Use this game info
 								
 							}
 						}
