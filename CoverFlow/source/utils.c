@@ -323,6 +323,7 @@ void quit()
 	BUFFER_KillBuffer();
 	freeResources();
 	free(titleList);
+	shutdownNetworkThread();
 	exit(0);
 }
 

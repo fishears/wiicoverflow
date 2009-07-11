@@ -900,7 +900,13 @@ int main( int argc, char **argv )
 		
 		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1))  // Button1 is the 'Get Info' button
 		{
-			showInfoWindow();
+			//showInfoWindow();
+			if(networkInit(self.ipAddress)){
+				if(checkForUpdate())
+					self.updateAvailable = true;
+				else
+					self.updateAvailable = false;
+			}
 		}
 	
 		if(self.updateAvailable){
