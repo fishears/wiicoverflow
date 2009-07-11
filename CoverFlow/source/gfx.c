@@ -1966,3 +1966,18 @@ void MemInfo()
 	
 }
 
+void MemInfo_2()
+{
+	//char linebuf[300] = "";
+	char memtotal[20];
+	char memused[20];
+	char memnotinuse[20];
+	char memcanbefreed[20];
+	struct mallinfo mymallinfo = mallinfo();
+	sprintf(memtotal,"%d",mymallinfo.arena/1024);
+	sprintf(memused,"%d",mymallinfo.uordblks/1024);
+	sprintf(memnotinuse,"%d",mymallinfo.fordblks/1024);
+	sprintf(memcanbefreed,"%d",mymallinfo.keepcost/1024);
+	sprintf(self.linebuf, "all: %s KB used: %s KB notused: %s KB canfree: %sKB", memtotal, memused, memnotinuse, memcanbefreed);
+}
+

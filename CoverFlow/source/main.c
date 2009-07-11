@@ -95,6 +95,7 @@ void initVars()
 	self.url_fileexist = false;
 #endif
 	self.updateAvailable = false;
+	sprintf(self.linebuf, "%s","");
 }
 
 
@@ -398,7 +399,7 @@ int main( int argc, char **argv )
 								WBFS_GameSize(header->id, &size);
 								self.gsize = size;
 								
-								LoadCurrentCover(self.gameSelected, self.gameList);
+								//LoadCurrentCover(self.gameSelected, self.gameList);
 								
 								
 								#ifdef GAME_INFO_TEST
@@ -982,6 +983,15 @@ int main( int argc, char **argv )
 */
 
 #endif
+		self.dummy++;
+		if(self.dummy > 100){
+			self.dummy = 0;
+			MemInfo_2();
+		}
+		
+		CFreeTypeGX_DrawText(ttf16pt, 30, 30, self.linebuf, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+		
+		//CFreeTypeGX_DrawText(ttf16pt, 100, 100, self.linebuf, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 		
 		// Draw the pointing hand
 		DrawCursor(pointer.p_type, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
@@ -993,7 +1003,7 @@ int main( int argc, char **argv )
 		if(shutdown == 1)
 			Sys_Shutdown();
 		else if(reset == 1)
-			Sys_Reboot(); 
+			Sys_Reboot();
 		
 	} // main screen gui loop END
 
