@@ -3,7 +3,7 @@
 
 #define COVERS_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/cover/[Lang]/[GameID].png"
 #define COVERS_LOCATION_LANG_FULL "http://wiitdb.com/wiitdb/artwork/coverfull/[Lang]/[GameID].png"
-#define DISKART_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/disk/[Lang]/[GameID].png"
+#define DISKART_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/disc/[Lang]/[GameID].png"
 extern s_self self;
 extern s_settings settings;
 extern s_gameSettings gameSetting;

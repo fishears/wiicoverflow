@@ -178,7 +178,7 @@ int SETTINGS_Load()
 		  if(mxmlElementGetAttr(next_n,"sound"))
 			  settings.sound = atoi(mxmlElementGetAttr(next_n,"sound"));
 		  if(mxmlElementGetAttr(next_n,"music"))
-			  settings.sound = atoi(mxmlElementGetAttr(next_n,"music"));
+			  settings.music = atoi(mxmlElementGetAttr(next_n,"music"));
 		  if(mxmlElementGetAttr(next_n,"rumble"))
 			  settings.rumble   = atof(mxmlElementGetAttr(next_n,"rumble"));
 		  if(mxmlElementGetAttr(next_n,"lock"))
