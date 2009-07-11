@@ -67,7 +67,7 @@ void GetPublisherFromGameid(char *idtxt, char *dest, int destsize);
 char *ConvertLangTextToCode(char *langtext);
 void ConvertRating(char *ratingvalue, char *fromrating, char *torating, char *destvalue, int destsize);
 void PrintGameInfo(int showfullinfo);
-char *MemInfo();
+
 
 void title_set(char *id, char *title);
 char* trimcopy(char *dest, char *src, int size);

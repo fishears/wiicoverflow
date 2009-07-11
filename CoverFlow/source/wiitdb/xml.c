@@ -12,6 +12,8 @@ Load game information from XML - Lustar
 //#include "cfg.h"
 //#include "xml.h"
 
+#include "gfx.h"
+
 //Code taken for the most part from USB Loader GX... Thanks!
 
 
@@ -116,7 +118,7 @@ void GetTextFromNode(mxml_node_t *currentnode, mxml_node_t *topnode, char *noden
 int OpenXMLFile(char *filename)
 {
 	//if (xmldebug) dbg_time1();
-	
+		
 	if (xml_loaded) 
 		 return 0;
 	
@@ -143,6 +145,7 @@ int OpenXMLFile(char *filename)
 		unzFile unzfile = unzOpen(filename);
 		if (unzfile == NULL)
 			return 0;
+			
 		unzOpenCurrentFile(unzfile);
 		
 		unz_file_info zipfileinfo;
@@ -150,6 +153,7 @@ int OpenXMLFile(char *filename)
 		int zipfilebuffersize = zipfileinfo.uncompressed_size;
 		char * zipfilebuffer = malloc(zipfilebuffersize);
 		memset(zipfilebuffer, 0, zipfilebuffersize);
+		
 		if (zipfilebuffer == NULL) {
 			unzCloseCurrentFile(unzfile);
 			unzClose(unzfile);
@@ -160,19 +164,25 @@ int OpenXMLFile(char *filename)
 		unzCloseCurrentFile(unzfile);
 		unzClose(unzfile);
 		
+		
+		
 		nodetree = mxmlLoadString(NULL, zipfilebuffer, MXML_NO_CALLBACK);
 		free(zipfilebuffer);
 	}
 
 	if (nodetree == NULL)
+	{
+		WindowPrompt("Failed to load wiitdb", "Check available memory; need at least 2 MB", &okButton, 0);
 		return 0;
-			
+	}
+	
     nodedata = mxmlFindElement(nodetree, nodetree, "datafile", NULL, NULL, MXML_DESCEND);
    	if (nodedata == NULL) {
 	    return 0;
 	} else {
 		//if (xmldebug)	xmlloadtime = dbg_time2(NULL);
 		xml_loaded = 1;
+	WindowPrompt("Debug g", "g", &okButton, 0);
 		return 1;
 	}
 }
@@ -373,7 +383,7 @@ int LoadGameInfoFromXML(char* gameid)
 	int exist=0;
 	if (!xml_loaded || nodedata == NULL) 		 
 		return exist;
-
+		
 	// load game info using forced language, or game individual setting, or main language setting
 	char langcode[100] = "";
 	//if (!strcmp(langtxt,""))
@@ -400,7 +410,7 @@ int LoadGameInfoFromXML(char* gameid)
 			break;
 	    }
     }
-
+	
     if (!strcmp(element_text,gameid)) {
 		/* text from elements */
 		strlcpy(gameinfo.id,element_text,sizeof(gameinfo.id));
@@ -583,30 +593,13 @@ int LoadGameInfoFromXML(char* gameid)
 		if (gameid[3] == 'I') strlcpy(gameinfo.region,"PAL",sizeof(gameinfo.region));
 		if (gameid[3] == 'N') strlcpy(gameinfo.region,"PAL",sizeof(gameinfo.region));
 	}
-
+	
 	// free memory
 	mxmlIndexDelete(nodeindex);
 
 	return exist;
 }
 
-char *MemInfo()
-{
-	char linebuf[300] = "";
-	char memtotal[20];
-	char memused[20];
-	char memnotinuse[20];
-	char memcanbefreed[20];
-	struct mallinfo mymallinfo = mallinfo();
-	sprintf(memtotal,"%d",mymallinfo.arena/1024);
-	sprintf(memused,"%d",mymallinfo.uordblks/1024);
-	sprintf(memnotinuse,"%d",mymallinfo.fordblks/1024);
-	sprintf(memcanbefreed,"%d",mymallinfo.keepcost/1024);
-	snprintf(linebuf,sizeof(linebuf),"all:%sKB used:%sKB notused:%sKB canfree:%sKB", memtotal, memused, memnotinuse, memcanbefreed);
-	char *minfo[300];
-	*minfo = linebuf;
-	return *minfo;
-}
 
 
 

@@ -267,7 +267,7 @@ Button homeMenuBottomButton;
 Button wiimoteButton;
 Button loaderButton;
 Button wiiMenuButton;
-
+void MemInfo();
 void ResetBuffer();
 void LoadFonts();
 void LoadTextures();

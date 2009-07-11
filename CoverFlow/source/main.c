@@ -405,8 +405,13 @@ int main( int argc, char **argv )
 								//Try to load current game info
 								int ret = GetGameInfo(header->id);
 								
+								
 								if(ret == true)
+								{
+									WindowPrompt("Are you ready!!!", "Click ok to see if it worked!", &okButton, 0);
 									WindowPrompt("Game Info Loaded!", gameinfo.synopsis, &okButton, 0);
+								}
+								
 								// Else.... not so much :)
 								
 								//TODO Use this game info
@@ -748,6 +753,11 @@ int main( int argc, char **argv )
 			}
 		}
 		
+		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_PLUS))
+		{
+			MemInfo();
+		}
+			
 		// Check for parental lock button combo A + B + 1 + 2
 		if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) &&
 			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_B) &&
