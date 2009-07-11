@@ -67,6 +67,8 @@
 
 /*DOL TEST END*/
 
+//#define GAME_INFO_TEST 1
+
 #define COVER_WIDTH    160
 #define COVER_HEIGHT   224
 
