@@ -344,3 +344,159 @@ void FreeButtonResources(struct Button *btn)
 	if (btn->toFreeHoverTexture) free(btn->hoverTexture.data);	
 }
 
+
+
+
+
+#ifdef NEWS_TEST
+void Button3_Init(Button3 * new_button, const unsigned char normal_img[], const unsigned char hover_img[], const unsigned char triState_img[], int x, int y)
+{
+	GRRLIB_LoadTexture(&(new_button->texture), normal_img);
+	GRRLIB_LoadTexture(&(new_button->hoverTexture), hover_img);
+	GRRLIB_LoadTexture(&(new_button->TriStateTexture), triState_img);
+	new_button->toFreeTexture = true;
+	new_button->toFreeHoverTexture = true;
+	new_button->toFreeTriStateTexture = true;
+	new_button->x = x;
+	new_button->y = y;
+	new_button->hovering = false;
+	new_button->show_reflection = false;
+}
+
+
+bool Button3_Hover(struct Button3* btn, int x, int y)
+{
+	x += 40; // adjusts to the tip of the cursor fingertip
+	y += 37;
+	
+	if(btn == 0)
+		return false;
+		
+	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) && y > (btn->y) && y < (btn->texture.h + (btn->y)))
+		btn->hovering = true;
+	else
+		btn->hovering = false;
+	
+	return btn->hovering;
+}
+
+
+bool Button3_Select(struct Button3* btn, int x, int y)
+{
+	x += 40; // adjusts to the tip of the cursor fingertip
+	y += 37;
+	
+	if(btn == 0)
+		return false;
+		
+	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) && y > (btn->y) && y < (btn->texture.h + (btn->y)))
+		btn->hovering = true;
+	else
+		btn->hovering = false;
+	
+	if(btn->hovering)
+		SOUND_PlaySound(FX_BUTTON_CLICK, 0);
+	
+	return btn->hovering;
+}
+
+
+
+void Button3_Theme_Paint(struct Button3* btn, int theme_id)
+{
+	Button3_Theme_Paint_Offset(btn, theme_id, 0, 0);
+}
+
+
+
+void Button3_Theme_Paint_Offset(struct Button3* btn, int theme_id, int x_offset, int y_offset)
+{
+	if(btn == 0)
+		return;
+		
+	if(btn->hovering)
+	{
+		switch (theme_id)
+		{
+			case 0: // black theme
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+			case 1: // white theme
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+			default:
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+		}
+	}
+	else
+	{
+		switch (theme_id)
+		{
+			case 0: // black theme
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+			case 1: // white theme
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+			default:
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+		}
+		
+	}	
+}
+
+
+
+void Button3_Theme_Paint_Fade(struct Button3* btn, int theme_id, int fade)
+{
+	if(btn == 0)
+		return;
+	
+	u32 color = 0xFFFFFF00|fade;
+		
+	if(btn->hovering)
+	{
+		switch (theme_id)
+		{
+			case 0: // black theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, color);
+				break;
+			case 1: // white theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, color);
+				break;
+			default:
+				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, color);
+				break;
+		}
+	}
+	else
+	{
+		switch (theme_id)
+		{
+			case 0: // black theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, color);
+				break;
+			case 1: // white theme
+				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, color);
+				break;
+			default:
+				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, color);
+				break;
+		}
+		
+	}	
+}
+
+
+
+void FreeButton3Resources(struct Button3 *btn)
+{
+	if (btn->toFreeTexture) 		free(btn->texture.data);	
+	if (btn->toFreeHoverTexture) 	free(btn->hoverTexture.data);
+	if (btn->toFreeTriStateTexture)	free(btn->TriStateTexture.data);
+}
+
+#endif
+

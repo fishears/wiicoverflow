@@ -92,8 +92,6 @@ void initVars()
 	strcpy(self.url_password, "");
 	self.url_fileexist = false;
 #endif
-
-	self.updateAvailable = false;
 }
 
 
@@ -233,8 +231,6 @@ int main( int argc, char **argv )
 
 	// Fade the loading screen to BG color (from settings)
 	Paint_Progress_FadeToBG();
-	
-	initNetworkThread();
 
 	// Set the background
 	if (settings.theme)
@@ -369,7 +365,11 @@ int main( int argc, char **argv )
 			else if((!settings.parentalLock) && Button_Select(&infoButton, pointer.p_x, pointer.p_y)){
 				showInfoWindow();
 			}
-			
+#ifdef NEWS_TEST			
+			else if((!settings.parentalLock) && Button3_Select(&newsButton, pointer.p_x, pointer.p_y)){
+				// toDo
+			}
+#endif			
 			else // user clicked A somewhere on the screen
 			{
 				if(self.gameCnt) // any games?
@@ -833,7 +833,10 @@ int main( int argc, char **argv )
 			
 			if(!settings.parentalLock)
 				Button_Theme_Paint_Fade(&infoButton, settings.theme, fadeButton);
-			
+#ifdef NEWS_TEST
+			if(!settings.parentalLock)
+				Button3_Theme_Paint_Fade(&newsButton, settings.theme, fadeButton);
+#endif			
 			// Draw Game Title
 			if(settings.coverText && (!self.dragging && !self.twisting && select_ready))
 			{	
@@ -844,7 +847,9 @@ int main( int argc, char **argv )
 		}
 		
 		Button_Hover(&infoButton, pointer.p_x, pointer.p_y);
-		
+#ifdef NEWS_TEST
+		Button3_Hover(&newsButton, pointer.p_x, pointer.p_y);
+#endif	
 		// Check for button-pointer intersections, and rumble
 		if ((!self.selected && // main screen button only
 			 (((!settings.parentalLock) && Button_Hover(&addButton, pointer.p_x, pointer.p_y)) ||
@@ -854,6 +859,9 @@ int main( int argc, char **argv )
 			(self.selected && // game load panel is showing
 			 (((!settings.parentalLock) && (Button_Hover(&deleteButton, pointer.p_x, pointer.p_y) 
 			                              || Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y) 
+#ifdef NEWS_TEST
+										  || Button3_Hover(&newsButton, pointer.p_x, pointer.p_y) 
+#endif											  
 										  || Button_Hover(&infoButton, pointer.p_x, pointer.p_y))) ||
 			  (Button_Hover(&loadButton, pointer.p_x, pointer.p_y) ||
 			   Button_Hover(&backButton, pointer.p_x, pointer.p_y))))
@@ -909,14 +917,6 @@ int main( int argc, char **argv )
 			}
 		}
 	
-		if(self.updateAvailable){
-			
-			if(promptForUpdate()){
-				WindowPrompt("Not yet implemented!", "but at least update notify works!", 0, &okButton);
-			}
-			
-			self.updateAvailable = false;
-		}
 #ifdef DEBUG
 //		char tDebugOut[100];
 // These won't work until they get switched over to use CFreeTypeGX_DrawText

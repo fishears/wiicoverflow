@@ -95,9 +95,9 @@
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           15
 
+#define NEWS_TEST
 
-
-#define RELEASE              "v1.0"
+#define RELEASE              "v1.1"
 
 #define ANIMATE_SPEED 0
 #define FLIP_SPEED  0.016

@@ -245,7 +245,10 @@ void Init_Buttons()
 	Button_Init(&settingsButton, button_round_gear_png, button_round_gear_over_png, 30, 427);
 	Button_Init(&addButton, button_round_add_png,  button_round_add_over_png, 580, 427);
     Button_Init(&infoButton, button_round_info_png, button_round_info_over_png, 580, 44);
- 	// Dialog Box Buttons
+#ifdef NEWS_TEST
+	Button3_Init(&newsButton, button_round_news_png, button_round_news_over_png, button_round_news_blue_png, 30, 44);
+#endif	
+	// Dialog Box Buttons
 	Button_TTF_Init(&okButton, button_bar_h28w104_black_png, button_bar_h28w104_white_png, 300, 290, TX.okB);
 	Duplicate_Button_TTF(&cancelButton, okButton, 414, 290, TX.cancelB);
 	Duplicate_Button_TTF(&yesButton, okButton, 300, 290, TX.yesB);
@@ -520,6 +523,10 @@ void DrawCoverFlyInStart()
 		moving_y = easeOutQuint(q, yEndButtonInfo - 70, +70.0, 192);
 		infoButton.y = moving_y;
 		Button_Theme_Paint(&infoButton, settings.theme);
+#ifdef NEWS_TEST
+		newsButton.y = moving_y;
+		Button3_Theme_Paint(&newsButton, settings.theme);
+#endif		
 		// Float in the game title
 		if(settings.coverText)
 		{
@@ -1667,6 +1674,9 @@ void freeResources(){
 	FreeButtonResources(&settingsButton);
 	FreeButtonResources(&addButton);
 	FreeButtonResources(&infoButton);
+#ifdef NEWS_TEST
+	FreeButton3Resources(&newsButton);
+#endif
  	// Dialog Box Buttons
 	FreeButtonResources(&okButton);
 	FreeButtonResources(&cancelButton);
