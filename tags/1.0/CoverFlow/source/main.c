@@ -389,7 +389,7 @@ int main( int argc, char **argv )
 								WBFS_GameSize(header->id, &size);
 								self.gsize = size;
 								
-								LoadCurrentCover(self.gameSelected, self.gameList);
+								//LoadCurrentCover(self.gameSelected, self.gameList);
 								
 							}
 						}
