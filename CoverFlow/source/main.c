@@ -92,6 +92,7 @@ void initVars()
 	strcpy(self.url_password, "");
 	self.url_fileexist = false;
 #endif
+	self.updateAvailable = false;
 }
 
 
@@ -232,6 +233,8 @@ int main( int argc, char **argv )
 	// Fade the loading screen to BG color (from settings)
 	Paint_Progress_FadeToBG();
 
+	initNetworkThread();
+	
 	// Set the background
 	if (settings.theme)
 		GRRLIB_SetBGColor(1); // set BG to white
@@ -916,7 +919,13 @@ int main( int argc, char **argv )
 					self.updateAvailable = false;
 			}
 		}
-	
+		
+		if(self.updateAvailable){
+			if(promptForUpdate()){
+				WindowPrompt("Not yet implemented!", "but at least update notify works!", 0, &okButton);
+			}
+			self.updateAvailable = false;
+		}
 #ifdef DEBUG
 //		char tDebugOut[100];
 // These won't work until they get switched over to use CFreeTypeGX_DrawText

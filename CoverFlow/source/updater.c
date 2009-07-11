@@ -104,6 +104,7 @@ bool promptForUpdate(){
 	}
 	
 	fclose(fp);
+	unlink(USBLOADER_PATH "/current.txt");
 	
 	return WindowPrompt("Update Available!", message, &okButton, &cancelButton);
 }
