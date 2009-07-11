@@ -400,6 +400,8 @@ int main( int argc, char **argv )
 								
 								LoadCurrentCover(self.gameSelected, self.gameList);
 								
+								
+								#ifdef GAME_INFO_TEST
 								//Try to load current game info
 								int ret = GetGameInfo(header->id);
 								
@@ -408,6 +410,7 @@ int main( int argc, char **argv )
 								// Else.... not so much :)
 								
 								//TODO Use this game info
+								#endif
 								
 							}
 						}
