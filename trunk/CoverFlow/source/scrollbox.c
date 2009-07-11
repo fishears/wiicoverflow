@@ -12,6 +12,12 @@
 #include "scrollbox.h"
 #include "coverflow.h"
 
+int Hz50or60();
+
+
+
+
+
 void ScrollBox_Init( ScrollBox * sb, f32 x, f32 y, f32 w, f32 h, int frWidth, u32 frameColor, u32 backColor)
 {
 	int i;
@@ -23,21 +29,97 @@ void ScrollBox_Init( ScrollBox * sb, f32 x, f32 y, f32 w, f32 h, int frWidth, u3
 	sb->frWidth = frWidth;
 	sb->frColor = frameColor;
 	sb->bkColor = backColor;
-	sb->txColor = (GXColor){0x00, 0x00, 0x00, 0xff};
 	sb->lines = 0;
 	sb->pos_text = (float) (sb->y + sb->h - 14);
-	sb->textStyling = FTGX_JUSTIFY_LEFT;
+	
 	sb->speed = 0.4;
 	sb->repeat = true;
 	sb->lineSpace = 0;
 	sb->startDelay = 0;
 	sb->waitTics = 0;
 	sb->selected = false;
+	sb->Hz = Hz50or60();
 	for(i=0;i<SB_MAXLINES;i++) {
 		strcpy(sb->ttf_text[i], "");
 		sb->ttf_size[i] = 16;
+		sb->ttf_color[i] = (GXColor){0x00, 0x00, 0x00, 0xff};
+		sb->textStyling[i] = FTGX_JUSTIFY_LEFT;
 	}
 }
+
+
+
+void ScrollBox_Paint(struct ScrollBox* sb)
+{
+ int i, j, ysum;
+ f32 xp;
+ 
+ GRRLIB_Rectangle(sb->x, sb->y, sb->w, sb->h, sb->frColor, true);
+ GRRLIB_Rectangle(sb->x +sb->frWidth, sb->y +sb->frWidth, sb->w -2*sb->frWidth, sb->h -2*sb->frWidth, sb->bkColor, true);
+ 
+ if (!sb->selected)
+	 {
+	 if ((sb->startDelay > 0) && ( sb->waitTics < ( sb->startDelay * sb->Hz )))
+		sb->waitTics++;
+	 else	
+		sb->pos_text = sb->pos_text - (sb->speed * 50.0 / (float)sb->Hz);
+	 }
+ 
+ for (i=0; i< sb->lines; i++)
+	{
+	 switch(sb->textStyling[i]){
+		case FTGX_JUSTIFY_LEFT:
+			xp = sb->x + 10;
+			break;
+		case FTGX_JUSTIFY_CENTER:
+			xp = sb->x + (sb->w /2);
+			break;
+		case FTGX_JUSTIFY_RIGHT:
+			xp = sb->x + sb->w -10;
+			break;
+		default:
+			xp = sb->x + 10;
+		}
+	 ysum = 0;
+	 for(j =0; j<i; j++)
+	  {
+		ysum = ysum + sb->ttf_size[j] + sb->lineSpace;
+	  }
+	 
+	 if(((f32)(sb->pos_text + ysum) > (sb->y +sb->ttf_size[i]-sb->frWidth)) && ((f32)(sb->pos_text + ysum) <  (sb->y + sb->h )))
+		{
+		 switch (sb->ttf_size[i]) {
+			case 16:
+				CFreeTypeGX_DrawText(ttf16pt, xp, (f32)sb->pos_text + ysum, sb->ttf_text[i], sb->ttf_color[i], sb->textStyling[i]);
+				break;
+			case 14:
+				CFreeTypeGX_DrawText(ttf14pt, xp, (f32)sb->pos_text + ysum, sb->ttf_text[i], sb->ttf_color[i], sb->textStyling[i]);
+				break;
+			case 18:
+				CFreeTypeGX_DrawText(ttf18pt, xp, (f32)sb->pos_text + ysum, sb->ttf_text[i], sb->ttf_color[i], sb->textStyling[i]);
+				break;
+			case 20:
+				CFreeTypeGX_DrawText(ttf20pt, xp, (f32)sb->pos_text + ysum, sb->ttf_text[i], sb->ttf_color[i], sb->textStyling[i]);
+				break;
+			case 24:
+				CFreeTypeGX_DrawText(ttf24pt, xp, (f32)sb->pos_text + ysum, sb->ttf_text[i], sb->ttf_color[i], sb->textStyling[i]);
+				break;
+			}
+		}
+	 else
+		{
+	     ysum = 0;
+		 for(j =0; j<sb->lines-1; j++)
+		  {
+		   ysum = ysum + sb->ttf_size[j] + sb->lineSpace;
+		  }
+		 
+		 if ((sb->repeat) && ((f32)(sb->pos_text + ysum) < (sb->y +14))) 
+			sb->pos_text = (float) (sb->y + sb->h);
+		}
+	}
+}	
+
 
 
 void ScrollBox_SetTextFormat( ScrollBox * sb, int* ttf_size, int lines)
@@ -73,6 +155,7 @@ void ScrollBox_SetTextFormat( ScrollBox * sb, int* ttf_size, int lines)
 }
 
 
+
 void ScrollBox_SetText( ScrollBox * sb, char* sb_text[], int lines)
 {
 	int i;
@@ -87,78 +170,6 @@ void ScrollBox_SetText( ScrollBox * sb, char* sb_text[], int lines)
 }
 
 
-void ScrollBox_Paint(struct ScrollBox* sb)
-{
- int i, j, ysum;
- f32 xp;
- 
- GRRLIB_Rectangle(sb->x, sb->y, sb->w, sb->h, sb->frColor, true);
- GRRLIB_Rectangle(sb->x +sb->frWidth, sb->y +sb->frWidth, sb->w -2*sb->frWidth, sb->h -2*sb->frWidth, sb->bkColor, true);
- 
- if (!sb->selected)
-	 {
-	 if ((sb->startDelay > 0) && ( sb->waitTics < ( sb->startDelay * 50 )))
-		sb->waitTics++;
-	 else	
-		sb->pos_text = sb->pos_text - sb->speed;
-	 }
-	 
- switch(sb->textStyling){
-	case FTGX_JUSTIFY_LEFT:
-		xp = sb->x + 10;
-		break;
-	case FTGX_JUSTIFY_CENTER:
-		xp = sb->x + (sb->w /2);
-		break;
-	case FTGX_JUSTIFY_RIGHT:
-		xp = sb->x + sb->w -10;
-		break;
-	default:
-		xp = sb->x + 10;
-	}
- 
- for (i=0; i< sb->lines; i++)
-	{
-	 ysum = 0;
-	 for(j =0; j<i; j++)
-	  {
-		ysum = ysum + sb->ttf_size[j] + sb->lineSpace;
-	  }
-	 
-	 if(((f32)(sb->pos_text + ysum) > (sb->y +sb->ttf_size[i]-sb->frWidth)) && ((f32)(sb->pos_text + ysum) <  (sb->y + sb->h )))
-		{
-		 switch (sb->ttf_size[i]) {
-			case 16:
-				CFreeTypeGX_DrawText(ttf16pt, xp, (f32)sb->pos_text + ysum, sb->ttf_text[i], sb->txColor, sb->textStyling);
-				break;
-			case 14:
-				CFreeTypeGX_DrawText(ttf14pt, xp, (f32)sb->pos_text + ysum, sb->ttf_text[i], sb->txColor, sb->textStyling);
-				break;
-			case 18:
-				CFreeTypeGX_DrawText(ttf18pt, xp, (f32)sb->pos_text + ysum, sb->ttf_text[i], sb->txColor, sb->textStyling);
-				break;
-			case 20:
-				CFreeTypeGX_DrawText(ttf20pt, xp, (f32)sb->pos_text + ysum, sb->ttf_text[i], sb->txColor, sb->textStyling);
-				break;
-			case 24:
-				CFreeTypeGX_DrawText(ttf24pt, xp, (f32)sb->pos_text + ysum, sb->ttf_text[i], sb->txColor, sb->textStyling);
-				break;
-			}
-		}
-	 else
-		{
-	     ysum = 0;
-		 for(j =0; j<sb->lines-1; j++)
-		  {
-		   ysum = ysum + sb->ttf_size[j] + sb->lineSpace;
-		  }
-		 
-		 if ((sb->repeat) && ((f32)(sb->pos_text + ysum) < (sb->y +14))) 
-			sb->pos_text = (float) (sb->y + sb->h);
-		}
-	}
-}	
-
 
 void ScrollBox_SetSpeed( ScrollBox * sb, int speed)
 {
@@ -167,21 +178,21 @@ void ScrollBox_SetSpeed( ScrollBox * sb, int speed)
 	sb->speed = (float)speed/10.0;
 }
 
+
+
 void ScrollBox_SetRepeat( ScrollBox * sb, bool repeat)
 {
 	sb->repeat = repeat;
 }
 
 
-void ScrollBox_SetTextStyling( ScrollBox * sb, uint16_t	textStyling)
-{
-	sb->textStyling = textStyling;
-}
 
 void ScrollBox_SetLineSpace( ScrollBox * sb, int lineSpace)
 {
 	sb->lineSpace = lineSpace;
 }
+
+
 
 void ScrollBox_SetStartPos( ScrollBox * sb, int startPos )
 {
@@ -201,16 +212,49 @@ void ScrollBox_SetStartPos( ScrollBox * sb, int startPos )
 	}
 }
 
+
+
 void ScrollBox_SetDelay( ScrollBox * sb, int startDelay )
 {
 	sb->startDelay = startDelay;
 }
 
-void ScrollBox_SetTextColor( ScrollBox * sb, GXColor TXtColor )
+
+void ScrollBox_SetTextStyling( ScrollBox * sb, uint16_t	textStyling)
 {
-	sb->txColor = TXtColor;
+	int i;
+	for(i=0;i<SB_MAXLINES;i++) {
+		sb->textStyling[i] = textStyling;
+		}
 }
 
+
+
+void ScrollBox_SetTextStylingLine( ScrollBox * sb, uint16_t	textStyling, int line )
+{
+	if (line > SB_MAXLINES) line = SB_MAXLINES;
+	if (line < 1) line = 1;
+	sb->textStyling[line -1] = textStyling;;
+}
+
+
+
+void ScrollBox_SetTextColor( ScrollBox * sb, GXColor TXtColor )
+{
+	int i;
+	for(i=0;i<SB_MAXLINES;i++) {
+		sb->ttf_color[i] = TXtColor;
+		}
+}
+
+
+
+void ScrollBox_SetTextColorLine( ScrollBox * sb, GXColor TXtColor, int line )
+{
+	if (line > SB_MAXLINES) line = SB_MAXLINES;
+	if (line < 1) line = 1;
+	sb->ttf_color[line -1] = TXtColor;
+}
 
 
 
@@ -228,3 +272,40 @@ bool ScrollBox_Select(struct ScrollBox* sb, int x, int y)
 		return false;
 
 }
+
+
+
+int Hz50or60()
+{
+	u32 tvmode;
+	int ret;
+	
+	tvmode = CONF_GetVideo();
+	switch(tvmode)
+	{
+		case CONF_VIDEO_PAL:
+			if (CONF_GetEuRGB60() > 0)
+				ret = 60;
+			else
+				ret = 50;
+			break;
+		case CONF_VIDEO_MPAL:
+			ret = 60;
+			break;
+		case CONF_VIDEO_NTSC:
+			ret = 60;
+			break;
+		default:
+			ret = 50; // german default :)
+	}
+	return ret;
+}
+
+
+
+
+
+
+
+
+

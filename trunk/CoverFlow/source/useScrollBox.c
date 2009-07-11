@@ -70,6 +70,7 @@ void Config_sbAbout()
  ScrollBox_SetTextFormat( &sbAbout, fmtAboUt, 23);
  ScrollBox_SetTextStyling( &sbAbout, FTGX_JUSTIFY_CENTER);
  ScrollBox_SetStartPos(&sbAbout, SB_TOP );
+ ScrollBox_SetTextColorLine(&sbAbout, (GXColor){0x00, 0x00, 0xff, 0xaa}, 23 ); //blue
  ScrollBox_SetDelay(&sbAbout, 7 );
  ScrollBox_SetRepeat(&sbAbout, true);
 }
