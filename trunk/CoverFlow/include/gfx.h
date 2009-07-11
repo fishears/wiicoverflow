@@ -301,6 +301,7 @@ void freeResources();
 bool CoverHoverCenter();
 bool CoverHoverRight();
 bool CoverHoverLeft();
+void MemInfo_2();
 
 #endif
 

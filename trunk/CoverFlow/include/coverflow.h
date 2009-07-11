@@ -250,6 +250,7 @@ typedef struct{
 #endif
 	
 	bool updateAvailable;
+	char linebuf[300];
 
 } s_self;
 
