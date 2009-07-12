@@ -525,7 +525,7 @@ void DrawCoverFlyInStart()
 		Button_Theme_Paint(&infoButton, settings.theme);
 #ifdef NEWS_TEST
 		newsButton.y = moving_y;
-		Button3_Theme_Paint(&newsButton, settings.theme);
+		Button3_Theme_Paint(&newsButton, settings.theme + self.blueID);
 #endif		
 		// Float in the game title
 		if(settings.coverText)

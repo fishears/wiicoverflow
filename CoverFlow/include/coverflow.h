@@ -251,7 +251,11 @@ typedef struct{
 	
 	bool updateAvailable;
 	char linebuf[300];
-
+	
+#ifdef NEWS_TEST	
+	int  blueID;
+	bool blinkBlue;
+#endif
 } s_self;
 
 
