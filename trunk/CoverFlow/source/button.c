@@ -424,6 +424,10 @@ void Button3_Theme_Paint_Offset(struct Button3* btn, int theme_id, int x_offset,
 			case 1: // white theme
 				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->texture, 0, 1, 1, 0xFFFFFFFF);
 				break;
+			case 2: // blue state
+			case 3:
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->TriStateTexture, 0, 1, 1, 0xFFFFFFFF);
+				break;
 			default:
 				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
 				break;
@@ -438,6 +442,10 @@ void Button3_Theme_Paint_Offset(struct Button3* btn, int theme_id, int x_offset,
 				break;
 			case 1: // white theme
 				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
+				break;
+			case 2: // blue state
+			case 3:
+				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->TriStateTexture, 0, 1, 1, 0xFFFFFFFF);
 				break;
 			default:
 				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->texture, 0, 1, 1, 0xFFFFFFFF);
@@ -466,6 +474,10 @@ void Button3_Theme_Paint_Fade(struct Button3* btn, int theme_id, int fade)
 			case 1: // white theme
 				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, color);
 				break;
+			case 2: // blue state
+			case 3:
+				GRRLIB_DrawImg(btn->x, btn->y, btn->TriStateTexture, 0, 1, 1, color);
+				break;
 			default:
 				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, color);
 				break;
@@ -480,6 +492,10 @@ void Button3_Theme_Paint_Fade(struct Button3* btn, int theme_id, int fade)
 				break;
 			case 1: // white theme
 				GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, color);
+				break;
+			case 2: // blue state
+			case 3:
+				GRRLIB_DrawImg(btn->x, btn->y, btn->TriStateTexture, 0, 1, 1, color);
 				break;
 			default:
 				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, color);

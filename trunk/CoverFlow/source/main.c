@@ -33,6 +33,9 @@ s_coverFlip    coverFlip[500];
 
 extern struct gameXMLinfo gameinfo;
 
+//prototype
+bool blinking( int Aon, int Aoff, int Bon, int Boff, int Con, int Coff );
+
 void initVars()
 {
 	pointer.p_x = 0;
@@ -96,6 +99,10 @@ void initVars()
 #endif
 	self.updateAvailable = false;
 	sprintf(self.linebuf, "%s","");
+#ifdef NEWS_TEST	
+	self.blueID = 0;
+	self.blinkBlue = false;
+#endif
 }
 
 
@@ -374,6 +381,18 @@ int main( int argc, char **argv )
 #ifdef NEWS_TEST			
 			else if((!settings.parentalLock) && Button3_Select(&newsButton, pointer.p_x, pointer.p_y)){
 				// toDo
+				// only for demo
+				if (!self.blinkBlue)
+					{
+					 self.blinkBlue = true;
+					 //self.blueID = 2;
+					}
+				else
+					{
+					 self.blinkBlue = false;
+					 self.blueID = 0;
+					}
+
 			}
 #endif			
 			else // user clicked A somewhere on the screen
@@ -753,6 +772,30 @@ int main( int argc, char **argv )
 				}
 			}
 		}
+
+#ifdef NEWS_TEST
+		if (self.blinkBlue)
+		{
+			if ( blinking(16, 8, 16, 8, 16, 150))
+			{
+			 self.blueID = 2;
+			 if (!self.slot_glow)
+				{
+				WiiLight(1); // turn on the slot light
+				self.slot_glow = 1;
+				}
+			}
+			else
+			{
+			 self.blueID = 0;
+			 if (self.slot_glow)
+				{
+				WiiLight(0); // turn off the slot light
+				self.slot_glow = 0;
+				}
+			}
+		}
+#endif
 		
 		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_PLUS))
 		{
@@ -863,7 +906,7 @@ int main( int argc, char **argv )
 				Button_Theme_Paint_Fade(&infoButton, settings.theme, fadeButton);
 #ifdef NEWS_TEST
 			if(!settings.parentalLock)
-				Button3_Theme_Paint_Fade(&newsButton, settings.theme, fadeButton);
+				Button3_Theme_Paint_Fade(&newsButton, settings.theme + self.blueID, fadeButton);
 #endif			
 			// Draw Game Title
 			if(settings.coverText && (!self.dragging && !self.twisting && select_ready))
@@ -1014,4 +1057,32 @@ int main( int argc, char **argv )
 } 
 
 
+bool blinking( int Aon, int Aoff, int Bon, int Boff, int Con, int Coff )
+{
+	static long tic = 0;
+	
+	int a1 = Aon;
+	int a2 = a1 + Aoff;
+	int b1 = a2 + Bon;
+	int b2 = b1 + Boff;
+	int c1 = b2 + Con;
+	int c2 = c1 + Coff;
+		
+	tic++;
+	
+    if ( tic <= a1 ) return true;
+	
+	if ( tic > a1 && tic <= a2 ) return false;
+	
+	if ( tic > a2 && tic <= b1 ) return true;
+	
+	if ( tic > b1 && tic <= b2 ) return false;
+	
+	if ( tic > b2 && tic <= c1 ) return true;
+	
+	if ( tic > c1 && tic <= c2 ) return false;
 
+    if ( tic > c2 ) tic = 0;
+		
+	return false;
+}
