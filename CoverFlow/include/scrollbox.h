@@ -14,7 +14,7 @@
 #include "GRRLIB.h"
 
 #define SB_MAXLINES 40
-#define SB_MAXCHARS 40
+#define SB_MAXCHARS 60
 
 #define SB_BOTTOM	0
 #define SB_MIDDLE	1
@@ -49,18 +49,23 @@ typedef struct ScrollBox
 
 void ScrollBox_Init( ScrollBox * sb, f32 x, f32 y, f32 w, f32 h, int frWidth, u32 frameColor, u32 backColor );
 void ScrollBox_Paint( struct ScrollBox* sb );
-void ScrollBox_SetText( ScrollBox * sb, char* sb_text[], int lines );
-void ScrollBox_SetTextFormat( ScrollBox * sb, int* ttf_size, int lines );
 bool ScrollBox_Select(struct ScrollBox* sb, int x, int y);
 //Properties
+void ScrollBox_SetText( ScrollBox * sb, char* sb_text[], int lines );
+void ScrollBox_SetTextLine( ScrollBox * sb, char* sb_text, int line );
+void ScrollBox_SetTextFormat( ScrollBox * sb, int* ttf_size, int lines );
+void ScrollBox_SetTextFormatLine( ScrollBox * sb, int ttf_size, int line );
+void ScrollBox_SetTextColor( ScrollBox * sb, GXColor TXtColor );
+void ScrollBox_SetTextColorLine( ScrollBox * sb, GXColor TXtColor, int line ); // line starts from 1
+void ScrollBox_SetTextStyling( ScrollBox * sb, uint16_t	textStyling );
+void ScrollBox_SetTextStylingLine( ScrollBox * sb, uint16_t	textStyling, int line ); // line starts from 1
+
 void ScrollBox_SetStartPos( ScrollBox * sb, int startPos );
 void ScrollBox_SetSpeed( ScrollBox * sb, int speed );
 void ScrollBox_SetDelay( ScrollBox * sb, int Delay );
 void ScrollBox_SetRepeat( ScrollBox * sb, bool repeat );
 void ScrollBox_SetLineSpace( ScrollBox * sb, int lineSpace );
-void ScrollBox_SetTextColor( ScrollBox * sb, GXColor TXtColor );
-void ScrollBox_SetTextColorLine( ScrollBox * sb, GXColor TXtColor, int line ); // line starts from 1
-void ScrollBox_SetTextStyling( ScrollBox * sb, uint16_t	textStyling );
-void ScrollBox_SetTextStylingLine( ScrollBox * sb, uint16_t	textStyling, int line ); // line starts from 1
+void ScrollBox_SetLines( ScrollBox * sb, int lines );
+void ScrollBox_SetBackColor( ScrollBox * sb, u32 backColor );
 #endif //_SCROLLBOX_H_
 

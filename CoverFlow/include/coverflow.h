@@ -54,6 +54,8 @@
 //#include "trackedMemoryManager.h"
 
 #include "gameinfo.h"
+#include "newsreader.h"
+
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy

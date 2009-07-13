@@ -381,6 +381,9 @@ int main( int argc, char **argv )
 #ifdef NEWS_TEST			
 			else if((!settings.parentalLock) && Button3_Select(&newsButton, pointer.p_x, pointer.p_y)){
 				// toDo
+				
+				showNewsWindow();
+				
 				// only for demo
 				if (!self.blinkBlue)
 					{
