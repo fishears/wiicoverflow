@@ -16,26 +16,26 @@ char *textAbout[]= {
 "brwest85    [HBC Icon]",
 "alexcarlosantao",
 "",
+
 "[Translators]",
-
-"basda, Spidy1000, nolodude, Xtend,",
-"pepperoni, aHMET, onyxdata, Tusk",
+"basda, Xtend, aHMET, nolodude, Tusk,",
+"pepperoni, Spidy1000, onyxdata, Cambo",
 "",
-"[Channel and Forwarder]",
-"Davi92 and DjSim1",
 
+"[Channel and Forwarder]",
+"Davi92  and  DjSim1",
 "",
 "[Cover Service]",
 "zorglub07 and wiitdb.com crew",
+
 "djtaz and wiiboxart.com crew",
 "",
-
 "the power of GRRLib",
 "",
 "and others...", 
+
 "(please ask if we forgot someone!)",
 "",
-
 "",
 "http://code.google.com/p/wiicoverflow/"
 };

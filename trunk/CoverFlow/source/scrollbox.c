@@ -155,6 +155,33 @@ void ScrollBox_SetTextFormat( ScrollBox * sb, int* ttf_size, int lines)
 }
 
 
+void ScrollBox_SetTextFormatLine( ScrollBox * sb, int ttf_size, int line )
+{
+	if (line > SB_MAXLINES) line = SB_MAXLINES;
+	if (line < 1) line = 1;
+
+	switch (ttf_size)
+		{
+		  case 14:
+			sb->ttf_size[line-1] = 14;
+			break;
+		  case 16:
+			sb->ttf_size[line-1] = 16;
+			break;
+		  case 18:
+			sb->ttf_size[line-1] = 18;
+			break;
+		  case 20:
+			sb->ttf_size[line-1] = 20;
+			break;
+		  case 24:
+			sb->ttf_size[line-1] = 24;
+			break;
+		  default:
+			sb->ttf_size[line-1] = 16;
+		}
+}
+
 
 void ScrollBox_SetText( ScrollBox * sb, char* sb_text[], int lines)
 {
@@ -165,9 +192,20 @@ void ScrollBox_SetText( ScrollBox * sb, char* sb_text[], int lines)
 	
 	for (i = 0; i< sb->lines; i++)
 		{
-		strcopy(sb->ttf_text[i], sb_text[i], 40);
+		strcopy(sb->ttf_text[i], sb_text[i], SB_MAXCHARS);
 	    }
 }
+
+
+
+
+void ScrollBox_SetTextLine( ScrollBox * sb, char* sb_text, int line )
+{
+	if (line > SB_MAXLINES) line = SB_MAXLINES;
+	if (line < 1) line = 1;
+	strcopy(sb->ttf_text[line-1], sb_text, SB_MAXCHARS);
+}
+
 
 
 
@@ -234,7 +272,16 @@ void ScrollBox_SetTextStylingLine( ScrollBox * sb, uint16_t	textStyling, int lin
 {
 	if (line > SB_MAXLINES) line = SB_MAXLINES;
 	if (line < 1) line = 1;
-	sb->textStyling[line -1] = textStyling;;
+	sb->textStyling[line -1] = textStyling;
+}
+
+
+
+void ScrollBox_SetLines( ScrollBox * sb, int lines )
+{
+	if (lines > SB_MAXLINES) lines = SB_MAXLINES;
+	if (lines < 1) lines = 1;
+	sb->lines = lines;
 }
 
 
@@ -254,6 +301,13 @@ void ScrollBox_SetTextColorLine( ScrollBox * sb, GXColor TXtColor, int line )
 	if (line > SB_MAXLINES) line = SB_MAXLINES;
 	if (line < 1) line = 1;
 	sb->ttf_color[line -1] = TXtColor;
+}
+
+
+
+void ScrollBox_SetBackColor( ScrollBox * sb, u32 backColor )
+{
+ sb->bkColor = backColor;
 }
 
 
@@ -300,7 +354,6 @@ int Hz50or60()
 	}
 	return ret;
 }
-
 
 
 
