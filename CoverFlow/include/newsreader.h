@@ -5,5 +5,9 @@
 
 
 void showNewsWindow();
+bool newsFileExist();
+void getNewsFormatData();
+void setNewsFormatData(char *name, char *val);
+bool getNewsID(char *value);
 
 #endif

@@ -84,7 +84,7 @@ extern const u8 button_char_up_over_png[];
 extern const u8 button_char_down_png[];
 extern const u8 button_char_down_over_png[];
 
-#ifdef NEWS_TEST
+#ifdef NEWS_READER
 extern const u8 button_round_news_png[];
 extern const u8 button_round_news_over_png[];
 extern const u8 button_round_news_blue_png[];

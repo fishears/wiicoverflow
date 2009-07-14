@@ -11,9 +11,10 @@
 #ifndef _Button_H_
 #define _Button_H_
 
+#include "defines.h"
 #include "GRRLIB.h"
 
-#define NEWS_TEST   /* uncomment manually */
+
 
 typedef struct Button {
 	int		x;
@@ -23,13 +24,13 @@ typedef struct Button {
 	bool	hovering;
 	bool	show_reflection;
 	struct	GRRLIB_texImg texture;
-	bool toFreeTexture;
+	bool 	toFreeTexture;
 	struct	GRRLIB_texImg hoverTexture;
-	bool toFreeHoverTexture;
+	bool 	toFreeHoverTexture;
 } Button;
 
 
-#ifdef NEWS_TEST
+#ifdef NEWS_READER
 typedef struct Button3 {
 	int		x;
 	int		y;

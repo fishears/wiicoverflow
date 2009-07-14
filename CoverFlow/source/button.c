@@ -348,7 +348,7 @@ void FreeButtonResources(struct Button *btn)
 
 
 
-#ifdef NEWS_TEST
+#ifdef NEWS_READER
 void Button3_Init(Button3 * new_button, const unsigned char normal_img[], const unsigned char hover_img[], const unsigned char triState_img[], int x, int y)
 {
 	GRRLIB_LoadTexture(&(new_button->texture), normal_img);
