@@ -56,6 +56,9 @@
 #include "gameinfo.h"
 #include "newsreader.h"
 
+#include "defines.h"		/* see for enable/disable definitions  */
+
+#define RELEASE   "v1.1" 	/* shown ReleaseNo in SysInfo-Window   */
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy
@@ -83,11 +86,7 @@
 //#define TEST_MODE 1
 #define DEBUG 1
 #define CHEAT_MANAGER
-//#define WBA_BY_FILE           /* Access to wiiboxart with data from file */ 
-  
- #ifdef WBA_BY_FILE 
-       #define URLBOXART_PASS   "SD:/usb-loader/wiiboxart.pass" 
- #endif 
+ 
  
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 
@@ -102,9 +101,7 @@
 #define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           15
 
-#define NEWS_TEST
 
-#define RELEASE              "v1.1"
 
 #define ANIMATE_SPEED 0
 #define FLIP_SPEED  0.016
@@ -254,9 +251,10 @@ typedef struct{
 	bool updateAvailable;
 	char linebuf[300];
 	
-#ifdef NEWS_TEST	
+#ifdef NEWS_READER	
 	int  blueID;
 	bool blinkBlue;
+	char newsID[9];
 #endif
 } s_self;
 

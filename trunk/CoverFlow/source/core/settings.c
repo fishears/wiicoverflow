@@ -62,6 +62,9 @@ void SETTINGS_Init()
 	settings.vipatch      = 0;
 	strcpy(settings.lastplayed,"");
 	settings.presetFix	  = 0;
+#ifdef NEWS_READER
+	strcpy(settings.newsID, "0");
+#endif
 };
 //called by reset button on graphics settings screen
 //button used to reset EVERYTHING
@@ -189,6 +192,10 @@ int SETTINGS_Load()
 			  settings.enablepitch     = atof(mxmlElementGetAttr(next_n,"enablepitch"));
 		  if(mxmlElementGetAttr(next_n,"localizeLang"))
 			  strcpy(settings.localLanguage, mxmlElementGetAttr(next_n,"localizeLang"));
+#ifdef NEWS_READER	  
+		  if(mxmlElementGetAttr(next_n,"newsID"))
+			  strcpy(settings.newsID, mxmlElementGetAttr(next_n,"newsID"));
+#endif	  
 	  }
 	  else
 	  {
@@ -315,6 +322,9 @@ int SETTINGS_Save()
 	sprintf(buffer, "%d", SVN_VERSION);
 	mxmlElementSetAttr(node, "rev", buffer);	
 
+#ifdef NEWS_READER	
+	mxmlElementSetAttr(node, "newsID", settings.newsID);
+#endif
     //GLOBAL GAME SETTINGS
 
 	node = mxmlNewElement(tree, "game");

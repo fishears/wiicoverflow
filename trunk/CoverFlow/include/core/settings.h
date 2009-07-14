@@ -42,6 +42,9 @@ typedef struct {
     char lastplayed[7];
     char localLanguage[7];
 	int presetFix;  // preset gamefix, default 0
+#ifdef NEWS_READER 
+	char newsID[9];
+#endif
 } s_settings;
 
 

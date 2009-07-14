@@ -53,6 +53,7 @@ void ScrollBox_Paint(struct ScrollBox* sb)
 {
  int i, j, ysum;
  f32 xp;
+ uint16_t format;
  
  GRRLIB_Rectangle(sb->x, sb->y, sb->w, sb->h, sb->frColor, true);
  GRRLIB_Rectangle(sb->x +sb->frWidth, sb->y +sb->frWidth, sb->w -2*sb->frWidth, sb->h -2*sb->frWidth, sb->bkColor, true);
@@ -67,7 +68,17 @@ void ScrollBox_Paint(struct ScrollBox* sb)
  
  for (i=0; i< sb->lines; i++)
 	{
-	 switch(sb->textStyling[i]){
+	 if (sb->textStyling[i] & FTGX_JUSTIFY_LEFT ) {
+			format = FTGX_JUSTIFY_LEFT;
+		}
+	 else if (sb->textStyling[i] & FTGX_JUSTIFY_CENTER ) {
+			format = FTGX_JUSTIFY_CENTER;;
+		}
+	 else if (sb->textStyling[i] & FTGX_JUSTIFY_RIGHT ) {
+			format = FTGX_JUSTIFY_RIGHT;;
+		}	 
+	 
+	 switch(format){
 		case FTGX_JUSTIFY_LEFT:
 			xp = sb->x + 10;
 			break;

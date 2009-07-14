@@ -99,9 +99,10 @@ void initVars()
 #endif
 	self.updateAvailable = false;
 	sprintf(self.linebuf, "%s","");
-#ifdef NEWS_TEST	
+#ifdef NEWS_READER	
 	self.blueID = 0;
 	self.blinkBlue = false;
+	strcpy(self.newsID, "0");
 #endif
 }
 
@@ -280,6 +281,46 @@ int main( int argc, char **argv )
 		getURL_LoginData();
 		}
 #endif
+
+#ifdef NEWS_READER 
+	if (newsFileExist())
+		{
+			if (getNewsID(self.newsID))
+				{
+				if (strcmp(self.newsID, settings.newsID) == 0)
+					{ // same 'old' news, no blinking
+					  self.blinkBlue = false;
+					  self.blueID = 0;
+					}
+				else
+				    {
+					  u32 IDold = atol(settings.newsID);
+					  u32 IDnew = atol(self.newsID);
+					  if (IDnew > IDold )
+						  { // newer news, store it to settings and blink
+						   self.blinkBlue = true;
+						   strcpy( settings.newsID,self.newsID);
+						  }
+					  else
+						  {
+						  self.blinkBlue = false;
+						  self.blueID = 0;
+						  }
+					}
+				}
+			else
+				{
+				 self.blinkBlue = false;
+				 self.blueID = 0;
+				}
+		}
+	else
+		{
+		 self.blinkBlue = false;
+		 self.blueID = 0;
+		}
+#endif
+
 	
 	//////////////////////////
 	// main screen gui loop //
@@ -378,25 +419,15 @@ int main( int argc, char **argv )
 			else if((!settings.parentalLock) && Button_Select(&infoButton, pointer.p_x, pointer.p_y)){
 				showInfoWindow();
 			}
-#ifdef NEWS_TEST			
+#ifdef NEWS_READER			
 			else if((!settings.parentalLock) && Button3_Select(&newsButton, pointer.p_x, pointer.p_y)){
-				// toDo
-				
-				showNewsWindow();
-				
-				// only for demo
-				if (!self.blinkBlue)
+				if (newsFileExist())
 					{
-					 self.blinkBlue = true;
-					 //self.blueID = 2;
-					}
-				else
-					{
+					 showNewsWindow();
 					 self.blinkBlue = false;
-					 self.blueID = 0;
+				     self.blueID = 0;
 					}
-
-			}
+			}		
 #endif			
 			else // user clicked A somewhere on the screen
 			{
@@ -776,7 +807,7 @@ int main( int argc, char **argv )
 			}
 		}
 
-#ifdef NEWS_TEST
+#ifdef NEWS_READER
 		if (self.blinkBlue)
 		{
 			if ( blinking(16, 8, 16, 8, 16, 150))
@@ -907,7 +938,7 @@ int main( int argc, char **argv )
 			
 			if(!settings.parentalLock)
 				Button_Theme_Paint_Fade(&infoButton, settings.theme, fadeButton);
-#ifdef NEWS_TEST
+#ifdef NEWS_READER
 			if(!settings.parentalLock)
 				Button3_Theme_Paint_Fade(&newsButton, settings.theme + self.blueID, fadeButton);
 #endif			
@@ -921,7 +952,7 @@ int main( int argc, char **argv )
 		}
 		
 		Button_Hover(&infoButton, pointer.p_x, pointer.p_y);
-#ifdef NEWS_TEST
+#ifdef NEWS_READER
 		Button3_Hover(&newsButton, pointer.p_x, pointer.p_y);
 #endif	
 		// Check for button-pointer intersections, and rumble
@@ -933,7 +964,7 @@ int main( int argc, char **argv )
 			(self.selected && // game load panel is showing
 			 (((!settings.parentalLock) && (Button_Hover(&deleteButton, pointer.p_x, pointer.p_y) 
 			                              || Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y) 
-#ifdef NEWS_TEST
+#ifdef NEWS_READER
 										  || Button3_Hover(&newsButton, pointer.p_x, pointer.p_y) 
 #endif											  
 										  || Button_Hover(&infoButton, pointer.p_x, pointer.p_y))) ||
