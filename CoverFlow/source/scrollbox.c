@@ -15,9 +15,6 @@
 int Hz50or60();
 
 
-
-
-
 void ScrollBox_Init( ScrollBox * sb, f32 x, f32 y, f32 w, f32 h, int frWidth, u32 frameColor, u32 backColor)
 {
 	int i;
@@ -31,7 +28,6 @@ void ScrollBox_Init( ScrollBox * sb, f32 x, f32 y, f32 w, f32 h, int frWidth, u3
 	sb->bkColor = backColor;
 	sb->lines = 0;
 	sb->pos_text = (float) (sb->y + sb->h - 14);
-	
 	sb->speed = 0.4;
 	sb->repeat = true;
 	sb->lineSpace = 0;
@@ -194,6 +190,16 @@ void ScrollBox_SetTextFormatLine( ScrollBox * sb, int ttf_size, int line )
 }
 
 
+
+void ScrollBox_SetTextFormatDef( ScrollBox * sb, int ttf_size )
+{
+ int i;
+ for(i=0;i<SB_MAXLINES;i++)
+	ScrollBox_SetTextFormatLine( sb, ttf_size, i+1 );
+}
+
+
+
 void ScrollBox_SetText( ScrollBox * sb, char* sb_text[], int lines)
 {
 	int i;
@@ -218,6 +224,12 @@ void ScrollBox_SetTextLine( ScrollBox * sb, char* sb_text, int line )
 }
 
 
+void ScrollBox_GetTextLine( ScrollBox * sb, char* sb_text, int line )
+{
+	if (line > SB_MAXLINES) line = SB_MAXLINES;
+	if (line < 1) line = 1;
+	strcopy(sb_text, sb->ttf_text[line-1], SB_MAXCHARS);
+}
 
 
 void ScrollBox_SetSpeed( ScrollBox * sb, int speed)

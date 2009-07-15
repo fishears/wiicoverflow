@@ -9,5 +9,5 @@ bool newsFileExist();
 void getNewsFormatData();
 void setNewsFormatData(char *name, char *val);
 bool getNewsID(char *value);
-
+bool blinking(int Aon, int Aoff, int Bon, int Boff, int Con, int Coff);
 #endif

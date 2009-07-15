@@ -29,89 +29,22 @@
 extern s_self self;
 extern s_pointer pointer;
 
-
 ScrollBox sbnews;			// creates scrollBox
 
-
-
-char *mytext[]= { 
-"News",
-"July 13th, 2009",
-"",
-"This is a demo for coming NewsReader.",
-"If available, a downladed file called...",
-/////////////////////////////
-"'CoverFloader.news'",
-"...is shown and scrolled by automatic.",
-"",
-"The file contains also a header section",
-"with several format-settings like:",
-//////////////////////////////
-"       NEWSID",
-"       BACKCOLOR",
-"       TX_COLOR",
-"       TX_COLORLINE",
-"       TX_SIZE",
-////////////////////////////
-"       TX_SIZELINE",
-"       TX_STYLE",
-"       TX_STYLELINE",
-"       SPEED",
-"       REPEAT",
-////////////////////////////
-"       DELAY",
-"       LINES",
-"",
-"(functions for reading format-settings aren't coded yet.)",
-"",
-////////////////////////////
-"",
-"...and now REPEAT"
-};
-
-// ttf_size ( // 14, 16, 18, 20, 24 ( 0 -> Default = 16 )
-int myFormat[] = { 	24,14,24, 0, 0,
-					20, 0, 0, 0, 0,
-					18,18,18,18,18,
-					18,18,18,18,18,
-					18,18,24,14,24,
-					24, 0 };
 
 void showNewsWindow(){
 
 	bool doloop = true;
 	int fade = 5;
 	int y, sp;
-	int i;
 	char temp[100];
 	
 	sprintf(temp,"NEWSID %s", self.newsID);
 	
-///////////////////////////////////////
 	ScrollBox_Init( &sbnews, 40, 80, 560, 295, 2, 0x000000FF, 0xFFFFFFFF );
-	ScrollBox_SetText(&sbnews, mytext, 27);
-	ScrollBox_SetTextStyling( &sbnews, FTGX_JUSTIFY_LEFT);	//optional
-	ScrollBox_SetTextFormat( &sbnews, myFormat, 27);		//optional
-	ScrollBox_SetLineSpace( &sbnews, 3);					//optional	  
-	ScrollBox_SetSpeed(&sbnews, 4);							//optional
-	ScrollBox_SetRepeat(&sbnews, true);						//optional
-	ScrollBox_SetStartPos(&sbnews, SB_TOP );				//optional	
-	ScrollBox_SetDelay(&sbnews, 5 );						//optional
-	ScrollBox_SetTextColor(&sbnews, (GXColor){0x00, 0x00, 0x00, 0xff} ); //optional
-	// #1
-	ScrollBox_SetTextColorLine(&sbnews, (GXColor){0xFF, 0x00, 0x00, 0xFF}, 1 ); //red
-	ScrollBox_SetTextStylingLine(&sbnews, FTGX_JUSTIFY_CENTER | FTGX_STYLE_UNDERLINE, 1 );
-	// #2
-	ScrollBox_SetTextStylingLine(&sbnews, FTGX_JUSTIFY_RIGHT, 2 );
-	// #6
-	ScrollBox_SetTextColorLine(&sbnews, (GXColor){0x00, 0x00, 0xFF, 0xAA}, 6 ); //blue
-	ScrollBox_SetTextStylingLine(&sbnews, FTGX_JUSTIFY_CENTER, 6 );
-	// #11 - #22
-	for (i=11; i<23; i++)
-		ScrollBox_SetTextColorLine(&sbnews, (GXColor){0x00, 0x00, 0xFF, 0xFF}, i ); //darkblue
-
+	ScrollBox_SetStartPos(&sbnews, SB_TOP );
+	getNewsFormatData() ;
 	
-///////////////////////////////////////
 	do{
 		y = 115;
 		sp = 0;
@@ -131,12 +64,8 @@ void showNewsWindow(){
 		CFreeTypeGX_DrawText(ttf16pt, 320 , 52, "News Reader", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 
 		CFreeTypeGX_DrawText(ttf14pt, 40 , 70, temp, (GXColor){0x00, 0x00, 0x00, 0xFF}, FTGX_JUSTIFY_LEFT);
-
-///////////////////////////////		
+	
 		ScrollBox_Paint(&sbnews);			//scrolls text in box
-///////////////////////////////		
-		
-		//GRRLIB_DrawImg(430, 80, menu_logo_texture, 0, 1, 1, 0xFFFFFFFF);
 		
 		okButton.x = 320 - 54;
 		okButton.y = 388;
@@ -168,12 +97,10 @@ void showNewsWindow(){
 			{
 				doloop = false;
 			}
-////////////////////////////////////////////
 			else if(ScrollBox_Select(&sbnews, pointer.p_x, pointer.p_y))
 			{
 				sbnews.selected = (sbnews.selected == true) ? false : true;
 			}
-////////////////////////////////////////////			
 		}
 		
 		GRRLIB_Render();
@@ -183,91 +110,268 @@ void showNewsWindow(){
 
 
 
- bool newsFileExist() 
+bool newsFileExist() 
+{ 
+ FILE *fp; 
+ fp = fopen(NEWSFILE, "r"); 
+ if(fp != NULL) 
  { 
-	 FILE *fp; 
-	 fp = fopen(NEWSFILE, "r"); 
-	 if(fp != NULL) 
-	 { 
-		fclose(fp); 
-		return true; 
-	 } 
-	 else 
-		return false; 
+	fclose(fp); 
+	return true; 
  } 
+ else 
+	return false; 
+} 
 
 
  
- void getNewsFormatData() 
- { 
-  cfg_parsefile(NEWSFILE, &setNewsFormatData); 
- } 
+void getNewsFormatData() 
+{ 
+ cfg_parsefile(NEWSFILE, &setNewsFormatData); 
+} 
   
   
- void setNewsFormatData(char *name, char *val) 
- { 
-  /*  
-     if (strcmp(name, "username") == 0) { 
-                 strcopy(self.url_username, val, sizeof(self.url_username)); 
-                 return; 
-         } 
+void setNewsFormatData(char *name, char *val) 
+{ 
+  // SPEED
+  if (strcmp(name, "SPEED") == 0)
+	{ 
+	 ScrollBox_SetSpeed(&sbnews, atoi(val));				
+	 return; 
+	} 
   
-         if (strcmp(name, "password") == 0) { 
-                 strcopy(self.url_password, val, sizeof(self.url_password)); 
-                 return; 
-         } 
-  */
- } 
+  // DELAY
+  if (strcmp(name, "DELAY") == 0)
+	{ 
+	 ScrollBox_SetDelay(&sbnews, atoi(val));				
+	 return; 
+	} 
+  
+  // LINES
+  if (strcmp(name, "LINES") == 0)
+	{ 
+	 ScrollBox_SetLines(&sbnews, atoi(val));				
+	 return; 
+	} 
+  
+  // REPEAT
+  if (strcmp(name, "REPEAT") == 0)
+	{ 
+	 if ( atoi(val) > 0 ) 
+		 ScrollBox_SetRepeat(&sbnews, true);
+	 else
+		 ScrollBox_SetRepeat(&sbnews, false);
+	 return; 
+	} 
+  
+  // BACKCOLOR
+  if (strcmp(name, "BACKCOLOR") == 0)
+	{ 
+	 u32 bc = strtoul(val,NULL,0);
+	 ScrollBox_SetBackColor(&sbnews, (u32)bc);				
+	 return; 
+	} 
+  
+  // TX_SIZE
+  if (strcmp(name, "TX_SIZE") == 0)
+	{ 
+	 ScrollBox_SetTextFormatDef(&sbnews, atoi(val));	
+	 return; 
+	} 
+  
+  // TX_STYLE
+  if (strcmp(name, "TX_STYLE") == 0)
+	{ 
+	 if (strcmp(val, "FTGX_JUSTIFY_LEFT") == 0)
+	   {
+	    ScrollBox_SetTextStyling( &sbnews, 	FTGX_JUSTIFY_LEFT );
+	    return;
+	   }
+	 if (strcmp(val, "FTGX_JUSTIFY_CENTER") == 0)
+	   {
+	    ScrollBox_SetTextStyling( &sbnews, 	FTGX_JUSTIFY_CENTER );
+	    return;
+	   }
+	 if (strcmp(val, "FTGX_JUSTIFY_RIGHT") == 0)
+	   {
+	    ScrollBox_SetTextStyling( &sbnews, 	FTGX_JUSTIFY_RIGHT );
+	    return;
+	   }
+	 ScrollBox_SetTextStyling( &sbnews, FTGX_JUSTIFY_LEFT );
+	 return; 
+	} 
+  
+  //TX_STYLELINE
+  if (strcmp(name, "TX_STYLELINE") == 0)
+	{ 
+	 int cnt;
+	 int line;
+	 char buff[100];
+		
+	 cnt = sscanf(val, "%d, %s", &line, buff);
+	 if (cnt == 2)
+		{
+		 if (strcmp(buff, "FTGX_JUSTIFY_LEFT") == 0)
+		   {
+			ScrollBox_SetTextStylingLine( &sbnews, FTGX_JUSTIFY_LEFT, line );
+			return;
+		   }
+		 if (strcmp(buff, "FTGX_JUSTIFY_CENTER") == 0)
+		   {
+			ScrollBox_SetTextStylingLine( &sbnews, FTGX_JUSTIFY_CENTER, line );
+			return;
+		   }
+		 if (strcmp(buff, "FTGX_JUSTIFY_RIGHT") == 0)
+		   {
+			ScrollBox_SetTextStylingLine( &sbnews, FTGX_JUSTIFY_RIGHT, line );
+			return;
+		   }
+		}
+	 return; 
+	}   
+  
+  
+  // TX_COLOR
+  if (strcmp(name, "TX_COLOR") == 0)
+	{ 
+		int cnt;
+		int R,G,B,A;
+		
+		cnt = sscanf(val, "0x%x, 0x%x, 0x%x, 0x%x", &R, &G, &B, &A);
+		if (cnt == 4)
+			{
+			 ScrollBox_SetTextColor(&sbnews, (GXColor){R, G, B, A} );
+			}
+		else
+			{
+			 ScrollBox_SetTextColor(&sbnews, (GXColor){0x00, 0x00, 0x00, 0xff} );
+			}
+		return;
+	}
+
+  // TX_COLORLINE
+  if (strcmp(name, "TX_COLORLINE") == 0)
+	{ 
+		int line;
+		int cnt;
+		int R,G,B,A;
+		
+		cnt = sscanf(val, "%d, 0x%x, 0x%x, 0x%x, 0x%x",&line, &R, &G, &B, &A);
+		if (cnt == 5)
+			{
+			 ScrollBox_SetTextColorLine(&sbnews, (GXColor){R, G, B, A}, line );
+			}
+		return;
+	}
+
+  //TX_SIZELINE 
+  if (strcmp(name, "TX_SIZELINE") == 0)
+	{ 
+		int cnt;
+		int line;
+		int size;
+		
+		cnt = sscanf(val, "%d, %d", &line, &size);
+		if (cnt == 2)
+			{
+			 ScrollBox_SetTextFormatLine( &sbnews, size, line );
+			}
+		return;
+	}
+	
+  //TX_TABLINE
+  // Must be added behind reading lines with content of text
+  if (strcmp(name, "TX_TABLINE") == 0)
+	{ 
+		char tmp[120] = "";
+		int cnt;
+		int line;
+		int blanks;
+		int i;
+		
+		cnt = sscanf(val, "%d, %d", &line, &blanks);
+		if (cnt == 2)
+			{
+			 if (blanks > (SB_MAXCHARS -10)) blanks = SB_MAXCHARS -10;
+			 if (blanks < 0) blanks = 0;
+			 for (i=0;i<blanks;i++)
+				strcat(tmp, " ");
+			 strcat(tmp, sbnews.ttf_text[line-1]);
+			 strcopy(sbnews.ttf_text[line-1],tmp, SB_MAXCHARS);
+			}
+		return;	
+	}  
+  
+	
+  // TEXTLINE
+  if ( atoi(name) > 0 )
+    {
+	 int line = atoi(name);
+	 ScrollBox_SetTextLine( &sbnews, val, line );
+	 return;
+	}
+} 
 
 
 
 
 bool getNewsID(char *value)
 {
-	FILE *f;
-	char *eq;
-	char line[100], name[50], val[50];
+ FILE *f;
+ char *eq;
+ char line[100], name[50], val[50];
 
-	strcpy(value, "");
-	f = fopen(NEWSFILE, "rt");
-	if (!f) 
-	{
-		return false;
-	}
-
-	while (fgets(line, sizeof(line), f)) 
-	{
-		if (line[0] == '#') continue;
-		eq = strchr(line, '=');
-		if (!eq) continue;
-		*eq = 0;
-		trimcopy(name, line, sizeof(name));
-		trimcopy(val, eq+1, sizeof(val));		
- 	    if (strcmp(name, "NEWSID") == 0)
-			{
-			fclose(f);
-			strcpy(value, val);
-			return true;
-			}
-	}
-	fclose(f);
+ strcpy(value, "");
+ f = fopen(NEWSFILE, "rt");
+ if (!f) 
+   {
 	return false;
+   }
+
+ while (fgets(line, sizeof(line), f)) 
+ {
+	if (line[0] == '#') continue;
+	eq = strchr(line, '=');
+	if (!eq) continue;
+	*eq = 0;
+	trimcopy(name, line, sizeof(name));
+	trimcopy(val, eq+1, sizeof(val));		
+	if (strcmp(name, "NEWSID") == 0)
+		{
+		fclose(f);
+		strcpy(value, val);
+		return true;
+		}
+ }
+ fclose(f);
+ return false;
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+bool blinking( int Aon, int Aoff, int Bon, int Boff, int Con, int Coff )
+{
+	static long tic = 0;
+	
+	int a1 = Aon;
+	int a2 = a1 + Aoff;
+	int b1 = a2 + Bon;
+	int b2 = b1 + Boff;
+	int c1 = b2 + Con;
+	int c2 = c1 + Coff;
+		
+	tic++;
+	
+    if ( tic <= a1 ) 			  return true;
+	if ( tic > a1 && tic <= a2 ) return false;
+	if ( tic > a2 && tic <= b1 ) return true;
+	if ( tic > b1 && tic <= b2 ) return false;
+	if ( tic > b2 && tic <= c1 ) return true;
+	if ( tic > c1 && tic <= c2 ) return false;
+    if ( tic > c2 ) tic = 0;
+		
+	return false;
+}
 
 #endif
 

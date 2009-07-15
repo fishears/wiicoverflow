@@ -53,8 +53,12 @@ bool ScrollBox_Select(struct ScrollBox* sb, int x, int y);
 //Properties
 void ScrollBox_SetText( ScrollBox * sb, char* sb_text[], int lines );
 void ScrollBox_SetTextLine( ScrollBox * sb, char* sb_text, int line );
+void ScrollBox_GetTextLine( ScrollBox * sb, char* sb_text, int line );
+
 void ScrollBox_SetTextFormat( ScrollBox * sb, int* ttf_size, int lines );
 void ScrollBox_SetTextFormatLine( ScrollBox * sb, int ttf_size, int line );
+void ScrollBox_SetTextFormatDef( ScrollBox * sb, int ttf_size );
+
 void ScrollBox_SetTextColor( ScrollBox * sb, GXColor TXtColor );
 void ScrollBox_SetTextColorLine( ScrollBox * sb, GXColor TXtColor, int line ); // line starts from 1
 void ScrollBox_SetTextStyling( ScrollBox * sb, uint16_t	textStyling );
