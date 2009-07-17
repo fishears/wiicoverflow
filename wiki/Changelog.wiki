@@ -1,9 +1,13 @@
 #labels Featured
 == v1.1  (July ? 2009) ==
 
+-NEW-
+  * CoverFloader News Service (CFNS) (requires internet connection)
+  * CoverFloader NewsReader
+
 -FIX-
   * Fix typo in url-path for diskarts
-  * Fix bug in wbfs_estimate_disc() (issue321) (thx hend...@freenet.de)
+  * Fix bug in wbfs_estimate_disc() (issue321 thanks to hend...@freenet.de)
   * Fix bug that doesn't create codes directory for cheats (issue326 thanks to Richard)
 
 -OTHER-
