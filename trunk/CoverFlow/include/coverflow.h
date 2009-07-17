@@ -254,7 +254,7 @@ typedef struct{
 #ifdef NEWS_READER	
 	int  blueID;
 	bool blinkBlue;
-	char newsID[9];
+	char newsID[10];
 #endif
 } s_self;
 
