@@ -285,7 +285,7 @@ int main( int argc, char **argv )
 		{
 			if (getNewsID(self.newsID))
 				{
-				if (strcmp(self.newsID, settings.newsID) == 0)
+				if (strcmp(self.newsID, settings.newsID) == 0) 
 					{ // same 'old' news, no blinking
 					  self.blinkBlue = false;
 					  self.blueID = 0;

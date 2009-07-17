@@ -321,7 +321,6 @@ bool getNewsID(char *value)
  char *eq;
  char line[100], name[50], val[50];
 
- strcpy(value, "");
  f = fopen(NEWSFILE, "rt");
  if (!f) 
    {
