@@ -63,7 +63,8 @@ void SETTINGS_Init()
 	strcpy(settings.lastplayed,"");
 	settings.presetFix	  = 0;
 #ifdef NEWS_READER
-	strcpy(settings.newsID, "0");
+	strcpy(settings.newsDate, "0");
+	strcpy(settings.newsID,   "0");
 #endif
 };
 //called by reset button on graphics settings screen
@@ -195,6 +196,8 @@ int SETTINGS_Load()
 #ifdef NEWS_READER	  
 		  if(mxmlElementGetAttr(next_n,"newsID"))
 			  strcpy(settings.newsID, mxmlElementGetAttr(next_n,"newsID"));
+		  if(mxmlElementGetAttr(next_n,"newsDate"))
+			  strcpy(settings.newsDate, mxmlElementGetAttr(next_n,"newsDate"));
 #endif	  
 	  }
 	  else
@@ -323,7 +326,8 @@ int SETTINGS_Save()
 	mxmlElementSetAttr(node, "rev", buffer);	
 
 #ifdef NEWS_READER	
-	mxmlElementSetAttr(node, "newsID", settings.newsID);
+	mxmlElementSetAttr(node, "newsDate", settings.newsDate);
+	mxmlElementSetAttr(node, "newsID",   settings.newsID);
 #endif
     //GLOBAL GAME SETTINGS
 

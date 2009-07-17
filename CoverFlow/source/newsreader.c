@@ -372,5 +372,17 @@ bool blinking( int Aon, int Aoff, int Bon, int Boff, int Con, int Coff )
 	return false;
 }
 
+
+void setNewsDate(char* ret_string)
+{
+ 	time_t now;
+	struct tm  *ts;
+   
+	now = time(NULL);
+	ts = localtime(&now);
+	sprintf(ret_string, "%02d%02d%02d", ts->tm_year-100, ts->tm_mon+1, ts->tm_mday);
+}
+
+
 #endif
 

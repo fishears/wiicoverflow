@@ -3,6 +3,7 @@
 static lwp_t networkthread = LWP_THREAD_NULL;
 
 extern s_self self;
+extern s_settings settings;
 
 void * networkinitcallback(void *arg)
 {
@@ -115,16 +116,22 @@ bool promptForUpdate(){
 
 #ifdef NEWS_READER 
 bool checkForNews(){
+	char nowDate[7];
 	struct block file;
 	char* url = "http://wiicoverflow.googlecode.com/files/CoverFloader.news";
 	
-	unlink(USBLOADER_PATH "/CoverFloader.news");
-	file = downloadfile(url);
-	
-	if(file.data != NULL){
-		saveFile(USBLOADER_PATH "/CoverFloader.news", file);
-		free(file.data);
-		return true;
+	setNewsDate(nowDate);
+	if ( atoi(nowDate) > atoi(settings.newsDate) )
+		{	
+		 unlink(USBLOADER_PATH "/CoverFloader.news");
+		 file = downloadfile(url);
+		
+		 if(file.data != NULL){
+			saveFile(USBLOADER_PATH "/CoverFloader.news", file);
+			strcpy(settings.newsDate, nowDate);
+			free(file.data);
+			return true;
+			}
 		}
 	return false;
 }
