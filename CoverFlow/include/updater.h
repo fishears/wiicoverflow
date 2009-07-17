@@ -20,6 +20,6 @@ void* networkinitcallback(void *arg);
 void initNetworkThread();
 void shutdownNetworkThread();
 bool checkForUpdate();
+bool checkForNews();
 bool promptForUpdate();
-
 #endif

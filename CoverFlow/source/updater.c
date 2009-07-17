@@ -9,6 +9,9 @@ void * networkinitcallback(void *arg)
 
 	self.dummy++;
 	if(networkInit(self.ipAddress)){
+#ifdef NEWS_READER 
+		checkForNews();
+#endif		
 		if(checkForUpdate())
 			self.updateAvailable = true;
 		else
@@ -57,6 +60,7 @@ bool checkForUpdate(){
 	
 	return false;
 }
+
 
 bool promptForUpdate(){
 	
@@ -108,3 +112,23 @@ bool promptForUpdate(){
 	
 	return WindowPrompt("Update Available!", message, &okButton, &cancelButton);
 }
+
+#ifdef NEWS_READER 
+bool checkForNews(){
+	struct block file;
+	char* url = "http://wiicoverflow.googlecode.com/files/CoverFloader.news";
+	
+	unlink(USBLOADER_PATH "/CoverFloader.news");
+	file = downloadfile(url);
+	
+	if(file.data != NULL){
+		saveFile(USBLOADER_PATH "/CoverFloader.news", file);
+		free(file.data);
+		return true;
+		}
+	return false;
+}
+#endif
+
+
+
