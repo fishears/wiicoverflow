@@ -15,12 +15,24 @@
 
 /* Prototypes */
 u32 swap32(u32);
-void sysdate();
+void setSysdate(char* ret_string);
+void getSysdate(char* now, char* ret_string);
 void ios_version_check();
 u8 CalculateFrameRate();
 void apply_settings();
-int Net_Init(char *ip);
+void apply_fixsettings();
+//bool ifConfig(char *ip);
+bool networkInit(char *ip);
 void quit();
-//char *get_title(struct discHdr *header);
+void WiiLight(int enable);
+void UpdateBufferedImages();
+void DragSlider(int xPos);
+int getRandomNum(int min, int max);
+float easeOutQuint(float t,float b , float c, float d);
+float easeInQuint(float t,float b , float c, float d);
+float easeOutQuad(float t,float b , float c, float d);
+float easeInQuad(float t,float b , float c, float d);
+float easeOutCubic(float t,float b , float c, float d);
+char * ParseTokenedUrl(char * url, char* username, char* password, char * lang, char * region, char *id);
 
 #endif

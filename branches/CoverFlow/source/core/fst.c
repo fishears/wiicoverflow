@@ -33,12 +33,18 @@
 #include "dvd_broadway.h"
 #include "wiipad.h"
 #include "fat.h"
-
+#include "fatmounter.h"
+#include "defines.h"
 
 #define FSTDIRTYPE 1
 #define FSTFILETYPE 0
 #define ENTRYSIZE 0xC
-#define FILEDIR	"SD:/codes"
+
+#ifdef USB_DEVICE
+	#define FILEDIR	"USB:/codes"
+#else
+	#define FILEDIR	"SD:/codes"
+#endif
 
 #define MAX_FILENAME_LEN	128
 
@@ -55,7 +61,9 @@ u32 do_sd_code(char *filename)
 	u32 ret;
 	char filepath[128];
 	
-	ret = Fat_MountSDHC();
+	//ret = Fat_MountSDHC();
+	ret = SDCard_Init();
+	USBDevice_Init();
 
 	if (ret < 0) {
 		printf("[+] SD Error\n");
@@ -76,7 +84,9 @@ u32 do_sd_code(char *filename)
 	fp = fopen(filepath, "rb");
 	if (!fp) {
 		printf("[+] No SD codes found\n");
-		Fat_UnmountSDHC();
+		//Fat_UnmountSDHC();
+		USBDevice_deInit();
+		SDCard_deInit();
 		sleep(2);
 		return 0;
 	}
@@ -97,7 +107,9 @@ u32 do_sd_code(char *filename)
 		printf("[+] SD Code Error\n");
 		free(filebuff);
 		fclose(fp);
-		Fat_UnmountSDHC();
+		//Fat_UnmountSDHC();
+		USBDevice_deInit();
+		SDCard_deInit();
 		sleep(2);
 		return 0;
 	}
@@ -111,7 +123,10 @@ u32 do_sd_code(char *filename)
 	free(filebuff);
 	fclose(fp);
 	
-	Fat_UnmountSDHC();
+	//Fat_UnmountSDHC();
+	
+	USBDevice_deInit();
+	SDCard_deInit();
 	
 	sleep(2);
 	return 1;

@@ -3,9 +3,9 @@
 
 /**
  * Emptyblock is a statically defined variable for functions to return if they are unable
- * to complete a request
+ * to complete a request - but now it includes ERROR INFO (fishears)
  */
-const struct block emptyblock = {0, NULL};
+struct block emptyblock = {0, NULL};
 
 //The maximum amount of bytes to send per net_write() call
 #define NET_BUFFER_SIZE 1024
@@ -91,7 +91,7 @@ struct block read_message(s32 connection)
 		//Anything below 0 is an error in the connection
 		if(bytes_read < 0)
 		{
-			printf(localStr("M041", "Connection error from net_read()  Errorcode: %i\n"), bytes_read);
+			printf(TX.errorConnect, bytes_read);
 			return emptyblock;
 		}
 		
@@ -133,10 +133,10 @@ struct block read_message(s32 connection)
  */
 struct block downloadfile(const char *url)
 {
-	//Check if the url starts with "http://", if not it is not considered a valid url
+        //Check if the url starts with "http://", if not it is not considered a valid url
 	if(strncmp(url, "http://", strlen("http://")) != 0)
 	{
-		printf(localStr("M042", "URL '%s' doesn't start with 'http://'\n"), url);
+		sprintf(emptyblock.error,TX.URLnoBegin, url); //doen't start with http://
 		return emptyblock;
 	}
 	
@@ -146,7 +146,7 @@ struct block downloadfile(const char *url)
 	//At the very least the url has to end with '/', ending with just a domain is invalid
 	if(path == NULL)
 	{
-		printf(localStr("M043", "URL '%s' has no PATH part\n"), url);
+		sprintf(emptyblock.error,TX.URLnoPath, url); //no path part in URL
 		return emptyblock;
 	}
 	
@@ -155,7 +155,7 @@ struct block downloadfile(const char *url)
 	
 	if(domainlength == 0)
 	{
-		printf(localStr("M044", "No domain part in URL '%s'\n"), url);
+		sprintf(emptyblock.error,TX.URLnoDomain, url); //couldn't find a domain in url
 		return emptyblock;
 	}
 	
@@ -164,11 +164,11 @@ struct block downloadfile(const char *url)
 	domain[domainlength] = '\0';
 	
 	//Parsing of the URL is done, start making an actual connection
-	u32 ipaddress = getipbynamecached(domain);
+	u32 ipaddress = getipbyname(domain); //slower but doesn't leak memory
 	
 	if(ipaddress == 0)
 	{
-		printf(localStr("M045", "\ndomain %s could not be resolved"), domain);
+		sprintf(emptyblock.error,TX.errorDomain, domain); //couldn't resolve domain
 		return emptyblock;
 	}
 
@@ -176,7 +176,7 @@ struct block downloadfile(const char *url)
 	s32 connection = server_connect(ipaddress, 80);
 	
 	if(connection < 0) {
-		printf(localStr("M046", "Error establishing connection") );
+		sprintf(emptyblock.error,TX.errEstablishConn); //couldn't establish connection
 		return emptyblock;
 	}
 	
@@ -209,8 +209,7 @@ struct block downloadfile(const char *url)
 	
 	if(filestart == NULL)
 	{
-		printf(localStr("M047", "HTTP Response was without a file\n") );
-		free(response.data);
+		sprintf(emptyblock.error,TX.HTTPnoFile);
 		return emptyblock;
 	}
 	
@@ -221,7 +220,7 @@ struct block downloadfile(const char *url)
 	
 	if(file.data == NULL)
 	{
-		printf(localStr("M048", "No more memory to copy file from HTTP response\n") );
+		sprintf(emptyblock.error,TX.noMemCopy ); //couldn't copy the file to the block
 		free(response.data);
 		return emptyblock;
 	}

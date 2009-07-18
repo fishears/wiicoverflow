@@ -1,2 +1,2 @@
 #pragma once
-#define SVN_VERSION 347
+#define SVN_VERSION 821

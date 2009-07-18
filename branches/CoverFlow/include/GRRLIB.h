@@ -79,11 +79,13 @@ inline void GRRLIB_Rectangle(f32 x, f32 y, f32 width, f32 height, u32 color, u8 
 void GRRLIB_NGone(Vector v[], u32 color, long n);
 void GRRLIB_NGoneFilled(Vector v[], u32 color, long n);
 
-GRRLIB_texImg GRRLIB_CreateEmptyTexture(unsigned int, unsigned int);
-GRRLIB_texImg GRRLIB_DuplicateTexture(GRRLIB_texImg tex, unsigned int w, unsigned int h);
-inline GRRLIB_texImg GRRLIB_LoadTexturePNG(const unsigned char my_img[]);
-GRRLIB_texImg GRRLIB_LoadTexturePNGToMemory(const unsigned char my_png[], void * textureAddress);
-GRRLIB_texImg GRRLIB_LoadTexture(const unsigned char my_img[]);
+inline void GRRLIB_DrawFlatCoverImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color );
+void GRRLIB_CreateEmptyTexture(GRRLIB_texImg * my_texture, unsigned int, unsigned int);
+void GRRLIB_DuplicateTexture(GRRLIB_texImg * destination_texture, GRRLIB_texImg tex, unsigned int w, unsigned int h);
+void GRRLIB_LoadTexturePNG(GRRLIB_texImg * my_texture, const unsigned char my_img[]);
+void GRRLIB_LoadTexturePNGToMemory(GRRLIB_texImg * my_texture, const unsigned char my_png[], void * textureAddress);
+void GRRLIB_LoadTexturePNGToMemorySized(GRRLIB_texImg * my_texture, const unsigned char my_png[], void * textureAddress,int Size);
+void GRRLIB_LoadTexture(GRRLIB_texImg * my_texture, const unsigned char my_img[]);
 
 GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]);
 void GRRLIB_FreeBMF(GRRLIB_bytemapFont bmf);
@@ -91,7 +93,8 @@ void GRRLIB_FreeBMF(GRRLIB_bytemapFont bmf);
 void GRRLIB_InitTileSet(struct GRRLIB_texImg *tex, unsigned int tilew, unsigned int tileh, unsigned int tilestart);
 
 inline void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color );
-inline void GRRLIB_DrawCoverImg(f32 loc, GRRLIB_texImg tex, float degrees, float scale, u32 color );
+inline void GRRLIB_DrawImgReflection(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, float dist);
+inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degrees, float scale, u32 color, float falloff, int theme);
 inline void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color, int frame);
 
 void GRRLIB_Printf(f32 xpos, f32 ypos, GRRLIB_texImg tex, u32 color, f32 zoom, const char *text, ...);

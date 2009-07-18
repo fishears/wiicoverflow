@@ -4,7 +4,13 @@
 #include <unistd.h>
 
 #include "usbstorage.h"
+
+#ifndef BOOTLOADER
 #include "utils.h"
+#else
+#include "bootloader.h"
+#endif
+
 #include "video.h"
 #include "wdvd.h"
 #include "disc.h"

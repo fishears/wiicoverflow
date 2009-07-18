@@ -2,22 +2,25 @@
   <app version="1.0">
     <name>CoverFloader</name>
     <coder>Many Talented People</coder>
-    <version>Release X.X</version>
-    <release_date>N/A</release_date>
+    <version>v1.0</version>
+    <release_date>July 7th, 2009</release_date>
     <short_description>USB ISO Loader</short_description>
     <long_description>Many thanks to the developers:
 Scognito
 AFour98
 F1SHE4RS
 GC@Blackbird
-and I suppose thanks to myself, beardface.
+LoudBob11
+beardface
 
 Other thanks to:
 Gitkua (images)
 brwest85 (HBC Icon)
-
-Possible thanks to:
-LoudBob11 --Pending a useful commit ;)
+alexcarlosantao
+zorglub07 and wiitdb.com crew for the cover service
+djtaz and wiiboxart.com crew for the cover service
+the power of GRRLib
+and others (please ask if we forgot someone!)
 
 wiicoverflow.googlecode.com
 </long_description>
