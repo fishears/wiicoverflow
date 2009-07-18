@@ -1,6 +1,10 @@
 #include "deleteMenu.h"
+#include "settings.h"
 
+extern s_settings settings;
 extern s_self self;
+extern s_title* titleList;
+extern int COVER_COUNT;
 
 bool Menu_Delete(){
 
@@ -16,31 +20,42 @@ bool Menu_Delete(){
 
 	/* Selected game */
 	header = &self.gameList[self.gameSelected];
+	char title[MAX_TITLE_LEN];
 
-	if(strlen(header->title) < 30) {
-		sprintf(gameName, "%s", header->title);
+	if(self.usingTitlesTxt){
+		sprintf(title, "%s", header->title);
+		getTitle(titleList, (char*)header->id, title);
+	}
+	else
+		sprintf(title, "%s", (header->title));
+
+	if(strlen(title) < 30) {
+		sprintf(gameName, "%s", title);
 	}
 	else
 	{
-		strncpy(gameName, header->title, 27);
+		strncpy(gameName, title, 27);
 		gameName[27] = '\0';
 		strncat(gameName, "...", 3);
 	}
 
-	if(WindowPrompt(localStr("M080", "Do you want to delete:"), gameName, &yesButton, &noButton))
+	//if(WindowPrompt(TX.askDelete, gameName, &yesButton, &noButton))
+	if(WindowPromptInstall((char*)header->id, gameName, TX.askDelete, &yesButton, &noButton, 1))
 	{
+		BUFFER_KillBuffer();
 		if(0 > WBFS_RemoveGame(header->id))
 		{
-			WindowPrompt(localStr("M081", "Delete Failed."), localStr("M082", "Could not delete game."), &okButton, 0);
+			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
+			BUFFER_InitBuffer();
+			WindowPrompt(TX.errorDelete, TX.cantDelete, &okButton, 0);
 		}
 		else
 		{
 			GetEntries();
-			Sleep(300);
-			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift);
-			Sleep(100);
-			
-			WindowPrompt(localStr("M083", "Successfully deleted."), localStr("M084", "Press Ok to Continue."), &okButton, 0);
+			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
+			BUFFER_InitBuffer();
+			WindowPrompt(TX.successDelete, TX.pressOkContinue, &okButton, 0);
+			WBFS_DiskSpace(&self.usedSpace, &self.freeSpace);
 			return true;
 		}
 	}

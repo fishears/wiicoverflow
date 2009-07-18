@@ -2,6 +2,7 @@
 #include <ogcsys.h>
 
 #include "fat.h"
+#include "fatmounter.h"
 #include "wiipad.h"
 
 
@@ -12,7 +13,9 @@ void Subsystem_Init(void)
 	Wpad_Init();
 	
 	/* Mount SDHC */
-	Fat_MountSDHC();
+	//Fat_MountSDHC();
+	SDCard_Init();
+	USBDevice_Init();
 }
 
 void Subsystem_Close(void)
@@ -22,5 +25,7 @@ void Subsystem_Close(void)
 	Wpad_Disconnect();
 	
 	/* Unmount SDHC */
-	Fat_UnmountSDHC();
+	//Fat_UnmountSDHC();
+	USBDevice_deInit();
+	SDCard_deInit();
 }

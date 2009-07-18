@@ -1,6 +1,11 @@
 #include "bootMenu.h"
+#include "capp_dol.h"
+
+#include "processor.h"
+#include "asm.h"
 
 extern s_self self;
+extern s_settings settings;
 extern s_gameSettings gameSetting;
 
 bool Menu_Boot(){
@@ -32,6 +37,12 @@ bool Menu_Boot(){
 	/* Set WBFS mode */
 	Disc_SetWBFS(WBFS_DEVICE_USB,header->id);
 		
+	if (self.gameList)
+	{
+		free(self.gameList);
+		self.gameList=NULL;
+	}
+
 	s32 ret;
 	
 	/* Open disc */
@@ -46,26 +57,44 @@ bool Menu_Boot(){
     }
 
 	#else
+	/*
 	//TODO No really sure how args need to be set up...
 	char* buffer;
-	buffer = malloc(strlen("bootloader.dol") + 1 + 6 + 1);
-	sprintf(buffer, "bootloader.dol%c%s%c", '\0', header->id, '\0');
+	buffer = malloc(strlen("bootloader.dol") + 1 + 6 + 2);
+	sprintf(buffer, "bootloader.dol%c%s%c%c", '\0', header->id, '\0','\0');
 	
 	struct __argv argv;
 	bzero(&argv, sizeof(argv));
 	argv.argvMagic = ARGV_MAGIC;
+	
 	//length is bootloader length + null + header length + null + null
-	argv.length = strlen(buffer) + 1;
+	argv.length = strlen(buffer);
 	argv.commandLine = malloc(argv.length);
 	strcpy(argv.commandLine, buffer);
 	
-	argv.commandLine[argv.length - 1] = '\x00';
 	argv.argc = 2;
 	argv.argv = & argv.commandLine;
 	
-	argv.endARGV = argv.argv + 1;
+	argv.endARGV = argv.argv + argv.length;
 			
 	run_dol(bootloader_dol, &argv);
+	*/
+	
+	char cmdLine[256];
+	
+	
+	sprintf(cmdLine, "%s %s %d %d %d %d %d", "bootloader.dol",
+			header->id, settings.ocarina, settings.hooktype, settings.language,
+			settings.video, settings.vipatch);
+	
+	if (self.gameList)
+	{
+		free(self.gameList);
+		self.gameList=NULL;
+	}
+
+	CAPPDOL_Launch(bootloader_dol, (const char *)cmdLine);	
+
 	#endif
 
 	#endif
@@ -80,7 +109,7 @@ bool LaunchGame()
 	{
 		//self.dummy = false;
 		draw_covers();
-		done = draw_selected_two(true, false);
+		done = DrawLoadGameDialog(true, false);
 		
 		GRRLIB_Render();
 		//self.dummy = false;
@@ -88,8 +117,19 @@ bool LaunchGame()
 	
 	/*Fade to black*/
 	//TODO Fade to black instead of just drawing black
-	GRRLIB_FillScreen(0x000000FF);
-	GRRLIB_Render();
+	
+	int i = 0;
+	int fade = 0x00;
+	
+	for(i = 0; i <= 25; i++){
+		fade+=10;
+		
+		draw_covers();
+		DrawLoadGameDialog(true, false);
+		GRRLIB_2D_Init();
+		GRRLIB_FillScreen(0x00000000|fade);
+		GRRLIB_Render();
+	}
 	
 
 	if(!Menu_Boot())

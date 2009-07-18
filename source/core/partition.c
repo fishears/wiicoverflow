@@ -4,7 +4,12 @@
 
 #include "partition.h"
 #include "usbstorage.h"
+
+#ifndef BOOTLOADER
 #include "utils.h"
+#else
+#include "bootloader.h"
+#endif
 
 /* 'partition table' structure */
 typedef struct {

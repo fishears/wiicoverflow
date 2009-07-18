@@ -3,7 +3,7 @@
 
 #include "coverflow.h"
 
-void Graphic_Settings_Menu();
-void Settings_Menu();
+void Settings_Menu_Show();
+void Game_Settings_Menu_Show();
 
 #endif

@@ -542,7 +542,7 @@ error:
 }
 u32 wbfs_extract_file(wbfs_disc_t*d, char *path);
 
-u32 wbfs_estimate_disc(
+u64 wbfs_estimate_disc(
 		wbfs_t *p, read_wiidisc_callback_t read_src_wii_disc,
 		void *callback_data,
 		partition_selector_t sel)
@@ -598,5 +598,5 @@ error:
 	if (info)
 		wbfs_iofree(info);
 
-	return tot * ((p->wbfs_sec_sz / p->hd_sec_sz) * 512);
+	return (u64) tot * ((p->wbfs_sec_sz / p->hd_sec_sz) * 512);
 }

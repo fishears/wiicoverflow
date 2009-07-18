@@ -12,9 +12,12 @@
 #include "fst.h"
 //#include "cfg.h"
 #include "subsystem.h"
+
 #include "settings.h"
 
 extern s_settings settings;
+
+
 /* Constants */
 #define PTABLE_OFFSET	0x40000
 #define WII_MAGIC	0x5D1C9EA3
@@ -36,7 +39,8 @@ void __Disc_SetLowMem(void)
 	*(vu32 *)0x800000FC = 0x2B73A840;
 
 	/* Copy disc ID */
-	memcpy((void *)0x80003180, (void *)0x80000000, 4);
+        if(!settings.ocarina)
+        	memcpy((void *)0x80003180, (void *)0x80000000, 4);
 
 	/* Flush cache */
 	DCFlushRange((void *)0x80000000, 0x3F00);
