@@ -6,9 +6,10 @@
 #include <sys/stat.h>
 
 /* Constants */
-#define SDHC_MOUNT	"SD"
-#define CACHE 4
-#define SECTORS 64
+//#define SDHC_MOUNT	"SD"
+//#define CACHE 4
+//#define SECTORS 64
+
 /* Disc interfaces */
 extern const DISC_INTERFACE __io_sdhc;
 
@@ -17,22 +18,25 @@ extern const DISC_INTERFACE __io_sdhc;
 
 extern void fatUnmount (const char* name);
 
+/*
 s32 Fat_MountSDHC(void)
 {
 	s32 ret;
 
-	/* Initialize SDHC interface */
+	// Initialize SDHC interface 
 	ret = __io_sdhc.startup();
 	if (!ret)
 		return -1;
 
-	/* Mount device */
+	// Mount device 
 	ret = fatMount(SDHC_MOUNT, &__io_sdhc, 0, CACHE, SECTORS);
 	if (!ret)
 		return -2;
 
 	return 0;
 }
+*/
+
 
 s32 Fat_ReadFile(const char *filepath, void **outbuf)
 {
@@ -129,17 +133,20 @@ out:
 	return ret;
 }
 
+/*
 s32 Fat_UnmountSDHC(void)
 {
 	s32 ret;
 
-	/* Unmount device */
+	//  Unmount device 
 	fatUnmount(SDHC_MOUNT);
 	
-	/* Close SDHC interface */
+	// Close SDHC interface 
 	ret = __io_sdhc.shutdown();
 	if (!ret)
 		return -1;
 
 	return 0;
 }
+*/
+
