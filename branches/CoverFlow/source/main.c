@@ -110,30 +110,26 @@ void initVars()
 int main( int argc, char **argv )
 {
 	bool bootDevice_found=false;
-	char bootDevice[10];
 	
+	strcpy(self.bootDevice, "SD:");
 	if(argc >= 1)
 	{
 		if(!strncasecmp(argv[0], "usb:/", 5))
 		{
-			strcpy(bootDevice, "USB:");
+			strcpy(self.bootDevice, "USB:");
 			bootDevice_found = true;
 		}
 		else if(!strncasecmp(argv[0], "sd:/", 4))
 			bootDevice_found = true;
 	}
+	
 	if(!bootDevice_found)
 	{
 		//try USB
 		struct stat st;
         if((stat("USB:/apps/CoverFloader/boot.dol", &st) == 0) || (stat("USB:/apps/CoverFloader/boot.elf", &st) == 0))
-			strcpy(bootDevice, "USB:");
+			strcpy(self.bootDevice, "USB:");
 	}
-
-
-
-
-
 
 
 //---------------------------------------------------------------------------------
@@ -480,7 +476,7 @@ int main( int argc, char **argv )
 								WBFS_GameSize(header->id, &size);
 								self.gsize = size;
 								
-								//LoadCurrentCover(self.gameSelected, self.gameList);
+								LoadCurrentCover(self.gameSelected, self.gameList);
 								
 								
 								#ifdef GAME_INFO_TEST

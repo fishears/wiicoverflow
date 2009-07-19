@@ -257,6 +257,8 @@ typedef struct{
 	bool blinkBlue;
 	char newsID[10];
 #endif
+
+    char bootDevice[10];
 } s_self;
 
 

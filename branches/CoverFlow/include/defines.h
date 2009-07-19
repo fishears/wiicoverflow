@@ -3,7 +3,7 @@
 
 
 //***************************************************************
-//#define USB_DEVICE
+#define USB_DEVICE
 #ifdef USB_DEVICE
 	#define USBLOADER_PATH       "USB:/usb-loader"
 #else
