@@ -9,15 +9,23 @@ int GetGameInfo(unsigned char* ID)
 	//TODO Make this configurable...
 
     char pathname[100];
-    snprintf(pathname, sizeof(pathname), "%s%s", "SD:/usb-loader/", "wiitdb.zip");
+#ifdef USB_DEVICE
+	snprintf(pathname, sizeof(pathname), "%s%s", "USB:/usb-loader/", "wiitdb.zip");
+#else
+	snprintf(pathname, sizeof(pathname), "%s%s", "SD:/usb-loader/", "wiitdb.zip");
+#endif
     
 								
     // database should always be zipped, while it may be convenient detecting and loading from .xml may lead to confusion:
     int fileexists = OpenXMLFile(pathname);
 
     if(!fileexists) {
-        snprintf(pathname, sizeof(pathname), "%s%s", "SD:/usb-loader/", "wiitdb.xml");
-        fileexists = OpenXMLFile(pathname);
+#ifdef USB_DEVICE
+	    snprintf(pathname, sizeof(pathname), "%s%s", "USB:/usb-loader/", "wiitdb.xml");
+#else
+	    snprintf(pathname, sizeof(pathname), "%s%s", "SD:/usb-loader/", "wiitdb.xml");
+#endif
+         fileexists = OpenXMLFile(pathname);
     }
 
 	

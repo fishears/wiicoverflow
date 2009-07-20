@@ -14,12 +14,17 @@
 #ifndef _CHEATS_H
 #define	_CHEATS_H
 
+#include "defines.h"
 #ifdef	__cplusplus
 extern "C" {
 #endif
 
     #define TXT_PATH "/txtcodes/"
+#ifdef USB_DEVICE
+	#define GCT_PATH "USB:/codes/"
+#else
     #define GCT_PATH "sd:/codes/"
+#endif
     #define CODESITE "http://www.usbgecko.com/codes/codes/"
     #define LINES_PER_PAGE 9 //lines per page to display
     #define LINE_LENGTH 50 //max title line length

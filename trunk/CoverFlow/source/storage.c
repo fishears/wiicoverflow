@@ -53,7 +53,9 @@ bool reinit_usbfs()
 	
 	/* Mount SDHC */
 	Fat_MountSDHC();
-				
+#ifdef USB_SUPPORT
+	USBDevice_Init();   // does 1st fatUnmount and then fatMount
+#endif				
 	/* Initialize DIP module */
 	ret = Disc_Init();
 	
