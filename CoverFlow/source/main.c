@@ -109,6 +109,29 @@ void initVars()
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv )
 {
+#ifdef USB_DEVICE
+	bool bootDevice_found=false;
+	
+	strcpy(self.bootDevice, "SD:");
+	if(argc >= 1)
+	{
+		if(!strncasecmp(argv[0], "usb:/", 5))
+		{
+			strcpy(self.bootDevice, "USB:");
+			bootDevice_found = true;
+		}
+		else if(!strncasecmp(argv[0], "sd:/", 4))
+			bootDevice_found = true;
+	}
+	
+	if(!bootDevice_found)
+	{
+		//try USB
+		struct stat st;
+        if((stat("USB:/apps/CoverFloader/boot.dol", &st) == 0) || (stat("USB:/apps/CoverFloader/boot.elf", &st) == 0))
+			strcpy(self.bootDevice, "USB:");
+	}
+#endif
 
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------

@@ -55,6 +55,7 @@
 
 #include "gameinfo.h"
 #include "newsreader.h"
+#include "fatmounter.h"
 
 #include "defines.h"		/* see for enable/disable definitions  */
 
@@ -98,7 +99,6 @@
 #define MAX_CHARACTERS	 	 30
 #define BUFFER_WINDOW        15
 #define BUFFER_THREAD_COUNT  1
-#define USBLOADER_PATH       "SD:/usb-loader"
 #define MAX_COVERS           15
 
 
@@ -255,6 +255,10 @@ typedef struct{
 	int  blueID;
 	bool blinkBlue;
 	char newsID[10];
+#endif
+
+#ifdef USB_DEVICE
+	char bootDevice[10];
 #endif
 } s_self;
 
