@@ -1,9 +1,32 @@
+#include <ogc/machine/processor.h>
+
 #include "updater.h"
 
 static lwp_t networkthread = LWP_THREAD_NULL;
 
 extern s_self self;
 extern s_settings settings;
+
+
+
+bool ShutdownWC24()
+{
+  	bool onlinefix = true;
+	s32 kd_fd, ret;
+	STACK_ALIGN(u8, kd_buf, 0x20, 32);
+
+	kd_fd = IOS_Open("/dev/net/kd/request", 0);
+	if (kd_fd >= 0) 
+	{
+		ret = IOS_Ioctl(kd_fd, 7, NULL, 0, kd_buf, 0x20);
+		if(ret >= 0)
+			onlinefix = false; // fixed no IOS reload needed
+		IOS_Close(kd_fd);
+	}
+	return onlinefix;
+}
+
+
 
 void * networkinitcallback(void *arg)
 {

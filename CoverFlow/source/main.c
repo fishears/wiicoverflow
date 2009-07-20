@@ -450,7 +450,7 @@ int main( int argc, char **argv )
 								WBFS_GameSize(header->id, &size);
 								self.gsize = size;
 								
-								//LoadCurrentCover(self.gameSelected, self.gameList);
+								LoadCurrentCover(self.gameSelected, self.gameList);
 								
 								
 								#ifdef GAME_INFO_TEST
@@ -511,9 +511,12 @@ int main( int argc, char **argv )
 								
 								WiiLight(0); // turn off the slot light
 								
+								ShutdownWC24();  // OnlineFix
+								
 								if(!LaunchGame())
 								{
 									SETTINGS_Load(); //failed to launch so get the globals back
+									initNetworkThread();
 									return 0;
 								}
 							}
@@ -876,9 +879,12 @@ int main( int argc, char **argv )
 				setGameSettings(titleID, &gameSetting,1);
 				WiiLight(0); // turn off the slot light
 				
+				ShutdownWC24();  // OnlineFix
+				
 				if(!LaunchGame())
 				{
 					SETTINGS_Load(); //failed to launch so get the globals back
+					initNetworkThread();
 					return 0;
 				}
 				
