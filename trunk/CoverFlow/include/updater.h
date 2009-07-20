@@ -16,6 +16,7 @@
 
 #include "coverflow.h"
 
+bool ShutdownWC24();
 void* networkinitcallback(void *arg);
 void initNetworkThread();
 void shutdownNetworkThread();
