@@ -86,7 +86,14 @@ void checkDirs(){
 	
 	int result = 0;
 	
-	DIR_ITER* dir = diropen(USBLOADER_PATH);
+        DIR_ITER* dir = diropen("SD:/codes");
+        if(dir == NULL) {
+                mkdir("SD:/codes", S_ISVTX);
+        }
+        else{
+                dirclose(dir);
+        }
+	dir = diropen(USBLOADER_PATH);
 	if (dir == NULL) {
 		
 		mkdir(USBLOADER_PATH, S_ISVTX);
@@ -99,8 +106,8 @@ void checkDirs(){
 			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
 			mkdir("covers", S_ISVTX);
 			//mkdir("games", S_ISVTX);
-            mkdir("txtcodes" ,S_ISVTX);
-			mkdir("codes", S_ISVTX);
+            mkdir("txtcodes", S_ISVTX);
+
 		}
 		else{
 			WindowPrompt(TX.error, TX.errorReadDir, &okButton, NULL);
@@ -151,14 +158,8 @@ void checkDirs(){
 			}
 			
 			//WindowPrompt("Codes test",USBLOADER_PATH "/txtcodes/", &okButton, NULL);
-			dir = diropen("codes");
-			if(dir == NULL) {
-				mkdir("codes", S_ISVTX);
+
 			}
-			else{
-				dirclose(dir);
-			}
-		}
 		
 		else{
 			WindowPrompt(TX.error, TX.errorCreateDir, &okButton, NULL);
