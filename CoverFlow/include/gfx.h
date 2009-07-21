@@ -158,6 +158,8 @@ Button selectAllButton;
 Button deselectAllButton;
 Button charUpButton[8];
 Button charDownButton[8];
+Button varEditButton[10];
+Button varDoneButton;
 
 GRRLIB_texImg cover_texture;
 GRRLIB_texImg cover_texture_3d;

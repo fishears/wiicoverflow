@@ -254,7 +254,7 @@ void manage_cheats(int id, struct discHdr *gameList)
             cheat[n].enabled=false;
         }
         //get stored cheat status
-        char ming[3];
+        char ming[4];
         sprintf(titleID,"%s",header->id);
         sprintf(filename, "%sx.txt", titleID);
         chdir("/");
@@ -267,7 +267,7 @@ void manage_cheats(int id, struct discHdr *gameList)
             int n;
             while(!feof(txtfile))
             {
-                fgets(ming,3,txtfile);
+                fgets(ming,4,txtfile);
                 n=atoi(ming);
                 cheat[n].enabled =true;
             }
@@ -472,7 +472,7 @@ int is_code(char* line)
                     }
                 }
                 
-                pch = strtok(NULL," \n");
+                pch = strtok(NULL," \r\n");
                 if(strlen(pch)==8) //test for second block of 8 characters to SPACE or NEWLINE
                 {
                     strcat(tempCode,pch);
@@ -578,11 +578,11 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id, in
                     char* msg = malloc(strlen(cheat[i].codes[n])*sizeof(char));
                     sprintf(msg, cheat[i].codes[n]);
 
-                    pch = strtok(msg, " |\n"); //chomp out the space from the middle
+                    pch = strtok(msg, " |\r\n"); //chomp out the space from the middle
                     //while (pch != NULL)
                     //{
                             strcat(tempCode,pch); //part one
-                            pch  = strtok(NULL, " |\n");
+                            pch  = strtok(NULL, " |\r\n");
                             strcat(tempCode,pch); //part two
                     //}
                     free(msg);
@@ -656,23 +656,42 @@ void edit_codes(CHEAT cheat, int cheatNum)
     else
         pages = (cheat[cheatNum].codelines/LINES_PER_PAGE)+1;
 
+    int ret,count=0;
+    for(i=0;i<cheat[cheatNum].codelines;i++)
+    {
+        ret=is_code(cheat[cheatNum].codes[i]);
+        if(ret==2) //line IS a cheat code and IS editable
+        {
+            Duplicate_Button(&varEditButton[i],varEditButton[0],108,148+(count*28)); //make the buttons
+            count++;
+        }
+    }
     while(1) //edit codes GUI loop
         {
             WPAD_ScanPads();
             GetWiimoteData();
             if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)) //b or home to exit
             {
+                for(i=0;i<cheat[cheatNum].codelines;i++)
+                {
+                    ret=is_code(cheat[cheatNum].codes[i]);
+                    if(ret==2) //line IS a cheat code and IS editable
+                    {
+                        FreeButtonResources(&varEditButton[i]);
+                    }
+                }
                 return;
             }
             else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
             {
-                if(Button_Select(&cheatDoneButton, pointer.p_x, pointer.p_y))
+                if(Button_Select(&varDoneButton, pointer.p_x, pointer.p_y))
                 {
+                    pointer.p_x = 0;
                     return;
                 }
                 for(n=0;n<cheat[cheatNum].codelines;n++) //test the cheat buttons
                 {
-                    if(Button_Select(&cheatEditButton[n], pointer.p_x, pointer.p_y) && is_code(cheat[cheatNum].codes[n])==2)
+                    if(Button_Select(&varEditButton[n], pointer.p_x, pointer.p_y) && is_code(cheat[cheatNum].codes[n])==2)
                     {
                         sprintf(tTemp,"%s",cheat[cheatNum].codes[n]);
                         tTemp[17]='\0';
@@ -723,16 +742,13 @@ void edit_codes(CHEAT cheat, int cheatNum)
                 sprintf(tTemp,"%d/%d",currpage,pages); //report page x of xx
                 CFreeTypeGX_DrawText(ttf14pt, 520, 100, tTemp, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
             }
-            int ret,count=0;
             for(i=0;i<cheat[cheatNum].codelines;i++)
             {
                 ret=is_code(cheat[cheatNum].codes[i]);
-                if(ret==2)
+                if(ret==2) //line IS a cheat code and IS editable
                 {
-                    Duplicate_Button(&cheatEditButton[i],cheatEditButton[0],108,148+(count*28));
-                    count++;
-                    Button_Paint(&cheatEditButton[i]);
-                    Button_Hover(&cheatEditButton[i], pointer.p_x, pointer.p_y);
+                    Button_Paint(&varEditButton[i]);
+                    Button_Hover(&varEditButton[i], pointer.p_x, pointer.p_y);
                     sprintf(tTemp,"%s",cheat[cheatNum].codes[i]);
                     tTemp[17]='\0';
                     CFreeTypeGX_DrawText(ttf14pt, 135, 164+step,tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
@@ -746,8 +762,8 @@ void edit_codes(CHEAT cheat, int cheatNum)
                 Button_Hover(&pageDownButton, pointer.p_x, pointer.p_y);
                 Button_Hover(&pageUpButton, pointer.p_x, pointer.p_y);
             }
-            Button_TTF_Paint(&cheatDoneButton);
-            Button_Hover(&cheatDoneButton, pointer.p_x, pointer.p_y);
+            Button_TTF_Paint(&varDoneButton);
+            Button_Hover(&varDoneButton, pointer.p_x, pointer.p_y);
             DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF); //HAND!
             GRRLIB_Render();
         }
@@ -766,7 +782,7 @@ void edit_variables(char* line)
     char* msg = malloc(strlen(line)*sizeof(char));
     sprintf(msg, line);
     pch = strtok(msg, " "); //locate & ignore the first 8 chars of the codeline
-    pch = strtok(NULL," \n\0");
+    pch = strtok(NULL," \r\n\0");
     if(strlen(pch)==8) //test for second block of 8 characters to SPACE or NEWLINE
     {
         strncpy(editline,pch,8);
@@ -776,11 +792,12 @@ void edit_variables(char* line)
             if(pch[x] =='x' || pch[x] =='X' || pch[x] =='R' || pch[x] =='G' || pch[x] =='Y' || pch[x] =='y'
                     || (pch[x-1] =='b' && pch[x] =='b') || (pch[x] =='b' && pch[x+1] =='b') //sneaky B
                     || (pch[x-1] =='B' && pch[x] =='B') || (pch[x] =='B' && pch[x+1] =='B')) // B is used in LOZTP
-                editable[x]=1; //found a variable so store it's position
+              editable[x]=1; //found a variable so store it's position
+            //WindowPrompt("pch",pch[x],0,0);
         }
     }
     free(msg);
-    WindowPrompt("Coming Soon",editline,&okButton,0);
+    WindowPrompt("EDIT Coming Soon",editline,&okButton,0);
     return;
 
     while(1) //edit variables GUI loop
