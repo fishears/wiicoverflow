@@ -941,6 +941,8 @@ void Settings_Menu_Show()
 //////////////////////////////////
 void Game_Settings_Menu_Show()
 {
+    bool hasGCT = false;
+    bool hasTXT = false;
     //get/set per-game settings
     struct discHdr *header = NULL;
     header = &self.gameList[self.gameSelected];
@@ -980,7 +982,8 @@ void Game_Settings_Menu_Show()
         gameSetting.lock     = 0;
 		gameSetting.fixtype  = settings.presetFix;
     }
-	
+    hasGCT = check_gct(self.gameSelected,self.gameList);
+    hasTXT = check_txt(self.gameSelected,self.gameList);
     bool doloop = true;
 	//////////////
     // Window loop
@@ -1014,25 +1017,23 @@ void Game_Settings_Menu_Show()
                                 #ifdef CHEAT_MANAGER
                                 if(gameSetting.ocarina == 1)
                                 {
-                                    if(!check_txt(self.gameSelected,self.gameList)) //no txt file so try downloading
+                                    if(!hasGCT)
                                     {
-                                        if(!download_txt(self.gameSelected,0,self.gameList))
-                                            gameSetting.ocarina = 0;
+                                        gameSetting.ocarina = 0;
+                                    }
+                                    if(!hasTXT)
+                                    {
+                                        if(download_txt(self.gameSelected,0,self.gameList))
+                                            hasTXT=true;
                                     }
                                 }
                                 #endif
 			}
                         #ifdef CHEAT_MANAGER
-                        else if (Button_Select(&manageCheatsButton, pointer.p_x, pointer.p_y) && gameSetting.ocarina==1)
+                        else if (Button_Select(&manageCheatsButton, pointer.p_x, pointer.p_y))
                         {
-                            if(check_txt(self.gameSelected,self.gameList))
-                                    {
-                                       manage_cheats(self.gameSelected,self.gameList); 
-                                    }
-                            else if (download_txt(self.gameSelected,0,self.gameList))
-                            {
-                                manage_cheats(self.gameSelected,self.gameList);
-                            }
+                            manage_cheats(self.gameSelected,self.gameList);
+                            hasGCT = check_gct(self.gameSelected,self.gameList);
                         }
                         #endif
 			else if (Button_Select(&gvidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&gvidtvoffButton, pointer.p_x, pointer.p_y))
@@ -1285,7 +1286,7 @@ void Game_Settings_Menu_Show()
 		Button_Paint(&gfixupButton);
 		
 		#ifdef CHEAT_MANAGER
-		if(gameSetting.ocarina)
+		if(hasTXT)
 			Button_TTF_Paint(&manageCheatsButton);
 		#endif
 		if(gameSetting.lock)
@@ -1310,7 +1311,7 @@ void Game_Settings_Menu_Show()
 			 Button_Hover(&gfixdownButton,  pointer.p_x, pointer.p_y) ||
 			 ((gameSetting.lock) ? Button_Hover(&unlockButton, pointer.p_x, pointer.p_y) : Button_Hover(&lockButton, pointer.p_x, pointer.p_y) )
 			 #ifdef CHEAT_MANAGER
-			 || ((gameSetting.ocarina == 1) ? Button_Hover(&manageCheatsButton, pointer.p_x, pointer.p_y) : false)
+			 || ((hasTXT) ? Button_Hover(&manageCheatsButton, pointer.p_x, pointer.p_y) : false)
 			 #endif
 		   )
 		{
