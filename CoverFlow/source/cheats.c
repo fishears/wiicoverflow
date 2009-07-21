@@ -12,6 +12,8 @@
  */
 #include "coverflow.h"
 #include "cheats.h"
+#include "TrackedMemoryManager.h"
+
 extern s_pointer pointer;
 extern s_self self;
 
@@ -104,7 +106,7 @@ bool download_txt(int id, int mode, struct discHdr *gameList)
             {
                 sprintf(imgpath,"%s%s%s.txt",USBLOADER_PATH,TXT_PATH,titleID);
                 saveFile(imgpath, file);
-                free(file.data);
+                CFFree(file.data);
                 if(check_download(titleID))
                 {
                     if(mode==0)
@@ -453,7 +455,7 @@ int is_code(char* line)
         memset(tempCode, 0, sizeof(tempCode));
         bool checkFlag = true, editable = false;
         char* pch;
-        char* msg = malloc(strlen(line)*sizeof(char));
+        char* msg = CFMalloc(strlen(line)*sizeof(char));
         sprintf(msg, line);
         pch = strtok(msg, " ");
         strcat(tempCode,pch);
@@ -486,7 +488,7 @@ int is_code(char* line)
                     }
                     if(checkFlag)
                     {
-                        free(msg);
+                        CFFree(msg);
                         if(editable)
                         {
                             return 2; //it's a code line (editable)
@@ -498,7 +500,7 @@ int is_code(char* line)
                     }
                 }
             }
-            free(msg);
+            CFFree(msg);
             return 0;
         }
     }
@@ -519,7 +521,7 @@ bool check_download(char* titleID)
     txtfile = fopen(filename, "r");
     fgets( buffer, sizeof buffer, txtfile );
     char* pch;
-    char* msg = malloc(strlen(buffer)*sizeof(char));
+    char* msg = CFMalloc(strlen(buffer)*sizeof(char));
     sprintf(msg, buffer);
     pch = strtok(msg, " ");
     while(pch!=NULL)
@@ -527,18 +529,18 @@ bool check_download(char* titleID)
         if(strcmp(pch,"<!DOCTYPE")==0) //test for a bad file
         {
             remove(filename); //it's bad so delete it
-			free(msg);
+			CFFree(msg);
             return false;
         }
         else
         {
             fclose(txtfile); //it's good so close it
-			free(msg);
+			CFFree(msg);
             return true;
         }
     }
     fclose(txtfile); //it's good so close it
-	free(msg);
+	CFFree(msg);
     return true;
 }
 
@@ -575,7 +577,7 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id, in
                 {
                     int x;
                     char* pch;
-                    char* msg = malloc(strlen(cheat[i].codes[n])*sizeof(char));
+                    char* msg = CFMalloc(strlen(cheat[i].codes[n])*sizeof(char));
                     sprintf(msg, cheat[i].codes[n]);
 
                     pch = strtok(msg, " |\r\n"); //chomp out the space from the middle
@@ -585,7 +587,7 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id, in
                             pch  = strtok(NULL, " |\r\n");
                             strcat(tempCode,pch); //part two
                     //}
-                    free(msg);
+                    CFFree(msg);
                     //WindowPrompt("debug",tempCode, &okButton,0);
                     int currentChar = 0;
                     
@@ -779,7 +781,7 @@ void edit_variables(char* line)
     char editline[8]; //holds the second block of codeline (the bit with variables)
     char* screen;
     char* pch;
-    char* msg = malloc(strlen(line)*sizeof(char));
+    char* msg = CFMalloc(strlen(line)*sizeof(char));
     sprintf(msg, line);
     pch = strtok(msg, " "); //locate & ignore the first 8 chars of the codeline
     pch = strtok(NULL," \r\n\0");
@@ -796,7 +798,7 @@ void edit_variables(char* line)
             //WindowPrompt("pch",pch[x],0,0);
         }
     }
-    free(msg);
+    CFFree(msg);
     WindowPrompt("EDIT Coming Soon",editline,&okButton,0);
     return;
 

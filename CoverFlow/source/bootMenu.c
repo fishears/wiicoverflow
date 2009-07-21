@@ -3,6 +3,7 @@
 
 #include "processor.h"
 #include "asm.h"
+#include "TrackedMemoryManager.h"
 
 extern s_self self;
 extern s_settings settings;
@@ -39,7 +40,7 @@ bool Menu_Boot(){
 		
 	if (self.gameList)
 	{
-		free(self.gameList);
+		CFFree(self.gameList);
 		self.gameList=NULL;
 	}
 
@@ -60,7 +61,7 @@ bool Menu_Boot(){
 	/*
 	//TODO No really sure how args need to be set up...
 	char* buffer;
-	buffer = malloc(strlen("bootloader.dol") + 1 + 6 + 2);
+	buffer = CFMalloc(strlen("bootloader.dol") + 1 + 6 + 2);
 	sprintf(buffer, "bootloader.dol%c%s%c%c", '\0', header->id, '\0','\0');
 	
 	struct __argv argv;
@@ -69,7 +70,7 @@ bool Menu_Boot(){
 	
 	//length is bootloader length + null + header length + null + null
 	argv.length = strlen(buffer);
-	argv.commandLine = malloc(argv.length);
+	argv.commandLine = CFMalloc(argv.length);
 	strcpy(argv.commandLine, buffer);
 	
 	argv.argc = 2;
@@ -89,7 +90,7 @@ bool Menu_Boot(){
 	
 	if (self.gameList)
 	{
-		free(self.gameList);
+		CFFree(self.gameList);
 		self.gameList=NULL;
 	}
 

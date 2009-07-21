@@ -1,4 +1,5 @@
 #include "storage.h"
+#include "TrackedMemoryManager.h"
 
 extern s_self self;
 extern s_settings settings;
@@ -326,7 +327,7 @@ s32 GetEntries()
 	len = sizeof(struct discHdr) * cnt;
 
 	/* Allocate memory */
-	buffer = (struct discHdr *)memalign(32, len);
+	buffer = (struct discHdr *)CFMemAlign(32, len);
 	if (!buffer)
 		return -1;
 
@@ -354,7 +355,7 @@ s32 GetEntries()
 	
 	/* Free memory */
 	if (self.gameList)
-		free(self.gameList);
+		CFFree(self.gameList);
 
 	/* Set values */
 	self.gameList = buffer;
@@ -403,7 +404,7 @@ s32 GetEntries()
 err:
 	/* Free memory */
 	if (buffer)
-		free(buffer);
+		CFFree(buffer);
 
 	return ret;
 }

@@ -16,6 +16,7 @@ Download and Help Forum : http://grrlib.santo.fr
 #include <fatsvn.h>
 #include "settings.h"
 #include "core/video.h"
+#include "TrackedMemoryManager.h"
 
 #define DEFAULT_FIFO_SIZE (256 * 1024)
 
@@ -156,7 +157,7 @@ void GRRLIB_LoadTexturePNG(GRRLIB_texImg * my_texture, const unsigned char my_pn
 
     ctx = PNGU_SelectImageFromBuffer(my_png);
     PNGU_GetImageProperties (ctx, &imgProp);
-	textureAddress= memalign (32, imgProp.imgWidth * imgProp.imgHeight * 4);
+	textureAddress= CFMemAlign (32, imgProp.imgWidth * imgProp.imgHeight * 4);
 	if (textureAddress>0)
 	{
 		my_texture->data = textureAddress;
@@ -308,7 +309,7 @@ void GRRLIB_PrintBMF(f32 xpos, f32 ypos, GRRLIB_bytemapFont bmf, f32 zoom, const
 
     GRRLIB_DrawImg(0, 0, tex_BMfont, 0, 1, 1, 0xFFFFFFFF);
 
-    free(tex_BMfont.data);
+    CFFree(tex_BMfont.data);
 }
 
 /**
@@ -337,16 +338,16 @@ GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]) {
         highestcolor = my_bmf[11];
         nbPalette = my_bmf[16];
         numcolpal = 3 * nbPalette;
-        fontArray.palette = (u32 *)calloc(nbPalette + 1, sizeof(u32));
+        fontArray.palette = (u32 *)CFCalloc(nbPalette + 1, sizeof(u32));
         for(i=0; i < numcolpal; i+=3) {
             fontArray.palette[j++] = ((((my_bmf[i+17]<<2)+3)<<24) | (((my_bmf[i+18]<<2)+3)<<16) | (((my_bmf[i+19]<<2)+3)<<8) | 0xFF);
         }
         j = my_bmf[17 + numcolpal];
-        fontArray.name = (char *)calloc(j + 1, sizeof(char));
+        fontArray.name = (char *)CFCalloc(j + 1, sizeof(char));
         memcpy(fontArray.name, &my_bmf[18 + numcolpal], j);
         j = 18 + numcolpal + j;
         fontArray.nbChar = (my_bmf[j] | my_bmf[j+1]<<8);
-        fontArray.charDef = (GRRLIB_bytemapChar *)calloc(fontArray.nbChar, sizeof(GRRLIB_bytemapChar));
+        fontArray.charDef = (GRRLIB_bytemapChar *)CFCalloc(fontArray.nbChar, sizeof(GRRLIB_bytemapChar));
         j++;
         for(i=0; i < fontArray.nbChar; i++) {
             fontArray.charDef[i].character = my_bmf[++j];
@@ -356,7 +357,7 @@ GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]) {
             fontArray.charDef[i].rely = my_bmf[++j];
             fontArray.charDef[i].shift = my_bmf[++j];
             nbPixels = fontArray.charDef[i].width * fontArray.charDef[i].height;
-            fontArray.charDef[i].data = malloc(nbPixels);
+            fontArray.charDef[i].data = CFMalloc(nbPixels);
             if(nbPixels && fontArray.charDef[i].data) {
                 memcpy(fontArray.charDef[i].data, &my_bmf[++j], nbPixels);
                 j += (nbPixels - 1);
@@ -375,11 +376,11 @@ void GRRLIB_FreeBMF(GRRLIB_bytemapFont bmf)
     unsigned int i;
 
     for(i=0; i<bmf.nbChar; i++) {
-        free(bmf.charDef[i].data);
+        CFFree(bmf.charDef[i].data);
     }
-    free(bmf.charDef);
-    free(bmf.palette);
-    free(bmf.name);
+    CFFree(bmf.charDef);
+    CFFree(bmf.palette);
+    CFFree(bmf.name);
 }
 
 /**
@@ -408,7 +409,7 @@ void GRRLIB_CreateEmptyTexture(GRRLIB_texImg * my_texture,unsigned int w, unsign
     unsigned int x, y;
 
 
-    my_texture->data = memalign (32, h * w * 4);
+    my_texture->data = CFMemAlign (32, h * w * 4);
     my_texture->w = w;
     my_texture->h = h;
     // Initialize the texture
@@ -429,7 +430,7 @@ void GRRLIB_CreateEmptyTexture(GRRLIB_texImg * my_texture,unsigned int w, unsign
 void GRRLIB_DuplicateTexture(GRRLIB_texImg * destination_texture, GRRLIB_texImg tex, unsigned int w, unsigned int h) {
     unsigned int x, y;
 
-    destination_texture->data = memalign (32, h * w * 4);
+    destination_texture->data = CFMemAlign (32, h * w * 4);
     destination_texture->w = w;
     destination_texture->h = h;
     // Initialize the texture
@@ -1494,7 +1495,7 @@ void GRRLIB_Init() {
     if(rmode->viTVMode&VI_NON_INTERLACE)
         VIDEO_WaitVSync();
 
-    gp_fifo = (u8 *) memalign(32, DEFAULT_FIFO_SIZE);
+    gp_fifo = (u8 *) CFMemAlign(32, DEFAULT_FIFO_SIZE);
     if(gp_fifo == NULL)
         return;
     memset(gp_fifo, 0, DEFAULT_FIFO_SIZE);
@@ -1637,25 +1638,25 @@ void GRRLIB_Exit() {
 	
 	// Free custom GRRLIB textures
 
-	free(rightTexture.data);
-	free(matteBlackTexture.data);
-	free(matteGreyTexture.data);
+	CFFree(rightTexture.data);
+	CFFree(matteBlackTexture.data);
+	CFFree(matteGreyTexture.data);
 		
     GX_Flush();
     GX_AbortFrame();
 
     if(xfb[0] != NULL) {
 	//	VIDEO_ClearFrameBuffer(rmode, xfb[0], 0x000000);
-        free(MEM_K1_TO_K0(xfb[0]));
+        CFFree(MEM_K1_TO_K0(xfb[0]));
         xfb[0] = NULL;
     }
     if(xfb[1] != NULL) {
 	//	VIDEO_ClearFrameBuffer(rmode, xfb[1], 0x000000);
-        free(MEM_K1_TO_K0(xfb[1]));
+        CFFree(MEM_K1_TO_K0(xfb[1]));
         xfb[1] = NULL;
     }
     if(gp_fifo != NULL) {
-        free(gp_fifo);
+        CFFree(gp_fifo);
         gp_fifo = NULL;
     }
 }

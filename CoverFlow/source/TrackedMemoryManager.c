@@ -52,10 +52,10 @@ void * TrackedMalloc(int size)
 	return ret;
 }
 
-void * TrackedMemAlign(int size)
+void * TrackedMemAlign(int alignment, int size)
 {
 	void * ret;
-	ret=memalign(32,size);
+	ret=memalign(alignment,size);
 	if (ret>0)
 	{
 		int newSlot=FindFreeSlot();

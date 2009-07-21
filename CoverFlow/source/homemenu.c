@@ -11,6 +11,7 @@
 #include "homemenu.h"
 #include "localization.h"
 #include "gfx.h"
+#include "TrackedMemoryManager.h"
 
 extern s_self self;
 extern s_pointer pointer;
@@ -32,17 +33,17 @@ void launchTitle(u64 titleID, int need_sys)
 	if(ES_GetNumTicketViews(titleID, &cnt)<0)
 		return;
 
-	tikview *views = (tikview *)memalign( 32, sizeof(tikview)*cnt );
+	tikview *views = (tikview *)CFMemAlign( 32, sizeof(tikview)*cnt );
 
 	if(ES_GetTicketViews(titleID, views, cnt)<0)
 	{
-		free(views);
+		CFFree(views);
 		return;
 	}
 
 	if(ES_LaunchTitle(titleID, &views[0])<0)
 	{
-		free(views);
+		CFFree(views);
 		return;
 	}
 }
@@ -349,7 +350,7 @@ void HomeMenu_Destroy()
 
 	BUFFER_KillBuffer();
 	freeResources();
-	free(titleList);
+	CFFree(titleList);
 }
 
 

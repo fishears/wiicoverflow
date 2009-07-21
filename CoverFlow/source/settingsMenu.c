@@ -14,6 +14,7 @@
 #include "settingsMenu.h"
 #include "localization.h"
 #include "useScrollBox.h"
+#include "TrackedMemoryManager.h"
 
 extern s_self         self;
 extern s_pointer      pointer;
@@ -290,7 +291,7 @@ void Settings_Menu_Show()
 											if(numLines > 0){
 													self.usingTitlesTxt = true;
 													self.titlesTxtSize = numLines;
-													titleList = (s_title *) malloc (numLines * sizeof(s_title));
+													titleList = (s_title *) CFMalloc (numLines * sizeof(s_title));
 													fillTitleStruct(titleList, numLines);
 													char numLinesTxt[250];
 													sprintf(numLinesTxt, TX.successTitles, numLines);

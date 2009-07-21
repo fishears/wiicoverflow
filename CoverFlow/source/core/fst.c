@@ -35,6 +35,7 @@
 #include "fat.h"
 #include "fatmounter.h"
 #include "defines.h"
+#include "TrackedMemoryManager.h"
 
 #define FSTDIRTYPE 1
 #define FSTFILETYPE 0
@@ -97,7 +98,7 @@ u32 do_sd_code(char *filename)
 	filesize = ftell(fp);
 	fseek(fp, 0, SEEK_SET);
 	
-	filebuff = (u8*) malloc (filesize);
+	filebuff = (u8*) CFMalloc (filesize);
 	if(filebuff == 0){
 		fclose(fp);
 #ifdef USB_SUPPORT
@@ -111,7 +112,7 @@ u32 do_sd_code(char *filename)
 	ret = fread(filebuff, 1, filesize, fp);
 	if(ret != filesize){	
 		printf("[+] SD Code Error\n");
-		free(filebuff);
+		CFFree(filebuff);
 		fclose(fp);
 #ifdef USB_SUPPORT
 		USBDevice_deInit();
@@ -125,7 +126,7 @@ u32 do_sd_code(char *filename)
 	memcpy((void*)0x800027E8,filebuff,filesize);
 	*(vu8*)0x80001807 = 0x01;
 
-	free(filebuff);
+	CFFree(filebuff);
 	fclose(fp);
 #ifdef USB_SUPPORT
 	USBDevice_deInit();
