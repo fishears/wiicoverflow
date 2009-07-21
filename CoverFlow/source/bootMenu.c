@@ -44,6 +44,10 @@ bool Menu_Boot(){
 		self.gameList=NULL;
 	}
 
+	//just about to go so free up all that we have missed
+	ClearAllocatedMemory();
+	// this should have freed any untoward allocs
+	
 	s32 ret;
 	
 	/* Open disc */
