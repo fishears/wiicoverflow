@@ -1,6 +1,7 @@
 #include <ogc/machine/processor.h>
 
 #include "updater.h"
+#include "TrackedMemoryManager.h"
 
 static lwp_t networkthread = LWP_THREAD_NULL;
 
@@ -68,7 +69,7 @@ bool checkForUpdate(){
 	
 	if(file.data != NULL){
 		saveFile(USBLOADER_PATH "/current.txt", file);
-		free(file.data);
+		CFFree(file.data);
 		
 		FILE* fp;
 		fp = fopen(USBLOADER_PATH "/current.txt", "r");
@@ -152,7 +153,7 @@ bool checkForNews(){
 		 if(file.data != NULL){
 			saveFile(USBLOADER_PATH "/CoverFloader.news", file);
 			strcpy(settings.newsDate, nowDate);
-			free(file.data);
+			CFFree(file.data);
 			return true;
 			}
 		}

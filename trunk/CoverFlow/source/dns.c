@@ -1,5 +1,6 @@
 #include "dns.h"
 #include "localization.h"
+#include "TrackedMemoryManager.h"
 
 /**
  * Resolves a domainname to an ip address
@@ -72,16 +73,16 @@ u32 getipbynamecached(char *domain)
 	u32 ip = getipbyname(domain);
 	
 	//No cache of this domain could be found, create a cache node and add it to the front of the cache
-	struct dnsentry *newnode = malloc(sizeof(struct dnsentry));
+	struct dnsentry *newnode = CFMalloc(sizeof(struct dnsentry));
 	if(newnode == NULL) {
 		return ip;
 	}
 		
 	newnode->ip = ip;
-	newnode->domain = malloc(strlen(domain)+1);
+	newnode->domain = CFMalloc(strlen(domain)+1);
 	if(newnode->domain == NULL)
 	{
-		free(newnode);
+		CFFree(newnode);
 		return ip;
 	}
 	strcpy(newnode->domain, domain);
@@ -114,8 +115,8 @@ u32 getipbynamecached(char *domain)
 			previousnode->nextnode = NULL;
 		}
 		
-		free(node->domain);
-		free(node);
+		CFFree(node->domain);
+		CFFree(node);
 		dnsentrycount--;
 	}
 

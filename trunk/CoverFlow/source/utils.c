@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "TrackedMemoryManager.h"
 
 #define MAX_URL_SIZE 256
 
@@ -322,7 +323,7 @@ void quit()
 	//we should free all allocated textures (SCO);
 	BUFFER_KillBuffer();
 	freeResources();
-	free(titleList);
+	CFFree(titleList);
 	shutdownNetworkThread();
 	exit(0);
 }

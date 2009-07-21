@@ -12,6 +12,7 @@
  */
 #include "coverflow.h"
 #include "filter.h"
+#include "TrackedMemoryManager.h"
 	
 extern int COVER_COUNT;
 #ifdef TEST_MODE
@@ -233,7 +234,7 @@ int main( int argc, char **argv )
 	if(numLines > 0){
 		self.usingTitlesTxt = true;
 		self.titlesTxtSize = numLines;
-		titleList = (s_title *) malloc (numLines * sizeof(s_title));
+		titleList = (s_title *) CFMalloc (numLines * sizeof(s_title));
 		fillTitleStruct(titleList, numLines);
 	}
 
@@ -1077,7 +1078,7 @@ int main( int argc, char **argv )
 //		GRRLIB_Printf(50,20,font_texture,0x808080FF,1,"gameCnt:%d shift:%f lastplayed:%s lastsel: %d",self.gameCnt,self.shift,settings.lastplayed,self.lastGameSelected);
 /*		void * freeMemPtr;
 		int freeMem=0;
-		freeMemPtr = memalign(32,1024);
+		freeMemPtr = CFMemAlign(32,1024);
 		if (freeMemPtr >0)
 		{
 			freeMem = 0x817FFFFF - (unsigned int)freeMemPtr;

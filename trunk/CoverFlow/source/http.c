@@ -1,5 +1,6 @@
 #include "http.h"
 #include "localization.h"
+#include "TrackedMemoryManager.h"
 
 /**
  * Emptyblock is a statically defined variable for functions to return if they are unable
@@ -72,7 +73,7 @@ struct block read_message(s32 connection)
 {
 	//Create a block of memory to put in the response
 	struct block buffer;
-	buffer.data = malloc(HTTP_BUFFER_SIZE);
+	buffer.data = CFMalloc(HTTP_BUFFER_SIZE);
 	buffer.size = HTTP_BUFFER_SIZE;
 
 	if(buffer.data == NULL) {
@@ -109,7 +110,7 @@ struct block read_message(s32 connection)
 		if(offset >= buffer.size)
 		{
 			buffer.size += HTTP_BUFFER_GROWTH;
-			buffer.data = realloc(buffer.data, buffer.size);
+			buffer.data = CFRealloc(buffer.data, buffer.size);
 			
 			if(buffer.data == NULL)
 			{
@@ -122,7 +123,7 @@ struct block read_message(s32 connection)
 	buffer.size = offset;
 		
 	//Shrink the size of the buffer so the data fits exactly in it
-	realloc(buffer.data, buffer.size);
+	CFRealloc(buffer.data, buffer.size);
 	
 	return buffer;
 }
@@ -215,20 +216,20 @@ struct block downloadfile(const char *url)
 	
 	//Copy the file part of the response into a new memoryblock to return
 	struct block file;
-	file.data = malloc(filesize);
+	file.data = CFMalloc(filesize);
 	file.size = filesize;
 	
 	if(file.data == NULL)
 	{
 		sprintf(emptyblock.error,TX.noMemCopy ); //couldn't copy the file to the block
-		free(response.data);
+		CFFree(response.data);
 		return emptyblock;
 	}
 	
 	memcpy(file.data, filestart, filesize);
 
 	//Dispose of the original response
-	free(response.data);
+	CFFree(response.data);
 	
 	return file;
 }

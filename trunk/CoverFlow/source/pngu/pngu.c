@@ -11,6 +11,7 @@ More info : http://frontier-dev.net
 #include <malloc.h>
 #include "pngu.h"
 #include "png.h"
+#include "TrackedMemoryManager.h"
 
 
 // Constants
@@ -58,7 +59,7 @@ IMGCTX PNGU_SelectImageFromBuffer (const void *buffer)
 	if (!buffer)
 		return NULL;
 
-	ctx = malloc (sizeof (struct _IMGCTX));
+	ctx = CFMalloc (sizeof (struct _IMGCTX));
 	if (!ctx)
 		return NULL;
 
@@ -80,7 +81,7 @@ IMGCTX PNGU_SelectImageFromDevice (const char *filename)
 	if (!filename)
 		return NULL;
 
-	ctx = malloc (sizeof (struct _IMGCTX));
+	ctx = CFMalloc (sizeof (struct _IMGCTX));
 	if (!ctx)
 		return NULL;
 
@@ -88,10 +89,10 @@ IMGCTX PNGU_SelectImageFromDevice (const char *filename)
 	ctx->source = PNGU_SOURCE_DEVICE;
 	ctx->cursor = 0;
 
-	ctx->filename = malloc (strlen (filename) + 1);
+	ctx->filename = CFMalloc (strlen (filename) + 1);
 	if (!ctx->filename)
 	{
-		free (ctx);
+		CFFree (ctx);
 		return NULL;
 	}
 	strcpy(ctx->filename, filename);
@@ -109,14 +110,14 @@ void PNGU_ReleaseImageContext (IMGCTX ctx)
 		return;
 
 	if (ctx->filename)
-		free (ctx->filename);
+		CFFree (ctx->filename);
 
 	if ((ctx->propRead) && (ctx->prop.trans))
-		free (ctx->prop.trans);
+		CFFree (ctx->prop.trans);
 
 	pngu_free_info (ctx);
 
-	free (ctx);
+	CFFree (ctx);
 }
 
 
@@ -162,8 +163,8 @@ int PNGU_DecodeToYCbYCr (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *buff
 															*(ctx->row_pointers[y]+x*6+3), *(ctx->row_pointers[y]+x*6+4), *(ctx->row_pointers[y]+x*6+5));
 	
 	// Free resources
-	free (ctx->img_data);
-	free (ctx->row_pointers);
+	CFFree (ctx->img_data);
+	CFFree (ctx->row_pointers);
 
 	// Success
 	return PNGU_OK;
@@ -190,8 +191,8 @@ int PNGU_DecodeToRGB565 (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *buff
 				(((PNGU_u16) (ctx->row_pointers[y][x*3+2] & 0xF8)) >> 3);
 	
 	// Free resources
-	free (ctx->img_data);
-	free (ctx->row_pointers);
+	CFFree (ctx->img_data);
+	CFFree (ctx->row_pointers);
 
 	// Success
 	return PNGU_OK;
@@ -233,10 +234,10 @@ int PNGU_DecodeToRGBA8 (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *buffe
 		
 		// Free resources
 		if(ctx->img_data)
-			free (ctx->img_data);
+			CFFree (ctx->img_data);
 			
 		if(ctx->row_pointers)
-			free (ctx->row_pointers);
+			CFFree (ctx->row_pointers);
 	}
 	
 	// Success
@@ -300,8 +301,8 @@ int PNGU_DecodeTo4x4RGB565 (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *b
 		}
 	
 	// Free resources
-	free (ctx->img_data);
-	free (ctx->row_pointers);
+	CFFree (ctx->img_data);
+	CFFree (ctx->row_pointers);
 
 	// Success
 	return PNGU_OK;
@@ -552,8 +553,8 @@ int PNGU_DecodeTo4x4RGB5A3 (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *b
 	}
 	
 	// Free resources
-	free (ctx->img_data);
-	free (ctx->row_pointers);
+	CFFree (ctx->img_data);
+	CFFree (ctx->row_pointers);
 
 	// Success
 	return PNGU_OK;
@@ -689,10 +690,10 @@ int PNGU_DecodeTo4x4RGBA8 (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *bu
 	
 	// Free resources
 	if(ctx->img_data)
-		free (ctx->img_data);
+		CFFree (ctx->img_data);
 	
 	if(ctx->row_pointers)
-		free (ctx->row_pointers);
+		CFFree (ctx->row_pointers);
 
 	// Success
 	return PNGU_OK;
@@ -760,7 +761,7 @@ int PNGU_EncodeFromYCbYCr (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *bu
 	if (rowbytes % 4)
 		rowbytes = ((rowbytes / 4) + 1) * 4; // Add extra padding so each row starts in a 4 byte boundary
 
-	ctx->img_data = malloc (rowbytes * height);
+	ctx->img_data = CFMalloc (rowbytes * height);
 	if (!ctx->img_data)
 	{
 		png_destroy_write_struct (&(ctx->png_ptr), (png_infopp)NULL);
@@ -769,7 +770,7 @@ int PNGU_EncodeFromYCbYCr (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *bu
 		return PNGU_LIB_ERROR;
 	}
 
-	ctx->row_pointers = malloc (sizeof (png_bytep) * height);
+	ctx->row_pointers = CFMalloc (sizeof (png_bytep) * height);
 	if (!ctx->row_pointers)
 	{
 		png_destroy_write_struct (&(ctx->png_ptr), (png_infopp)NULL);
@@ -801,8 +802,8 @@ int PNGU_EncodeFromYCbYCr (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, void *bu
 	png_write_end (ctx->png_ptr, (png_infop) NULL);
 
 	// Free resources
-	free (ctx->img_data);
-	free (ctx->row_pointers);
+	CFFree (ctx->img_data);
+	CFFree (ctx->row_pointers);
 	png_destroy_write_struct (&(ctx->png_ptr), &(ctx->info_ptr));
 	if (ctx->source == PNGU_SOURCE_DEVICE)
 		fclose (ctx->fd);
@@ -985,7 +986,7 @@ int pngu_info (IMGCTX ctx)
 		{
 			if (ctx->prop.numTrans)
 			{
-				ctx->prop.trans = malloc (sizeof (PNGUCOLOR) * ctx->prop.numTrans);
+				ctx->prop.trans = CFMalloc (sizeof (PNGUCOLOR) * ctx->prop.numTrans);
 				if (ctx->prop.trans)
 					for (i = 0; i < ctx->prop.numTrans; i++)
 					{
@@ -1002,7 +1003,7 @@ int pngu_info (IMGCTX ctx)
 		{
 			if (ctx->prop.numTrans)
 			{
-				ctx->prop.trans = malloc (sizeof (PNGUCOLOR) * ctx->prop.numTrans);
+				ctx->prop.trans = CFMalloc (sizeof (PNGUCOLOR) * ctx->prop.numTrans);
 				if (ctx->prop.trans)
 					for (i = 0; i < ctx->prop.numTrans; i++)
 						ctx->prop.trans[i].r = ctx->prop.trans[i].g = ctx->prop.trans[i].b = 
@@ -1067,17 +1068,17 @@ int pngu_decode (IMGCTX ctx, PNGU_u32 width, PNGU_u32 height, PNGU_u32 stripAlph
 	if (rowbytes % 4)
 		rowbytes = ((rowbytes / 4) + 1) * 4; // Add extra padding so each row starts in a 4 byte boundary
 
-	ctx->img_data = malloc (rowbytes * ctx->prop.imgHeight);
+	ctx->img_data = CFMalloc (rowbytes * ctx->prop.imgHeight);
 	if (!ctx->img_data)
 	{
 		pngu_free_info (ctx);
 		return PNGU_LIB_ERROR;
 	}
 
-	ctx->row_pointers = malloc (sizeof (png_bytep) * ctx->prop.imgHeight);
+	ctx->row_pointers = CFMalloc (sizeof (png_bytep) * ctx->prop.imgHeight);
 	if (!ctx->row_pointers)
 	{
-		free (ctx->img_data);
+		CFFree (ctx->img_data);
 		pngu_free_info (ctx);
 		return PNGU_LIB_ERROR;
 	}

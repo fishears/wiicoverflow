@@ -1,4 +1,5 @@
 #include "titles.h"
+#include "TrackedMemoryManager.h"
 
 extern s_self self;
 
@@ -115,24 +116,24 @@ bool downloadTitles(){
 	if(file.data != NULL){
 		
                 char* pch;
-                char* msg = malloc(20*sizeof(char));
+                char* msg = CFMalloc(20*sizeof(char));
                 strncpy(msg, (char*)file.data,20);
                 pch = strtok(msg, " ");
                 if(strcmp(pch,"<!DOCTYPE")==0) //test for a bad file
                 {
-                    free(msg);
-                    free(file.data);
+                    CFFree(msg);
+                    CFFree(file.data);
                     return false;
                 }
-                free(msg);
+                CFFree(msg);
                 unlink(titlesPath);
                 if(saveFile(titlesPath, file))
                 {
-                        free(file.data);
+                        CFFree(file.data);
                         return true;
                 }
                 else{
-                    free(file.data);
+                    CFFree(file.data);
                     return false;
                 }
         }

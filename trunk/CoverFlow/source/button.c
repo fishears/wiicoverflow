@@ -11,6 +11,7 @@
  */
 #include "button.h"
 #include "soundmanager.h"
+#include "TrackedMemoryManager.h"
 
 void Button_Flag_Init(Button * new_button, const unsigned char normal_img[], int x, int y, char *button_label)
 {
@@ -340,8 +341,8 @@ void Button_TTF_Toggle_Paint(struct Button* btn1, struct Button* btn2, char *lef
 
 void FreeButtonResources(struct Button *btn)
 {
-	if (btn->toFreeTexture) free(btn->texture.data);	
-	if (btn->toFreeHoverTexture) free(btn->hoverTexture.data);	
+	if (btn->toFreeTexture) CFFree(btn->texture.data);	
+	if (btn->toFreeHoverTexture) CFFree(btn->hoverTexture.data);	
 }
 
 
@@ -509,9 +510,9 @@ void Button3_Theme_Paint_Fade(struct Button3* btn, int theme_id, int fade)
 
 void FreeButton3Resources(struct Button3 *btn)
 {
-	if (btn->toFreeTexture) 		free(btn->texture.data);	
-	if (btn->toFreeHoverTexture) 	free(btn->hoverTexture.data);
-	if (btn->toFreeTriStateTexture)	free(btn->TriStateTexture.data);
+	if (btn->toFreeTexture) 		CFFree(btn->texture.data);	
+	if (btn->toFreeHoverTexture) 	CFFree(btn->hoverTexture.data);
+	if (btn->toFreeTriStateTexture)	CFFree(btn->TriStateTexture.data);
 }
 
 #endif

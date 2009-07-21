@@ -1,5 +1,6 @@
 #include "cover.h"
 #include "utils.h"
+#include "TrackedMemoryManager.h"
 
 #define COVERS_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/cover/[Lang]/[GameID].png"
 #define COVERS_LOCATION_LANG_FULL "http://wiitdb.com/wiitdb/artwork/coverfull/[Lang]/[GameID].png"
@@ -31,7 +32,7 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 	{
 		BufferImageToSlot(&current_cover_texture,(const unsigned char*)imgData,10);
 
-		free(imgData);
+		CFFree(imgData);
 	}
 	else
 	{
@@ -41,7 +42,7 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 		if (ret > 0)
 		{
 			BufferImageToSlot(&current_cover_texture,(const unsigned char*)imgData,10);
-			free(imgData);
+			CFFree(imgData);
 		}
 		else
 		{
@@ -76,7 +77,7 @@ void Init_Covers()
 	
 	for(i = 0; i < CoverCount; i++)
 	{
-		AddCover( GRRLIB_LoadTexture(no_cover_png) );
+		AddCover( cover_texture );
 		self.progress+=per_game_prog;
 		Paint_Progress(self.progress, "Initializing Covers...");
 	}
@@ -270,7 +271,7 @@ bool getCoverFromServer(char* url, char* imgPath, int v, int max){
 
 	if(file.data != NULL && file.size >= 1024){
 		saveFile(imgPath, file);
-		free(file.data);
+		CFFree(file.data);
 		sprintf(self.debugMsg, TX.done );
 		Paint_Progress_Generic(v, max,self.debugMsg);
 		return true;

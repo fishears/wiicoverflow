@@ -3,6 +3,7 @@
 #include "localization.h"
 #include "buffer.h"
 #include "CFreeTypeGX.h"
+#include "TrackedMemoryManager.h"
 
 extern s_self self;
 extern s_pointer pointer;
@@ -44,7 +45,7 @@ void LoadTextures()
 	GRRLIB_LoadTexturePNG(&turn_point_texture,pointer_turning_png); // can't find free
 	BufferImageToSlot(&cover_texture,no_cover_png,7);
 	BufferImageToSlot(&cover_texture_3d,full_cover_png,5); // read notes for MEM2_EXTENT before removing
-	GRRLIB_LoadTexturePNG(&no_disc_texture,no_disc_png);
+	BufferImageToSlot(&no_disc_texture,no_disc_png,13); // read notes for MEM2_EXTENT before removing
 	GRRLIB_LoadTexturePNG(&slidebar_texture,slidebar_png);  // can't find free
 	GRRLIB_CreateEmptyTexture(&slidebar_white_texture,slidebar_texture.w, slidebar_texture.h);
 	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white
@@ -65,7 +66,7 @@ void LoadTextures()
 	GRRLIB_LoadTexturePNG(&dialog_box_titlebar_texture,dialog_box_titlebar_png);
 	GRRLIB_LoadTexturePNG(&dialog_box_titlebar_long_texture,dialog_box_titlebar_long_png);
 	GRRLIB_LoadTexturePNG(&dialog_box_icon_texture,dialog_box_icon_png);
-	GRRLIB_LoadTexturePNG(&menu_graphics_wireframe_texture,menu_graphics_wireframe_png);
+	BufferImageToSlot(&menu_graphics_wireframe_texture,menu_graphics_wireframe_png,14); // read notes for MEM2_EXTENT before removing
 	GRRLIB_LoadTexturePNG(&menu_graphics_box1_texture,menu_graphics_box1_png);
 	GRRLIB_LoadTexturePNG(&menu_graphics_box2_texture,menu_graphics_box2_png);
 	GRRLIB_LoadTexturePNG(&flag_br_texture,flag_br_png);
@@ -990,7 +991,7 @@ bool WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button
 		int lsp = moving_y;
 		if(txt != NULL)
 		{
-			char* msg = malloc(strlen(txt)*sizeof(char));
+			char* msg = CFMalloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 			
 			pch = strtok(msg, "|\n");
@@ -1000,7 +1001,7 @@ bool WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button
 				pch  = strtok(NULL, "|\n");
 				lsp += 16;
 			}
-			free(msg);
+			CFFree(msg);
         }
 		// Draw the pointer
 		WPAD_ScanPads();
@@ -1097,7 +1098,7 @@ bool WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button
 		int sp = 0;
 		if(txt != NULL)
 		{
-			char* msg = malloc(strlen(txt)*sizeof(char));
+			char* msg = CFMalloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 			
 			pch = strtok(msg, "|\n");
@@ -1107,7 +1108,7 @@ bool WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button
 				pch = strtok(NULL, "|\n");
 				sp+=16;
 			}
-			free(msg);
+			CFFree(msg);
         }
 		
 
@@ -1170,7 +1171,7 @@ bool WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button
 		int lsp = moving_y;
 		if(txt != NULL)
 		{
-			char* msg = malloc(strlen(txt)*sizeof(char));
+			char* msg = CFMalloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 			
 			pch = strtok(msg, "|\n");
@@ -1180,7 +1181,7 @@ bool WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button
 				pch  = strtok(NULL, "|\n");
 				lsp += 16;
 			}
-			free(msg);
+			CFFree(msg);
         }
 		// Draw the pointer
 		WPAD_ScanPads();
@@ -1310,7 +1311,7 @@ bool WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_
 		int lsp = moving_y;
 		if(txt != NULL)
 		{
-			char* msg = malloc(strlen(txt)*sizeof(char));
+			char* msg = CFMalloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 
 			pch = strtok(msg, "|\n");
@@ -1320,7 +1321,7 @@ bool WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_
 				pch  = strtok(NULL, "|\n");
 				lsp += 16;
 			}
-			free(msg);
+			CFFree(msg);
         }
 		// Draw the pointer
 		WPAD_ScanPads();
@@ -1419,7 +1420,7 @@ bool WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_
 		int sp = 0;
 		if(txt != NULL)
 		{
-			char* msg = malloc(strlen(txt)*sizeof(char));
+			char* msg = CFMalloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 
 			pch = strtok(msg, "|\n");
@@ -1429,7 +1430,7 @@ bool WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_
 				pch = strtok(NULL, "|\n");
 				sp+=16;
 			}
-			free(msg);
+			CFFree(msg);
         }
 
 
@@ -1493,7 +1494,7 @@ bool WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_
 		int lsp = moving_y;
 		if(txt != NULL)
 		{
-			char* msg = malloc(strlen(txt)*sizeof(char));
+			char* msg = CFMalloc(strlen(txt)*sizeof(char));
 			sprintf(msg, txt);
 
 			pch = strtok(msg, "|\n");
@@ -1503,7 +1504,7 @@ bool WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_
 				pch  = strtok(NULL, "|\n");
 				lsp += 16;
 			}
-			free(msg);
+			CFFree(msg);
         }
 		// Draw the pointer
 		WPAD_ScanPads();
@@ -1514,7 +1515,7 @@ bool WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_
 
 	WPAD_Rumble(0,0);
 	self.rumbleAmt = 0;
-        free(myTex.data);
+        CFFree(myTex.data);
 	return returnVal;
 }
 
@@ -1629,47 +1630,47 @@ void DrawCursor(int type, f32 xpos, f32 ypos, float degrees, float scaleX, f32 s
 void freeResources(){
 
 	//textures
-	free(pointer_texture.data);
-	free(pointer_shadow_texture.data);
-	free(turn_point_texture.data);
+	CFFree(pointer_texture.data);
+	CFFree(pointer_shadow_texture.data);
+	CFFree(turn_point_texture.data);
 	//free(cover_texture.data);
 	//free(cover_texture_3d.data);
-	free(no_disc_texture.data);
-	free(slidebar_texture.data);
-	free(slidebar_white_texture.data);
+	//CFFree(no_disc_texture.data);
+	CFFree(slidebar_texture.data);
+	CFFree(slidebar_white_texture.data);
 	//free(ambientlight_texture.data);
-	free(ambientlight_white_texture.data);
-	free(battery_bar.data);
-    free(battery_bar_red.data);
-    free(battery.data);
-    free(battery_dead.data);
-	free(menu_button_texture.data);
-	free(menu_button_over_texture.data);
-	free(menu_header_texture.data);
-	free(menu_header_vflip_texture.data);
-	free(menu_logo_texture.data);
-	free(menu_loading_texture.data);
-	free(dialog_box_titlebar_texture.data);
-	free(dialog_box_titlebar_long_texture.data);
-	free(dialog_box_icon_texture.data);
-	free(menu_graphics_wireframe_texture.data);
-	free(menu_graphics_box1_texture.data);
-	free(menu_graphics_box2_texture.data);
-	free(flag_br_texture.data);
-	free(flag_da_texture.data);
-	free(flag_de_texture.data);
-	free(flag_fr_texture.data);
-	free(flag_it_texture.data);
-	free(flag_dk_texture.data);
-	free(flag_tr_texture.data);
-	free(flag_us_texture.data);
-	free(flag_es_texture.data);
-	free(flag_ct_texture.data);
-	free(flag_fi_texture.data);
-	free(flag_hu_texture.data);
-	free(flag_MyLang_texture.data);
+	CFFree(ambientlight_white_texture.data);
+	CFFree(battery_bar.data);
+    CFFree(battery_bar_red.data);
+    CFFree(battery.data);
+    CFFree(battery_dead.data);
+	CFFree(menu_button_texture.data);
+	CFFree(menu_button_over_texture.data);
+	CFFree(menu_header_texture.data);
+	CFFree(menu_header_vflip_texture.data);
+	CFFree(menu_logo_texture.data);
+	CFFree(menu_loading_texture.data);
+	CFFree(dialog_box_titlebar_texture.data);
+	CFFree(dialog_box_titlebar_long_texture.data);
+	CFFree(dialog_box_icon_texture.data);
+//	CFFree(menu_graphics_wireframe_texture.data);
+	CFFree(menu_graphics_box1_texture.data);
+	CFFree(menu_graphics_box2_texture.data);
+	CFFree(flag_br_texture.data);
+	CFFree(flag_da_texture.data);
+	CFFree(flag_de_texture.data);
+	CFFree(flag_fr_texture.data);
+	CFFree(flag_it_texture.data);
+	CFFree(flag_dk_texture.data);
+	CFFree(flag_tr_texture.data);
+	CFFree(flag_us_texture.data);
+	CFFree(flag_es_texture.data);
+	CFFree(flag_ct_texture.data);
+	CFFree(flag_fi_texture.data);
+	CFFree(flag_hu_texture.data);
+	CFFree(flag_MyLang_texture.data);
 	//if (coverLoaded)free(current_cover_texture.data); // now in mem2
-	free(hdspace_texture.data);
+	CFFree(hdspace_texture.data);
 	
 	//buttons
 	FreeButtonResources(&slideButton);

@@ -4,6 +4,7 @@
 #include <ogcsys.h>
 #include <fat.h>
 #include <sys/stat.h>
+#include "TrackedMemoryManager.h"
 
 /* Constants */
 #define SDHC_MOUNT	"SD"
@@ -51,7 +52,7 @@ s32 Fat_ReadFile(const char *filepath, void **outbuf)
 	filelen = filestat.st_size;
 
 	/* Allocate memory */
-	buffer = memalign(32, filelen);
+	buffer = CFMemAlign(32, filelen);
 	if (!buffer)
 		goto err;
 
@@ -73,7 +74,7 @@ s32 Fat_ReadFile(const char *filepath, void **outbuf)
 err:
 	/* Free memory */
 	if (buffer)
-		free(buffer);
+		CFFree(buffer);
 
 	/* Error code */
 	ret = -1;
