@@ -361,9 +361,11 @@ void Init_Buttons()
     Button_Init(&cheatEnabled[0], button_cheat_on_png, button_cheat_off_png, 44, 80);
     Button_Init(&cheatDisabled[0], button_cheat_off_png, button_cheat_on_png, 44, 80);
     Button_Init(&cheatEditButton[0], button_cheat_edit_png, button_cheat_edit_over_png, 68, 80);
+    Duplicate_Button(&varEditButton[0],cheatEditButton[0],68,80);
     Duplicate_Button(&pageUpButton, vidupButton,478,82);
     Duplicate_Button(&pageDownButton, viddownButton,450,82);
     Duplicate_Button_TTF(&cheatDoneButton, okButton,84,82,TX.done);
+    Duplicate_Button_TTF(&varDoneButton, okButton,84,82,TX.done);
     Duplicate_Button(&selectAllButton, cheatEnabled[0],84,120);
     Duplicate_Button(&deselectAllButton, cheatDisabled[0],84,120);
     Button_Init(&charUpButton[0],button_char_up_png,button_char_up_over_png,100,100);
@@ -1779,7 +1781,7 @@ void freeResources(){
             FreeButtonResources(&cheatDisabled[n]);
             FreeButtonResources(&cheatEditButton[n]);
         }
-	
+	FreeButtonResources(&varDoneButton);
 	FreeButtonResources(&manageCheatsButton);
 	FreeButtonResources(&pageUpButton);
     FreeButtonResources(&pageDownButton);
