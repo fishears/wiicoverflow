@@ -10,7 +10,7 @@
   * Fix typo in url-path for diskarts
   * Fix bug in wbfs_estimate_disc() (issue321 thanks to hend...@freenet.de)
   * Fix bug that doesn't create codes directory for cheats (issue326 thanks to Richard)
-  * Fix fliping of zoomed 3d covers.
+  * Fix fliping of zoomed 3d covers. (issue256)
 
 -OTHER-
   * Titles.txt is now taken from wiitdb.com
