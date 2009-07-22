@@ -646,9 +646,9 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
     guMtxRotAxisDeg (m, &axis, degrees);
 	
 	if(scale > 1)
-		guMtxTransApply(m, m, loc, 0, 6.0f+falloff);
+		guMtxTransApply(m, m, loc, 0, 6.0f+falloff + -1*zpos);
 	else
-		guMtxTransApply(m, m, loc, 0, 8.0f+falloff);
+		guMtxTransApply(m, m, loc, 0, 8.0f+falloff + -1*zpos);
 	
     guMtxConcat (view, m, mv);
 
