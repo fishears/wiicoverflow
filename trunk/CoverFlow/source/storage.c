@@ -88,11 +88,17 @@ bool saveFile(char* imgPath, struct block file){
 void checkDirs(){
 	
 	int result = 0;
-
+#ifdef USB_DEVICE
+        DIR_ITER* dir = diropen("USB:/codes");
+        if(dir == NULL) {
+                mkdir("USB:/codes", S_ISVTX);
+        }
+#else
         DIR_ITER* dir = diropen("SD:/codes");
         if(dir == NULL) {
                 mkdir("SD:/codes", S_ISVTX);
         }
+#endif
         else{
                 dirclose(dir);
         }
