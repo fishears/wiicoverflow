@@ -142,7 +142,7 @@ bool promptForUpdate(){
 bool checkForNews(){
 	char nowDate[7];
 	struct block file;
-	char* url = "http://wiicoverflow.googlecode.com/files/CoverFloader.news";
+	char* url = "http://wiicoverflow.googlecode.com/svn/trunk/CoverFlow/CFNS/CoverFloader.news";
 	
 	setNewsDate(nowDate);
 	if ( atoi(nowDate) > atoi(settings.newsDate) )
