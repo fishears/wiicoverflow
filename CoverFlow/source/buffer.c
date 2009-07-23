@@ -241,6 +241,9 @@ void HandleLoadRequest(int index,int threadNo)
 		int tW = GraphicModes[graphicMode][0];
 		int tH = GraphicModes[graphicMode][1];
 		
+		int sW = GraphicModes[graphicMode][0];
+		int sH = GraphicModes[graphicMode][1];
+		
 		// determines the cover location
 		if(!graphicMode)
 		{
@@ -254,6 +257,17 @@ void HandleLoadRequest(int index,int threadNo)
 		
 		int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
 		ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress,tW * tH * 4);
+		
+		if(graphicMode && ret <= 0)
+		{
+			sW = GraphicModes[0][0];
+			sH = GraphicModes[0][1];
+		
+			//read failed, try to load in 2D cover instead
+			int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
+			snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
+			ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress, sW * sH * 4);
+		}
 		
 		if (ret > 0) 
 		{
@@ -277,10 +291,10 @@ void HandleLoadRequest(int index,int threadNo)
 			if (thisDataMem2Address!=-1) // we have a slot, load the texture to it
 			{
 				// a garbled image will not cause an issue here
-				GRRLIB_LoadTexturePNGToMemorySized(&_texture_data[index],(const unsigned char*)imgDataAddress, (void *)thisDataMem2Address, tW * tH * 4);
+				GRRLIB_LoadTexturePNGToMemorySized(&_texture_data[index],(const unsigned char*)imgDataAddress, (void *)thisDataMem2Address, sW * sH * 4);
 				GRRLIB_texImg textureData=_texture_data[index];
 				pthread_mutex_lock(&buffer_mutex[index]);
-				if (!(textureData.h ==tH && textureData.w == tW && textureData.data!=0)) // sanity check
+				if (!(textureData.h == sH && textureData.w == sW && textureData.data!=0)) // sanity check
 				{
 					_cq.coverMissing[index]=true; // bad image size
 					_cq.ready[index]   = false;
