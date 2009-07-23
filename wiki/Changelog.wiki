@@ -5,6 +5,7 @@
   * Support for USB-Devices
   * CoverFloader News Service (CFNS) (requires internet connection)
   * CoverFloader NewsReader
+  * Load 2D Cover if a 3D cover is not found.
 
 -FIX-
   * Fix typo in url-path for diskarts
