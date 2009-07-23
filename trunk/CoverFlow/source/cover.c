@@ -270,6 +270,7 @@ void Download_Cover(char* id, int v, int max)
 bool getCoverFromServer(char* url, char* imgPath, int v, int max){
 
 	struct block file;
+	char* pch;
 
 	sprintf(self.debugMsg, TX.getting, url);
 	Paint_Progress_Generic(v, max,self.debugMsg);
@@ -277,7 +278,18 @@ bool getCoverFromServer(char* url, char* imgPath, int v, int max){
 	file = downloadfile(url);
 
 	if(file.data != NULL && file.size >= 1024){
-		saveFile(imgPath, file);
+	    char* msg = CFMalloc(20*sizeof(char));
+	    strncpy(msg, (char*)file.data,20);
+	    pch = strtok(msg, " ");
+	    if(strcmp(pch,"<!DOCTYPE")==0) //test for a bad file
+	     {
+		   CFFree(msg);
+		   CFFree(file.data);
+		   return false;
+	     }  
+	    CFFree(msg);
+	    unlink(imgPath);
+ 		saveFile(imgPath, file);
 		CFFree(file.data);
 		sprintf(self.debugMsg, TX.done );
 		Paint_Progress_Generic(v, max,self.debugMsg);
