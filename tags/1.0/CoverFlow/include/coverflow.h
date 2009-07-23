@@ -96,7 +96,7 @@
 
 
 
-#define RELEASE              "v1.0"
+#define RELEASE              "v1.1"
 
 #define ANIMATE_SPEED 0
 #define FLIP_SPEED  0.016
@@ -105,6 +105,8 @@
 #define OGG_FORMAT 0
 #define RAW_FORMAT 1
 #define MAX_SOUNDS   5
+
+
 
 /* CFG stuff */
 #define CFG_VIDEO_COUNT  6

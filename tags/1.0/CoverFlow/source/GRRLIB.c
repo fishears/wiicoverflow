@@ -559,6 +559,9 @@ inline void GRRLIB_DrawFlatCoverImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float
 
 	float right = .527;
 	
+	if(tex.w == 160 && tex.h == 224)
+		right = 0;
+	
     GX_InitTexObj(&texObj, tex.data, tex.w, tex.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     //GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
     GX_LoadTexObj(&texObj, GX_TEXMAP0);
@@ -626,7 +629,15 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 
     GX_InitTexObj(&texObj, tex.data, tex.w, tex.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 
-	if(!(settings.covers3d))
+	bool use3d = settings.covers3d;
+
+	if(use3d && (tex.w == 160 && tex.h == 224))
+	{
+		use3d = false;
+		//force to 2d cover since 3d wasn't found, but 2d was
+	}
+
+	if(!(use3d))
 	{
 		width = tex.w * 0.01 * scale;
 		height = tex.h * 0.01 * scale;
@@ -663,7 +674,7 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 	float left = .470;
 	float right = .527;
 		
-	if(settings.covers3d)
+	if(use3d)
 	{
 		// Draw Back cover
 		GX_LoadPosMtxImm (mv, GX_PNMTX0);
@@ -842,12 +853,33 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 		GX_Color1u32(color);
 		GX_TexCoord2f32(1, 0);
 		GX_End();
+		
+		// Draw Back cover
+		GX_LoadPosMtxImm (mv, GX_PNMTX0);
+
+		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+		GX_Position3f32(-width, -height, .001);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(0, 1);
+
+		GX_Position3f32(-width, height, .001);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(0, 0);
+
+		GX_Position3f32(width, height, .001);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(1, 0);
+
+		GX_Position3f32(width, -height, .001);
+		GX_Color1u32(color);
+		GX_TexCoord2f32(1, 1);
+		GX_End();
 	}
 
 	float dist = 2.02;
 
 	//Reflections
-	if(settings.covers3d)
+	if(use3d)
 	{
 		dist = 2.02;
 		// Draw Back cover reflection matte
@@ -1001,6 +1033,27 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 		GX_Position3f32(width, -height-height*dist, 0);
 		GX_Color1u32(0xFFFFFF00);
 		GX_TexCoord2f32(right, 0);
+		GX_End();
+	}
+	else
+	{
+	
+		GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+		GX_Position3f32(-width, -height-height*dist, .001);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(0, 0);
+		
+		GX_Position3f32(-width, height-height*dist, .001);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(0, 1);
+		
+		GX_Position3f32(width, height-height*dist, .001);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(1, 1);
+		
+		GX_Position3f32(width, -height-height*dist, .001);
+		GX_Color1u32(0xFFFFFFFF);
+		GX_TexCoord2f32(1, 0);
 		GX_End();
 	}
 
