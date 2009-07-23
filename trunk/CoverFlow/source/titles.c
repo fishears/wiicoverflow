@@ -2,12 +2,17 @@
 #include "TrackedMemoryManager.h"
 
 extern s_self self;
+extern s_path dynPath;
 
 int initTitle(){
 
+	char fbuf[255];
 	FILE* fp;
 	
-	fp = fopen(USBLOADER_PATH "/titles.txt", "r");
+	
+	sprintf(fbuf,"%s/titles.txt", dynPath.dir_usb_loader);
+	fp = fopen(fbuf, "r");
+	//fp = fopen(USBLOADER_PATH "/titles.txt", "r");
 	
 	if(fp == NULL)
 		return -1;
@@ -40,9 +45,12 @@ void fillTitleStruct(s_title* titleList, int len){
 	
 	int i = 0;
 	char line[MAX_TITLE_LEN];
+	char fbuf[255];
 	
 	FILE* fp;
-	fp = fopen(USBLOADER_PATH "/titles.txt", "r");
+		sprintf(fbuf,"%s/titles.txt", dynPath.dir_usb_loader);
+	fp = fopen(fbuf, "r");
+	//fp = fopen(USBLOADER_PATH "/titles.txt", "r");
 	
 	if(fp == NULL){
 		WindowPrompt("ERROR!", "Cannot fill struct!", 0, &cancelButton);
@@ -109,7 +117,8 @@ bool downloadTitles(){
 	char titlesPath[100];
 	struct block file;
 	
-	snprintf(titlesPath, sizeof(titlesPath), "%s/titles.txt", USBLOADER_PATH);
+	//snprintf(titlesPath, sizeof(titlesPath), "%s/titles.txt", USBLOADER_PATH);
+	snprintf(titlesPath, sizeof(titlesPath), "%s/titles.txt", dynPath.dir_usb_loader);
 	
 	//file = downloadfile("http://www.wiiboxart.com/titles.txt");
 	file = downloadfile("http://wiitdb.com/titles.txt");

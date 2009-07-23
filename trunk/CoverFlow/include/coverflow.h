@@ -257,13 +257,26 @@ typedef struct{
 	char newsID[10];
 #endif
 
-#ifdef USB_DEVICE
+
 	char bootDevice[10];
-#endif
+
 } s_self;
 
 
+typedef struct
+{
+ char bootDevice[10];
+ char dir_codes[255];
+ char dir_usb_loader[255];
+ char dir_3dcovers[255];
+ char dir_covers[255];
+ char dir_disks[255];
+ char dir_games[255];
+ char dir_txtcodes[255];
+ char dir_altdol[255];
+} s_path;
 
+void initPaths();
 void initVars();
 
 #endif

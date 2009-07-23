@@ -2,6 +2,8 @@
 
 #include "gfx.h"
 
+extern s_path dynPath;
+
 //Code taken for the most part from USB Loader GX... Thanks!
 
 int GetGameInfo(unsigned char* ID)
@@ -9,23 +11,18 @@ int GetGameInfo(unsigned char* ID)
 	//TODO Make this configurable...
 
     char pathname[100];
-#ifdef USB_DEVICE
-	snprintf(pathname, sizeof(pathname), "%s%s", "USB:/usb-loader/", "wiitdb.zip");
-#else
-	snprintf(pathname, sizeof(pathname), "%s%s", "SD:/usb-loader/", "wiitdb.zip");
-#endif
+	//snprintf(pathname, sizeof(pathname), "%s%s", "SD:/usb-loader/", "wiitdb.zip");
+	snprintf(pathname, sizeof(pathname), "%s/wiitdb.zip", dynPath.dir_usb_loader);
+
     
 								
     // database should always be zipped, while it may be convenient detecting and loading from .xml may lead to confusion:
     int fileexists = OpenXMLFile(pathname);
 
     if(!fileexists) {
-#ifdef USB_DEVICE
-	    snprintf(pathname, sizeof(pathname), "%s%s", "USB:/usb-loader/", "wiitdb.xml");
-#else
-	    snprintf(pathname, sizeof(pathname), "%s%s", "SD:/usb-loader/", "wiitdb.xml");
-#endif
-         fileexists = OpenXMLFile(pathname);
+	   //snprintf(pathname, sizeof(pathname), "%s%s", "SD:/usb-loader/", "wiitdb.xml");
+ 	   snprintf(pathname, sizeof(pathname), "%s/wiitdb.xml", dynPath.dir_usb_loader);
+       fileexists = OpenXMLFile(pathname);
     }
 
 	

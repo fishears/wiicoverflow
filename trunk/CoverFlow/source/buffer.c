@@ -22,6 +22,9 @@
 // then lower this number
 #define MEM2_EXTENT (0x93300000-MEM2_START_ADDRESS)
 
+extern s_path dynPath;
+
+
 // private cars
 typedef struct COVERQUEUE 
 {
@@ -249,12 +252,14 @@ void HandleLoadRequest(int index,int threadNo)
 		// determines the cover location
 		if(!graphicMode)
 		{
-			snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
+			//snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_covers, _cq.requestId[index]->id);
 		}
 		else
 		{
 			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
-			snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%s.png", _cq.requestId[index]->id);
+			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%s.png", _cq.requestId[index]->id);
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_3dcovers, _cq.requestId[index]->id);		
 		}
 		
 		int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
@@ -267,7 +272,8 @@ void HandleLoadRequest(int index,int threadNo)
 		
 			//read failed, try to load in 2D cover instead
 			int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
-			snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
+			//snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_covers, _cq.requestId[index]->id);
 			ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress, sW * sH * 4);
 		}
 		

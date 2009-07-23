@@ -12,7 +12,7 @@ extern s_gameSettings gameSetting;
 extern s_title* titleList;
 extern s_coverFlip coverFlip[];
 extern int COVER_COUNT;
-
+extern s_path dynPath;
 
 void ResetBuffer()
 {
@@ -928,7 +928,8 @@ bool WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button
 	bool returnVal = false;
 	bool doloop = true;
 	char* pch;
-	
+	char snpbuff[255];
+				
 	if(choice_a == 0 && choice_b == 0)
 		doloop = false;
 	if(choice_a != 0)
@@ -1041,8 +1042,11 @@ bool WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button
 		}
 		
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))
-			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
-
+			{
+			sprintf(snpbuff, "%s/sshot.png", dynPath.dir_usb_loader );
+			GRRLIB_ScrShot(snpbuff);
+			//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+			}
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
 		{
 			if(choice_a != 0)
@@ -1204,8 +1208,10 @@ bool WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_
 	unsigned char buffer[160 * 224 * 4 * 10];
 	char filepath[255];
 	int ret;
+	char snpbuff[255];
 	
-	sprintf(filepath, USBLOADER_PATH "/covers/%s.png", id);
+	sprintf(filepath, "%s/%s.png", dynPath.dir_covers, id);
+	//sprintf(filepath, USBLOADER_PATH "/covers/%s.png", id);
 	
 	
 	WPAD_Rumble(0,0); //sometimes rumble remain active
@@ -1361,8 +1367,11 @@ bool WindowPromptInstall(char* id,char* title, char* txt, struct Button* choice_
 		}
 
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))
-			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
-
+			{
+				sprintf(snpbuff, "%s/sshot.png", dynPath.dir_usb_loader );
+				GRRLIB_ScrShot(snpbuff);
+				//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+			}
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
 		{
 			if(choice_a != 0)

@@ -18,6 +18,7 @@
 #include "localization.h"
 
 extern s_settings settings;
+extern s_path dynPath;
 static char *cfg_name, *cfg_val;
 char langFile[20];
 struct LANGUAGE TX;
@@ -1182,6 +1183,8 @@ void languageSet(char *name, char *val)
 
 bool languageLoad()
 {
+	char fbuff[255];
+	
 	if (strcmp(settings.localLanguage, "default") == 0) {
 		languageDefault();
 		return true;
@@ -1220,7 +1223,10 @@ bool languageLoad()
 		return parseMemFile( (char*)hungarian_lang, hungarian_lang_size, &languageSet);
 		}
 	if (strcmp(settings.localLanguage, "myLANG") == 0) {
-		if (!cfg_parsefile(USBLOADER_PATH "/MyLanguage.lang", &languageSet)) {
+		sprintf(fbuff,"%s/MyLanguage.lang", dynPath.dir_usb_loader);
+		//if (!cfg_parsefile(USBLOADER_PATH "/MyLanguage.lang", &languageSet)) 
+		if (!cfg_parsefile(fbuff, &languageSet)) 
+			{
 			sprintf( settings.localLanguage, "default");
 			languageDefault();
 			return false;

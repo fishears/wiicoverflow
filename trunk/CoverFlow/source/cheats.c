@@ -16,6 +16,7 @@
 
 extern s_pointer pointer;
 extern s_self self;
+extern s_path dynPath;
 
 bool check_txt(int id, struct discHdr *gameList)
 {
@@ -28,7 +29,8 @@ bool check_txt(int id, struct discHdr *gameList)
     sprintf(titleID,"%s",header->id);
     sprintf(filename, "%s.txt", titleID);
     chdir("/");
-    sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+    //sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+	sprintf(path,"%s/", dynPath.dir_txtcodes);
     chdir(path);
     FILE *txtfile;
     txtfile = fopen(filename, "r");
@@ -54,7 +56,8 @@ bool check_gct(int id, struct discHdr *gameList)
     sprintf(titleID,"%s",header->id);
     sprintf(filename, "%s.gct", titleID);
     chdir("/");
-    chdir(GCT_PATH);
+    //chdir(GCT_PATH);
+    chdir(dynPath.dir_codes);	
     FILE *txtfile;
     txtfile = fopen(filename, "r");
     if(txtfile)
@@ -104,8 +107,9 @@ bool download_txt(int id, int mode, struct discHdr *gameList)
             }
             if(file.data != NULL) // if we got data back, save that sucka
             {
-                sprintf(imgpath,"%s%s%s.txt",USBLOADER_PATH,TXT_PATH,titleID);
-                saveFile(imgpath, file);
+                //sprintf(imgpath,"%s%s%s.txt",USBLOADER_PATH,TXT_PATH,titleID);
+                sprintf(imgpath,"%s/%s.txt", dynPath.dir_txtcodes, titleID);
+                 saveFile(imgpath, file);
                 CFFree(file.data);
                 if(check_download(titleID))
                 {
@@ -174,7 +178,8 @@ void manage_cheats(int id, struct discHdr *gameList)
     sprintf(titleID,"%s",header->id);
     sprintf(filename, "%s.txt", titleID);
     chdir("/");
-    sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+//  sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+	sprintf(path,"%s/",dynPath.dir_txtcodes);
     chdir(path);
     FILE *txtfile=NULL;
     txtfile = fopen(filename, "r");
@@ -260,7 +265,8 @@ void manage_cheats(int id, struct discHdr *gameList)
         sprintf(titleID,"%s",header->id);
         sprintf(filename, "%sx.txt", titleID);
         chdir("/");
-        sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+        //sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+		sprintf(path,"%s/", dynPath.dir_txtcodes);
         chdir(path);
         FILE *txtfile=NULL;
         txtfile = fopen(filename, "r");
@@ -514,8 +520,9 @@ bool check_download(char* titleID)
     char filename[20];
     char path [100];
     chdir("/");
-    sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
-    chdir(path);
+    //sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+    sprintf(path,"%s/", dynPath.dir_txtcodes);
+	chdir(path);
     sprintf(filename, "%s.txt", titleID);
     FILE *txtfile;
     txtfile = fopen(filename, "r");
@@ -554,7 +561,8 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id, in
     sprintf(titleID,"%s",header->id);
     sprintf(gctname,"%s.gct",titleID);
     chdir("/");
-    chdir(GCT_PATH);
+    //chdir(GCT_PATH);
+    chdir(dynPath.dir_codes);	
     FILE *gctFile;
     gctFile = fopen(gctname,"wb");
     if(!gctFile)
@@ -626,7 +634,8 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id, in
     sprintf(titleID,"%s",header->id);
     sprintf(filename, "%sx.txt", titleID);
     chdir("/");
-    sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+    //sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
+	sprintf(path,"%s/", dynPath.dir_txtcodes);
     chdir(path);
     FILE *txtfile=NULL;
     txtfile = fopen(filename, "w");

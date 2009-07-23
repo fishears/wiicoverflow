@@ -12,26 +12,35 @@
   
  #ifdef URLBOXART_PASS
  extern s_self self; 
-  
+ extern s_path dynPath; 
   
  bool urlFileExist() 
  { 
-         FILE *fp; 
-         fp = fopen(URLBOXART_PASS, "r"); 
-         if(fp != NULL) 
-         { 
-                 fclose(fp); 
-                 return true; 
-         } 
-         else 
-                 return false; 
+	 FILE *fp; 
+	 char buff[255];
+	 
+	 sprintf(buff, "%s/%s", dynPath.dir_usb_loader, URLBOXART_PASS);
+	 fp = fopen(buff, "r"); 
+	 //fp = fopen(URLBOXART_PASS, "r"); 
+	 if(fp != NULL) 
+	 { 
+		 fclose(fp); 
+		 return true; 
+	 } 
+	 else 
+		 return false; 
  } 
   
   
   
  void getURL_LoginData() 
  { 
-  cfg_parsefile(URLBOXART_PASS, &storeURL_LoginData); 
+  char buff[255];
+	 
+  sprintf(buff, "%s/%s", dynPath.dir_usb_loader, URLBOXART_PASS);
+  
+  cfg_parsefile(buff, &storeURL_LoginData); 
+  //cfg_parsefile(URLBOXART_PASS, &storeURL_LoginData); 
  } 
   
   

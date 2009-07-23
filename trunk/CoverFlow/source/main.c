@@ -30,7 +30,12 @@ s_self         self;
 s_pointer      pointer;
 s_gameSettings gameSetting;
 s_coverFlip    coverFlip[500];
+s_path		   dynPath;
+
 //static s_Filter gameFilter;
+
+
+
 
 extern struct gameXMLinfo gameinfo;
 
@@ -106,11 +111,26 @@ void initVars()
 }
 
 
+
+void initPaths()
+{
+ sprintf(dynPath.dir_usb_loader, "%s/usb-loader", dynPath.bootDevice);
+ sprintf(dynPath.dir_codes,      "%s/codes",      dynPath.bootDevice);
+ sprintf(dynPath.dir_3dcovers,   "%s/3dcovers",   dynPath.dir_usb_loader);
+ sprintf(dynPath.dir_covers,     "%s/covers",     dynPath.dir_usb_loader);
+ sprintf(dynPath.dir_disks,      "%s/disks",      dynPath.dir_usb_loader);
+ sprintf(dynPath.dir_games,      "%s/games",      dynPath.dir_usb_loader);
+ sprintf(dynPath.dir_covers,     "%s/covers",     dynPath.dir_usb_loader);
+ sprintf(dynPath.dir_txtcodes,   "%s/txtcodes",   dynPath.dir_usb_loader);
+ sprintf(dynPath.dir_altdol,     "%s/altdol",     dynPath.dir_usb_loader);
+}
+
+
+
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv )
 {
-#ifdef USB_DEVICE
 	bool bootDevice_found=false;
 	
 	strcpy(self.bootDevice, "SD:");
@@ -132,7 +152,9 @@ int main( int argc, char **argv )
         if((stat("USB:/apps/CoverFloader/boot.dol", &st) == 0) || (stat("USB:/apps/CoverFloader/boot.elf", &st) == 0))
 			strcpy(self.bootDevice, "USB:");
 	}
-#endif
+	
+	strcpy(dynPath.bootDevice, self.bootDevice);  //temporary
+
 
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
@@ -155,6 +177,7 @@ int main( int argc, char **argv )
 	languageInit();     // loads default msgs
 	LoadFonts();
 	initVars();
+	initPaths();
 
 	// Set up the buffer slots 
 	ClearBufferSlotMemory();
@@ -192,6 +215,14 @@ int main( int argc, char **argv )
 	Subsystem_Init();
 
 	//********  earliest access point for accessing files on SD-Card (after Fat_MountSDHC) ********
+
+ 
+ //char buffer[500];
+ //sprintf(buffer,"%s|%s|%s|%s|%s|%s|%s|%s",dynPath.dir_usb_loader, dynPath.dir_3dcovers, dynPath.dir_covers, dynPath.dir_disks, dynPath.dir_games, dynPath.dir_covers, dynPath.dir_txtcodes, dynPath.dir_altdol);
+ //WindowPrompt("Paths", buffer, 0, &okButton);
+
+
+
 
 	checkDirs();
 	checkFiles();

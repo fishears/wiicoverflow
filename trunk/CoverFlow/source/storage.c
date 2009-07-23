@@ -7,6 +7,7 @@ extern s_title* titleList;
 extern int COVER_COUNT;
 extern s_coverFlip coverFlip[];
 extern s_pointer      pointer;
+extern s_path dynPath;
 
 bool init_usbfs()
 {    
@@ -88,27 +89,28 @@ bool saveFile(char* imgPath, struct block file){
 void checkDirs(){
 	
 	int result = 0;
-#ifdef USB_DEVICE
-        DIR_ITER* dir = diropen("USB:/codes");
-        if(dir == NULL) {
-                mkdir("USB:/codes", S_ISVTX);
+
+//  DIR_ITER* dir = diropen("SD:/codes");
+	DIR_ITER* dir = diropen(dynPath.dir_codes);
+    if(dir == NULL) 
+		{
+			//mkdir("SD:/codes", S_ISVTX);
+			mkdir(dynPath.dir_codes, S_ISVTX);
         }
-#else
-        DIR_ITER* dir = diropen("SD:/codes");
-        if(dir == NULL) {
-                mkdir("SD:/codes", S_ISVTX);
+        else
+		{
+            dirclose(dir);
         }
-#endif
-        else{
-                dirclose(dir);
-        }
-	dir = diropen(USBLOADER_PATH);
+	//dir = diropen(USBLOADER_PATH);
+	dir = diropen(dynPath.dir_usb_loader);
 	if (dir == NULL) {
 		
-		mkdir(USBLOADER_PATH, S_ISVTX);
+		//mkdir(USBLOADER_PATH, S_ISVTX);
+		mkdir(dynPath.dir_usb_loader, S_ISVTX);
 		//int result = chdir("SD:/usb-loader/");
 
-		result = chdir(USBLOADER_PATH);
+		//result = chdir(USBLOADER_PATH);
+		result = chdir(dynPath.dir_usb_loader);
 		
 		if(result == 0){
 			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
@@ -128,7 +130,8 @@ void checkDirs(){
 	//	WindowPrompt("Cover download","Closing dir", &okButton, NULL);
 		dirclose(dir);
 		
-		result = chdir(USBLOADER_PATH);
+		//result = chdir(USBLOADER_PATH);
+		result = chdir(dynPath.dir_usb_loader);
 		
 		if(result == 0){
 			dir = diropen("disks");
@@ -178,17 +181,23 @@ void checkDirs(){
 }
 
 void checkFiles(){
-	
+
+	char fbuff[255];
 	FILE* fp;
 	
-	fp = fopen(USBLOADER_PATH "/gamelist.xml", "r");
+	sprintf(fbuff, "%s/gamelist.xml", dynPath.dir_usb_loader);
+	fp = fopen(fbuff, "r");
+	//fp = fopen(USBLOADER_PATH "/gamelist.xml", "r");
 	
 	if(fp == NULL)
 		createEmptyGameSettingsFile();
 	else
 		fclose(fp);
 
-	fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
+	sprintf(fbuff, "%s/wiicoverflow.xml", dynPath.dir_usb_loader);
+	fp = fopen(fbuff, "r");
+	//fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
+	
 	if(fp == NULL)
 		createEmptyWiiCoverFlowFile();
 	else
@@ -197,9 +206,15 @@ void checkFiles(){
 
 
 bool check_write_access(){
-    FILE* fp;
-    fp = fopen(USBLOADER_PATH "/temp.txt","wb");
-    if(fp==NULL)
+
+    char fbuff[255];
+	FILE* fp;
+    
+	sprintf(fbuff, "%s/temp.txt", dynPath.dir_usb_loader);
+	fp = fopen(fbuff, "wb");
+	//fp = fopen(USBLOADER_PATH "/temp.txt","wb");
+    
+	if(fp==NULL)
     {
         WindowPrompt(TX.error, TX.errorSD, &okButton,0);
         return false;
@@ -207,7 +222,8 @@ bool check_write_access(){
     else
     {
         fclose(fp);
-		chdir(USBLOADER_PATH);
+		chdir(dynPath.dir_usb_loader);
+		//chdir(USBLOADER_PATH);
         remove("temp.txt");
         return true;
     }
