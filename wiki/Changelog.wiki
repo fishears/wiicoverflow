@@ -2,13 +2,14 @@
 == v1.1  (July ? 2009) ==
 
 -NEW-
-  * dynamic paths for all files and directories on SD: or/and USB:
+  * dynamic paths for all CoverFloader files and directories on SD: or/and USB:
   * Support for USB-Devices
   * CoverFloader News Service (CFNS) (requires internet connection)
   * CoverFloader NewsReader
   * Load 2D Cover if a 3D cover is not found.
 
 -FIX-
+  * Fix issue that stores invalid files for missing discs and covers (issue344)
   * Fix typo in url-path for diskarts
   * Fix bug in wbfs_estimate_disc() (issue321 thanks to hend...@freenet.de)
   * Fix bug that doesn't create codes directory for cheats (issue326 thanks to Richard)
