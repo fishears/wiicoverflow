@@ -23,7 +23,7 @@ extern s_gameSettings gameSetting;
 extern s_title*       titleList;
 extern u8             shutdown;
 extern u8             reset;
-
+extern s_path		  dynPath;
 
 char languages[11][30] = {{""},{""},{""},{""},{""},{""},{""},{""},{""},{""},{""}};
 
@@ -66,6 +66,7 @@ void Settings_Menu_Show()
 	int  stateMachine = settingsPanel;  // default to 'settings' panel
 	menuSettingsButton.selected  = true;
 	bool bMyFile 	  = false;
+	char fbuff[255];
 	
 	//////////////////
 	// Draw the intro - lower the menu
@@ -73,7 +74,11 @@ void Settings_Menu_Show()
 	int i = 1;
 	int fade = 0x00;
 	float moving_y;
-	bMyFile = checkMyLanguageFile(USBLOADER_PATH "/MyLanguage.lang");
+	
+	sprintf(fbuff,"%s/MyLanguage.lang", dynPath.dir_usb_loader);
+	bMyFile = checkMyLanguageFile(fbuff);
+	//bMyFile = checkMyLanguageFile(USBLOADER_PATH "/MyLanguage.lang");
+
 	Init_sbAbout();
 	Config_sbAbout();
 	
@@ -146,8 +151,11 @@ void Settings_Menu_Show()
 		// Check for screen shot   
 		// here it works for all cases
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1) || (PAD_ButtonsDown(0) & PAD_BUTTON_X))
-			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
-		
+			{
+			 sprintf(fbuff,"%s/sshot.png", dynPath.dir_usb_loader);
+			 GRRLIB_ScrShot(fbuff);
+			 //GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+		    }
 		// Check for B to save and exit
 		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_B)||(PAD_ButtonsDown(0) & PAD_BUTTON_B))
 		{
@@ -949,6 +957,7 @@ void Game_Settings_Menu_Show()
     header = &self.gameList[self.gameSelected];
     char titleID[7];
     char gameName[MAX_TITLE_LEN];
+	char fbuff[255];
 	
     // chomp the title to fit
 	if(self.usingTitlesTxt)
@@ -994,7 +1003,11 @@ void Game_Settings_Menu_Show()
 
 		// Handle button events
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_1)||(PAD_ButtonsDown(0) & PAD_BUTTON_X))
-			GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+			{
+				sprintf(fbuff,"%s/sshot.png", dynPath.dir_usb_loader);
+				GRRLIB_ScrShot(fbuff);
+				//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
+			}
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME) || (PAD_ButtonsDown(0) & PAD_TRIGGER_Z))
 		{
 			setGameSettings(titleID, &gameSetting,-1);

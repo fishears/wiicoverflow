@@ -28,6 +28,7 @@
 
 extern s_self self;
 extern s_pointer pointer;
+extern s_path dynPath;
 
 ScrollBox sbnews;			// creates scrollBox
 
@@ -113,7 +114,11 @@ void showNewsWindow(){
 bool newsFileExist() 
 { 
  FILE *fp; 
- fp = fopen(NEWSFILE, "r"); 
+ char buff[255];
+ 
+ sprintf(buff, "%s/%s", dynPath.dir_usb_loader, NEWSFILE );
+ fp = fopen(buff, "r"); 
+ //fp = fopen(NEWSFILE, "r");
  if(fp != NULL) 
  { 
 	fclose(fp); 
@@ -127,7 +132,11 @@ bool newsFileExist()
  
 void getNewsFormatData() 
 { 
- cfg_parsefile(NEWSFILE, &setNewsFormatData); 
+ char buff[255];
+ sprintf(buff, "%s/%s", dynPath.dir_usb_loader, NEWSFILE );
+
+ cfg_parsefile(buff, &setNewsFormatData); 
+ //cfg_parsefile(NEWSFILE, &setNewsFormatData); 
 } 
   
   
@@ -320,8 +329,11 @@ bool getNewsID(char *value)
  FILE *f;
  char *eq;
  char line[100], name[50], val[50];
-
- f = fopen(NEWSFILE, "rt");
+ char buff[255];
+ 
+ sprintf(buff, "%s/%s", dynPath.dir_usb_loader, NEWSFILE );
+ f = fopen(buff, "rt"); 
+ //f = fopen(NEWSFILE, "rt");
  if (!f) 
    {
 	return false;

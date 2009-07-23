@@ -2,6 +2,7 @@
 #include "settings.h"
 
 extern s_settings settings;
+extern s_path dynPath;
 
 void initGameSettings(s_gameSettings* gs){
 	gs->ocarina  = -1;
@@ -58,8 +59,11 @@ bool getGameSettings(char* gameCode, s_gameSettings* gs){
 
 	FILE *fp;
 	mxml_node_t *xml;
+	char buffer[255];
 	
-	fp = fopen(USBLOADER_PATH "/gamelist.xml", "r");
+	sprintf(buffer,"%s/gamelist.xml", dynPath.dir_usb_loader);
+	fp = fopen( buffer, "r");
+	//fp = fopen(USBLOADER_PATH "/gamelist.xml", "r");
   
 	if(fp != NULL){
 		
@@ -162,8 +166,11 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 	mxml_node_t *xml;
 	char temp[128];	
 	bool found = false;
+	char buffer[255];
 	
-	fp = fopen(USBLOADER_PATH "/gamelist.xml", "r");
+	sprintf(buffer,"%s/gamelist.xml", dynPath.dir_usb_loader);
+	fp = fopen( buffer, "r");	
+	//fp = fopen(USBLOADER_PATH "/gamelist.xml", "r");
   
 	if(fp != NULL){
 		
@@ -276,8 +283,10 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 							mxmlElementSetAttr(next_n, "lastplayed", temp);
 						}
 					}
-					
-					fp = fopen(USBLOADER_PATH "/gamelist.xml", "w");
+	
+					sprintf(buffer,"%s/gamelist.xml", dynPath.dir_usb_loader);
+					fp = fopen( buffer, "w");
+					//fp = fopen(USBLOADER_PATH "/gamelist.xml", "w");
 					
 					if(fp != NULL){
 						mxmlSaveFile(xml, fp, _whitespace_cb);
@@ -292,7 +301,7 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 }
 
 void createEmptyGameSettingsFile(){
-	
+	char buffer[255];
 	mxml_node_t *xml;
 	mxml_node_t *tree;
 	mxml_node_t *node;
@@ -302,8 +311,11 @@ void createEmptyGameSettingsFile(){
 	xml = mxmlNewXML("1.0");
 	tree = mxmlNewElement(xml, "wiicoverflow");
 	node = mxmlNewElement(tree, "gamelist");
+
 	
-	fp = fopen(USBLOADER_PATH "/gamelist.xml", "w");
+	sprintf(buffer,"%s/gamelist.xml", dynPath.dir_usb_loader);
+	fp = fopen( buffer, "w");	
+	//fp = fopen(USBLOADER_PATH "/gamelist.xml", "w");
         
 	if(fp != NULL){
 		mxmlSaveFile(xml, fp, _whitespace_cb);
@@ -318,8 +330,12 @@ int checkGameList578(int rev)
 {
 	if (rev < 578)
 	{
+		char buffer[255];
+		
 		WindowPrompt("gamelist.xml",TX.obsoleteGL,&okButton,0);
-		remove(USBLOADER_PATH "/gamelist.xml");
+		sprintf(buffer,"%s/gamelist.xml", dynPath.dir_usb_loader);
+		//remove(USBLOADER_PATH "/gamelist.xml");
+		remove(buffer);
 		checkFiles();
 		return 0; // GameList removed and new created
 	}  

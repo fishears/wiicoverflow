@@ -2,38 +2,25 @@
 #define __DEFINES_H_
 
 
-
 //***************************************************************
 //      enable/disable all code for additional USB-Support
-//#define USB_SUPPORT
-//***************************************************************
-//#define USB_DEVICE
-#ifdef USB_DEVICE
-	#define USBLOADER_PATH       "USB:/usb-loader"
-#else
-	#define USBLOADER_PATH       "SD:/usb-loader"
-#endif
+#define USB_SUPPORT
 //***************************************************************
 //         enable/disable all code for NewsReader
  #define NEWS_READER
  #ifdef NEWS_READER 	
-	#ifdef USB_DEVICE
-		#define NEWSFILE   		"USB:/usb-loader/CoverFloader.news" 
-	#else
-		#define NEWSFILE   		"SD:/usb-loader/CoverFloader.news" 
-	#endif
+	#define NEWSFILE   		"CoverFloader.news" 
  #endif 
 //***************************************************************
 // Access to wiiboxart with data from file 
 //#define WBA_BY_FILE          
  #ifdef WBA_BY_FILE 
-	#ifdef USB_DEVICE
-		#define URLBOXART_PASS	"USB:/usb-loader/wiiboxart.pass" 
-	#else
-		#define URLBOXART_PASS	"SD:/usb-loader/wiiboxart.pass" 
-	#endif
+	#define URLBOXART_PASS	"wiiboxart.pass" 
  #endif 
 //***************************************************************
+
+
+
 
 #endif
 

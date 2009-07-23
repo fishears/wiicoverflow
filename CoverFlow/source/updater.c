@@ -7,7 +7,7 @@ static lwp_t networkthread = LWP_THREAD_NULL;
 
 extern s_self self;
 extern s_settings settings;
-
+extern s_path dynPath;
 
 
 bool ShutdownWC24()
@@ -63,16 +63,21 @@ bool checkForUpdate(){
 	char* url = "http://wiicoverflow.googlecode.com/files/current.txt";
 	char serverRevision[10];
 	int rev;
+	char buff[255];
 	
-	unlink(USBLOADER_PATH "/current.txt");
+	sprintf(buff,"%s/current.txt", dynPath.dir_usb_loader);
+	unlink(buff);
+	//unlink(USBLOADER_PATH "/current.txt");
 	file = downloadfile(url);
 	
 	if(file.data != NULL){
-		saveFile(USBLOADER_PATH "/current.txt", file);
+		saveFile(buff, file);
+		//saveFile(USBLOADER_PATH "/current.txt", file);
 		CFFree(file.data);
 		
 		FILE* fp;
-		fp = fopen(USBLOADER_PATH "/current.txt", "r");
+		fp = fopen(buff, "r");
+		//fp = fopen(USBLOADER_PATH "/current.txt", "r");
 		fgets(serverRevision, sizeof(serverRevision), fp);
 		fclose(fp);
 		
@@ -93,8 +98,11 @@ bool promptForUpdate(){
 	int i;
 	char line[256];
 	char message[1024];
+	char buff[255];
 	
-	fp = fopen(USBLOADER_PATH "/current.txt", "r");
+	sprintf(buff,"%s/current.txt", dynPath.dir_usb_loader);
+	fp = fopen(buff, "r");
+	//fp = fopen(USBLOADER_PATH "/current.txt", "r");
 	
 	if(fp == NULL){
 		WindowPrompt("ERROR!", "Cannot open update file!", 0, &okButton);
@@ -133,8 +141,8 @@ bool promptForUpdate(){
 	}
 	
 	fclose(fp);
-	unlink(USBLOADER_PATH "/current.txt");
-	
+	unlink(buff);
+	//unlink(USBLOADER_PATH "/current.txt");
 	return WindowPrompt("Update Available!", message, &okButton, &cancelButton);
 }
 
@@ -143,15 +151,20 @@ bool checkForNews(){
 	char nowDate[7];
 	struct block file;
 	char* url = "http://wiicoverflow.googlecode.com/svn/trunk/CoverFlow/CFNS/CoverFloader.news";
+	char buff[255];
+	
+	sprintf(buff,"%s/CoverFloader.news", dynPath.dir_usb_loader);
 	
 	setNewsDate(nowDate);
 	if ( atoi(nowDate) > atoi(settings.newsDate) )
 		{	
-		 unlink(USBLOADER_PATH "/CoverFloader.news");
+		 unlink(buff);
+		 //unlink(USBLOADER_PATH "/CoverFloader.news");
 		 file = downloadfile(url);
 		
 		 if(file.data != NULL){
-			saveFile(USBLOADER_PATH "/CoverFloader.news", file);
+			saveFile(buff, file);
+			//saveFile(USBLOADER_PATH "/CoverFloader.news", file);
 			strcpy(settings.newsDate, nowDate);
 			CFFree(file.data);
 			return true;

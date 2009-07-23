@@ -9,6 +9,7 @@ extern s_self self;
 extern s_settings settings;
 extern s_gameSettings gameSetting;
 extern int COVER_COUNT;
+extern s_path dynPath;
 
 void LoadCurrentCover(int id, struct discHdr *gameList)
 {
@@ -21,7 +22,8 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 	s32  ret;
 	struct discHdr *header = &gameList[id];
 
-	sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c%c%c%c.png", header->id[0],header->id[1],header->id[2],header->id[3],header->id[4],header->id[5]);
+	//sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c%c%c%c.png", header->id[0],header->id[1],header->id[2],header->id[3],header->id[4],header->id[5]);
+	sprintf(filepath, "%s/%c%c%c%c%c%c.png", dynPath.dir_disks, header->id[0],header->id[1],header->id[2],header->id[3],header->id[4],header->id[5]);
 
 	ret = Fat_ReadFile(filepath, &imgData);
 	
@@ -36,7 +38,9 @@ void LoadCurrentCover(int id, struct discHdr *gameList)
 	}
 	else
 	{
-		sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c%c%c%c.png", header->id[0],header->id[1],header->id[2], header->id[3],header->id[4],header->id[5]);
+		//sprintf(filepath, USBLOADER_PATH "/disks/%c%c%c%c%c%c.png", header->id[0],header->id[1],header->id[2], header->id[3],header->id[4],header->id[5]);
+		sprintf(filepath, "%s/%c%c%c%c%c%c.png", dynPath.dir_disks, header->id[0],header->id[1],header->id[2], header->id[3],header->id[4],header->id[5]);
+
 		ret = Fat_ReadFile(filepath, &imgData);
 		
 		if (ret > 0)
@@ -164,10 +168,12 @@ void Download_Cover(char* id, int v, int max)
 	}
 
 	if(!(settings.covers3d))
-		snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, id);
+		//snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, id);
+		snprintf(imgPath, sizeof(imgPath), "%s/%s.png", dynPath.dir_covers, id);
 	else
-		snprintf(imgPath, sizeof(imgPath), "%s/3dcovers/%s.png", USBLOADER_PATH, id);
-	
+		//snprintf(imgPath, sizeof(imgPath), "%s/3dcovers/%s.png", USBLOADER_PATH, id);
+	    snprintf(imgPath, sizeof(imgPath), "%s/%s.png", dynPath.dir_3dcovers, id);
+		
 	sprintf(self.debugMsg, TX.checkPresence, imgPath);
 	Paint_Progress_Generic(v, max, self.debugMsg);
 	
@@ -230,7 +236,8 @@ void Download_Cover(char* id, int v, int max)
 	// DISC ART
 	//
 	
-	snprintf(imgPath, sizeof(imgPath), "%s/disks/%s.png", USBLOADER_PATH, id);
+	//snprintf(imgPath, sizeof(imgPath), "%s/disks/%s.png", USBLOADER_PATH, id);
+	snprintf(imgPath, sizeof(imgPath), "%s/%s.png", dynPath.dir_disks, id);
 	sprintf(self.debugMsg, TX.checkPresence, imgPath);
 	Paint_Progress_Generic(v, max,self.debugMsg);
 	

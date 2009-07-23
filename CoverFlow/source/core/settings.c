@@ -3,6 +3,7 @@
 
 s_settings settings;
 gp_settings gpsettings;
+extern s_path dynPath;
 
 /* my save callback */
 const char* whitespace_cb(mxml_node_t *node, int where)
@@ -119,8 +120,11 @@ int SETTINGS_Load()
 {
   FILE *fp;
   mxml_node_t *xml;
-
-  fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
+  char buffer[255];
+	
+  sprintf(buffer,"%s/wiicoverflow.xml", dynPath.dir_usb_loader);
+  fp = fopen( buffer, "r");
+  //fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
   
   if(fp == NULL)
      return -1;
@@ -253,6 +257,7 @@ int SETTINGS_Save()
 	mxml_node_t *node;
 	
     char buffer[50];
+	char fbuff [255];
 	
 	xml = mxmlNewXML("1.0");
 	
@@ -355,7 +360,10 @@ int SETTINGS_Save()
 	
 	FILE *fp;
 
-	fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "w");
+	
+    sprintf(fbuff,"%s/wiicoverflow.xml", dynPath.dir_usb_loader);
+    fp = fopen( fbuff, "w");
+	//fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "w");
         
 	if(fp != NULL)
 	{
@@ -377,7 +385,7 @@ void createEmptyWiiCoverFlowFile()
 	mxml_node_t *xml;
 	mxml_node_t *tree;
 	mxml_node_t *node;
-	
+	char fbuff[255];
 	FILE *fp;
 	
 	xml = mxmlNewXML("1.0");
@@ -387,7 +395,10 @@ void createEmptyWiiCoverFlowFile()
 	sprintf(buf, "%d", SVN_VERSION);
 	mxmlElementSetAttr(node, "rev", buf);	
 	node = mxmlNewElement(tree, "game");
-	fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "w");
+	
+	sprintf(fbuff,"%s/wiicoverflow.xml", dynPath.dir_usb_loader );
+	fp = fopen(fbuff, "w");
+//	fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "w");
         
 	if(fp != NULL){
 		mxmlSaveFile(xml, fp, whitespace_cb);
@@ -403,8 +414,11 @@ int getRevXML()
    FILE *fp;
    mxml_node_t *xml;
    int rev;
-   
-   fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
+   char buffer[255];
+	
+   sprintf(buffer,"%s/wiicoverflow.xml", dynPath.dir_usb_loader);
+   fp = fopen( buffer, "r");
+   //fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
    
    if(fp == NULL)
       return -1;
@@ -454,8 +468,11 @@ int getLangXML()
 {
   FILE *fp;
   mxml_node_t *xml;
-    
-  fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
+  char buffer[255];
+	
+  sprintf(buffer,"%s/wiicoverflow.xml", dynPath.dir_usb_loader);
+  fp = fopen( buffer, "r");
+  //fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
   
   if(fp == NULL)
      return -1;

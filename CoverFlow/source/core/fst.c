@@ -36,21 +36,20 @@
 #include "fatmounter.h"
 #include "defines.h"
 #include "TrackedMemoryManager.h"
+#include "coverflow.h"
 
 #define FSTDIRTYPE 1
 #define FSTFILETYPE 0
 #define ENTRYSIZE 0xC
 
-#ifdef USB_DEVICE
-	#define FILEDIR	"USB:/codes"
-#else
-	#define FILEDIR	"SD:/codes"
-#endif
+
+#define FILEDIR	"SD:/codes"
+
 
 
 #define MAX_FILENAME_LEN	128
 
-
+extern s_path dynPath;
 static vu32 dvddone = 0;
 
 
@@ -75,7 +74,9 @@ u32 do_sd_code(char *filename)
 
 	fflush(stdout);
 	
-	sprintf(filepath, FILEDIR "/%s", filename);
+	//sprintf(filepath, FILEDIR "/%s", filename);
+	sprintf(filepath, "%s/%s", dynPath.dir_codes, filename);
+	
 	filepath[16] = 0x2E;
 	filepath[17] = 0x67;
 	filepath[18] = 0x63;
