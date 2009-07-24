@@ -114,21 +114,15 @@ void Download_Cover(char* id, int v, int max)
 		case 'J':
 			sprintf(country, "JA");
 			break;
-		case 'I':
-			sprintf(country, "IT");
-			break;
 		case 'K':
-		case 'T':
-		case 'Q':
 			sprintf(country, "KO");
 			break;
-		case 'D':
-			sprintf(country, "DE");
-			break;
-		case 'F':
-			sprintf(country, "FR");
-			break;
 		case 'P':
+		case 'D':
+		case 'F':
+		case 'I':
+		case 'S':
+		case 'H':
 		case 'X':
 		case 'Y':
 			switch(CONF_GetLanguage()){
@@ -262,6 +256,7 @@ void Download_Cover(char* id, int v, int max)
 bool getCoverFromServer(char* url, char* imgPath, int v, int max){
 
 	struct block file;
+	char* pch;
 
 	sprintf(self.debugMsg, TX.getting, url);
 	Paint_Progress_Generic(v, max,self.debugMsg);
@@ -269,6 +264,17 @@ bool getCoverFromServer(char* url, char* imgPath, int v, int max){
 	file = downloadfile(url);
 
 	if(file.data != NULL && file.size >= 1024){
+	    char* msg = malloc(20*sizeof(char));
+	    strncpy(msg, (char*)file.data,20);
+	    pch = strtok(msg, " ");
+	    if(strcmp(pch,"<!DOCTYPE")==0) //test for a bad file
+	     {
+		   free(msg);
+		   free(file.data);
+		   return false;
+	     }  
+	    free(msg);
+	    unlink(imgPath);
 		saveFile(imgPath, file);
 		free(file.data);
 		sprintf(self.debugMsg, TX.done );
