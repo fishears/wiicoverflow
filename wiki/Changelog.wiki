@@ -2,6 +2,7 @@
 == v1.1  (July ? 2009) ==
 
 -NEW-
+  * 2nd page for System Information
   * dynamic paths for all CoverFloader files and directories on SD: and USB: (changeable by hand)
   * Support for USB-Devices
   * CoverFloader News Service (CFNS) (requires internet connection)
