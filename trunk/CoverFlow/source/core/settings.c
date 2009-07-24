@@ -13,9 +13,10 @@ const char* whitespace_cb(mxml_node_t *node, int where)
 
 	if (!strcmp(name, "wiicoverflow"))
 		return ("\n");	
-	else if (!strcmp(name, "graphics") ||
-			 !strcmp(name, "general")  ||
-			 !strcmp(name, "game"))
+	else if (!strcmp(name, "graphics") 	||
+			 !strcmp(name, "general")  	||
+			 !strcmp(name, "game")		||
+			 !strcmp(name, "paths"))
 	{
 		if (where == MXML_WS_BEFORE_OPEN)
 			return ("\t");
@@ -238,6 +239,41 @@ int SETTINGS_Load()
 	  {
 		 return -1;
 	  }
+	  
+	  // PATHS
+	  next_n = mxmlFindElement(node, node, "paths", NULL, NULL, MXML_DESCEND);
+
+	  if(next_n != NULL)
+	  {
+		if(mxmlElementGetAttr(next_n,"dir_usb_loader"))
+			strcpy(dynPath.dir_usb_loader, mxmlElementGetAttr(next_n,"dir_usb_loader"));
+			
+		if(mxmlElementGetAttr(next_n,"dir_codes"))
+			strcpy(dynPath.dir_codes, mxmlElementGetAttr(next_n,"dir_codes"));
+			
+		if(mxmlElementGetAttr(next_n,"dir_3dcovers"))
+			strcpy(dynPath.dir_3dcovers, mxmlElementGetAttr(next_n,"dir_3dcovers"));
+			
+		if(mxmlElementGetAttr(next_n,"dir_covers"))
+			strcpy(dynPath.dir_covers, mxmlElementGetAttr(next_n,"dir_covers"));
+			
+		if(mxmlElementGetAttr(next_n,"dir_disks"))
+			strcpy(dynPath.dir_disks, mxmlElementGetAttr(next_n,"dir_disks"));
+			
+		if(mxmlElementGetAttr(next_n,"dir_games"))
+			strcpy(dynPath.dir_games, mxmlElementGetAttr(next_n,"dir_games"));
+			
+		if(mxmlElementGetAttr(next_n,"dir_txtcodes"))
+			strcpy(dynPath.dir_txtcodes, mxmlElementGetAttr(next_n,"dir_txtcodes"));
+			
+		if(mxmlElementGetAttr(next_n,"dir_altdol"))
+			strcpy(dynPath.dir_altdol, mxmlElementGetAttr(next_n,"dir_altdol"));
+	  }
+	  else
+	  {
+		 return -1;
+	  }
+
 	 
 	  return 1;
   }
@@ -247,8 +283,9 @@ int SETTINGS_Load()
   }
   
   return -1;
-  
 }
+
+
 
 int SETTINGS_Save()
 {
@@ -356,7 +393,18 @@ int SETTINGS_Save()
 
 	sprintf(buffer, "%d", settings.presetFix);
 	mxmlElementSetAttr(node, "presetFix", buffer);
-
+	
+	//PATHS SETTINGS
+	node = mxmlNewElement(tree, "paths");
+	mxmlElementSetAttr(node, "dir_usb_loader", 	dynPath.dir_usb_loader);
+	mxmlElementSetAttr(node, "dir_codes", 		dynPath.dir_codes);
+	mxmlElementSetAttr(node, "dir_3dcovers", 	dynPath.dir_3dcovers);
+	mxmlElementSetAttr(node, "dir_covers", 		dynPath.dir_covers);
+	mxmlElementSetAttr(node, "dir_disks", 		dynPath.dir_disks);
+	mxmlElementSetAttr(node, "dir_games", 		dynPath.dir_games);
+	mxmlElementSetAttr(node, "dir_txtcodes", 	dynPath.dir_txtcodes);
+	mxmlElementSetAttr(node, "dir_altdol", 		dynPath.dir_altdol);
+	
 	
 	FILE *fp;
 
@@ -379,6 +427,8 @@ int SETTINGS_Save()
 	}
 }
 
+
+
 void createEmptyWiiCoverFlowFile()
 {
 	char buf[30];
@@ -395,6 +445,7 @@ void createEmptyWiiCoverFlowFile()
 	sprintf(buf, "%d", SVN_VERSION);
 	mxmlElementSetAttr(node, "rev", buf);	
 	node = mxmlNewElement(tree, "game");
+	node = mxmlNewElement(tree, "paths");
 	
 	sprintf(fbuff,"%s/wiicoverflow.xml", dynPath.dir_usb_loader );
 	fp = fopen(fbuff, "w");
