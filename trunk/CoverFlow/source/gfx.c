@@ -283,7 +283,11 @@ void Init_Buttons()
     Duplicate_Button_TTF(&themeWhiteButton, okButton, 422, 199, TX.whiteB);
 	Duplicate_Button_TTF(&coversButton, okButton, 310, 265, TX.coversB);
 	Duplicate_Button_TTF(&titlesButton, okButton, 422, 265, TX.titlesB);
-    Button_Init(&viddownButton, button_minus_png, button_minus_over_png, 310,334);
+
+	Button_Init(&infoLeftButton,  button_left_png,  button_left_over_png,  490,380);
+	Button_Init(&infoRightButton, button_right_png, button_right_over_png, 518,380);
+	
+	Button_Init(&viddownButton, button_minus_png, button_minus_over_png, 310,334);
 	Button_Init(&vidupButton, button_plus_png, button_plus_over_png, 338,334);
     Duplicate_Button(&vidtvonButton, musicOnButton, 310, 299);
     Duplicate_Button(&vidtvoffButton, musicOffButton, 310, 299);
@@ -1694,6 +1698,8 @@ void freeResources(){
 	FreeButtonResources(&cancelButton);
 	FreeButtonResources(&yesButton);
     FreeButtonResources(&noButton);
+	FreeButtonResources(&infoLeftButton);
+	FreeButtonResources(&infoRightButton);
 	// Game Launch Panel Buttons
 	FreeButtonResources(&loadButton);
     FreeButtonResources(&backButton);
@@ -1972,7 +1978,7 @@ void MemInfo()
 	sprintf(memused,"%d",mymallinfo.uordblks/1024);
 	sprintf(memnotinuse,"%d",mymallinfo.fordblks/1024);
 	sprintf(memcanbefreed,"%d",mymallinfo.keepcost/1024);
-	sprintf(linebuf, "all: %s KB\n used: %s KB \nnotused: %s KB \ncanfree: %sKB", memtotal, memused, memnotinuse, memcanbefreed);
+	sprintf(linebuf, "all: %s KB\nused: %s KB \nnotused: %s KB \ncanfree: %sKB", memtotal, memused, memnotinuse, memcanbefreed);
 	
 	WindowPrompt("Memory", linebuf, &okButton, 0);
 	

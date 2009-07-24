@@ -1119,14 +1119,15 @@ int main( int argc, char **argv )
 */
 
 #endif
+
+#ifdef SHOW_MEMINFO
 		self.dummy++;
 		if(self.dummy > 100){
 			self.dummy = 0;
 			MemInfo_2();
 		}
-		
 		CFreeTypeGX_DrawText(ttf16pt, 30, 30, self.linebuf, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
-		
+#endif		
 		//CFreeTypeGX_DrawText(ttf16pt, 100, 100, self.linebuf, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 		
 		// Draw the pointing hand
