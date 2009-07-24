@@ -59,6 +59,11 @@ extern const u8 menu_logo_png[];						// CoverFloader logo
 extern const u8 menu_panel_png[];						// Settings screen background panel (TODO replace with GRRLIB rectangle)
 extern const u8 menu_loading_png[];					    // blue circle when loading
 
+extern const u8 button_left_png[];						// Left side of </> combo button
+extern const u8 button_left_over_png[];					// Left side hover
+extern const u8 button_right_png[];						// Right side of </> combo button
+extern const u8 button_right_over_png[];				// Right side hover
+
 extern const u8 flag_br_png[];							// Flags...
 extern const u8 flag_da_png[];
 extern const u8 flag_de_png[];
@@ -194,6 +199,9 @@ Button deleteButton;
 Button settingsButton;
 Button toggleOnButton;
 Button toggleOffButton;
+
+Button infoLeftButton;
+Button infoRightButton;
 
 Button gsettingsButton;
 Button gbackButton;
