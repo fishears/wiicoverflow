@@ -119,21 +119,15 @@ void Download_Cover(char* id, int v, int max)
 		case 'J':
 			sprintf(country, "JA");
 			break;
-		case 'I':
-			sprintf(country, "IT");
-			break;
 		case 'K':
-		case 'T':
-		case 'Q':
 			sprintf(country, "KO");
 			break;
-		case 'D':
-			sprintf(country, "DE");
-			break;
-		case 'F':
-			sprintf(country, "FR");
-			break;
 		case 'P':
+		case 'D':
+		case 'F':
+		case 'I':
+		case 'S':
+		case 'H':
 		case 'X':
 		case 'Y':
 			switch(CONF_GetLanguage()){
