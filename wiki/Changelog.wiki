@@ -1,5 +1,5 @@
 #labels Featured
-== v1.1+ Unstable (2.0 Path) ==
+== v1.1+ Unstable (2.0 Path) (July ? 2009)==
 
 -NEW-
   * CoverFloader News Service (CFNS) (requires internet connection)
@@ -8,7 +8,7 @@
   * dynamic paths for all CoverFloader files and directories on SD: and USB: (changeable by hand)
   * Support for USB-Devices
 
-== v1.1  (July ? 2009) ==
+== v1.1  (July 24 2009) ==
 
 -NEW-
   * Load 2D Cover if a 3D cover is not found.
