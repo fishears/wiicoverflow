@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <malloc.h>
 #include "fat.h"
+#include "buffer.h"
 #include "fatmounter.h"
 #include "apploader.h"
 #include "wdvd.h"
@@ -46,7 +47,7 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 	filesize = ftell(file);
 	fseek(file, 0, SEEK_SET);
 
-	dol_buffer = CFMalloc(filesize);
+	dol_buffer = GetSlotBufferAddress(15);
 	if (dol_buffer == NULL)
 	{
 		fclose(file);
