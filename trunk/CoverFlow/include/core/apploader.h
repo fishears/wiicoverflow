@@ -6,5 +6,5 @@ typedef void (*entry_point)(void);
 
 /* Prototypes */
 s32 Apploader_Run(entry_point *); 
-
+void gamepatches(void * dst, int len);
 #endif
