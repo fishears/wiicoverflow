@@ -257,8 +257,9 @@ typedef struct{
 	char newsID[10];
 #endif
 
-
 	char bootDevice[10];
+	bool patchCountryStr;
+	int  alternatedol;
 
 } s_self;
 

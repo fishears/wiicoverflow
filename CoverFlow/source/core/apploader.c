@@ -2,6 +2,7 @@
 #include <ogcsys.h>
 #include <string.h>
 #include "apploader.h"
+#include "alternatedol.h"
 #include "wdvd.h"
 #include "video.h"
 #include "patchcode.h" /*FISHEARS*/
@@ -11,6 +12,8 @@
 
 extern s_settings settings;
 extern s_self self;
+extern s_path dynPath;
+
 
 /*KENOBI! - FISHEARS*/
 extern const unsigned char kenobiwii[];
@@ -184,6 +187,7 @@ GXRModeObj* NTSC2PAL60[]={
 	&TVNtsc480Prog,			&TVEurgb60Hz480Prog,
 	0,0
 };
+
 bool Search_and_patch_Video_Modes(void *Address, u32 Size, GXRModeObj* Table[])
 {
 	u8 *Addr = (u8 *)Address;
@@ -192,13 +196,8 @@ bool Search_and_patch_Video_Modes(void *Address, u32 Size, GXRModeObj* Table[])
 
 	while(Size >= sizeof(GXRModeObj))
 	{
-
-
-
 		for(i = 0; Table[i]; i+=2)
 		{
-
-
 			if(compare_videomodes(Table[i], (GXRModeObj*)Addr))
 
 			{
@@ -209,17 +208,14 @@ bool Search_and_patch_Video_Modes(void *Address, u32 Size, GXRModeObj* Table[])
 				break;
 			}
 		}
-
 		Addr += 4;
 		Size -= 4;
 	}
-
-
 	return found;
 }
 
 
-/** Anti 002 fix for IOS 249 rev < 12 thanks to WiiPower **/
+/** Thanks to WiiPower **/
 void Anti_002_fix(void *Address, int Size)
 {
 	u8 SearchPattern[12] = 	{ 0x2C, 0x00, 0x00, 0x00, 0x48, 0x00, 0x02, 0x14, 0x3C, 0x60, 0x80, 0x00 };
@@ -249,6 +245,11 @@ s32 Apploader_Run(entry_point *entry)
 	u32 appldr_len;
 	s32 ret;
 
+/////////////////////////////////////
+//  only for testing alternateDOL  //
+//self.alternatedol = 1;
+/////////////////////////////////////
+
 	/* Read apploader header */
 	ret = WDVD_Read(buffer, 0x20, APPLDR_OFFSET);
 	if (ret < 0)
@@ -271,16 +272,10 @@ s32 Apploader_Run(entry_point *entry)
 	/* Initialize apploader */
 	appldr_init(__noprint);
 
-	//002 fix per Wiipower @ http://gbatemp.net/index.php?showtopic=158885
-	// working with CIOS 13a
-	
-	/* ERROR 002 fix (thanks to WiiPower for sharing this)*/
+	/* Thanks to WiiPower */
 	if((self.enableError002Fix == true) || (self.enableAnti002Fix == true))
 		*(u32 *)0x80003140 = *(u32 *)0x80003188; 
 
-	// Fix for Sam & Max. thx WiiPower
-	//if (self.enableSamMAxFix == true)
-	//	*(vu32*)0x80003184	= 0x80000000; // Game ID Address
 
 	// copy kenobiwii code into tempoarary memory area
 	memset((void*)0x80001800,0,kenobiwii_size);
@@ -295,7 +290,6 @@ s32 Apploader_Run(entry_point *entry)
 		void *dst = NULL;
 		s32   len = 0, offset = 0;
 
-		GXRModeObj** table = NULL;
 		/* Run apploader main function */
 		ret = appldr_main(&dst, &len, &offset);
 		if (!ret)
@@ -304,51 +298,84 @@ s32 Apploader_Run(entry_point *entry)
 		/* Read data from DVD */
 		WDVD_Read(dst, len, (u64)(offset << 2));
 		
-		// with cIOS rev10 use Anti_002_fix AND ERROR_002_fix. Thx WiiPower
-		if(self.enableAnti002Fix == true)
-			Anti_002_fix(dst, len);
-		
-		if (settings.video == 1) // patch
-		{
-			switch(CONF_GetVideo())
-			{
-			case CONF_VIDEO_PAL:
-				if(CONF_GetEuRGB60() > 0) 
-				{
-					table = NTSC2PAL60;
-				}	
-				else
-				{
-					table = NTSC2PAL;
-				}
-				break;
-
-			case CONF_VIDEO_MPAL:
-
-
-
-				table = NTSC2PAL;
-				break;
-
-			default:
-				table = PAL2NTSC;
-				break;
-			}
-			Search_and_patch_Video_Modes(dst, len, table);
-		}
-		
-		dogamehooks(dst,len);
-
-		if (settings.vipatch)
-			vidolpatcher(dst,len);
-
-		langpatcher(dst,len);
+		gamepatches(dst, len);
 		
 		DCFlushRange(dst, len);
     }
 
 	/* Set entry point from apploader */
 	*entry = appldr_final();
+    
+	/** Load alternate dol if set **/
+	if(self.alternatedol == 1) 
+	{
+        void *dolbuffer;
+        int dollen;
+
+        bool dolloaded = Load_Dol(&dolbuffer, &dollen, dynPath.dir_altdol);
+        if(dolloaded) 
+		{
+            Remove_001_Protection(dolbuffer, dollen);
+
+            DCFlushRange(dolbuffer, dollen);
+
+            gamepatches( dolbuffer, dollen);
+
+            DCFlushRange(dolbuffer, dollen);
+
+            /* Set entry point from apploader */
+            *entry = (entry_point) load_dol_image(dolbuffer);
+        }
+    }
 
 	return 0;
 }
+
+
+
+void gamepatches(void * dst, int len)
+{
+ 	GXRModeObj** table = NULL;
+	
+	// Thanks to WiiPower
+	if(self.enableAnti002Fix == true)
+		Anti_002_fix(dst, len);
+	
+	if (settings.video == 1) // patch
+	{
+		switch(CONF_GetVideo())
+		{
+		case CONF_VIDEO_PAL:
+			if(CONF_GetEuRGB60() > 0) 
+			{
+				table = NTSC2PAL60;
+			}	
+			else
+			{
+				table = NTSC2PAL;
+			}
+			break;
+
+		case CONF_VIDEO_MPAL:
+			table = NTSC2PAL;
+			break;
+
+		default:
+			table = PAL2NTSC;
+			break;
+		}
+		Search_and_patch_Video_Modes(dst, len, table);
+	}
+	
+	dogamehooks(dst,len);
+
+	if (settings.vipatch)
+		vidolpatcher(dst,len);
+
+	langpatcher(dst,len);
+
+	/*Thanks to WiiPower*/
+	if (self.patchCountryStr == true )
+		PatchCountryStrings(dst, len);
+}
+

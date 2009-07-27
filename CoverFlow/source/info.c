@@ -13,7 +13,8 @@ void showInfoWindow(){
 	bool doloop = true;
 	int fade = 5;
 	int y, sp;
-	int step = 35;
+	int step  = 35;
+	int step2 = 25;
 	char temp[256];
 	int hdSize = self.freeSpace + self.usedSpace;
 	int x = 92;
@@ -91,35 +92,38 @@ void showInfoWindow(){
 				
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "BootDevice:", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.bootDevice, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				sp+=step;
+				sp+=step2;
 
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "usb-loader:", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.dir_usb_loader, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				sp+=step;
+				sp+=step2;
 	
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "3D-Cover:", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.dir_3dcovers, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				sp+=step;
+				sp+=step2;
 
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "2D-Cover:", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.dir_covers, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				sp+=step;
+				sp+=step2;
 
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "Disc:", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.dir_disks, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				sp+=step;
+				sp+=step2;
 
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "Games:", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.dir_games, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				sp+=step;
+				sp+=step2;
 
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "Codes:", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.dir_codes, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				sp+=step;
+				sp+=step2;
 
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "TxtCodes:", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.dir_txtcodes, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-				sp+=step;
+				sp+=step2;
+
+				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "alt.Dol:", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.dir_altdol, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 			}
 /*
 		else if (page == 3 )

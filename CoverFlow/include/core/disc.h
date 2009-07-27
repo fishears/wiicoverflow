@@ -43,6 +43,7 @@ s32  Disc_ReadHeader(void *);
 s32  Disc_IsWii(void);
 s32  Disc_BootPartition(u64);
 s32  Disc_WiiBoot(void);
+void PatchCountryStrings(void *Address, int Size);
 
 #endif
 

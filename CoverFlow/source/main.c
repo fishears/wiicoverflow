@@ -108,6 +108,8 @@ void initVars()
 	self.blinkBlue = false;
 	strcpy(self.newsID, "0");
 #endif
+	self.patchCountryStr = false;
+	self.alternatedol = 0;
 }
 
 
