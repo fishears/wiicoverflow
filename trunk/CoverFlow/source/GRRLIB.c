@@ -1615,10 +1615,10 @@ void GRRLIB_Init() {
 
 	GRRLIB_2D_Init();
 	
-	GRRLIB_LoadTexture(&matteBlackTexture,matte_black_png);
-	GRRLIB_LoadTexture(&matteGreyTexture,matte_grey_png);
-	GRRLIB_LoadTexture(&rightTexture,case_right_png);
-	GRRLIB_LoadTexture(&case3DShadowTexture,case_3d_shadow_png);
+	BufferImageToSlot(&matteBlackTexture,matte_black_png,19);
+	BufferImageToSlot(&matteGreyTexture,matte_grey_png,18);
+	BufferImageToSlot(&rightTexture,case_right_png,17);
+	BufferImageToSlot(&case3DShadowTexture,case_3d_shadow_png,16);
     GX_InitTexObj(&matteBlackTex, matteBlackTexture.data, matteBlackTexture.w, matteBlackTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GX_InitTexObj(&matteGreyTex, matteGreyTexture.data, matteGreyTexture.w, matteGreyTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 	GX_InitTexObj(&rightSideTex, rightTexture.data, rightTexture.w, rightTexture.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -1702,9 +1702,10 @@ void GRRLIB_Exit() {
 	
 	// Free custom GRRLIB textures
 
-	CFFree(rightTexture.data);
-	CFFree(matteBlackTexture.data);
-	CFFree(matteGreyTexture.data);
+//	CFFree(case3DShadowTexture.data);
+//	CFFree(rightTexture.data);
+//	CFFree(matteBlackTexture.data);
+//	CFFree(matteGreyTexture.data);
 		
     GX_Flush();
     GX_AbortFrame();
