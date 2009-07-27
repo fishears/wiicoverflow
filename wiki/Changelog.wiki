@@ -1,5 +1,5 @@
 #labels Featured
-== v1.1+ Unstable (2.0 Path) (July ? 2009)==
+== v1.1+ (2.0 Path) (July ? 2009)==
 
 -NEW-
   * CoverFloader News Service (CFNS) (requires internet connection)
