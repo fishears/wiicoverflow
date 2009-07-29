@@ -18,14 +18,16 @@
 #define PNG_START_ADDRESS 0x90100000
 
 // this is the start adrress of MEM2 see http://wiibrew.org/wiki/Memory_Map
-//#define MEM2_START_ADDRESS 0x90900000
-#define MEM2_START_ADDRESS 0x90100000
+//#define MEM2_START_ADDRESS 0x90100000
+#define MEM2_START_ADDRESS 0x90900000
 //this is lower than the extent address of MEM2 which should be 54394880 (0x33E0000) - but there is a crash before that point
 //  IOS has the range 0x933E0000-0x93400000  for a heap but who knows what IOS 249 uses, if there are issues at the end of memory
 // then lower this number
 #define MEM2_EXTENT (0x93300000-MEM2_START_ADDRESS)
 
 extern s_path dynPath;
+
+static int nextAllocationAddress=PNG_START_ADDRESS;
 
 
 // private cars
@@ -81,7 +83,7 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	128,//12 string buffer tokenurlParsing
 	160*160*4, //13 no_disc_texture
 	472*172*4, //14 menu_graphics_wireframe_texture
-	2*1024*1024, //15 alt dol buffer
+	0,//2*1024*1024, //15 alt dol buffer
 	512*340*4, //16 case_3d_shadow
 	20*224*4, //17 case_right
 	4*4*4, //18 matte grey
@@ -108,6 +110,21 @@ void * GetSlotBufferAddress(int slot)
 	if ((slot>BUFFER_SLOTS)) return (void *)offset;
 	offset=GetOffsetToSlot(slot);
 	return (void *) MEM2_START_ADDRESS+MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS)+offset;
+}
+
+void * GetNextPngAddress()
+{
+	int ret=GetOffsetToSlot(BUFFER_SLOTS);
+	
+	ret+=nextAllocationAddress;
+	
+	return (void *)ret;
+}
+
+void LoadTextureToBuffer(GRRLIB_texImg * my_texture,const unsigned char* pngDataAddress)
+{
+	GRRLIB_LoadTexturePNGToMemory(my_texture, pngDataAddress, GetNextPngAddress());
+	nextAllocationAddress+=my_texture->w*my_texture->h*4;
 }
 
 
