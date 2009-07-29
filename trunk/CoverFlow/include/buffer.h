@@ -80,4 +80,7 @@ void * GetSlotBufferAddress(int slot);
 	The memory does not need to be freed as there is no associated malloc
 */
 void BufferImageToSlot(GRRLIB_texImg * my_texture,const unsigned char* pngDataAddress,int slot);
+
+void LoadTextureToBuffer(GRRLIB_texImg * my_texture,const unsigned char* pngDataAddress);
+
 #endif
