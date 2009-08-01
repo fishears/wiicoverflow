@@ -13,10 +13,8 @@ void Subsystem_Init(void)
 	Wpad_Init();
 	
 	/* Mount SDHC */
-	Fat_MountSDHC();
-#ifdef USB_SUPPORT
+	SDCard_Init();
 	USBDevice_Init();
-#endif
 
 }
 
@@ -27,8 +25,6 @@ void Subsystem_Close(void)
 	Wpad_Disconnect();
 	
 	/* Unmount SDHC */
-	Fat_UnmountSDHC();
-#ifdef USB_SUPPORT
+	SDCard_deInit();
 	USBDevice_deInit();
-#endif
 }

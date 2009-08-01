@@ -26,8 +26,7 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 	memcpy(gameidbuffer6, (char*)0x80000000, 6);
 	snprintf(fullpath, 200, "%s/%s.dol", filepath, gameidbuffer6);
 
-    //SDCard_Init();
-	Fat_MountSDHC();
+    SDCard_Init();
     USBDevice_Init();
 
 	file = fopen(fullpath, "rb");
@@ -35,9 +34,7 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 	if(file == NULL)
 	{
 		fclose(file);
-	    //SDCard_deInit();
-		Fat_UnmountSDHC();
-		sleep(2);
+	    SDCard_deInit();
 	    USBDevice_deInit();
 		return false;
 	}
@@ -51,9 +48,7 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 	if (dol_buffer == NULL)
 	{
 		fclose(file);
-	    //SDCard_deInit();
-		Fat_UnmountSDHC();
-		sleep(2);
+	    SDCard_deInit();
 	    USBDevice_deInit();
 		return false;
 	}
@@ -62,17 +57,13 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 	{
 		CFFree(dol_buffer);
 		fclose(file);
-	    //SDCard_deInit();
-		Fat_UnmountSDHC();
-		sleep(2);
+	    SDCard_deInit();
 	    USBDevice_deInit();
 		return false;
 	}
 	fclose(file);
 
-	//SDCard_deInit();
-	Fat_UnmountSDHC();
-	sleep(2);
+	SDCard_deInit();
     USBDevice_deInit();
 	*buffer = dol_buffer;
 	*dollen = filesize;

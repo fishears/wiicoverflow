@@ -49,15 +49,13 @@ bool reinit_usbfs()
 	u32 ret;
 	
 	/* UnMount SDHC */
-	Fat_UnmountSDHC();
+	SDCard_deInit();
 	
 	sleep(1);
 	
 	/* Mount SDHC */
-	Fat_MountSDHC();
-#ifdef USB_SUPPORT
-	USBDevice_Init();   // does 1st fatUnmount and then fatMount
-#endif				
+	SDCard_Init();
+	USBDevice_Init();
 	/* Initialize DIP module */
 	ret = Disc_Init();
 	

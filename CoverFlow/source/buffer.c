@@ -15,11 +15,8 @@
 #define COVER_REQUESTED 1
 #define COVER_PROCESSING 2
 
-#define PNG_START_ADDRESS 0x90100000
-
 // this is the start adrress of MEM2 see http://wiibrew.org/wiki/Memory_Map
-//#define MEM2_START_ADDRESS 0x90100000
-#define MEM2_START_ADDRESS 0x90900000
+#define MEM2_START_ADDRESS 0x90100000
 //this is lower than the extent address of MEM2 which should be 54394880 (0x33E0000) - but there is a crash before that point
 //  IOS has the range 0x933E0000-0x93400000  for a heap but who knows what IOS 249 uses, if there are issues at the end of memory
 // then lower this number
@@ -27,11 +24,9 @@
 
 extern s_path dynPath;
 
-static int nextAllocationAddress=PNG_START_ADDRESS;
-
 
 // private cars
-typedef struct COVERQUEUE 
+typedef struct COVERQUEUE
 {
 	bool ready[MAX_BUFFERED_COVERS];
 	int request[MAX_BUFFERED_COVERS];
@@ -63,7 +58,7 @@ int GraphicModes[GRAPHIC_MODES][2] =
 };
 
 // this is the chunk of MEM2 allocated for other tasks (i.e. things that don't fit in normal memory)
-#define BUFFER_SLOTS 21
+#define BUFFER_SLOTS 15
 
 
 unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
@@ -83,11 +78,6 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	128,//12 string buffer tokenurlParsing
 	160*160*4, //13 no_disc_texture
 	472*172*4, //14 menu_graphics_wireframe_texture
-	0,//2*1024*1024, //15 alt dol buffer
-	512*340*4, //16 case_3d_shadow
-	20*224*4, //17 case_right
-	4*4*4, //18 matte grey
-	4*4*4, //19 matte black
 	0};
 
 // returns the offset to the memory slot required
@@ -112,21 +102,6 @@ void * GetSlotBufferAddress(int slot)
 	return (void *) MEM2_START_ADDRESS+MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS)+offset;
 }
 
-void * GetNextPngAddress()
-{
-	int ret=GetOffsetToSlot(BUFFER_SLOTS);
-	
-	ret+=nextAllocationAddress;
-	
-	return (void *)ret;
-}
-
-void LoadTextureToBuffer(GRRLIB_texImg * my_texture,const unsigned char* pngDataAddress)
-{
-	GRRLIB_LoadTexturePNGToMemory(my_texture, pngDataAddress, GetNextPngAddress());
-	nextAllocationAddress+=my_texture->w*my_texture->h*4;
-}
-
 
 #include <unistd.h>
 void Sleep(unsigned long milliseconds)
@@ -141,20 +116,20 @@ void Sleep(unsigned long milliseconds)
 void BUFFER_InitBuffer()
 {
 	int i = 0;
-	
+
 	/*Initialize Mutexs*/
 	pthread_mutex_init(&count_mutex, 0);
 	pthread_mutex_init(&queue_mutex, 0);
 	pthread_mutex_init(&quit_mutex, 0);
 	pthread_mutex_init(&lock_thread_mutex, 0);
 	pthread_mutex_init(&covers_3d_mutex, 0);
-	
+
 	for(i = 0; i < MAX_BUFFERED_COVERS; i++)
 	{
 		pthread_mutex_init(&buffer_mutex[i], 0);
 		_texture_data[i].data=0;
 	}
-	
+
 	_requestQuit = false;
 
 	for(i = 0; i < MAX_THREADS; i++)
@@ -168,7 +143,7 @@ void BUFFER_InitBuffer()
 void BUFFER_Shutdown()
 {
 	int i,m;
-	
+
 	for(i = 0; i < MAX_THREADS; i++)
 	{
 		if (thread[i])
@@ -180,38 +155,38 @@ void BUFFER_Shutdown()
 	pthread_mutex_destroy(&quit_mutex);
 	pthread_mutex_destroy(&lock_thread_mutex);
 	pthread_mutex_destroy(&covers_3d_mutex);
-	
+
 	for(m = 0; m < MAX_BUFFERED_COVERS; m++)
 		pthread_mutex_destroy(&buffer_mutex[m]);
-	
+
 }
 
 
 bool BUFFER_IsCoverReady(int index)
 {
 	bool retval = false;
-	
+
 	if(index < MAX_BUFFERED_COVERS)
 	{
 		pthread_mutex_lock(&buffer_mutex[index]);
 		retval = _cq.ready[index];
 		pthread_mutex_unlock(&buffer_mutex[index]);
 	}
-	
+
 	return retval;
 }
 
 bool BUFFER_IsCoverQueued(int index)
 {
 	bool retval = false;
-	
+
 	if(index < MAX_BUFFERED_COVERS)
 	{
 		pthread_mutex_lock(&buffer_mutex[index]);
 		retval = _cq.request[index]>0;
 		pthread_mutex_unlock(&buffer_mutex[index]);
 	}
-	
+
 	return retval;
 }
 
@@ -220,21 +195,21 @@ bool BUFFER_IsCoverQueued(int index)
 bool BUFFER_IsCoverMissing(int index)
 {
 	bool retval = false;
-	
+
 	if(index < MAX_BUFFERED_COVERS)
 	{
 		pthread_mutex_lock(&buffer_mutex[index]);
 		retval = _cq.coverMissing[index];
 		pthread_mutex_unlock(&buffer_mutex[index]);
 	}
-	
+
 	return retval;
 }
 
 // sets the thread stop flag and waits for shutdown
 void BUFFER_KillBuffer()
 {
-	
+
 	pthread_mutex_lock(&quit_mutex);
 	_requestQuit = true;
 	pthread_mutex_unlock(&quit_mutex);
@@ -260,20 +235,20 @@ void HandleLoadRequest(int index,int threadNo)
 {
 	if(index >= nCovers)
 		return ;
-		
+
 	/*Definitely dont need to load the same texture twice*/
 	if(!_cq.ready[index] && !_cq.coverMissing[index])
 	{
-		
+
 		char * filepath=GetSlotBufferAddress(threadNo);
 		s32  ret;
-		
+
 		int tW = GraphicModes[graphicMode][0];
 		int tH = GraphicModes[graphicMode][1];
-		
+
 		int sW = GraphicModes[graphicMode][0];
 		int sH = GraphicModes[graphicMode][1];
-		
+
 		// determines the cover location
 		if(!graphicMode)
 		{
@@ -284,25 +259,25 @@ void HandleLoadRequest(int index,int threadNo)
 		{
 			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
 			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%s.png", _cq.requestId[index]->id);
-			snprintf(filepath,256, "%s/%s.png", dynPath.dir_3dcovers, _cq.requestId[index]->id);		
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_3dcovers, _cq.requestId[index]->id);
 		}
-		
+
 		int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
 		ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress,tW * tH * 4);
-		
+
 		if(graphicMode && ret <= 0)
 		{
 			sW = GraphicModes[0][0];
 			sH = GraphicModes[0][1];
-		
+
 			//read failed, try to load in 2D cover instead
 			int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
 			//snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
 			snprintf(filepath,256, "%s/%s.png", dynPath.dir_covers, _cq.requestId[index]->id);
 			ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress, sW * sH * 4);
 		}
-		
-		if (ret > 0) 
+
+		if (ret > 0)
 		{
 			int thisDataMem2Address=-1;
 			if (_cq.permaBufferPosition[index]!=-1)// permanent cache
@@ -341,7 +316,7 @@ void HandleLoadRequest(int index,int threadNo)
 				pthread_mutex_unlock(&buffer_mutex[index]);
 			}
 			//free(imgData);
-			
+
 		}
 		else // no cover file
 		{
@@ -359,7 +334,7 @@ void HandleLoadRequest(int index,int threadNo)
 			_cq.request[index]=0;
 			pthread_mutex_unlock(&buffer_mutex[index]);
 		}
-		
+
 	}
 	//pthread_mutex_unlock(&buffer_mutex[index]);
 }
@@ -372,12 +347,12 @@ int GetPrioritisedCover(int selection)
 	{
 		for (j=0;j<2;j++)
 		{
-			int index = selection +i*(j*2-1); 
+			int index = selection +i*(j*2-1);
 			if (index>=0 && index<=nCovers)
 			{
 				if(index >= MAX_BUFFERED_COVERS)
 					return -1;
-		
+
 				if (_cq.request[index]==COVER_REQUESTED && !_cq.ready[index]) return index;
 			}
 		}
@@ -393,17 +368,17 @@ void* process(void *arg)
 	bool b = false;
 	/*Main Buffering Thread*/
 	usleep(thread*50);
-	
+
 	while(1)
 	{
-		
+
 		//Load Covers from the middle out
 		for(i = 0; i <= (nCovers+1)/2; i++)
 		{
 			for (j=0;j<2;j++)
 			{
 				int index=GetPrioritisedCover(CurrentSelection);
-				
+
 				if (index==-1) index= (nCovers+1)/2 +i*(j*2-1);
 				if (index>=0 && index<=nCovers)
 				{
@@ -413,9 +388,9 @@ void* process(void *arg)
 					b = _cq.request[index]==COVER_REQUESTED && !_cq.ready[index];
 					if (b) _cq.request[index]|=COVER_PROCESSING;
 					pthread_mutex_unlock(&buffer_mutex[index]);
-					
+
 					if(b) HandleLoadRequest(index,thread);
-					
+
 					pthread_mutex_lock(&quit_mutex);
 					if(_requestQuit)
 					{
@@ -424,14 +399,14 @@ void* process(void *arg)
 					}
 					pthread_mutex_unlock(&quit_mutex);
 				}
-			}        
+			}
 		}
-		
-		
+
+
 		usleep(10);// need to get the threads separated but this should free some processor
 	}
-	
-	
+
+
 }
 
 // is the cover already cached
@@ -439,14 +414,14 @@ bool InCache(int index)
 {
 	if(index >= MAX_BUFFERED_COVERS)
 		return false;
-		
+
 	bool ret=false;
 	int i;
 	for (i=0;i<FloatingCacheSize;i++)
 	{
 		if (FloatingCacheCovers[i]==index) ret=true;
 	}
-	
+
 	return ret;
 }
 
@@ -454,16 +429,16 @@ bool InCache(int index)
 // takes a cover out of the floating cache
 void RemoveFromCache(int index)
 {
-		
+
 	if (_cq.floatingQueuePosition[FloatingCacheCovers[index]] != -1)
 	{
 		_cq.ready[FloatingCacheCovers[index]] = false;
 		_cq.request[FloatingCacheCovers[index]] = 0;
 		_texture_data[FloatingCacheCovers[index]].data=0;
 		_cq.floatingQueuePosition[FloatingCacheCovers[index]]=-1;
-		
+
 	}
-	
+
 }
 
 //already locked
@@ -495,13 +470,13 @@ void SetFloatingCacheItem(int selection, int newCacheItem)
 	}
 	if (!spaceFound) // no empty slot remove the furthest
 	{
-		
+
 		RemoveFromCache(maxIndex);
 		FloatingCacheCovers[maxIndex] = newCacheItem;
 		_cq.floatingQueuePosition[newCacheItem]=maxIndex;
 	}
-	
-	
+
+
 }
 
 // request all the visible floating cache covers
@@ -509,9 +484,9 @@ void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
 {
 	int i=0;
 	int extra = 0;
-	
+
 	CurrentSelection=nCovers-index;
-	
+
 	if (doNotRemoveFromFloating) extra = 1;
 	int searchSize=nCoversInWindow*(2+extra);
 	//this'll do for now - a more elegant algrorithm would be better
@@ -519,17 +494,17 @@ void iSetSelectedCover(int index, bool doNotRemoveFromFloating)
 	{
 		if (i >= 0 && i < nCovers)
 		{
-		
+
 			if (!_cq.ready[i] && !_cq.request[i] && _cq.permaBufferPosition[i] == -1 && !_cq.coverMissing[i])
 			{
 				// this one isn't permenantly cached make a space for it in the floating cache
 				if (_cq.permaBufferPosition[i] == -1) SetFloatingCacheItem(CurrentSelection,i);
-				
+
 				_cq.requestId[i]=&CoverList[i];
 				_cq.request[i] = COVER_REQUESTED;
 				_cq.ready[i] = false;
 			}
-			
+
 		}
 	}
 }
@@ -547,7 +522,7 @@ void ResetQueueItem(int index)
 {
 	if(index >= MAX_BUFFERED_COVERS)
 		return;
-		
+
 	_cq.ready[index]=false;
 	_cq.request[index]=0;
 	_cq.requestId[index]=0;
@@ -565,7 +540,7 @@ void RequestForCache(int index)
 {
 	if(index >= MAX_BUFFERED_COVERS)
 		return;
-		
+
 	_cq.requestId[index]=&CoverList[index];
 	_cq.request[index]=COVER_REQUESTED;
 }
@@ -580,15 +555,15 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	CoverList=gameList;
 	nCovers=gameCount;
 	nCoversInWindow=numberOfCoversToBeShown;
-	
+
 	//start from a clear point
 	for (i=0;i<gameCount;i++) ResetQueueItem(i);
 	memset((void *)MEM2_START_ADDRESS,0,MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS)); // clear all the memory
-	
+
 	_covers3d=graphMode;
-	
+
 	maxSlots=(MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS))/(textureDataSize)-MAX_THREADS; // this is the number of slots available
-	
+
 	//decide on buffering method
 	if (gameCount<=maxSlots) // can we fit all the covers in memory
 	{
@@ -634,12 +609,12 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 				_cq.permaBufferPosition[i]=-1;
 			}
 			lastValue = (int)dPosition;
-			
+
 		}
 	}
-	
+
 	//now request all the permenant covers
-	for (i=0;i<gameCount;i++) 
+	for (i=0;i<gameCount;i++)
 	{
 		if (_cq.permaBufferPosition[i]!=-1)
 		{

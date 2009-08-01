@@ -15,9 +15,8 @@
 
 void Button_Flag_Init(Button * new_button, const unsigned char normal_img[], int x, int y, char *button_label)
 {
-	LoadTextureToBuffer(&(new_button->texture),normal_img);
-//	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
-	new_button->toFreeTexture=false;
+	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
+	new_button->toFreeTexture=true;
 	new_button->toFreeHoverTexture=false;
 	new_button->x = x;
 	new_button->y = y;
@@ -29,12 +28,10 @@ void Button_Flag_Init(Button * new_button, const unsigned char normal_img[], int
 
 void Button_TTF_Init(Button * new_button, const unsigned char normal_img[], const unsigned char hover_img[], int x, int y, char *button_label)
 {
-	LoadTextureToBuffer(&(new_button->texture),normal_img);
-//	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
-	new_button->toFreeTexture=false;
-	LoadTextureToBuffer(&(new_button->hoverTexture),hover_img);
-//	GRRLIB_LoadTexture(&(new_button->hoverTexture),hover_img);
-	new_button->toFreeHoverTexture=false;
+	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
+	new_button->toFreeTexture=true;
+	GRRLIB_LoadTexture(&(new_button->hoverTexture),hover_img);
+	new_button->toFreeHoverTexture=true;
 	new_button->x = x;
 	new_button->y = y;
 	new_button->hovering = false;
@@ -45,12 +42,10 @@ void Button_TTF_Init(Button * new_button, const unsigned char normal_img[], cons
 
 void Button_Init(Button * new_button, const unsigned char normal_img[], const unsigned char hover_img[], int x, int y)
 {
-	LoadTextureToBuffer(&(new_button->texture),normal_img);
-//	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
-	LoadTextureToBuffer(&(new_button->hoverTexture),hover_img);
-//	GRRLIB_LoadTexture(&(new_button->hoverTexture),hover_img);
-	new_button->toFreeTexture=false;
-	new_button->toFreeHoverTexture=false;
+	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
+	GRRLIB_LoadTexture(&(new_button->hoverTexture),hover_img);
+	new_button->toFreeTexture=true;
+	new_button->toFreeHoverTexture=true;
 	new_button->x = x;
 	new_button->y = y;
 	new_button->hovering = false;
@@ -87,15 +82,15 @@ bool Button_Hover(struct Button* btn, int x, int y)
 {
 	x += 40; // adjusts to the tip of the cursor fingertip
 	y += 37;
-	
+
 	if(btn == 0)
 		return false;
-		
+
 	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) && y > (btn->y) && y < (btn->texture.h + (btn->y)))
 		btn->hovering = true;
 	else
 		btn->hovering = false;
-	
+
 	return btn->hovering;
 }
 
@@ -103,18 +98,18 @@ bool Button_Select(struct Button* btn, int x, int y)
 {
 	x += 40; // adjusts to the tip of the cursor fingertip
 	y += 37;
-	
+
 	if(btn == 0)
 		return false;
-		
+
 	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) && y > (btn->y) && y < (btn->texture.h + (btn->y)))
 		btn->hovering = true;
 	else
 		btn->hovering = false;
-	
+
 	if(btn->hovering)
 		SOUND_PlaySound(FX_BUTTON_CLICK, 0);
-	
+
 	return btn->hovering;
 }
 
@@ -122,7 +117,7 @@ void Button_Flag_Paint(struct Button* btn)
 {
 	if(btn == 0)
 		return;
-	
+
 	if(btn->hovering)
 	{
 		GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1.2, 1.2, 0xFFFFFFFF); // Adjust the scale here to make the flag 'bubble up' more
@@ -131,14 +126,14 @@ void Button_Flag_Paint(struct Button* btn)
 	}
 	else
 		GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
-	
+
 }
 
 void Button_TTF_Paint(struct Button* btn)
 {
 	if(btn == 0)
 		return;
-	
+
 	if(btn->hovering || btn->selected)
 	{
 		GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
@@ -161,7 +156,7 @@ void Button_HomeMenu_Paint(struct Button* btn)
 {
 	if(btn == 0)
 		return;
-	
+
 	if(btn->hovering || btn->selected)
 		GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
 	else
@@ -175,7 +170,7 @@ void Button_Menu_Paint(struct Button* btn)
 {
 	if(btn == 0)
 		return;
-	
+
 	if(btn->hovering || btn->selected)
 		GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
 	else
@@ -188,7 +183,7 @@ void Button_Paint(struct Button* btn)
 {
 	if(btn == 0)
 		return;
-		
+
 	if(btn->hovering)
 	{
 		GRRLIB_DrawImg(btn->x, btn->y, btn->hoverTexture, 0, 1, 1, 0xFFFFFFFF);
@@ -204,7 +199,7 @@ void Button_Paint(struct Button* btn)
 		{
 			GRRLIB_DrawImgReflection(btn->x, (btn->y + btn->texture.h), btn->texture, 0, 1, 1, 0.7);
 		}
-	}	
+	}
 }
 
 void Button_Theme_Paint(struct Button* btn, int theme_id)
@@ -216,7 +211,7 @@ void Button_Theme_Paint_Offset(struct Button* btn, int theme_id, int x_offset, i
 {
 	if(btn == 0)
 		return;
-		
+
 	if(btn->hovering)
 	{
 		switch (theme_id)
@@ -246,18 +241,18 @@ void Button_Theme_Paint_Offset(struct Button* btn, int theme_id, int x_offset, i
 				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->texture, 0, 1, 1, 0xFFFFFFFF);
 				break;
 		}
-		
-	}	
+
+	}
 }
 
 void Button_Theme_Paint_Fade(struct Button* btn, int theme_id, int fade)
 {
 	if(btn == 0)
 		return;
-		
-	
+
+
 	u32 color = 0xFFFFFF00|fade;
-		
+
 	if(btn->hovering)
 	{
 		switch (theme_id)
@@ -287,8 +282,8 @@ void Button_Theme_Paint_Fade(struct Button* btn, int theme_id, int fade)
 				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, color);
 				break;
 		}
-		
-	}	
+
+	}
 }
 
 // When passed two buttons and a toggle int, 0=draw the first , 1=draws the second
@@ -316,7 +311,7 @@ void Button_TTF_Toggle_Paint(struct Button* btn1, struct Button* btn2, char *lef
 	{
 		if(btn2 == 0)
 			return;
-		
+
 		GRRLIB_DrawImg(btn2->x, btn2->y, btn2->texture, 0, 1, 1, 0xFFFFFFFF);
 		if( (strlen(left_text) > 0) && (strlen(right_text) > 0) )
 		{
@@ -330,7 +325,7 @@ void Button_TTF_Toggle_Paint(struct Button* btn1, struct Button* btn2, char *lef
 	{
 		if(btn1 == 0)
 			return;
-		
+
 		GRRLIB_DrawImg(btn1->x, btn1->y, btn1->texture, 0, 1, 1, 0xFFFFFFFF);
 		if( (strlen(left_text) > 0) && (strlen(right_text) > 0) )
 		{
@@ -340,14 +335,14 @@ void Button_TTF_Toggle_Paint(struct Button* btn1, struct Button* btn2, char *lef
 			//CFreeTypeGX_DrawText(ttf16pt, (btn1->x + ((btn1->texture.w/4)*3)), (btn1->y + (btn1->texture.h/2) + 1), right_text, (GXColor){0x80, 0x80, 0x80, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 		}
 	}
-	
-	
+
+
 }
 
 void FreeButtonResources(struct Button *btn)
 {
-	if (btn->toFreeTexture) CFFree(btn->texture.data);	
-	if (btn->toFreeHoverTexture) CFFree(btn->hoverTexture.data);	
+	if (btn->toFreeTexture) CFFree(btn->texture.data);
+	if (btn->toFreeHoverTexture) CFFree(btn->hoverTexture.data);
 }
 
 
@@ -374,15 +369,15 @@ bool Button3_Hover(struct Button3* btn, int x, int y)
 {
 	x += 40; // adjusts to the tip of the cursor fingertip
 	y += 37;
-	
+
 	if(btn == 0)
 		return false;
-		
+
 	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) && y > (btn->y) && y < (btn->texture.h + (btn->y)))
 		btn->hovering = true;
 	else
 		btn->hovering = false;
-	
+
 	return btn->hovering;
 }
 
@@ -391,18 +386,18 @@ bool Button3_Select(struct Button3* btn, int x, int y)
 {
 	x += 40; // adjusts to the tip of the cursor fingertip
 	y += 37;
-	
+
 	if(btn == 0)
 		return false;
-		
+
 	if(x > (btn->x) && x < (btn->texture.w + (btn->x)) && y > (btn->y) && y < (btn->texture.h + (btn->y)))
 		btn->hovering = true;
 	else
 		btn->hovering = false;
-	
+
 	if(btn->hovering)
 		SOUND_PlaySound(FX_BUTTON_CLICK, 0);
-	
+
 	return btn->hovering;
 }
 
@@ -419,7 +414,7 @@ void Button3_Theme_Paint_Offset(struct Button3* btn, int theme_id, int x_offset,
 {
 	if(btn == 0)
 		return;
-		
+
 	if(btn->hovering)
 	{
 		switch (theme_id)
@@ -457,8 +452,8 @@ void Button3_Theme_Paint_Offset(struct Button3* btn, int theme_id, int x_offset,
 				GRRLIB_DrawImg(btn->x+x_offset, btn->y+y_offset, btn->texture, 0, 1, 1, 0xFFFFFFFF);
 				break;
 		}
-		
-	}	
+
+	}
 }
 
 
@@ -467,9 +462,9 @@ void Button3_Theme_Paint_Fade(struct Button3* btn, int theme_id, int fade)
 {
 	if(btn == 0)
 		return;
-	
+
 	u32 color = 0xFFFFFF00|fade;
-		
+
 	if(btn->hovering)
 	{
 		switch (theme_id)
@@ -507,15 +502,15 @@ void Button3_Theme_Paint_Fade(struct Button3* btn, int theme_id, int fade)
 				GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, color);
 				break;
 		}
-		
-	}	
+
+	}
 }
 
 
 
 void FreeButton3Resources(struct Button3 *btn)
 {
-	if (btn->toFreeTexture) 		CFFree(btn->texture.data);	
+	if (btn->toFreeTexture) 		CFFree(btn->texture.data);
 	if (btn->toFreeHoverTexture) 	CFFree(btn->hoverTexture.data);
 	if (btn->toFreeTriStateTexture)	CFFree(btn->TriStateTexture.data);
 }

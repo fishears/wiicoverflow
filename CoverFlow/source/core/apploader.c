@@ -312,8 +312,7 @@ s32 Apploader_Run(entry_point *entry)
         void *dolbuffer;
         int dollen;
 
-        bool dolloaded = Load_Dol(&dolbuffer, &dollen, dynPath.dir_altdol);
-        if(dolloaded) 
+        if(Load_Dol(&dolbuffer, &dollen, dynPath.dir_altdol))
 		{
             Remove_001_Protection(dolbuffer, dollen);
 

@@ -32,7 +32,7 @@ int FloatingCacheCovers[MAX_BUFFERED_COVERS];
 
 /*Protect each buffer*/
 pthread_mutex_t buffer_mutex[MAX_BUFFERED_COVERS];
-	
+
 /*Protect quit*/
 pthread_mutex_t quit_mutex;
 
@@ -80,7 +80,4 @@ void * GetSlotBufferAddress(int slot);
 	The memory does not need to be freed as there is no associated malloc
 */
 void BufferImageToSlot(GRRLIB_texImg * my_texture,const unsigned char* pngDataAddress,int slot);
-
-void LoadTextureToBuffer(GRRLIB_texImg * my_texture,const unsigned char* pngDataAddress);
-
 #endif
