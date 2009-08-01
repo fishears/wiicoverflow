@@ -7,9 +7,6 @@
 //       shows MemInfo in first line
 //#define SHOW_MEMINFO
 //***************************************************************
-//      enable/disable all code for additional USB-Support
-#define USB_SUPPORT
-//***************************************************************
 //         enable/disable all code for NewsReader
  //#define NEWS_READER
  //#ifdef NEWS_READER

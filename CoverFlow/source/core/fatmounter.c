@@ -10,8 +10,6 @@
 #include "usbstorage.h"
 
 
-#ifdef USB_SUPPORT
-
 //these are the only stable and speed is good
 #define CACHE 8
 #define SECTORS 64
@@ -65,4 +63,4 @@ void SDCard_deInit()
 	fatUnmount("SD:/");
 }
 
-#endif
+
