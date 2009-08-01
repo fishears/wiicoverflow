@@ -47,10 +47,9 @@ bool reinit_usbfs()
 {
 	u32 ret;
 	
-	/* UnMount SDHC */
-        SDCard_deInit();
 	
-	sleep(1);
+//    SDCard_deInit();
+//	  sleep(1);
 	
 	/* Mount SDHC */
 	SDCard_Init();

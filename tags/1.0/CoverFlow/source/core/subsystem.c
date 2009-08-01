@@ -23,5 +23,5 @@ void Subsystem_Close(void)
 	Wpad_Disconnect();
 	
 	/* Unmount SDHC */
-        SDCard_deInit();
+    SDCard_deInit();
 }

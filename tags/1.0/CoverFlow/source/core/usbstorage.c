@@ -3,7 +3,7 @@
 usbstorage_starlet.c -- USB mass storage support, inside starlet
 Copyright (C) 2009 Kwiirk
 
-If this driver is linked before libogc, this will replace the original 
+If this driver is linked before libogc, this will replace the original
 usbstorage driver by svpe from libogc
 This software is provided 'as-is', without any express or implied
 warranty.  In no event will the authors be held liable for any
@@ -33,18 +33,20 @@ distribution.
 
 /* IOCTL commands */
 #define UMS_BASE			(('U'<<24)|('M'<<16)|('S'<<8))
-#define USB_IOCTL_UMS_INIT	        (UMS_BASE+0x1)
+#define USB_IOCTL_UMS_INIT	        	(UMS_BASE+0x1)
 #define USB_IOCTL_UMS_GET_CAPACITY      (UMS_BASE+0x2)
 #define USB_IOCTL_UMS_READ_SECTORS      (UMS_BASE+0x3)
-#define USB_IOCTL_UMS_WRITE_SECTORS	(UMS_BASE+0x4)
-#define USB_IOCTL_UMS_READ_STRESS	(UMS_BASE+0x5)
-#define USB_IOCTL_UMS_SET_VERBOSE	(UMS_BASE+0x6)
+#define USB_IOCTL_UMS_WRITE_SECTORS		(UMS_BASE+0x4)
+#define USB_IOCTL_UMS_READ_STRESS		(UMS_BASE+0x5)
+#define USB_IOCTL_UMS_SET_VERBOSE		(UMS_BASE+0x6)
+#define USB_IOCTL_UMS_UNMOUNT			(UMS_BASE+0x10)
+#define USB_IOCTL_UMS_WATCHDOG			(UMS_BASE+0x80)
 
-#define UMS_HEAPSIZE			0x8000
+#define UMS_HEAPSIZE			0x10000
 
 /* Variables */
 static char fs[] ATTRIBUTE_ALIGN(32) = "/dev/usb/ehc";
- 
+
 static s32 hid = -1, fd = -1;
 static u32 sector_size;
 
@@ -85,7 +87,7 @@ s32 USBStorage_Init(void)
 	if (hid < 0) {
 		hid = iosCreateHeap(UMS_HEAPSIZE);
 		if (hid < 0)
-			return IPC_ENOMEM; 
+			return IPC_ENOMEM;
 	}
 
 	/* Open USB device */
@@ -94,7 +96,8 @@ s32 USBStorage_Init(void)
 		return fd;
 
 	/* Initialize USB storage */
-	IOS_IoctlvFormat(hid, fd, USB_IOCTL_UMS_INIT, ":");
+	ret = IOS_IoctlvFormat(hid, fd, USB_IOCTL_UMS_INIT, ":");
+    if(ret<0) goto err;
 
 	/* Get device capacity */
 	ret = USBStorage_GetCapacity(NULL);
@@ -111,6 +114,31 @@ err:
 	}
 
 	return -1;
+}
+
+/** Hermes **/
+s32 USBStorage_Watchdog(u32 on_off)
+{
+	if (fd >= 0) {
+		s32 ret;
+
+		ret = IOS_IoctlvFormat(hid, fd, USB_IOCTL_UMS_WATCHDOG, "i:", on_off);
+
+		return ret;
+	}
+
+	return IPC_ENOENT;
+}
+
+s32 USBStorage_Umount(void)
+{
+	if (fd >= 0) {
+		s32 ret;
+		ret = IOS_IoctlvFormat(hid, fd, USB_IOCTL_UMS_UNMOUNT, ":");
+		return ret;
+	}
+
+	return IPC_ENOENT;
 }
 
 void USBStorage_Deinit(void)
@@ -184,3 +212,88 @@ s32 USBStorage_WriteSectors(u32 sector, u32 numSectors, const void *buffer)
 
 	return ret;
 }
+
+
+#define DEVICE_TYPE_WII_UMS (('W'<<24)|('U'<<16)|('M'<<8)|'S')
+
+
+bool umsio_Startup()
+{
+	return USBStorage_Init() == 0;
+}
+
+bool umsio_IsInserted()
+{
+	return true; // allways true
+}
+bool umsio_ReadSectors(sec_t sector, sec_t numSectors, u8 *buffer)
+{
+	u32 cnt = 0;
+	s32 ret;
+	/* Do reads */
+	while (cnt < numSectors)
+	{
+		u32   sectors = (numSectors - cnt);
+
+		/* Read sectors is too big */
+		if (sectors > 32)
+			sectors = 32;
+
+		/* USB read */
+		ret = USBStorage_ReadSectors(sector + cnt, sectors, &buffer[cnt*512]);
+		if (ret < 0)
+			return false;
+
+		/* Increment counter */
+		cnt += sectors;
+	}
+
+	return true;
+}
+
+bool umsio_WriteSectors(sec_t sector, sec_t numSectors, const u8* buffer)
+{
+	u32 cnt = 0;
+	s32 ret;
+
+	/* Do writes */
+	while (cnt < numSectors)
+	{
+		u32   sectors = (numSectors - cnt);
+
+		/* Write sectors is too big */
+		if (sectors > 32)
+			sectors = 32;
+
+		/* USB write */
+		ret = USBStorage_WriteSectors(sector + cnt, sectors, &buffer[cnt * 512]);
+		if (ret < 0)
+			return false;
+
+		/* Increment counter */
+		cnt += sectors;
+	}
+
+	return true;
+}
+bool umsio_ClearStatus(void)
+{
+	return true;
+}
+
+bool umsio_Shutdown()
+{
+	USBStorage_Deinit();
+	return true;
+}
+const DISC_INTERFACE __io_wiiums =
+{
+DEVICE_TYPE_WII_UMS,
+FEATURE_MEDIUM_CANREAD | FEATURE_MEDIUM_CANWRITE | FEATURE_WII_USB,
+(FN_MEDIUM_STARTUP)&umsio_Startup,
+	(FN_MEDIUM_ISINSERTED)&umsio_IsInserted,
+	(FN_MEDIUM_READSECTORS)&umsio_ReadSectors,
+	(FN_MEDIUM_WRITESECTORS)&umsio_WriteSectors,
+	(FN_MEDIUM_CLEARSTATUS)&umsio_ClearStatus,
+	(FN_MEDIUM_SHUTDOWN)&umsio_Shutdown
+};
