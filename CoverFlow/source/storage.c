@@ -1,4 +1,5 @@
 #include "storage.h"
+#include "fatmounter.h"
 
 extern s_self self;
 extern s_settings settings;
@@ -47,12 +48,12 @@ bool reinit_usbfs()
 	u32 ret;
 	
 	/* UnMount SDHC */
-	Fat_UnmountSDHC();
+        SDCard_deInit();
 	
 	sleep(1);
 	
 	/* Mount SDHC */
-	Fat_MountSDHC();
+	SDCard_Init();
 				
 	/* Initialize DIP module */
 	ret = Disc_Init();

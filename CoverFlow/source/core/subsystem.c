@@ -3,6 +3,7 @@
 
 #include "fat.h"
 #include "wiipad.h"
+#include "fatmounter.h"
 
 
 void Subsystem_Init(void)
@@ -12,7 +13,7 @@ void Subsystem_Init(void)
 	Wpad_Init();
 	
 	/* Mount SDHC */
-	Fat_MountSDHC();
+	SDCard_Init();
 }
 
 void Subsystem_Close(void)
@@ -22,5 +23,5 @@ void Subsystem_Close(void)
 	Wpad_Disconnect();
 	
 	/* Unmount SDHC */
-	Fat_UnmountSDHC();
+        SDCard_deInit();
 }
