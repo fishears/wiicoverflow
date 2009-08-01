@@ -10,7 +10,7 @@
 #include "usbstorage.h"
 
 
-#ifdef USB_SUPPORT
+
 
 //these are the only stable and speed is good
 #define CACHE 8
@@ -64,5 +64,3 @@ void SDCard_deInit()
 	//closing all open Files write back the cache and then shutdown em!
 	fatUnmount("SD:/");
 }
-
-#endif

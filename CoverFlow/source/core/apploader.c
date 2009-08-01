@@ -325,7 +325,10 @@ s32 Apploader_Run(entry_point *entry)
             /* Set entry point from apploader */
             *entry = (entry_point) load_dol_image(dolbuffer);
         }
-    }
+    
+		if(dolbuffer)
+            free(dolbuffer);
+	}
 
 	return 0;
 }
