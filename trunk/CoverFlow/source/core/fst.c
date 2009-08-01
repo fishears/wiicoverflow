@@ -62,10 +62,8 @@ u32 do_sd_code(char *filename)
 	u32 ret;
 	char filepath[128];
 	
-	ret = Fat_MountSDHC();
-#ifdef USB_SUPPORT
+	ret = SDCard_Init();
 	USBDevice_Init();
-#endif
 	if (ret < 0) {
 		printf("[+] SD Error\n");
 		sleep (2);
@@ -87,11 +85,8 @@ u32 do_sd_code(char *filename)
 	fp = fopen(filepath, "rb");
 	if (!fp) {
 		printf("[+] No SD codes found\n");
-#ifdef USB_SUPPORT
 		USBDevice_deInit();
-#endif
-		Fat_UnmountSDHC();
-		sleep(2);
+		SDCard_deInit();
 		return 0;
 	}
 
@@ -102,11 +97,8 @@ u32 do_sd_code(char *filename)
 	filebuff = (u8*) CFMalloc (filesize);
 	if(filebuff == 0){
 		fclose(fp);
-#ifdef USB_SUPPORT
 		USBDevice_deInit();
-#endif
-		Fat_UnmountSDHC();
-		sleep(2);		
+		SDCard_deInit();		
 		return 0;
 	}
 
@@ -115,11 +107,8 @@ u32 do_sd_code(char *filename)
 		printf("[+] SD Code Error\n");
 		CFFree(filebuff);
 		fclose(fp);
-#ifdef USB_SUPPORT
 		USBDevice_deInit();
-#endif
-		Fat_UnmountSDHC();
-		sleep(2);
+		SDCard_deInit();
 		return 0;
 	}
 	printf("[+] SD Codes found.\n");
@@ -129,11 +118,8 @@ u32 do_sd_code(char *filename)
 
 	CFFree(filebuff);
 	fclose(fp);
-#ifdef USB_SUPPORT
 	USBDevice_deInit();
-#endif
-	Fat_UnmountSDHC();
-	sleep(2);
+	SDCard_deInit();
 	return 1;
 }
 
