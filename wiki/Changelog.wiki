@@ -8,6 +8,10 @@
   * dynamic paths for all CoverFloader files and directories on SD: and USB: (changeable by hand)
   * Support for USB-Devices
 
+-FIX-
+  * SDHC support fixed
+  * Improved cover loading speed
+
 == v1.1  (July 24 2009) ==
 
 -NEW-
