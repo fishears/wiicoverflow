@@ -7,6 +7,7 @@
 #include "video.h"
 #include "patchcode.h" /*FISHEARS*/
 #include "kenobiwii.h" /*FISHEARS*/
+#include "TrackedMemoryManager.h"
 
 #include "settings.h"
 
@@ -247,7 +248,7 @@ s32 Apploader_Run(entry_point *entry)
 
 /////////////////////////////////////
 //  only for testing alternateDOL  //
-//self.alternatedol = 1;
+self.alternatedol = 1;
 /////////////////////////////////////
 
 	/* Read apploader header */
@@ -327,7 +328,7 @@ s32 Apploader_Run(entry_point *entry)
         }
     
 		if(dolbuffer)
-            free(dolbuffer);
+            CFFree(dolbuffer);
 	}
 
 	return 0;
