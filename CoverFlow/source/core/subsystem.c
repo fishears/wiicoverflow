@@ -10,7 +10,7 @@ void Subsystem_Init(void)
 {
 
 	/* Initialize Wiimote subsystem */
-	Wpad_Init();
+	//Wpad_Init();
 	
 	/* Mount SDHC */
 	SDCard_Init();
