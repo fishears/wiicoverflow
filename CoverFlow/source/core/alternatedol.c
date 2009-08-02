@@ -10,6 +10,7 @@
 #include "apploader.h"
 #include "wdvd.h"
 #include "TrackedMemoryManager.h"
+#include "utils.h"
 //#include "fstfile.h"
 
 /** Alternate dolloader made by WiiPower **/
@@ -33,6 +34,9 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 
 	if(file == NULL)
 	{
+#ifdef DEBUG_FILE
+		DebTxt(".dol is missing");
+#endif
 		fclose(file);
 	    SDCard_deInit();
 	    USBDevice_deInit();
@@ -47,6 +51,9 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 	dol_buffer = CFMalloc(filesize);
 	if (dol_buffer == NULL)
 	{
+#ifdef DEBUG_FILE
+		DebTxt("Out of memory");
+#endif
 		fclose(file);
 	    SDCard_deInit();
 	    USBDevice_deInit();
@@ -55,6 +62,9 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 	ret = fread( dol_buffer, 1, filesize, file);
 	if(ret != filesize)
 	{
+#ifdef DEBUG_FILE
+		DebTxt("Error reading dol header");
+#endif
 		CFFree(dol_buffer);
 		fclose(file);
 	    SDCard_deInit();
@@ -62,7 +72,9 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 		return false;
 	}
 	fclose(file);
-
+#ifdef DEBUG_FILE
+	DebTxt("dol header in buffer");
+#endif
 	SDCard_deInit();
     USBDevice_deInit();
 	*buffer = dol_buffer;

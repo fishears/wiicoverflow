@@ -496,4 +496,30 @@ char * ParseTokenedUrl(char * url, char* username, char* password, char * lang, 
 	return ret;
 }
 
+#ifdef DEBUG_FILE
+int DebTxt( char * Msg)
+{
+	char       buf[255];
+	FILE       *fp;
+	time_t     now;
+	struct tm  *ts;
+
+	now = time(NULL);
+	ts = localtime(&now);
+	//strftime(tbuf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts); //strftime doesn't work
+
+	// Doesn't work, why???  No Mem?
+	//sprintf(buf, "%02d-%02d-%02d %02d:%02d:%02d    %s", ts->tm_year+1900, ts->tm_mon+1, ts->tm_mday, ts->tm_hour, ts->tm_min, ts->tm_sec, Msg);
+
+		strcpy(buf, Msg);
+
+	fp = fopen(DEBUG_FILENAME, "a");
+	if (!fp) 
+	return -1;
+	fprintf(fp, "%s\n", buf);
+	fclose(fp);
+	return 1;
+}
+#endif
+
 

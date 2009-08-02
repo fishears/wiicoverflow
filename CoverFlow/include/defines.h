@@ -1,8 +1,12 @@
 #ifndef __DEFINES_H_
 #define __DEFINES_H_
 
-
-
+//***************************************************************
+//       Adds Debug-Info to file
+//#define DEBUG_FILE
+#ifdef DEBUG_FILE
+	#define DEBUG_FILENAME "SD:/usb-loader/debug.txt"
+#endif
 //***************************************************************
 //       shows MemInfo in first line
 //#define SHOW_MEMINFO
