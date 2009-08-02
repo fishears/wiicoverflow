@@ -15,8 +15,9 @@
 
 void Button_Flag_Init(Button * new_button, const unsigned char normal_img[], int x, int y, char *button_label)
 {
-	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
-	new_button->toFreeTexture=true;
+	LoadTextureToBuffer(&(new_button->texture),normal_img);
+//	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
+	new_button->toFreeTexture=false;
 	new_button->toFreeHoverTexture=false;
 	new_button->x = x;
 	new_button->y = y;
@@ -28,10 +29,12 @@ void Button_Flag_Init(Button * new_button, const unsigned char normal_img[], int
 
 void Button_TTF_Init(Button * new_button, const unsigned char normal_img[], const unsigned char hover_img[], int x, int y, char *button_label)
 {
-	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
-	new_button->toFreeTexture=true;
-	GRRLIB_LoadTexture(&(new_button->hoverTexture),hover_img);
-	new_button->toFreeHoverTexture=true;
+	LoadTextureToBuffer(&(new_button->texture),normal_img);
+//	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
+	new_button->toFreeTexture=false;
+	LoadTextureToBuffer(&(new_button->hoverTexture),hover_img);
+//	GRRLIB_LoadTexture(&(new_button->hoverTexture),hover_img);
+	new_button->toFreeHoverTexture=false;
 	new_button->x = x;
 	new_button->y = y;
 	new_button->hovering = false;
@@ -42,10 +45,12 @@ void Button_TTF_Init(Button * new_button, const unsigned char normal_img[], cons
 
 void Button_Init(Button * new_button, const unsigned char normal_img[], const unsigned char hover_img[], int x, int y)
 {
-	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
-	GRRLIB_LoadTexture(&(new_button->hoverTexture),hover_img);
-	new_button->toFreeTexture=true;
-	new_button->toFreeHoverTexture=true;
+	LoadTextureToBuffer(&(new_button->texture),normal_img);
+//	GRRLIB_LoadTexture(&(new_button->texture),normal_img);
+	LoadTextureToBuffer(&(new_button->hoverTexture),hover_img);
+//	GRRLIB_LoadTexture(&(new_button->hoverTexture),hover_img);
+	new_button->toFreeTexture=false;
+	new_button->toFreeHoverTexture=false;
 	new_button->x = x;
 	new_button->y = y;
 	new_button->hovering = false;
