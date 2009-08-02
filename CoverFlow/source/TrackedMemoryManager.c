@@ -27,7 +27,7 @@ int FindFreeSlot()
 
 int FindPointerSlot(void * ptr)
 {
-	int i,ret=0;
+	int i,ret=-1;
 	for (i=0;i<MEMORY_TRACKER_SIZE;i++)
 	{
 		if ((void*)TrackingBuffer[i][MEMORY_TRACKER_POINTER]==ptr)
@@ -93,10 +93,14 @@ void * TrackedRealloc(void * ptr, int size)
 
 void TrackedFree(void * ptr)
 {
+	// don't free memory that wasn't allocated through this
 	int existingSlot=FindPointerSlot(ptr);
-	TrackingBuffer[existingSlot][MEMORY_TRACKER_POINTER]=0;
-	TrackingBuffer[existingSlot][MEMORY_TRACKER_POINTER_SIZE]=0;
-	free(ptr);
+	if (existingSlot!=-1)
+	{
+		TrackingBuffer[existingSlot][MEMORY_TRACKER_POINTER]=0;
+		TrackingBuffer[existingSlot][MEMORY_TRACKER_POINTER_SIZE]=0;
+		free(ptr);
+	}
 }
 
 

@@ -357,12 +357,15 @@ void FreeButtonResources(struct Button *btn)
 #ifdef NEWS_READER
 void Button3_Init(Button3 * new_button, const unsigned char normal_img[], const unsigned char hover_img[], const unsigned char triState_img[], int x, int y)
 {
-	GRRLIB_LoadTexture(&(new_button->texture), normal_img);
-	GRRLIB_LoadTexture(&(new_button->hoverTexture), hover_img);
-	GRRLIB_LoadTexture(&(new_button->TriStateTexture), triState_img);
-	new_button->toFreeTexture = true;
-	new_button->toFreeHoverTexture = true;
-	new_button->toFreeTriStateTexture = true;
+	LoadTextureToBuffer(&(new_button->texture),normal_img);
+//	GRRLIB_LoadTexture(&(new_button->texture), normal_img);
+	LoadTextureToBuffer(&(new_button->hoverTexture),hover_img);
+//	GRRLIB_LoadTexture(&(new_button->hoverTexture), hover_img);
+	LoadTextureToBuffer(&(new_button->TriStateTexture),triState_img);
+//	GRRLIB_LoadTexture(&(new_button->TriStateTexture), triState_img);
+	new_button->toFreeTexture = false;
+	new_button->toFreeHoverTexture = false;
+	new_button->toFreeTriStateTexture = false;
 	new_button->x = x;
 	new_button->y = y;
 	new_button->hovering = false;
