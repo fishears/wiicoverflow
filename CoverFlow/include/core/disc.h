@@ -38,11 +38,14 @@ struct discHdr
 s32  Disc_Init(void);
 s32  Disc_Open(void);
 s32  Disc_Wait(void);
+void __Disc_SetLowMem(void);
 s32  Disc_SetWBFS(u32, u8 *);
+s32  Disc_SetUSB(u8 *);
 s32  Disc_ReadHeader(void *);
 s32  Disc_IsWii(void);
 s32  Disc_BootPartition(u64);
 s32  Disc_WiiBoot(void);
+s32 __Disc_FindPartition(u64 *outbuf);
 void PatchCountryStrings(void *Address, int Size);
 
 #endif

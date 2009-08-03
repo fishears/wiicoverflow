@@ -29,18 +29,39 @@ static char gameid[8];
 
 void __Disc_SetLowMem(void)
 {
-	/* Setup low memory */
-	*(vu32 *)0x80000030 = 0x00000000;
-	*(vu32 *)0x80000060 = 0x38A00040;
-	*(vu32 *)0x800000E4 = 0x80431A80;
-	*(vu32 *)0x800000EC = 0x81800000;
-	*(vu32 *)0x800000F4 = 0x817E5480;
-	*(vu32 *)0x800000F8 = 0x0E7BE2C0;
-	*(vu32 *)0x800000FC = 0x2B73A840;
+
+    *(vu32 *)0x80000020 = 0x0D15EA5E;       // Standard Boot Code
+    *(vu32 *)0x80000024 = 0x00000001;       // Version
+
+    *(vu32 *)0x80000030 = 0x00000000;       // Arena Low
+    *(vu32 *)0x800000F4 = 0x817E5480;       // BI2
+    *(vu32 *)0x800000F8 = 0x0E7BE2C0;       // Console Bus Speed
+    *(vu32 *)0x800000FC = 0x2B73A840;       // Console CPU Speed
+
+    /* Setup low memory */
+    *(vu32 *)0x80000060 = 0x38A00040;
+    *(vu32 *)0x800000E4 = 0x80431A80;
+    *(vu32 *)0x800000EC = 0x81800000;       // Dev Debugger Monitor Address
+    *(vu32 *)0x800000F0 = 0x01800000;       // Simulated Memory Size
+
+
+
+    memset(gameid, 0, 8);
+    memcpy(gameid, (char*)0x80000000, 6);
+
+    if ((strcmp(gameid,"R3XE6U")==0)||
+            (strcmp(gameid,"R3XP6V")==0))/*&&
+		(IOS_GetVersion()==249)&&
+		((IOS_GetRevision()==10)||(IOS_GetRevision()==13))  I left out the ios check to see if works with other ios versions.*/
+    {
+        *(vu32*)0x80003184	= 0x80000000;    // Game ID Address
+    }
+
+	
 
 	/* Copy disc ID */
-        if(!settings.ocarina)
-        	memcpy((void *)0x80003180, (void *)0x80000000, 4);
+	if(!settings.ocarina)
+		memcpy((void *)0x80003180, (void *)0x80000000, 4);
 
 	/* Flush cache */
 	DCFlushRange((void *)0x80000000, 0x3F00);
@@ -126,8 +147,13 @@ void __Disc_SetVMode(void)
 	*(vu32 *)0x800000CC = vmode_reg;
 
 	/* Set video mode */
-	if (vmode)
+	if (vmode) {
 		Video_Configure(vmode);
+       /* Setup video */
+        VIDEO_SetBlack(FALSE);
+        VIDEO_Flush();
+        VIDEO_WaitVSync();
+		}
 
 }
 
@@ -221,6 +247,13 @@ s32 Disc_SetWBFS(u32 mode, u8 *id)
 	/* Set WBFS mode */
 	return WDVD_SetWBFSMode(mode, id);
 }
+
+s32 Disc_SetUSB(u8 *id) 
+{
+    /* Set USB mode */
+    return WDVD_SetUSBMode(id);
+}
+
 
 s32 Disc_ReadHeader(void *outbuf)
 {
