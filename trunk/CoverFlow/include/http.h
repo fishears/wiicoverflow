@@ -26,5 +26,6 @@ struct block
 extern struct block emptyblock;
 
 struct block downloadfile(const char *url);
+s32 GetConnection(char * domain);
 
 #endif /* _HTTP_H_ */
