@@ -75,6 +75,8 @@
 
 //#define GAME_INFO_TEST 1
 
+#define NEWS_READER
+
 #define COVER_WIDTH    160
 #define COVER_HEIGHT   224
 

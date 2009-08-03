@@ -23,4 +23,5 @@ void shutdownNetworkThread();
 bool checkForUpdate();
 bool checkForNews();
 bool promptForUpdate();
+bool downloadUpdate();
 #endif

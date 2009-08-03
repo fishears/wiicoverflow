@@ -60,7 +60,7 @@ void shutdownNetworkThread()
 bool checkForUpdate(){
 	
 	struct block file;
-	char* url = "http://wiicoverflow.googlecode.com/files/current.txt";
+	char* url = "http://wiicoverflow.googlecode.com/svn/trunk/CoverFlow/Current_Release/current.txt";
 	char serverRevision[10];
 	int rev;
 	char buff[255];
@@ -91,6 +91,42 @@ bool checkForUpdate(){
 	return false;
 }
 
+bool downloadUpdate(){
+	struct block file;
+	char* url = "http://wiicoverflow.googlecode.com/svn/trunk/CoverFlow/Current_Release/current.dol";
+	char buff[255];
+	
+	sprintf(buff,"%s/current.dol", dynPath.dir_usb_loader);
+	
+	char buff_boot[255];
+	sprintf(buff_boot,"%s/boot.dol", dynPath.dir_usb_loader);
+
+	char buff_old[255];
+	sprintf(buff_old,"%s/boot.dol.old", dynPath.dir_usb_loader);	
+	
+	unlink(buff);
+	//unlink(USBLOADER_PATH "/current.txt");
+	file = downloadfile(url);
+	
+	if(file.data != NULL){
+		saveFile(buff, file);
+		//saveFile(USBLOADER_PATH "/current.txt", file);
+		CFFree(file.data);
+		
+		//remove old dol backup
+		remove(buff_old);
+		
+		//backup old dol
+		rename(buff_boot, buff_old);
+	
+		//rename new dol to boot.dol
+		rename(buff, buff_boot);
+		
+		return true;
+	}
+	
+	return false;
+}
 
 bool promptForUpdate(){
 	

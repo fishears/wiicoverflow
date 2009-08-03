@@ -34,6 +34,8 @@ typedef struct {
     int quickstart;
     int enablepitch; //0=OFF, 1=ON skip the load disc dialog
 
+	int autoUpdate;
+
     int ocarina;
     int hooktype;
     int language;
