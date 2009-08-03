@@ -376,7 +376,6 @@ int main( int argc, char **argv )
 		}
 #endif
 
-	
 	//////////////////////////
 	// main screen gui loop //
 	//////////////////////////
@@ -790,7 +789,7 @@ int main( int argc, char **argv )
 					self.inetOk = true;
 				}
 						
-						struct block file = downloadfile("http://www.theotherzone.com/wii/diskart/160/160/zuc2.png");
+						struct block file = file("http://www.theotherzone.com/wii/diskart/160/160/zuc2.png");
 						if(file.data != NULL && file.size != 7386){
 							
 							char imgPath[256];
@@ -1083,9 +1082,12 @@ int main( int argc, char **argv )
 			}
 		}
 		
-		if(self.updateAvailable){
+		if(settings.autoUpdate && self.updateAvailable){
 			if(promptForUpdate()){
-				WindowPrompt("Not yet implemented!", "but at least update notify works!", 0, &okButton);
+				if(downloadUpdate())
+				{
+					WindowPrompt("Updated Successfully!", "Restart coverloader to begin using new version.", 0, &okButton);
+				}
 			}
 			self.updateAvailable = false;
 		}

@@ -42,6 +42,7 @@ void SETTINGS_Init()
 	settings.falldist     = 4;
 	settings.drawWindow   = 13;
 	settings.coverText    = 1;
+	settings.autoUpdate   = 1;
 	settings.theme		  = 0; // default to black
 	settings.covers3d     = 0;
 	settings.covers3dThickness = 0; //default to 0=Fat, 1=flat
@@ -204,6 +205,8 @@ int SETTINGS_Load()
 		  if(mxmlElementGetAttr(next_n,"newsDate"))
 			  strcpy(settings.newsDate, mxmlElementGetAttr(next_n,"newsDate"));
 #endif	  
+		  if(mxmlElementGetAttr(next_n,"autoUpdate"))
+			  settings.autoUpdate  = atoi(mxmlElementGetAttr(next_n,"autoUpdate"));
 	  }
 	  else
 	  {
@@ -347,6 +350,9 @@ int SETTINGS_Save()
 	sprintf(buffer, "%d", settings.sound);
 	mxmlElementSetAttr(node, "sound", buffer);
 	
+	sprintf(buffer, "%d", settings.autoUpdate);
+	mxmlElementSetAttr(node, "autoUpdate", buffer);
+			  
 	sprintf(buffer, "%d", settings.music);
 	mxmlElementSetAttr(node, "music", buffer);
 	
