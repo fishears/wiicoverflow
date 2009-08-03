@@ -501,17 +501,14 @@ int DebTxt( char * Msg)
 {
 	char       buf[255];
 	FILE       *fp;
+
 	time_t     now;
 	struct tm  *ts;
 
-	now = time(NULL);
+	now = time(0);
 	ts = localtime(&now);
-	//strftime(tbuf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts); //strftime doesn't work
 
-	// Doesn't work, why???  No Mem?
-	//sprintf(buf, "%02d-%02d-%02d %02d:%02d:%02d    %s", ts->tm_year+1900, ts->tm_mon+1, ts->tm_mday, ts->tm_hour, ts->tm_min, ts->tm_sec, Msg);
-
-		strcpy(buf, Msg);
+	sprintf(buf, "%d-%02d-%02d %02d:%02d:%02d    %s", ts->tm_year+1900, ts->tm_mon+1, ts->tm_mday, ts->tm_hour, ts->tm_min, ts->tm_sec, Msg);
 
 	fp = fopen(DEBUG_FILENAME, "a");
 	if (!fp) 

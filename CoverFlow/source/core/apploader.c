@@ -8,7 +8,7 @@
 #include "patchcode.h" /*FISHEARS*/
 #include "kenobiwii.h" /*FISHEARS*/
 #include "TrackedMemoryManager.h"
-
+#include "utils.h"
 #include "settings.h"
 
 extern s_settings settings;
@@ -248,7 +248,7 @@ s32 Apploader_Run(entry_point *entry)
 
 /////////////////////////////////////
 //  only for testing alternateDOL  //
-self.alternatedol = 1;
+//self.alternatedol = 1;
 /////////////////////////////////////
 
 	/* Read apploader header */
@@ -325,6 +325,13 @@ self.alternatedol = 1;
 
             /* Set entry point from apploader */
             *entry = (entry_point) load_dol_image(dolbuffer);
+            #ifdef DEBUG_FILE
+                SDCard_Init();
+                char * dbg;
+                sprintf(dbg,"altdol entrypoint %X",(u32)*entry);
+                DebTxt(dbg);
+                SDCard_deInit();
+            #endif
         }
     
 		if(dolbuffer)
