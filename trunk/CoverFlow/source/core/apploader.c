@@ -245,7 +245,9 @@ s32 Apploader_Run(entry_point *entry)
 
 	u32 appldr_len;
 	s32 ret;
-
+#ifdef DEBUG_FILE
+	char dbg[80];
+#endif
 /////////////////////////////////////
 //  only for testing alternateDOL  //
 //self.alternatedol = 1;
@@ -306,7 +308,12 @@ s32 Apploader_Run(entry_point *entry)
 
 	/* Set entry point from apploader */
 	*entry = appldr_final();
-    
+	
+	#ifdef DEBUG_FILE
+		sprintf(dbg,"normal entrypoint %X",(u32)*entry);
+		DebTxt(dbg);
+	#endif 
+   
 	/** Load alternate dol if set **/
 	if(self.alternatedol == 1) 
 	{
@@ -326,11 +333,10 @@ s32 Apploader_Run(entry_point *entry)
             /* Set entry point from apploader */
             *entry = (entry_point) load_dol_image(dolbuffer);
             #ifdef DEBUG_FILE
-                SDCard_Init();
-                char * dbg;
+				SDCard_Init();
                 sprintf(dbg,"altdol entrypoint %X",(u32)*entry);
                 DebTxt(dbg);
-                SDCard_deInit();
+				SDCard_deInit();
             #endif
         }
     
