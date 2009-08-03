@@ -1,0 +1,4 @@
+880
+coverflow 1.2+
++Auto Update Support
++New Features
