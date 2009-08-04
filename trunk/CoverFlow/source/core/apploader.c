@@ -375,8 +375,8 @@ void gamepatches(void * dst, int len)
 		Search_and_patch_Video_Modes(dst, len, table);
 	}
 
-//	dogamehooks(dst,len);
-
+	if(self.alternatedol == 0)
+		dogamehooks(dst,len);
 
 	if (settings.vipatch)
 		vidolpatcher(dst,len);
