@@ -29,7 +29,7 @@ extern s_path dynPath;
 
 static int nextAllocationAddress=PNG_START_ADDRESS;
 
-// private cars
+// private vars
 typedef struct COVERQUEUE
 {
 	bool ready[MAX_BUFFERED_COVERS];
@@ -61,8 +61,15 @@ int GraphicModes[GRAPHIC_MODES][2] =
 	{512,340} //3d
 };
 
+// instructions for getting a chunk of MEM2
+// add 1 to BUFFER_SLOTS.  Put the required amount of memory in
+// the FreeMemorySlots array.  get it from GetSlotBufferAddress(your slot)
+// it behaves just like malloc...
+
+
+
 // this is the chunk of MEM2 allocated for other tasks (i.e. things that don't fit in normal memory)
-#define BUFFER_SLOTS 21
+#define BUFFER_SLOTS 23
 
 
 unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
@@ -87,6 +94,8 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	20*224*4, //17 case_right
 	4*4*4, //18 matte grey
 	4*4*4, //19 matte black
+	1*1024*1024, //20 Fishears
+	1*1024*1024, //21 Bob
 	0};
 
 // returns the offset to the memory slot required
