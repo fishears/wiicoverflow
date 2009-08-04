@@ -250,7 +250,7 @@ s32 Apploader_Run(entry_point *entry)
 #endif
 /////////////////////////////////////
 //  only for testing alternateDOL  //
-//self.alternatedol = 1;
+self.alternatedol = 1;
 /////////////////////////////////////
 
 	/* Read apploader header */
@@ -326,7 +326,7 @@ s32 Apploader_Run(entry_point *entry)
 
             DCFlushRange(dolbuffer, dollen);
 
-            gamepatches( dolbuffer, dollen);
+            //gamepatches( dolbuffer, dollen);
 
             DCFlushRange(dolbuffer, dollen);
 
