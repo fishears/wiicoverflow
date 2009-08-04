@@ -16,6 +16,8 @@
 #include "useScrollBox.h"
 #include "TrackedMemoryManager.h"
 
+#define COVER_OFFSET 0
+
 extern s_self         self;
 extern s_pointer      pointer;
 extern s_settings     settings;
@@ -47,7 +49,12 @@ char gFixes[CFG_FIX_COUNT][16] =
  {"Anti_002"}
 }; 
  
- 
+ char gAltDol[CFG_ALTDOL_COUNT][20] =
+{
+ {"none"},          // none
+ {"from SD: or USB:"},
+ {"from Image"}
+}; 
  
 /////////////////////////////////////////
 // This method shows the Settings Menu //
@@ -984,13 +991,14 @@ void Game_Settings_Menu_Show()
     // ocarina will be -1 if we never been into game settings before
     if(gameSetting.ocarina == -1)
     {
-        gameSetting.ocarina  = 0;
-        gameSetting.hooktype = 0;
-        gameSetting.language = 0;
-        gameSetting.video    = 0;
-        gameSetting.vipatch  = 0;
-        gameSetting.lock     = 0;
-		gameSetting.fixtype  = settings.presetFix;
+        gameSetting.ocarina  	= 0;
+        gameSetting.hooktype 	= 0;
+        gameSetting.language 	= 0;
+        gameSetting.video    	= 0;
+        gameSetting.vipatch  	= 0;
+        gameSetting.lock     	= 0;
+		gameSetting.fixtype  	= settings.presetFix;
+		gameSetting.altdoltype	= 0;
     }
     hasGCT = check_gct(self.gameSelected,self.gameList);
     hasTXT = check_txt(self.gameSelected,self.gameList);
@@ -1079,6 +1087,30 @@ void Game_Settings_Menu_Show()
 				}
 			}
 
+			else if (Button_Select(&gAltDoldownButton, pointer.p_x, pointer.p_y))
+			{ // Clicked on the AltDol-type buttons
+				if (gameSetting.altdoltype > 0)
+				{
+					gameSetting.altdoltype --;
+				}
+				else
+				{
+					gameSetting.altdoltype = (CFG_ALTDOL_COUNT - 1);
+				}
+			}
+			else if (Button_Select(&gAltDolupButton, pointer.p_x, pointer.p_y))
+			{
+				if (gameSetting.altdoltype < (CFG_ALTDOL_COUNT - 1))
+				{
+					gameSetting.altdoltype ++;
+				}
+				else
+				{
+					gameSetting.altdoltype = 0;
+				}
+			}
+
+
 			
 			else if (Button_Select(&glangdownButton, pointer.p_x, pointer.p_y))
 			{ // Clicked on the language buttons
@@ -1158,12 +1190,9 @@ void Game_Settings_Menu_Show()
 		// Draw the covers behind the dialog
 		draw_covers();
 		// Draw the dialog panel
-		//GRRLIB_Rectangle(40, 106, 560, 276, 0xffffffdd, true);
-		//GRRLIB_Rectangle(42, 108, 556, 272, 0x737373FF, true);
 		
-		GRRLIB_Rectangle(40, 106 + YOS_GSDB, 560, 306, 0xffffffdd, true);
-		GRRLIB_Rectangle(42, 108 + YOS_GSDB, 556, 302, 0x737373FF, true);
-
+		GRRLIB_Rectangle(40, 106 + YOS_GSDB, 560, 336, 0xffffffdd, true);
+		GRRLIB_Rectangle(42, 108 + YOS_GSDB, 556, 332, 0x737373FF, true);
 
 		// Draw the game cover
 		if(self.gameSelected < MAX_BUFFERED_COVERS || self.gameSelected >= 0)
@@ -1177,22 +1206,22 @@ void Game_Settings_Menu_Show()
 					{
 						if(settings.covers3d)
 						{
-							GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+							GRRLIB_DrawFlatCoverImg(55, 131 + COVER_OFFSET, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
 						}
 						else
 						{
-							GRRLIB_DrawImg(60, 131 + YOS_GSDB, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
+							GRRLIB_DrawImg(55, 131 + COVER_OFFSET, _texture_data[self.gameSelected], 0, AR_16_9, 1, 0xFFFFFFFF);
 						}
 					}
 					else
 					{
 						if(settings.covers3d)
 						{
-							GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+							GRRLIB_DrawFlatCoverImg(55, 131 + COVER_OFFSET, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
 						}
 						else
 						{
-							GRRLIB_DrawImg(60, 131 + YOS_GSDB, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
+							GRRLIB_DrawImg(55, 131 + COVER_OFFSET, _texture_data[self.gameSelected], 0, 1, 1, 0xFFFFFFFF);
 						}
 					}
 				}
@@ -1202,22 +1231,22 @@ void Game_Settings_Menu_Show()
 					{
 						if(settings.covers3d)
 						{
-							GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
+							GRRLIB_DrawFlatCoverImg(55, 131 + COVER_OFFSET , cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
 						}
 						else
 						{
-							GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+							GRRLIB_DrawImg(55, 131 + COVER_OFFSET, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 						}
 					}
 					else
 					{
 						if(settings.covers3d)
 						{
-							GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+							GRRLIB_DrawFlatCoverImg(55, 131 + COVER_OFFSET, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
 						}
 						else
 						{
-							GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+							GRRLIB_DrawImg(55, 131 + COVER_OFFSET, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 						}
 					}
 				}
@@ -1229,22 +1258,22 @@ void Game_Settings_Menu_Show()
 			{
 				if(settings.covers3d)
 				{
-					GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
+					GRRLIB_DrawFlatCoverImg(55, 131 + COVER_OFFSET, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
 				}
 				else
 				{
-					GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+					GRRLIB_DrawImg(55, 131 + COVER_OFFSET, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 				}
 			}
 			else
 			{
 				if(settings.covers3d)
 				{
-					GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+					GRRLIB_DrawFlatCoverImg(55, 131 + COVER_OFFSET, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
 				}
 				else
 				{
-					GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+					GRRLIB_DrawImg(55, 131 + COVER_OFFSET, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 				}
 			}
 			}
@@ -1255,37 +1284,40 @@ void Game_Settings_Menu_Show()
 			{
 				if(settings.covers3d)
 				{
-					GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
+					GRRLIB_DrawFlatCoverImg(55, 131 + COVER_OFFSET, cover_texture_3d, 0, AR_16_9, 1, 0xFFFFFFFF);
 				}
 				else
 				{
-					GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
+					GRRLIB_DrawImg(55, 131 + COVER_OFFSET, cover_texture, 0, AR_16_9, 1, 0xFFFFFFFF);
 				}
 			}
 			else
 			{
 				if(settings.covers3d)
 				{
-					GRRLIB_DrawFlatCoverImg(60, 131 + YOS_GSDB, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
+					GRRLIB_DrawFlatCoverImg(55, 131 + COVER_OFFSET, cover_texture_3d, 0, 1, 1, 0xFFFFFFFF);
 				}
 				else
 				{
-					GRRLIB_DrawImg(60, 131 + YOS_GSDB, cover_texture, 0, 1, 1, 0xFFFFFFFF);
+					GRRLIB_DrawImg(55, 131 + COVER_OFFSET, cover_texture, 0, 1, 1, 0xFFFFFFFF);
 				}
 			}
 		}
 		// Draw the attributes labels
-		CFreeTypeGX_DrawText(ttf20pt, 420, 140 + YOS_GSDB, TX.gameSettings, (GXColor){0x00, 0x00, 0x00F, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf20pt, 400, 140 + YOS_GSDB, TX.gameSettings, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 183 + YOS_GSDB, TX.patchVIDTV, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 219 + YOS_GSDB, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 251 + YOS_GSDB, TX.hook, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-		CFreeTypeGX_DrawText(ttf16pt, 500, 251 + YOS_GSDB, ghooks[gameSetting.hooktype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 503, 251 + YOS_GSDB, ghooks[gameSetting.hooktype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 285 + YOS_GSDB, TX.language, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-		CFreeTypeGX_DrawText(ttf16pt, 500, 285 + YOS_GSDB, languages[gameSetting.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 503, 285 + YOS_GSDB, languages[gameSetting.language], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 319 + YOS_GSDB, TX.videoMode, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-		CFreeTypeGX_DrawText(ttf16pt, 500, 319 + YOS_GSDB, vidmodes[gameSetting.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 503, 319 + YOS_GSDB, vidmodes[gameSetting.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 355 + YOS_GSDB, TX.gameFix, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-		CFreeTypeGX_DrawText(ttf16pt, 500, 355 + YOS_GSDB, gFixes[gameSetting.fixtype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 503, 355 + YOS_GSDB, gFixes[gameSetting.fixtype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf16pt, 355, 390 + YOS_GSDB, "Alternative DOL:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+		CFreeTypeGX_DrawText(ttf16pt, 503, 390 + YOS_GSDB, gAltDol[gameSetting.altdoltype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+
 		// Draw the buttons
 		Button_TTF_Paint(&gbackButton);
 		Button_Paint(&glangupButton);
@@ -1298,6 +1330,8 @@ void Game_Settings_Menu_Show()
 		Button_TTF_Toggle_Paint(&gvidtvoffButton, &gvidtvonButton, TX.toggleOffB, TX.toggleOnB, gameSetting.vipatch);
 		Button_Paint(&gfixdownButton);
 		Button_Paint(&gfixupButton);
+		Button_Paint(&gAltDoldownButton);
+		Button_Paint(&gAltDolupButton);
 		
 		#ifdef CHEAT_MANAGER
 		if(hasTXT)
@@ -1323,6 +1357,8 @@ void Game_Settings_Menu_Show()
 			 Button_Hover(&ghookdownButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&gfixupButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&gfixdownButton,  pointer.p_x, pointer.p_y) ||
+			 Button_Hover(&gAltDolupButton, pointer.p_x, pointer.p_y) ||
+			 Button_Hover(&gAltDoldownButton,  pointer.p_x, pointer.p_y) ||
 			 ((gameSetting.lock) ? Button_Hover(&unlockButton, pointer.p_x, pointer.p_y) : Button_Hover(&lockButton, pointer.p_x, pointer.p_y) )
 			 #ifdef CHEAT_MANAGER
 			 || ((hasTXT) ? Button_Hover(&manageCheatsButton, pointer.p_x, pointer.p_y) : false)

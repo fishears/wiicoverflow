@@ -217,6 +217,8 @@ Button gcheatonButton;
 Button gcheatoffButton;
 Button gfixupButton;
 Button gfixdownButton;
+Button gAltDolupButton;
+Button gAltDoldownButton;
 
 Button coverTextOnButton;
 Button coverTextOffButton;

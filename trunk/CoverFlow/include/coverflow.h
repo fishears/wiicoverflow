@@ -118,9 +118,10 @@
 #define CFG_HOOK_COUNT   3
 #define CFG_LANG_COUNT   11
 #define CFG_FIX_COUNT	 3
+#define CFG_ALTDOL_COUNT 3 
 
 /* Y-Offset for gameSettings-Dialogbox */
-#define YOS_GSDB	-15
+#define YOS_GSDB	-30
 
 enum {
 	FX_BG_MUSIC = 0,
