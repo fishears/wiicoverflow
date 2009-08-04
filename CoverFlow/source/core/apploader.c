@@ -248,10 +248,6 @@ s32 Apploader_Run(entry_point *entry)
 #ifdef DEBUG_FILE
 	char dbg[80];
 #endif
-/////////////////////////////////////
-//  only for testing alternateDOL  //
-self.alternatedol = 1;
-/////////////////////////////////////
 
 	/* Read apploader header */
 	ret = WDVD_Read(buffer, 0x20, APPLDR_OFFSET);

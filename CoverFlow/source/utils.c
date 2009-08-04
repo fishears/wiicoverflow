@@ -275,6 +275,9 @@ void apply_fixsettings()
 			self.enableError002Fix = false;
 			self.enableAnti002Fix  = false;
 	}
+
+	// use alternate dol if needed
+	self.alternatedol = gameSetting.altdoltype;
 }
 
 

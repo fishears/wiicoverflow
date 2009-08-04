@@ -361,7 +361,10 @@ void Init_Buttons()
 	Duplicate_Button(&gvidupButton, vidupButton, 388, 300 + YOS_GSDB);
     Duplicate_Button(&gfixdownButton, viddownButton, 360, 334 + YOS_GSDB);
     Duplicate_Button(&gfixupButton, vidupButton, 388, 334 + YOS_GSDB);
-	Duplicate_Button_TTF(&gbackButton, okButton, 266, 368 + YOS_GSDB, TX.backB);
+    Duplicate_Button(&gAltDoldownButton, viddownButton, 360, 369 + YOS_GSDB);
+    Duplicate_Button(&gAltDolupButton, vidupButton, 388, 369 + YOS_GSDB);
+
+	Duplicate_Button_TTF(&gbackButton, okButton, 266, 400 + YOS_GSDB, TX.backB);
   #ifdef CHEAT_MANAGER
     Duplicate_Button_TTF(&manageCheatsButton, okButton, 468, 198 + YOS_GSDB, TX.manageB);
 
@@ -1796,6 +1799,8 @@ void freeResources(){
 	FreeButtonResources(&gbackButton);
 	FreeButtonResources(&gfixdownButton);
 	FreeButtonResources(&gfixupButton);
+	FreeButtonResources(&gAltDoldownButton);
+	FreeButtonResources(&gAltDolupButton);
 	FreeButtonResources(&charUpButton[0]);
 	FreeButtonResources(&charDownButton[0]);
 		

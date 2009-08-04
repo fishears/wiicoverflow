@@ -22,6 +22,7 @@ typedef struct{
 	int lock;
 	// fixes
 	int fixtype;
+	int altdoltype;
 	/*Used for lookup and saving game setting*/
 	bool changed;
 } s_gameSettings;

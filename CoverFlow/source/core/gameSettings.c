@@ -16,6 +16,8 @@ void initGameSettings(s_gameSettings* gs){
 	gs->lock = 0;
 	
 	gs->fixtype = settings.presetFix;
+	
+	gs->altdoltype = 0;
 
 	gs->changed  = false;
 	
@@ -135,6 +137,11 @@ bool getGameSettings(char* gameCode, s_gameSettings* gs){
 							else
 								gs->fixtype = settings.presetFix;
 							
+							if(mxmlElementGetAttr(next_n,"altdoltype"))
+								gs->altdoltype = atoi(mxmlElementGetAttr(next_n,"altdoltype"));
+							else
+								gs->altdoltype = 0;
+							
 							return true;
 						}
                                                 
@@ -232,6 +239,9 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 								
 								sprintf(temp, "%d", gs->fixtype);
 								mxmlElementSetAttr(next_n, "fixtype", temp);
+
+								sprintf(temp, "%d", gs->altdoltype);
+								mxmlElementSetAttr(next_n, "altdoltype", temp);
 	
 							if(date == 1){
 								setSysdate(temp);
@@ -266,6 +276,8 @@ void setGameSettings(char* gameCode, s_gameSettings* gs, int date){
 						mxmlElementSetAttr(next_n, "lock", temp);
 						sprintf(temp, "%d", gs->fixtype);
 						mxmlElementSetAttr(next_n, "fixtype", temp);
+						sprintf(temp, "%d", gs->altdoltype);
+						mxmlElementSetAttr(next_n, "altdoltype", temp);
 						if(date == 1)
 						{
 							//sysdate(temp);
