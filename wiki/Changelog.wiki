@@ -1,7 +1,8 @@
 #labels Featured
-== v1.1+ (2.0 Path) (July ? 2009)==
+== v1.1+ (2.0 Path) (August ? 2009)==
 
 -NEW-
+  * Method for alt.DOL from SD: / USB: implemented
   * CoverFloader News Service (CFNS) (requires internet connection)
   * CoverFloader NewsReader
   * 2nd page for System Information
