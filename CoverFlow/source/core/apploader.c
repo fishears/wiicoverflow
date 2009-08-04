@@ -322,7 +322,7 @@ s32 Apploader_Run(entry_point *entry)
 
             DCFlushRange(dolbuffer, dollen);
 
-            //gamepatches( dolbuffer, dollen);
+            gamepatches( dolbuffer, dollen);
 
             DCFlushRange(dolbuffer, dollen);
 
@@ -349,10 +349,6 @@ void gamepatches(void * dst, int len)
 {
  	GXRModeObj** table = NULL;
 	
-	// Thanks to WiiPower
-	if(self.enableAnti002Fix == true)
-		Anti_002_fix(dst, len);
-	
 	if (settings.video == 1) // patch
 	{
 		switch(CONF_GetVideo())
@@ -378,16 +374,21 @@ void gamepatches(void * dst, int len)
 		}
 		Search_and_patch_Video_Modes(dst, len, table);
 	}
-	
-	dogamehooks(dst,len);
+
+//	dogamehooks(dst,len);
+
 
 	if (settings.vipatch)
 		vidolpatcher(dst,len);
 
 	langpatcher(dst,len);
 
-	/*Thanks to WiiPower*/
+	// Thanks to WiiPower
 	if (self.patchCountryStr == true )
 		PatchCountryStrings(dst, len);
+
+	// Thanks to WiiPower
+	if(self.enableAnti002Fix == true)
+		Anti_002_fix(dst, len);
 }
 
