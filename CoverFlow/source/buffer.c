@@ -82,8 +82,8 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	512*340*4, // 5 3d no cover
 	240*480*4, //6 ambilight
 	160*224*4, //7 no cover
-	512, //8 Cheat Manager Array 1
-	1920, //9 Cheat Manager Array 2
+	0, //8 Cheat Manager Array 1
+	0, //9 Cheat Manager Array 2
 	160*160*4, //10 current_cover_texture
 	128,//11 string buffer tokenurlParsing
 	128,//12 string buffer tokenurlParsing

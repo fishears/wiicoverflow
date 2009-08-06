@@ -93,6 +93,7 @@ bool download_txt(int id, int mode, struct discHdr *gameList)
             char url[100];
             char titleID[7];
             char imgpath[50];
+            char tmppath[50];
             struct block file;
             struct discHdr *header = &gameList[id];
             sprintf(titleID,"%s",header->id);
@@ -107,20 +108,22 @@ bool download_txt(int id, int mode, struct discHdr *gameList)
             }
             if(file.data != NULL) // if we got data back, save that sucka
             {
-                //sprintf(imgpath,"%s%s%s.txt",USBLOADER_PATH,TXT_PATH,titleID);
-                sprintf(imgpath,"%s/%s.txt", dynPath.dir_txtcodes, titleID);
-                 saveFile(imgpath, file);
+                sprintf(tmppath,"%s/temp.txt", dynPath.dir_txtcodes);
+                saveFile(tmppath, file); //save the download to a temp file
                 CFFree(file.data);
-                if(check_download(titleID))
+                if(check_download())
                 {
                     if(mode==0)
                         WindowPrompt(titleID, TX.downloadComplete, &okButton,0);
+                    sprintf(imgpath,"%s/%s.txt", dynPath.dir_txtcodes, titleID);
+                    rename(tmppath,imgpath); //temp file is good so rename for titleID
                     return true;
                 }
                 else
                 {
                     if(mode==0)
                         WindowPrompt(TX.error, TX.noTxtCodes, &okButton,0);
+                    remove(tmppath); //delete the temp file
                     return false;
                 }
             }
@@ -160,12 +163,11 @@ void manage_cheats(int id, struct discHdr *gameList)
 {
     //parses the txt file and allows user to enable/disable cheats
     //then turns enabled codes into a gct file to be used with ocarina
-    //TODO: editable codelines, viewable comment lines, heading lines... so much work!!!
-    //TODO: save a txt file containing a list of cheat lines enabled
-    //TODO: parse back in if found so enabled cheats are remembered
+    //TODO: editable codelines, viewable comment lines, heading lines...
 
     WPAD_Rumble(0,0); //sometimes rumble remain active
-    CHEAT cheat;
+    CHEAT *cheat;
+    cheat = (CHEAT*) GetSlotBufferAddress(20); //make use of a buffer slot
     char buffer[128]; //dummy line for tests
     char lastline[128]; //hold the game name (which also appears at end of file)
     char filename[10];
@@ -179,7 +181,7 @@ void manage_cheats(int id, struct discHdr *gameList)
     sprintf(filename, "%s.txt", titleID);
     chdir("/");
 //  sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
-	sprintf(path,"%s/",dynPath.dir_txtcodes);
+    sprintf(path,"%s/",dynPath.dir_txtcodes);
     chdir(path);
     FILE *txtfile=NULL;
     txtfile = fopen(filename, "r");
@@ -201,30 +203,30 @@ void manage_cheats(int id, struct discHdr *gameList)
             ret=is_code(buffer);
             if(ret == 0 && strlen(buffer)!=1) //if its not a code and not a blank line
             {
-                memset(cheat[i].title, 0, LINE_LENGTH);
-                sprintf(cheat[i].title,buffer); //write a title line
+                memset(cheat[i]->title, 0, LINE_LENGTH);
+                sprintf(cheat[i]->title,buffer); //write a title line
                 if(strlen(buffer)>LINE_LENGTH)
-                    cheat[i].title[LINE_LENGTH-1]='\0'; //get rid of the end of line
+                    cheat[i]->title[LINE_LENGTH-1]='\0'; //get rid of the end of line
                 else
-                    cheat[i].title[strlen(cheat[i].title)-1]='\0';
-                    //WindowPrompt("title1",cheat[i].title,&okButton,0);
-                cheat[i].codelines = 0; //set new title codelines to zero
-                cheat[i].editable = false;
+                    cheat[i]->title[strlen(cheat[i]->title)-1]='\0';
+                    //WindowPrompt("title1",cheat[i]->title,&okButton,0);
+                cheat[i]->codelines = 0; //set new title codelines to zero
+                cheat[i]->editable = false;
                 if(i>0) //only write codelines if this isn't the first title
                 {
-                    cheat[i-1].codelines = codecounter; //write the number of codelines for the previous title
-                    if(cheat[i-1].codelines<1) //if previous title has no codelines then it wasn't a title after all
+                    cheat[i-1]->codelines = codecounter; //write the number of codelines for the previous title
+                    if(cheat[i-1]->codelines<1) //if previous title has no codelines then it wasn't a title after all
                     {
                             i--;
-                            memset(cheat[i].title, 0, LINE_LENGTH);
-                            sprintf(cheat[i].title,buffer); //write THIS title over THAT title
+                            memset(cheat[i]->title, 0, LINE_LENGTH);
+                            sprintf(cheat[i]->title,buffer); //write THIS title over THAT title
                             if(strlen(buffer)>LINE_LENGTH)
-                                cheat[i].title[LINE_LENGTH-1]='\0'; //get rid of the end of line
+                                cheat[i]->title[LINE_LENGTH-1]='\0'; //get rid of the end of line
                             else
-                                cheat[i].title[strlen(cheat[i].title)-1]='\0';
-                                //WindowPrompt("title2",cheat[i].title,&okButton,0);
-                            cheat[i].codelines = 0; //set new title codelines to zero
-                            cheat[i].editable = false;
+                                cheat[i]->title[strlen(cheat[i]->title)-1]='\0';
+                                //WindowPrompt("title2",cheat[i]->title,&okButton,0);
+                            cheat[i]->codelines = 0; //set new title codelines to zero
+                            cheat[i]->editable = false;
                     }
                 }
                 codecounter = 0; //reset the codecounter
@@ -232,13 +234,13 @@ void manage_cheats(int id, struct discHdr *gameList)
             }
             else if(strlen(buffer)!=1)//it must be a code
             {
-                    sprintf(cheat[i-1].codes[codecounter],"%18s",buffer); //write the codeline
-                        //WindowPrompt("code",cheat[i-1].codes[codecounter],&okButton,0);
+                    sprintf(cheat[i-1]->codes[codecounter],"%18s",buffer); //write the codeline
+                        //WindowPrompt("code",cheat[i-1]->codes[codecounter],&okButton,0);
                     codecounter++; //we got another codeline
-                    if(cheat[i-1].editable==false && ret == 2)
-                        cheat[i-1].editable=true;
+                    if(cheat[i-1]->editable==false && ret == 2)
+                        cheat[i-1]->editable=true;
 
-                    cheat[i-1].codelines = codecounter; //write the number of codelines
+                    cheat[i-1]->codelines = codecounter; //write the number of codelines
                     lastiscode = true;
             }
             memset(buffer, 0, 128);
@@ -258,7 +260,7 @@ void manage_cheats(int id, struct discHdr *gameList)
         int maxlines = i;
         for(n=0;n<maxlines;n++) //set all lines to disabled
         {
-            cheat[n].enabled=false;
+            cheat[n]->enabled=false;
         }
         //get stored cheat status
         char ming[4];
@@ -277,7 +279,7 @@ void manage_cheats(int id, struct discHdr *gameList)
             {
                 fgets(ming,4,txtfile);
                 n=atoi(ming);
-                cheat[n].enabled =true;
+                cheat[n]->enabled =true;
             }
         }
         fclose(txtfile);
@@ -306,7 +308,7 @@ void manage_cheats(int id, struct discHdr *gameList)
             {
                 for(n=0;n<maxlines;n++)
                 {
-                   if(cheat[n].enabled==true  && tamper) //check for any enabled cheats to use, & have we changed any
+                   if(cheat[n]->enabled==true  && tamper) //check for any enabled cheats to use, & have we changed any
                    {
                     if(WindowPrompt(TX.ocarina, TX.useCodes, &yesButton, &noButton))
                        {
@@ -325,10 +327,10 @@ void manage_cheats(int id, struct discHdr *gameList)
                     buttcheck = n+((currpage-1)*LINES_PER_PAGE); //so that we check the right cheat status
                     if(Button_Select(&cheatEnabled[n], pointer.p_x, pointer.p_y) || Button_Select(&cheatDisabled[n], pointer.p_x, pointer.p_y))
                     {
-                        cheat[buttcheck].enabled = (cheat[buttcheck].enabled) ? false : true;
+                        cheat[buttcheck]->enabled = (cheat[buttcheck]->enabled) ? false : true;
                         tamper = true;
                     }
-                    else if(Button_Select(&cheatEditButton[n], pointer.p_x, pointer.p_y) && cheat[buttcheck].editable==true)
+                    else if(Button_Select(&cheatEditButton[n], pointer.p_x, pointer.p_y) && cheat[buttcheck]->editable==true)
                         edit_codes(cheat,buttcheck);
                 }
                  if(pages>1)
@@ -352,7 +354,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                 {
                    for(n=0;n<maxlines;n++)
                    {
-                      if(cheat[n].enabled==true && tamper) //check for any enabled cheats to use, and have we changed any
+                      if(cheat[n]->enabled==true && tamper) //check for any enabled cheats to use, and have we changed any
                       {
                            if(WindowPrompt(TX.ocarina, TX.useCodes,&yesButton,&noButton))
                             {
@@ -368,7 +370,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                     page[currpage].selectAll = page[currpage].selectAll ? false : true;
                     for(n=(currpage-1)*LINES_PER_PAGE;n<(currpage)*LINES_PER_PAGE && n<maxlines;n++)
                     {
-                        cheat[n].enabled = page[currpage].selectAll;
+                        cheat[n]->enabled = page[currpage].selectAll;
                         tamper = true;
                     }
                 }
@@ -404,14 +406,14 @@ void manage_cheats(int id, struct discHdr *gameList)
                 if(display < (maxlines)-1) //only show up to the number of lines available
                 {
                     memset(tTemp,0,LINE_LENGTH);
-                    sprintf(tTemp,"%s",cheat[display].title);
-                    //sprintf(tTemp,"%s:%d",cheat[display].title, cheat[display].codelines);
+                    sprintf(tTemp,"%s",cheat[display]->title);
+                    //sprintf(tTemp,"%s:%d",cheat[display]->title, cheat[display]->codelines);
                     
                     CFreeTypeGX_DrawText(ttf14pt, 135, 164+step, tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
                     step +=28;
-                    if(cheat[display].editable)
+                    if(cheat[display]->editable)
                         Button_Paint(&cheatEditButton[i]);
-                    if(cheat[display].enabled) //paint the appropriate cheat button state
+                    if(cheat[display]->enabled) //paint the appropriate cheat button state
                         Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],0);
                     else
                         Button_Toggle_Paint(&cheatEnabled[i],&cheatDisabled[i],1);
@@ -434,7 +436,7 @@ void manage_cheats(int id, struct discHdr *gameList)
             Button_Hover(&cheatDoneButton, pointer.p_x, pointer.p_y);
             for(n=0;n<=display;n++) //hover the selection buttons
             {
-                if(cheat[n+((currpage-1)*LINES_PER_PAGE)].editable)
+                if(cheat[n+((currpage-1)*LINES_PER_PAGE)]->editable)
                     Button_Hover(&cheatEditButton[n], pointer.p_x, pointer.p_y);
                 Button_Hover(&cheatEnabled[n], pointer.p_x, pointer.p_y);
                 Button_Hover(&cheatDisabled[n], pointer.p_x, pointer.p_y);
@@ -513,7 +515,7 @@ int is_code(char* line)
     return 0;
 }
 
-bool check_download(char* titleID)
+bool check_download()
 {
     //checks txt file to see if it's valid
     char buffer[128];
@@ -523,25 +525,29 @@ bool check_download(char* titleID)
     //sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
     sprintf(path,"%s/", dynPath.dir_txtcodes);
 	chdir(path);
-    sprintf(filename, "%s.txt", titleID);
+    //sprintf(filename, "%s.txt", titleID);
+    sprintf(filename, "temp.txt");
     FILE *txtfile;
     txtfile = fopen(filename, "r");
     fgets( buffer, sizeof buffer, txtfile );
     char* pch;
     char* msg = CFMalloc(strlen(buffer)*sizeof(char));
     sprintf(msg, buffer);
-    pch = strtok(msg, " ");
+    pch = strtok(msg, " |>\n");
     while(pch!=NULL)
     {
-        if(strcmp(pch,"<!DOCTYPE")==0) //test for a bad file
+        //WindowPrompt("DownCheck",pch,&okButton,0);
+        if(strcmp(pch,"<!DOCTYPE")==0 || strcmp(pch,"<HTML")==0) //test for a bad file
         {
-            remove(filename); //it's bad so delete it
+            //remove(filename); //it's bad so delete it
+            //WindowPrompt("DownCheck","BAD",&okButton,0);
 			CFFree(msg);
             return false;
         }
         else
         {
             fclose(txtfile); //it's good so close it
+            //WindowPrompt("DownCheck","GOOD",&okButton,0);
 			CFFree(msg);
             return true;
         }
@@ -551,7 +557,7 @@ bool check_download(char* titleID)
     return true;
 }
 
-void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id, int cheatCount)
+void create_gct(CHEAT *cheat,int cheatcount, struct discHdr *gameList, int id, int cheatCount)
 {
     //this is where we parse the selected cheat data into a gct file for ocarina
     //char to hex by brkirch
@@ -577,16 +583,16 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id, in
 
     for(i=0;i<cheatcount;i++) //main loop for checking each cheat
     {
-        if(cheat[i].enabled) //if this cheat is enabled...
+        if(cheat[i]->enabled) //if this cheat is enabled...
         {
-            for(n=0;n<cheat[i].codelines;n++) //sub loop for getting the enabled codes
+            for(n=0;n<cheat[i]->codelines;n++) //sub loop for getting the enabled codes
             {
-                if(cheat[i].codes[n] !=NULL)
+                if(cheat[i]->codes[n] !=NULL)
                 {
                     int x;
                     char* pch;
-                    char* msg = CFMalloc(strlen(cheat[i].codes[n])*sizeof(char));
-                    sprintf(msg, cheat[i].codes[n]);
+                    char* msg = CFMalloc(strlen(cheat[i]->codes[n])*sizeof(char));
+                    sprintf(msg, cheat[i]->codes[n]);
 
                     pch = strtok(msg, " |\r\n"); //chomp out the space from the middle
                     //while (pch != NULL)
@@ -642,7 +648,7 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id, in
 
     for(n=0;n<cheatCount;n++)
     {
-        if(cheat[n].enabled ==true)
+        if(cheat[n]->enabled ==true)
         {
             sprintf(ming,"%d\n",n);
             fputs(ming,txtfile);
@@ -654,7 +660,7 @@ void create_gct(CHEAT cheat,int cheatcount, struct discHdr *gameList, int id, in
 
 }
 
-void edit_codes(CHEAT cheat, int cheatNum)
+void edit_codes(CHEAT *cheat, int cheatNum)
 {
     //allows cheat lines with variables to be edited and saved for the current cheat
     //TODO add hex keyboard
@@ -662,15 +668,15 @@ void edit_codes(CHEAT cheat, int cheatNum)
     int pages=0;
     int i,n;
     char tTemp[128];
-    if(cheat[cheatNum].codelines<=LINES_PER_PAGE)
+    if(cheat[cheatNum]->codelines<=LINES_PER_PAGE)
         pages = 1;
     else
-        pages = (cheat[cheatNum].codelines/LINES_PER_PAGE)+1;
+        pages = (cheat[cheatNum]->codelines/LINES_PER_PAGE)+1;
 
     int ret,count=0;
-    for(i=0;i<cheat[cheatNum].codelines;i++)
+    for(i=0;i<cheat[cheatNum]->codelines;i++)
     {
-        ret=is_code(cheat[cheatNum].codes[i]);
+        ret=is_code(cheat[cheatNum]->codes[i]);
         if(ret==2) //line IS a cheat code and IS editable
         {
             Duplicate_Button(&varEditButton[i],varEditButton[0],108,148+(count*28)); //make the buttons
@@ -683,9 +689,9 @@ void edit_codes(CHEAT cheat, int cheatNum)
             GetWiimoteData();
             if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)) //b or home to exit
             {
-                for(i=0;i<cheat[cheatNum].codelines;i++)
+                for(i=0;i<cheat[cheatNum]->codelines;i++)
                 {
-                    ret=is_code(cheat[cheatNum].codes[i]);
+                    ret=is_code(cheat[cheatNum]->codes[i]);
                     if(ret==2) //line IS a cheat code and IS editable
                     {
                         FreeButtonResources(&varEditButton[i]);
@@ -700,11 +706,11 @@ void edit_codes(CHEAT cheat, int cheatNum)
                     pointer.p_x = 0;
                     return;
                 }
-                for(n=0;n<cheat[cheatNum].codelines;n++) //test the cheat buttons
+                for(n=0;n<cheat[cheatNum]->codelines;n++) //test the cheat buttons
                 {
-                    if(Button_Select(&varEditButton[n], pointer.p_x, pointer.p_y) && is_code(cheat[cheatNum].codes[n])==2)
+                    if(Button_Select(&varEditButton[n], pointer.p_x, pointer.p_y) && is_code(cheat[cheatNum]->codes[n])==2)
                     {
-                        sprintf(tTemp,"%s",cheat[cheatNum].codes[n]);
+                        sprintf(tTemp,"%s",cheat[cheatNum]->codes[n]);
                         tTemp[17]='\0';
                         edit_variables(tTemp);
                     }
@@ -747,20 +753,20 @@ void edit_codes(CHEAT cheat, int cheatNum)
             GRRLIB_Rectangle(72, 78, 496, 342, 0x737373FF, true);
             int step = 0;
             CFreeTypeGX_DrawText(ttf18pt, 320, 100, "Edit Variables", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-            CFreeTypeGX_DrawText(ttf14pt, 320, 136, cheat[cheatNum].title, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
+            CFreeTypeGX_DrawText(ttf14pt, 320, 136, cheat[cheatNum]->title, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
             if(pages>1)
             {
                 sprintf(tTemp,"%d/%d",currpage,pages); //report page x of xx
                 CFreeTypeGX_DrawText(ttf14pt, 520, 100, tTemp, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
             }
-            for(i=0;i<cheat[cheatNum].codelines;i++)
+            for(i=0;i<cheat[cheatNum]->codelines;i++)
             {
-                ret=is_code(cheat[cheatNum].codes[i]);
+                ret=is_code(cheat[cheatNum]->codes[i]);
                 if(ret==2) //line IS a cheat code and IS editable
                 {
                     Button_Paint(&varEditButton[i]);
                     Button_Hover(&varEditButton[i], pointer.p_x, pointer.p_y);
-                    sprintf(tTemp,"%s",cheat[cheatNum].codes[i]);
+                    sprintf(tTemp,"%s",cheat[cheatNum]->codes[i]);
                     tTemp[17]='\0';
                     CFreeTypeGX_DrawText(ttf14pt, 135, 164+step,tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
                     step +=28;
