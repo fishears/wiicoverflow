@@ -95,7 +95,7 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	4*4*4, //18 matte grey
 	4*4*4, //19 matte black
 	1*1024*1024, //20 Fishears
-	1*1024*1024, //21 Bob
+	0,//*1024*1024, //21 LoudBob
 	0};
 
 // returns the offset to the memory slot required

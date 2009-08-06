@@ -43,6 +43,9 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 		return false;
 	}
 
+
+	ClearAllocatedMemory();
+
 	int filesize;
 	fseek(file, 0, SEEK_END);
 	filesize = ftell(file);
@@ -52,7 +55,10 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 	if (dol_buffer == NULL)
 	{
 #ifdef DEBUG_FILE
+		char dbg[80];
 		DebTxt("Out of memory");
+		sprintf(dbg,"%s  %d", gameidbuffer6, filesize);
+		DebTxt(dbg);
 #endif
 		fclose(file);
 	    SDCard_deInit();
@@ -149,7 +155,7 @@ u32 load_dol_image(void *dolstart) {
 	return 0;
 }
 
-/*
+
 static int i;
 static int phase;
 
@@ -224,7 +230,7 @@ bool load_dol_image_modified(void **offset, u32 *pos, u32 *len)
 	return false;
 }
 
-u32 Load_Dol_from_disc(u32 doloffset, u8 videoSelected, u8 patchcountrystring, u8 vipatch)
+u32 Load_Dol_from_disc(u32 doloffset)
 {
 	int ret;
 	void *dol_header;
@@ -258,7 +264,7 @@ u32 Load_Dol_from_disc(u32 doloffset, u8 videoSelected, u8 patchcountrystring, u
 
             DCFlushRange(offset, len);
 
-			gamepatches(offset, len, videoSelected, patchcountrystring, vipatch);
+			gamepatches(offset, len );
 
             DCFlushRange(offset, len);
 
@@ -271,5 +277,5 @@ u32 Load_Dol_from_disc(u32 doloffset, u8 videoSelected, u8 patchcountrystring, u
 	return entrypoint;
 }
 
-*/
+
 
