@@ -263,6 +263,7 @@ typedef struct{
 	char bootDevice[10];
 	bool patchCountryStr;
 	int  alternatedol;
+	u32  alternatedoloffset;
 
 } s_self;
 

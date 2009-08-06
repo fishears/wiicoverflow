@@ -110,6 +110,7 @@ void initVars()
 #endif
 	self.patchCountryStr = false;
 	self.alternatedol = 0;
+	self.alternatedoloffset = 0;
 }
 
 
