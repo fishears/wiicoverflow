@@ -88,6 +88,7 @@ bool download_txt(int id, int mode, struct discHdr *gameList)
             char url[100];
             char titleID[7];
             char imgpath[50];
+            char tmppath[50];
             struct block file;
             struct discHdr *header = &gameList[id];
             sprintf(titleID,"%s",header->id);
@@ -102,19 +103,22 @@ bool download_txt(int id, int mode, struct discHdr *gameList)
             }
             if(file.data != NULL) // if we got data back, save that sucka
             {
-                sprintf(imgpath,"%s%s%s.txt",USBLOADER_PATH,TXT_PATH,titleID);
-                saveFile(imgpath, file);
+                sprintf(tmppath,"%s%stemp.txt",USBLOADER_PATH,TXT_PATH);
+                saveFile(tmppath, file); //save the download to a temp file
                 free(file.data);
-                if(check_download(titleID))
+                if(check_download())
                 {
                     if(mode==0)
                         WindowPrompt(titleID, TX.downloadComplete, &okButton,0);
+                    sprintf(imgpath,"%s%s%s.txt",USBLOADER_PATH,TXT_PATH,titleID);
+                    rename(tmppath,imgpath); //temp file is good so rename for titleID
                     return true;
                 }
                 else
                 {
                     if(mode==0)
                         WindowPrompt(TX.error, TX.noTxtCodes, &okButton,0);
+                    remove(tmppath); //delete the temp file
                     return false;
                 }
             }
@@ -505,7 +509,7 @@ int is_code(char* line)
     return 0;
 }
 
-bool check_download(char* titleID)
+bool check_download()
 {
     //checks txt file to see if it's valid
     char buffer[128];
@@ -513,26 +517,30 @@ bool check_download(char* titleID)
     char path [100];
     chdir("/");
     sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
-    chdir(path);
-    sprintf(filename, "%s.txt", titleID);
+	chdir(path);
+    //sprintf(filename, "%s.txt", titleID);
+    sprintf(filename, "temp.txt");
     FILE *txtfile;
     txtfile = fopen(filename, "r");
     fgets( buffer, sizeof buffer, txtfile );
     char* pch;
     char* msg = malloc(strlen(buffer)*sizeof(char));
     sprintf(msg, buffer);
-    pch = strtok(msg, " ");
+    pch = strtok(msg, " |>\n");
     while(pch!=NULL)
     {
-        if(strcmp(pch,"<!DOCTYPE")==0) //test for a bad file
+        //WindowPrompt("DownCheck",pch,&okButton,0);
+        if(strcmp(pch,"<!DOCTYPE")==0 || strcmp(pch,"<HTML")==0) //test for a bad file
         {
-            remove(filename); //it's bad so delete it
+            //remove(filename); //it's bad so delete it
+            //WindowPrompt("DownCheck","BAD",&okButton,0);
 			free(msg);
             return false;
         }
         else
         {
             fclose(txtfile); //it's good so close it
+            //WindowPrompt("DownCheck","GOOD",&okButton,0);
 			free(msg);
             return true;
         }
