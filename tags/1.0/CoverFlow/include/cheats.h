@@ -20,7 +20,7 @@ extern "C" {
 
     #define TXT_PATH "/txtcodes/"
     #define GCT_PATH "sd:/codes/"
-    #define CODESITE "http://www.usbgecko.com/codes/codes/"
+    #define CODESITE "http://geckocodes.org/codes/"
     #define LINES_PER_PAGE 9 //lines per page to display
     #define LINE_LENGTH 50 //max title line length
     #define MAX_CODES 30 //max number of cheat codes
@@ -45,7 +45,7 @@ typedef struct {
     void batch_download_txt(struct discHdr *gameList); // download txt cheat files for all games
     void manage_cheats(int id, struct discHdr *gameList); //main cheat manager gui and parser
     int is_code(char* line); //check if line is a code line & if it is an editable code line
-    bool check_download(char* titleID); //check downloaded txt cheat file for validity
+    bool check_download(); //check downloaded txt cheat file for validity
     void create_gct(CHEAT cheat, int cheatcount,struct discHdr *gameList, int id, int cheatCount); //parse selected cheats into a gct
     void edit_codes(CHEAT cheat, int cheatNum); //main code line editor gui
     void edit_variables(char* line); //lets you edit the variable values in a codeline
