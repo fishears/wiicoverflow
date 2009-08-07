@@ -22,7 +22,7 @@ extern "C" {
     #define TXT_PATH "/txtcodes/"
     #define GCT_PATH "sd:/codes/"
 
-    #define CODESITE "http://www.usbgecko.com/codes/codes/"
+    #define CODESITE "http://geckocodes.org/codes/"
     #define LINES_PER_PAGE 9 //lines per page to display
     #define LINE_LENGTH 50 //max title line length
     #define MAX_CODES 30 //max number of cheat codes
