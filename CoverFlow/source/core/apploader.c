@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "settings.h"
 #include "fstfile.h"
+#include "discbrowser.h"
 
 extern s_settings settings;
 extern s_self self;
@@ -255,7 +256,7 @@ s32 Apploader_Run(entry_point *entry)
 //												//
 // 	   (see autoSelectDol in discbrowser.c )	//
 //										 		//
-self.alternatedoloffset = 952;    // WSR		//
+//self.alternatedoloffset = 952;    // WSR		//
 //self.alternatedoloffset = 1957; // RedSteel	//
 //										 		//
 //////////////////////////////////////////////////
@@ -352,8 +353,13 @@ self.alternatedoloffset = 952;    // WSR		//
 	}
 	else if (self.alternatedol == 2) 
 	{
+		char gameidbuffer6[7];
+		memset(gameidbuffer6, 0, 7);
+		memcpy(gameidbuffer6, (char*)0x80000000, 6); 
 
-        FST_ENTRY *fst = (FST_ENTRY *)*(u32 *)0x80000038;
+        self.alternatedoloffset = autoSelectDol(gameidbuffer6);
+		
+		FST_ENTRY *fst = (FST_ENTRY *)*(u32 *)0x80000038;
 
         *entry = (entry_point) Load_Dol_from_disc(fst[self.alternatedoloffset].fileoffset);
 

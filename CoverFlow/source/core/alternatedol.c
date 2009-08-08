@@ -239,6 +239,9 @@ u32 Load_Dol_from_disc(u32 doloffset)
 	dol_header = memalign(32, sizeof(dolheader));
 	if (dol_header == NULL)
 	{
+#ifdef DEBUG_FILE
+		DebTxt("Out of memory");
+#endif		
 		return -1;
 	}
 
@@ -248,6 +251,9 @@ u32 Load_Dol_from_disc(u32 doloffset)
 
 	if (entrypoint == 0)
 	{
+#ifdef DEBUG_FILE
+		DebTxt("entrypoint = 0");
+#endif
 		free(dol_header);
 		return -1;
 	}
