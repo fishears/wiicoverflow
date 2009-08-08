@@ -211,7 +211,8 @@ int autoSelectDol(const char *id) {
     if (strcmp(id,"RMZX69") == 0) return 492;//from isostar
     if (strcmp(id,"RMZP69") == 0) return 492;//from isostar
     if (strcmp(id,"RMZE69") == 0) return 492;//starstremr
-
+	if (strcmp(id,"RM2X69") == 0) return 601;//dj_skual
+	
     if (strcmp(id,"REDP41") == 0) return 1957;//from isostar
     if (strcmp(id,"REDE41") == 0) return 1957;//starstremr
 
@@ -236,15 +237,11 @@ int autoSelectDol(const char *id) {
     if (strcmp(id,"RVUP8P") == 0) return 16426;//from isostar
     if (strcmp(id,"RVUE8P") == 0) return 16405;//from isostar
 
-    if (strcmp(id,"RJ8P64") == 0) return 8;//from isostar
-
     if (strcmp(id,"RHDP8P") == 0) return 149;//from isostar
     if (strcmp(id,"RHDE8P") == 0) return 149;//starstremr
 
     if (strcmp(id,"RJ8P64") == 0) return 8;//from isostar
     if (strcmp(id,"RJ8E64") == 0) return 8;//starstremr
-
-    if (strcmp(id,"RHDP8P") == 0) return 149;//from isostar
 
     if (strcmp(id,"RMDP69") == 0) return 39;//from isostar
 
@@ -253,7 +250,7 @@ int autoSelectDol(const char *id) {
 
     if (strcmp(id,"RPYP9B") == 0) return 12490;//from isostar
 
-    if (strcmp(id,"RM2X69") == 0)return 601;//dj_skual
+    
 
 
 
