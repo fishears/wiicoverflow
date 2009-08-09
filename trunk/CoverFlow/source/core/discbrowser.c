@@ -1,3 +1,62 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+
+
+int autoSelectDol(const char *id) 
+{
+    if (strcmp(id,"RF8E69") == 0) return 439;
+    if (strcmp(id,"RF8P69") == 0) return 463;
+    if (strcmp(id,"RF8X69") == 0) return 464;
+
+    if (strcmp(id,"RZTP01") == 0) return 952;
+    if (strcmp(id,"RZTE01") == 0) return 674;
+
+    if (strcmp(id,"RMZX69") == 0) return 492;
+    if (strcmp(id,"RMZP69") == 0) return 492;
+    if (strcmp(id,"RMZE69") == 0) return 492;
+	if (strcmp(id,"RM2X69") == 0) return 601;
+	
+    if (strcmp(id,"REDP41") == 0) return 1957;
+    if (strcmp(id,"REDE41") == 0) return 1957;
+
+    if (strcmp(id,"RSXP69") == 0) return 337;
+    if (strcmp(id,"RSXE69") == 0) return 337;
+
+    if (strcmp(id,"RNBX69") == 0) return 964;
+
+    if (strcmp(id,"RNFP69") == 0) return 1079;
+
+    if (strcmp(id,"RMLP7U") == 0) return 56;
+
+    if (strcmp(id,"RKMP5D") == 0) return 290;
+    if (strcmp(id,"RKME5D") == 0) return 290;
+
+    if (strcmp(id,"R5TP69") == 0) return 1493;
+    if (strcmp(id,"R5TE69") == 0) return 1493;
+
+    if (strcmp(id,"R9OP69") == 0) return 1991;
+    if (strcmp(id,"R9OE69") == 0) return 1973;
+
+    if (strcmp(id,"RVUP8P") == 0) return 16426;
+    if (strcmp(id,"RVUE8P") == 0) return 16405;
+
+    if (strcmp(id,"RHDP8P") == 0) return 149;
+    if (strcmp(id,"RHDE8P") == 0) return 149;
+
+    if (strcmp(id,"RJ8P64") == 0) return 8;
+    if (strcmp(id,"RJ8E64") == 0) return 8;
+
+    if (strcmp(id,"RMDP69") == 0) return 39;
+
+    if (strcmp(id,"RBOP69") == 0) return 657;
+    if (strcmp(id,"RBOE69") == 0) return 675;
+
+    if (strcmp(id,"RPYP9B") == 0) return 12490;
+    
+	return -1;
+}
 
 
 /*
@@ -197,98 +256,5 @@ int DiscBrowse(struct discHdr * header) {
     return ret;
 }
 */
-
-int autoSelectDol(const char *id) {
-    //still not done//
-    //////////ID6/////////////////
-    if (strcmp(id,"RF8E69") == 0) return 439;//from isostar
-    if (strcmp(id,"RF8P69") == 0) return 463;//from isostar
-    if (strcmp(id,"RF8X69") == 0) return 464;//from isostar
-
-    if (strcmp(id,"RZTP01") == 0) return 952;//from isostar
-    if (strcmp(id,"RZTE01") == 0) return 674;//from starstremr
-
-    if (strcmp(id,"RMZX69") == 0) return 492;//from isostar
-    if (strcmp(id,"RMZP69") == 0) return 492;//from isostar
-    if (strcmp(id,"RMZE69") == 0) return 492;//starstremr
-	if (strcmp(id,"RM2X69") == 0) return 601;//dj_skual
-	
-    if (strcmp(id,"REDP41") == 0) return 1957;//from isostar
-    if (strcmp(id,"REDE41") == 0) return 1957;//starstremr
-
-    if (strcmp(id,"RSXP69") == 0) return 337;//from isostar
-    if (strcmp(id,"RSXE69") == 0) return 337;//starstremr
-
-    if (strcmp(id,"RNBX69") == 0) return 964;//from isostar
-
-    if (strcmp(id,"RNFP69") == 0) return 1079;//from isostar
-
-    if (strcmp(id,"RMLP7U") == 0) return 56;//from isostar
-
-    if (strcmp(id,"RKMP5D") == 0) return 290;//from isostar
-    if (strcmp(id,"RKME5D") == 0) return 290;//starstremr
-
-    if (strcmp(id,"R5TP69") == 0) return 1493;//from isostar
-    if (strcmp(id,"R5TE69") == 0) return 1493;//starstremr
-
-    if (strcmp(id,"R9OP69") == 0) return 1991;//from isostar
-    if (strcmp(id,"R9OE69") == 0) return 1973;//starstremr
-
-    if (strcmp(id,"RVUP8P") == 0) return 16426;//from isostar
-    if (strcmp(id,"RVUE8P") == 0) return 16405;//from isostar
-
-    if (strcmp(id,"RHDP8P") == 0) return 149;//from isostar
-    if (strcmp(id,"RHDE8P") == 0) return 149;//starstremr
-
-    if (strcmp(id,"RJ8P64") == 0) return 8;//from isostar
-    if (strcmp(id,"RJ8E64") == 0) return 8;//starstremr
-
-    if (strcmp(id,"RMDP69") == 0) return 39;//from isostar
-
-    if (strcmp(id,"RBOP69") == 0) return 657;//from isostar
-    if (strcmp(id,"RBOE69") == 0) return 675;//starstremr
-
-    if (strcmp(id,"RPYP9B") == 0) return 12490;//from isostar
-
-    
-
-
-
-    /*
-
-     Tiger Woods10 R9OP69 1991
-     Virtual Tennis 2009 RVUP8P 16426
-     Fate of Atlantis"Indianer Jones" RJ8P64 8
-     Madden NFL07 RMDP69 39
-     Boogie RBOP69 657
-     Pangya! Golf with Sryle RPYP9B 12490
-    Grand Slam R5TP69 1493
-     Madden NFL08 RNFP69 1079
-
-     rboe69 = boogie ntsc = (675)
-
-     601 rm2x69
-
-      RZTE01 = WSR = 674
-
-     Fifa08 RF8P69 463
-     Fifa08 RF8X69 464
-     Wii Sports Resort RZTP01 952
-     Medal of Honor Heroes RMZX69 492
-     Medal of Honor Heroes RMZP69 492
-     Redsteel REDP41 1957
-     SSX RSXP69 337
-     NBA08 RNBX69 964
-     Metal Slug Anthology RMLP7U 56
-     Mortal Kombat RKMP5D 290
-     House of Dead 2+3 RHDP8P 149
-    	Metroid Prime 1 and/or 2? listed on the alt dol list but not on lustar's site
-    */
-
-    //if (strcmp(id,"") == 0) return ; //blank line for more dols
-
-    return -1;
-}
-
 
 

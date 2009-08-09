@@ -1315,7 +1315,7 @@ void Game_Settings_Menu_Show()
 		CFreeTypeGX_DrawText(ttf16pt, 503, 319 + YOS_GSDB, vidmodes[gameSetting.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 355 + YOS_GSDB, TX.gameFix, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 503, 355 + YOS_GSDB, gFixes[gameSetting.fixtype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-		CFreeTypeGX_DrawText(ttf16pt, 355, 390 + YOS_GSDB, "Alternative DOL:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+		CFreeTypeGX_DrawText(ttf16pt, 355, 390 + YOS_GSDB, TX.altDOL, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 503, 390 + YOS_GSDB, gAltDol[gameSetting.altdoltype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 
 		// Draw the buttons
