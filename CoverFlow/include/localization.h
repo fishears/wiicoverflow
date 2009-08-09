@@ -227,6 +227,14 @@ struct LANGUAGE
 	char noFixes[15];				//186
 	char gameFix[25];				//187
 	char Hungarian[15];				//188
+	char altDOL[25];				//189
+	char altDOL_none[20];			//190
+	char altDOL_SD[20];				//191
+	char altDOL_Image[20];			//192
+	char devID[20];					//193
+	char loaderVer[20];				//194
+	char iosVer[20]; 				//195
+	
 // Buttons	
 	char addB[15];					//B01
 	char deleteB[15];				//B02

@@ -26,6 +26,7 @@ struct LANGUAGE TX;
 extern char	languages[11][30];
 extern char	vidmodes[6][30];
 extern char gFixes[CFG_FIX_COUNT][16];
+extern char gAltDol[CFG_ALTDOL_COUNT][20];
 
 char selLanguages[21][7]=
 {
@@ -270,6 +271,16 @@ void languageDefault()
 	snprintf(gFixes[0],  sizeof(TX.noFixes), "%s", TX.noFixes);
 	snprintf(TX.gameFix, sizeof(TX.gameFix), "Game Fix:"); 
 	snprintf(TX.Hungarian, sizeof(TX.Hungarian), "Hungarian"); 
+	snprintf(TX.altDOL, sizeof(TX.altDOL), "Alternative DOL:"); 
+	snprintf(TX.altDOL_none, sizeof(TX.altDOL_none), "none"); 
+	snprintf(gAltDol[0],  sizeof(TX.altDOL_none), "%s", TX.altDOL_none);
+	snprintf(TX.altDOL_SD, sizeof(TX.altDOL_SD), "from SD: or USB:"); 
+	snprintf(gAltDol[1],  sizeof(TX.altDOL_SD), "%s", TX.altDOL_SD);
+	snprintf(TX.altDOL_Image, sizeof(TX.altDOL_Image), "from Image"); 
+	snprintf(gAltDol[2],  sizeof(TX.altDOL_Image), "%s", TX.altDOL_Image);
+	snprintf(TX.devID, sizeof(TX.devID), "DeviceID:"); 
+	snprintf(TX.loaderVer, sizeof(TX.loaderVer), "Version:"); 
+	snprintf(TX.iosVer, sizeof(TX.iosVer), "IOS Version:"); 
 
 // Buttons	
 
@@ -1078,6 +1089,39 @@ void languageSet(char *name, char *val)
 		strcopy(TX.Hungarian, val, sizeof(TX.Hungarian));
 		return;
 	}	
+	if (strcmp(name, "altDOL") == 0) {
+		strcopy(TX.altDOL, val, sizeof(TX.altDOL));
+		return;
+	}	
+	if (strcmp(name, "altDOL_none") == 0) {
+		strcopy(TX.altDOL_none, val, sizeof(TX.altDOL_none));
+		snprintf(gAltDol[0], sizeof(TX.altDOL_none), "%s", TX.altDOL_none);
+		return;
+	}	
+	if (strcmp(name, "altDOL_SD") == 0) {
+		strcopy(TX.altDOL_SD, val, sizeof(TX.altDOL_SD));
+		snprintf(gAltDol[1], sizeof(TX.altDOL_SD), "%s", TX.altDOL_SD);
+		return;
+	}	
+	if (strcmp(name, "altDOL_Image") == 0) {
+		strcopy(TX.altDOL_Image, val, sizeof(TX.altDOL_Image));
+		snprintf(gAltDol[2], sizeof(TX.altDOL_Image), "%s", TX.altDOL_Image);
+		return;
+	}	
+	if (strcmp(name, "devID") == 0) {
+		strcopy(TX.devID, val, sizeof(TX.devID));
+		return;
+	}	
+	if (strcmp(name, "loaderVer") == 0) {
+		strcopy(TX.loaderVer, val, sizeof(TX.loaderVer));
+		return;
+	}	
+	if (strcmp(name, "iosVer") == 0) {
+		strcopy(TX.iosVer, val, sizeof(TX.iosVer));
+		return;
+	}	
+
+
 
 //////////////// Buttons //////////////
 

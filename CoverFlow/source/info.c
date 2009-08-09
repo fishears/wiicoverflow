@@ -1,4 +1,5 @@
 #include "info.h"
+#include "localization.h"
 
 #define INFOPAGES 2
 
@@ -46,15 +47,15 @@ void showInfoWindow(){
 				y = 115;
 				sp = 0;
 
-				sprintf(temp, "DeviceID: %u", self.deviceID);
+				sprintf(temp, "%s %u", TX.devID, self.deviceID);
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, temp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 				sp+=step;
 
-				sprintf(temp, "Version: %s (r%d)", RELEASE, SVN_VERSION);
+				sprintf(temp, "%s %s (r%d)", TX.loaderVer, RELEASE, SVN_VERSION);
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, temp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 				sp+=step;
 				
-				sprintf(temp, "IOS Version: %d (rev%d)", IOS_GetVersion(), IOS_GetRevision());
+				sprintf(temp, "%s %d (rev%d)",TX.iosVer, IOS_GetVersion(), IOS_GetRevision());
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, temp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 				sp+=step;
 				
@@ -122,7 +123,7 @@ void showInfoWindow(){
 				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.dir_txtcodes, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 				sp+=step2;
 
-				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "alt.Dol:", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "alt.DOL", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.dir_altdol, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 			}
 /*
