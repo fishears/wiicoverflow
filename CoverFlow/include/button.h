@@ -60,6 +60,12 @@ void FreeButton3Resources(struct Button3 *btn);
 #endif
 
 
+#ifdef OSK
+void Button_Key_Init(Button * new_button, const unsigned char normal_img[], int x, int y, char *button_label);
+void Duplicate_Button_Key(Button * destination_button, Button btn, int x, int y, char *button_label);
+void Button_Key_Paint(struct Button* btn);
+#endif
+
 
 // Button Init methods
 void Button_Init(Button * new_button, const unsigned char normal_img[], const unsigned char hover_img[], int x, int y);
