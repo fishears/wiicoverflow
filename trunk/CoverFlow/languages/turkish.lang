@@ -186,6 +186,13 @@ spaceUsed = Kullanılan alan %.1f%%
 gameFix = Oyun Düzeltmesi:
 noFixes = yok
 Hungarian = Macarca
+altDOL = Alternatif DOL:
+altDOL_none = hiçbiri
+altDOL_SD = SD: veya USB:
+altDOL_Image = İmaj Dosyasından
+devID = AygıtID:
+loaderVer = Versiyon:
+iosVer = IOS Versiyon:
 
 ############
 # Butonlar #

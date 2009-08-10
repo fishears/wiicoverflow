@@ -186,6 +186,13 @@ spaceUsed = Utilizzo HD: %.1f%%
 gameFix = Fix gioco:
 noFixes = nessuno
 Hungarian = Ungherese
+altDOL = DOL Alternativo:
+altDOL_none = nessuno
+altDOL_SD = da SD: o USB:
+altDOL_Image = dalla Immagine
+devID = ID Periferica:
+loaderVer = Versione:
+iosVer = Versione IOS:
 
 ###########
 # Buttons #
