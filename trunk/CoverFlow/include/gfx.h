@@ -57,7 +57,6 @@ extern const u8 menu_button_over_png[];					// Large menu hover
 extern const u8 menu_header_png[];						// Header bar for settings screens
 extern const u8 menu_logo_png[];						// CoverFloader logo
 extern const u8 menu_panel_png[];						// Settings screen background panel (TODO replace with GRRLIB rectangle)
-extern const u8 menu_loading_png[];					    // blue circle when loading
 
 extern const u8 button_left_png[];						// Left side of </> combo button
 extern const u8 button_left_over_png[];					// Left side hover
@@ -93,20 +92,32 @@ extern const u8 button_char_down_over_png[];
 extern const u8 button_round_news_png[];
 extern const u8 button_round_news_over_png[];
 extern const u8 button_round_news_blue_png[];
-
-GRRLIB_texImg button_round_news_texture;
-GRRLIB_texImg button_round_news_over_texture;
-GRRLIB_texImg button_round_news_blue_texture;
-
 Button3 newsButton;
 #endif
+
+
+#ifdef OSK
+extern const u8 kb_key_png[];
+extern const u8 kb_function_png[];
+extern const u8 kb_space_png[];
+extern const u8 kb_textbox_png[];
+//GRRLIB_texImg kb_key_texture;
+//GRRLIB_texImg kb_function_texture;
+//GRRLIB_texImg kb_space_texture;
+GRRLIB_texImg kb_textbox_texture;
+Button kb_key[4][11];
+Button kb_function[4];
+Button kb_space;
+Button kb_OK;
+Button kb_ESC;
+#endif
+
 
 GRRLIB_texImg menu_button_texture;
 GRRLIB_texImg menu_button_over_texture;
 GRRLIB_texImg menu_header_texture;
 GRRLIB_texImg menu_header_vflip_texture;
 GRRLIB_texImg menu_logo_texture;
-GRRLIB_texImg menu_loading_texture;
 GRRLIB_texImg dialog_box_titlebar_texture;
 GRRLIB_texImg dialog_box_titlebar_long_texture;
 GRRLIB_texImg dialog_box_icon_texture;
@@ -117,7 +128,8 @@ Button menuSettingsButton;
 Button menuGraphicsButton;
 Button menuLanguagesButton;
 Button menuLogoButton;
-Button menuLoadingButton;
+
+/*
 GRRLIB_texImg flag_br_texture; // Brazil flag
 GRRLIB_texImg flag_da_texture; // Netherlands Flag
 GRRLIB_texImg flag_de_texture; // Germany Flag
@@ -131,8 +143,9 @@ GRRLIB_texImg flag_fi_texture; // Finnland Flag
 GRRLIB_texImg flag_MyLang_texture; // MyLang Flag
 GRRLIB_texImg flag_dk_texture; // Denmark Flag
 GRRLIB_texImg flag_hu_texture; // Hungary Flag
-GRRLIB_texImg button_round_info_texture;
-GRRLIB_texImg button_round_info_over_texture;
+*/
+//GRRLIB_texImg button_round_info_texture;
+//GRRLIB_texImg button_round_info_over_texture;
 
 
 Button flagBRButton;

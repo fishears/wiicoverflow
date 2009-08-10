@@ -13,6 +13,7 @@
 #include "coverflow.h"
 #include "filter.h"
 #include "TrackedMemoryManager.h"
+#include "OSK.h"
 	
 extern int COVER_COUNT;
 #ifdef TEST_MODE
@@ -472,6 +473,7 @@ int main( int argc, char **argv )
 				self.scrolling = true;
 			}
 			else if((!settings.parentalLock) && Button_Select(&infoButton, pointer.p_x, pointer.p_y)){
+				
 				showInfoWindow();
 			}
 #ifdef NEWS_READER			
@@ -892,6 +894,11 @@ int main( int argc, char **argv )
 		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_PLUS))
 		{
 			MemInfo();
+		}
+		
+		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_MINUS))
+		{
+			showOSK();
 		}
 			
 		// Check for parental lock button combo A + B + 1 + 2

@@ -13,6 +13,8 @@
 #include "soundmanager.h"
 #include "TrackedMemoryManager.h"
 
+
+
 void Button_Flag_Init(Button * new_button, const unsigned char normal_img[], int x, int y, char *button_label)
 {
 	LoadTextureToBuffer(&(new_button->texture),normal_img);
@@ -57,6 +59,21 @@ void Button_Init(Button * new_button, const unsigned char normal_img[], const un
 	new_button->show_reflection = false;
 }
 
+#ifdef OSK
+void Button_Key_Init(Button * new_button, const unsigned char normal_img[], int x, int y, char *button_label)
+{
+	LoadTextureToBuffer(&(new_button->texture),normal_img);
+	new_button->toFreeTexture=false;
+	new_button->toFreeHoverTexture=false;
+	new_button->x = x;
+	new_button->y = y;
+	new_button->hovering = false;
+	new_button->selected = false;
+	new_button->show_reflection = false;
+	strcpy(new_button->ttf_label, button_label);
+}
+#endif
+
 void Duplicate_Button(Button * destination_button, Button btn, int x, int y)
 {
 	destination_button->texture = btn.texture;
@@ -82,6 +99,21 @@ void Duplicate_Button_TTF(Button * destination_button, Button btn, int x, int y,
 	destination_button->show_reflection = false;
 	strcpy(destination_button->ttf_label, button_label);
 }
+
+#ifdef OSK
+void Duplicate_Button_Key(Button * destination_button, Button btn, int x, int y, char *button_label)
+{
+	destination_button->texture = btn.texture;
+	destination_button->toFreeTexture=false;
+	destination_button->toFreeHoverTexture=false;
+	destination_button->x = x;
+	destination_button->y = y;
+	destination_button->hovering = false;
+	destination_button->selected = false;
+	destination_button->show_reflection = false;
+	strcpy(destination_button->ttf_label, button_label);
+}
+#endif
 
 bool Button_Hover(struct Button* btn, int x, int y)
 {
@@ -133,6 +165,31 @@ void Button_Flag_Paint(struct Button* btn)
 		GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
 
 }
+
+#ifdef OSK
+void Button_Key_Paint(struct Button* btn)
+{
+	if(btn == 0)
+		return;
+
+	if(btn->hovering || btn->selected)
+	{
+		GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1.2, 1.2, 0xFFFFFFFF); // Adjust the scale here to make the 'bubble up' 
+		if (strlen(btn->ttf_label) > 0)
+		{
+			CFreeTypeGX_DrawText(ttf18pt, (btn->x + (btn->texture.w / 2)), (btn->y + (btn->texture.h / 2)), btn->ttf_label, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+		}
+	}
+	else
+	{	
+		GRRLIB_DrawImg(btn->x, btn->y, btn->texture, 0, 1, 1, 0xFFFFFFFF);
+		if (strlen(btn->ttf_label) > 0)
+		{
+			CFreeTypeGX_DrawText(ttf18pt, (btn->x + (btn->texture.w / 2)), (btn->y + (btn->texture.h / 2)), btn->ttf_label, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+		}
+	}
+}
+#endif
 
 void Button_TTF_Paint(struct Button* btn)
 {

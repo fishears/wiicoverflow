@@ -62,13 +62,13 @@ void LoadTextures()
 	GRRLIB_CreateEmptyTexture(&menu_header_vflip_texture,menu_header_texture.w, menu_header_texture.h);
 	GRRLIB_BMFX_FlipV(menu_header_texture, menu_header_vflip_texture);
 	GRRLIB_LoadTexturePNG(&menu_logo_texture,menu_logo_png);
-	GRRLIB_LoadTexturePNG(&menu_loading_texture,menu_loading_png);
 	GRRLIB_LoadTexturePNG(&dialog_box_titlebar_texture,dialog_box_titlebar_png);
 	GRRLIB_LoadTexturePNG(&dialog_box_titlebar_long_texture,dialog_box_titlebar_long_png);
 	GRRLIB_LoadTexturePNG(&dialog_box_icon_texture,dialog_box_icon_png);
 	BufferImageToSlot(&menu_graphics_wireframe_texture,menu_graphics_wireframe_png,14); // read notes for MEM2_EXTENT before removing
 	GRRLIB_LoadTexturePNG(&menu_graphics_box1_texture,menu_graphics_box1_png);
 	GRRLIB_LoadTexturePNG(&menu_graphics_box2_texture,menu_graphics_box2_png);
+/*
 	GRRLIB_LoadTexturePNG(&flag_br_texture,flag_br_png);
 	GRRLIB_LoadTexturePNG(&flag_da_texture,flag_da_png);
 	GRRLIB_LoadTexturePNG(&flag_de_texture,flag_de_png);
@@ -82,9 +82,15 @@ void LoadTextures()
 	GRRLIB_LoadTexturePNG(&flag_MyLang_texture,flag_MyLang_png);
 	GRRLIB_LoadTexturePNG(&flag_dk_texture,flag_dk_png);
 	GRRLIB_LoadTexturePNG(&flag_hu_texture,flag_hu_png);
+*/	
 	GRRLIB_LoadTexturePNG(&hdspace_texture,hdspace_png);
-	GRRLIB_LoadTexturePNG(&button_round_info_texture,button_round_info_png);
-	GRRLIB_LoadTexturePNG(&button_round_info_over_texture,button_round_info_over_png);	
+//	GRRLIB_LoadTexturePNG(&button_round_info_texture,button_round_info_png);
+//	GRRLIB_LoadTexturePNG(&button_round_info_over_texture,button_round_info_over_png);	
+
+	#ifdef OSK
+	GRRLIB_LoadTexturePNG(&kb_textbox_texture, kb_textbox_png);
+	#endif
+
 }
 
 void DrawBufferedCover(int i, float loc, float zpos, float angle, float falloff)
@@ -295,7 +301,6 @@ void Init_Buttons()
     Duplicate_Button(&cheatoffButton, musicOffButton, 198,367);
     Duplicate_Button(&hookdownButton, viddownButton, 422,367);
     Duplicate_Button(&hookupButton, vidupButton, 450,367);
-	Button_Init(&menuLoadingButton, menu_loading_png, menu_loading_png, 310, 414);
     Duplicate_Button_TTF(&cheatDownButton, okButton,310,367,TX.downloadB);
 	// Graphic Settings Panel
     Duplicate_Button(&falloffdownButton, viddownButton, 99,123);
@@ -382,6 +387,15 @@ void Init_Buttons()
     Button_Init(&charUpButton[0],button_char_up_png,button_char_up_over_png,100,100);
     Button_Init(&charDownButton[0],button_char_down_png,button_char_down_over_png,100,100);
   #endif
+
+  #ifdef OSK
+	Button_Key_Init(&kb_key[0][0], kb_key_png, 80, 80, "");
+	Button_Key_Init(&kb_function[0], kb_function_png, 80, 80, "");
+	Button_Key_Init(&kb_space, kb_space_png, 220, 4*42+150, " ");
+	Duplicate_Button_TTF(&kb_OK,  okButton, 80, 80, "OK");
+	Duplicate_Button_TTF(&kb_ESC, okButton, 80, 80, "ESC");
+  #endif
+
 } // End Init_Buttons();
 
 void DrawSlider(int yPos, int theme_id)
@@ -1665,13 +1679,13 @@ void freeResources(){
 	CFFree(menu_header_texture.data);
 	CFFree(menu_header_vflip_texture.data);
 	CFFree(menu_logo_texture.data);
-	CFFree(menu_loading_texture.data);
 	CFFree(dialog_box_titlebar_texture.data);
 	CFFree(dialog_box_titlebar_long_texture.data);
 	CFFree(dialog_box_icon_texture.data);
 //	CFFree(menu_graphics_wireframe_texture.data);
 	CFFree(menu_graphics_box1_texture.data);
 	CFFree(menu_graphics_box2_texture.data);
+/*
 	CFFree(flag_br_texture.data);
 	CFFree(flag_da_texture.data);
 	CFFree(flag_de_texture.data);
@@ -1685,6 +1699,7 @@ void freeResources(){
 	CFFree(flag_fi_texture.data);
 	CFFree(flag_hu_texture.data);
 	CFFree(flag_MyLang_texture.data);
+*/
 	//if (coverLoaded)free(current_cover_texture.data); // now in mem2
 	CFFree(hdspace_texture.data);
 	
@@ -1742,7 +1757,6 @@ void freeResources(){
     FreeButtonResources(&cheatoffButton);
     FreeButtonResources(&hookdownButton);
     FreeButtonResources(&hookupButton);
-	FreeButtonResources(&menuLoadingButton);
 	// Graphic Settings Panel
     FreeButtonResources(&falloffdownButton);
     FreeButtonResources(&falloffupButton);
@@ -1821,6 +1835,21 @@ void freeResources(){
     FreeButtonResources(&deselectAllButton);
     FreeButtonResources(&cheatDownButton);
  #endif
+
+#ifdef OSK
+	int i, j;
+	for( i=0; i<4; i++)
+	{
+		for( j=0; j<11; j++)
+		{
+			FreeButtonResources(&kb_key[i][j]);
+		}
+		FreeButtonResources(&kb_function[i]);	
+	}
+	FreeButtonResources(&kb_space);
+	FreeButtonResources(&kb_OK);
+	FreeButtonResources(&kb_ESC);
+#endif
 
  //  CFreeTypeGX_delete function make the games don't boot, removed temporary (it wass addedd in r533)
 
