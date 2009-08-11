@@ -112,6 +112,10 @@ void initVars()
 	self.patchCountryStr = false;
 	self.alternatedol = 0;
 	self.alternatedoloffset = 0;
+#ifdef OSK
+	strcpy(self.kb_buffer, "" );
+	self.kb_OK = false;
+#endif
 }
 
 
@@ -898,7 +902,10 @@ int main( int argc, char **argv )
 		
 		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_MINUS))
 		{
-			showOSK();
+#ifdef OSK
+			sprintf(self.kb_buffer, "This is only for testing...");
+			showOSK("Test KeyBoard");
+#endif
 		}
 			
 		// Check for parental lock button combo A + B + 1 + 2
