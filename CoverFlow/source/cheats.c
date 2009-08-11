@@ -7,8 +7,8 @@
  *  Licensed under the terms of the GNU GPL, version 2
  *  http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  *
- *  This file contains the main() entry point to the application
- *  Build configuration settings can be found in "coverflow.h"
+ * This file together with cheats.h contains all the code for the Cheat Manager
+ *
  */
 #include "coverflow.h"
 #include "cheats.h"
@@ -205,6 +205,7 @@ void manage_cheats(int id, struct discHdr *gameList)
             {
                 memset(cheat[i]->title, 0, LINE_LENGTH);
                 sprintf(cheat[i]->title,buffer); //write a title line
+                lastiscode = false;
                 if(strlen(buffer)>LINE_LENGTH)
                     cheat[i]->title[LINE_LENGTH-1]='\0'; //get rid of the end of line
                 else
@@ -218,6 +219,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                     if(cheat[i-1]->codelines<1) //if previous title has no codelines then it wasn't a title after all
                     {
                             i--;
+                            lastiscode = false;
                             memset(cheat[i]->title, 0, LINE_LENGTH);
                             sprintf(cheat[i]->title,buffer); //write THIS title over THAT title
                             if(strlen(buffer)>LINE_LENGTH)
@@ -247,9 +249,9 @@ void manage_cheats(int id, struct discHdr *gameList)
         }
         memset(buffer, 0, 128);
         memset(&lastline,0,128);
-        if(lastiscode) //we reached feof but the last line was a code NOT the game title
+        if(lastiscode==false) //we reached feof but the last line was a code NOT the game title
         {
-            i++;
+            i--;
         }
 
         char tTemp[LINE_LENGTH];
@@ -292,6 +294,8 @@ void manage_cheats(int id, struct discHdr *gameList)
         fclose(txtfile);
         if(maxlines<=LINES_PER_PAGE)
             pages = 1;
+        else if(maxlines % LINES_PER_PAGE == 0)
+            pages = (maxlines/LINES_PER_PAGE);
         else
             pages = (maxlines/LINES_PER_PAGE)+1;
         PAGE page[pages]; //initialize the pages
@@ -403,7 +407,7 @@ void manage_cheats(int id, struct discHdr *gameList)
             for(i=0;i<LINES_PER_PAGE;i++)
             {
                 display = i+((currpage-1)*LINES_PER_PAGE);
-                if(display < (maxlines)-1) //only show up to the number of lines available
+                if(display < (maxlines)) //only show up to the number of lines available
                 {
                     memset(tTemp,0,LINE_LENGTH);
                     sprintf(tTemp,"%s",cheat[display]->title);
@@ -670,6 +674,8 @@ void edit_codes(CHEAT *cheat, int cheatNum)
     char tTemp[128];
     if(cheat[cheatNum]->codelines<=LINES_PER_PAGE)
         pages = 1;
+    else if(cheat[cheatNum]->codelines % LINES_PER_PAGE == 0)
+        pages = (cheat[cheatNum]->codelines/LINES_PER_PAGE);
     else
         pages = (cheat[cheatNum]->codelines/LINES_PER_PAGE)+1;
 
