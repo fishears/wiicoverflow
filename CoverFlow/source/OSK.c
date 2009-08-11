@@ -13,19 +13,7 @@
 extern s_pointer pointer;
 extern s_self self;
 
-int showOSK(char *kbtitle)
-{
-	bool doloop = true;
-	int fade = 5;
-	int i, j;
-	char temp[2];
-	char kb_buf[256];
-	int ret = 0;	//ESC
-	
-	strcpy(kb_buf, self.kb_buffer);
-	self.kb_OK = false;
-	
-	Key Keys[4][11] = {
+Key Keys[4][11] = {
 	{
 		{'1','!'},
 		{'2','@'},
@@ -81,6 +69,23 @@ int showOSK(char *kbtitle)
 	}
 	};
 
+bool Shift;
+bool Caps;
+
+int showOSK(char *kbtitle)
+{
+	bool doloop = true;
+	int fade = 5;
+	int i, j;
+	char temp[2];
+	char kb_buf[256];
+	int ret = 0;	//ESC
+	
+	strcpy(kb_buf, self.kb_buffer);
+	self.kb_OK = false;
+	
+	Shift = false;
+	Caps  = false;
 		
 	Duplicate_Button_Key(&kb_function[0], kb_function[0], 10*42+90, 0*42+150, "Back");
 	Duplicate_Button_Key(&kb_function[1], kb_function[0], 10*42+90, 4*42+150, "Clear");
@@ -202,14 +207,16 @@ int showOSK(char *kbtitle)
 			  strcpy( kb_buf, "" );
 			}
 			else if(Button_Select(&kb_function[2], pointer.p_x, pointer.p_y))
-			{ // Caps
-			
+			{// Caps
+				Caps = !Caps;
+				setCharSet();
 			}
 			else if(Button_Select(&kb_function[3], pointer.p_x, pointer.p_y))
-			{ // Shift
-			
+			{// Shift
+				Shift = !Shift;
+				setCharSet();
 			}		   
-		    else //if (true)
+		    else 
 			{
 				for(i=0; i<4; i++)
 				{
@@ -219,7 +226,12 @@ int showOSK(char *kbtitle)
 						{
 						  if(Button_Select(&kb_key[i][j], pointer.p_x, pointer.p_y))
 						  {
-						   strcat( kb_buf,kb_key[i][j].ttf_label);
+							strcat( kb_buf,kb_key[i][j].ttf_label);
+							if ( Shift==true )
+						    {
+								Shift = false;
+								setCharSet();
+							}
 						  }
 						}
 					}
@@ -254,6 +266,26 @@ int showOSK(char *kbtitle)
 
 
 
-
+void setCharSet()
+{
+	int i,j;
+	char temp[2];
+	
+	for(i=0; i<4; i++)
+	{
+		for(j=0; j<11; j++)
+		{
+			if(Keys[i][j].ch != '\0')
+			{
+			 if ((Shift == true) || (Caps == true ))
+				temp[0] = Keys[i][j].chShift;
+			 else
+				temp[0] = Keys[i][j].ch;
+			 temp[1] = '\0';
+			 strcpy(kb_key[i][j].ttf_label, temp);
+			}
+		}
+	}
+}
 
 
