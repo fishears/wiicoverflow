@@ -55,7 +55,7 @@ extern void patchupdatecheck(u32 address, u32 len);
 
 extern void movedvdhooks(u32 address, u32 len);
 
-
+extern void multidolhook(u32 address);
 extern void patchhookdol(u32 address, u32 len);
 extern void langvipatch(u32 address, u32 len, u8 langbyte);
 extern void vipatch(u32 address, u32 len);
@@ -114,7 +114,9 @@ static const u32 movedvdpatch[3] = {
 	0x2C040000, 0x41820120, 0x3C608109
 };
 
-	
+static const u32 multidolhooks[4] = {
+	0x7C0004AC, 0x4C00012C, 0x7FE903A6, 0x4E800420
+};
 
 static const u32 regionfreehooks[5] = {
 	0x7C600774, 0x2C000001, 0x41820030,0x40800010,0x2C000000
@@ -134,6 +136,22 @@ static const u32 kpadoldhooks[6] = {
 
 static const u32 joypadhooks[4] = {
 	0x3AB50001, 0x3A73000C, 0x2C150004, 0x3B18000C
+};
+
+static const u32 gxdrawhooks[4] = {
+	0x3CA0CC01, 0x38000061, 0x3C804500, 0x98058000
+};
+
+static const u32 gxflushhooks[4] = {
+	0x90010014, 0x800305FC, 0x2C000000, 0x41820008
+};
+
+static const u32 ossleepthreadhooks[4] = {
+	0x90A402E0, 0x806502E4, 0x908502E4, 0x2C030000
+};
+
+static const u32 axnextframehooks[4] = {
+	0x3800000E, 0x7FE3FB78, 0xB0050000, 0x38800080
 };
 
 static const u32 langpatch[3] = {
@@ -158,23 +176,19 @@ void dogamehooks(void *addr, u32 len)
 	while(addr_start < addr_end)
 	{
 		
-		switch(settings.hooktype) //prep for adding hooktype to improve ocarina compatibility
+		switch(settings.hooktype)
 		{
 		
-			case 0: //VI
+			case 0: //VI (default)
 				if(memcmp(addr_start, viwiihooks, sizeof(viwiihooks))==0){
 					patchhook((u32)addr_start, len);
+				}
+				if(memcmp(addr_start, multidolhooks, sizeof(multidolhooks))==0){
+					multidolhook((u32)addr_start+sizeof(multidolhooks)-4);
 				}
 			break;
 
 			case 1: //Wii Pad
-				if(memcmp(addr_start, viwiihooks, sizeof(viwiihooks))==0){
-					patchhook2((u32)addr_start, len);
-				}
-				
-			break;
-
-			case 2: //GC Pad
 				if(memcmp(addr_start, kpadhooks, sizeof(kpadhooks))==0){
 					patchhook((u32)addr_start, len);
 				}
@@ -182,95 +196,55 @@ void dogamehooks(void *addr, u32 len)
 				if(memcmp(addr_start, kpadoldhooks, sizeof(kpadoldhooks))==0){
 					patchhook((u32)addr_start, len);
 				}
+				if(memcmp(addr_start, multidolhooks, sizeof(multidolhooks))==0){
+					multidolhook((u32)addr_start+sizeof(multidolhooks)-4);
+				}
+				
 			break;
 
-			case 4:
+			case 2: //GC Pad
 				if(memcmp(addr_start, joypadhooks, sizeof(joypadhooks))==0){
 					patchhook((u32)addr_start, len);
 				}
-			break;
-
-			case 5:
-				if(memcmp(addr_start, recoveryhooks, sizeof(recoveryhooks))==0){
-						patchhook3((u32)addr_start, len);
-					}
-			break;
-
-			// multidol
-			case 6:
-
-				if(memcmp(addr_start, multidolpatch1, sizeof(multidolpatch1))==0){
-						multidolpatchone((u32)addr_start, len);
+				if(memcmp(addr_start, multidolhooks, sizeof(multidolhooks))==0){
+					multidolhook((u32)addr_start+sizeof(multidolhooks)-4);
 				}
-				if(memcmp(addr_start, multidolpatch2, sizeof(multidolpatch2))==0){
-						multidolpatchtwo((u32)addr_start, len);
+			break;
+
+			case 3: //GXDraw
+				if(memcmp(addr_start, gxdrawhooks, sizeof(gxdrawhooks))==0){
+					patchhook((u32)addr_start, len);
+				}
+				if(memcmp(addr_start, multidolhooks, sizeof(multidolhooks))==0){
+					multidolhook((u32)addr_start+sizeof(multidolhooks)-4);
+				}
+			break;
+
+			case 4: //GXFlush
+				if(memcmp(addr_start, gxflushhooks, sizeof(gxflushhooks))==0){
+					patchhook((u32)addr_start, len);
+				}
+				if(memcmp(addr_start, multidolhooks, sizeof(multidolhooks))==0){
+					multidolhook((u32)addr_start+sizeof(multidolhooks)-4);
+				}
+			break;
+
+			case 5: //OSSleep
+				if(memcmp(addr_start, ossleepthreadhooks, sizeof(ossleepthreadhooks))==0){
+					patchhook((u32)addr_start, len);
+				}
+				if(memcmp(addr_start, multidolhooks, sizeof(multidolhooks))==0){
+					multidolhook((u32)addr_start+sizeof(multidolhooks)-4);
 				}
                         break;
 
-/*
-			case 6:
-				// jap region free
-				if(memcmp(addr_start, regionfreehooks, sizeof(regionfreehooks))==0){
-						regionfreejap((u32)addr_start, len);
-					}
-
-				// usa region free
-				if(memcmp(addr_start, regionfreehooks, sizeof(regionfreehooks))==0){
-					regionfreeusa((u32)addr_start, len);
+                        case 6: //axNextFrame
+                                if(memcmp(addr_start, axnextframehooks, sizeof(axnextframehooks))==0){
+					patchhook((u32)addr_start, len);
 				}
-
-				// pal region free
-				if(memcmp(addr_start, regionfreehooks, sizeof(regionfreehooks))==0){
-					regionfreepal((u32)addr_start, len);
+				if(memcmp(addr_start, multidolhooks, sizeof(multidolhooks))==0){
+					multidolhook((u32)addr_start+sizeof(multidolhooks)-4);
 				}
-
-				// skip disc update
-				if(memcmp(addr_start, updatecheckhook, sizeof(updatecheckhook))==0){
-					patchupdatecheck((u32)addr_start, len);
-				}
-			break;
-
-
-			case 7:
-				if(memcmp(addr_start, healthcheckhook, sizeof(healthcheckhook))==0){
-					removehealthcheck((u32)addr_start, len);
-				}
-			break;
-
-			// no copy flags
-			case 8:
-					// Remove the actual flag so can copy back
-				if(memcmp(addr_start, nocopyflag5, sizeof(nocopyflag5))==0){
-					copyflagcheck5((u32)addr_start, len);
-				}
-
-
-				if(memcmp(addr_start, nocopyflag1, sizeof(nocopyflag1))==0){
-					copyflagcheck1((u32)addr_start, len);
-				}
-
-				if(memcmp(addr_start, nocopyflag2, sizeof(nocopyflag2))==0){
-					copyflagcheck2((u32)addr_start, len);
-				}
-
-				// no VC and GH3 save
-				if(memcmp(addr_start, nocopyflag3, sizeof(nocopyflag2))==0){
-					copyflagcheck3((u32)addr_start, len);
-				}
-				// no VC and GH3 save display remove
-				if(memcmp(addr_start, nocopyflag4, sizeof(nocopyflag4))==0){
-					copyflagcheck4((u32)addr_start, len);
-				}
-
-			break;
-
-			case 9:
-				if(memcmp(addr_start, movedvdpatch, sizeof(movedvdpatch))==0){
-					movedvdhooks((u32)addr_start, len);
-				}
-			break;
-*/
-
                 }
 		addr_start += 4;
         }

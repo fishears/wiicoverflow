@@ -1,7 +1,11 @@
-
-	# (c) Nuke www.usbgecko.com. Licensed under GPL V2
 .text
-#include "../include/core/ppc.h"
+.set r0,0;   .set sp,1;   .set r2,2; .set r3,3;   .set r4,4
+.set r5,5;   .set r6,6;   .set r7,7;   .set r8,8;   .set r9,9
+.set r10,10; .set r11,11; .set r12,12; .set r13,13; .set r14,14
+.set r15,15; .set r16,16; .set r17,17; .set r18,18; .set r19,19
+.set r20,20; .set r21,21; .set r22,22; .set r23,23; .set r24,24
+.set r25,25; .set r26,26; .set r27,27; .set r28,28; .set r29,29
+.set r30,30; .set r31,31
 
 
 .globl patchhook		# r3 address
@@ -21,7 +25,7 @@ writebranch:
 	lis     r4, 0x8000	# 800018A0 hook location (source)
 	ori     r4, r4, 0x18A8
 	subf    r4, r3, r4	# subtract r3 from r4 and place in r4
-	lis     r5, 0x3FF	
+	lis     r5, 0x3FF
 	ori     r5, r5, 0xFFFF	# 0x3FFFFFF
 	and     r4, r4, r5
 	lis     r5, 0x4800	# 0x48000000
@@ -32,7 +36,7 @@ writebranch:
 exit:
 	blr                     # return
 
-.globl patchhook2		# r3 address
+	.globl patchhook2		# r3 address
 patchhook2:
 	mtctr	r4
 	lis	r6, 0x4E80
@@ -49,7 +53,7 @@ writebranch2:
 	lis     r4, 0x8000	# 81700000 our temp patcher
 	ori     r4, r4, 0x18a8
 	subf    r4, r3, r4	# subtract r3 from r4 and place in r4
-	lis     r5, 0x3FF	
+	lis     r5, 0x3FF
 	ori     r5, r5, 0xFFFF	# 0x3FFFFFF
 	and     r4, r4, r5
 	lis     r5, 0x4800	# 0x48000000
@@ -82,33 +86,11 @@ writebl:
 exit3:
 	blr                     # return
 
-.globl patchhook4		# r3 address
-patchhook4:
-	mtctr	r4
-	lis	r6, 0x4082
-	ori	r6, r6, 0x001C	# blr
-findregion:
-	lwz	r5, 0(r3)
-	cmpw	r6, r5
-	beq	writebr
-	addi	r3, r3, 4	# next word
-	bdnz	findregion	# loop length
-	b	exit4		# stop unhooked game hanging
-
-writebr:
-	lis     r4, 0x4800	
-	ori     r4, r4, 0x001C
-	stw     r4, 0(r3)	# result in r3
-	dcbf    r0, r3		# data cache block flush
-	icbi    r0, r3
-exit4:
-	blr                     # return
-
 .globl multidolpatchone		# r3 address
 multidolpatchone:
 	mtctr	r4
 	lis	r6, 0x3800
-	ori	r6, r6, 0x0001	# (li r0,1) 
+	ori	r6, r6, 0x0001	# (li r0,1)
 findmulti:
 	lwz	r5, 0(r3)
 	cmpw	r6, r5
@@ -138,7 +120,7 @@ exit5:
 multidolpatchtwo:
 	mtctr	r4
 	lis	r6, 0x3F60
-	ori	r6, r6, 0x8000	# (lis r27,-32768)  
+	ori	r6, r6, 0x8000	# (lis r27,-32768)
 findmulti2:
 	lwz	r5, 0(r3)
 	cmpw	r6, r5
@@ -164,10 +146,26 @@ writemulti2:
 exit6:
 	blr                     # return
 
+.globl multidolhook		# r3 address
+multidolhook:
+	lis     r4, 0x8000	# 80001000 hook location (source)
+	ori     r4, r4, 0x1000
+	subf    r4, r3, r4	# subtract r3 from r4 and place in r4
+	lis     r5, 0x3FF
+	ori     r5, r5, 0xFFFF	# 0x3FFFFFF
+	and     r4, r4, r5
+	lis     r5, 0x4800	# 0x48000000
+	or      r4, r4, r5
+	stw     r4, 0(r3)	# result in r3
+	dcbf    r0, r3		# data cache block flush
+	icbi    r0, r3
+	blr                     # return
+
+
 .globl langvipatch		# r3 address, r4 len, r5 lang byte
 langvipatch:
 	mtctr	r4
-	lis	r6, 0x8861 
+	lis	r6, 0x8861
 	ori	r6, r6, 0x0008	# lbz     r3, 8(sp)
 findlang:
 	lwz	r7, 0(r3)
@@ -178,7 +176,7 @@ findlang:
 	b	exitlang	# stop unhooked game hanging
 
 patchlang:
-	
+
 	lis     r4, 0x3860	# 0x38600001	 li      %r3, 1          # eng
 	add     r4, r4, r5
 gofinal:
@@ -191,7 +189,7 @@ exitlang:
 .globl vipatch		# r3 address
 vipatch:
 	mtctr	r4
-	lis	r6, 0x5400  
+	lis	r6, 0x5400
 	ori	r6, r6, 0xFFFE
 findvi:
 	lwz	r5, 0(r3)
@@ -211,11 +209,11 @@ patchvi:
 	beq	patchjap2	# JAP
 	b	exitvi
 patchjap2:
-	lis     r4, 0x3800	
+	lis     r4, 0x3800
 	ori     r4, r4, 0x0001
 	b	gofinal2
 patchusa:
-	lis     r4, 0x3800	
+	lis     r4, 0x3800
 	ori     r4, r4, 0x0000
 gofinal2:
 	stw     r4, 0(r3)	# result in r3
@@ -333,7 +331,7 @@ writebhe:
 exithe:
 	blr                     # return
 
-	
+
 
 .globl patchupdatecheck		# r3 address
 patchupdatecheck:
@@ -423,7 +421,7 @@ exitncf3:
 .globl copyflagcheck4	# r3 address
 copyflagcheck4:
 	mtctr	r4
-	lis	r6, 0x3BE0 
+	lis	r6, 0x3BE0
 	ori	r6, r6, 0x0001 # li r31,1
 findncf4:
 	lwz	r5, 0(r3)
@@ -457,42 +455,42 @@ findncf5:
 
 writencf5:
 	#addi	r3, r3, 8	# skip 2
-	
+
 	lis     r4, 0x801D
 	ori     r4, r4, 0x0024	# change to 801D0024 (lwz r0,36(r29))
-	stw     r4, 0(r3)	
-	dcbf    r0, r3		
+	stw     r4, 0(r3)
+	dcbf    r0, r3
 	icbi    r0, r3
-	
+
 	addi	r3, r3, 4	# next word
 
 	lis     r4, 0x5400
 	ori     r4, r4, 0x003C	# change to 5400003C (rlwinm r0,r0,0,0,30)
-	stw     r4, 0(r3)	
-	dcbf    r0, r3		
+	stw     r4, 0(r3)
+	dcbf    r0, r3
 	icbi    r0, r3
 
 	addi	r3, r3, 4	# next word
 
 	lis     r4, 0x901D
 	ori     r4, r4, 0x0024	# change to 901D0024 (stw r0,36(r29))
-	stw     r4, 0(r3)	
-	dcbf    r0, r3		
+	stw     r4, 0(r3)
+	dcbf    r0, r3
 	icbi    r0, r3
 
 	addi	r3, r3, 4	# next word
 
 	lis     r4, 0x4800
 	ori     r4, r4, 0x0018	# change to 48000018 (b 0x8134aa60)
-	stw     r4, 0(r3)	
-	dcbf    r0, r3		
+	stw     r4, 0(r3)
+	dcbf    r0, r3
 	icbi    r0, r3
 exitncf5:
 	blr                     # return
 
 .globl movedvdhooks	# r3 address
 movedvdhooks:
-	lis	r6, 0x4182 
+	lis	r6, 0x4182
 	ori	r6, r6, 0x0120 # beq     loc_813A7938
 findmd1:
 	addi	r3, r3, 4	# next word
@@ -505,4 +503,3 @@ writemd1:
 	icbi    r0, r3
 exitmd1:
 	blr                     # return
-

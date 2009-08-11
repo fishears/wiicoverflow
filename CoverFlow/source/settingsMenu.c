@@ -32,15 +32,25 @@ char languages[11][30] = {{""},{""},{""},{""},{""},{""},{""},{""},{""},{""},{""}
 char vidmodes[6][30] = {{""},{""},{""},{""},{""},{""}};
 
 //hook types for ocarina
-char hooks[3][9] =
-{{"   VI"},
-{" Wii Pad"},
-{" GC Pad"}};
+char hooks[7][12] =
+{{"VBI"},
+{"Wii Pad"},
+{"GC Pad"},
+{"GXDraw"},
+{"GXFlush"},
+{"OSSleep"},
+{"AXNextFrame"}
+};
 
-char ghooks[3][9] =
-{{"      VI"},
-{" Wii Pad"},
-{" GC Pad"}};
+char ghooks[7][12] =
+{{"VBI"},
+{"Wii Pad"},
+{"GC Pad"},
+{"GXDraw"},
+{"GXFlush"},
+{"OSSleep"},
+{"AXNextFrame"}
+};
 
 char gFixes[CFG_FIX_COUNT][16] =
 {
