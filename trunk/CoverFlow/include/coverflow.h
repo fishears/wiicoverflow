@@ -264,6 +264,11 @@ typedef struct{
 	bool patchCountryStr;
 	int  alternatedol;
 	u32  alternatedoloffset;
+	
+#ifdef OSK
+	char kb_buffer[256];
+	bool kb_OK;
+#endif	
 
 } s_self;
 

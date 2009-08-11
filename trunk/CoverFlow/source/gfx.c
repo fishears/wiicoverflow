@@ -87,10 +87,6 @@ void LoadTextures()
 //	GRRLIB_LoadTexturePNG(&button_round_info_texture,button_round_info_png);
 //	GRRLIB_LoadTexturePNG(&button_round_info_over_texture,button_round_info_over_png);	
 
-	#ifdef OSK
-	GRRLIB_LoadTexturePNG(&kb_textbox_texture, kb_textbox_png);
-	#endif
-
 }
 
 void DrawBufferedCover(int i, float loc, float zpos, float angle, float falloff)

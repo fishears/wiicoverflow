@@ -186,6 +186,13 @@ spaceUsed = Espaço utilizado %.1f%%
 gameFix = Conserto do jogo:
 noFixes = nenhum
 Hungarian = Húngaro
+altDOL = DOL Alternativo:
+altDOL_none = nenhum
+altDOL_SD = do SD: ou USB:
+altDOL_Image = da Imagem
+devID = ID do dispositivo:
+loaderVer = Versão:
+iosVer = Versão do IOS:
 
 ###########
 # Buttons #

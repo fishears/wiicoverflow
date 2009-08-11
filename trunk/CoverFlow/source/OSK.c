@@ -13,12 +13,17 @@
 extern s_pointer pointer;
 extern s_self self;
 
-void showOSK()
+int showOSK(char *kbtitle)
 {
 	bool doloop = true;
 	int fade = 5;
 	int i, j;
 	char temp[2];
+	char kb_buf[256];
+	int ret = 0;	//ESC
+	
+	strcpy(kb_buf, self.kb_buffer);
+	self.kb_OK = false;
 	
 	Key Keys[4][11] = {
 	{
@@ -77,10 +82,10 @@ void showOSK()
 	};
 
 		
-	Duplicate_Button_Key(&kb_function[0], kb_function[0], (10*42+70), 0*42+150, "Back");
-	Duplicate_Button_Key(&kb_function[1], kb_function[0], (10*42+70), 4*42+150, "Clear");
-	Duplicate_Button_Key(&kb_function[2], kb_function[0], ( 0*42+28), 2*42+150, "Caps");
-	Duplicate_Button_Key(&kb_function[3], kb_function[0], ( 0*42+48), 3*42+150, "Shift");
+	Duplicate_Button_Key(&kb_function[0], kb_function[0], 10*42+90, 0*42+150, "Back");
+	Duplicate_Button_Key(&kb_function[1], kb_function[0], 10*42+90, 4*42+150, "Clear");
+	Duplicate_Button_Key(&kb_function[2], kb_function[0],  0*42+50, 2*42+150, "Caps");
+	Duplicate_Button_Key(&kb_function[3], kb_function[0],  0*42+70, 3*42+150, "Shift");
 	
 	
 	for(i=0; i<4; i++)
@@ -91,7 +96,7 @@ void showOSK()
 			{
 			 temp[0] = Keys[i][j].ch;
 			 temp[1] = '\0';
-			 Duplicate_Button_Key(&kb_key[i][j], kb_key[0][0], (j*42+21*i+70), i*42+150, temp);
+			 Duplicate_Button_Key(&kb_key[i][j], kb_key[0][0], j*42+21*i+90, i*42+150, temp);
 			}
 		}
 	}
@@ -112,16 +117,15 @@ void showOSK()
 		GRRLIB_2D_Init();
 		GRRLIB_FillScreen(0x00000000|fade);
 		
-		GRRLIB_Rectangle(20,  20, 580, 440, 0xffffffdd, true);
-		GRRLIB_Rectangle(22,  22, 576, 436, 0x000000FF, true);
-		GRRLIB_Rectangle(22, 410, 576,  48, 0x737373FF, true);
+		GRRLIB_Rectangle(30,  20, 580, 440, 0xffffffdd, true);
+		GRRLIB_Rectangle(32,  22, 576, 436, 0x000000FF, true);
+		GRRLIB_Rectangle(32, 410, 576,  48, 0x737373FF, true);
 		
-//		GRRLIB_DrawImg(62, 50, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
-//		CFreeTypeGX_DrawText(ttf16pt, 177, 63, "Keyboard", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
+		GRRLIB_DrawImg(200, 10, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
+		CFreeTypeGX_DrawText(ttf16pt, 320, 23, kbtitle, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
 		
-//////////////////////////////////////
-
-		GRRLIB_DrawImg(120, 60, kb_textbox_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_Rectangle(70, 70, 500, 40, 0xffffffdd, true);   // TextField
+		CFreeTypeGX_DrawText(ttf18pt, 75, 98, kb_buf, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 		
 		
 		for(i=0; i<4; i++)
@@ -146,9 +150,6 @@ void showOSK()
 		
 		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		
-		if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_B)	
-			doloop = false;
-		
 		
 		if (Button_Hover(&kb_OK,  pointer.p_x, pointer.p_y) ||
 			Button_Hover(&kb_ESC, pointer.p_x, pointer.p_y)   )
@@ -169,14 +170,62 @@ void showOSK()
 		{
 			if(Button_Select(&kb_OK, pointer.p_x, pointer.p_y))
 			{
+				strcpy(self.kb_buffer, kb_buf);
+				self.kb_OK = true;
+				ret = 1; //OK
 				doloop = false;
 			}
 			
 			else if(Button_Select(&kb_ESC, pointer.p_x, pointer.p_y))
 			{
+				strcpy(self.kb_buffer, "");
+				self.kb_OK = false;
+				ret = 0; //ESC
 				doloop = false;
 			}
-		
+			else if(Button_Select(&kb_space, pointer.p_x, pointer.p_y))
+			{
+				if(strlen(kb_buf) < 255)
+				{
+					kb_buf[strlen(kb_buf)] = ' ';
+				}
+			}
+			else if(Button_Select(&kb_function[0], pointer.p_x, pointer.p_y))
+			{ // Back
+				if(strlen(kb_buf) > 0)
+				{
+					kb_buf[strlen(kb_buf)-1] = 0;
+				}
+			}
+			else if(Button_Select(&kb_function[1], pointer.p_x, pointer.p_y))
+			{ // Clear
+			  strcpy( kb_buf, "" );
+			}
+			else if(Button_Select(&kb_function[2], pointer.p_x, pointer.p_y))
+			{ // Caps
+			
+			}
+			else if(Button_Select(&kb_function[3], pointer.p_x, pointer.p_y))
+			{ // Shift
+			
+			}		   
+		    else //if (true)
+			{
+				for(i=0; i<4; i++)
+				{
+					for(j=0; j<11; j++)
+					{
+						if(Keys[i][j].ch != '\0')
+						{
+						  if(Button_Select(&kb_key[i][j], pointer.p_x, pointer.p_y))
+						  {
+						   strcat( kb_buf,kb_key[i][j].ttf_label);
+						  }
+						}
+					}
+				}
+			}
+
 		}
 		
 		GRRLIB_Render();
@@ -184,6 +233,7 @@ void showOSK()
 	}while(doloop);
 
 
+// clean up after Loop
 
 	for(i=0; i<4; i++)
 	{
@@ -196,6 +246,7 @@ void showOSK()
 		}
 		FreeButtonResources(&kb_function[i]);
 	}
+	return ret;
 }
 
 
