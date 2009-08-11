@@ -21,8 +21,8 @@ typedef struct _keytype {
 	char ch, chShift, chalt, chalt2;
 } Key;
 
-int showOSK(char *kbtitle);
-
+int  showOSK(char *kbtitle);
+void setCharSet();
 
 #ifdef	__cplusplus
 }
