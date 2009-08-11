@@ -7,8 +7,6 @@
  *  Licensed under the terms of the GNU GPL, version 2
  *  http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  *
- *  This file contains the main() entry point to the application
- *  Build configuration settings can be found in "coverflow.h"
  */
 
 #ifndef _CHEATS_H
@@ -19,15 +17,15 @@
 extern "C" {
 #endif
 
-    #define TXT_PATH "/txtcodes/"
-    #define GCT_PATH "sd:/codes/"
+    //#define TXT_PATH "/txtcodes/"
+    //#define GCT_PATH "sd:/codes/"
 
     #define CODESITE "http://geckocodes.org/codes/"
     #define LINES_PER_PAGE 9 //lines per page to display
     #define LINE_LENGTH 50 //max title line length
     #define MAX_CODES 30 //max number of cheat codes
     #define CHEAT_LINE 18 //cheat codeline length
-    #define MAX_CHEATS 38 //maximum number of cheats per game
+    #define MAX_CHEATS 37 //maximum number of cheats per game
 
 typedef struct {
     char title[LINE_LENGTH]; //cheat description text
