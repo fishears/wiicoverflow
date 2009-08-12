@@ -3,8 +3,8 @@
 
 -NEW-
   * OSK (OnScreen-Keyboard) (qwerty)
-    # used with dynamic paths
-    # used with ...
+   # used with dynamic paths
+   # used with ...
   * Method for alt.DOL from Image with autoselection implemented
   * Method for alt.DOL from SD: / USB: implemented
   * CoverFloader News Service (CFNS) (requires internet connection)
