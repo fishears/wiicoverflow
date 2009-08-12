@@ -3,12 +3,14 @@
 
 -NEW-
   * OSK (OnScreen-Keyboard) (qwerty)
+    # used with dynamic paths
+    # used with ...
   * Method for alt.DOL from Image with autoselection implemented
   * Method for alt.DOL from SD: / USB: implemented
   * CoverFloader News Service (CFNS) (requires internet connection)
   * CoverFloader NewsReader
-  * 2nd page for System Information
-  * dynamic paths for all CoverFloader files and directories on SD: and USB: (changeable by hand)
+  * 2nd page for System Information (paths)
+  * dynamic paths for all CoverFloader files and directories on SD: and USB: (editable with OSK)
   * additional support for USB-Devices
   * support for the new game hooks (found in GeckoOS 1.9.2)
 
