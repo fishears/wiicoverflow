@@ -10,6 +10,8 @@
 #include "coverflow.h"
 #include "OSK.h"
 
+#define STRMAX 256
+
 extern s_pointer pointer;
 extern s_self self;
 
@@ -78,7 +80,7 @@ int showOSK(char *kbtitle)
 	int fade = 5;
 	int i, j;
 	char temp[2];
-	char kb_buf[256];
+	char kb_buf[STRMAX];
 	int ret = 0;	//ESC
 	
 	strcpy(kb_buf, self.kb_buffer);
@@ -152,7 +154,21 @@ int showOSK(char *kbtitle)
 		Button_TTF_Paint(&kb_ESC);
 		Button_Hover(&kb_space, pointer.p_x, pointer.p_y);
 		
-		
+////////////  DirtyFix BEGIN
+		if ((Shift == true) || (Caps == true ))
+		{
+			CFreeTypeGX_DrawText(ttf18pt, 315, 177, "^", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+			CFreeTypeGX_DrawText(ttf20pt, 400, 180, "*", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+			CFreeTypeGX_DrawText(ttf18pt, 547, 220, "_", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+			CFreeTypeGX_DrawText(ttf18pt, 570, 260, "\"", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+		}
+		else
+		{
+			CFreeTypeGX_DrawText(ttf18pt, 549, 220, "-", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+			CFreeTypeGX_DrawText(ttf18pt, 570, 260, "'", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);		
+		}
+//////////// DirtyFix End	
+	
 		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
 		
 		
@@ -189,31 +205,38 @@ int showOSK(char *kbtitle)
 				doloop = false;
 			}
 			else if(Button_Select(&kb_space, pointer.p_x, pointer.p_y))
-			{
-				if(strlen(kb_buf) < 255)
+			{ // SPACE
+				if(strlen(kb_buf) < STRMAX)
 				{
-					kb_buf[strlen(kb_buf)] = ' ';
+					SOUND_PlaySound(FX_BUTTON_CLICK, 0);
+					strcat(kb_buf, " ");
 				}
 			}
 			else if(Button_Select(&kb_function[0], pointer.p_x, pointer.p_y))
 			{ // Back
 				if(strlen(kb_buf) > 0)
 				{
+					SOUND_PlaySound(FX_BUTTON_CLICK, 0);
 					kb_buf[strlen(kb_buf)-1] = 0;
 				}
 			}
 			else if(Button_Select(&kb_function[1], pointer.p_x, pointer.p_y))
 			{ // Clear
-			  strcpy( kb_buf, "" );
+			  int c;
+			  SOUND_PlaySound(FX_BUTTON_CLICK, 0);
+			  for (c = 0; c < STRMAX; c++) {
+			     kb_buf[c] = 0; }
 			}
 			else if(Button_Select(&kb_function[2], pointer.p_x, pointer.p_y))
 			{// Caps
 				Caps = !Caps;
+				SOUND_PlaySound(FX_BUTTON_CLICK, 0);
 				setCharSet();
 			}
 			else if(Button_Select(&kb_function[3], pointer.p_x, pointer.p_y))
 			{// Shift
 				Shift = !Shift;
+				SOUND_PlaySound(FX_BUTTON_CLICK, 0);
 				setCharSet();
 			}		   
 		    else 
@@ -226,6 +249,7 @@ int showOSK(char *kbtitle)
 						{
 						  if(Button_Select(&kb_key[i][j], pointer.p_x, pointer.p_y))
 						  {
+							SOUND_PlaySound(FX_BUTTON_CLICK, 0);
 							strcat( kb_buf,kb_key[i][j].ttf_label);
 							if ( Shift==true )
 						    {
@@ -263,9 +287,6 @@ int showOSK(char *kbtitle)
 
 
 
-
-
-
 void setCharSet()
 {
 	int i,j;
@@ -287,5 +308,8 @@ void setCharSet()
 		}
 	}
 }
+
+
+
 
 
