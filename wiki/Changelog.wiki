@@ -2,6 +2,7 @@
 == v1.1+ (2.0 Path) (August ? 2009)==
 
 -NEW-
+  * OSK (OnScreen-Keyboard) (qwerty)
   * Method for alt.DOL from Image with autoselection implemented
   * Method for alt.DOL from SD: / USB: implemented
   * CoverFloader News Service (CFNS) (requires internet connection)
