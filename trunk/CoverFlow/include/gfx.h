@@ -108,6 +108,10 @@ Button kb_ESC;
 #endif
 
 
+extern const u8 button_edit_png[];
+extern const u8 button_edit_over_png[];
+Button button_edit[9];
+
 GRRLIB_texImg menu_button_texture;
 GRRLIB_texImg menu_button_over_texture;
 GRRLIB_texImg menu_header_texture;

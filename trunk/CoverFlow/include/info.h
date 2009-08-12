@@ -4,5 +4,5 @@
 #include "coverflow.h"
 
 void showInfoWindow();
-
+void gotoEditor(int val);
 #endif

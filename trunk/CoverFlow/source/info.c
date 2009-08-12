@@ -1,5 +1,6 @@
 #include "info.h"
 #include "localization.h"
+#include "OSK.h"
 
 #define INFOPAGES 2
 
@@ -9,13 +10,14 @@ extern s_path dynPath;
 
 
 void showInfoWindow(){
-    int page = 1;
+    int i;
+	int page = 1;
 	int tab	= 130;
 	bool doloop = true;
 	int fade = 5;
 	int y, sp;
 	int step  = 35;
-	int step2 = 25;
+	int step2 = 30;
 	char temp[256];
 	int hdSize = self.freeSpace + self.usedSpace;
 	int x = 92;
@@ -25,6 +27,12 @@ void showInfoWindow(){
 
 	okButton.x = 320 - 54;
 	okButton.y = 380;
+	
+	
+	for(i=0; i<9; i++)
+	{
+	 Duplicate_Button(&button_edit[i], button_edit[0], 515, i*step2 +97);
+	}
 	
 	do{
 		
@@ -85,6 +93,9 @@ void showInfoWindow(){
 				
 				GRRLIB_DrawImg(272, y+sp-16, hdspace_texture, 0, 1, 1, 0xFFFFFFFF);
 				GRRLIB_DrawImgReflection(272, y+sp-16 + hdspace_texture.h + 4, hdspace_texture, 0, 1, 1, 0.7);
+				
+				GRRLIB_DrawImg(430, 80, menu_logo_texture, 0, 1, 1, 0xFFFFFFFF);
+			
 			}
 		else if (page == 2 )
 			{
@@ -125,6 +136,13 @@ void showInfoWindow(){
 
 				CFreeTypeGX_DrawText(ttf16pt, x, y+sp, "alt.DOL", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 				CFreeTypeGX_DrawText(ttf16pt, x+tab, y+sp, dynPath.dir_altdol, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+			
+				for(i=0; i<9; i++)
+				{
+				 Button_Paint(&button_edit[i]);
+				 Button_Hover(&button_edit[i], pointer.p_x, pointer.p_y);
+				}
+			
 			}
 /*
 		else if (page == 3 )
@@ -133,7 +151,7 @@ void showInfoWindow(){
 				sp = 0;
 			}
 */
-		GRRLIB_DrawImg(430, 80, menu_logo_texture, 0, 1, 1, 0xFFFFFFFF);
+		
 		sprintf(temp, "%d/%d", page, INFOPAGES );
 		CFreeTypeGX_DrawText(ttf18pt, 420, 400, temp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 
@@ -183,9 +201,118 @@ void showInfoWindow(){
 			{
 				page ++;
 			}
+			
+		    else 
+			{
+				for(i=0; i<9; i++)
+				{
+				  if(Button_Select(&button_edit[i], pointer.p_x, pointer.p_y))
+				  {
+					SOUND_PlaySound(FX_BUTTON_CLICK, 0);
+					gotoEditor(i);
+				  }
+				}
+			}			
 		}
 		
 		GRRLIB_Render();
 		
 	}while(doloop);
+
+
+	// clean up after Loop
+	for( i=0; i<9; i++)
+	{
+	 FreeButtonResources(&button_edit[i]);
+	}
+}
+
+void gotoEditor(int val)
+{
+	int ret;
+	
+	switch( val )
+	{
+		case 0:
+			strcpy(self.kb_buffer,dynPath.bootDevice);
+			ret = showOSK("BootDevice");
+			if (ret > 0 )
+			{
+			 strcpy(dynPath.bootDevice, self.kb_buffer);
+			}
+			break;
+			
+		case 1:
+			strcpy(self.kb_buffer,dynPath.dir_usb_loader);
+			ret = showOSK("usb-loader");
+			if (ret > 0 )
+			{
+			 strcpy(dynPath.dir_usb_loader, self.kb_buffer);
+			}
+			break;
+			
+		case 2:
+			strcpy(self.kb_buffer,dynPath.dir_3dcovers);
+			ret = showOSK("3D-Cover");
+			if (ret > 0 )
+			{
+			 strcpy(dynPath.dir_3dcovers, self.kb_buffer);
+			}
+			break;
+			
+		case 3:
+			strcpy(self.kb_buffer,dynPath.dir_covers);
+			ret = showOSK("2D-Cover");
+			if (ret > 0 )
+			{
+			 strcpy(dynPath.dir_covers, self.kb_buffer);
+			}
+			break;
+			
+		case 4:
+			strcpy(self.kb_buffer,dynPath.dir_disks);
+			ret = showOSK("Disc");
+			if (ret > 0 )
+			{
+			 strcpy(dynPath.dir_disks, self.kb_buffer);
+			}
+			break;
+			
+		case 5:
+			strcpy(self.kb_buffer,dynPath.dir_games);
+			ret = showOSK("Games");
+			if (ret > 0 )
+			{
+			 strcpy(dynPath.dir_games, self.kb_buffer);
+			}
+			break;
+			
+		case 6:
+			strcpy(self.kb_buffer, dynPath.dir_codes);
+			ret = showOSK("Codes");
+			if (ret > 0 )
+			{
+			 strcpy(dynPath.dir_codes, self.kb_buffer);
+			}
+			break;
+			
+		case 7:
+			strcpy(self.kb_buffer, dynPath.dir_txtcodes);
+			ret = showOSK("TxtCodes");
+			if (ret > 0 )
+			{
+			 strcpy(dynPath.dir_txtcodes, self.kb_buffer);
+			}
+			break;
+			
+		case 8:
+			strcpy(self.kb_buffer, dynPath.dir_altdol);
+			ret = showOSK("alt.DOL");
+			if (ret > 0 )
+			{
+			 strcpy(dynPath.dir_altdol, self.kb_buffer);
+			}
+			break;
+	}
+
 }

@@ -391,6 +391,11 @@ void Init_Buttons()
 	Duplicate_Button_TTF(&kb_OK,  okButton, 80, 80, "OK");
 	Duplicate_Button_TTF(&kb_ESC, okButton, 80, 80, "ESC");
   #endif
+   
+   	Button_Init(&button_edit[0], button_edit_png,  button_edit_over_png, 80, 80);
+
+
+
 
 } // End Init_Buttons();
 
@@ -1846,6 +1851,12 @@ void freeResources(){
 	FreeButtonResources(&kb_OK);
 	FreeButtonResources(&kb_ESC);
 #endif
+
+	for( i=0; i<9; i++)
+	{
+	 FreeButtonResources(&button_edit[i]);
+	}
+
 
  //  CFreeTypeGX_delete function make the games don't boot, removed temporary (it wass addedd in r533)
 
