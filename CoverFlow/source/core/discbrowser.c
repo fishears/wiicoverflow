@@ -21,8 +21,8 @@ int autoSelectDol(const char *id)
     if (strcmp(id,"REDP41") == 0) return 1957;
     if (strcmp(id,"REDE41") == 0) return 1957;
 
-    if (strcmp(id,"RSXP69") == 0) return 337;
-    if (strcmp(id,"RSXE69") == 0) return 337;
+    if (strcmp(id,"RSXP69") == 0) return 377;
+    if (strcmp(id,"RSXE69") == 0) return 377;
 
     if (strcmp(id,"RNBX69") == 0) return 964;
 
