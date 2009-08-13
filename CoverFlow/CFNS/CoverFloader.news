@@ -1,6 +1,6 @@
-NEWSID = 200907240
+NEWSID = 200908130
 ############ Common ############
-LINES = 31
+LINES = 16
 SPEED = 4
 DELAY = 5
 REPEAT = 1
@@ -11,55 +11,30 @@ TX_STYLE = FTGX_JUSTIFY_LEFT
 ############ Lines #############
 TX_COLORLINE = 1, 0xff, 0x00, 0x00, 0xff
 TX_COLORLINE = 5, 0xff, 0x00, 0xff, 0xff
-TX_COLORLINE = 21, 0xff, 0x00, 0x00, 0xff
-TX_COLORLINE = 25, 0x00, 0x00, 0xff, 0xff
-TX_COLORLINE = 26, 0x00, 0x00, 0xff, 0xff
-TX_COLORLINE = 27, 0x00, 0x00, 0xff, 0xff
 TX_SIZELINE = 1, 24
 TX_SIZELINE = 2, 14
 TX_SIZELINE = 5, 20
-TX_SIZELINE = 25, 18
-TX_SIZELINE = 26, 18
-TX_SIZELINE = 27, 18
-TX_SIZELINE = 31, 18
+TX_SIZELINE = 16, 18
 TX_STYLELINE = 1, FTGX_JUSTIFY_CENTER
 TX_STYLELINE = 2, FTGX_JUSTIFY_RIGHT
 TX_STYLELINE = 5, FTGX_JUSTIFY_CENTER
 ############ Text ###############
 1 = News
-2 = July 24th, 2009
+2 = August 13th, 2009
 3 =
 4 = 
-5 = Workaround 
+5 = Information about downloading covers
 6 = 
 7 = 
-8 = The Cover-Hoster WiiTDB changed his response
-9 = to non existing covers, 3dcovers and discs...
-10 = 
-11 = That means: Whenever you tried to download missing 
-12 = covers etc., all missing files were stored with wrong
-13 = content onto your SD-Card.
+8 = WiiTDB will be moving to another host.
+9 = All artwork will be unavailable to download from  
+10 = external programs for at least one week.
+11 =  
+12 = This is only temporary, all features will be back 
+13 = as soon as the site migration is complete. 
 14 = 
-15 = Games with wrong cover-files aren't playable anymore.
-16 = In this case CoverFloader does a controlled exit.
-17 = 
-18 = We've sorted out this issue with r850 and filter downloads
-19 = for wrong content.
-20 = 
-21 = But all users have do delete these wrong files by hand!
-22 = 
-23 = Please delete all files with size of 7 KB in...
-24
-25 = SD:/usb-loader/disks/
-26 = SD:/usb-loader/covers/
-27 = SD:/usb-loader/3dcovers/
-28 = 
-29 = Sorry about that,
-30 = 
-31 = LoudBob11
+15 = Thanks,
+16 = CoverFloader Team
 ############ Add Tabs ##################
-TX_TABLINE = 25, 20
-TX_TABLINE = 26, 20
-TX_TABLINE = 27, 20
-TX_TABLINE = 31, 7
+TX_TABLINE = 16, 7
 
