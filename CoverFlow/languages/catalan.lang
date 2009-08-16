@@ -186,6 +186,13 @@ spaceUsed = Espai usat %.1f%%
 gameFix = Pedaç pel joc:
 noFixes = cap
 Hungarian = Hongarès
+altDOL = DOL Alternatiu:
+altDOL_none = cap
+altDOL_SD = des de SD o USB:
+altDOL_Image = des d'Imatge:
+devID = ID dispositiu:
+loaderVer = Versió:
+iosVer = Versió d'IOS:
 
 ###########
 # Buttons #
