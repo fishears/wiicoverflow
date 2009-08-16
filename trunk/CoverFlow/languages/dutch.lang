@@ -186,6 +186,13 @@ spaceUsed = Gebruikte ruimte %.1f%%
 gameFix = Spel Fix:
 noFixes = geen
 Hungarian = Hongaars
+altDOL = Alternatieve DOL:
+altDOL_none = geen
+altDOL_SD = van SD: of USB:
+altDOL_Image = van Image
+devID = ApparaatID:
+loaderVer = Versie:
+iosVer = IOS Versie:
 
 ###########
 # Buttons #
