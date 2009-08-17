@@ -255,7 +255,7 @@ void languageDefault()
 	snprintf(TX.noCreateWCFXML, sizeof(TX.noCreateWCFXML), "can't create wiicoverflow.xml");
 	snprintf(TX.downloadCheatFile, sizeof(TX.downloadCheatFile), "Download missing cheat file?");
 	snprintf(TX.downloadComplete, sizeof(TX.downloadComplete), "Download Complete");
-	snprintf(TX.noTxtCodes, sizeof(TX.noTxtCodes), "txt codes not available");
+	snprintf(TX.noTxtCodes, sizeof(TX.noTxtCodes), "Codes not available");
 	snprintf(TX.errorHTTP, sizeof(TX.errorHTTP), "HTTP ERROR");
 	snprintf(TX.useCodes, sizeof(TX.useCodes), "Use these codes?");
 	snprintf(TX.errOpenGCT, sizeof(TX.errOpenGCT), "Could not create (or Open) GCT.");

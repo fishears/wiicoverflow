@@ -13,6 +13,7 @@
 #include "coverflow.h"
 #include "cheats.h"
 #include "TrackedMemoryManager.h"
+#include "OSK.h"
 
 extern s_pointer pointer;
 extern s_self self;
@@ -253,7 +254,7 @@ void manage_cheats(int id, struct discHdr *gameList)
         {
             i--;
         }
-
+        fclose(txtfile);
         char tTemp[LINE_LENGTH];
         int pages = 0;
         int currpage = 1;
@@ -291,7 +292,6 @@ void manage_cheats(int id, struct discHdr *gameList)
             Duplicate_Button(&cheatDisabled[n],cheatDisabled[0],84,148+(n*28));
             Duplicate_Button(&cheatEditButton[n],cheatEditButton[0],108,148+(n*28));
         }
-        fclose(txtfile);
         if(maxlines<=LINES_PER_PAGE)
             pages = 1;
         else if(maxlines % LINES_PER_PAGE == 0)
@@ -335,7 +335,11 @@ void manage_cheats(int id, struct discHdr *gameList)
                         tamper = true;
                     }
                     else if(Button_Select(&cheatEditButton[n], pointer.p_x, pointer.p_y) && cheat[buttcheck]->editable==true)
-                        edit_codes(cheat,buttcheck);
+                        if(edit_codes(cheat,buttcheck))
+                        {
+                            tamper=true;
+                            cheat[buttcheck]->enabled=true;
+                        }
                 }
                  if(pages>1)
                  {
@@ -664,7 +668,7 @@ void create_gct(CHEAT *cheat,int cheatcount, struct discHdr *gameList, int id, i
 
 }
 
-void edit_codes(CHEAT *cheat, int cheatNum)
+bool edit_codes(CHEAT *cheat, int cheatNum)
 {
     //allows cheat lines with variables to be edited and saved for the current cheat
     //TODO add hex keyboard
@@ -672,6 +676,7 @@ void edit_codes(CHEAT *cheat, int cheatNum)
     int pages=0;
     int i,n;
     char tTemp[128];
+    bool tamper = false, invalid = false;
     if(cheat[cheatNum]->codelines<=LINES_PER_PAGE)
         pages = 1;
     else if(cheat[cheatNum]->codelines % LINES_PER_PAGE == 0)
@@ -679,15 +684,16 @@ void edit_codes(CHEAT *cheat, int cheatNum)
     else
         pages = (cheat[cheatNum]->codelines/LINES_PER_PAGE)+1;
 
-    int ret,count=0;
+    int count=0;
+    int ret;
     for(i=0;i<cheat[cheatNum]->codelines;i++)
     {
-        ret=is_code(cheat[cheatNum]->codes[i]);
-        if(ret==2) //line IS a cheat code and IS editable
-        {
+        //ret=is_code(cheat[cheatNum]->codes[i]);
+        //if(ret!=0) //line IS a cheat code and IS editable
+        //{
             Duplicate_Button(&varEditButton[i],varEditButton[0],108,148+(count*28)); //make the buttons
             count++;
-        }
+        //}
     }
     while(1) //edit codes GUI loop
         {
@@ -697,28 +703,48 @@ void edit_codes(CHEAT *cheat, int cheatNum)
             {
                 for(i=0;i<cheat[cheatNum]->codelines;i++)
                 {
-                    ret=is_code(cheat[cheatNum]->codes[i]);
-                    if(ret==2) //line IS a cheat code and IS editable
-                    {
+                    //ret=is_code(cheat[cheatNum]->codes[i]);
+                    //if(ret!=0) //line IS a cheat code and IS editable
+                    //{
                         FreeButtonResources(&varEditButton[i]);
-                    }
+                    //}
                 }
-                return;
+                if(invalid)
+                {
+                    WindowPrompt(TX.error,"Please correct invalid code",&okButton,0);
+                    tamper = false;
+                }
+                else
+                    return tamper;
             }
             else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
             {
                 if(Button_Select(&varDoneButton, pointer.p_x, pointer.p_y))
                 {
                     pointer.p_x = 0;
-                    return;
+                    if(invalid)
+                    {
+                        WindowPrompt(TX.error,"Please correct invalid code",&okButton,0);
+                        tamper = false;
+                    }
+                    else
+                        return tamper;
                 }
                 for(n=0;n<cheat[cheatNum]->codelines;n++) //test the cheat buttons
                 {
-                    if(Button_Select(&varEditButton[n], pointer.p_x, pointer.p_y) && is_code(cheat[cheatNum]->codes[n])==2)
+                    if(Button_Select(&varEditButton[n], pointer.p_x, pointer.p_y))
                     {
                         sprintf(tTemp,"%s",cheat[cheatNum]->codes[n]);
                         tTemp[17]='\0';
-                        edit_variables(tTemp);
+                        sprintf(self.kb_buffer,"%s",tTemp);
+                        int ret = showOSK("Edit Code");
+                        if(ret==1)
+                        {
+                            sprintf(cheat[cheatNum]->codes[n],"%s",self.kb_buffer);
+                            tamper=true;
+                            invalid = false;
+                        }
+                        //edit_variables(tTemp);
                     }
                 }
                  if(pages>1)
@@ -768,15 +794,30 @@ void edit_codes(CHEAT *cheat, int cheatNum)
             for(i=0;i<cheat[cheatNum]->codelines;i++)
             {
                 ret=is_code(cheat[cheatNum]->codes[i]);
-                if(ret==2) //line IS a cheat code and IS editable
-                {
+                //if(ret!=0) //line IS a cheat code and IS editable
+                //{
                     Button_Paint(&varEditButton[i]);
                     Button_Hover(&varEditButton[i], pointer.p_x, pointer.p_y);
                     sprintf(tTemp,"%s",cheat[cheatNum]->codes[i]);
                     tTemp[17]='\0';
                     CFreeTypeGX_DrawText(ttf14pt, 135, 164+step,tTemp, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+                    switch(ret)
+                    {
+                        case 0:
+                            CFreeTypeGX_DrawText(ttf14pt, 330, 164+step,"<- Invalid code", (GXColor){0xe9, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+                            invalid = true;
+                            break;
+                        case 1:
+                            //CFreeTypeGX_DrawText(ttf14pt, 330, 164+step,"<- Valid code", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+                            break;
+                        case 2:
+                            CFreeTypeGX_DrawText(ttf14pt, 330, 164+step,"<- Edit required", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
+                            break;
+                    }
+
+
                     step +=28;
-                }
+                //}
             }
             if(pages>1)
             {
@@ -790,67 +831,5 @@ void edit_codes(CHEAT *cheat, int cheatNum)
             DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF); //HAND!
             GRRLIB_Render();
         }
-    return;
-}
-
-void edit_variables(char* line)
-{
-    //lets you edit the variable values found in the codeline
-    //char hexlist[17] = {'X','0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-    int editable[8] = {0,0,0,0,0,0,0,0}; //holds 1 if character is editable
-    int x;
-    char editline[8]; //holds the second block of codeline (the bit with variables)
-    char* screen;
-    char* pch;
-    char* msg = CFMalloc(strlen(line)*sizeof(char));
-    sprintf(msg, line);
-    pch = strtok(msg, " "); //locate & ignore the first 8 chars of the codeline
-    pch = strtok(NULL," \r\n\0");
-    if(strlen(pch)==8) //test for second block of 8 characters to SPACE or NEWLINE
-    {
-        strncpy(editline,pch,8);
-        for (x = 0; x < 8; x++)
-        {
-            //look for known code variables
-            if(pch[x] =='x' || pch[x] =='X' || pch[x] =='R' || pch[x] =='G' || pch[x] =='Y' || pch[x] =='y'
-                    || (pch[x-1] =='b' && pch[x] =='b') || (pch[x] =='b' && pch[x+1] =='b') //sneaky B
-                    || (pch[x-1] =='B' && pch[x] =='B') || (pch[x] =='B' && pch[x+1] =='B')) // B is used in LOZTP
-              editable[x]=1; //found a variable so store it's position
-            //WindowPrompt("pch",pch[x],0,0);
-        }
-    }
-    CFFree(msg);
-    WindowPrompt("EDIT Coming Soon",editline,&okButton,0);
-    return;
-
-    while(1) //edit variables GUI loop
-    {
-        WPAD_ScanPads();
-        GetWiimoteData();
-        if((WPAD_ButtonsDown(0) & WPAD_BUTTON_B) || (WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME)) //b or home to exit
-        {
-            return;
-        }
-        else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
-        {
-             return;
-        }
-
-        draw_covers();
-        GRRLIB_Rectangle(150, 156, 350, 206, 0xffffffdd, true); //draw a big boring box
-        GRRLIB_Rectangle(152, 158, 352, 202, 0x737373FF, true);
-
-        int step = 0;
-        for(x=0;x<8;x++)
-        {
-            sprintf(screen,"%c",editline[x]);
-            CFreeTypeGX_DrawText(ttf14pt, 210+step, 190,screen, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-            step +=24;
-        }
-
-
-        DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF); //HAND!
-        GRRLIB_Render();
-    }
-    return;
+    return tamper;
 }
