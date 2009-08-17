@@ -76,10 +76,9 @@ bool check_gct(int id, struct discHdr *gameList)
 
 bool download_txt(int id, int mode, struct discHdr *gameList)
 {
-    //attempt to download the game's txt cheat file from www.usbgecko.com
+    //attempt to download the game's txt cheat file from CODESITE
     // call with mode=1 to suppress messages, mode=0 for verbose mode
     //TODO tidy this up a bit
-    //TODO add a batch download function like for covers
     //TODO get the 4-digit bit to kick in after a bad download on 6-digit not just after NULL data
     if(mode==0)
     {
@@ -174,6 +173,7 @@ void manage_cheats(int id, struct discHdr *gameList)
     char filename[10];
     char titleID[7];
     char path[50];
+    char *strpointer;
     int i, codecounter = 0,ret;
     bool lastiscode = false;
     bool tamper = false;
@@ -181,7 +181,6 @@ void manage_cheats(int id, struct discHdr *gameList)
     sprintf(titleID,"%s",header->id);
     sprintf(filename, "%s.txt", titleID);
     chdir("/");
-//  sprintf(path,"%s%s",USBLOADER_PATH,TXT_PATH);
     sprintf(path,"%s/",dynPath.dir_txtcodes);
     chdir(path);
     FILE *txtfile=NULL;
@@ -207,10 +206,16 @@ void manage_cheats(int id, struct discHdr *gameList)
                 memset(cheat[i]->title, 0, LINE_LENGTH);
                 sprintf(cheat[i]->title,buffer); //write a title line
                 lastiscode = false;
-                if(strlen(buffer)>LINE_LENGTH)
-                    cheat[i]->title[LINE_LENGTH-1]='\0'; //get rid of the end of line
-                else
-                    cheat[i]->title[strlen(cheat[i]->title)-1]='\0';
+                strpointer=strchr(cheat[i]->title, '\r'); //search for CR
+                if(strpointer)
+                    *strpointer='\0'; //replace with EOL
+                strpointer=strchr(cheat[i]->title, '\n'); //search for Newline
+                if(strpointer)
+                    *strpointer='\0'; //replace with EOL
+                //if(strlen(buffer)>LINE_LENGTH)
+                //    cheat[i]->title[LINE_LENGTH-1]='\0'; //get rid of the end of line
+                //else
+                //    cheat[i]->title[strlen(cheat[i]->title)-1]='\0';
                     //WindowPrompt("title1",cheat[i]->title,&okButton,0);
                 cheat[i]->codelines = 0; //set new title codelines to zero
                 cheat[i]->editable = false;
@@ -223,10 +228,15 @@ void manage_cheats(int id, struct discHdr *gameList)
                             lastiscode = false;
                             memset(cheat[i]->title, 0, LINE_LENGTH);
                             sprintf(cheat[i]->title,buffer); //write THIS title over THAT title
-                            if(strlen(buffer)>LINE_LENGTH)
-                                cheat[i]->title[LINE_LENGTH-1]='\0'; //get rid of the end of line
-                            else
-                                cheat[i]->title[strlen(cheat[i]->title)-1]='\0';
+                            strpointer=strchr(cheat[i]->title, '\r'); //search for CR
+                            if(strpointer)
+                                *strpointer='\0'; //replace with EOL
+                            strpointer=strchr(cheat[i]->title, '\n'); //search for Newline
+                            if(strpointer)
+                            //if(strlen(buffer)>LINE_LENGTH)
+                            //    cheat[i]->title[LINE_LENGTH-1]='\0'; //get rid of the end of line
+                            //else
+                            //    cheat[i]->title[strlen(cheat[i]->title)-1]='\0';
                                 //WindowPrompt("title2",cheat[i]->title,&okButton,0);
                             cheat[i]->codelines = 0; //set new title codelines to zero
                             cheat[i]->editable = false;
