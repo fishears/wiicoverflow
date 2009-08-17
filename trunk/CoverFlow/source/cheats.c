@@ -593,7 +593,7 @@ void create_gct(CHEAT *cheat,int cheatcount, struct discHdr *gameList, int id, i
     {
         if(cheat[i]->enabled) //if this cheat is enabled...
         {
-            for(n=0;n<cheat[i]->codelines;n++) //sub loop for getting the enabled codes
+            for(n=0;n<cheat[i]->codelines && n<MAX_CODES;n++) //sub loop for getting the enabled codes
             {
                 if(cheat[i]->codes[n] !=NULL)
                 {
