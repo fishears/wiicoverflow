@@ -212,11 +212,7 @@ void manage_cheats(int id, struct discHdr *gameList)
                 strpointer=strchr(cheat[i]->title, '\n'); //search for Newline
                 if(strpointer)
                     *strpointer='\0'; //replace with EOL
-                //if(strlen(buffer)>LINE_LENGTH)
-                //    cheat[i]->title[LINE_LENGTH-1]='\0'; //get rid of the end of line
-                //else
-                //    cheat[i]->title[strlen(cheat[i]->title)-1]='\0';
-                    //WindowPrompt("title1",cheat[i]->title,&okButton,0);
+
                 cheat[i]->codelines = 0; //set new title codelines to zero
                 cheat[i]->editable = false;
                 if(i>0) //only write codelines if this isn't the first title
@@ -233,11 +229,8 @@ void manage_cheats(int id, struct discHdr *gameList)
                                 *strpointer='\0'; //replace with EOL
                             strpointer=strchr(cheat[i]->title, '\n'); //search for Newline
                             if(strpointer)
-                            //if(strlen(buffer)>LINE_LENGTH)
-                            //    cheat[i]->title[LINE_LENGTH-1]='\0'; //get rid of the end of line
-                            //else
-                            //    cheat[i]->title[strlen(cheat[i]->title)-1]='\0';
-                                //WindowPrompt("title2",cheat[i]->title,&okButton,0);
+                                *strpointer='\0'; //replace with EOL
+                            
                             cheat[i]->codelines = 0; //set new title codelines to zero
                             cheat[i]->editable = false;
                     }
