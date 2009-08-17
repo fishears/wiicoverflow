@@ -23,9 +23,9 @@ extern "C" {
     #define CODESITE "http://geckocodes.org/codes/"
     #define LINES_PER_PAGE 9 //lines per page to display
     #define LINE_LENGTH 50 //max title line length
-    #define MAX_CODES 30 //max number of cheat codes
+    #define MAX_CODES 100 //max number of cheat codes
     #define CHEAT_LINE 18 //cheat codeline length
-    #define MAX_CHEATS 37 //maximum number of cheats per game
+    #define MAX_CHEATS 45 //maximum number of cheats per game
 
 typedef struct {
     char title[LINE_LENGTH]; //cheat description text
@@ -36,7 +36,7 @@ typedef struct {
 } CHEAT[MAX_CHEATS];
 
 typedef struct {
-    bool selectAll; //select all/de-select all stus of page
+    bool selectAll; //"select all/de-select all" status of page
 } PAGE;
     
     bool check_txt(int id, struct discHdr *gameList); //check for txt cheat file on sd
@@ -47,8 +47,7 @@ typedef struct {
     int is_code(char* line); //check if line is a code line & if it is an editable code line
     bool check_download(); //check downloaded txt cheat file for validity
     void create_gct(CHEAT *cheat, int cheatcount,struct discHdr *gameList, int id, int cheatCount); //parse selected cheats into a gct
-    void edit_codes(CHEAT *cheat, int cheatNum); //main code line editor gui
-    void edit_variables(char* line); //lets you edit the variable values in a codeline
+    bool edit_codes(CHEAT *cheat, int cheatNum); //code line editor gui
 
 #ifdef	__cplusplus
 }
