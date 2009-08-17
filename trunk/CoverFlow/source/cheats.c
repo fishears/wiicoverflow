@@ -206,13 +206,17 @@ void manage_cheats(int id, struct discHdr *gameList)
                 memset(cheat[i]->title, 0, LINE_LENGTH);
                 sprintf(cheat[i]->title,buffer); //write a title line
                 lastiscode = false;
-                strpointer=strchr(cheat[i]->title, '\r'); //search for CR
-                if(strpointer)
-                    *strpointer='\0'; //replace with EOL
-                strpointer=strchr(cheat[i]->title, '\n'); //search for Newline
-                if(strpointer)
-                    *strpointer='\0'; //replace with EOL
-
+                if(strlen(buffer)>LINE_LENGTH)
+                    cheat[i]->title[LINE_LENGTH-1]='\0'; //get rid of the end of line
+                else
+                {
+                    strpointer=strchr(cheat[i]->title, '\r'); //search for CR
+                    if(strpointer)
+                        *strpointer='\0'; //replace with EOL
+                    strpointer=strchr(cheat[i]->title, '\n'); //search for Newline
+                    if(strpointer)
+                        *strpointer='\0'; //replace with EOL
+                }
                 cheat[i]->codelines = 0; //set new title codelines to zero
                 cheat[i]->editable = false;
                 if(i>0) //only write codelines if this isn't the first title
@@ -224,13 +228,17 @@ void manage_cheats(int id, struct discHdr *gameList)
                             lastiscode = false;
                             memset(cheat[i]->title, 0, LINE_LENGTH);
                             sprintf(cheat[i]->title,buffer); //write THIS title over THAT title
-                            strpointer=strchr(cheat[i]->title, '\r'); //search for CR
-                            if(strpointer)
-                                *strpointer='\0'; //replace with EOL
-                            strpointer=strchr(cheat[i]->title, '\n'); //search for Newline
-                            if(strpointer)
-                                *strpointer='\0'; //replace with EOL
-                            
+                            if(strlen(buffer)>LINE_LENGTH)
+                                cheat[i]->title[LINE_LENGTH-1]='\0'; //get rid of the end of line
+                            else
+                            {
+                                strpointer=strchr(cheat[i]->title, '\r'); //search for CR
+                                if(strpointer)
+                                    *strpointer='\0'; //replace with EOL
+                                strpointer=strchr(cheat[i]->title, '\n'); //search for Newline
+                                if(strpointer)
+                                    *strpointer='\0'; //replace with EOL
+                            }
                             cheat[i]->codelines = 0; //set new title codelines to zero
                             cheat[i]->editable = false;
                     }
