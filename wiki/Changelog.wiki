@@ -4,7 +4,7 @@
 -NEW-
   * OSK (OnScreen-Keyboard) (qwerty)
    # used with dynamic paths
-   # used with ...
+   # used with cheat manager
   * Method for alt.DOL from Image with autoselection implemented
   * Method for alt.DOL from SD: / USB: implemented
   * CoverFloader News Service (CFNS) (requires internet connection)
@@ -13,10 +13,12 @@
   * dynamic paths for all CoverFloader files and directories on SD: and USB: (editable with OSK)
   * additional support for USB-Devices
   * support for the new game hooks (found in GeckoOS 1.9.2)
+  * cheat codes with variables are now editable
 
 -FIX-
   * SDHC support fixed
   * Improved cover loading speed
+  * Improved cheat compatibility (codes per cheat raised to 100)
 
 == v1.1  (July 24 2009) ==
 
