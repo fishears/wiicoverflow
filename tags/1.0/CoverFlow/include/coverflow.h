@@ -96,7 +96,7 @@
 
 
 
-#define RELEASE              "v1.1"
+#define RELEASE              "v1.2"
 
 #define ANIMATE_SPEED 0
 #define FLIP_SPEED  0.016
