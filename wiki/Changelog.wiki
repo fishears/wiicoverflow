@@ -4,7 +4,7 @@
 -FIX-
   * SDHC support fixed
   * Improved cover loading speed
-  * Cheat downloads redirected to usbgeckocodes.org
+  * Cheat downloads redirected to geckocodes.org
 
 == v1.2a (2.0 Path) (August 18 2009)==
 
@@ -26,7 +26,7 @@
   * SDHC support fixed
   * Improved cover loading speed
   * Improved cheat compatibility (codes per cheat raised to 100)
-  * Cheat downloads redirected to usbgeckocodes.org
+  * Cheat downloads redirected to geckocodes.org
 
 == v1.1  (July 24 2009) ==
 
