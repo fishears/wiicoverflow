@@ -1,5 +1,12 @@
 #labels Featured
-== v1.1+ (2.0 Path) (August ? 2009)==
+== v1.2 (Stable) (August 18 2009)==
+
+-FIX-
+  * SDHC support fixed
+  * Improved cover loading speed
+  * Improved cheat compatibility (codes per cheat raised to 100)
+
+== v1.2a (2.0 Path) (August 18 2009)==
 
 -NEW-
   * OSK (OnScreen-Keyboard) (qwerty)
