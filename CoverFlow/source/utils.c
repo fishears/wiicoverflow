@@ -447,7 +447,7 @@ char * GetTokenValue(char * token, char* username, char* password, char * lang, 
 	return ret;
 }
 
-char * ParseTokenedUrl(char * url, char* username, char* password, char * lang, char * region, char *id)
+char * ParseTokenedUrl(char * sitebase,char * subdirectory, char * url, char* username, char* password, char * lang, char * region, char *id)
 {
 	char * ret;
 	int nChars=0;
@@ -459,6 +459,16 @@ char * ParseTokenedUrl(char * url, char* username, char* password, char * lang, 
 	int i,pos=0;
 	int tokenPos=0;
 	bool inToken=false;
+	
+	for (i=0;i<strlen(sitebase);i++)
+	{
+		ret[pos++]=sitebase[i];
+	}
+
+	for (i=0;i<strlen(subdirectory);i++)
+	{
+		ret[pos++]=subdirectory[i];
+	}
 
 	for (i=0;i<strlen(url);i++)
 	{
