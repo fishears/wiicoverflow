@@ -2,9 +2,14 @@
 #include "utils.h"
 #include "TrackedMemoryManager.h"
 
-#define COVERS_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/cover/[Lang]/[GameID].png"
-#define COVERS_LOCATION_LANG_FULL "http://wiitdb.com/wiitdb/artwork/coverfull/[Lang]/[GameID].png"
-#define DISKART_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/disc/[Lang]/[GameID].png"
+#define SITE_BASE "http://wiitdb.com/wiitdb/artwork/"
+
+#define COVER "cover"
+#define COVERFULL "coverfull"
+#define DISK "disk"
+
+#define PARAMTERISED_ARTWORK_LOCATION "/[Lang]/[GameID].png"
+
 extern s_self self;
 extern s_settings settings;
 extern s_gameSettings gameSetting;
@@ -191,11 +196,11 @@ void Download_Cover(char* id, int v, int max)
 
 		if(!(settings.covers3d))
 		{
-			parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword",country,region,id);
+			parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
 		}
 		else
 		{
-			parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword",country,region,id);
+			parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
 		}
 
 		if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
@@ -204,21 +209,21 @@ void Download_Cover(char* id, int v, int max)
 			if(id[3] != 'E' && id[3] != 'J'){ //PAL default to EN
 				if(!(settings.covers3d))
 				{
-					parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword","EN",region,id);
+					parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
 				}
 				else
 				{
-					parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword","EN",region,id);
+					parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
 				}
 			}
 			else{
 				if(!(settings.covers3d))
 				{
-					parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG,"testUsername","testPassword","US",region,id);
+					parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 				}
 				else
 				{
-					parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword","US",region,id);
+					parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 				}
 			}
 	
@@ -244,16 +249,16 @@ void Download_Cover(char* id, int v, int max)
 	}
 	else
 	{
-		parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword",country,region,id);
+		parsedUrl=ParseTokenedUrl(SITE_BASE,DISK,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
 		
 		if(!getCoverFromServer(parsedUrl, imgPath, v, max))
 		{
 
 			//FALLBACK (ugly code)
 			if(id[3] != 'E' && id[3] != 'J') //PAL default to EN
-				parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword","EN",region,id);
+				parsedUrl=ParseTokenedUrl(SITE_BASE,DISK,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
 			else
-				parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword","US",region,id);
+				parsedUrl=ParseTokenedUrl(SITE_BASE,DISK,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 			
 			getCoverFromServer(parsedUrl, imgPath, v, max);
 		}
