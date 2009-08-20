@@ -1,9 +1,9 @@
 #include "cover.h"
 #include "utils.h"
 
-#define COVERS_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/cover/[Lang]/[GameID].png"
-#define COVERS_LOCATION_LANG_FULL "http://wiitdb.com/wiitdb/artwork/coverfull/[Lang]/[GameID].png"
-#define DISKART_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/disc/[Lang]/[GameID].png"
+#define COVERS_LOCATION_LANG "http://www.muntrue.nl/covers/ALL/160/224/boxart/[GameID].png"
+#define COVERS_LOCATION_LANG_FULL "http://www.muntrue.nl/covers/ALL/512/340/fullcover/[GameID].png"
+#define DISKART_LOCATION_LANG "http://www.muntrue.nl/covers/ALL/160/160/disc/[GameID].png"
 extern s_self self;
 extern s_settings settings;
 extern s_gameSettings gameSetting;
@@ -263,7 +263,7 @@ bool getCoverFromServer(char* url, char* imgPath, int v, int max){
 
 	file = downloadfile(url);
 
-	if(file.data != NULL && file.size >= 1024){
+	if(file.data != NULL && file.size >= 4000){
 	    char* msg = malloc(20*sizeof(char));
 	    strncpy(msg, (char*)file.data,20);
 	    pch = strtok(msg, " ");
