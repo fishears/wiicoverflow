@@ -3,12 +3,17 @@
 #include "TrackedMemoryManager.h"
 
 #define SITE_BASE "http://wiitdb.com/wiitdb/artwork/"
+#define ALT_SITE_BASE "http://www.muntrue.nl/covers/ALL/"
 
 #define COVER "cover"
 #define COVERFULL "coverfull"
 #define DISK "disk"
+#define ALT_COVER "160/224/boxart"
+#define ALT_COVERFULL "512/340/fullcover"
+#define ALT_DISK "160/160/disc"
 
 #define PARAMTERISED_ARTWORK_LOCATION "/[Lang]/[GameID].png"
+#define ALT_PARAMTERISED_ARTWORK_LOCATION "/[GameID].png"
 
 extern s_self self;
 extern s_settings settings;
@@ -196,11 +201,11 @@ void Download_Cover(char* id, int v, int max)
 
 		if(!(settings.covers3d))
 		{
-			parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+			parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVER,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
 		}
 		else
 		{
-			parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+			parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVERFULL,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
 		}
 
 		if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
@@ -209,21 +214,21 @@ void Download_Cover(char* id, int v, int max)
 			if(id[3] != 'E' && id[3] != 'J'){ //PAL default to EN
 				if(!(settings.covers3d))
 				{
-					parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
+					parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVER,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
 				}
 				else
 				{
-					parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
+					parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVERFULL,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
 				}
 			}
 			else{
 				if(!(settings.covers3d))
 				{
-					parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
+					parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVER,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 				}
 				else
 				{
-					parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
+					parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVERFULL,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 				}
 			}
 	
@@ -249,16 +254,16 @@ void Download_Cover(char* id, int v, int max)
 	}
 	else
 	{
-		parsedUrl=ParseTokenedUrl(SITE_BASE,DISK,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+		parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_DISK,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
 		
 		if(!getCoverFromServer(parsedUrl, imgPath, v, max))
 		{
 
 			//FALLBACK (ugly code)
 			if(id[3] != 'E' && id[3] != 'J') //PAL default to EN
-				parsedUrl=ParseTokenedUrl(SITE_BASE,DISK,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
+				parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_DISK,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
 			else
-				parsedUrl=ParseTokenedUrl(SITE_BASE,DISK,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
+				parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_DISK,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 			
 			getCoverFromServer(parsedUrl, imgPath, v, max);
 		}
@@ -276,7 +281,7 @@ bool getCoverFromServer(char* url, char* imgPath, int v, int max){
 
 	file = downloadfile(url);
 
-	if(file.data != NULL && file.size >= 1024){
+	if(file.data != NULL && file.size >= 4000){
 	    char* msg = CFMalloc(20*sizeof(char));
 	    strncpy(msg, (char*)file.data,20);
 	    pch = strtok(msg, " ");
