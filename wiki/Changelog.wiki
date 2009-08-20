@@ -1,12 +1,18 @@
 #labels Featured
 == v1.2 (Stable) (August 18 2009)==
 
+-UPDATE-
+  * cover downloads switched to www.muntrue.nl
+
 -FIX-
   * SDHC support fixed
   * Improved cover loading speed
   * Cheat downloads redirected to geckocodes.org
 
 == v1.2a (2.0 Path) (August 18 2009)==
+
+-UPDATE-
+  * cover downloads switched to www.muntrue.nl
 
 -NEW-
   * OSK (OnScreen-Keyboard) (qwerty)
