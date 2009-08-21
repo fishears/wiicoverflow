@@ -495,23 +495,29 @@ int is_code(char* line)
                 {
                     if (((tempCode[x] >= 'g') && (tempCode[x] <= 'z')) ||((tempCode[x] >= 'G') && (tempCode[x] <= 'Z')))
                     {
-                        //exclude known code variables
-                        //if(tempCode[x] !='x' && tempCode[x] !='X' && tempCode[x] !='R' && tempCode[x] !='G' && tempCode[x] !='Y' && tempCode[x] !='y')
                             checkFlag=false;
                     }
                 }
-                
+                for (x=0;x<8;x++) //but if there are ANY numbers is must be a code
+                {
+                    if (((tempCode[x] >= '0') && (tempCode[x] <= '9')))
+                    {
+                            checkFlag=true;
+                    }
+                }
                 pch = strtok(NULL," \r\n");
                 if(strlen(pch)==8) //test for second block of 8 characters to SPACE or NEWLINE
                 {
                     strcat(tempCode,pch);
-                    for (x = 0; x < 8; x++) //check for characters outside the scope of a pukka code
+                    for (x = 0; x < 16; x++) //check whole codeline for characters outside the scope of a pukka code
                     {
                         //known code variables
-                        if(pch[x] =='x' || pch[x] =='X' || pch[x] =='R' || pch[x] =='G' || pch[x] =='Y' || pch[x] =='y' 
-                                || (pch[x-1] =='b' && pch[x] =='b') || (pch[x] =='b' && pch[x+1] =='b') //sneaky B
-                                || (pch[x-1] =='B' && pch[x] =='B') || (pch[x] =='B' && pch[x+1] =='B')) // B is used in LOZTP
+                        if(tempCode[x] =='x' || tempCode[x] =='X' || tempCode[x] =='R' || tempCode[x] =='G' || tempCode[x] =='Y' || tempCode[x] =='y'
+                                || (tempCode[x-1] =='b' && tempCode[x] =='b') || (tempCode[x] =='b' && tempCode[x+1] =='b') //sneaky B
+                                || (tempCode[x-1] =='B' && tempCode[x] =='B') || (tempCode[x] =='B' && tempCode[x+1] =='B')) // B is used in LOZTP
+                        {
                             editable = true;
+                        }
                     }
                     if(checkFlag)
                     {
