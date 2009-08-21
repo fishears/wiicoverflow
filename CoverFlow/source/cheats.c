@@ -116,6 +116,7 @@ bool download_txt(int id, int mode, struct discHdr *gameList)
                     if(mode==0)
                         WindowPrompt(titleID, TX.downloadComplete, &okButton,0);
                     sprintf(imgpath,"%s/%s.txt", dynPath.dir_txtcodes, titleID);
+                    remove(imgpath);
                     rename(tmppath,imgpath); //temp file is good so rename for titleID
                     return true;
                 }
