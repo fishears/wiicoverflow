@@ -1,0 +1,7 @@
+#labels Phase-Implementation
+=What are we working on?=
+
+==Work In Progress==
+|| *Developer* || *Currently working on* || *Date started* ||
+|| F1SHE4RS    || Automatic host switching for missing covers between our 3 known hosts || 21/08/09 ||
+
