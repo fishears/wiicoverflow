@@ -44,7 +44,6 @@
 #include "soundmanager.h"
 #include "CFreeTypeGX.h"
 #include "titles.h"
-#include "ee.h"
 #include "konami.h"
 #include "cheats.h"
 #include "info.h"
