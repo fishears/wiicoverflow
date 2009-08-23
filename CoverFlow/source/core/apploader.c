@@ -251,16 +251,6 @@ s32 Apploader_Run(entry_point *entry)
 	char dbg[80];
 #endif
 
-//////////////////////////////////////////////////
-//  	Only for testing alt.DOL from image		//
-//												//
-// 	   (see autoSelectDol in discbrowser.c )	//
-//										 		//
-//self.alternatedoloffset = 952;    // WSR		//
-//self.alternatedoloffset = 1957; // RedSteel	//
-//										 		//
-//////////////////////////////////////////////////
-
 	/* Read apploader header */
 	ret = WDVD_Read(buffer, 0x20, APPLDR_OFFSET);
 	if (ret < 0)
@@ -358,11 +348,16 @@ s32 Apploader_Run(entry_point *entry)
 		memcpy(gameidbuffer6, (char*)0x80000000, 6); 
 
         self.alternatedoloffset = autoSelectDol(gameidbuffer6);
+		if (self.alternatedoloffset != -1)
+		{
+			FST_ENTRY *fst = (FST_ENTRY *)*(u32 *)0x80000038;
+			*entry = (entry_point) Load_Dol_from_disc(fst[self.alternatedoloffset].fileoffset);
+		}
+		else
+		{
+			*entry = 0;
+		}
 		
-		FST_ENTRY *fst = (FST_ENTRY *)*(u32 *)0x80000038;
-
-        *entry = (entry_point) Load_Dol_from_disc(fst[self.alternatedoloffset].fileoffset);
-
         if (*entry == 0)
             SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
 	}
