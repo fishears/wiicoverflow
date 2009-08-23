@@ -35,9 +35,6 @@ s_path		   dynPath;
 
 //static s_Filter gameFilter;
 
-
-
-
 extern struct gameXMLinfo gameinfo;
 
 
@@ -224,14 +221,6 @@ int main( int argc, char **argv )
 
 	//********  earliest access point for accessing files on SD-Card (after Fat_MountSDHC) ********
 
- 
- //char buffer[500];
- //sprintf(buffer,"%s|%s|%s|%s|%s|%s|%s|%s",dynPath.dir_usb_loader, dynPath.dir_3dcovers, dynPath.dir_covers, dynPath.dir_disks, dynPath.dir_games, dynPath.dir_covers, dynPath.dir_txtcodes, dynPath.dir_altdol);
- //WindowPrompt("Paths", buffer, 0, &okButton);
-
-
-
-
 	checkDirs();
 	checkFiles();
 	
@@ -387,7 +376,6 @@ int main( int argc, char **argv )
 	//////////////////////////
 	while(1) 
 	{
-	  START_LOOP:
 #ifndef TEST_MODE
 		WPAD_ScanPads();
 		GetWiimoteData();
@@ -395,30 +383,7 @@ int main( int argc, char **argv )
 		PAD_ScanPads();
 		self.twisting = false;
 		self.scrolling = false;
-	
-		if(CheckKonami())
-		{
-			WindowPrompt("Konami Code!!", "Click OK to enable GC Backups..." , &okButton, 0);
-			
-			int c = 0;
-			for(;c < 25; c++)
-			{
-				Sleep(100);
-				Paint_Progress_Generic(c, 27,"Enabling GC Backup Support...");
-			}	
-			
-			Sleep(2000);
-			
-			for(;c >= 0; c--)
-			{
-				Sleep(100);
-				Paint_Progress_Generic(c, 27,"Enabling GC Backup Support...");
-			}	
-			
-			ee();
-			goto START_LOOP;
-		}
-	
+
 		// Check for 'HOME' button press
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME) || (PAD_ButtonsDown(0) & PAD_TRIGGER_Z))
 		{
@@ -902,10 +867,7 @@ int main( int argc, char **argv )
 		
 		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_MINUS))
 		{
-#ifdef OSK
-			sprintf(self.kb_buffer, "This is only for testing...");
-			showOSK("Test KeyBoard");
-#endif
+            // free
 		}
 			
 		// Check for parental lock button combo A + B + 1 + 2

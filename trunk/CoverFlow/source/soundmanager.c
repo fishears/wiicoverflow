@@ -14,9 +14,6 @@ extern u8 buttonClick_raw[];
 extern u32 buttonClick_raw_size;
 
 
-extern u8 toasty_raw[];
-extern u32 toasty_raw_size;
-
 inline void SOUND_Init()
 {
    SND_Init(INIT_RATE_48000); // Initialize the Sound Lib
@@ -27,7 +24,6 @@ inline void SOUND_Init()
    _sounds[FX_COVER_FLIP]   = SoundFile_Init(coverFlip_raw, coverFlip_raw_size, RAW_FORMAT, FX_COVER_FLIP);
    _sounds[FX_COVER_SCROLL] = SoundFile_Init(coverScroll_raw, coverScroll_raw_size, RAW_FORMAT, FX_COVER_SCROLL);
    _sounds[FX_BUTTON_CLICK] = SoundFile_Init(buttonClick_raw, buttonClick_raw_size, RAW_FORMAT, FX_BUTTON_CLICK);
-   _sounds[FX_TOASTY] = SoundFile_Init(toasty_raw, toasty_raw_size, RAW_FORMAT, FX_TOASTY);
 }
 
 inline int SOUND_PlaySound(int sound_id, int loops)
