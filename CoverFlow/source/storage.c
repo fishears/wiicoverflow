@@ -105,6 +105,7 @@ void checkDirs(){
 			mkdir("disks", S_ISVTX);
 			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
 			mkdir("covers", S_ISVTX);
+                        mkdir("3dcovers", S_ISVTX);
 			//mkdir("games", S_ISVTX);
             mkdir("txtcodes", S_ISVTX);
 
