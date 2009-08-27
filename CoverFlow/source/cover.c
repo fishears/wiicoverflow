@@ -7,7 +7,7 @@
 
 #define COVER "cover"
 #define COVERFULL "coverfull"
-#define DISK "disk"
+#define DISK "disc"
 #define ALT_COVER "160/224/boxart"
 #define ALT_COVERFULL "512/340/fullcover"
 #define ALT_DISK "160/160/disc"
@@ -201,11 +201,11 @@ void Download_Cover(char* id, int v, int max)
 
 		if(!(settings.covers3d))
 		{
-			parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVER,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+			parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
 		}
 		else
 		{
-			parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVERFULL,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+			parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
 		}
 
 		if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
@@ -214,25 +214,37 @@ void Download_Cover(char* id, int v, int max)
 			if(id[3] != 'E' && id[3] != 'J'){ //PAL default to EN
 				if(!(settings.covers3d))
 				{
-					parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVER,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
+					parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
 				}
 				else
 				{
-					parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVERFULL,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
+					parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
 				}
 			}
 			else{
 				if(!(settings.covers3d))
 				{
-					parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVER,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
+					parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 				}
 				else
 				{
-					parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVERFULL,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
+					parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 				}
 			}
 	
-			getCoverFromServer(parsedUrl, imgPath, v, max);
+			if(!getCoverFromServer(parsedUrl, imgPath, v, max)){ //all that failed so try other supplier
+                            {
+                            if(!(settings.covers3d))
+                            {
+                                    parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVER,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+                            }
+                            else
+                            {
+                                    parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVERFULL,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+                            }
+                        }
+                        getCoverFromServer(parsedUrl, imgPath, v, max);
+                        }
 		}
 	}
 	
@@ -254,18 +266,22 @@ void Download_Cover(char* id, int v, int max)
 	}
 	else
 	{
-		parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_DISK,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+		parsedUrl=ParseTokenedUrl(SITE_BASE,DISK,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
 		
 		if(!getCoverFromServer(parsedUrl, imgPath, v, max))
 		{
 
 			//FALLBACK (ugly code)
 			if(id[3] != 'E' && id[3] != 'J') //PAL default to EN
-				parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_DISK,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
+				parsedUrl=ParseTokenedUrl(SITE_BASE,DISK,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
 			else
-				parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_DISK,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
+				parsedUrl=ParseTokenedUrl(SITE_BASE,DISK,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 			
-			getCoverFromServer(parsedUrl, imgPath, v, max);
+			if(!getCoverFromServer(parsedUrl, imgPath, v, max)) //first supplier failed so try second
+                        {
+                            parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_DISK,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+                            getCoverFromServer(parsedUrl, imgPath, v, max);
+                        }
 		}
 	}
 } /* end download */
