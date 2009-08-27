@@ -1,9 +1,14 @@
 #include "cover.h"
 #include "utils.h"
 
-#define COVERS_LOCATION_LANG "http://www.muntrue.nl/covers/ALL/160/224/boxart/[GameID].png"
-#define COVERS_LOCATION_LANG_FULL "http://www.muntrue.nl/covers/ALL/512/340/fullcover/[GameID].png"
-#define DISKART_LOCATION_LANG "http://www.muntrue.nl/covers/ALL/160/160/disc/[GameID].png"
+#define ALT_COVERS_LOCATION_LANG "http://www.muntrue.nl/covers/ALL/160/224/boxart/[GameID].png"
+#define ALT_COVERS_LOCATION_LANG_FULL "http://www.muntrue.nl/covers/ALL/512/340/fullcover/[GameID].png"
+#define ALT_DISKART_LOCATION_LANG "http://www.muntrue.nl/covers/ALL/160/160/disc/[GameID].png"
+
+#define COVERS_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/cover/[Lang]/[GameID].png"
+#define COVERS_LOCATION_LANG_FULL "http://wiitdb.com/wiitdb/artwork/coverfull/[Lang]/[GameID].png"
+#define DISKART_LOCATION_LANG "http://wiitdb.com/wiitdb/artwork/disc/[Lang]/[GameID].png"
+
 extern s_self self;
 extern s_settings settings;
 extern s_gameSettings gameSetting;
@@ -214,8 +219,18 @@ void Download_Cover(char* id, int v, int max)
 					parsedUrl=ParseTokenedUrl(COVERS_LOCATION_LANG_FULL,"testUsername","testPassword","US",region,id);
 				}
 			}
-	
-			getCoverFromServer(parsedUrl, imgPath, v, max);
+                        if(!getCoverFromServer(parsedUrl, imgPath, v, max)){
+                            if(!(settings.covers3d))
+                            {
+                                    parsedUrl=ParseTokenedUrl(ALT_COVERS_LOCATION_LANG,"testUsername","testPassword",country,region,id);
+                            }
+                            else
+                            {
+                                    parsedUrl=ParseTokenedUrl(ALT_COVERS_LOCATION_LANG_FULL,"testUsername","testPassword",country,region,id);
+                            }
+                            getCoverFromServer(parsedUrl, imgPath, v, max);
+                        }
+			
 		}
 	}
 	
@@ -246,9 +261,13 @@ void Download_Cover(char* id, int v, int max)
 				parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword","EN",region,id);
 			else
 				parsedUrl=ParseTokenedUrl(DISKART_LOCATION_LANG,"testUsername","testPassword","US",region,id);
-			
-			getCoverFromServer(parsedUrl, imgPath, v, max);
-		}
+
+                        if(!getCoverFromServer(parsedUrl, imgPath, v, max))
+                        {
+                            parsedUrl=ParseTokenedUrl(ALT_DISKART_LOCATION_LANG,"testUsername","testPassword",country,region,id);
+                            getCoverFromServer(parsedUrl, imgPath, v, max);
+                        }
+                }
 	}
 } /* end download */
 
