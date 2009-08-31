@@ -1837,8 +1837,9 @@ void freeResources(){
     FreeButtonResources(&cheatDownButton);
  #endif
 
-#ifdef OSK
+
 	int i, j;
+#ifdef OSK
 	for( i=0; i<4; i++)
 	{
 		for( j=0; j<11; j++)

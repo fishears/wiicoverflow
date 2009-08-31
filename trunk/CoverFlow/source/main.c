@@ -1058,7 +1058,7 @@ int main( int argc, char **argv )
 					self.updateAvailable = false;
 			}
 		}
-		
+/*		
 		if(settings.autoUpdate && self.updateAvailable){
 			if(promptForUpdate()){
 				if(downloadUpdate())
@@ -1068,6 +1068,7 @@ int main( int argc, char **argv )
 			}
 			self.updateAvailable = false;
 		}
+*/		
 #ifdef DEBUG
 //		char tDebugOut[100];
 // These won't work until they get switched over to use CFreeTypeGX_DrawText
