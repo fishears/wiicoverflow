@@ -1,6 +1,7 @@
 #include "titles.h"
 
 extern s_self self;
+extern s_settings settings;
 
 int initTitle(){
 
@@ -52,8 +53,8 @@ void fillTitleStruct(s_title* titleList, int len){
 		//while(fgets(line, sizeof(line), fp)){
 		for(i=0; i<len; i++){
 			fgets(line, sizeof(line), fp);
-			snprintf(titleList[i].id, 5, "%s",line);
-			sprintf(titleList[i].name, "%s",line+7);
+			snprintf(titleList[i].id, 7, "%s",line);
+			sprintf(titleList[i].name, "%s",line+9);
 			titleList[i].name[strlen(titleList[i].name)-1] = '\0';
 			if (titleList[i].name[strlen(titleList[i].name)-1]==0x0d) // playing with notepad = stupid titles
 			{
@@ -97,7 +98,7 @@ void getTitle(s_title* titleList, char* id, char* title){
 	
 	int i = 0;
 	for(i=0; i<self.titlesTxtSize; i++){
-		if((strncmp(id, titleList[i].id, 4)==0)){
+		if((strncmp(id, titleList[i].id, 6)==0)){
 			sprintf(title, "%s", titleList[i].name);
 		}
 	}
@@ -107,10 +108,54 @@ bool downloadTitles(){
 	//WindowPrompt(TX.error, "Error initializing network\nTitles.txt can't be downloaded.", &okButton, 0);
 	char titlesPath[100];
 	struct block file;
-	
+/*	char country[3];
+
+        char LANG[10];
+        sprintf(LANG,"%s",settings.localLanguage);
+	switch(LANG){
+                case DEFAULT:
+			sprintf(country, "EN");
+			break;
+		case GER:
+			sprintf(country, "DE");
+			break;
+		case HUN:
+			sprintf(country, "HU");
+			break;
+		case ITA:
+                        sprintf(country, "IT");
+                        break;
+                case TUR:
+                        sprintf(country, "TR");
+                        break;
+		case PTBR:
+                        sprintf(country, "PT");
+                        break;
+		case FRE:
+                        sprintf(country, "FR");
+                        break;
+		case DUT:
+                        sprintf(country, "NL");
+                        break;
+		case DAN:
+                        sprintf(country, "DA");
+                        break;
+		case CAT:
+                        sprintf(country, "CA");
+                        break;
+		case SPA:
+                        sprintf(country, "ES");
+                        break;
+		case FIN:
+			sprintf(country, "FI");
+			break;
+		default:
+			sprintf(country, "EN");
+	}
+*/
+
 	snprintf(titlesPath, sizeof(titlesPath), "%s/titles.txt", USBLOADER_PATH);
-	
-	//file = downloadfile("http://www.wiiboxart.com/titles.txt");
+        //sprintf(TEMP,"http://wiitdb.com/titles.txt?LANG=%s",country);
 	file = downloadfile("http://wiitdb.com/titles.txt");
 	if(file.data != NULL){
 		
