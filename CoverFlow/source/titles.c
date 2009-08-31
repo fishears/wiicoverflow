@@ -61,8 +61,8 @@ void fillTitleStruct(s_title* titleList, int len){
 		//while(fgets(line, sizeof(line), fp)){
 		for(i=0; i<len; i++){
 			fgets(line, sizeof(line), fp);
-			snprintf(titleList[i].id, 5, "%s",line);
-			sprintf(titleList[i].name, "%s",line+7);
+			snprintf(titleList[i].id, 7, "%s",line);
+			sprintf(titleList[i].name, "%s",line+9);
 			titleList[i].name[strlen(titleList[i].name)-1] = '\0';
 			if (titleList[i].name[strlen(titleList[i].name)-1]==0x0d) // playing with notepad = stupid titles
 			{
@@ -106,7 +106,7 @@ void getTitle(s_title* titleList, char* id, char* title){
 	
 	int i = 0;
 	for(i=0; i<self.titlesTxtSize; i++){
-		if((strncmp(id, titleList[i].id, 4)==0)){
+		if((strncmp(id, titleList[i].id, 6)==0)){
 			sprintf(title, "%s", titleList[i].name);
 		}
 	}

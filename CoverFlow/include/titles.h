@@ -6,7 +6,7 @@
 #define MAX_TITLE_LEN 256
 
 typedef struct{
-	char id[5];
+	char id[7];
     char name[MAX_TITLE_LEN];
 } s_title;
 
