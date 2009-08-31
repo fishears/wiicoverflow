@@ -3,7 +3,6 @@
 #include <string.h>
 
 
-
 int autoSelectDol(const char *id) 
 {
     if (strcmp(id,"RF8E69") == 0) return 439;  // Fifa 08 NTSC
@@ -19,6 +18,7 @@ int autoSelectDol(const char *id)
 	
 	if (strcmp(id,"RM2X69") == 0) return 601;  // Medal Of Honor Heroes 2 PAL
 	if (strcmp(id,"RM2P69") == 0) return 517;	// Medal Of Honor Heroes 2 PAL
+	if (strcmp(id,"RM2E69") == 0) return 492;	// Medal Of Honor Heroes 2 NTSC
 	
     if (strcmp(id,"REDP41") == 0) return 1957; // Red Steel PAL
     if (strcmp(id,"REDE41") == 0) return 1957; // Red Steel NTSC

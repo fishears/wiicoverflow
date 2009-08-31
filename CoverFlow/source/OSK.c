@@ -10,6 +10,7 @@
 #include "coverflow.h"
 #include "OSK.h"
 
+#ifdef OSK
 #define STRMAX 256
 
 extern s_pointer pointer;
@@ -308,8 +309,7 @@ void setCharSet()
 		}
 	}
 }
-
-
+#endif
 
 
 
