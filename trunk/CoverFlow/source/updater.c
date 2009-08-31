@@ -9,6 +9,10 @@
  extern s_settings settings; 
  extern s_path dynPath; 
   
+ s32 connection; 
+ static s32 socket; 
+  
+ static bool waitforanswer = false; 
   
  bool ShutdownWC24() 
  { 
@@ -46,6 +50,103 @@
          return NULL; 
  } 
   
+ s32 network_request(const char * request) { 
+     char buf[1024]; 
+     char *ptr = NULL; 
+  
+     u32 cnt, size; 
+     s32 ret; 
+  
+     /* Send request */ 
+     ret = net_send(connection, request, strlen(request), 0); 
+     if (ret < 0) 
+         return ret; 
+  
+     /* Clear buffer */ 
+     memset(buf, 0, sizeof(buf)); 
+  
+     /* Read HTTP header */ 
+     for (cnt = 0; !strstr(buf, "\r\n\r\n"); cnt++) 
+         if (net_recv(connection, buf + cnt, 1, 0) <= 0) 
+             return -1; 
+  
+     /* HTTP request OK? */ 
+     if (!strstr(buf, "HTTP/1.1 200 OK")) 
+         return -1; 
+     /* Retrieve content size */ 
+     ptr = strstr(buf, "Content-Length:"); 
+     if (!ptr) 
+         return -1; 
+  
+     sscanf(ptr, "Content-Length: %u", &size); 
+     return size; 
+ } 
+  
+ s32 network_read(u8 *buf, u32 len) { 
+     u32 read = 0; 
+     s32 ret = -1; 
+  
+     /* Data to be read */ 
+     while (read < len) { 
+         /* Read network data */ 
+         ret = net_read(connection, buf + read, len - read); 
+         if (ret < 0) 
+             return ret; 
+  
+         /* Read finished */ 
+         if (!ret) 
+             break; 
+  
+         /* Increment read variable */ 
+         read += ret; 
+     } 
+  
+     return read; 
+ } 
+  
+ /**************************************************************************** 
+  * Download request 
+  ***************************************************************************/ 
+ s32 download_request(const char * url) { 
+  
+     //Check if the url starts with "http://", if not it is not considered a valid url 
+     if (strncmp(url, "http://", strlen("http://")) != 0) { 
+         return -1; 
+     } 
+  
+     //Locate the path part of the url by searching for '/' past "http://" 
+     char *path = strchr(url + strlen("http://"), '/'); 
+  
+     //At the very least the url has to end with '/', ending with just a domain is invalid 
+     if (path == NULL) { 
+         return -1; 
+     } 
+  
+     //Extract the domain part out of the url 
+     int domainlength = path - url - strlen("http://"); 
+  
+     if (domainlength == 0) { 
+         return -1; 
+     } 
+  
+     char domain[domainlength + 1]; 
+     strncpy(domain, url + strlen("http://"), domainlength); 
+     domain[domainlength] = '\0'; 
+  
+     connection = GetConnection(domain); 
+     if (connection < 0) { 
+         return -1; 
+     } 
+  
+     //Form a nice request header to send to the webserver 
+     char header[strlen(path)+strlen(domain)+100]; 
+     sprintf(header, "GET %s HTTP/1.1\r\nHost: %s\r\nConnection: close\r\n\r\n", path, domain); 
+  
+     s32 filesize = network_request(header); 
+  
+     return filesize; 
+ } 
+  
  void initNetworkThread() 
  { 
          LWP_CreateThread(&networkthread, networkinitcallback, NULL, NULL, 0, 80); 
@@ -60,7 +161,7 @@
  bool checkForUpdate(){ 
           
          struct block file; 
-         char* url = "http://wiicoverflow.googlecode.com/files/current.txt"; 
+         char* url = "http://wiicoverflow.googlecode.com/svn/trunk/CoverFlow/Current_Release/current.txt"; 
          char serverRevision[10]; 
          int rev; 
          char buff[255]; 
@@ -89,6 +190,97 @@
          } 
           
          return false; 
+ } 
+  
+ bool downloadUpdate(){ 
+  
+     s32 filesize = download_request("http://wiicoverflow.googlecode.com/svn/trunk/CoverFlow/Current_Release/current.dol"); 
+          
+         char progtxt[100]; 
+         int percent = 0; 
+          
+         char dolpath[255]; 
+         sprintf(dolpath,"%s/current.dol", dynPath.dir_usb_loader); 
+          
+         char dolpathsuccess[255]; 
+         sprintf(dolpathsuccess,"%s/boot.dol", dynPath.dir_usb_loader); 
+  
+         int failed = 1; 
+         s32 i  = 0; 
+         s32 ret = 0; 
+          
+         if (filesize > 0) { 
+                 FILE * pfile; 
+                 pfile = fopen(dolpath, "wb"); 
+                  
+                 u8 * blockbuffer = TrackedMalloc(BLOCKSIZE); 
+                  
+                 for (i = 0; i < filesize; i += BLOCKSIZE) { 
+                         usleep(100); 
+                          
+                         percent = (int)(i * 100.0) / filesize; 
+          
+                         sprintf(progtxt, "Downloading Update... (%d%%)", percent);  
+                          
+                         Paint_Progress_Generic(i, filesize, progtxt);  
+  
+                         u32 blksize; 
+                         blksize = (u32)(filesize - i); 
+                         if (blksize > BLOCKSIZE) 
+                                 blksize = BLOCKSIZE; 
+  
+                         ret = network_read(blockbuffer, blksize); 
+                          
+                         if (ret != (s32) blksize) { 
+                                 failed = -1; 
+                                 ret = -1; 
+                                 fclose(pfile); 
+                                 remove(dolpath); 
+                                 break; 
+                         } 
+                          
+                         fwrite(blockbuffer,1,blksize, pfile); 
+                 } 
+                  
+                 fclose(pfile); 
+                  
+                 if(blockbuffer) 
+                 { 
+                         TrackedFree(blockbuffer); 
+                 } 
+                  
+                 if (!failed) { 
+                         //remove old 
+                         if (checkfile(dolpathsuccess)) { 
+                                 remove(dolpathsuccess); 
+                         } 
+                          
+                         //rename new to old 
+                         rename(dolpath, dolpathsuccess); 
+                          
+                         CloseConnection(); 
+                          
+                         return true; 
+                 } 
+                  
+                 CloseConnection(); 
+                  
+                 return false; 
+         } 
+          
+         return false; 
+ } 
+  
+ bool checkfile(char * path) 
+ { 
+     FILE * f; 
+     f = fopen(path,"r"); 
+     if(f) { 
+     fclose(f); 
+     return true; 
+     } 
+     fclose(f); 
+ return false; 
  } 
   
   
@@ -173,3 +365,14 @@
          return false; 
  } 
  #endif 
+  
+  
+ void CloseConnection() { 
+  
+     net_close(connection); 
+  
+     if (waitforanswer) { 
+         net_close(socket); 
+         waitforanswer = false; 
+     } 
+ }
