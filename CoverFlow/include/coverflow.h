@@ -87,7 +87,8 @@
 //#define TEST_MODE 1
 #define DEBUG 1
 #define CHEAT_MANAGER
- 
+
+#define LOUDTEST
  
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
 
@@ -263,10 +264,10 @@ typedef struct{
 	int  alternatedol;
 	u32  alternatedoloffset;
 	
-//#ifdef OSK
+#ifdef OSK
 	char kb_buffer[256];
 	bool kb_OK;
-//#endif	
+#endif	
 
 } s_self;
 

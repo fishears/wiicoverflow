@@ -337,9 +337,11 @@ s32 Apploader_Run(entry_point *entry)
 				SDCard_deInit();
             #endif
         }
-    
+
+#ifndef LOUDTEST
 		if(dolbuffer)
             CFFree(dolbuffer);
+#endif
 	}
 	else if (self.alternatedol == 2) 
 	{
