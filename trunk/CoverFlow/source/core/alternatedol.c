@@ -51,7 +51,11 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 	filesize = ftell(file);
 	fseek(file, 0, SEEK_SET);
 
+#ifdef LOUDTEST
+	dol_buffer = (void *) 0x90900000; //safest
+#else
 	dol_buffer = CFMalloc(filesize);
+#endif
 	if (dol_buffer == NULL)
 	{
 #ifdef DEBUG_FILE
@@ -71,7 +75,9 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 #ifdef DEBUG_FILE
 		DebTxt("Error reading dol header");
 #endif
+#ifndef LOUDTEST
 		CFFree(dol_buffer);
+#endif
 		fclose(file);
 	    SDCard_deInit();
 	    USBDevice_deInit();
