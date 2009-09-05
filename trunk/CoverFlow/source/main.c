@@ -221,8 +221,9 @@ int main( int argc, char **argv )
 	Paint_Progress(self.progress,self.debugMsg);
 
 #ifndef TEST_MODE
-// LoudBob: commented for cIOS222
-// ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
+
+    if (IOS_GetVersion() == 249)
+		ios_version_check(); //Warn if cIOS249 is less than REQUIRED_IOS_REV
 
 	Sys_Init();
 	Subsystem_Init();
@@ -235,11 +236,6 @@ int main( int argc, char **argv )
 	SETTINGS_Load();	// Load user settings from xml file in SD:/usb-loader/
 	languageLoad();		// Load translated Messages 
 	Label_Buttons();	// Localize buttons	
-
-/////////////////////////////////
-// only for test    LoudBob11
-//settings.cios = ios222;
-/////////////////////////////////
 	
     // Load Custom IOS
     if (settings.cios == ios222 && IOS_GetVersion() != 222) 
@@ -594,10 +590,31 @@ int main( int argc, char **argv )
 								
 								WiiLight(0); // turn off the slot light
 								
-								ShutdownWC24();  // OnlineFix
+								bool onlinefix = ShutdownWC24();  // OnlineFix
+//////////////////////////////////////////////////////////////////////				    
 								
+								int ios2 = IOS2int();
+								if (IOS_GetVersion() != ios2 || onlinefix == true) 
+								{
+									ret = Sys_IosReload(ios2);
+									if (ret < 0) {
+										Sys_IosReload(249);
+									}
+								 }
+								ret = Disc_SetUSB(header->id);								
+								SDCard_deInit();
+								USBDevice_deInit();
+								if (gameSetting.iosreloadblock == 1 && (IOS_GetVersion() == 222 || IOS_GetVersion() == 223)) 
+								{
+									patch_cios_data();
+									mload_close();
+								}
+
+//////////////////////////////////////////////////////////////////////					
 								if(!LaunchGame())
 								{
+									SDCard_Init();
+									USBDevice_Init();
 									SETTINGS_Load(); //failed to launch so get the globals back
 									initNetworkThread();
 									return 0;
@@ -967,10 +984,32 @@ int main( int argc, char **argv )
 				setGameSettings(titleID, &gameSetting,1);
 				WiiLight(0); // turn off the slot light
 				
-				ShutdownWC24();  // OnlineFix
+				bool onlinefix = ShutdownWC24();  // OnlineFix
+//////////////////////////////////////////////////////////////////////				    
+								
+				int ios2 = IOS2int();
+				if (IOS_GetVersion() != ios2 || onlinefix == true) 
+				{
+					ret = Sys_IosReload(ios2);
+					if (ret < 0) {
+						Sys_IosReload(249);
+					}
+				 }
+				ret = Disc_SetUSB(header->id);								
+				SDCard_deInit();
+				USBDevice_deInit();
+				if (gameSetting.iosreloadblock == 1 && (IOS_GetVersion() == 222 || IOS_GetVersion() == 223)) 
+				{
+					patch_cios_data();
+					mload_close();
+				}
+
+//////////////////////////////////////////////////////////////////////					
 				
 				if(!LaunchGame())
 				{
+					SDCard_Init();
+					USBDevice_Init();
 					SETTINGS_Load(); //failed to launch so get the globals back
 					initNetworkThread();
 					return 0;

@@ -23,6 +23,8 @@ typedef struct{
 	// fixes
 	int fixtype;
 	int altdoltype;
+	int ios;
+	int iosreloadblock;
 	/*Used for lookup and saving game setting*/
 	bool changed;
 } s_gameSettings;
