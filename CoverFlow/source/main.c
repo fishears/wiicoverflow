@@ -14,6 +14,7 @@
 #include "filter.h"
 #include "TrackedMemoryManager.h"
 #include "OSK.h"
+#include "mload.h"
 	
 extern int COVER_COUNT;
 #ifdef TEST_MODE
@@ -168,9 +169,15 @@ int main( int argc, char **argv )
 	// Check if Custom IOS is loaded
 	if (ret < 0)
 	{
-		printf("[+] ERROR:\n");
-		printf("    Custom IOS could not be loaded! (ret = %d)\n", ret);
-		return 0;
+		ret = IOS_ReloadIOS(222);
+        load_ehc_module();
+		if(ret <0) 
+		{
+			printf("[+] ERROR:\n");
+			printf("    Custom IOS could not be loaded! (ret = %d)\n", ret);
+			sleep(5);
+			return 0;
+		}	
 	}
 #endif
 
@@ -214,19 +221,67 @@ int main( int argc, char **argv )
 	Paint_Progress(self.progress,self.debugMsg);
 
 #ifndef TEST_MODE
-	ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
+// LoudBob: commented for cIOS222
+// ios_version_check(); //Warn if cIOS is less than REQUIRED_IOS_REV
 
 	Sys_Init();
 	Subsystem_Init();
 
 	//********  earliest access point for accessing files on SD-Card (after Fat_MountSDHC) ********
 
-	checkDirs();
+	// LoudBob: issue with cIOS222, no covers are shown, checkDirs() is called later
+	// checkDirs();
 	checkFiles();
-	
 	SETTINGS_Load();	// Load user settings from xml file in SD:/usb-loader/
 	languageLoad();		// Load translated Messages 
 	Label_Buttons();	// Localize buttons	
+
+/////////////////////////////////
+// only for test    LoudBob11
+//settings.cios = ios222;
+/////////////////////////////////
+	
+    // Load Custom IOS
+    if (settings.cios == ios222 && IOS_GetVersion() != 222) 
+		{
+			SDCard_deInit();	// unmount SD for reloading IOS
+			USBDevice_deInit();	// unmount USB for reloading IOS
+			ret = IOS_ReloadIOS(222);
+			load_ehc_module();
+			if (ret < 0) 
+			{
+				settings.cios = ios249;
+				ret = IOS_ReloadIOS(249);
+			}
+			SDCard_Init(); 		// now mount SD:/
+			USBDevice_Init(); 	// and mount USB:/
+		} 
+		else if (settings.cios == ios249 && IOS_GetVersion() != 249) 
+		{
+			SDCard_deInit();	// unmount SD for reloading IOS
+			USBDevice_deInit();	// unmount USB for reloading IOS
+			ret = IOS_ReloadIOS(249);
+			if (ret < 0) 
+			{
+				settings.cios = ios222;
+				ret = IOS_ReloadIOS(222);
+				load_ehc_module();
+			}
+			SDCard_Init(); 		// now mount SD:/
+			USBDevice_Init(); 	// and mount USB:/
+		}
+
+    if (ret < 0) 
+	{
+        printf("ERROR: cIOS could not be loaded!");
+        sleep(5);
+        SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
+    }
+	
+	// LoudBob: if called from here, the covers are shown with cIOS222
+	checkDirs(); 
+
+//////////////////////////////////////////////////
 
 	if(!init_usbfs())
 	{

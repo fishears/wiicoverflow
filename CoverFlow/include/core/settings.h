@@ -41,6 +41,7 @@ typedef struct {
     int language;
     int video;
     int vipatch;
+	int cios; 		// 0=cIOS249, 1=cIOS222 
     char lastplayed[7];
     char localLanguage[7];
 	int presetFix;  // preset gamefix, default 0
