@@ -294,6 +294,14 @@ s32 WBFS_Open(void)
 	return 0;
 }
 
+s32 WBFS_Close(void)
+{
+    /* Close hard disk */
+    if (hdd)
+        wbfs_close(hdd);
+    return 0;
+}
+
 s32 WBFS_Format(u32 lba, u32 size)
 {
 	wbfs_t *partition = NULL;
@@ -438,4 +446,37 @@ s32 WBFS_DiskSpace(f32 *used, f32 *free)
 
 	return 0;
 }
+
+s32 WBFS_RenameGame(u8 *discid, const void *newname) {
+    s32 ret;
+
+    /* No USB device open */
+    if (!hdd)
+        return -1;
+    ret = wbfs_ren_disc(hdd, discid,(u8*)newname);
+    if (ret < 0)
+        return ret;
+
+    return 0;
+}
+
+s32 WBFS_ReIDGame(u8 *discid, const void *newID) {
+    s32 ret;
+
+    /* No USB device open */
+    if (!hdd)
+        return -1;
+    ret = wbfs_rID_disc(hdd, discid,(u8*)newID);
+    if (ret < 0)
+        return ret;
+
+    return 0;
+}
+
+f32 WBFS_EstimeGameSize(void) {
+
+    return wbfs_estimate_disc(hdd, __WBFS_ReadDVD, NULL, ONLY_GAME_PARTITION);
+
+}
+
 

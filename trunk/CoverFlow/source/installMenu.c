@@ -19,7 +19,8 @@ bool Menu_Install()
 	//WindowPrompt (TX.initDVD, TX.pleaseWait,0,0);
 	
 	/* Disable WBFS mode */
-	Disc_SetWBFS(0, NULL);
+	//Disc_SetWBFS(0, NULL);
+	Disc_SetUSB(NULL);
 	
     int ret, choice = 0;
 	char name[MAX_TITLE_LEN];

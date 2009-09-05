@@ -36,8 +36,9 @@ bool Menu_Boot(){
 	
 	#ifndef DOL_TEST
 	/* Set WBFS mode */
-	Disc_SetWBFS(WBFS_DEVICE_USB,header->id);
-		
+//	Disc_SetWBFS(WBFS_DEVICE_USB,header->id);
+	Disc_SetUSB(header->id);	
+	
 	if (self.gameList)
 	{
 		CFFree(self.gameList);

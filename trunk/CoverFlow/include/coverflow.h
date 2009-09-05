@@ -177,8 +177,21 @@ typedef struct{
 	float angle;
 } s_coverFlip;
 
-typedef struct{
+enum 
+{
+	i249=0,
+	i222,
+	i223
+};
 
+enum 
+{
+	ios249=0,
+	ios222
+};
+
+
+typedef struct{
 	char debugMsg[1024];
 	float shift;
     float select_shift;
