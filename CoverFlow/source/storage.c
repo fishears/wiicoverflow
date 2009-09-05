@@ -1,5 +1,6 @@
 #include "storage.h"
 #include "TrackedMemoryManager.h"
+#include "mload.h"
 
 extern s_self self;
 extern s_settings settings;
@@ -292,7 +293,26 @@ void initWBFS(){
 				WDVD_Close();
 				init=false;
 			}
-			if (retries<5) IOS_ReloadIOS(249);  // from NeoGamma 4 (don't reload cIOS everytime)
+			if (retries<5)				// from NeoGamma 4 (don't reload cIOS everytime)
+				{
+				  SDCard_deInit();	    // unmount SD  for reloading IOS
+				  USBDevice_deInit();	// unmount USB for reloading IOS
+				  switch (settings.cios)
+				  {
+					case ios249:
+						IOS_ReloadIOS(249);
+						break;
+					case ios222:
+						IOS_ReloadIOS(222);
+						load_ehc_module();
+						break;
+					default:
+						IOS_ReloadIOS(249);
+						break;
+				  }
+				  SDCard_Init(); 		// now mount SD:/
+			      USBDevice_Init(); 	// and mount USB:/
+				}
 			goto INIT_RETRY;
 		}
 	}

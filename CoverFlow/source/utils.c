@@ -532,4 +532,29 @@ int DebTxt( char * Msg)
 }
 #endif
 
+int IOS2int()
+{
+ int ios2;
+ switch (gameSetting.ios)
+ {
+	case i249:
+		ios2 = 249;
+		break;
+
+	case i222:
+		ios2 = 222;
+		break;
+
+	case i223:
+		ios2 = 223;
+		break;
+
+	default:
+		ios2 = 249;
+		break;
+ }
+ return ios2;
+}
+
+
 
