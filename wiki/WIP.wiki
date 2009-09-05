@@ -3,4 +3,5 @@
 
 ==Work In Progress==
 || *Developer* || *Currently working on* || *Date started* ||
+|| LoudBob11 || Support of "Hermes" cIOS 222/223 || 05/09/09 ||
 || F1SHE4RS || Implement the new cheat engine from GeckoOS 1.9.2 (only thinking about this one) || 21/08/09 ||
