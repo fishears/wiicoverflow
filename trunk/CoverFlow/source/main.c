@@ -137,6 +137,12 @@ void initPaths()
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv )
 {
+
+	#ifdef DEBUG_FILE
+		unlink(DEBUG_FILENAME);
+		DebTxt("Started logging...");
+	#endif
+
 	bool bootDevice_found=false;
 	
 	strcpy(self.bootDevice, "SD:");
@@ -231,7 +237,7 @@ int main( int argc, char **argv )
 	//********  earliest access point for accessing files on SD-Card (after Fat_MountSDHC) ********
 
 	// LoudBob: issue with cIOS222, no covers are shown, checkDirs() is called later
-	// checkDirs();
+	checkDirs();
 	checkFiles();
 	SETTINGS_Load();	// Load user settings from xml file in SD:/usb-loader/
 	languageLoad();		// Load translated Messages 
@@ -275,7 +281,7 @@ int main( int argc, char **argv )
     }
 	
 	// LoudBob: if called from here, the covers are shown with cIOS222
-	checkDirs(); 
+	//checkDirs();
 
 //////////////////////////////////////////////////
 

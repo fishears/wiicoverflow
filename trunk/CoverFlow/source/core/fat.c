@@ -4,6 +4,7 @@
 #include <ogcsys.h>
 #include <fat.h>
 #include <sys/stat.h>
+#include <utils.h>
 #include "TrackedMemoryManager.h"
 
 /* Constants */
@@ -89,6 +90,13 @@ out:
 
 s32 Fat_ReadFileToBuffer(const char *filepath, void *outbuf, int maxsize)
 {
+	char txt[1024];
+
+	#ifdef DEBUG_FILE
+		sprintf(txt, "Fat_ReadFileToBuffer %s %d", filepath, maxsize);
+		DebTxt(txt);
+	#endif
+
 	FILE *fp     = NULL;
 
 	struct stat filestat;
@@ -102,24 +110,47 @@ s32 Fat_ReadFileToBuffer(const char *filepath, void *outbuf, int maxsize)
 	/* Get filesize */
 	filelen = filestat.st_size;
 
-	if (filelen>maxsize) goto err;
+	if (filelen>maxsize){
+
+		#ifdef DEBUG_FILE
+			DebTxt(" Err: filelen > maxsize");
+		#endif
+
+		goto err;
+	}
 	
 
 	/* Open file */
 	fp = fopen(filepath, "rb");
-	if (!fp)
+	if (!fp){
+
+		#ifdef DEBUG_FILE
+			DebTxt(" Err: cannot open");
+		#endif
+
 		goto err;
+	}
 
 	/* Read file */
 	ret = fread(outbuf, 1, filelen, fp);	
-	if (ret != filelen)
+	if (ret != filelen){
+
+		#ifdef DEBUG_FILE
+			DebTxt(" Err: ret != filelen");
+		#endif
+
 		goto err;
+	}
 
 	goto out;
 
 err:
 
 	/* Error code */
+	#ifdef DEBUG_FILE
+		sprintf(txt, " last message: %s", strerror(errno));
+	#endif
+
 	ret = -1;
 
 out:
