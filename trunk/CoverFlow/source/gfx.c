@@ -364,8 +364,13 @@ void Init_Buttons()
     Duplicate_Button(&gfixupButton, vidupButton, 388, 334 + YOS_GSDB);
     Duplicate_Button(&gAltDoldownButton, viddownButton, 360, 369 + YOS_GSDB);
     Duplicate_Button(&gAltDolupButton, vidupButton, 388, 369 + YOS_GSDB);
+    Duplicate_Button(&gciosdownButton, viddownButton, 360, 403 + YOS_GSDB);
+    Duplicate_Button(&gciosupButton, vidupButton, 388, 403 + YOS_GSDB);
+    Duplicate_Button(&gblockOnButton, musicOnButton,  360, 437 + YOS_GSDB);
+    Duplicate_Button(&gblockOffButton, musicOffButton, 360, 437 + YOS_GSDB);
 
-	Duplicate_Button_TTF(&gbackButton, okButton, 266, 400 + YOS_GSDB, TX.backB);
+
+	Duplicate_Button_TTF(&gbackButton, okButton, 71, 437 + YOS_GSDB, TX.backB);
   #ifdef CHEAT_MANAGER
     Duplicate_Button_TTF(&manageCheatsButton, okButton, 468, 198 + YOS_GSDB, TX.manageB);
 
@@ -1816,6 +1821,11 @@ void freeResources(){
 	FreeButtonResources(&gfixupButton);
 	FreeButtonResources(&gAltDoldownButton);
 	FreeButtonResources(&gAltDolupButton);
+	FreeButtonResources(&gciosupButton);
+	FreeButtonResources(&gciosdownButton);
+	FreeButtonResources(&gblockOnButton);
+	FreeButtonResources(&gblockOffButton);
+
 	FreeButtonResources(&charUpButton[0]);
 	FreeButtonResources(&charDownButton[0]);
 		

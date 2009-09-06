@@ -231,6 +231,10 @@ Button gfixupButton;
 Button gfixdownButton;
 Button gAltDolupButton;
 Button gAltDoldownButton;
+Button gciosupButton;
+Button gciosdownButton;
+Button gblockOnButton;
+Button gblockOffButton;
 
 Button coverTextOnButton;
 Button coverTextOffButton;
