@@ -65,6 +65,13 @@ char gFixes[CFG_FIX_COUNT][16] =
  {"from SD: or USB:"},
  {"from Image"}
 }; 
+
+char gCIOS[CFG_CIOS_COUNT][4] =
+{
+ {"249"},          
+ {"222"},
+ {"223"}
+}; 
  
 /////////////////////////////////////////
 // This method shows the Settings Menu //
@@ -1116,8 +1123,34 @@ void Game_Settings_Menu_Show()
 				}
 			}
 
+			else if (Button_Select(&gciosdownButton, pointer.p_x, pointer.p_y))
+			{ // Clicked on the AltDol-type buttons
+				if (gameSetting.ios > 0)
+				{
+					gameSetting.ios --;
+				}
+				else
+				{
+					gameSetting.ios = (CFG_CIOS_COUNT - 1);
+				}
+			}
+			else if (Button_Select(&gciosupButton, pointer.p_x, pointer.p_y))
+			{
+				if (gameSetting.ios < (CFG_CIOS_COUNT - 1))
+				{
+					gameSetting.ios ++;
+				}
+				else
+				{
+					gameSetting.ios = 0;
+				}
+			}
 
-			
+			else if (Button_Select(&gblockOnButton, pointer.p_x, pointer.p_y) || Button_Select(&gblockOffButton, pointer.p_x, pointer.p_y))
+			{
+				gameSetting.iosreloadblock = (gameSetting.iosreloadblock) ? 0 : 1; // Clicked the IOS_Reload_BLOCK button, toggle state
+			}
+
 			else if (Button_Select(&glangdownButton, pointer.p_x, pointer.p_y))
 			{ // Clicked on the language buttons
 				if (gameSetting.language > 0)
@@ -1197,8 +1230,8 @@ void Game_Settings_Menu_Show()
 		draw_covers();
 		// Draw the dialog panel
 		
-		GRRLIB_Rectangle(40, 106 + YOS_GSDB, 560, 336, 0xffffffdd, true);
-		GRRLIB_Rectangle(42, 108 + YOS_GSDB, 556, 332, 0x737373FF, true);
+		GRRLIB_Rectangle(40, 106 + YOS_GSDB, 560, 381, 0xffffffdd, true);
+		GRRLIB_Rectangle(42, 108 + YOS_GSDB, 556, 377, 0x737373FF, true);
 
 		// Draw the game cover
 		if(self.gameSelected < MAX_BUFFERED_COVERS || self.gameSelected >= 0)
@@ -1310,7 +1343,7 @@ void Game_Settings_Menu_Show()
 			}
 		}
 		// Draw the attributes labels
-		CFreeTypeGX_DrawText(ttf20pt, 400, 140 + YOS_GSDB, TX.gameSettings, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		CFreeTypeGX_DrawText(ttf20pt, 320, 140 + YOS_GSDB, TX.gameSettings, (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 183 + YOS_GSDB, TX.patchVIDTV, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 219 + YOS_GSDB, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 251 + YOS_GSDB, TX.hook, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
@@ -1323,6 +1356,11 @@ void Game_Settings_Menu_Show()
 		CFreeTypeGX_DrawText(ttf16pt, 503, 355 + YOS_GSDB, gFixes[gameSetting.fixtype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 		CFreeTypeGX_DrawText(ttf16pt, 355, 390 + YOS_GSDB, TX.altDOL, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 		CFreeTypeGX_DrawText(ttf16pt, 503, 390 + YOS_GSDB, gAltDol[gameSetting.altdoltype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+
+		CFreeTypeGX_DrawText(ttf16pt, 355, 424 + YOS_GSDB, "IOS:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+		CFreeTypeGX_DrawText(ttf16pt, 503, 424 + YOS_GSDB, gCIOS[gameSetting.ios], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+		if(gameSetting.ios > 0 )
+			CFreeTypeGX_DrawText(ttf16pt, 355, 458 + YOS_GSDB, "Block IOS Reload:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 
 		// Draw the buttons
 		Button_TTF_Paint(&gbackButton);
@@ -1338,6 +1376,11 @@ void Game_Settings_Menu_Show()
 		Button_Paint(&gfixupButton);
 		Button_Paint(&gAltDoldownButton);
 		Button_Paint(&gAltDolupButton);
+		Button_Paint(&gciosdownButton);
+		Button_Paint(&gciosupButton);
+		if(gameSetting.ios > 0 )
+			Button_TTF_Toggle_Paint(&gblockOffButton, &gblockOnButton, TX.toggleOffB, TX.toggleOnB, gameSetting.iosreloadblock);
+		
 		
 		#ifdef CHEAT_MANAGER
 		if(hasTXT)
@@ -1365,6 +1408,10 @@ void Game_Settings_Menu_Show()
 			 Button_Hover(&gfixdownButton,  pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&gAltDolupButton, pointer.p_x, pointer.p_y) ||
 			 Button_Hover(&gAltDoldownButton,  pointer.p_x, pointer.p_y) ||
+			 Button_Hover(&gciosupButton,   pointer.p_x, pointer.p_y) ||
+			 Button_Hover(&gciosdownButton, pointer.p_x, pointer.p_y) ||
+			 ((gameSetting.ios > 0) ? Button_Hover(&gblockOnButton, pointer.p_x, pointer.p_y) : false) ||
+			 ((gameSetting.ios > 0) ? Button_Hover(&gblockOffButton, pointer.p_x, pointer.p_y) : false) ||
 			 ((gameSetting.lock) ? Button_Hover(&unlockButton, pointer.p_x, pointer.p_y) : Button_Hover(&lockButton, pointer.p_x, pointer.p_y) )
 			 #ifdef CHEAT_MANAGER
 			 || ((hasTXT) ? Button_Hover(&manageCheatsButton, pointer.p_x, pointer.p_y) : false)
