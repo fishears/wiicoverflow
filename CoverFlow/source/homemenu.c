@@ -323,6 +323,10 @@ void HomeMenu_Show()
 
 void HomeMenu_Destroy()
 {
+    #ifdef DEBUG_FILE
+		DebTxt("Called HomeMenu_Destroy");
+	#endif
+
 	int i;
 
 	for(i=0xff;i>=0;i-=8){
@@ -348,8 +352,22 @@ void HomeMenu_Destroy()
 		GRRLIB_Render();
 	}
 
+	#ifdef DEBUG_FILE
+		DebTxt(" Killing Buffer");
+	#endif
+
 	BUFFER_KillBuffer();
+
+	#ifdef DEBUG_FILE
+		DebTxt(" Freeing Resources");
+	#endif
+
 	freeResources();
+
+	#ifdef DEBUG_FILE
+		DebTxt(" Freeing TitleList");
+	#endif
+
 	CFFree(titleList);
 }
 
