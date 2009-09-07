@@ -298,6 +298,9 @@ void Init_Buttons()
     Duplicate_Button(&hookdownButton, viddownButton, 422,367);
     Duplicate_Button(&hookupButton, vidupButton, 450,367);
     Duplicate_Button_TTF(&cheatDownButton, okButton,310,367,TX.downloadB);
+	Duplicate_Button(&sysciosdownButton, viddownButton, 310,437);
+    Duplicate_Button(&sysciosupButton, vidupButton, 338,437);
+
 	// Graphic Settings Panel
     Duplicate_Button(&falloffdownButton, viddownButton, 99,123);
     Duplicate_Button(&falloffupButton, vidupButton,127,123);
@@ -1763,6 +1766,9 @@ void freeResources(){
     FreeButtonResources(&cheatoffButton);
     FreeButtonResources(&hookdownButton);
     FreeButtonResources(&hookupButton);
+    FreeButtonResources(&sysciosdownButton);
+    FreeButtonResources(&sysciosupButton);
+	
 	// Graphic Settings Panel
     FreeButtonResources(&falloffdownButton);
     FreeButtonResources(&falloffupButton);
