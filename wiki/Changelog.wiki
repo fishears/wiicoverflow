@@ -1,4 +1,26 @@
 #labels Featured
+== v1.3a (2.0 Path) (September ?? 2009)==
+
+-NEW-
+  * Support of 'Hermes' cIOS 222/223
+  * Cover download from multiple hosts
+-FIX-
+  * Fixed hangup after booting
+
+-UPDATE-
+  * Large alt.DOL files loading from SD: or USB:
+
+== v1.3 (Stable) (September ?? 2009)==
+
+-NEW-
+  * Cover download from multiple hosts
+  
+-FIX-
+  *
+
+-UPDATE-
+  *
+
 == v1.2 (Stable) (August 18 2009)==
 
 -UPDATE-
