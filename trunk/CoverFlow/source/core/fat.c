@@ -90,9 +90,8 @@ out:
 
 s32 Fat_ReadFileToBuffer(const char *filepath, void *outbuf, int maxsize)
 {
-	char txt[1024];
-
 	#ifdef DEBUG_FILE
+		char txt[1024];
 		sprintf(txt, "Fat_ReadFileToBuffer %s %d", filepath, maxsize);
 		DebTxt(txt);
 	#endif

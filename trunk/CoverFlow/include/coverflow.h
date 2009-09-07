@@ -110,7 +110,7 @@
 /* Sound stuff */
 #define OGG_FORMAT 0
 #define RAW_FORMAT 1
-#define MAX_SOUNDS   5
+#define MAX_SOUNDS   4
 
 /* CFG stuff */
 #define CFG_VIDEO_COUNT  6

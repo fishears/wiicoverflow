@@ -3,7 +3,7 @@
 
 //***************************************************************
 //       Adds Debug-Info to file
-#define DEBUG_FILE
+//#define DEBUG_FILE
 #ifdef DEBUG_FILE
 	#define DEBUG_FILENAME "SD:/usb-loader/debug.txt"
 #endif
