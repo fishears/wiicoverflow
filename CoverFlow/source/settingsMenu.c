@@ -72,6 +72,13 @@ char gCIOS[CFG_CIOS_COUNT][4] =
  {"222"},
  {"223"}
 }; 
+
+
+char sysCIOS[CFG_SYSCIOS_COUNT][13] =
+{
+ {"cIOS 249"},          
+ {"cIOS 222/223"},
+}; 
  
 /////////////////////////////////////////
 // This method shows the Settings Menu //
@@ -261,6 +268,24 @@ void Settings_Menu_Show()
 						else
 							settings.video = 0;
 					}
+
+					else if (Button_Select(&sysciosdownButton, pointer.p_x,pointer.p_y))
+					{
+						// Clicked on the System cIOS down button
+						if (settings.cios > 0)
+							settings.cios --;
+						else
+							settings.cios = (CFG_SYSCIOS_COUNT -1);
+					}
+					else if (Button_Select(&sysciosupButton, pointer.p_x,pointer.p_y))
+					{
+						// Clicked on the System cIOS up button
+						if (settings.cios < (CFG_SYSCIOS_COUNT -1))
+							settings.cios ++;
+						else
+							settings.cios = 0;
+					}
+				
 					else if (Button_Select(&hookdownButton, pointer.p_x, pointer.p_y))
 					{ // Clicked on the hooktype buttons
 						if (settings.hooktype > 0)
@@ -373,14 +398,20 @@ void Settings_Menu_Show()
 				}
 				
 				// Draw the Background boxes
-				GRRLIB_Rectangle(118, 90, 434, 144, 0xffffffdd, true);
-				GRRLIB_Rectangle(120, 92, 430, 140, 0x737373FF, true);
+				GRRLIB_Rectangle(118,  90, 434, 144, 0xffffffdd, true);
+				GRRLIB_Rectangle(120,  92, 430, 140, 0x737373FF, true);
 				GRRLIB_Rectangle(118, 258, 434, 144, 0xffffffdd, true);
 				GRRLIB_Rectangle(120, 260, 430, 140, 0x737373FF, true);
-				GRRLIB_DrawImg(80, 76, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
+				GRRLIB_Rectangle(118, 428, 434,  48, 0xffffffdd, true);
+				GRRLIB_Rectangle(120, 430, 430,  44, 0x737373FF, true);
+				
+				GRRLIB_DrawImg(80,  76, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
 				GRRLIB_DrawImg(80, 244, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
-				CFreeTypeGX_DrawText(ttf16pt, 158,96, TX.basic, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 158,264,TX.advanced, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				GRRLIB_DrawImg(80, 414, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
+				
+				CFreeTypeGX_DrawText(ttf16pt, 158,95, TX.basic, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 158,263,TX.advanced, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 158,433,"System", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Draw the attributes labels
 				CFreeTypeGX_DrawText(ttf16pt, 300,116, TX.sound, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,150, TX.rumble, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
@@ -392,6 +423,9 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 455,352, vidmodes[settings.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 188,387, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 510,387, hooks[settings.hooktype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 300,456, "IOS Boot default:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 455,456, sysCIOS[settings.cios], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+
 				// Draw buttons
 				Button_TTF_Toggle_Paint(&musicOffButton, &musicOnButton, TX.toggleOffB, TX.toggleOnB, settings.music);
 				Button_TTF_Toggle_Paint(&rumbleOffButton, &rumbleOnButton, TX.toggleOffB, TX.toggleOnB, settings.rumble);
@@ -424,9 +458,11 @@ void Settings_Menu_Show()
 				Button_Paint(&vidupButton);
 				Button_Paint(&viddownButton);
 				Button_TTF_Toggle_Paint(&cheatoffButton, &cheatonButton, TX.toggleOffB, TX.toggleOnB, settings.ocarina);
-                                Button_TTF_Paint(&cheatDownButton);
+                Button_TTF_Paint(&cheatDownButton);
 				Button_Paint(&hookupButton);
 				Button_Paint(&hookdownButton);
+				Button_Paint(&sysciosupButton);
+				Button_Paint(&sysciosdownButton);
 
 				// Check for button-pointer intersections, and rumble
 				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
@@ -448,9 +484,11 @@ void Settings_Menu_Show()
 					Button_Hover(&viddownButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&cheatoffButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y) ||
-                                        Button_Hover(&cheatDownButton, pointer.p_x, pointer.p_y) ||
+                    Button_Hover(&cheatDownButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hookupButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&hookdownButton, pointer.p_x, pointer.p_y) )
+					Button_Hover(&hookdownButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&sysciosupButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&sysciosdownButton, pointer.p_x, pointer.p_y) )
 				{
 					if (--self.rumbleAmt > 0) // Should we be rumbling?
 					{

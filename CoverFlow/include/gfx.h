@@ -261,6 +261,10 @@ Button musicOffButton;
 Button bookmarkOnButton;
 Button bookmarkOffButton;
 Button cheatDownButton;
+Button sysciosupButton;
+Button sysciosdownButton;
+
+
 
 Button covers3dThinButton;
 Button covers3dFatButton;

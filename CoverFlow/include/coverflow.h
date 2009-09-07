@@ -104,21 +104,22 @@
 
 
 
-#define ANIMATE_SPEED 0
-#define FLIP_SPEED  0.016
+#define ANIMATE_SPEED	0
+#define FLIP_SPEED  	0.016
 
 /* Sound stuff */
-#define OGG_FORMAT 0
-#define RAW_FORMAT 1
-#define MAX_SOUNDS   4
+#define OGG_FORMAT 	0
+#define RAW_FORMAT 	1
+#define MAX_SOUNDS  4
 
 /* CFG stuff */
-#define CFG_VIDEO_COUNT  6
-#define CFG_HOOK_COUNT   7
-#define CFG_LANG_COUNT   11
-#define CFG_FIX_COUNT	 3
-#define CFG_ALTDOL_COUNT 3 
-#define CFG_CIOS_COUNT	 3
+#define CFG_VIDEO_COUNT  	6
+#define CFG_HOOK_COUNT   	7
+#define CFG_LANG_COUNT   	11
+#define CFG_FIX_COUNT	 	3
+#define CFG_ALTDOL_COUNT 	3 
+#define CFG_CIOS_COUNT	 	3
+#define CFG_SYSCIOS_COUNT	2
 
 /* Y-Offset for gameSettings-Dialogbox */
 #define YOS_GSDB	-60
