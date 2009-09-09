@@ -3,6 +3,7 @@
 
 -NEW-
   * Support of 'Hermes' cIOS 222/223
+  * Edit GameID with OSK  ( useful for custom isos )
   * Cover download from multiple hosts
 -FIX-
   * Fixed hangup after booting
