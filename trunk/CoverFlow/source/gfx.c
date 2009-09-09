@@ -396,12 +396,12 @@ void Init_Buttons()
 	Button_Key_Init(&kb_key[0][0], kb_key_png, 80, 80, "");
 	Button_Key_Init(&kb_function[0], kb_function_png, 80, 80, "");
 	Button_Key_Init(&kb_space, kb_space_png, 220, 4*42+150, " ");
-	Duplicate_Button_TTF(&kb_OK,  okButton, 80, 80, "OK");
-	Duplicate_Button_TTF(&kb_ESC, okButton, 80, 80, "ESC");
+	Duplicate_Button_TTF(&kb_OK,  okButton, 80, 80, "Ok");
+	Duplicate_Button_TTF(&kb_ESC, okButton, 80, 80, "Esc");
   #endif
    
    	Button_Init(&button_edit[0], button_edit_png,  button_edit_over_png, 80, 80);
-
+    Duplicate_Button(&editGameIDButton, button_edit[0], 450, 284);
 
 
 
@@ -775,15 +775,17 @@ int DrawLoadGameDialog(bool load, bool hover)
 		
 		
 		Button_TTF_Paint(&backButton);
+		
 		//Button_Toggle_Paint(&bookmarkOffButton, &bookmarkOnButton, self.dummy);
 		if(!settings.parentalLock)
 		{
 			Button_Paint(&deleteButton);
 			Button_Paint(&gsettingsButton);
+			Button_Paint(&editGameIDButton);
 			
 			Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y);
 			Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
-			
+			Button_Hover(&editGameIDButton, pointer.p_x, pointer.p_y);
 		}
 		
 		Button_TTF_Paint(&loadButton);
@@ -1730,6 +1732,7 @@ void freeResources(){
 	// Game Launch Panel Buttons
 	FreeButtonResources(&loadButton);
     FreeButtonResources(&backButton);
+	FreeButtonResources(&editGameIDButton);
 	FreeButtonResources(&lockButton);
 	FreeButtonResources(&unlockButton);
 	FreeButtonResources(&deleteButton);
