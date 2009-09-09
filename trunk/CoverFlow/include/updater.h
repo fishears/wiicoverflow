@@ -29,7 +29,7 @@ s32 network_request(const char * request);
 s32 network_read(u8 *buf, u32 len);
 s32 download_request(const char * url);
 
-bool checkfile(char * path);
+bool existFile(char * path);
 void CloseConnection();
 
 #endif
