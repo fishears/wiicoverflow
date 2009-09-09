@@ -151,17 +151,6 @@ int main( int argc, char **argv )
 			bootDevice_found = true;
 	}
 	
-	if(!bootDevice_found)
-	{
-		//try USB
-		struct stat st;
-        if((stat("USB:/apps/CoverFloader/boot.dol", &st) == 0) || (stat("USB:/apps/CoverFloader/boot.elf", &st) == 0))
-			strcpy(self.bootDevice, "USB:");
-	}
-	
-	strcpy(dynPath.bootDevice, self.bootDevice);  //temporary
-
-
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 
@@ -182,14 +171,13 @@ int main( int argc, char **argv )
 
 
 	int fadeButton = 255;
-
 	u8 FPS = 0;			// frames per second counter
 
 	SETTINGS_Init();
 	languageInit();     // loads default msgs
 	LoadFonts();
 	initVars();
-	initPaths();
+	
 
 	// Set up the buffer slots 
 	ClearBufferSlotMemory();
@@ -228,7 +216,17 @@ int main( int argc, char **argv )
 	Sys_Init();
 	Subsystem_Init();
 
-	//********  earliest access point for accessing files on SD-Card (after Fat_MountSDHC) ********
+//////////********  earliest access point for accessing files  ********
+
+	if(!bootDevice_found)
+	{	//try USB
+        if((existFile((char*) "USB:/apps/CoverFloader/boot.dol") == 0) || (existFile((char*) "USB:/apps/CoverFloader/boot.elf") == 0))
+			strcpy(self.bootDevice, "USB:");
+    }
+	
+	strcpy(dynPath.bootDevice, self.bootDevice);  
+
+    initPaths();
 
 	SETTINGS_Load();	// Load user settings from xml file in SD:/usb-loader/
 	languageLoad();		// Load translated Messages 

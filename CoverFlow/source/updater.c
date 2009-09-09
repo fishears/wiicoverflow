@@ -251,7 +251,7 @@
                   
                  if (!failed) { 
                          //remove old 
-                         if (checkfile(dolpathsuccess)) { 
+                         if (existFile(dolpathsuccess)) { 
                                  remove(dolpathsuccess); 
                          } 
                           
@@ -271,7 +271,8 @@
          return false; 
  } 
   
- bool checkfile(char * path) 
+
+ bool existFile(char * path) 
  { 
      FILE * f; 
      f = fopen(path,"r"); 
@@ -279,7 +280,6 @@
      fclose(f); 
      return true; 
      } 
-     fclose(f); 
  return false; 
  } 
   
