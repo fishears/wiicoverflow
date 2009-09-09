@@ -201,6 +201,7 @@ Button okButton;
 Button backButton;
 Button cancelButton;
 Button loadButton;
+Button editGameIDButton;
 Button lockButton;
 Button unlockButton;
 Button cheatonButton;

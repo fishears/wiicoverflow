@@ -36,4 +36,5 @@ float easeOutCubic(float t,float b , float c, float d);
 char * ParseTokenedUrl(char * sitebase,char * subdirectory, char * url, char* username, char* password, char * lang, char * region, char *id);
 int DebTxt( char * Msg);
 int IOS2int();
+void editGameID();
 #endif

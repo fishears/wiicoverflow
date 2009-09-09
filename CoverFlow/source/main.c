@@ -631,6 +631,11 @@ int main( int argc, char **argv )
 							//clicked settings button on launch screen
                             Game_Settings_Menu_Show();
                         }
+						else if(!settings.parentalLock && Button_Select(&editGameIDButton, pointer.p_x, pointer.p_y))
+                        {
+							editGameID();
+                            
+                        }
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
 						{	
 							self.dummy ^= 1;

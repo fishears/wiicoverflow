@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "TrackedMemoryManager.h"
+#include "OSK.h"
 
 #define MAX_URL_SIZE 256
 
@@ -8,6 +9,7 @@ extern s_settings settings;
 extern s_gameSettings gameSetting;
 extern s_self self;
 extern s_title* titleList;
+extern int COVER_COUNT;
 
 // Slot light patch - from Bool's wiilight)
 static vu32 *_wiilight_reg = (u32*)0xCD0000C0;
@@ -556,5 +558,28 @@ int IOS2int()
  return ios2;
 }
 
+void editGameID()
+{
+	int ret;
+//	s32 wert;
+	
+	struct discHdr *header = NULL;
+	header = &self.gameList[self.gameSelected];
+	
+	strcpy(self.kb_buffer,(char*)header->id);
+	ret = showOSK("Edit GameID");
+	if (ret > 0 )
+	{
 
+//   This works, but disabled for commit
+//	 wert = WBFS_ReIDGame(header->id, self.kb_buffer);
+
+
+//   This doesn't works ??
+//	 GetEntries();
+//	 BUFFER_InitBuffer();
+//	 InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
+
+	}
+}
 
