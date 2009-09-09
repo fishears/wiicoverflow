@@ -448,6 +448,89 @@ err:
 	return ret;
 }
 
+
+s32 GetEntriesSilent()
+{
+	self.shift = 0.0;
+	struct discHdr *buffer = NULL;
+
+	u32 cnt, len;
+	s32 ret;
+
+	/* Get list length */
+	ret = WBFS_GetCount(&cnt);
+	if (ret < 0)
+		return ret;
+
+	/* Buffer length */
+	len = sizeof(struct discHdr) * cnt;
+
+	/* Allocate memory */
+	buffer = (struct discHdr *)CFMemAlign(32, len);
+	if (!buffer)
+		return -1;
+
+	/* Clear buffer */
+	memset(buffer, 0, len);
+
+	/* Get header list */
+	ret = WBFS_GetHeaders(buffer, cnt, sizeof(struct discHdr));
+	if (ret < 0)
+		goto err;
+
+	/* Sort entries */
+	qsort(buffer, cnt, sizeof(struct discHdr), __Menu_EntryCmp);
+
+	/* Free memory */
+	if (self.gameList)
+		CFFree(self.gameList);
+
+	/* Set values */
+	self.gameList = buffer;
+	self.gameCnt  = cnt;
+	COVER_COUNT = self.gameCnt;
+	
+	if(self.gameCnt > 2)
+	{
+		if ( ((int)((COVER_COUNT/2.0) + 0.5)) - (COVER_COUNT/2.0) == 0) // even # of covers
+			self.max_cover = (int)(COVER_COUNT/2.0);
+		else // odd # of covers
+			self.max_cover = (int)((COVER_COUNT/2.0) - 0.5);
+		
+		self.min_cover = (-1*((int)((COVER_COUNT/2.0) + 0.5)) +1);
+	}
+	else if (self.gameCnt == 2)
+	{
+		self.min_cover = 0;
+		self.max_cover = 1;
+	}
+	else if (self.gameCnt == 1)
+	{
+		self.min_cover = 0;
+		self.max_cover = 0;
+	}
+	
+	Init_Covers();
+
+	/* Reset variables */
+	self.gameSelected = self.gameStart = 0;
+	int i = 0;
+	for(i = 0; i < self.gameCnt; i++)
+	{
+		coverFlip[i].flip = false;
+		coverFlip[i].angle = 0.0;
+	}
+
+	return 0;
+
+err:
+	/* Free memory */
+	if (buffer)
+		CFFree(buffer);
+
+	return ret;
+}
+
 bool Init_Game_List(){
 
 	Paint_Progress(self.progress, TX.initWBFS_GL);

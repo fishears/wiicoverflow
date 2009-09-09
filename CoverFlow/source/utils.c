@@ -558,10 +558,12 @@ int IOS2int()
  return ios2;
 }
 
-void editGameID()
+int editGameID()
 {
 	int ret;
-//	s32 wert;
+	s32 wert;
+	int i;
+	char titleID[7];
 	
 	struct discHdr *header = NULL;
 	header = &self.gameList[self.gameSelected];
@@ -570,16 +572,36 @@ void editGameID()
 	ret = showOSK("Edit GameID");
 	if (ret > 0 )
 	{
+	 strcat( self.kb_buffer, "111111" );
+	 for (i=0; i<6; i++)
+	 {
+	   self.kb_buffer[i] = toupper(self.kb_buffer[i]);
+	 }
+	 self.kb_buffer[6] = '\0';
+	 
+	 // ToDo:
+	 // check if the new GameID already exists
+	 // if exists 
+	 // WindowPrompt ("GameID already exists!", self.kb_buffer, &cancelButton,0);
+	 // return -1;
+	 
+	 wert = WBFS_ReIDGame(header->id, self.kb_buffer);
 
-//   This works, but disabled for commit
-//	 wert = WBFS_ReIDGame(header->id, self.kb_buffer);
+	 BUFFER_KillBuffer(); 
+	 GetEntriesSilent();
+	 BUFFER_InitBuffer();
 
-
-//   This doesn't works ??
-//	 GetEntries();
-//	 BUFFER_InitBuffer();
-//	 InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
-
+	 for (i=0;i<=self.gameCnt;i++)
+	 {
+		struct discHdr *header = &self.gameList[i];
+		sprintf(titleID, "%s", header->id);
+		if(strcmp(titleID,self.kb_buffer)==0)
+			self.shift = (COVER_COUNT/2)-i;
+	 }
+	 
+	 InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
+	 return 1;
 	}
+	return 0;
 }
 
