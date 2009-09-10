@@ -90,7 +90,8 @@ void Settings_Menu_Show()
 		settingsPanel=0,
 		graphicsPanel=1,
 		langPanel=2,
-		aboutPanel=3
+		aboutPanel=3,
+		advancedPanel=4
 	};
 	
 	bool doloop       = true;
@@ -136,14 +137,16 @@ void Settings_Menu_Show()
 			GRRLIB_DrawImg(header_x*8, moving_y, menu_header_vflip_texture, 0, 1, 1, 0xFFFFFFFF);
 		moving_y = change_scale(i, 0, 20, -52, 20);
 		// Draw the buttons
-		menuLogoButton.y = moving_y;
+		//menuLogoButton.y = moving_y + ;
 		menuSettingsButton.y = moving_y;
 		menuGraphicsButton.y = moving_y;
 		menuLanguagesButton.y = moving_y;
+		menuAdvancedButton.y = moving_y;
 		Button_Paint(&menuLogoButton);
 		Button_Menu_Paint(&menuSettingsButton);
 		Button_Menu_Paint(&menuGraphicsButton);
 		Button_Menu_Paint(&menuLanguagesButton);
+		Button_Menu_Paint(&menuAdvancedButton);
 		// Draw the pointer
 		WPAD_ScanPads();
 		GetWiimoteData();
@@ -176,8 +179,10 @@ void Settings_Menu_Show()
 		Button_Menu_Paint(&menuSettingsButton);
 		Button_Menu_Paint(&menuGraphicsButton);
 		Button_Menu_Paint(&menuLanguagesButton);
+		Button_Menu_Paint(&menuAdvancedButton);
 		// Draw the logo
-		Button_Paint(&menuLogoButton);
+		if (stateMachine != aboutPanel)
+			Button_Paint(&menuLogoButton);
 		
 		// Check for screen shot   
 		// here it works for all cases
@@ -203,6 +208,7 @@ void Settings_Menu_Show()
 				menuSettingsButton.selected  = true;
 				menuGraphicsButton.selected  = false;
 				menuLanguagesButton.selected = false;
+				menuAdvancedButton.selected = false;
 			}
 			else if (Button_Select(&menuGraphicsButton, pointer.p_x, pointer.p_y))
 			{
@@ -210,6 +216,7 @@ void Settings_Menu_Show()
 				menuSettingsButton.selected  = false;
 				menuGraphicsButton.selected  = true;
 				menuLanguagesButton.selected = false;
+				menuAdvancedButton.selected = false;
 				if(self.firstTimeGP == true)
 					backup_gpSettings();  // backup 'old' graphics settings
 				self.firstTimeGP = false;
@@ -220,6 +227,7 @@ void Settings_Menu_Show()
 				menuSettingsButton.selected  = false;
 				menuGraphicsButton.selected  = false;
 				menuLanguagesButton.selected = true;
+				menuAdvancedButton.selected = false;
 			}
 			else if (Button_Select(&menuLogoButton, pointer.p_x, pointer.p_y))
 			{
@@ -227,6 +235,15 @@ void Settings_Menu_Show()
 				menuSettingsButton.selected  = false;
 				menuGraphicsButton.selected  = false;
 				menuLanguagesButton.selected = false;
+				menuAdvancedButton.selected = false;
+			}
+			else if (Button_Select(&menuAdvancedButton, pointer.p_x, pointer.p_y))
+			{
+				stateMachine = advancedPanel;
+				menuSettingsButton.selected  = false;
+				menuGraphicsButton.selected  = false;
+				menuLanguagesButton.selected = false;
+				menuAdvancedButton.selected = true;
 			}
 		}
 		
@@ -244,7 +261,111 @@ void Settings_Menu_Show()
 					{
 						doloop = false; // Clicked the setting button, exit to main screen
 					}
-					else if (Button_Select(&vidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&vidtvoffButton, pointer.p_x, pointer.p_y))
+
+					else if (Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
+					{
+						if (settings.theme)
+						{
+							themeWhiteButton.selected = false;
+							themeBlackButton.selected = true;
+							settings.theme = 0; // black
+							GRRLIB_SetBGColor(0); // set BG to black
+						}
+					}
+					else if (Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y))
+					{
+						if (!settings.theme)
+						{
+							themeWhiteButton.selected = true;
+							themeBlackButton.selected = false;
+							settings.theme = 1; // white
+							GRRLIB_SetBGColor(1); // set BG to white
+						}
+					}
+					else if (Button_Select(&quickstartOnButton, pointer.p_x, pointer.p_y) || Button_Select(&quickstartOffButton, pointer.p_x, pointer.p_y))
+					{
+						settings.quickstart = (settings.quickstart) ? 0 : 1; // Clicked the "1-Click Launch" button, toggle state
+					}
+					else if (Button_Select(&rumbleOnButton, pointer.p_x, pointer.p_y) || Button_Select(&rumbleOffButton, pointer.p_x, pointer.p_y))
+					{
+						settings.rumble = (settings.rumble) ? 0 : 1; // Clicked the Rumble button, toggle state
+					}
+					else if (Button_Select(&musicOnButton, pointer.p_x, pointer.p_y) || Button_Select(&musicOffButton, pointer.p_x, pointer.p_y))
+					{
+						settings.music = (settings.music) ? 0 : 1; // Clicked the music button, toggle state
+					}
+					
+				}
+				
+				// Draw the Background boxes
+				GRRLIB_Rectangle(118,  90, 434, 182, 0xffffffdd, true);
+				GRRLIB_Rectangle(120,  92, 430, 178, 0x737373FF, true);
+				GRRLIB_DrawImg(80,  76, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
+
+				CFreeTypeGX_DrawText(ttf16pt, 158,95, TX.basic, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+
+				// Draw the attributes labels
+				CFreeTypeGX_DrawText(ttf16pt, 300,116, TX.sound, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 300,150, TX.rumble, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 300,185, TX.oneClickLaunch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 300,219, TX.theme, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+
+				// Draw buttons
+				Button_TTF_Toggle_Paint(&musicOffButton, &musicOnButton, TX.toggleOffB, TX.toggleOnB, settings.music);
+				Button_TTF_Toggle_Paint(&rumbleOffButton, &rumbleOnButton, TX.toggleOffB, TX.toggleOnB, settings.rumble);
+				Button_TTF_Toggle_Paint(&quickstartOffButton, &quickstartOnButton, TX.toggleOffB, TX.toggleOnB, settings.quickstart);
+				if (settings.theme)
+				{
+					themeWhiteButton.selected = true;
+					themeBlackButton.selected = false;
+				}
+				else
+				{
+					themeWhiteButton.selected = false;
+					themeBlackButton.selected = true;
+				}
+				Button_TTF_Paint(&themeBlackButton);
+				Button_TTF_Paint(&themeWhiteButton);
+				
+				// Check for button-pointer intersections, and rumble
+				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&menuAdvancedButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&menuLanguagesButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&quickstartOnButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&quickstartOffButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&musicOnButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&musicOffButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&rumbleOnButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&rumbleOffButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&themeBlackButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&themeWhiteButton, pointer.p_x, pointer.p_y)
+
+					)
+				{
+					if (--self.rumbleAmt > 0) // Should we be rumbling?
+					{
+						if(settings.rumble)
+							WPAD_Rumble(0,1); // Turn on Wiimote rumble
+					}
+					else 
+						WPAD_Rumble(0,0); // Kill the rumble
+				}
+				else
+				{ // If no button is being hovered, kill the rumble
+					WPAD_Rumble(0,0);
+					self.rumbleAmt = 4;
+				}
+				
+				break;
+			} // end case for 'settings' panel
+	/////////////////////////////////////////////////////////			
+			case advancedPanel:		// Case for advanced
+	/////////////////////////////////////////////////////////
+			{
+				if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A) || (PAD_ButtonsDown(0) & PAD_BUTTON_A))
+				{
+					if (Button_Select(&vidtvonButton, pointer.p_x, pointer.p_y) || Button_Select(&vidtvoffButton, pointer.p_x, pointer.p_y))
 					{
 						settings.vipatch = (settings.vipatch) ? 0 : 1; // Clicked the VIPATCH button, toggle state
 					}
@@ -285,7 +406,7 @@ void Settings_Menu_Show()
 						else
 							settings.cios = 0;
 					}
-				
+
 					else if (Button_Select(&hookdownButton, pointer.p_x, pointer.p_y))
 					{ // Clicked on the hooktype buttons
 						if (settings.hooktype > 0)
@@ -318,16 +439,16 @@ void Settings_Menu_Show()
 							}
 						}
 					}
-                                        else if(Button_Select(&cheatDownButton, pointer.p_x,pointer.p_y))
-                                        {
-                                            WPAD_Rumble(0,0); //sometimes rumble remain active
-                                            batch_download_txt(self.gameList);
-                                        }
+										else if(Button_Select(&cheatDownButton, pointer.p_x,pointer.p_y))
+										{
+											WPAD_Rumble(0,0); //sometimes rumble remain active
+											batch_download_txt(self.gameList);
+										}
 
 					else if(Button_Select(&titlesButton, pointer.p_x, pointer.p_y) )
 					{
 						WPAD_Rumble(0,0); //sometimes rumble remain active
-											
+
 						if(check_write_access())
 						{
 							if(networkInit(self.ipAddress))
@@ -362,87 +483,34 @@ void Settings_Menu_Show()
 							}
 						}
 					}
-					else if (Button_Select(&themeBlackButton, pointer.p_x, pointer.p_y))
-					{
-						if (settings.theme)
-						{
-							themeWhiteButton.selected = false;
-							themeBlackButton.selected = true;
-							settings.theme = 0; // black
-							GRRLIB_SetBGColor(0); // set BG to black
-						}
-					}
-					else if (Button_Select(&themeWhiteButton, pointer.p_x, pointer.p_y))
-					{
-						if (!settings.theme)
-						{
-							themeWhiteButton.selected = true;
-							themeBlackButton.selected = false;
-							settings.theme = 1; // white
-							GRRLIB_SetBGColor(1); // set BG to white
-						}
-					}
-					else if (Button_Select(&quickstartOnButton, pointer.p_x, pointer.p_y) || Button_Select(&quickstartOffButton, pointer.p_x, pointer.p_y))
-					{
-						settings.quickstart = (settings.quickstart) ? 0 : 1; // Clicked the "1-Click Launch" button, toggle state
-					}
-					else if (Button_Select(&rumbleOnButton, pointer.p_x, pointer.p_y) || Button_Select(&rumbleOffButton, pointer.p_x, pointer.p_y))
-					{
-						settings.rumble = (settings.rumble) ? 0 : 1; // Clicked the Rumble button, toggle state
-					}
-					else if (Button_Select(&musicOnButton, pointer.p_x, pointer.p_y) || Button_Select(&musicOffButton, pointer.p_x, pointer.p_y))
-					{
-						settings.music = (settings.music) ? 0 : 1; // Clicked the music button, toggle state
-					}
-					
 				}
-				
-				// Draw the Background boxes
-				GRRLIB_Rectangle(118,  90, 434, 144, 0xffffffdd, true);
-				GRRLIB_Rectangle(120,  92, 430, 140, 0x737373FF, true);
+
+				// System
+				GRRLIB_Rectangle(118, 90, 434,  118, 0xffffffdd, true);
+				GRRLIB_Rectangle(120, 92, 430,  114, 0x737373FF, true);
+
+				// Misc
 				GRRLIB_Rectangle(118, 258, 434, 144, 0xffffffdd, true);
 				GRRLIB_Rectangle(120, 260, 430, 140, 0x737373FF, true);
-				GRRLIB_Rectangle(118, 428, 434,  48, 0xffffffdd, true);
-				GRRLIB_Rectangle(120, 430, 430,  44, 0x737373FF, true);
-				
-				GRRLIB_DrawImg(80,  76, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
+
+
 				GRRLIB_DrawImg(80, 244, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
-				GRRLIB_DrawImg(80, 414, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
-				
-				CFreeTypeGX_DrawText(ttf16pt, 158,95, TX.basic, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 158,263,TX.advanced, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 158,433,"System", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
-				// Draw the attributes labels
-				CFreeTypeGX_DrawText(ttf16pt, 300,116, TX.sound, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-				CFreeTypeGX_DrawText(ttf16pt, 300,150, TX.rumble, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-				CFreeTypeGX_DrawText(ttf16pt, 300,185, TX.oneClickLaunch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-				CFreeTypeGX_DrawText(ttf16pt, 300,219, TX.theme, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				GRRLIB_DrawImg(80,  76, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
+
+				CFreeTypeGX_DrawText(ttf16pt, 158,95, "System", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 158,263, "Misc", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
+
+
 				CFreeTypeGX_DrawText(ttf16pt, 300,285, TX.getAddData, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,318, TX.patchVIDTV, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,352, TX.videoMode, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 455,352, vidmodes[settings.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 188,387, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 510,387, hooks[settings.hooktype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 300,456, "IOS Boot default:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-				CFreeTypeGX_DrawText(ttf16pt, 455,456, sysCIOS[settings.cios], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 
-				// Draw buttons
-				Button_TTF_Toggle_Paint(&musicOffButton, &musicOnButton, TX.toggleOffB, TX.toggleOnB, settings.music);
-				Button_TTF_Toggle_Paint(&rumbleOffButton, &rumbleOnButton, TX.toggleOffB, TX.toggleOnB, settings.rumble);
-				Button_TTF_Toggle_Paint(&quickstartOffButton, &quickstartOnButton, TX.toggleOffB, TX.toggleOnB, settings.quickstart);
-				if (settings.theme)
-				{
-					themeWhiteButton.selected = true;
-					themeBlackButton.selected = false;
-				}
-				else
-				{
-					themeWhiteButton.selected = false;
-					themeBlackButton.selected = true;
-				}
-				Button_TTF_Paint(&themeBlackButton);
-				Button_TTF_Paint(&themeWhiteButton);
-				
+				CFreeTypeGX_DrawText(ttf16pt, 300, 116, "IOS Boot default:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 455, 116, sysCIOS[settings.cios], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+
 				if (settings.covers3d == 1)
 				{
 				 strcopy( coversButton.ttf_label, TX.covers3D, 15);
@@ -451,7 +519,7 @@ void Settings_Menu_Show()
 				{
 				 strcopy( coversButton.ttf_label, TX.coversB, 15);
 				}
-								
+
 				Button_TTF_Paint(&coversButton);
 				Button_TTF_Paint(&titlesButton);
 				Button_TTF_Toggle_Paint(&vidtvoffButton, &vidtvonButton, TX.toggleOffB, TX.toggleOnB, settings.vipatch);
@@ -464,19 +532,7 @@ void Settings_Menu_Show()
 				Button_Paint(&sysciosupButton);
 				Button_Paint(&sysciosdownButton);
 
-				// Check for button-pointer intersections, and rumble
-				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&menuLanguagesButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&quickstartOnButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&quickstartOffButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&musicOnButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&musicOffButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&rumbleOnButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&rumbleOffButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&themeBlackButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&themeWhiteButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&coversButton, pointer.p_x, pointer.p_y) ||
+				if(Button_Hover(&coversButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&titlesButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&vidtvoffButton, pointer.p_x, pointer.p_y) ||
@@ -484,18 +540,19 @@ void Settings_Menu_Show()
 					Button_Hover(&viddownButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&cheatoffButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&cheatonButton, pointer.p_x, pointer.p_y) ||
-                    Button_Hover(&cheatDownButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&cheatDownButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hookupButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hookdownButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&sysciosupButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&sysciosdownButton, pointer.p_x, pointer.p_y) )
+					Button_Hover(&sysciosdownButton, pointer.p_x, pointer.p_y)
+				)
 				{
 					if (--self.rumbleAmt > 0) // Should we be rumbling?
 					{
 						if(settings.rumble)
 							WPAD_Rumble(0,1); // Turn on Wiimote rumble
 					}
-					else 
+					else
 						WPAD_Rumble(0,0); // Kill the rumble
 				}
 				else
@@ -503,10 +560,11 @@ void Settings_Menu_Show()
 					WPAD_Rumble(0,0);
 					self.rumbleAmt = 4;
 				}
-				
+
 				break;
-			} // end case for 'settings' panel
-	/////////////////////////////////////////////////////////			
+
+			}// end case for 'settings' panel
+	/////////////////////////////////////////////////////////
 			case graphicsPanel:		// Case for graphics
 	/////////////////////////////////////////////////////////		
 			{				
@@ -687,6 +745,7 @@ void Settings_Menu_Show()
 				// Check for button-pointer intersections, and rumble
 				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&menuAdvancedButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuLanguagesButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&spacingupButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&spacingdownButton, pointer.p_x, pointer.p_y) ||
@@ -867,6 +926,7 @@ void Settings_Menu_Show()
 				if (
 					Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&menuAdvancedButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuLanguagesButton, pointer.p_x, pointer.p_y)||
 					Button_Hover(&langupButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&langdownButton, pointer.p_x, pointer.p_y)||
@@ -905,6 +965,7 @@ void Settings_Menu_Show()
 			case aboutPanel:		// Case for About panel
 	/////////////////////////////////////////////////////////
 			{
+
 				GRRLIB_Rectangle(88, 88, 464, 306, 0xffffffdd, true);
 				GRRLIB_Rectangle(90, 90, 460, 302, 0x737373FF, true);
 			
@@ -930,6 +991,7 @@ void Settings_Menu_Show()
 				// Check for button-pointer intersections, and rumble
 				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&menuAdvancedButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuLanguagesButton, pointer.p_x, pointer.p_y))
 				{
 					if (--self.rumbleAmt > 0) // Should we be rumbling?
@@ -947,7 +1009,7 @@ void Settings_Menu_Show()
 				}
 				
 				break;
-			} // end case for 'about' panel
+			} // end case for 'k' panel
 		}// end switch
 		// Draw Cursor and render
 		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
@@ -983,11 +1045,13 @@ void Settings_Menu_Show()
 		menuLogoButton.y = moving_y;
 		menuSettingsButton.y = moving_y;
 		menuGraphicsButton.y = moving_y;
+		menuAdvancedButton.y = moving_y;
 		menuLanguagesButton.y = moving_y;
 		Button_Paint(&menuLogoButton);
 		Button_Menu_Paint(&menuSettingsButton);
 		Button_Menu_Paint(&menuGraphicsButton);
 		Button_Menu_Paint(&menuLanguagesButton);
+		Button_Menu_Paint(&menuAdvancedButton);
 		// Draw the pointer
 		WPAD_ScanPads();
 		GetWiimoteData();
@@ -996,6 +1060,7 @@ void Settings_Menu_Show()
 	}
 	menuSettingsButton.selected  = true;
 	menuGraphicsButton.selected  = false;
+	menuAdvancedButton.selected  = false;
 	menuLanguagesButton.selected = false;
 	
 } // Settings_Menu_Show()

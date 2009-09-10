@@ -40,6 +40,10 @@ void LoadFonts()
 
 void LoadTextures()
 {
+	#ifdef DEBUG_FILE
+		DebTxt("LoadTextures (start)");
+	#endif
+
 	GRRLIB_LoadTexturePNG(&pointer_texture, pointer_basic_png);
 	GRRLIB_LoadTexturePNG(&pointer_shadow_texture,pointer_shadow_png);
 	GRRLIB_LoadTexturePNG(&turn_point_texture,pointer_turning_png); // can't find free
@@ -85,8 +89,11 @@ void LoadTextures()
 */	
 	GRRLIB_LoadTexturePNG(&hdspace_texture,hdspace_png);
 //	GRRLIB_LoadTexturePNG(&button_round_info_texture,button_round_info_png);
-//	GRRLIB_LoadTexturePNG(&button_round_info_over_texture,button_round_info_over_png);	
+//	GRRLIB_LoadTexturePNG(&button_round_info_over_texture,button_round_info_over_png);
 
+	#ifdef DEBUG_FILE
+		DebTxt("LoadTextures (end)");
+	#endif
 }
 
 void DrawBufferedCover(int i, float loc, float zpos, float angle, float falloff)
@@ -242,6 +249,10 @@ void Paint_Progress_FadeToBG()
 
 void Init_Buttons()
 {
+	#ifdef DEBUG_FILE
+		DebTxt("Init_Buttons (start)");
+	#endif
+
 	/////////////////////////////////
 	// Main screen
 	Button_Init(&slideButton,slide_png, slide_hover_png, 260, 426);
@@ -270,10 +281,11 @@ void Init_Buttons()
     Duplicate_Button_TTF(&loaderButton, wiiMenuButton, 186, 187, TX.loaderB);
     Button_Init(&wiimoteButton, menu_home_wiimote_png, menu_home_wiimote_png, 54, 400);
 	// Settings Panels Header Buttons
-    Button_TTF_Init(&menuSettingsButton, menu_button_png, menu_button_over_png, 160, 20, TX.cflowSettings); 
-	Duplicate_Button_TTF(&menuGraphicsButton, menuSettingsButton, 320, 20, TX.graphics);
-    Duplicate_Button_TTF(&menuLanguagesButton, menuSettingsButton, 480, 20, TX.languagesB); 
-	Button_Init(&menuLogoButton, menu_logo_png, menu_logo_png, 30, 20);
+    Button_TTF_Init(&menuSettingsButton, menu_button_png, menu_button_over_png, 16, 20, "General");
+	Duplicate_Button_TTF(&menuGraphicsButton, menuSettingsButton, 484, 20, TX.graphics);
+    Duplicate_Button_TTF(&menuLanguagesButton, menuSettingsButton, 328, 20, TX.languagesB);
+    Duplicate_Button_TTF(&menuAdvancedButton, menuSettingsButton, 172, 20, "Advanced");//change
+	Button_Init(&menuLogoButton, menu_logo_png, menu_logo_png, 268, 420);
 	// General Settings Panel
     Button_Init(&musicOnButton, button_bar_h28w104_toggle_right_png, button_bar_h28w104_toggle_right_png, 310, 97);
     Button_Init(&musicOffButton, button_bar_h28w104_toggle_left_png, button_bar_h28w104_toggle_left_png, 310, 97);
@@ -298,8 +310,8 @@ void Init_Buttons()
     Duplicate_Button(&hookdownButton, viddownButton, 422,367);
     Duplicate_Button(&hookupButton, vidupButton, 450,367);
     Duplicate_Button_TTF(&cheatDownButton, okButton,310,367,TX.downloadB);
-	Duplicate_Button(&sysciosdownButton, viddownButton, 310,437);
-    Duplicate_Button(&sysciosupButton, vidupButton, 338,437);
+	Duplicate_Button(&sysciosdownButton, viddownButton, 310, 96);
+    Duplicate_Button(&sysciosupButton, vidupButton, 338, 96);
 
 	// Graphic Settings Panel
     Duplicate_Button(&falloffdownButton, viddownButton, 99,123);
@@ -403,8 +415,9 @@ void Init_Buttons()
    	Button_Init(&button_edit[0], button_edit_png,  button_edit_over_png, 80, 80);
     Duplicate_Button(&editGameIDButton, button_edit[0], 450, 284);
 
-
-
+	#ifdef DEBUG_FILE
+		DebTxt("Init_Buttons (end)");
+	#endif
 } // End Init_Buttons();
 
 void DrawSlider(int yPos, int theme_id)
