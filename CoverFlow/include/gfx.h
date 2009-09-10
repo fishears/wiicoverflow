@@ -127,6 +127,7 @@ Button menuSettingsButton;
 Button menuGraphicsButton;
 Button menuLanguagesButton;
 Button menuLogoButton;
+Button menuAdvancedButton;
 
 /*
 GRRLIB_texImg flag_br_texture; // Brazil flag
