@@ -19,7 +19,9 @@ void initGameSettings(s_gameSettings* gs){
 	
 	gs->altdoltype = 0;
 
-	gs->ios = 0;
+	//gs->ios = 0;
+	gs->ios = settings.cios;   // preset like global IOS
+
 	gs->iosreloadblock = 0;
 
 	gs->changed  = false;
@@ -148,7 +150,7 @@ bool getGameSettings(char* gameCode, s_gameSettings* gs){
 							if(mxmlElementGetAttr(next_n,"ios"))
 								gs->ios = atoi(mxmlElementGetAttr(next_n,"ios"));
 							else
-								gs->ios = 0;
+								gs->ios = settings.cios;   // preset like global IOS
 
 							if(mxmlElementGetAttr(next_n,"iosreloadblock"))
 								gs->iosreloadblock = atoi(mxmlElementGetAttr(next_n,"iosreloadblock"));

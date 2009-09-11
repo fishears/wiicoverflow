@@ -1763,6 +1763,7 @@ void freeResources(){
 	FreeButtonResources(&menuGraphicsButton);
     FreeButtonResources(&menuLanguagesButton);
 	FreeButtonResources(&menuLogoButton);
+	FreeButtonResources(&menuAdvancedButton);
 	// General Settings Panel
     FreeButtonResources(&musicOnButton);
     FreeButtonResources(&musicOffButton);
