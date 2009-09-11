@@ -180,7 +180,13 @@ void Settings_Menu_Show()
 		Button_Menu_Paint(&menuGraphicsButton);
 		Button_Menu_Paint(&menuLanguagesButton);
 		Button_Menu_Paint(&menuAdvancedButton);
+		
 		// Draw the logo
+		if (stateMachine == graphicsPanel)  // because of overlapping
+			menuLogoButton.y = 480;         // move it out of window
+		else
+			menuLogoButton.y = 420;
+		
 		if (stateMachine != aboutPanel)
 			Button_Paint(&menuLogoButton);
 		
@@ -208,7 +214,7 @@ void Settings_Menu_Show()
 				menuSettingsButton.selected  = true;
 				menuGraphicsButton.selected  = false;
 				menuLanguagesButton.selected = false;
-				menuAdvancedButton.selected = false;
+				menuAdvancedButton.selected  = false;
 			}
 			else if (Button_Select(&menuGraphicsButton, pointer.p_x, pointer.p_y))
 			{
@@ -216,7 +222,7 @@ void Settings_Menu_Show()
 				menuSettingsButton.selected  = false;
 				menuGraphicsButton.selected  = true;
 				menuLanguagesButton.selected = false;
-				menuAdvancedButton.selected = false;
+				menuAdvancedButton.selected  = false;
 				if(self.firstTimeGP == true)
 					backup_gpSettings();  // backup 'old' graphics settings
 				self.firstTimeGP = false;
@@ -227,7 +233,7 @@ void Settings_Menu_Show()
 				menuSettingsButton.selected  = false;
 				menuGraphicsButton.selected  = false;
 				menuLanguagesButton.selected = true;
-				menuAdvancedButton.selected = false;
+				menuAdvancedButton.selected  = false;
 			}
 			else if (Button_Select(&menuLogoButton, pointer.p_x, pointer.p_y))
 			{
@@ -235,7 +241,7 @@ void Settings_Menu_Show()
 				menuSettingsButton.selected  = false;
 				menuGraphicsButton.selected  = false;
 				menuLanguagesButton.selected = false;
-				menuAdvancedButton.selected = false;
+				menuAdvancedButton.selected  = false;
 			}
 			else if (Button_Select(&menuAdvancedButton, pointer.p_x, pointer.p_y))
 			{
@@ -243,7 +249,7 @@ void Settings_Menu_Show()
 				menuSettingsButton.selected  = false;
 				menuGraphicsButton.selected  = false;
 				menuLanguagesButton.selected = false;
-				menuAdvancedButton.selected = true;
+				menuAdvancedButton.selected  = true;
 			}
 		}
 		
@@ -439,11 +445,11 @@ void Settings_Menu_Show()
 							}
 						}
 					}
-										else if(Button_Select(&cheatDownButton, pointer.p_x,pointer.p_y))
-										{
-											WPAD_Rumble(0,0); //sometimes rumble remain active
-											batch_download_txt(self.gameList);
-										}
+					else if(Button_Select(&cheatDownButton, pointer.p_x,pointer.p_y))
+					{
+						WPAD_Rumble(0,0); //sometimes rumble remain active
+						batch_download_txt(self.gameList);
+					}
 
 					else if(Button_Select(&titlesButton, pointer.p_x, pointer.p_y) )
 					{
@@ -532,7 +538,11 @@ void Settings_Menu_Show()
 				Button_Paint(&sysciosupButton);
 				Button_Paint(&sysciosdownButton);
 
-				if(Button_Hover(&coversButton, pointer.p_x, pointer.p_y) ||
+				if( Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&menuAdvancedButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&menuLanguagesButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&coversButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&titlesButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&vidtvoffButton, pointer.p_x, pointer.p_y) ||
