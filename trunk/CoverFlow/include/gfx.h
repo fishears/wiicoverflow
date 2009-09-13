@@ -238,6 +238,10 @@ Button gciosdownButton;
 Button gblockOnButton;
 Button gblockOffButton;
 
+Button gDOLdownButton;
+Button gDOLupButton;
+
+
 Button coverTextOnButton;
 Button coverTextOffButton;
 

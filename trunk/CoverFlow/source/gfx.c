@@ -384,6 +384,9 @@ void Init_Buttons()
     Duplicate_Button(&gblockOnButton, musicOnButton,  360, 437 + YOS_GSDB);
     Duplicate_Button(&gblockOffButton, musicOffButton, 360, 437 + YOS_GSDB);
 
+    Duplicate_Button(&gDOLdownButton, viddownButton, 360, 260);
+    Duplicate_Button(&gDOLupButton, vidupButton, 388, 260);
+
 
 	Duplicate_Button_TTF(&gbackButton, okButton, 71, 437 + YOS_GSDB, TX.backB);
   #ifdef CHEAT_MANAGER
@@ -1848,6 +1851,9 @@ void freeResources(){
 	FreeButtonResources(&gciosdownButton);
 	FreeButtonResources(&gblockOnButton);
 	FreeButtonResources(&gblockOffButton);
+
+	FreeButtonResources(&gDOLupButton);
+	FreeButtonResources(&gDOLdownButton);
 
 	FreeButtonResources(&charUpButton[0]);
 	FreeButtonResources(&charDownButton[0]);
