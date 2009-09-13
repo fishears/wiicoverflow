@@ -120,6 +120,7 @@
 #define CFG_ALTDOL_COUNT 	3 
 #define CFG_CIOS_COUNT	 	3
 #define CFG_SYSCIOS_COUNT	2
+#define CFG_METROID_COUNT	3
 
 /* Y-Offset for gameSettings-Dialogbox */
 #define YOS_GSDB	-60
@@ -278,6 +279,7 @@ typedef struct{
 	bool patchCountryStr;
 	int  alternatedol;
 	u32  alternatedoloffset;
+	int  selectedDol;
 	
 #ifdef OSK
 	char kb_buffer[256];

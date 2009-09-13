@@ -15,6 +15,7 @@
 #include "TrackedMemoryManager.h"
 #include "OSK.h"
 #include "mload.h"
+#include "discbrowser.h"
 	
 extern int COVER_COUNT;
 #ifdef TEST_MODE
@@ -110,6 +111,7 @@ void initVars()
 	self.patchCountryStr = false;
 	self.alternatedol = 0;
 	self.alternatedoloffset = 0;
+	self.selectedDol = 0;
 #ifdef OSK
 	strcpy(self.kb_buffer, "" );
 	self.kb_OK = false;
@@ -582,6 +584,9 @@ int main( int argc, char **argv )
 								apply_fixsettings();
 								setGameSettings(titleID, &gameSetting,1);
 								
+								if (gameSetting.altdoltype == 2)
+								    self.selectedDol = checkMultiDol(titleID);
+														
 								WiiLight(0); // turn off the slot light
 								
 								bool onlinefix = ShutdownWC24();  // OnlineFix
@@ -981,6 +986,10 @@ int main( int argc, char **argv )
 					apply_settings();
 				apply_fixsettings();
 				setGameSettings(titleID, &gameSetting,1);
+
+				if (gameSetting.altdoltype == 2)
+					self.selectedDol = checkMultiDol(titleID);
+				
 				WiiLight(0); // turn off the slot light
 				
 				bool onlinefix = ShutdownWC24();  // OnlineFix
