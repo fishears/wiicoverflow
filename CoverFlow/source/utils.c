@@ -1,6 +1,8 @@
 #include "utils.h"
 #include "TrackedMemoryManager.h"
 #include "OSK.h"
+#include "dumpbanner.h"
+#include "openingbnr.h"
 
 #define MAX_URL_SIZE 256
 
@@ -9,6 +11,7 @@ extern s_settings settings;
 extern s_gameSettings gameSetting;
 extern s_self self;
 extern s_title* titleList;
+extern s_path dynPath;
 extern int COVER_COUNT;
 
 // Slot light patch - from Bool's wiilight)
@@ -511,7 +514,7 @@ char * ParseTokenedUrl(char * sitebase,char * subdirectory, char * url, char* us
 	return ret;
 }
 
-#ifdef DEBUG_FILE
+
 int DebTxt( char * Msg)
 {
 	char       buf[255];
@@ -532,7 +535,7 @@ int DebTxt( char * Msg)
 	fclose(fp);
 	return 1;
 }
-#endif
+
 
 int IOS2int()
 {
@@ -604,4 +607,45 @@ int editGameID()
 	}
 	return 0;
 }
+
+
+int getIntroSound(u8 *id)
+{
+ s32 ret;
+ char qbuf[50];
+ char zbuf[50];	
+ 
+ // cleaning before
+ unlink("/CF_SOUND/sound.bin");
+ unlink("/CF_SOUND/sound.bns");
+ unlink("/CF_SOUND/sound.wav");
+ unlink("/CF_SOUND/sound.aiff");
+ unlink("/CF_SOUND");
+ 
+ // store opening.bnr into root	 
+ sprintf(qbuf, "%s/opening.bnr", dynPath.bootDevice);
+ ret = dump_openingbnr(id, qbuf);
+ if (ret != 1) return -1;
+
+ // extract sound.bin from opening.bnr into /CF_SOUND
+ sprintf(zbuf, "%s/CF_SOUND", dynPath.bootDevice);
+ ret = extractBanner(qbuf, zbuf);
+ if (ret != 0) return -1;
+ remove(qbuf); //not needed any longer
+ 
+ // identify format and rename sound file
+ ret = RenameSoundFile(zbuf);
+ if (ret != 1) return -1;
+
+ return 1;
+}
+
+
+
+
+
+
+
+
+
 
