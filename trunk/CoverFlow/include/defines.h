@@ -4,9 +4,9 @@
 //***************************************************************
 //       Adds Debug-Info to file
 //#define DEBUG_FILE
-#ifdef DEBUG_FILE
+//#ifdef DEBUG_FILE
 	#define DEBUG_FILENAME "SD:/usb-loader/debug.txt"
-#endif
+//#endif
 //***************************************************************
 //       shows MemInfo in first line
 //#define SHOW_MEMINFO
@@ -26,7 +26,8 @@
 //       adds OSK Keyboard
 #define OSK
 //***************************************************************
-
-
+//       extracts IntroSound of selected game to file
+//#define EXTRACT_INTROSOUND
+//***************************************************************
 #endif
 

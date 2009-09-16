@@ -17,10 +17,10 @@ include $(DEVKITPPC)/wii_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	source source/pngu images source/libwbfs source/core source/wiitdb source/mload
+SOURCES		:=	source source/pngu images source/libwbfs source/core source/wiitdb source/mload source/openbnr
 #DATA		:=	data bootloader sounds fonts languages
 DATA		:=	data sounds fonts languages
-INCLUDES	:=  include include/pngu include/libwbfs include/core include/wiitdb include/mload
+INCLUDES	:=  include include/pngu include/libwbfs include/core include/wiitdb include/mload include/openbnr
 
 #---------------------------------------------------------------------------------
 # options for code generation

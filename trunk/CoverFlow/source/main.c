@@ -526,9 +526,13 @@ int main( int argc, char **argv )
 								self.gsize = size;
 								
 								LoadCurrentCover(self.gameSelected, self.gameList);
+
+							#ifdef EXTRACT_INTROSOUND
+								getIntroSound(header->id);						
+							#endif
+							
 								
-								
-								#ifdef GAME_INFO_TEST
+							#ifdef GAME_INFO_TEST
 								//Try to load current game info
 								int ret = GetGameInfo(header->id);
 								
@@ -542,7 +546,7 @@ int main( int argc, char **argv )
 								// Else.... not so much :)
 								
 								//TODO Use this game info
-								#endif
+							#endif
 								
 							}
 						}
@@ -639,7 +643,6 @@ int main( int argc, char **argv )
 						else if(!settings.parentalLock && Button_Select(&editGameIDButton, pointer.p_x, pointer.p_y))
                         {
 							editGameID();
-                            
                         }
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
 						{	
