@@ -107,7 +107,7 @@ int autoSelectDol(const char *id)
     if (strcmp(id,"RJ8P64") == 0) return 8;    // Indiana Jones And The Staff Of Kings PAL - thanks to isostar
     if (strcmp(id,"RJ8E64") == 0) return 8;    // Indiana Jones And The Staff Of Kings NTSC - thanks to starstremr
 
-    if (strcmp(id,"RBOP69") == 0) return 657;  // Boogie PAL - thanks to isostar
+    if (strcmp(id,"RBOP69") == 0) return 675;  // Boogie PAL - thanks to isostar
     if (strcmp(id,"RBOE69") == 0) return 675;  // Boogie NTSC - thanks to starstremr
 
     if (strcmp(id,"RPYP9B") == 0) return 12490;// Pangya Golf With Style PAL - thanks to isostar
