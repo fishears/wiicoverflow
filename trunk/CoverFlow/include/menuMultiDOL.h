@@ -3,7 +3,7 @@
 
 #include "coverflow.h"
 
-int showDOLWindow();
+int showDOLWindow(int nr);
 
 
 #endif
