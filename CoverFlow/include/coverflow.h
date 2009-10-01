@@ -120,7 +120,7 @@
 #define CFG_ALTDOL_COUNT 	3 
 #define CFG_CIOS_COUNT	 	3
 #define CFG_SYSCIOS_COUNT	2
-#define CFG_METROID_COUNT	3
+
 
 /* Y-Offset for gameSettings-Dialogbox */
 #define YOS_GSDB	-60

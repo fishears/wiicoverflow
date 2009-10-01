@@ -59,6 +59,42 @@ int autoSelectDol(const char *id)
 		}
 		return ret;
 	}
+	
+	
+	if (strcmp(id,"RHDP8P") == 0)				// The House Of The Dead 2 & 3 Return PAL
+	{
+		switch(self.selectedDol)
+		{
+			case 1:
+				ret = 149;
+				break;
+			case 2:
+				ret = 150;
+				break;
+			default:
+				ret = 150;
+				break;
+		}
+		return ret;
+	}
+    if (strcmp(id,"RHDE8P") == 0)				// The House Of The Dead 2 & 3 Return NTSC
+	{
+		switch(self.selectedDol)
+		{
+			case 1:
+				ret = 149;
+				break;
+			case 2:
+				ret = 150;
+				break;
+			default:
+				ret = 150;
+				break;
+		}
+		return ret;
+	}
+	
+	
 	if (strcmp(id,"RF8E69") == 0) return 439;  // Fifa 08 NTSC - thanks to isostar
     if (strcmp(id,"RF8P69") == 0) return 463;  // Fifa 08 PAL - thanks to isostar
     if (strcmp(id,"RF8X69") == 0) return 464;	// Fifa 08 PAL - thanks to isostar
@@ -100,8 +136,8 @@ int autoSelectDol(const char *id)
     if (strcmp(id,"RVUP8P") == 0) return 16426;// Virtua Tennis 2009 PAL - thanks to isostar
     if (strcmp(id,"RVUE8P") == 0) return 16405;// Virtua Tennis 2009 NTSC - thanks to isostar
 
-    if (strcmp(id,"RHDP8P") == 0) return 149;  // The House Of The Dead 2 & 3 Return PAL - thanks to isostar
-    if (strcmp(id,"RHDE8P") == 0) return 149;  // The House Of The Dead 2 & 3 Return NTSC - thanks to starstremr
+//   if (strcmp(id,"RHDP8P") == 0) return 149;  // The House Of The Dead 2 & 3 Return PAL - thanks to isostar
+//   if (strcmp(id,"RHDE8P") == 0) return 149;  // The House Of The Dead 2 & 3 Return NTSC - thanks to starstremr
 
 
     if (strcmp(id,"RJ8P64") == 0) return 8;    // Indiana Jones And The Staff Of Kings PAL - thanks to isostar
@@ -124,9 +160,17 @@ int checkMultiDol(const char *id)
  // Metroid Prime Trilogy
  if ((strcmp(id,"R3ME01") == 0) || (strcmp(id,"R3MP01") == 0))
    {
-     ret = showDOLWindow();
+     ret = showDOLWindow(1);
 	 return ret;
    }
+   
+  // The House Of The Dead 2 & 3 Return
+ if ((strcmp(id,"RHDP8P") == 0) || (strcmp(id,"RHDE8P") == 0))
+   {
+     ret = showDOLWindow(2);
+	 return ret;
+   }
+  
  return ret;
 }
 

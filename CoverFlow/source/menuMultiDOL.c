@@ -15,23 +15,48 @@
  extern s_title* 	titleList;
  extern s_settings	settings;
  
- char episodeDOL[CFG_METROID_COUNT][16] =
-{
- {"Metroid Prime"},          
- {"Metroid Prime 2"}, 
- {"Metroid Prime 3"} 
-}; 
+ #define CFG_METROID_COUNT	3
+ char MPT_DOL[CFG_METROID_COUNT][16] =
+ {
+  {"Metroid Prime"},          
+  {"Metroid Prime 2"}, 
+  {"Metroid Prime 3"} 
+ }; 
 
+ #define CFG_HOD23_COUNT	2
+ char HOD23_DOL[CFG_HOD23_COUNT][16] =
+ {
+  {"HoD 2"},          
+  {"HoD Main"} 
+ }; 
+
+ char Episode[3][16] = { {""},{""},{""} };
+ int  CFG_COUNT =  3;
  
- 
- int showDOLWindow(){ 
+ int showDOLWindow(int nr)
+ { 
          int ret = 1;
          bool doloop = true; 
          int fade = 5; 
          int y, sp; 
-  
+         int i;
+		 
 		 okButton.x = 353;
 		 okButton.y = 335;
+  
+		 switch(nr)
+		 {
+			case 1:
+				CFG_COUNT = CFG_METROID_COUNT;
+				for ( i=0; i<CFG_COUNT; i++)
+					strcpy(Episode[i], MPT_DOL[i]);
+				break;
+			case 2:
+				CFG_COUNT = CFG_HOD23_COUNT;
+				for ( i=0; i<CFG_COUNT; i++)
+					strcpy(Episode[i], HOD23_DOL[i]);
+				break;
+		 }
   
          do{ 
 			y = 115; 
@@ -79,9 +104,7 @@
 			CFreeTypeGX_DrawText(ttf20pt, 268, 149, "Episode to play ?", (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_LEFT);
 
 			CFreeTypeGX_DrawText(ttf16pt, 350, 280, "Episode:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-			CFreeTypeGX_DrawText(ttf16pt, 503, 280, episodeDOL[ret -1], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-
-
+			CFreeTypeGX_DrawText(ttf16pt, 503, 280,  Episode[ret -1], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 
 
 			// Draw the game cover
@@ -144,7 +167,8 @@
 					pthread_mutex_unlock(&buffer_mutex[self.gameSelected]);
 				}
 				else
-				{	if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
+				{	
+				if(CONF_GetAspectRatio() == CONF_ASPECT_16_9)
 				{
 					if(settings.covers3d)
 					{
@@ -231,12 +255,12 @@
 					}
 					else
 					{
-						ret = (CFG_METROID_COUNT);
+						ret = (CFG_COUNT);
 					}
 				}
 				else if (Button_Select(&gDOLupButton, pointer.p_x, pointer.p_y))
 				{
-					if (ret < (CFG_METROID_COUNT))
+					if (ret < (CFG_COUNT))
 					{
 						ret ++;
 					}
