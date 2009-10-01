@@ -8,10 +8,12 @@
  *  http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  *
  */
+
 #include "homemenu.h"
 #include "localization.h"
 #include "gfx.h"
 #include "TrackedMemoryManager.h"
+#include "wiisys.h"
 
 extern s_self self;
 extern s_pointer pointer;
@@ -21,7 +23,8 @@ extern u8 reset;
 extern s_settings settings;
 extern s_title* titleList;
 
-#define MAX_WIIMOTES				4
+#define MAX_WIIMOTES		4
+
 
 void launchTitle(u64 titleID, int need_sys)
 {
@@ -167,7 +170,12 @@ void HomeMenu_Show()
 			{
 				WPAD_Rumble(0,0); // Kill the rumble
 				HomeMenu_Destroy();
-				launchTitle(0x0001000148415858LL, 0); //launch system menu
+				
+				WII_Initialize();
+				WII_BootHBC();
+
+				
+				//launchTitle(0x0001000148415858LL, 0); //launch system menu
 				//exit(1);        // eventually, return a value.
 			}
 			/*
@@ -418,4 +426,16 @@ void Do_Batteries(int y_modifier)
 			CFreeTypeGX_DrawText(ttf18pt, 180+(106*x), (400 + y_modifier),  tUnit, (GXColor){0x80, 0x80, 0x80, 0xff}, FTGX_JUSTIFY_LEFT);
 	}
 } // End Do_Batteries()
+
+
+
+
+
+
+
+
+
+
+
+
 
