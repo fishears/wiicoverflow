@@ -71,13 +71,13 @@ inline void GRRLIB_FillScreen(u32 color);
 void GRRLIB_RawTo4x4RGBA(const unsigned char *src, void *dst, const unsigned int width, const unsigned int height);
 
 inline void GRRLIB_Plot(f32 x, f32 y, u32 color);
-void GRRLIB_NPlot(Vector v[], u32 color, long n);
+void GRRLIB_NPlot(guVector v[], u32 color, long n);
 
 inline void GRRLIB_Line(f32 x1, f32 y1, f32 x2, f32 y2, u32 color);
 
 inline void GRRLIB_Rectangle(f32 x, f32 y, f32 width, f32 height, u32 color, u8 filled);
-void GRRLIB_NGone(Vector v[], u32 color, long n);
-void GRRLIB_NGoneFilled(Vector v[], u32 color, long n);
+void GRRLIB_NGone(guVector v[], u32 color, long n);
+void GRRLIB_NGoneFilled(guVector v[], u32 color, long n);
 
 inline void GRRLIB_DrawFlatCoverImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color );
 void GRRLIB_CreateEmptyTexture(GRRLIB_texImg * my_texture, unsigned int, unsigned int);
@@ -117,7 +117,7 @@ void GRRLIB_BMFX_Blur(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor);
 void GRRLIB_BMFX_Scatter(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor);
 void GRRLIB_BMFX_Pixelate(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor);
 
-void GRRLIB_GXEngine(Vector v[], u32 color, long count, u8 fmt);
+void GRRLIB_GXEngine(guVector v[], u32 color, long count, u8 fmt);
 
 
 void GRRLIB_Init();

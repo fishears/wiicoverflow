@@ -389,27 +389,37 @@ int getRandomNum(int min, int max){
 // Penner's easing equations found here http://www.robertpenner.com/easing/
 float easeOutQuint(float t, float b , float c, float d)
 {
-	return c*((t=t/d-1)*t*t*t*t + 1) + b; //Quint
+	t=t/d-1;
+	return c*(t*t*t*t*t + 1) + b; //Quint
+	//return c*((t=t/d-1)*t*t*t*t + 1) + b; //Quint
 }
 
 float easeInQuint(float t,float b , float c, float d)
 {
-	return c*(t/=d)*t*t*t*t + b;
+	t=t/d;
+	return c*t*t*t*t*t + b;
+	//return c*(t/=d)*t*t*t*t + b;
 }
 
 float easeOutQuad(float t, float b , float c, float d)
 {
-	return -c *(t/=d)*(t-2) + b;
+	t=t/d;
+	return -c *t*(t-2) + b;
+	//return -c *(t/=d)*(t-2) + b;
 }
 
 float easeInQuad(float t, float b , float c, float d)
 {
-	return c*(t/=d)*t + b;
+	t=t/d;
+	return c*t*t + b;
+	//return c*(t/=d)*t + b;
 }
 
 float easeOutCubic(float t, float b , float c, float d)
 {
-	return c*((t=t/d-1)*t*t + 1) + b;
+	t=t/d-1;
+	return c*(t*t*t + 1) + b;
+	//return c*((t=t/d-1)*t*t + 1) + b;
 }
 
 char * GetTokenValue(char * token, char* username, char* password, char * lang, char * region, char * id, int * nChars)
@@ -578,7 +588,7 @@ int editGameID()
 	 strcat( self.kb_buffer, "111111" );
 	 for (i=0; i<6; i++)
 	 {
-	   self.kb_buffer[i] = toupper(self.kb_buffer[i]);
+	   self.kb_buffer[i] = (char)toupper((int)self.kb_buffer[i]);
 	 }
 	 self.kb_buffer[6] = '\0';
 	 

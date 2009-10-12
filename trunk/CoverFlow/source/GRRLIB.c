@@ -59,7 +59,7 @@ inline void GRRLIB_FillScreen(u32 color) {
  * @param color the color of the dot.
  */
 inline void GRRLIB_Plot(f32 x, f32 y, u32 color) {
-    Vector v[] = {{x,y,0.0f}};
+    guVector v[] = {{x,y,0.0f}};
 
     GRRLIB_NPlot(v, color, 1);
 }
@@ -70,7 +70,7 @@ inline void GRRLIB_Plot(f32 x, f32 y, u32 color) {
  * @param color
  * @param n
  */
-void GRRLIB_NPlot(Vector v[], u32 color, long n) {
+void GRRLIB_NPlot(guVector v[], u32 color, long n) {
     GRRLIB_GXEngine(v, color, n, GX_POINTS);
 }
 
@@ -83,7 +83,7 @@ void GRRLIB_NPlot(Vector v[], u32 color, long n) {
  * @param color line color.
  */
 inline void GRRLIB_Line(f32 x1, f32 y1, f32 x2, f32 y2, u32 color) {
-    Vector v[] = {{x1,y1,0.0f}, {x2,y2,0.0f}};
+    guVector v[] = {{x1,y1,0.0f}, {x2,y2,0.0f}};
 
     GRRLIB_NGone(v, color, 2);
 }
@@ -100,7 +100,7 @@ inline void GRRLIB_Line(f32 x1, f32 y1, f32 x2, f32 y2, u32 color) {
 inline void GRRLIB_Rectangle(f32 x, f32 y, f32 width, f32 height, u32 color, u8 filled) {
     f32 x2 = x+width;
     f32 y2 = y+height;
-    Vector v[] = {{x,y,0.0f}, {x2,y,0.0f}, {x2,y2,0.0f}, {x,y2,0.0f}, {x,y,0.0f}};
+    guVector v[] = {{x,y,0.0f}, {x2,y,0.0f}, {x2,y2,0.0f}, {x,y2,0.0f}, {x,y,0.0f}};
 
     if(!filled) {
         GRRLIB_NGone(v, color, 5);
@@ -116,7 +116,7 @@ inline void GRRLIB_Rectangle(f32 x, f32 y, f32 width, f32 height, u32 color, u8 
  * @param color
  * @param n
  */
-void GRRLIB_NGone(Vector v[], u32 color, long n) {
+void GRRLIB_NGone(guVector v[], u32 color, long n) {
     GRRLIB_GXEngine(v, color, n, GX_LINESTRIP);
 }
 
@@ -126,7 +126,7 @@ void GRRLIB_NGone(Vector v[], u32 color, long n) {
  * @param color
  * @param n
  */
-void GRRLIB_NGoneFilled(Vector v[], u32 color, long n) {
+void GRRLIB_NGoneFilled(guVector v[], u32 color, long n) {
     GRRLIB_GXEngine(v, color, n, GX_TRIANGLEFAN);
 }
 
@@ -470,7 +470,7 @@ inline void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees,
     height = tex.h * 0.5;
     guMtxIdentity (m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
-    Vector axis = (Vector) {0, 0, 1 };
+    guVector axis = (guVector) {0, 0, 1 };
     guMtxRotAxisDeg (m2, &axis, degrees);
     guMtxConcat(m2, m1, m);
 
@@ -520,7 +520,7 @@ inline void GRRLIB_DrawImgReflection(f32 xpos, f32 ypos, GRRLIB_texImg tex, floa
     height = tex.h * 0.5 * dist;
     guMtxIdentity (m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
-    Vector axis = (Vector) {0, 0, 1 };
+    guVector axis = (guVector) {0, 0, 1 };
     guMtxRotAxisDeg (m2, &axis, degrees);
     guMtxConcat(m2, m1, m);
 
@@ -575,7 +575,7 @@ inline void GRRLIB_DrawFlatCoverImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float
 
     guMtxIdentity (m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
-    Vector axis = (Vector) {0, 0, 1 };
+    guVector axis = (guVector) {0, 0, 1 };
     guMtxRotAxisDeg (m2, &axis, degrees);
     guMtxConcat(m2, m1, m);
 
@@ -654,7 +654,7 @@ inline void GRRLIB_DrawCoverImg(f32 loc, f32 zpos, GRRLIB_texImg tex, float degr
 
 	guMtxTransApply(m, m, 0, 0, -1*zpos);
 
-    Vector axis = (Vector) {0, 1, 0 };
+    guVector axis = (guVector) {0, 1, 0 };
     guMtxRotAxisDeg (m, &axis, degrees);
 
 	if(scale > 1)
@@ -1185,7 +1185,7 @@ inline void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees
     height = tex.tileh * 0.5f;
     guMtxIdentity (m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0f);
-    Vector axis = (Vector) {0, 0, 1 };
+    guVector axis = (guVector) {0, 0, 1 };
     guMtxRotAxisDeg (m2, &axis, degrees);
     guMtxConcat(m2, m1, m);
     guMtxTransApply(m, m, xpos+width, ypos+height, 0);
@@ -1515,7 +1515,7 @@ void GRRLIB_BMFX_Scatter(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor
  * @param n
  * @param fmt
  */
-void GRRLIB_GXEngine(Vector v[], u32 color, long n, u8 fmt) {
+void GRRLIB_GXEngine(guVector v[], u32 color, long n, u8 fmt) {
     int i;
 
     GX_Begin(fmt, GX_VTXFMT0, n);
@@ -1652,7 +1652,7 @@ void GRRLIB_3D_Init()
 {
     Mtx44 perspective;
 
-	Vector cam = {settings.coverCamX, settings.coverCamY, settings.coverZoom},
+	guVector cam = {settings.coverCamX, settings.coverCamY, settings.coverZoom},
 			up = {0.0F, 1.0F, 0.0F},
 		  look = {0.0F, 0.0F, 1.0F};
 	guLookAt(view, &cam, &up, &look);

@@ -30,9 +30,16 @@ void CFreeTypeGX_DrawText(const CFreeTypeGX *ftgx, uint16_t x, uint16_t y, char 
 	wchar_t *strWChar;
 	strWChar = new wchar_t[strlen(text) + 1];
 	
-	int ln = mbstowcs(strWChar, text, strlen(text));
-	if(ln < 0) ln = 0;
-	strWChar[ln] = (wchar_t)'\0';
+	
+	
+	char *tempSrc = text;
+	wchar_t *tempDest = strWChar;
+	while((*tempDest++ = *tempSrc++));
+	
+	
+	//int ln = mbstowcs(strWChar, text, strlen(text));
+	//if(ln < 0) ln = 0;
+	//strWChar[ln] = (wchar_t)'\0';
 
 	f->drawText(x,y,strWChar,color,textStyling);
 
@@ -45,7 +52,7 @@ void CFreeTypeGX_DrawWideText(const CFreeTypeGX *ftgx, uint16_t x, uint16_t y, w
 	f->drawText(x,y,text,color,textStyling);
 }
 
-	
+/*	
 void CFreeTypeGX_DrawTextWithShadow(const CFreeTypeGX *ftgx, uint16_t x, uint16_t y, char *text, GXColor color, GXColor shadowColor, uint16_t textStyling)
 {
 	FreeTypeGX *f = (FreeTypeGX*)ftgx;
@@ -61,7 +68,7 @@ void CFreeTypeGX_DrawTextWithShadow(const CFreeTypeGX *ftgx, uint16_t x, uint16_
 
 	delete strWChar;
 }
-
+*/
 wchar_t* CFreeTypeGX_charToWideChar(const CFreeTypeGX *ftgx, char* p)
 {
 	FreeTypeGX *f = (FreeTypeGX*)ftgx;
