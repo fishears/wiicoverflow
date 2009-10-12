@@ -300,9 +300,10 @@ int main( int argc, char **argv )
     
 
 	// we need PAD for WindowPrompt()
-	int cfREV = getRevXML(); // Check that we're using at least build #578 for correct ver. of gamelist.xml
-	if (cfREV != -1) // 0 or rev	
-		checkGameList578(cfREV);
+	
+//	int cfREV = getRevXML(); // Check that we're using at least build #578 for correct ver. of gamelist.xml
+//	if (cfREV != -1) // 0 or rev	
+//		checkGameList578(cfREV);
 
 	// Moved here as it sets the self.usingTitlesTxt used in initUSBFS sorting
 	int numLines = initTitle();

@@ -5,7 +5,7 @@ Load game information from XML - Lustar
 */
 
 #include <malloc.h>
-#include <mxml.h>
+#include "mxml.h"
 #include "unzip.h"
 //#include "settings/cfg.h"
 #include "xml.h"
@@ -479,7 +479,7 @@ int LoadGameInfoFromXML(char* gameid)
 					++gameinfo.wifiCnt;
 					GetTextFromNode(nodeidtmp, nodedata, "feature", NULL, NULL, MXML_DESCEND, gameinfo.wififeatures[gameinfo.wifiCnt],
 																					sizeof(gameinfo.wififeatures[gameinfo.wifiCnt]));
-					gameinfo.wififeatures[gameinfo.wifiCnt][0] = toupper(gameinfo.wififeatures[gameinfo.wifiCnt][0]);
+					gameinfo.wififeatures[gameinfo.wifiCnt][0] = (char)toupper((int)gameinfo.wififeatures[gameinfo.wifiCnt][0]);
 					if (gameinfo.wifiCnt == XML_ELEMMAX)
 						break;
 				}
@@ -548,7 +548,7 @@ int LoadGameInfoFromXML(char* gameid)
 				++gameinfo.genreCnt;
 				trimcopy(splitresult,splitresult,strlen(splitresult)+1);
 				strlcpy(gameinfo.genresplit[gameinfo.genreCnt],splitresult,sizeof(gameinfo.genresplit[gameinfo.genreCnt]));
-				gameinfo.genresplit[gameinfo.genreCnt][0] = toupper(gameinfo.genresplit[gameinfo.genreCnt][0]);
+				gameinfo.genresplit[gameinfo.genreCnt][0] = (char)toupper((int)gameinfo.genresplit[gameinfo.genreCnt][0]);
 				while (splitresult != NULL)
 				{
 					splitresult = strtok(NULL, delimgenre);
@@ -556,7 +556,7 @@ int LoadGameInfoFromXML(char* gameid)
 						++gameinfo.genreCnt;
 						trimcopy(splitresult,splitresult,strlen(splitresult)+1);
 						strlcpy(gameinfo.genresplit[gameinfo.genreCnt],splitresult,sizeof(gameinfo.genresplit[gameinfo.genreCnt]));
-						gameinfo.genresplit[gameinfo.genreCnt][0] = toupper(gameinfo.genresplit[gameinfo.genreCnt][0]);
+						gameinfo.genresplit[gameinfo.genreCnt][0] = (char)toupper((int)gameinfo.genresplit[gameinfo.genreCnt][0]);
 						if (gameinfo.genreCnt == XML_ELEMMAX)
 							break;
 					}
