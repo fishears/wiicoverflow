@@ -56,7 +56,7 @@
 
 #include "defines.h"		/* see for enable/disable definitions  */
 
-#define RELEASE   "v1.2a" 	/* shown ReleaseNo in SysInfo-Window   */
+#define RELEASE   "v1.3" 	/* shown ReleaseNo in SysInfo-Window   */
 
 /*DOL TEST*/
 // To test dol, build the bootloader, then copy

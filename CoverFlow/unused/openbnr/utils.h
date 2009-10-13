@@ -37,4 +37,5 @@ char * ParseTokenedUrl(char * sitebase,char * subdirectory, char * url, char* us
 int DebTxt( char * Msg);
 int IOS2int();
 int editGameID();
+int getIntroSound(u8 *id);
 #endif
