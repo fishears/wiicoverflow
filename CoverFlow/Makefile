@@ -43,7 +43,7 @@ LIBS	:=	-lmetaphrasis -lfreetype -lsnd -lmxml -lpng -lz -lfat -lwiiuse -lbte -lo
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(CURDIR)/libs/png $(CURDIR)/libs/mxml $(CURDIR)/libs/metaphrasis $(CURDIR)/libs/freetype $(CURDIR)/libs/sndlib $(CURDIR)/libs/wiiuse $(CURDIR)/libs/libfat
+LIBDIRS	:= $(CURDIR)/libs/png $(CURDIR)/libs/mxml $(CURDIR)/libs/metaphrasis $(CURDIR)/libs/freetype $(CURDIR)/libs/sndlib $(CURDIR)/libs/libfat
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
 # rules for different file extensions
