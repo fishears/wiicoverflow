@@ -527,11 +527,6 @@ int main( int argc, char **argv )
 								self.gsize = size;
 								
 								LoadCurrentCover(self.gameSelected, self.gameList);
-
-							#ifdef EXTRACT_INTROSOUND
-								getIntroSound(header->id);						
-							#endif
-							
 								
 							#ifdef GAME_INFO_TEST
 								//Try to load current game info
