@@ -21,7 +21,7 @@ class C_App_dol: public C_App
 		void * Load (const void * dol, const char * CommandLine = NULL, u8 Action = 0);
 	
 	private:
-		typedef struct Header 
+		struct Header 
 		{
 			u32 text_pos   [7];
 			u32 data_pos   [11];

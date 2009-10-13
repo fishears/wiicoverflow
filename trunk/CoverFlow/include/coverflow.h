@@ -11,7 +11,6 @@
 #include <wiipad.h>
 #include <sys/dir.h>
 #include <ogc/lwp_watchdog.h>   // Needed for gettime and ticks_to_millisecs
-#include "wpadsvn.h"
 #include "wbfs.h"
 #include "wdvd.h"
 #include "libwbfs/libwbfs.h"
