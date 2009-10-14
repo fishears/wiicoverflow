@@ -50,7 +50,6 @@
 #include "updater.h"
 //#include "trackedMemoryManager.h"
 
-#include "gameinfo.h"
 #include "newsreader.h"
 #include "fatmounter.h"
 
@@ -69,8 +68,6 @@
 //extern const u8 bootloader_dol[];
 
 /*DOL TEST END*/
-
-//#define GAME_INFO_TEST 1
 
 #define BLOCKSIZE 1024
 
@@ -100,7 +97,6 @@
 #define BUFFER_WINDOW        15
 #define BUFFER_THREAD_COUNT  1
 #define MAX_COVERS           15
-
 
 
 #define ANIMATE_SPEED	0
