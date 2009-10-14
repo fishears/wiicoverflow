@@ -527,23 +527,6 @@ int main( int argc, char **argv )
 								self.gsize = size;
 								
 								LoadCurrentCover(self.gameSelected, self.gameList);
-								
-							#ifdef GAME_INFO_TEST
-								//Try to load current game info
-								int ret = GetGameInfo(header->id);
-								
-								
-								if(ret == true)
-								{
-									WindowPrompt("Are you ready!!!", "Click ok to see if it worked!", &okButton, 0);
-									WindowPrompt("Game Info Loaded!", gameinfo.synopsis, &okButton, 0);
-								}
-								
-								// Else.... not so much :)
-								
-								//TODO Use this game info
-							#endif
-								
 							}
 						}
 						else if(CoverHoverLeft())
