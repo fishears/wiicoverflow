@@ -29,8 +29,6 @@ void CFreeTypeGX_DrawText(const CFreeTypeGX *ftgx,uint16_t x, uint16_t y, char *
 
 void CFreeTypeGX_DrawWideText(const CFreeTypeGX *ftgx,uint16_t x, uint16_t y, wchar_t *text, GXColor color, uint16_t textStyling);
 
-void CFreeTypeGX_DrawTextWithShadow(const CFreeTypeGX *ftgx, uint16_t x, uint16_t y, char *text, GXColor color, GXColor shadowColor, uint16_t textStyling);
-
 wchar_t* CFreeTypeGX_charToWideChar(const CFreeTypeGX *ftgx, char* p);
 
 uint16_t CFreeTypeGX_getWidth(const CFreeTypeGX *ftgx, wchar_t *text);

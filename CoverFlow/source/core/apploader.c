@@ -390,7 +390,7 @@ void PretendDiscInserted(void *buffer, u32 len)
 
 void gamepatches(void * dst, int len)
 {
- 	//PretendDiscInserted(dst, len);
+ 	PretendDiscInserted(dst, len);
 	
 	GXRModeObj** table = NULL;
 	
