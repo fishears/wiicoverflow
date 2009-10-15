@@ -290,6 +290,9 @@ s32 WBFS_Open(void)
 	hdd = wbfs_open_hd(readCallback, writeCallback, NULL, sector_size, nb_sectors, 0);
 	if (!hdd)
 		return -1;
+	// Thanks to Wiimm & e.bovendeur
+	// Save the new sector size, so it will be used in read and write calls
+	sector_size = hdd->head->hd_sec_sz_s;
 
 	return 0;
 }

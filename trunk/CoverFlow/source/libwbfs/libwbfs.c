@@ -50,6 +50,10 @@ wbfs_t*wbfs_open_hd(rw_sector_callback_t read_hdsector,
                 // verify there is the magic.
                 if (head->magic == wbfs_htonl(WBFS_MAGIC))
                 {
+					    // Thanks to Wiimm & e.bovendeur
+						// Override the sector size by the sector size in the wbfs header...
+						hd_sector_size = 1 << head->hd_sec_sz_s;
+ 
                         wbfs_t*p = wbfs_open_partition(read_hdsector,write_hdsector,
                                                 callback_data,hd_sector_size,0,part_lba,reset);
                         return p;
@@ -60,6 +64,7 @@ wbfs_t*wbfs_open_hd(rw_sector_callback_t read_hdsector,
         }
         return 0;
 }
+
 wbfs_t*wbfs_open_partition(rw_sector_callback_t read_hdsector,
                            rw_sector_callback_t write_hdsector,
                            void *callback_data,
