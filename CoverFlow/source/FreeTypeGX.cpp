@@ -52,8 +52,16 @@ FreeTypeGX::~FreeTypeGX() {
  * @return Wide character representation of supplied character string.
  */
 wchar_t* FreeTypeGX::charToWideChar(char* strChar) {
-      wchar_t *strWChar;
-      strWChar = new wchar_t[strlen(strChar) + 1];
+    wchar_t *strWChar;
+	try {strWChar = new wchar_t[strlen(strChar) + 1];}
+	catch (...) { return 0; }
+    // UTF-8
+    int	bt;
+    bt = mbstowcs(strWChar, strChar, strlen(strChar));
+    if (bt > 0) {
+        strWChar[bt] = (wchar_t)'\0';
+        return strWChar;
+    }
 
       char *tempSrc = strChar;
       wchar_t *tempDest = strWChar;
