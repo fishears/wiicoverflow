@@ -10,6 +10,7 @@
  *  This file contains the main() entry point to the application
  *  Build configuration settings can be found in "coverflow.h"
  */
+#include <locale.h>
 #include "coverflow.h"
 #include "filter.h"
 #include "TrackedMemoryManager.h"
@@ -139,6 +140,8 @@ void initPaths()
 //---------------------------------------------------------------------------------
 int main( int argc, char **argv )
 {
+	setlocale(LC_ALL, "en.UTF-8");
+	
 	bool bootDevice_found=false;
 	
 	strcpy(self.bootDevice, "SD:");

@@ -28,18 +28,21 @@ void CFreeTypeGX_DrawText(const CFreeTypeGX *ftgx, uint16_t x, uint16_t y, char 
 	FreeTypeGX *f = (FreeTypeGX*)ftgx;
 	
 	wchar_t *strWChar;
-	strWChar = new wchar_t[strlen(text) + 1];
-	
-	
-	
-	char *tempSrc = text;
-	wchar_t *tempDest = strWChar;
-	while((*tempDest++ = *tempSrc++));
-	
-	
-	//int ln = mbstowcs(strWChar, text, strlen(text));
-	//if(ln < 0) ln = 0;
-	//strWChar[ln] = (wchar_t)'\0';
+	try {strWChar = new wchar_t[strlen(text) + 1];}
+	catch (...) { return; }
+    // UTF-8
+
+	int ln = mbstowcs(strWChar, text, strlen(text));
+	if(ln > 0)
+	{ 
+	 strWChar[ln] = (wchar_t)'\0';
+	}
+	else
+	{
+	 char *tempSrc = text;
+	 wchar_t *tempDest = strWChar;
+	 while((*tempDest++ = *tempSrc++));
+	}
 
 	f->drawText(x,y,strWChar,color,textStyling);
 
