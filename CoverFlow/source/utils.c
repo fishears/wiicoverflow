@@ -569,6 +569,41 @@ int IOS2int()
  return ios2;
 }
 
+
+bool CombineTitleFiles()
+{
+	FILE *in; //owntitles.txt
+	FILE *out;//titles.txt
+	char ch;
+	char tbuf[255];
+	
+	sprintf(tbuf,"%s/owntitles.txt", dynPath.dir_usb_loader);
+	if((in=fopen(tbuf, "rb")) == NULL)
+	{
+		return false;
+	}
+
+	sprintf(tbuf,"%s/titles.txt", dynPath.dir_usb_loader);
+	if((out=fopen(tbuf, "ab")) == NULL) 
+	{
+		return false;
+	}
+	
+	while(!feof(in)) 
+	{
+		ch = getc(in);
+        if(!feof(in)) 
+			putc(ch, out);
+	}
+	fclose(in);
+	fclose(out);
+
+	return true;
+}
+
+
+
+
 int editGameID()
 {
 	int ret;

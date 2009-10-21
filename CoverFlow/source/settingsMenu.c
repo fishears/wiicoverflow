@@ -470,7 +470,9 @@ void Settings_Menu_Show()
 													self.titlesTxtSize = 0;
 													free(titleList);
 											}
-
+											#ifdef OWNTITLES
+											CombineTitleFiles();
+											#endif
 											int numLines = initTitle();
 											if(numLines > 0){
 													self.usingTitlesTxt = true;
