@@ -29,5 +29,8 @@
 //       extracts IntroSound of selected game to file
 //#define EXTRACT_INTROSOUND
 //***************************************************************
+//       allows using edited game titles in owntitles.txt
+#define OWNTITLES
+//***************************************************************
 #endif
 
