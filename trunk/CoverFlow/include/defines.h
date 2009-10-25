@@ -2,11 +2,22 @@
 #define __DEFINES_H_
 
 //***************************************************************
-//       Adds Debug-Info to file
-//#define DEBUG_FILE
-//#ifdef DEBUG_FILE
+//       Adds Debug-Info into file with DebTxt();
+//#define DEBTXT_ALTDOL
+//#define DEBTXT_APPLOAD
+//#define DEBTXT_FAT
+//#define DEBTXT_GFX
+//#define DEBTXT_HOMEMENU
+
+#if defined DEBTXT_ALTDOL  	|| \
+	defined DEBTXT_APPLOAD 	|| \
+	defined DEBTXT_FAT 		|| \
+	defined DEBTXT_GFX 		|| \
+	defined DEBTXT_HOMEMENU
+	
+	#define DEBTXT_ON
 	#define DEBUG_FILENAME "SD:/usb-loader/debug.txt"
-//#endif
+#endif
 //***************************************************************
 //       shows MemInfo in first line
 //#define SHOW_MEMINFO

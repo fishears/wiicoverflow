@@ -247,7 +247,7 @@ s32 Apploader_Run(entry_point *entry)
 
 	u32 appldr_len;
 	s32 ret;
-#ifdef DEBUG_FILE
+#ifdef DEBTXT_APPLOAD
 	char dbg[80];
 #endif
 
@@ -307,7 +307,7 @@ s32 Apploader_Run(entry_point *entry)
 	/* Set entry point from apploader */
 	*entry = appldr_final();
 	
-	#ifdef DEBUG_FILE
+	#ifdef DEBTXT_APPLOAD
 		sprintf(dbg,"normal entrypoint %X",(u32)*entry);
 		DebTxt(dbg);
 	#endif 
@@ -330,7 +330,7 @@ s32 Apploader_Run(entry_point *entry)
 
             /* Set entry point from apploader */
             *entry = (entry_point) load_dol_image(dolbuffer);
-            #ifdef DEBUG_FILE
+            #ifdef DEBTXT_APPLOAD
 				SDCard_Init();
                 sprintf(dbg,"altdol entrypoint %X",(u32)*entry);
                 DebTxt(dbg);

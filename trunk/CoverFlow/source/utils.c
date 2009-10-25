@@ -522,7 +522,7 @@ char * ParseTokenedUrl(char * sitebase,char * subdirectory, char * url, char* us
 	return ret;
 }
 
-
+#ifdef DEBTXT_ON
 int DebTxt( char * Msg)
 {
 	char       buf[255];
@@ -538,12 +538,12 @@ int DebTxt( char * Msg)
 
 	fp = fopen(DEBUG_FILENAME, "a");
 	if (!fp) 
-	return -1;
+		return -1;
 	fprintf(fp, "%s\n", buf);
 	fclose(fp);
 	return 1;
 }
-
+#endif
 
 int IOS2int()
 {

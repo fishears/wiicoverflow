@@ -90,7 +90,7 @@ out:
 
 s32 Fat_ReadFileToBuffer(const char *filepath, void *outbuf, int maxsize)
 {
-	#ifdef DEBUG_FILE
+	#ifdef DEBTXT_FAT
 		char txt[1024];
 		sprintf(txt, "Fat_ReadFileToBuffer %s %d", filepath, maxsize);
 		DebTxt(txt);
@@ -111,7 +111,7 @@ s32 Fat_ReadFileToBuffer(const char *filepath, void *outbuf, int maxsize)
 
 	if (filelen>maxsize){
 
-		#ifdef DEBUG_FILE
+		#ifdef DEBTXT_FAT
 			DebTxt(" Err: filelen > maxsize");
 		#endif
 
@@ -123,7 +123,7 @@ s32 Fat_ReadFileToBuffer(const char *filepath, void *outbuf, int maxsize)
 	fp = fopen(filepath, "rb");
 	if (!fp){
 
-		#ifdef DEBUG_FILE
+		#ifdef DEBTXT_FAT
 			DebTxt(" Err: cannot open");
 		#endif
 
@@ -134,7 +134,7 @@ s32 Fat_ReadFileToBuffer(const char *filepath, void *outbuf, int maxsize)
 	ret = fread(outbuf, 1, filelen, fp);	
 	if (ret != filelen){
 
-		#ifdef DEBUG_FILE
+		#ifdef DEBTXT_FAT
 			DebTxt(" Err: ret != filelen");
 		#endif
 
@@ -146,7 +146,7 @@ s32 Fat_ReadFileToBuffer(const char *filepath, void *outbuf, int maxsize)
 err:
 
 	/* Error code */
-	#ifdef DEBUG_FILE
+	#ifdef DEBTXT_FAT
 		sprintf(txt, " last message: %s", strerror(errno));
 	#endif
 

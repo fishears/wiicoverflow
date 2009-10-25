@@ -34,7 +34,7 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 
 	if(file == NULL)
 	{
-#ifdef DEBUG_FILE
+#ifdef DEBTXT_ALTDOL
 		DebTxt(".dol is missing");
 #endif
 		fclose(file);
@@ -58,7 +58,7 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 #endif
 	if (dol_buffer == NULL)
 	{
-#ifdef DEBUG_FILE
+#ifdef DEBTXT_ALTDOL
 		char dbg[80];
 		DebTxt("Out of memory");
 		sprintf(dbg,"%s  %d", gameidbuffer6, filesize);
@@ -72,7 +72,7 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 	ret = fread( dol_buffer, 1, filesize, file);
 	if(ret != filesize)
 	{
-#ifdef DEBUG_FILE
+#ifdef DEBTXT_ALTDOL
 		DebTxt("Error reading dol header");
 #endif
 #ifndef LOUDTEST
@@ -84,7 +84,7 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 		return false;
 	}
 	fclose(file);
-#ifdef DEBUG_FILE
+#ifdef DEBTXT_ALTDOL
 	DebTxt("dol header in buffer");
 #endif
 	SDCard_deInit();
@@ -245,7 +245,7 @@ u32 Load_Dol_from_disc(u32 doloffset)
 	dol_header = memalign(32, sizeof(dolheader));
 	if (dol_header == NULL)
 	{
-#ifdef DEBUG_FILE
+#ifdef DEBTXT_ALTDOL
 		DebTxt("Out of memory");
 #endif		
 		return -1;
@@ -257,7 +257,7 @@ u32 Load_Dol_from_disc(u32 doloffset)
 
 	if (entrypoint == 0)
 	{
-#ifdef DEBUG_FILE
+#ifdef DEBTXT_ALTDOL
 		DebTxt("entrypoint = 0");
 #endif
 		free(dol_header);
