@@ -40,7 +40,7 @@ void LoadFonts()
 
 void LoadTextures()
 {
-	#ifdef DEBUG_FILE
+	#ifdef DEBTXT_GFX
 		DebTxt("LoadTextures (start)");
 	#endif
 
@@ -91,7 +91,7 @@ void LoadTextures()
 //	GRRLIB_LoadTexturePNG(&button_round_info_texture,button_round_info_png);
 //	GRRLIB_LoadTexturePNG(&button_round_info_over_texture,button_round_info_over_png);
 
-	#ifdef DEBUG_FILE
+	#ifdef DEBTXT_GFX
 		DebTxt("LoadTextures (end)");
 	#endif
 }
@@ -249,7 +249,7 @@ void Paint_Progress_FadeToBG()
 
 void Init_Buttons()
 {
-	#ifdef DEBUG_FILE
+	#ifdef DEBTXT_GFX
 		DebTxt("Init_Buttons (start)");
 	#endif
 
@@ -418,7 +418,7 @@ void Init_Buttons()
    	Button_Init(&button_edit[0], button_edit_png,  button_edit_over_png, 80, 80);
     Duplicate_Button(&editGameIDButton, button_edit[0], 450, 284);
 
-	#ifdef DEBUG_FILE
+	#ifdef DEBTXT_GFX
 		DebTxt("Init_Buttons (end)");
 	#endif
 } // End Init_Buttons();
