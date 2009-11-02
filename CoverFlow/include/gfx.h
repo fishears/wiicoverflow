@@ -213,6 +213,8 @@ Button deleteButton;
 Button settingsButton;
 Button toggleOnButton;
 Button toggleOffButton;
+Button loseronButton;
+Button loseroffButton;
 
 Button infoLeftButton;
 Button infoRightButton;

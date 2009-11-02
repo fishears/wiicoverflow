@@ -37,6 +37,7 @@ typedef struct {
 	int autoUpdate;
 
     int ocarina;
+    int loser;
     int hooktype;
     int language;
     int video;
