@@ -2,8 +2,8 @@
   <app version="1.0">
     <name>CoverFloader</name>
     <coder>Many Talented People</coder>
-    <version>v1.2a</version>
-    <release_date>August 18th, 2009</release_date>
+    <version>v1.3</version>
+    <release_date>November 2nd, 2009</release_date>
     <short_description>USB ISO Loader</short_description>
     <long_description>Many thanks to the developers:
 Scognito
