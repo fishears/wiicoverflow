@@ -450,7 +450,10 @@ void Settings_Menu_Show()
 						WPAD_Rumble(0,0); //sometimes rumble remain active
 						batch_download_txt(self.gameList);
 					}
-
+                                        else if (Button_Select(&loseronButton, pointer.p_x, pointer.p_y) || Button_Select(&loseroffButton, pointer.p_x, pointer.p_y))
+					{
+						settings.loser = (settings.loser) ? 0 : 1;
+					}
 					else if(Button_Select(&titlesButton, pointer.p_x, pointer.p_y) )
 					{
 						WPAD_Rumble(0,0); //sometimes rumble remain active
@@ -509,7 +512,7 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 158,263, "Misc", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 
 
-				CFreeTypeGX_DrawText(ttf16pt, 300,285, TX.getAddData, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 300,150, TX.getAddData, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,318, TX.patchVIDTV, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,352, TX.videoMode, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 455,352, vidmodes[settings.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
@@ -518,6 +521,7 @@ void Settings_Menu_Show()
 
 				CFreeTypeGX_DrawText(ttf16pt, 300, 116, "IOS Boot default:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 455, 116, sysCIOS[settings.cios], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
+                                CFreeTypeGX_DrawText(ttf16pt, 300, 285, "Online cheating", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 
 				if (settings.covers3d == 1)
 				{
@@ -539,6 +543,7 @@ void Settings_Menu_Show()
 				Button_Paint(&hookdownButton);
 				Button_Paint(&sysciosupButton);
 				Button_Paint(&sysciosdownButton);
+                                Button_TTF_Toggle_Paint(&loseroffButton, &loseronButton, TX.toggleOffB, TX.toggleOnB, settings.loser);
 
 				if( Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
@@ -556,7 +561,9 @@ void Settings_Menu_Show()
 					Button_Hover(&hookupButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&hookdownButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&sysciosupButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&sysciosdownButton, pointer.p_x, pointer.p_y)
+					Button_Hover(&sysciosdownButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&loseronButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&loseroffButton, pointer.p_x, pointer.p_y)
 				)
 				{
 					if (--self.rumbleAmt > 0) // Should we be rumbling?

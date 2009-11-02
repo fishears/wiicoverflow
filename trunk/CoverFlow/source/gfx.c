@@ -295,8 +295,8 @@ void Init_Buttons()
     Duplicate_Button(&quickstartOffButton, musicOffButton, 310, 165);
     Duplicate_Button_TTF(&themeBlackButton, okButton, 310, 199, TX.blackB);
     Duplicate_Button_TTF(&themeWhiteButton, okButton, 422, 199, TX.whiteB);
-	Duplicate_Button_TTF(&coversButton, okButton, 310, 265, TX.coversB);
-	Duplicate_Button_TTF(&titlesButton, okButton, 422, 265, TX.titlesB);
+	Duplicate_Button_TTF(&coversButton, okButton, 310, 130, TX.coversB);
+	Duplicate_Button_TTF(&titlesButton, okButton, 422, 130, TX.titlesB);
 
 	Button_Init(&infoLeftButton,  button_left_png,  button_left_over_png,  490,380);
 	Button_Init(&infoRightButton, button_right_png, button_right_over_png, 518,380);
@@ -312,6 +312,8 @@ void Init_Buttons()
     Duplicate_Button_TTF(&cheatDownButton, okButton,310,367,TX.downloadB);
 	Duplicate_Button(&sysciosdownButton, viddownButton, 310, 96);
     Duplicate_Button(&sysciosupButton, vidupButton, 338, 96);
+    Duplicate_Button(&loseronButton, musicOnButton, 310, 265);
+    Duplicate_Button(&loseroffButton, musicOffButton, 310, 265);
 
 	// Graphic Settings Panel
     Duplicate_Button(&falloffdownButton, viddownButton, 99,123);

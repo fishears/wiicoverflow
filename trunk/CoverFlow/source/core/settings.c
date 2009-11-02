@@ -59,6 +59,7 @@ void SETTINGS_Init()
 	strcpy(settings.localLanguage, "default"); // en-US 
  	//Global Game
 	settings.ocarina      = 0;
+        settings.loser        = 0;
 	settings.hooktype     = 0;
 	settings.language     = 0;
 	settings.video        = 0;
@@ -223,6 +224,8 @@ int SETTINGS_Load()
 		  
 		  if(mxmlElementGetAttr(next_n,"ocarina"))
 			  settings.ocarina = atoi(mxmlElementGetAttr(next_n,"ocarina"));
+                  if(mxmlElementGetAttr(next_n,"loser"))
+			  settings.loser = atoi(mxmlElementGetAttr(next_n,"loser"));
 		  if(mxmlElementGetAttr(next_n,"hooktype"))
 			  settings.hooktype = atoi(mxmlElementGetAttr(next_n,"hooktype"));
 		  if(mxmlElementGetAttr(next_n,"language"))
@@ -388,6 +391,9 @@ int SETTINGS_Save()
 	node = mxmlNewElement(tree, "game");
 	sprintf(buffer, "%d", settings.ocarina);
 	mxmlElementSetAttr(node, "ocarina", buffer);
+
+        sprintf(buffer, "%d", settings.loser);
+	mxmlElementSetAttr(node, "loser", buffer);
 
 	sprintf(buffer, "%d", settings.hooktype);
 	mxmlElementSetAttr(node, "hooktype", buffer);
