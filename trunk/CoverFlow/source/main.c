@@ -346,7 +346,7 @@ int main( int argc, char **argv )
 	Paint_Progress_FadeToBG();
 
 	//  initNetworkThread();   //commented by LoudBob11
-	
+		
 	// Set the background
 	if (settings.theme)
 		GRRLIB_SetBGColor(1); // set BG to white
@@ -601,7 +601,7 @@ int main( int argc, char **argv )
 									SDCard_Init();
 									USBDevice_Init();
 									SETTINGS_Load(); //failed to launch so get the globals back
-									initNetworkThread();
+									//initNetworkThread();
 									return 0;
 								}
 							}
@@ -1004,7 +1004,7 @@ int main( int argc, char **argv )
 					SDCard_Init();
 					USBDevice_Init();
 					SETTINGS_Load(); //failed to launch so get the globals back
-					initNetworkThread();
+					//initNetworkThread();
 					return 0;
 				}
 				
@@ -1138,13 +1138,15 @@ int main( int argc, char **argv )
 		if((WPAD_ButtonsHeld(0) & WPAD_BUTTON_1))  // Button1 is the 'Get Info' button
 		{
 			//showInfoWindow();
-			if(networkInit(self.ipAddress)){
+	/*
+		if(networkInit(self.ipAddress)){
 				if(checkForUpdate())
 					self.updateAvailable = true;
 				else
 					self.updateAvailable = false;
 			}
-		}
+	*/
+	}
 /*		
 		if(settings.autoUpdate && self.updateAvailable){
 			if(promptForUpdate()){

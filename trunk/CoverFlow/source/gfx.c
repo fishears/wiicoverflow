@@ -259,9 +259,6 @@ void Init_Buttons()
 	Button_Init(&settingsButton, button_round_gear_png, button_round_gear_over_png, 30, 427);
 	Button_Init(&addButton, button_round_add_png,  button_round_add_over_png, 580, 427);
     Button_Init(&infoButton, button_round_info_png, button_round_info_over_png, 580, 44);
-#ifdef NEWS_READER
-	Button3_Init(&newsButton, button_round_news_png, button_round_news_over_png, button_round_news_blue_png, 30, 44);
-#endif	
 	// Dialog Box Buttons
 	Button_TTF_Init(&okButton, button_bar_h28w104_black_png, button_bar_h28w104_white_png, 300, 290, TX.okB);
 	Duplicate_Button_TTF(&cancelButton, okButton, 414, 290, TX.cancelB);
@@ -298,13 +295,20 @@ void Init_Buttons()
 	Duplicate_Button_TTF(&coversButton, okButton, 310, 130, TX.coversB);
 	Duplicate_Button_TTF(&titlesButton, okButton, 422, 130, TX.titlesB);
 
+#ifdef NEWS_READER
+	Button3_Init(&newsButton, button_round_news_png, button_round_news_over_png, button_round_news_blue_png, 30, 44);
+	Duplicate_Button_TTF(&checkNewsButton, okButton,310,164,"Check");
+#endif	
+
 	Button_Init(&infoLeftButton,  button_left_png,  button_left_over_png,  490,380);
 	Button_Init(&infoRightButton, button_right_png, button_right_over_png, 518,380);
 	
-	Button_Init(&viddownButton, button_minus_png, button_minus_over_png, 310,334);
-	Button_Init(&vidupButton, button_plus_png, button_plus_over_png, 338,334);
-    Duplicate_Button(&vidtvonButton, musicOnButton, 310, 299);
-    Duplicate_Button(&vidtvoffButton, musicOffButton, 310, 299);
+	Button_Init(&viddownButton, button_minus_png, button_minus_over_png, 310,299);
+	Button_Init(&vidupButton, button_plus_png, button_plus_over_png, 338,299);
+	Duplicate_Button(&vidtvonButton, musicOnButton, 310, 265);
+    Duplicate_Button(&vidtvoffButton, musicOffButton, 310, 265);
+	Duplicate_Button(&loseronButton, musicOnButton, 310, 334);
+    Duplicate_Button(&loseroffButton, musicOffButton, 310, 334);
     Duplicate_Button(&cheatonButton, musicOnButton, 198,367);
     Duplicate_Button(&cheatoffButton, musicOffButton, 198,367);
     Duplicate_Button(&hookdownButton, viddownButton, 422,367);
@@ -312,8 +316,7 @@ void Init_Buttons()
     Duplicate_Button_TTF(&cheatDownButton, okButton,310,367,TX.downloadB);
 	Duplicate_Button(&sysciosdownButton, viddownButton, 310, 96);
     Duplicate_Button(&sysciosupButton, vidupButton, 338, 96);
-    Duplicate_Button(&loseronButton, musicOnButton, 310, 265);
-    Duplicate_Button(&loseroffButton, musicOffButton, 310, 265);
+	
 
 	// Graphic Settings Panel
     Duplicate_Button(&falloffdownButton, viddownButton, 99,123);
@@ -1739,6 +1742,7 @@ void freeResources(){
 	FreeButtonResources(&infoButton);
 #ifdef NEWS_READER
 	FreeButton3Resources(&newsButton);
+	FreeButtonResources( &checkNewsButton);
 #endif
  	// Dialog Box Buttons
 	FreeButtonResources(&okButton);
@@ -1790,6 +1794,9 @@ void freeResources(){
     FreeButtonResources(&hookupButton);
     FreeButtonResources(&sysciosdownButton);
     FreeButtonResources(&sysciosupButton);
+	FreeButtonResources(&loseronButton);
+	FreeButtonResources(&loseroffButton);
+
 	
 	// Graphic Settings Panel
     FreeButtonResources(&falloffdownButton);

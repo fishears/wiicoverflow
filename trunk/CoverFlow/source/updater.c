@@ -376,3 +376,37 @@
          waitforanswer = false; 
      } 
  }
+
+
+//**********************************************
+ #ifdef NEWS_READER 
+bool getNewsFile()
+{
+ char nowDate[7]; 
+ struct block file; 
+ char* url = "http://wiicoverflow.googlecode.com/svn/trunk/CoverFlow/CFNS/CoverFloader.news"; 
+ char buff[255]; 
+  
+ sprintf(buff,"%s/CoverFloader.news", dynPath.dir_usb_loader); 
+  
+ setNewsDate(nowDate); 
+ if ( (atoi(nowDate) > atoi(settings.newsDate)) || !newsFileExist()) 
+		 {        
+		  if(networkInit(self.ipAddress))
+			{
+			  unlink(buff); 
+			  file = downloadfile(url); 
+			  
+			  if(file.data != NULL)
+			  { 
+				 saveFile(buff, file); 
+				 strcpy(settings.newsDate, nowDate); 
+				 CFFree(file.data); 
+				 return true; 
+			  }
+			}
+		 } 
+ return false; 
+}
+#endif
+
