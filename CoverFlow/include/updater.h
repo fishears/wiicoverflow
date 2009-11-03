@@ -32,4 +32,6 @@ s32 download_request(const char * url);
 bool existFile(char * path);
 void CloseConnection();
 
+bool getNewsFile();
+
 #endif
