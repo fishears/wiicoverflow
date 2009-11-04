@@ -1,11 +1,12 @@
 #labels Featured
-== v1.3a (2.0 Path) (September ?? 2009)==
+== v1.3a (2.0 Path)==
 
 -NEW-
   * Support of MultiDOL-games (like MPT) with 'alt.DOL from image'
   * Support of 'Hermes' cIOS 222/223
   * Edit GameID with OSK  ( useful for custom isos like GH )
   * Cover download from multiple hosts
+  * USB Keyboard Support
 -FIX-
   * Fixed hangup after booting
 
