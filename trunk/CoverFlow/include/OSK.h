@@ -12,6 +12,8 @@
 #define	_OSK_H
 
 #include "defines.h"
+#include <wiikeyboard/keyboard.h>
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
