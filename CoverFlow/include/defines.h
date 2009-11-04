@@ -43,5 +43,8 @@
 //       allows using edited game titles in owntitles.txt
 #define OWNTITLES
 //***************************************************************
+//		 plays the banner sound
+#define BANNER_SOUND
+//***************************************************************
 #endif
 

@@ -208,7 +208,7 @@ u32 wbfs_extract_disc(wbfs_disc_t*d, rw_sector_callback_t write_dst_wii_sector,v
 /*! extract a file from the wii disc filesystem. 
   E.G. Allows to extract the opening.bnr to install a game as a system menu channel
  */
-u32 wbfs_extract_file(wbfs_disc_t*d, char *path);
+int wbfs_extract_file(wbfs_disc_t*d, char *path, void **data);
 
 // remove some sanity checks
 void wbfs_set_force_mode(int force);
