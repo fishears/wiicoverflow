@@ -141,7 +141,9 @@ void initPaths()
 int main( int argc, char **argv )
 {
 	setlocale(LC_ALL, "en.UTF-8");
-	
+#ifdef BANNER_SOUND	
+	SoundInfo snd;
+#endif
 	bool bootDevice_found=false;
 	
 	strcpy(self.bootDevice, "SD:");
@@ -448,6 +450,14 @@ int main( int argc, char **argv )
 		
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_B)
 		{
+			#ifdef BANNER_SOUND
+			// stop banner sound, resume ogg
+			if (snd.dsp_data) {
+				SND_StopVoice(1);
+				CFFree(snd.dsp_data);
+				SND_PauseVoice(0, 0);
+			}
+			#endif
 			if(self.selected && self.animate_flip >= 1.0)
 				self.selected = false;
 		}
@@ -530,6 +540,32 @@ int main( int argc, char **argv )
 								self.gsize = size;
 								
 								LoadCurrentCover(self.gameSelected, self.gameList);
+///////////////////////////////////////////							
+#ifdef BANNER_SOUND
+								// play banner sound
+								//SoundInfo snd;
+								memset(&snd, 0, sizeof(snd));
+								WBFS_BannerSound(header->id, &snd);
+								if (snd.dsp_data) {
+									SND_PauseVoice(0, 1); // pause mp3
+									int fmt = (snd.channels == 2) ? VOICE_STEREO_16BIT : VOICE_MONO_16BIT;
+									SND_SetVoice(1, fmt, snd.rate, 0,
+										snd.dsp_data, snd.size, 
+										255,255, //volume,volume,
+										NULL); //DataTransferCallback
+								}
+#endif
+/*
+#ifdef BANNER_SOUND
+	// stop banner sound, resume ogg
+	if (snd.dsp_data) {
+		SND_StopVoice(1);
+		CFFree(snd.dsp_data);
+		SND_PauseVoice(0, 0);
+	}
+#endif
+*/
+/////////////////////////////////////////////								
 							}
 						}
 						else if(CoverHoverLeft())
@@ -555,6 +591,15 @@ int main( int argc, char **argv )
 						// Check the buttons
 						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y) || PAD_ButtonsDown(0) & PAD_BUTTON_A) // load
 						{
+							#ifdef BANNER_SOUND
+							// stop banner sound, resume ogg
+							if (snd.dsp_data) {
+								SND_StopVoice(1);
+								CFFree(snd.dsp_data);
+								SND_PauseVoice(0, 0);
+							}
+							#endif
+							
 							if(!(settings.parentalLock && gameSetting.lock))
 							{
 								// User clicked on the load game, so save settings before launching
@@ -608,22 +653,55 @@ int main( int argc, char **argv )
 						}
 						else if((!settings.parentalLock) && Button_Select(&deleteButton, pointer.p_x, pointer.p_y)) // delete
 						{
+							#ifdef BANNER_SOUND
+							// stop banner sound, resume ogg
+							if (snd.dsp_data) {
+								SND_StopVoice(1);
+								CFFree(snd.dsp_data);
+								SND_PauseVoice(0, 0);
+							}
+							#endif
+							
 							// User clicked delete button
 							if(Menu_Delete())
 								self.selected = false;
 						}
 						else if(Button_Select(&backButton, pointer.p_x, pointer.p_y)) // back
 						{
+							#ifdef BANNER_SOUND
+							// stop banner sound, resume ogg
+							if (snd.dsp_data) {
+								SND_StopVoice(1);
+								CFFree(snd.dsp_data);
+								SND_PauseVoice(0, 0);
+							}
+							#endif
 							// User clicked back button
 							self.selected = false;
 						}
 						else if(!settings.parentalLock && Button_Select(&gsettingsButton, pointer.p_x, pointer.p_y))
                         {
+							#ifdef BANNER_SOUND
+							// stop banner sound, resume ogg
+							if (snd.dsp_data) {
+								SND_StopVoice(1);
+								CFFree(snd.dsp_data);
+								SND_PauseVoice(0, 0);
+							}
+							#endif
 							//clicked settings button on launch screen
                             Game_Settings_Menu_Show();
                         }
 						else if(!settings.parentalLock && Button_Select(&editGameIDButton, pointer.p_x, pointer.p_y))
                         {
+							#ifdef BANNER_SOUND
+							// stop banner sound, resume ogg
+							if (snd.dsp_data) {
+								SND_StopVoice(1);
+								CFFree(snd.dsp_data);
+								SND_PauseVoice(0, 0);
+							}
+							#endif
 							editGameID();
                         }
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))

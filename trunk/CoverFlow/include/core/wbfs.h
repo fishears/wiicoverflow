@@ -1,7 +1,8 @@
 #ifndef _WBFS_H_
 #define _WBFS_H_
 
- #include "libwbfs.h"
+#include "libwbfs.h"
+
  
 /* Device list */
 enum {
@@ -34,5 +35,25 @@ f32 WBFS_EstimeGameSize(void);
 
 s32 __WBFS_ReadUSB(void *fp, u32 lba, u32 count, void *iobuf);
 s32 __WBFS_WriteUSB(void *fp, u32 lba, u32 count, void *iobuf);
+
+
+#define DOL_LIST_MAX 64
+typedef struct DOL_LIST
+{
+	char name[DOL_LIST_MAX][64];
+	int num;
+} DOL_LIST;
+
+typedef struct SoundInfo
+{
+	void *dsp_data;
+	int size;
+	int channels;
+	int rate;
+	int loop;
+} SoundInfo;
+
+int WBFS_GetDolList(u8 *discid, DOL_LIST *list);
+int WBFS_BannerSound(u8 *discid, SoundInfo *snd);
 
 #endif

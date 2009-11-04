@@ -18,6 +18,9 @@
 #include "wbfs.h"
 #include "libwbfs.h"
 
+#include "fstfile.h"
+#include "banner.h"
+
 /* Constants */
 #define MAX_NB_SECTORS	32
 
@@ -481,5 +484,82 @@ f32 WBFS_EstimeGameSize(void) {
     return wbfs_estimate_disc(hdd, __WBFS_ReadDVD, NULL, ONLY_GAME_PARTITION);
 
 }
+
+wbfs_disc_t* WBFS_OpenDisc(u8 *discid)
+{
+	/* No device open */
+	if (!hdd)
+		return NULL;
+
+	/* Open disc */
+	return wbfs_open_disc(hdd, discid);
+}
+
+char *fstfilename2(FST_ENTRY *fst, u32 index)
+{
+	u32 count = _be32((u8*)&fst[0].filelen);
+	u32 stringoffset;
+	if (index < count)
+	{
+		//stringoffset = *(u32 *)&(fst[index]) % (256*256*256);
+		stringoffset = _be32((u8*)&(fst[index])) % (256*256*256);
+		return (char *)((u32)fst + count*12 + stringoffset);
+	} else
+	{
+		return NULL;
+	}
+}
+
+
+int WBFS_GetDolList(u8 *discid, DOL_LIST *list)
+{
+	FST_ENTRY *fst = NULL;
+	int fst_size;
+
+	list->num = 0;
+
+	wbfs_disc_t* d = WBFS_OpenDisc(discid);
+	if (!d) return -1;
+	fst_size = wbfs_extract_file(d, "", (void*)&fst);
+	wbfs_close_disc(d);
+	if (!fst) return -1;
+
+	u32 count = _be32((u8*)&fst[0].filelen);
+	u32 i;
+
+	for (i=1;i<count;i++) {
+		char * fname = fstfilename2(fst, i);
+		int len = strlen(fname);
+		if (len > 4 && stricmp(fname+len-4, ".dol") == 0) {
+			if (list->num >= DOL_LIST_MAX) break;
+			strcopy(list->name[list->num], fname, sizeof(list->name[list->num]));
+			list->num++;
+		}
+	}
+
+	free(fst);
+	return 0;
+}
+
+int WBFS_BannerSound(u8 *discid, SoundInfo *snd)
+{
+	void *banner = NULL;
+	int size;
+
+	snd->dsp_data = NULL;
+	wbfs_disc_t* d = WBFS_OpenDisc(discid);
+	if (!d) return -1;
+	size = wbfs_extract_file(d, "opening.bnr", &banner);
+	wbfs_close_disc(d);
+	if (!banner) return -1;
+
+	//printf("\nopening.bnr: %d\n", size);
+	parse_banner_snd(banner, snd);
+	free(banner);
+	return 0;
+}
+
+
+
 
 
