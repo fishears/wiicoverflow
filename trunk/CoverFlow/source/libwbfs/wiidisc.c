@@ -125,7 +125,8 @@ static u32 do_fst(wiidisc_t *d,u8 *fst, const char *names, u32 i)
                 if(d->extract_pathname && strcmp(name, d->extract_pathname)==0)
                 {
                         d->extracted_buffer = wbfs_ioalloc(size);
-                        partition_read(d,offset, d->extracted_buffer, size,0);
+                        d->extracted_size = size;
+						partition_read(d,offset, d->extracted_buffer, size,0);
                 }else
                         partition_read(d,offset, 0, size,1);
 		return i + 1;
@@ -163,11 +164,21 @@ static void do_files(wiidisc_t*d)
 	partition_read(d,fst_offset, fst, fst_size,0);
 	n_files = _be32(fst + 8);
 
+	if (d->extract_pathname && *d->extract_pathname == 0) {
+		// if empty pathname requested return fst
+		d->extracted_buffer = fst;
+		d->extracted_size = fst_size;
+		d->extract_pathname = NULL;
+		// skip do_fst if only fst requested
+		n_files = 0;
+	}
+
 	if (n_files > 1)
 		do_fst(d,fst, (char *)fst + 12*n_files, 0);
-        wbfs_iofree(b);
-        wbfs_iofree(apl_header);
-	wbfs_iofree(fst);
+    wbfs_iofree(b);
+    wbfs_iofree(apl_header);
+	if (fst != d->extracted_buffer)
+		wbfs_iofree(fst);
 }
 
 static void do_partition(wiidisc_t*d)

@@ -651,6 +651,15 @@ int editGameID()
 	return 0;
 }
 
+bool bannerBlacKlist(const char *id) 
+{
+ //if (strcmp(id,"R9JP69") == 0) return true;  // The Beatles: Rockband
+ 
+ return false;
+}
+
+
+
 
 
 

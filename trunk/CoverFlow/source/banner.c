@@ -1,3 +1,13 @@
+/*
+ *  banner.c
+ *
+ *  Wii CoverFloader
+ *  Copyright 2009 Beardface April 29th, 2009
+ *  Additional coding by: gitkua, scognito, F1SHE4RS, afour98, blackbird399, LoudBob11
+ *  Licensed under the terms of the GNU GPL, version 2
+ *  http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+ *  originally written by oggzee (thank you for the use)
+ */
 #include <stdio.h>
 #include <string.h>
 #include <gctypes.h>
@@ -8,14 +18,8 @@
 #include "TrackedMemoryManager.h"
 
 
-/*
-#include "disc.h"
-#include "cfg.h"
-#include "wdvd.h"
-#include "wpad.h"
-#include "wbfs.h"
-#include "libwbfs/libwbfs.h"
 
+/*
 #define dbg4_printf if (CFG.debug & 4) printf
 
 void dbg_pause()
@@ -632,7 +636,7 @@ void parse_banner_snd(void *banner, SoundInfo *snd)
 	char *name_start, *name;
 	u8 u8_tag[4] = {0x55, 0xAA, 0x38, 0x2D}; // "U.8-"
 	
-	hex_dump(banner, 128);
+//	hex_dump(banner, 128);
 	u8_hdr = data_hdr;
 //	dbg4_printf("imet: %.4s\n", ((IMET*)banner)->imet);
 //	dbg4_printf("U8: %.4s 0x%x\n", u8_hdr->tag, u8_hdr->rootnode_offset);
@@ -651,18 +655,21 @@ void parse_banner_snd(void *banner, SoundInfo *snd)
 		if (strcmp(name, "sound.bin") == 0) {
 			IMD5 *imd5 = data_hdr + node[i].data_offset;
 			void *sound_data = (void*)imd5 + sizeof(IMD5);
-			unsigned size = imd5->filesize;
 			void *lz_data = NULL;
-			retry:
+			unsigned size = imd5->filesize;
+	retry:
 //			dbg4_printf("[%.4s]\n", (char*)sound_data);
 //			dbg_pause();
+
 			if (memcmp(sound_data, "BNS ", 4)==0) {
 				parse_bns(sound_data, snd);
 			} else if (memcmp(sound_data, "RIFF", 4)==0) {
 				parse_riff(sound_data, snd);
 			} else if (memcmp(sound_data, "FORM", 4)==0) {
 				parse_aiff(sound_data, snd);
-			} else if (memcmp(sound_data, "LZ77", 4)==0 && lz_data == NULL) {
+			} 
+			
+			else if (memcmp(sound_data, "LZ77", 4)==0 && lz_data == NULL) {
 //				unsigned lz_hdr = ((unsigned*)sound_data)[1];
 				lz_data = decompress_lz77(sound_data+8, size-8, &size);
 //				dbg4_printf("de-LZ: %p %x %x %x %x %.4s\n", lz_data,
@@ -670,6 +677,7 @@ void parse_banner_snd(void *banner, SoundInfo *snd)
 				sound_data = lz_data;
 				goto retry;
 			}
+
 			CFFree(lz_data);
 		}
 	}
