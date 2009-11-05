@@ -543,28 +543,21 @@ int main( int argc, char **argv )
 ///////////////////////////////////////////							
 #ifdef BANNER_SOUND
 								// play banner sound
-								//SoundInfo snd;
-								memset(&snd, 0, sizeof(snd));
-								WBFS_BannerSound(header->id, &snd);
-								if (snd.dsp_data) {
-									SND_PauseVoice(0, 1); // pause mp3
-									int fmt = (snd.channels == 2) ? VOICE_STEREO_16BIT : VOICE_MONO_16BIT;
-									SND_SetVoice(1, fmt, snd.rate, 0,
-										snd.dsp_data, snd.size, 
-										255,255, //volume,volume,
-										NULL); //DataTransferCallback
-								}
+								
+								//if(!bannerBlacKlist((char*)header->id)){
+									//SoundInfo snd;
+									memset(&snd, 0, sizeof(snd));
+									WBFS_BannerSound(header->id, &snd);
+									if (snd.dsp_data) {
+										SND_PauseVoice(0, 1); // pause mp3
+										int fmt = (snd.channels == 2) ? VOICE_STEREO_16BIT : VOICE_MONO_16BIT;
+										SND_SetVoice(1, fmt, snd.rate, 0,
+											snd.dsp_data, snd.size, 
+											255,255, //volume,volume,
+											NULL); //DataTransferCallback
+									}
+								//}
 #endif
-/*
-#ifdef BANNER_SOUND
-	// stop banner sound, resume ogg
-	if (snd.dsp_data) {
-		SND_StopVoice(1);
-		CFFree(snd.dsp_data);
-		SND_PauseVoice(0, 0);
-	}
-#endif
-*/
 /////////////////////////////////////////////								
 							}
 						}

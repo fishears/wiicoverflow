@@ -38,4 +38,5 @@ int DebTxt( char * Msg);
 int IOS2int();
 int editGameID();
 bool CombineTitleFiles();
+bool bannerBlacKlist(const char *id);
 #endif
