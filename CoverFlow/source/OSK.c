@@ -272,6 +272,16 @@ int showOSK(char *kbtitle)
                 if (res && (ke.type == KEYBOARD_PRESSED))
                 {
                     SOUND_PlaySound(FX_BUTTON_CLICK, 0);
+                    if(ke.symbol == KS_Caps_Lock)
+                    {
+                        Caps = !Caps;
+                        setCharSet();
+                    }
+                    if(ke.symbol == KS_Shift_R || ke.symbol == KS_Shift_L)
+                    {
+                        Shift = !Shift;
+                        setCharSet();
+                    }
                     if(ke.symbol == KS_Return)
                     {
                         strcpy(self.kb_buffer, kb_buf);
@@ -298,10 +308,16 @@ int showOSK(char *kbtitle)
                         sprintf(key,"%c",ke.symbol &0xff);
                         strcat(kb_buf,key);
                     } 
-                 //END handle USB Keyboards
-
-
                 }
+                else if(res && (ke.type == KEYBOARD_RELEASED))
+                {
+                    if(ke.symbol == KS_Shift_R || ke.symbol == KS_Shift_L)
+                    {
+                        Shift = !Shift;
+                        setCharSet();
+                    }
+                }
+                //END handle USB Keyboards
 		GRRLIB_Render();
 
 	}while(doloop);
