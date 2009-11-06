@@ -3,17 +3,19 @@
 
 -NEW-
   * Playing Banner Sounds on game selection ( Thanks to oggzee )
+  * USB Keyboard Support
+  * Keeping your changes in titles.txt after a new download (see r988)
   * Support of MultiDOL-games (like MPT) with 'alt.DOL from image'
   * Support of 'Hermes' cIOS 222/223
   * Edit GameID with OSK  ( useful for custom isos like GH )
   * Cover download from multiple hosts
-  * USB Keyboard Support
 -FIX-
   * Fixed hangup after booting
 
 -UPDATE-
   * Large alt.DOL files loading from SD: or USB:
   * Using latest libogc 1.8.0
+  * Using latest libfat 1.0.6
   * Using latest ported libraries
 
 == v1.3 (Stable) (September ?? 2009)==
