@@ -18,57 +18,57 @@ extern s_self self;
 
 Key Keys[4][11] = {
 	{
-		{'1','!'},
-		{'2','@'},
-		{'3','#'},
-		{'4','$'},
-		{'5','%'},
-		{'6','^'},
-		{'7','&'},
-		{'8','*'},
-		{'9','('},
-		{'0',')'},
-		{'\0','\0'}
+		{'1','!','1'},
+		{'2','@','2'},
+		{'3','#','3'},
+		{'4','$','4'},
+		{'5','%','5'},
+		{'6','^','6'},
+		{'7','&','7'},
+		{'8','*','8'},
+		{'9','(','9'},
+		{'0',')','0'},
+		{'\0','\0','\0'}
 	},
 	{
-		{'q','Q'},
-		{'w','W'},
-		{'e','E'},
-		{'r','R'},
-		{'t','T'},
-		{'y','Y'},
-		{'u','U'},
-		{'i','I'},
-		{'o','O'},
-		{'p','P'},
-		{'-','_'}
+		{'q','Q','Q'},
+		{'w','W','W'},
+		{'e','E','E'},
+		{'r','R','R'},
+		{'t','T','T'},
+		{'y','Y','Y'},
+		{'u','U','U'},
+		{'i','I','I'},
+		{'o','O','O'},
+		{'p','P','P'},
+		{'-','_','-'}
 	},
 	{
-		{'a','A'},
-		{'s','S'},
-		{'d','D'},
-		{'f','F'},
-		{'g','G'},
-		{'h','H'},
-		{'j','J'},
-		{'k','K'},
-		{'l','L'},
-		{':',';'},
-		{'\'','"'}
+		{'a','A','A'},
+		{'s','S','S'},
+		{'d','D','D'},
+		{'f','F','F'},
+		{'g','G','G'},
+		{'h','H','H'},
+		{'j','J','J'},
+		{'k','K','K'},
+		{'l','L','L'},
+		{';',':',';'},
+		{'\'','"','\''}
 	},
 
 	{
-		{'z','Z'},
-		{'x','X'},
-		{'c','C'},
-		{'v','V'},
-		{'b','B'},
-		{'n','N'},
-		{'m','M'},
-		{',','<'},
-		{'.','>'},
-		{'/','?'},
-		{'\0','\0'}
+		{'z','Z','Z'},
+		{'x','X','X'},
+		{'c','C','C'},
+		{'v','V','V'},
+		{'b','B','B'},
+		{'n','N','N'},
+		{'m','M','M'},
+		{',','<',','},
+		{'.','>','.'},
+		{'/','?','/'},
+		{'\0','\0','\0'}
 	}
 	};
 
@@ -157,18 +157,19 @@ int showOSK(char *kbtitle)
 		Button_Hover(&kb_space, pointer.p_x, pointer.p_y);
 		
 ////////////  DirtyFix BEGIN
-		if ((Shift == true) || (Caps == true ))
+		if (((Shift == false) && (Caps == true )) || ((Shift == false) && (Caps == false))|| ((Shift == true) && (Caps == true)))
+		{
+			CFreeTypeGX_DrawText(ttf18pt, 549, 220, "-", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+			CFreeTypeGX_DrawText(ttf18pt, 570, 260, "'", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
+		}
+                else if((Shift==true) && (Caps==false))
 		{
 			CFreeTypeGX_DrawText(ttf18pt, 315, 177, "^", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 			CFreeTypeGX_DrawText(ttf20pt, 400, 180, "*", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 			CFreeTypeGX_DrawText(ttf18pt, 547, 220, "_", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 			CFreeTypeGX_DrawText(ttf18pt, 570, 260, "\"", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 		}
-		else
-		{
-			CFreeTypeGX_DrawText(ttf18pt, 549, 220, "-", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-			CFreeTypeGX_DrawText(ttf18pt, 570, 260, "'", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);		
-		}
+		
 //////////// DirtyFix End	
 	
 		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
@@ -352,10 +353,12 @@ void setCharSet()
 		{
 			if(Keys[i][j].ch != '\0')
 			{
-			 if ((Shift == true) || (Caps == true ))
-				temp[0] = Keys[i][j].chShift;
-			 else
-				temp[0] = Keys[i][j].ch;
+                         if((Caps == true) && (Shift ==false))
+				temp[0] = Keys[i][j].chCaps;
+                         else if((Shift == true) && (Caps ==false))
+                                temp[0] = Keys[i][j].chShift;
+                         else
+                                temp[0] = Keys[i][j].ch;
 			 temp[1] = '\0';
 			 strcpy(kb_key[i][j].ttf_label, temp);
 			}

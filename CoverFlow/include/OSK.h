@@ -20,7 +20,7 @@ extern "C" {
 
 
 typedef struct _keytype {
-	char ch, chShift, chalt, chalt2;
+	char ch, chShift, chCaps, chalt, chalt2;
 } Key;
 
 int  showOSK(char *kbtitle);
