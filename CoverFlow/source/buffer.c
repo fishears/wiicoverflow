@@ -69,7 +69,7 @@ int GraphicModes[GRAPHIC_MODES][2] =
 
 
 // this is the chunk of MEM2 allocated for other tasks (i.e. things that don't fit in normal memory)
-#define BUFFER_SLOTS 23
+#define BUFFER_SLOTS 16
 
 
 unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
@@ -89,13 +89,6 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	128,//12 string buffer tokenurlParsing
 	160*160*4, //13 no_disc_texture
 	472*172*4, //14 menu_graphics_wireframe_texture
-	0,//2*1024*1024, //15 alt dol buffer
-	512*340*4, //16 case_3d_shadow
-	20*224*4, //17 case_right
-	4*4*4, //18 matte grey
-	4*4*4, //19 matte black
-	1*1024*1024, //20 Fishears
-	0,//*1024*1024, //21 LoudBob
 	0};
 
 // returns the offset to the memory slot required
