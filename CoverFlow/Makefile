@@ -29,8 +29,8 @@ INCLUDES	:=  include include/pngu include/libwbfs include/core include/mload
 CFLAGS	=	-g -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
-LDFLAGS =   -g $(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80b00000
-#LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80900100
+#LDFLAGS    =   -g $(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80b00000
+LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80900100
 #LDFLAGS	=	-g $(MACHDEP) -mrvl -Wl,-Map,$(notdir $@).map -T../rvl.ld
 #LDFLAGS	=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 
