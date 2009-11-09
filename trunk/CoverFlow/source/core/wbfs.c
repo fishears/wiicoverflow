@@ -551,8 +551,8 @@ int WBFS_BannerSound(u8 *discid, SoundInfo *snd)
 	if (!d) return -1;
 	size = wbfs_extract_file(d, "opening.bnr", &banner);
 	
-	if (!banner) 
-		size = wbfs_extract_file(d, "OPENING.BNR", &banner);
+//	if (!banner) 
+//		size = wbfs_extract_file(d, "OPENING.BNR", &banner);
 	wbfs_close_disc(d);
 	if (!banner) return -1;
 
