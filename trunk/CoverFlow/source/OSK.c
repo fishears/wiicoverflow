@@ -83,7 +83,7 @@ int showOSK(char *kbtitle)
 	char temp[2];
 	char kb_buf[STRMAX];
 	int ret = 0;	//ESC
-        KEYBOARD_Init(NULL); //usb keyboard
+        //s32 KB_ret = KEYBOARD_Init(NULL); //usb keyboard
 	
 	strcpy(kb_buf, self.kb_buffer);
 	self.kb_OK = false;
@@ -267,57 +267,63 @@ int showOSK(char *kbtitle)
 
 		}
                 //START handle USB Keyboards
-                keyboard_event ke;
-                s32 res = KEYBOARD_GetEvent(&ke);
-                char key[1];
-                if (res && (ke.type == KEYBOARD_PRESSED))
+/*
+                if(KB_ret>0)
                 {
-                    SOUND_PlaySound(FX_BUTTON_CLICK, 0);
-                    if(ke.symbol == KS_Caps_Lock)
+                    keyboard_event ke;
+                    s32 res = KEYBOARD_GetEvent(&ke);
+                    char key[1];
+                    if (res && (ke.type == KEYBOARD_PRESSED))
                     {
-                        Caps = !Caps;
-                        setCharSet();
-                    }
-                    if(ke.symbol == KS_Shift_R || ke.symbol == KS_Shift_L)
-                    {
-                        Shift = !Shift;
-                        setCharSet();
-                    }
-                    if(ke.symbol == KS_Return)
-                    {
-                        strcpy(self.kb_buffer, kb_buf);
-                        self.kb_OK = true;
-                        ret = 1; //OK
-                        doloop = false;
-                    }
-                    else if(ke.symbol == KS_BackSpace)
-                    {
-                        if(strlen(kb_buf) > 0)
+                        SOUND_PlaySound(FX_BUTTON_CLICK, 0);
+                        if(ke.symbol == KS_Caps_Lock)
                         {
-                            kb_buf[strlen(kb_buf)-1] = 0;
+                            Caps = !Caps;
+                            setCharSet();
+                        }
+                        if(ke.symbol == KS_Shift_R || ke.symbol == KS_Shift_L)
+                        {
+                            Shift = !Shift;
+                            setCharSet();
+                        }
+                        if(ke.symbol == KS_Return)
+                        {
+                            strcpy(self.kb_buffer, kb_buf);
+                            self.kb_OK = true;
+                            ret = 1; //OK
+                            doloop = false;
+                        }
+                        else if(ke.symbol == KS_BackSpace)
+                        {
+                            if(strlen(kb_buf) > 0)
+                            {
+                                kb_buf[strlen(kb_buf)-1] = 0;
+                            }
+                        }
+                        else if(ke.symbol == KS_Escape)
+                        {
+                            strcpy(self.kb_buffer, "");
+                            self.kb_OK = false;
+                            ret = 0; //ESC
+                            doloop = false;
+                        }
+                        else if (((ke.symbol >> 8) & 0xFF) == 0) //handle characters
+                        {
+                            sprintf(key,"%c",ke.symbol &0xff);
+                            strcat(kb_buf,key);
                         }
                     }
-                    else if(ke.symbol == KS_Escape)
+                    else if(res && (ke.type == KEYBOARD_RELEASED))
                     {
-                        strcpy(self.kb_buffer, "");
-                        self.kb_OK = false;
-                        ret = 0; //ESC
-                        doloop = false;
+                        if(ke.symbol == KS_Shift_R || ke.symbol == KS_Shift_L)
+                        {
+                            Shift = !Shift;
+                            setCharSet();
+                        }
                     }
-                    else if (((ke.symbol >> 8) & 0xFF) == 0) //handle characters
-                    {
-                        sprintf(key,"%c",ke.symbol &0xff);
-                        strcat(kb_buf,key);
-                    } 
+
                 }
-                else if(res && (ke.type == KEYBOARD_RELEASED))
-                {
-                    if(ke.symbol == KS_Shift_R || ke.symbol == KS_Shift_L)
-                    {
-                        Shift = !Shift;
-                        setCharSet();
-                    }
-                }
+*/
                 //END handle USB Keyboards
 		GRRLIB_Render();
 
