@@ -27,7 +27,7 @@ void getSysdate(char* now, char* ret_string)
 	char month[20];
 	char day[3];
 	char hour[3];
-	char min[3];
+	char min[2];
 	char dow[20];
 	
 	strncpy(year, now, 2);
