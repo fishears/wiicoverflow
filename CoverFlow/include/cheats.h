@@ -33,7 +33,7 @@ typedef struct {
     bool editable; //variables found in codelines
     char codes[MAX_CODES][CHEAT_LINE]; //cheat codes block
     int codelines; //number of lines of cheat codes
-} CHEAT[MAX_CHEATS];
+} CHEAT;//[MAX_CHEATS];
 
 typedef struct {
     bool selectAll; //"select all/de-select all" status of page
