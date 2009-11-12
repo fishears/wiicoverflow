@@ -83,7 +83,7 @@ int showOSK(char *kbtitle)
 	char temp[2];
 	char kb_buf[STRMAX];
 	int ret = 0;	//ESC
-        //s32 KB_ret = KEYBOARD_Init(NULL); //usb keyboard
+        KEYBOARD_Init(NULL); //usb keyboard
 	
 	strcpy(kb_buf, self.kb_buffer);
 	self.kb_OK = false;
@@ -267,9 +267,6 @@ int showOSK(char *kbtitle)
 
 		}
                 //START handle USB Keyboards
-/*
-                if(KB_ret>0)
-                {
                     keyboard_event ke;
                     s32 res = KEYBOARD_GetEvent(&ke);
                     char key[1];
@@ -322,8 +319,6 @@ int showOSK(char *kbtitle)
                         }
                     }
 
-                }
-*/
                 //END handle USB Keyboards
 		GRRLIB_Render();
 
