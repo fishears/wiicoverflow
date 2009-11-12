@@ -60,10 +60,8 @@ void __Disc_SetLowMem(void)
 	
 
 	/* Copy disc ID */
-	if(settings.loser && settings.ocarina)
+	if((settings.loser) || (!settings.ocarina))
 		memcpy((void *)0x80003180, (void *)0x80000000, 4);
-        else if(!settings.ocarina)
-                memcpy((void *)0x80003180, (void *)0x80000000, 4);
 
 	/* Flush cache */
 	DCFlushRange((void *)0x80000000, 0x3F00);
