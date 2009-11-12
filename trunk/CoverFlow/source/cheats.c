@@ -99,11 +99,13 @@ bool download_txt(int id, int mode, struct discHdr *gameList)
             sprintf(titleID,"%s",header->id);
             if(mode==0)
                 WindowPrompt(titleID, TX.pleaseWait, 0, 0);
-            sprintf(url, "%s%c/%s.txt", CODESITE, header->id[0] , titleID); //try 6-digit ID first
+            //sprintf(url, "%s%c/%s.txt", CODESITE, header->id[0] , titleID); //try 6-digit ID first
+            sprintf(url, "%sR/%s.txt", CODESITE, titleID); //try 6-digit ID first
             file = downloadfile(url);
             if(file.data == NULL) //nothing, so try 4-digit ID
             {
-                sprintf(url, "%s%c/%c%c%c%c.txt", CODESITE, header->id[0], header->id[0], header->id[1],header->id[2],header->id[3]);
+                //sprintf(url, "%s%c/%c%c%c%c.txt", CODESITE, header->id[0], header->id[0], header->id[1],header->id[2],header->id[3]);
+                sprintf(url, "%sR/%c%c%c%c.txt", CODESITE, header->id[0], header->id[1],header->id[2],header->id[3]);
                 file = downloadfile(url);
             }
             if(file.data != NULL) // if we got data back, save that sucka
