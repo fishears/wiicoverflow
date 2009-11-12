@@ -1717,6 +1717,9 @@ void freeResources(){
 //	CFFree(menu_graphics_wireframe_texture.data);
 	CFFree(menu_graphics_box1_texture.data);
 	CFFree(menu_graphics_box2_texture.data);
+        CFFree(progress_step_texture.data);
+        CFFree(progress_bar_texture.data);
+
 /*
 	CFFree(flag_br_texture.data);
 	CFFree(flag_da_texture.data);
