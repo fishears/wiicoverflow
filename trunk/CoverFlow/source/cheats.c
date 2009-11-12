@@ -514,7 +514,7 @@ int is_code(char* line)
                         //known code variables
                         if(tempCode[x] =='x' || tempCode[x] =='X' || tempCode[x] =='R' || tempCode[x] =='G' || tempCode[x] =='Y' || tempCode[x] =='y'
                                 || (tempCode[x-1] =='b' && tempCode[x] =='b') || (tempCode[x] =='b' && tempCode[x+1] =='b') //sneaky B
-                                || (tempCode[x-1] =='B' && tempCode[x] =='B') || (tempCode[x] =='B' && tempCode[x+1] =='B')) // B is used in LOZTP
+                                || (x>7 && tempCode[x-1] =='B' && tempCode[x] =='B') || (x>7 && tempCode[x] =='B' && tempCode[x+1] =='B')) // B is used in LOZTP
                         {
                             editable = true;
                         }
