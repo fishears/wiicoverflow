@@ -46,5 +46,8 @@
 //		 plays the banner sound
 #define BANNER_SOUND
 //***************************************************************
+//       supports buttons of GUITAR_HERO_3
+#define GH3
+//***************************************************************
 #endif
 

@@ -578,13 +578,13 @@ bool CombineTitleFiles()
 	char tbuf[255];
 	
 	sprintf(tbuf,"%s/owntitles.txt", dynPath.dir_usb_loader);
-	if((in=fopen(tbuf, "rb")) == NULL)
+	if((in=fopen(tbuf, "r")) == NULL)
 	{
 		return false;
 	}
 
 	sprintf(tbuf,"%s/titles.txt", dynPath.dir_usb_loader);
-	if((out=fopen(tbuf, "ab")) == NULL) 
+	if((out=fopen(tbuf, "a")) == NULL) 
 	{
 		return false;
 	}
