@@ -117,6 +117,9 @@ void initVars()
 	strcpy(self.kb_buffer, "" );
 	self.kb_OK = false;
 #endif
+#ifdef GH3
+	self.expType = 0; // Stores only the controller/expansion type.
+#endif
 }
 
 
@@ -437,6 +440,10 @@ int main( int argc, char **argv )
 		self.twisting = false;
 		self.scrolling = false;
 
+#ifdef GH3
+		WPAD_Probe( WPAD_CHAN_0, &self.expType );
+#endif
+
 		// Check for 'HOME' button press
 		if((WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME) || (PAD_ButtonsDown(0) & PAD_TRIGGER_Z))
 		{
@@ -447,8 +454,11 @@ int main( int argc, char **argv )
 			WPAD_Rumble(0,0);
 			self.rumbleAmt = 0;
 		}
-		
+#ifdef GH3		
+		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_B || ((WPAD_ButtonsDown(0) & WPAD_GUITAR_HERO_3_BUTTON_RED) && (self.expType == WPAD_EXP_GUITARHERO3)))
+#else
 		if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B || PAD_ButtonsDown(0) & PAD_BUTTON_B)
+#endif
 		{
 			#ifdef BANNER_SOUND
 			// stop banner sound, resume ogg
@@ -474,7 +484,11 @@ int main( int argc, char **argv )
 		}
 		
 	 	// Check for the A button action
+#ifdef GH3
+		else if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A || PAD_ButtonsDown(0) & PAD_BUTTON_A || ((WPAD_ButtonsDown(0) & WPAD_GUITAR_HERO_3_BUTTON_GREEN) && (self.expType == WPAD_EXP_GUITARHERO3)))
+#else
 		else if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A || PAD_ButtonsDown(0) & PAD_BUTTON_A)
+#endif
 		{
 			//First Check if any UI buttons or slider are selected
 			if((!settings.parentalLock) && (Button_Select(&addButton, pointer.p_x, pointer.p_y) || PAD_ButtonsDown(0) & PAD_TRIGGER_R))
@@ -528,7 +542,11 @@ int main( int argc, char **argv )
 					{
 						// nothing yet selected and nothing animating
 						// Check to see if in the cover area
+#ifdef GH3
+						if(CoverHoverCenter() || PAD_ButtonsDown(0) & PAD_BUTTON_A || ((WPAD_ButtonsDown(0) & WPAD_GUITAR_HERO_3_BUTTON_GREEN) && (self.expType == WPAD_EXP_GUITARHERO3)))
+#else
 						if(CoverHoverCenter() || PAD_ButtonsDown(0) & PAD_BUTTON_A)
+#endif						
 						{
 							if(select_ready && self.select_shift == 0.0)
 							{
@@ -586,7 +604,11 @@ int main( int argc, char **argv )
 					if(self.selected && self.animate_flip == 1.0)
 					{
 						// Check the buttons
+#ifdef GH3
+						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y) || PAD_ButtonsDown(0) & PAD_BUTTON_A || ((WPAD_ButtonsDown(0) & WPAD_GUITAR_HERO_3_BUTTON_GREEN) && (self.expType == WPAD_EXP_GUITARHERO3))) // load
+#else
 						if(Button_Select(&loadButton, pointer.p_x, pointer.p_y) || PAD_ButtonsDown(0) & PAD_BUTTON_A) // load
+#endif
 						{
 							#ifdef BANNER_SOUND
 							// stop banner sound, resume ogg
@@ -714,11 +736,13 @@ int main( int argc, char **argv )
 		// Nothing is selected and nothing is flipped
 		else if (!self.selected && self.animate_flip == 0)
 		{    
-			
-			
+#ifdef GH3			
+			if (self.movingLEFT || (WPAD_ButtonsDown(0) & WPAD_BUTTON_LEFT) || ((WPAD_ButtonsDown(0) & WPAD_GUITAR_HERO_3_BUTTON_STRUM_UP) && (self.expType == WPAD_EXP_GUITARHERO3)) )
+#else			
 			// Check for single flip animation in progress or new brief R/L button down
 			// Adjustment can be controlled with setting self.singleflipspeed
 			if (self.movingLEFT || (WPAD_ButtonsDown(0) & WPAD_BUTTON_LEFT))
+#endif
 			{	
 				self.movingLEFT = true;
 				self.movingRIGHT = false;
@@ -738,7 +762,11 @@ int main( int argc, char **argv )
 				else if ((int)self.shift <= self.min_cover)
 				{self.shift = self.min_cover; self.movingLEFT = false; self.L_CNT=0;}
 			}
+#ifdef GH3
+			else if (self.movingRIGHT || (WPAD_ButtonsDown(0) & WPAD_BUTTON_RIGHT) || ((WPAD_ButtonsDown(0) & WPAD_GUITAR_HERO_3_BUTTON_STRUM_DOWN) && (self.expType == WPAD_EXP_GUITARHERO3)) )
+#else
 			else if (self.movingRIGHT || (WPAD_ButtonsDown(0) & WPAD_BUTTON_RIGHT))
+#endif
 			{
 				self.movingRIGHT = true;
 				self.movingLEFT = false;
@@ -761,7 +789,11 @@ int main( int argc, char **argv )
 
 			// Now check to see if the R/L have been held down long enough to switch to fast scroll mode
 			// adjustment is controlled by the setting sef.scroll_speed
+#ifdef GH3
+			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT) || (PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT) || ((WPAD_ButtonsHeld(0) & WPAD_GUITAR_HERO_3_BUTTON_STRUM_UP) && (self.expType == WPAD_EXP_GUITARHERO3)))
+#else
 			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT) || (PAD_ButtonsHeld(0) & PAD_BUTTON_LEFT))
+#endif
 			{	
 				if ((int)self.shift < self.max_cover)
 				{				
@@ -775,7 +807,11 @@ int main( int argc, char **argv )
 						self.shift = self.min_cover;
 				}
 			} // now check for right, flip cover right
-			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT) ||	(PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT))
+#ifdef GH3
+			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT) || (PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT) || ((WPAD_ButtonsHeld(0) & WPAD_GUITAR_HERO_3_BUTTON_STRUM_DOWN) && (self.expType == WPAD_EXP_GUITARHERO3)))
+#else
+			else if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT) || (PAD_ButtonsHeld(0) & PAD_BUTTON_RIGHT))
+#endif
 			{
 				if ((int)self.shift > self.min_cover)
 				{				

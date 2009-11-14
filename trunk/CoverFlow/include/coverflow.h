@@ -281,6 +281,9 @@ typedef struct{
 	bool kb_OK;
 #endif	
 
+#ifdef GH3
+	u32 expType; //controller/expansion type.
+#endif
 } s_self;
 
 
