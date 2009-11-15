@@ -4,8 +4,8 @@
 -NEW-
   * Support of Guitar Hero 3 Controller (see r1016)
   * Playing Banner Sounds on game selection ( Thanks to oggzee )
-  * USB Keyboard Support
-  * Keeping your changes in titles.txt after a new download (see r988)
+  * ~~USB Keyboard Support~~ ( _in maintenance_ )
+  * Keeping your changes in *titles.txt* after a new download (see r988)
   * Support of MultiDOL-games (like MPT) with 'alt.DOL from image'
   * Support of 'Hermes' cIOS 222/223
   * Edit GameID with OSK  ( useful for custom isos like GH )
