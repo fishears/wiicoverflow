@@ -78,13 +78,24 @@ bool Caps;
 int showOSK(char *kbtitle)
 {
 	bool doloop = true;
+        //bool usbkb = false;
 	int fade = 5;
 	int i, j;
 	char temp[2];
 	char kb_buf[STRMAX];
 	int ret = 0;	//ESC
-        //s32 KB_ret = KEYBOARD_Init(NULL); //usb keyboard
-	
+/*
+        KEYBOARD_Init(NULL); //usb keyboard
+        keyboard_event ke;
+        s32 res=KEYBOARD_GetEvent(&ke);
+        if(res && (ke.type==KEYBOARD_CONNECTED))
+        {
+            usbkb=true;
+            WindowPrompt("KB","CONNECTED",0,0);
+        }
+        else
+            KEYBOARD_Deinit();
+*/
 	strcpy(kb_buf, self.kb_buffer);
 	self.kb_OK = false;
 	
@@ -268,7 +279,7 @@ int showOSK(char *kbtitle)
 		}
                 //START handle USB Keyboards
 /*
-                if(KB_ret>0)
+                if(usbkb)
                 {
                     keyboard_event ke;
                     s32 res = KEYBOARD_GetEvent(&ke);
@@ -321,7 +332,6 @@ int showOSK(char *kbtitle)
                             setCharSet();
                         }
                     }
-
                 }
 */
                 //END handle USB Keyboards
