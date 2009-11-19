@@ -300,12 +300,29 @@ void Settings_Menu_Show()
 					{
 						settings.music = (settings.music) ? 0 : 1; // Clicked the music button, toggle state
 					}
-					
+					else if (Button_Select(&barstepdownButton, pointer.p_x,pointer.p_y))
+					{
+						// Clicked on the barstep down button
+						if (settings.barstep > 0)
+							settings.barstep --;
+						else
+							settings.barstep = 9;
+						loadProgressStep();
+					}
+					else if (Button_Select(&barstepupButton, pointer.p_x,pointer.p_y))
+					{
+						// Clicked on the barstep up button
+						if (settings.barstep < 9)
+							settings.barstep ++;
+						else
+							settings.barstep = 0;
+						loadProgressStep();
+					}
 				}
 				
 				// Draw the Background boxes
-				GRRLIB_Rectangle(118,  90, 434, 182, 0xffffffdd, true);
-				GRRLIB_Rectangle(120,  92, 430, 178, 0x737373FF, true);
+				GRRLIB_Rectangle(118,  90, 434, 186, 0xffffffdd, true);
+				GRRLIB_Rectangle(120,  92, 430, 182, 0x737373FF, true);
 				GRRLIB_DrawImg(80,  76, dialog_box_titlebar_texture, 0, 1, 1, 0xFFFFFFFF);
 
 				CFreeTypeGX_DrawText(ttf16pt, 158,95, TX.basic, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
@@ -315,6 +332,16 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 300,150, TX.rumble, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,185, TX.oneClickLaunch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,219, TX.theme, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 300,254, "ProgressBar:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+
+				int i;
+				for(i = 0; i < 8; i++)
+				{
+					GRRLIB_DrawImg(426+12*i, 234, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
+					GRRLIB_DrawImgReflection(426+12*i, 233 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
+				}
+
+
 
 				// Draw buttons
 				Button_TTF_Toggle_Paint(&musicOffButton, &musicOnButton, TX.toggleOffB, TX.toggleOnB, settings.music);
@@ -333,6 +360,9 @@ void Settings_Menu_Show()
 				Button_TTF_Paint(&themeBlackButton);
 				Button_TTF_Paint(&themeWhiteButton);
 				
+				Button_Paint(&barstepupButton);
+				Button_Paint(&barstepdownButton);
+				
 				// Check for button-pointer intersections, and rumble
 				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
@@ -345,8 +375,9 @@ void Settings_Menu_Show()
 					Button_Hover(&rumbleOnButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&rumbleOffButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&themeBlackButton, pointer.p_x, pointer.p_y) ||
-					Button_Hover(&themeWhiteButton, pointer.p_x, pointer.p_y)
-
+					Button_Hover(&themeWhiteButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&barstepupButton, pointer.p_x, pointer.p_y) ||
+					Button_Hover(&barstepdownButton, pointer.p_x, pointer.p_y) 
 					)
 				{
 					if (--self.rumbleAmt > 0) // Should we be rumbling?

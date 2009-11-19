@@ -59,12 +59,13 @@ void SETTINGS_Init()
 	strcpy(settings.localLanguage, "default"); // en-US 
  	//Global Game
 	settings.ocarina      = 0;
-        settings.loser        = 0;
+    settings.loser        = 0;
 	settings.hooktype     = 0;
 	settings.language     = 0;
 	settings.video        = 0;
 	settings.vipatch      = 0;
 	settings.cios		  = 0;
+	settings.barstep      = 9;   // grey
 	strcpy(settings.lastplayed,"");
 	settings.presetFix	  = 0;
 #ifdef NEWS_READER
@@ -211,6 +212,8 @@ int SETTINGS_Load()
 			  settings.autoUpdate  = atoi(mxmlElementGetAttr(next_n,"autoUpdate"));
 		  if(mxmlElementGetAttr(next_n,"cios"))
 			  settings.cios  = atoi(mxmlElementGetAttr(next_n,"cios"));
+		  if(mxmlElementGetAttr(next_n,"barstep"))
+			  settings.barstep  = atoi(mxmlElementGetAttr(next_n,"barstep"));
 	  }
 	  else
 	  {
@@ -385,6 +388,9 @@ int SETTINGS_Save()
 #endif
 	sprintf(buffer, "%d", settings.cios);
 	mxmlElementSetAttr(node, "cios", buffer);
+	
+	sprintf(buffer, "%d", settings.barstep);
+	mxmlElementSetAttr(node, "barstep", buffer);
 
     //GLOBAL GAME SETTINGS
 

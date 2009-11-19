@@ -194,7 +194,7 @@ int main( int argc, char **argv )
     
 	// Init GRRLIB and load the progress bar textures
 	GRRLIB_Init();
-	GRRLIB_LoadTexture(&progress_step_texture,progress_step_png);
+	GRRLIB_LoadTexture(&progress_step_texture,progress_step09_png);
     GRRLIB_LoadTexture(&progress_bar_texture,progress_bar_png);
 	
 	// start from black
@@ -239,6 +239,7 @@ int main( int argc, char **argv )
     initPaths();
 
 	SETTINGS_Load();	// Load user settings from xml file in SD:/usb-loader/
+	loadProgressStep();	// Load selected ProgressStep
 	languageLoad();		// Load translated Messages 
 	Label_Buttons();	// Localize buttons	
 	
