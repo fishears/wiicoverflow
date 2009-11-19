@@ -2,6 +2,7 @@
 == v1.3a (2.0 Path)==
 
 -NEW-
+  * GUI option for ProgressBar
   * Support of Guitar Hero 3 Controller (see r1016)
   * On-the-fly patch for New Super Mario Bros. (PAL and NTSC)
   * Playing Banner Sounds on game selection ( Thanks to oggzee )
@@ -12,6 +13,7 @@
   * Edit GameID with OSK  ( useful for custom isos like GH )
   * Cover download from multiple hosts
 -FIX-
+  * Fixed cheats
   * Fixed hangup after booting
 
 -UPDATE-
