@@ -145,8 +145,19 @@ CFreeTypeGX *ttf24pt;
 extern const u8 full_cover_png[];
 extern const u8 no_cover_png[];
 extern const u8 no_disc_png[];
-extern const u8 progress_step_png[];
 extern const u8 progress_bar_png[];
+
+extern const u8 progress_step00_png[];
+extern const u8 progress_step01_png[];
+extern const u8 progress_step02_png[];
+extern const u8 progress_step03_png[];
+extern const u8 progress_step04_png[];
+extern const u8 progress_step05_png[];
+extern const u8 progress_step06_png[];
+extern const u8 progress_step07_png[];
+extern const u8 progress_step08_png[];
+extern const u8 progress_step09_png[];
+
 extern const u8 gradient_bg_png[];
 extern const u8 slidebar_png[];
 extern const u8 pointer_basic_png[];

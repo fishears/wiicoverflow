@@ -316,6 +316,10 @@ void Init_Buttons()
     Duplicate_Button_TTF(&cheatDownButton, okButton,310,367,TX.downloadB);
 	Duplicate_Button(&sysciosdownButton, viddownButton, 310, 96);
     Duplicate_Button(&sysciosupButton, vidupButton, 338, 96);
+
+    Duplicate_Button(&barstepdownButton, viddownButton, 310,233);
+    Duplicate_Button(&barstepupButton,   vidupButton,   338,233);
+
 	
 
 	// Graphic Settings Panel
@@ -1717,8 +1721,8 @@ void freeResources(){
 //	CFFree(menu_graphics_wireframe_texture.data);
 	CFFree(menu_graphics_box1_texture.data);
 	CFFree(menu_graphics_box2_texture.data);
-        CFFree(progress_step_texture.data);
-        CFFree(progress_bar_texture.data);
+    CFFree(progress_step_texture.data);
+    CFFree(progress_bar_texture.data);
 
 /*
 	CFFree(flag_br_texture.data);
@@ -1779,12 +1783,15 @@ void freeResources(){
 	// General Settings Panel
     FreeButtonResources(&musicOnButton);
     FreeButtonResources(&musicOffButton);
-    //FreeButtonResources(&rumbleOnButton);
+    FreeButtonResources(&rumbleOnButton);
     FreeButtonResources(&rumbleOffButton);
     FreeButtonResources(&quickstartOnButton);
     FreeButtonResources(&quickstartOffButton);
     FreeButtonResources(&themeBlackButton);
     FreeButtonResources(&themeWhiteButton);
+    FreeButtonResources(&barstepupButton);
+    FreeButtonResources(&barstepdownButton);
+	
 	FreeButtonResources(&coversButton);
 	FreeButtonResources(&titlesButton);
     FreeButtonResources(&viddownButton);
@@ -2058,6 +2065,50 @@ void Label_Buttons()
 	strcopy( manageCheatsButton.ttf_label, TX.manageB, 15);
  #endif	
 }
+
+void loadProgressStep()
+{
+ CFFree(progress_step_texture.data);
+ switch (settings.barstep)
+ {
+	case 0:
+		GRRLIB_LoadTexture(&progress_step_texture, progress_step00_png);
+		break;
+	case 1:
+		GRRLIB_LoadTexture(&progress_step_texture, progress_step01_png);
+		break;
+	case 2:
+		GRRLIB_LoadTexture(&progress_step_texture, progress_step02_png);
+		break;
+	case 3:
+		GRRLIB_LoadTexture(&progress_step_texture, progress_step03_png);
+		break;
+	case 4:
+		GRRLIB_LoadTexture(&progress_step_texture, progress_step04_png);
+		break;
+	case 5:
+		GRRLIB_LoadTexture(&progress_step_texture, progress_step05_png);
+		break;
+	case 6:
+		GRRLIB_LoadTexture(&progress_step_texture, progress_step06_png);
+		break;
+	case 7:
+		GRRLIB_LoadTexture(&progress_step_texture, progress_step07_png);
+		break;
+	case 8:
+		GRRLIB_LoadTexture(&progress_step_texture, progress_step08_png);
+		break;
+	case 9:
+		GRRLIB_LoadTexture(&progress_step_texture, progress_step09_png);
+		break;
+	default:
+		GRRLIB_LoadTexture(&progress_step_texture, progress_step09_png);
+	    break;
+ }
+
+}
+
+
 
 void MemInfo()
 {

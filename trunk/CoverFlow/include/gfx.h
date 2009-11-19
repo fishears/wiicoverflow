@@ -267,13 +267,14 @@ Button rumbleOnButton;
 Button rumbleOffButton;
 Button musicOnButton;
 Button musicOffButton;
+Button barstepupButton;
+Button barstepdownButton;
+
 Button bookmarkOnButton;
 Button bookmarkOffButton;
 Button cheatDownButton;
 Button sysciosupButton;
 Button sysciosdownButton;
-
-
 
 Button covers3dThinButton;
 Button covers3dFatButton;
@@ -331,11 +332,12 @@ void draw_game_title(int yPos, int index, float textSize);
 
 float change_scale_without_containing(float val, float in_min, float in_max, float out_min, float out_max);
 float change_scale(float val, float in_min, float in_max, float out_min, float out_max);
-bool WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
-bool WindowPromptInstall(char* id, char* title, char* txt, struct Button* choice_a, struct Button* choice_b, int option);
+bool  WindowPrompt(char* title, char* txt, struct Button* choice_a, struct Button* choice_b);
+bool  WindowPromptInstall(char* id, char* title, char* txt, struct Button* choice_a, struct Button* choice_b, int option);
 
+void loadProgressStep();
 void ShowProgress (s32 done, s32 total);
-int ProgressWindow(wbfs_t *hdd, char* title, char* msg);
+int  ProgressWindow(wbfs_t *hdd, char* title, char* msg);
 void freeResources();
 
 // Cover rollover event handlers
