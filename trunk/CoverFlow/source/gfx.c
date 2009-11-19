@@ -159,8 +159,8 @@ void Paint_Progress(float v, char* msg)
 	CFreeTypeGX_DrawText(ttf18pt, 320, 220, TX.welcomeMsg, (GXColor){0xee, 0xee, 0xee, 0xff}, FTGX_JUSTIFY_CENTER);
 	for(i = 0; i < count; i++)
 	{
-		GRRLIB_DrawImg(165+12*i, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
-		GRRLIB_DrawImgReflection(165+12*i, 232 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
+		GRRLIB_DrawImg(164+12*i, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImgReflection(164+12*i, 232 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
 	}
 	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
 	GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
@@ -185,8 +185,8 @@ void Paint_Progress_Generic(int v, int max, char* msg)
 	int i;
 	for(i = 0; i < count; i++)
 	{
-		GRRLIB_DrawImg(165+12*i, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
-		GRRLIB_DrawImgReflection(165+12*i, 232 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
+		GRRLIB_DrawImg(164+12*i, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
+		GRRLIB_DrawImgReflection(164+12*i, 232 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
 	}
 	GRRLIB_DrawImg(162, 230, progress_bar_texture, 0, 1, 1, 0xFFFFFFFF);
 	GRRLIB_DrawImgReflection(162, 230 + progress_bar_texture.h + 5, progress_bar_texture, 0, 1, 1, 1.0);
@@ -230,8 +230,8 @@ void Paint_Progress_FadeToBG()
 		int tBar;
 		for(tBar = 0; tBar < 26; tBar++)
 		{
-			GRRLIB_DrawImg(165+12*tBar, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
-			GRRLIB_DrawImgReflection(165+12*tBar, 232 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
+			GRRLIB_DrawImg(164+12*tBar, 232, progress_step_texture, 0, 1, 1, 0xFFFFFFFF);
+			GRRLIB_DrawImgReflection(164+12*tBar, 232 + progress_step_texture.h + 9, progress_step_texture, 0, 1, 1, 1.0);
 		}
 		if (settings.theme)
 			GRRLIB_FillScreen(0xCFCFCF00|tFade);
