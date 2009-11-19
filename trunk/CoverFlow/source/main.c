@@ -651,8 +651,8 @@ int main( int argc, char **argv )
 									}
 								 }
 								ret = Disc_SetUSB(header->id);								
-								SDCard_deInit();
-								USBDevice_deInit();
+								//SDCard_deInit();    /* cheats aren't working */
+								//USBDevice_deInit();
 								if (gameSetting.iosreloadblock == 1 && (IOS_GetVersion() == 222 || IOS_GetVersion() == 223)) 
 								{
 									patch_cios_data();
@@ -1100,8 +1100,8 @@ int main( int argc, char **argv )
 					}
 				 }
 				ret = Disc_SetUSB(header->id);								
-				SDCard_deInit();
-				USBDevice_deInit();
+				//SDCard_deInit();
+				//USBDevice_deInit();
 				if (gameSetting.iosreloadblock == 1 && (IOS_GetVersion() == 222 || IOS_GetVersion() == 223)) 
 				{
 					patch_cios_data();
