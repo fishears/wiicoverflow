@@ -304,7 +304,7 @@ void initWBFS(){
 						break;
 					case ios222:
 						IOS_ReloadIOS(222);
-						SDCard_Init();
+						//SDCard_Init();
 						load_ehc_module();
 						break;
 					default:

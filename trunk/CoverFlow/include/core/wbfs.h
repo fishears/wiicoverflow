@@ -1,8 +1,8 @@
 #ifndef _WBFS_H_
 #define _WBFS_H_
 
-#include "libwbfs.h"
-
+#include "libwbfs/libwbfs.h"
+#include "util.h"
  
 /* Device list */
 enum {
@@ -13,6 +13,15 @@ enum {
 /* Macros */
 #define WBFS_MIN_DEVICE		1
 #define WBFS_MAX_DEVICE		2
+
+#define DOL_LIST_MAX 64
+typedef struct DOL_LIST
+{
+	char name[DOL_LIST_MAX][64];
+	int num;
+} DOL_LIST;
+
+int WBFS_GetDolList(u8 *discid, DOL_LIST *list);
 
 /* Prototypes */
 s32 WBFS_Init(u32);
@@ -36,7 +45,9 @@ f32 WBFS_EstimeGameSize(void);
 s32 __WBFS_ReadUSB(void *fp, u32 lba, u32 count, void *iobuf);
 s32 __WBFS_WriteUSB(void *fp, u32 lba, u32 count, void *iobuf);
 
+int WBFS_BannerSound(u8 *discid, SoundInfo *snd);
 
+/*
 #define DOL_LIST_MAX 64
 typedef struct DOL_LIST
 {
@@ -53,7 +64,6 @@ typedef struct SoundInfo
 	int loop;
 } SoundInfo;
 
-int WBFS_GetDolList(u8 *discid, DOL_LIST *list);
-int WBFS_BannerSound(u8 *discid, SoundInfo *snd);
+*/
 
 #endif
