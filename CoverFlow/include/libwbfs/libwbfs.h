@@ -150,7 +150,7 @@ wbfs_disc_t *wbfs_open_disc(wbfs_t* p, u8 *diskid);
 void wbfs_close_disc(wbfs_disc_t*d);
 
 u32 wbfs_sector_used(wbfs_t *p,wbfs_disc_info_t *di);
-u32 wbfs_sector_used2(wbfs_t *p,wbfs_disc_info_t *di, u32 *last_blk);
+
 /*! @brief accessor to the wii disc
   @param d: a pointer to already open disc
   @param offset: an offset inside the disc, *points 32bit words*, allowing to access 16GB data
@@ -218,10 +218,6 @@ u64 wbfs_estimate_disc(
 		void *callback_data,
 		partition_selector_t sel);
 
-// compressed and real size
-u32 wbfs_size_disc(wbfs_t*p,read_wiidisc_callback_t read_src_wii_disc,
-                  void *callback_data,partition_selector_t sel,
-				  u32 *comp_size, u32 *real_size);
 
 #ifdef __cplusplus
    }
