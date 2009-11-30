@@ -74,30 +74,7 @@ void fillTitleStruct(s_title* titleList, int len){
 		
 		fclose(fp);
 	}
-	
-	/*
-	else
-	{
-		//while(fgets(line, sizeof(line), fp)){
-		for(i=0; i<1000; i++){
-			fgets(line, sizeof(line), fp);
-			snprintf(titleList[i].id, 4, "%s",line);
-			//sprintf(titleList[i].name, "%s",line+7);
-			//titleList[i].name[strlen(titleList[i].name)-2] = '\0';
-			//i++;
-			//break;
-		}
-		
-		fclose(fp);
-	}
-	char succa[256];
-	sprintf(succa, "%s", titleList[0].id);
-	WindowPrompt(succa, titleList[0].id, 0, &cancelButton);
-	*/
-	
-	//char succa[256];
-	//sprintf(succa, "%s", titleList[1000].id);
-	//WindowPrompt(succa, titleList[1000].name, 0, &cancelButton);
+
 }
 
 void getTitle(s_title* titleList, char* id, char* title){

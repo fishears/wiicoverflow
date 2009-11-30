@@ -67,17 +67,6 @@ bool Menu_Install()
 	
 	//WindowPrompt("SUCCA", headerdisc.title, 0, &cancelButton);
 	
-	/*
-	if (strlen(name) < (22 + 3)) {
-			memset(buffer, 0, sizeof(buffer));
-			sprintf(name, "%s", name);
-		} else {
-			strncpy(buffer, name,  MAX_CHARACTERS);
-			strncat(buffer, "...", 3);
-			sprintf(name, "%s", buffer);
-	}
-	*/
-	
 	ret = WBFS_CheckGame(headerdisc.id);
 	if (ret) {
 		WindowPrompt (TX.alreadyInstalled, name, &cancelButton,0);

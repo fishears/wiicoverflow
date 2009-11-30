@@ -124,87 +124,11 @@ void setSysdate(char* ret_string)
 	
 	time_t now;
 	struct tm  *ts;
-	//char string[128];
-	//char dow[20];
-	//char month[20];
    
 	now = time(NULL);
 	ts = localtime(&now);
 	
-	/*
-	switch(ts->tm_wday){
-	
-		case 0:
-			sprintf(dow, TX.Sun );
-			break;
-		case 1:
-			sprintf(dow, TX.Mon );
-			break;
-		case 2:
-			sprintf(dow, TX.Tue );
-			break;
-		case 3:
-			sprintf(dow, TX.Wed );
-			break;
-		case 4:
-			sprintf(dow, TX.Thu );
-			break;
-		case 5:
-			sprintf(dow, TX.Fri );
-			break;
-		case 6:
-			sprintf(dow, TX.Sat );
-			break;
-	}
-	
-	switch(ts->tm_mon){
-		
-		case 0:
-			sprintf(month, TX.Jan );
-			break;
-		case 1:
-			sprintf(month, TX.Feb );
-			break;
-		case 2:
-			sprintf(month, TX.Mar );
-			break;
-		case 3:
-			sprintf(month, TX.Apr );
-			break;
-		case 4:
-			sprintf(month, TX.May );
-			break;
-		case 5:
-			sprintf(month, TX.Jun );
-			break;
-		case 6:
-			sprintf(month, TX.Jul );
-			break;
-		case 7:
-			sprintf(month, TX.Aug );
-			break;
-		case 8:
-			sprintf(month, TX.Sep );
-			break;
-		case 9:
-			sprintf(month, TX.Oct );
-			break;
-		case 10:
-			sprintf(month, TX.Nov );
-			break;
-		case 11:
-			sprintf(month, TX.Dec );
-			break;
-		//default:
-		//	sprintf(month, "xxx: %d", ts->tm_mon);
-		
-	}
-	*/
-	
-	//sprintf(ret_string, "%s %d %s %02d:%02d", dow, ts->tm_mday, month, ts->tm_hour, ts->tm_min);
 	sprintf(ret_string, "%02d%02d%02d%02d%02d%02d", ts->tm_year-100, ts->tm_mon, ts->tm_mday, ts->tm_hour, ts->tm_min, ts->tm_wday);
-	
-	//WindowPrompt("Message", string, &okButton, NULL);
 	
 }
 
@@ -302,28 +226,6 @@ bool networkInit(char *ip)
 	return true;
 }
 
-/*
-bool networkInit()
-{	//if(self.firstTimeDownload == true){
-		
-		//char myIP[16];
-		
-		//sprintf(self.debugMsg, TX.iniNet );
-		//Paint_Progress_Generic(v, max, self.debugMsg);
-		
-		if(!ifConfig(self.ipAddress))
-		{
-			//sprintf(self.debugMsg, TX.iniNetErr );
-			//Paint_Progress_Generic(v, max, self.debugMsg);
-			//WindowPrompt (TX.error, TX.iniNetErr, &okButton, 0);
-			return false;
-		}
-
-		return true;
-		//self.firstTimeDownload = false;
-	//}
-}
-*/
 void quit()
 {
 	//we should free all allocated textures (SCO);
