@@ -16,7 +16,7 @@
 #define COVER_PROCESSING 2
 
 //#define PNG_START_ADDRESS 0x90100000
-#define PNG_START_ADDRESS 0x904A8380
+#define PNG_START_ADDRESS 0x90300000
 
 // this is the start adrress of MEM2 see http://wiibrew.org/wiki/Memory_Map
 //#define MEM2_START_ADDRESS 0x90100000
