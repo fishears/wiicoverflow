@@ -16,17 +16,7 @@ bool init_usbfs()
 	s32 ret;
 
 	Paint_Progress(self.progress, TX.initSys);
-	
-	/* Initialize system */
-	//Sys_Init(); // it is called in main.c yet
 
-	///* Initialize subsystems */
-	//Wpad_Init();	
-
-	//Paint_Progress(self.progress, "Init SDHC...");
-	/* Mount SDHC */
-	//Fat_MountSDHC(); //it is called in Subsystem_Init
-	
 	self.progress+=0.05;
 	Paint_Progress(self.progress, TX.initUSBFS);
 	
@@ -48,9 +38,6 @@ bool init_usbfs()
 bool reinit_usbfs()
 {
 	u32 ret;
-	
-	//SDCard_deInit();
-	//sleep(1);
 	
 	SDCard_Init();
 	USBDevice_Init();
@@ -102,11 +89,8 @@ void checkDirs(){
 	dir = diropen(dynPath.dir_usb_loader);
 	if (dir == NULL) {
 		
-		//mkdir(USBLOADER_PATH, S_ISVTX);
 		mkdir(dynPath.dir_usb_loader, S_ISVTX);
-		//int result = chdir("SD:/usb-loader/");
 
-		//result = chdir(USBLOADER_PATH);
 		result = chdir(dynPath.dir_usb_loader);
 		
 		if(result == 0){
