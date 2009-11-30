@@ -18,6 +18,12 @@
 #include "mload.h"
 #include "discbrowser.h"
 	
+//this is how to use mem2 but I can't find info - if you feel brave try it	
+#ifdef DONTKNOWHOWTHISWORKS
+static void *__sysarena2lo = 0x90100000; 
+static void *__sysarena2hi = 0x902fffff; 
+#endif
+	
 extern int COVER_COUNT;
 #ifdef TEST_MODE
 int COVER_COUNT = 29;
