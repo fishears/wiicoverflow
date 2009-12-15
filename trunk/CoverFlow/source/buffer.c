@@ -9,6 +9,8 @@
 #include <string.h>
 #include <malloc.h>
 
+#define NEW_MEMORY_METHOD
+
 #define DENSITY_METHOD 1
 #define ALL_CACHED 2
 
@@ -16,15 +18,20 @@
 #define COVER_PROCESSING 2
 
 //#define PNG_START_ADDRESS 0x90100000
-#define PNG_START_ADDRESS 0x90300000
+#define PNG_START_ADDRESS 0x91300000
 
 // this is the start adrress of MEM2 see http://wiibrew.org/wiki/Memory_Map
 //#define MEM2_START_ADDRESS 0x90100000
-#define MEM2_START_ADDRESS 0x90900000
+#define MEM2_START_ADDRESS 0x91900000
 //this is lower than the extent address of MEM2 which should be 54394880 (0x33E0000) - but there is a crash before that point
 //  IOS has the range 0x933E0000-0x93400000  for a heap but who knows what IOS 249 uses, if there are issues at the end of memory
 // then lower this number
 #define MEM2_EXTENT (0x93300000-MEM2_START_ADDRESS)
+
+#define LO_START_ADDRESS 0x80003F00
+#define LO_EXTENT (0x80a00000-LO_START_ADDRESS)
+
+
 
 extern s_path dynPath;
 
@@ -47,6 +54,7 @@ int BufferMethod=DENSITY_METHOD; // what buffering method is used either density
 float Density; // if density method is used then this is the fill rate for the permanent cache
 int MainCacheSize; // the number of slots available to permanently cache covers
 int maxSlots; // the total number of slots available for cache
+int newMaxSlots; // the total number of slots available for cache
 int FloatingCacheSize=0; // the number of floating slots available (for non permanent covers)
 int CurrentSelection;
 struct discHdr *CoverList;
@@ -54,6 +62,7 @@ int nCovers=0;
 int nCoversInWindow; // number of covers shown in the GUI
 int graphicMode=0; // the graphic mode for the covers - this relates to the cover sizes
 int textureDataSize; // the size needed for a texture in this graphic mode
+
 // end of private vars
 
 int GraphicModes[GRAPHIC_MODES][2] =
@@ -71,7 +80,7 @@ int GraphicModes[GRAPHIC_MODES][2] =
 
 // this is the chunk of MEM2 allocated for other tasks (i.e. things that don't fit in normal memory)
 #define BUFFER_SLOTS 23
-
+unsigned int CacheMemorySlotAddresses[MAX_BUFFERED_COVERS];
 
 unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	{
@@ -317,14 +326,24 @@ void HandleLoadRequest(int index,int threadNo)
 			int thisDataMem2Address=-1;
 			if (_cq.permaBufferPosition[index]!=-1)// permanent cache
 			{
+				#ifdef NEW_MEMORY_METHOD
+				// new memory
+				thisDataMem2Address=CacheMemorySlotAddresses[_cq.permaBufferPosition[index]];
+				#else
 				thisDataMem2Address=MEM2_START_ADDRESS + tW * tH * 4 * _cq.permaBufferPosition[index];
+				#endif
 			}
 			else // floating cache
 			{
 				int floatingPosition=GetFLoatingQueuePosition(index); // should have a slot allocated
 				if (floatingPosition!=-1)
 				{
+					#ifdef NEW_MEMORY_METHOD
+					// new memory
+					thisDataMem2Address=CacheMemorySlotAddresses[MainCacheSize + floatingPosition];
+					#else
 					thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition) * tW * tH * 4 ;
+					#endif
 				}
 				else
 				{
@@ -598,9 +617,27 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	_covers3d=graphMode;
 
 	maxSlots=(MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS))/(textureDataSize)-MAX_THREADS; // this is the number of slots available
+	
+	// new memory
+	int newMaxslots=LO_EXTENT/textureDataSize;
+	for (i=0;i<newMaxslots;i++)
+	{
+		CacheMemorySlotAddresses[i]=LO_START_ADDRESS+textureDataSize*i;
+	}
+	for (i=0;i<maxSlots;i++)
+	{
+		CacheMemorySlotAddresses[i+newMaxslots]=MEM2_START_ADDRESS+textureDataSize*i;
+	}
+	newMaxslots+=maxSlots;
+	//end new memory
 
+	#ifdef NEW_MEMORY_METHOD
+	// new memory
+	if (gameCount<=newMaxslots) // can we fit all the covers in memory
+	#else
 	//decide on buffering method
 	if (gameCount<=maxSlots) // can we fit all the covers in memory
+	#endif
 	{
 		BufferMethod=ALL_CACHED;
 		MainCacheSize=gameCount;
@@ -608,13 +645,24 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	else //we can't
 	{
 		BufferMethod=DENSITY_METHOD;
+
+		#ifdef NEW_MEMORY_METHOD
+		// new memory
+		Density = ((float)newMaxslots) / ((float)(gameCount));
+		#else
 		Density = ((float)maxSlots) / ((float)(gameCount));
+		#endif
 		FloatingCacheSize=(int)(((1-Density)*numberOfCoversToBeShown+1)*4);// works well for 2d may be too big for 3d
-		if (FloatingCacheSize>maxSlots)
-		{
-			FloatingCacheSize=maxSlots;
-		}
+
+		#ifdef NEW_MEMORY_METHOD
+		// new memory
+		if (FloatingCacheSize>newMaxslots) FloatingCacheSize=maxSlots;
+		MainCacheSize = newMaxslots - FloatingCacheSize;
+		#else
+		if (FloatingCacheSize>maxSlots) FloatingCacheSize=maxSlots;
 		MainCacheSize = maxSlots - FloatingCacheSize;
+		#endif
+		// new memory
 		Density = ((float)(MainCacheSize-1)) / ((float)(gameCount)); // the -1 is important - how many fence posts to cover 10 meters if they are 1 meter apart
 		for (i=0;i<FloatingCacheSize;i++)
 		{
