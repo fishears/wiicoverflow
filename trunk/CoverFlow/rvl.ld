@@ -29,7 +29,7 @@ SECTIONS
 	/* default base address */
 	/* use -Wl,--section-start,.init=0xADDRESS to change */
 	/* this is the vaule to change  equivilent to init - I can't get it much higher (yet)*/
-	. = 0x80c00f00;
+	. = 0x80e00000;
 
 	/* Program */
 	.init          :
