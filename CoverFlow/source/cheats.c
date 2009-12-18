@@ -167,7 +167,8 @@ void manage_cheats(int id, struct discHdr *gameList)
 
     WPAD_Rumble(0,0); //sometimes rumble remain active
     CHEAT *cheat;
-    cheat = (CHEAT*) GetSlotBufferAddress(20); //make use of a buffer slot
+    cheat = CFMalloc(1*1024*1024);
+    //cheat = (CHEAT*) GetSlotBufferAddress(20); //make use of a buffer slot
     char buffer[128]; //dummy line for tests
     char lastline[128]; //hold the game name (which also appears at end of file)
     char filename[10];
@@ -329,9 +330,11 @@ void manage_cheats(int id, struct discHdr *gameList)
                        {
                             create_gct(cheat, maxlines, gameList, id, maxlines); //go and make the gct file for the enabled cheats
                        }
+                        CFFree(cheat);
                         return;
                     }
                 }
+                CFFree(cheat);
                 return;
             }
             else if((WPAD_ButtonsDown(0) & WPAD_BUTTON_A)||(PAD_ButtonsDown(0) & PAD_BUTTON_A))
@@ -379,9 +382,11 @@ void manage_cheats(int id, struct discHdr *gameList)
                             {
                                 create_gct(cheat, maxlines, gameList, id, maxlines); //go and make the gct file for the enabled cheats
                           }
+                           CFFree(cheat);
                           return;
                         }
                     }
+                   CFFree(cheat);
                     return;
                 }
                 else if(Button_Select(&selectAllButton,pointer.p_x,pointer.p_y) || Button_Select(&deselectAllButton,pointer.p_x,pointer.p_y))
