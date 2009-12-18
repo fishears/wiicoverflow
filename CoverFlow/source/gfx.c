@@ -47,13 +47,13 @@ void LoadTextures()
 	GRRLIB_LoadTexturePNG(&pointer_texture, pointer_basic_png);
 	GRRLIB_LoadTexturePNG(&pointer_shadow_texture,pointer_shadow_png);
 	GRRLIB_LoadTexturePNG(&turn_point_texture,pointer_turning_png); // can't find free
-	BufferImageToSlot(&cover_texture,no_cover_png,7);
-	BufferImageToSlot(&cover_texture_3d,full_cover_png,5); // read notes for MEM2_EXTENT before removing
-	BufferImageToSlot(&no_disc_texture,no_disc_png,13); // read notes for MEM2_EXTENT before removing
+	GRRLIB_LoadTexturePNG(&cover_texture,no_cover_png);
+	GRRLIB_LoadTexturePNG(&cover_texture_3d,full_cover_png); // read notes for MEM2_EXTENT before removing
+	GRRLIB_LoadTexturePNG(&no_disc_texture,no_disc_png); // read notes for MEM2_EXTENT before removing
 	GRRLIB_LoadTexturePNG(&slidebar_texture,slidebar_png);  // can't find free
 	GRRLIB_CreateEmptyTexture(&slidebar_white_texture,slidebar_texture.w, slidebar_texture.h);
 	GRRLIB_BMFX_Invert(slidebar_texture, slidebar_white_texture); //invert the slider black to white
-	BufferImageToSlot(&ambientlight_texture,ambientlight_png,6);   // read notes for MEM2_EXTENT before removing
+	GRRLIB_LoadTexturePNG(&ambientlight_texture,ambientlight_png);   // read notes for MEM2_EXTENT before removing
 	GRRLIB_CreateEmptyTexture(&ambientlight_white_texture,ambientlight_texture.w, ambientlight_texture.h);
 	GRRLIB_BMFX_Invert(ambientlight_texture, ambientlight_white_texture); //invert the fade from black to white
 	GRRLIB_LoadTexturePNG(&battery_bar,battery_bar_png);  // can't find free
@@ -69,7 +69,7 @@ void LoadTextures()
 	GRRLIB_LoadTexturePNG(&dialog_box_titlebar_texture,dialog_box_titlebar_png);
 	GRRLIB_LoadTexturePNG(&dialog_box_titlebar_long_texture,dialog_box_titlebar_long_png);
 	GRRLIB_LoadTexturePNG(&dialog_box_icon_texture,dialog_box_icon_png);
-	BufferImageToSlot(&menu_graphics_wireframe_texture,menu_graphics_wireframe_png,14); // read notes for MEM2_EXTENT before removing
+	GRRLIB_LoadTexturePNG(&menu_graphics_wireframe_texture,menu_graphics_wireframe_png); // read notes for MEM2_EXTENT before removing
 	GRRLIB_LoadTexturePNG(&menu_graphics_box1_texture,menu_graphics_box1_png);
 	GRRLIB_LoadTexturePNG(&menu_graphics_box2_texture,menu_graphics_box2_png);
 /*
@@ -1699,12 +1699,12 @@ void freeResources(){
 	CFFree(pointer_texture.data);
 	CFFree(pointer_shadow_texture.data);
 	CFFree(turn_point_texture.data);
-	//free(cover_texture.data);
-	//free(cover_texture_3d.data);
-	//CFFree(no_disc_texture.data);
+	CFFree(cover_texture.data);
+	CFFree(cover_texture_3d.data);
+	CFFree(no_disc_texture.data);
 	CFFree(slidebar_texture.data);
 	CFFree(slidebar_white_texture.data);
-	//free(ambientlight_texture.data);
+	CFFree(ambientlight_texture.data);
 	CFFree(ambientlight_white_texture.data);
 	CFFree(battery_bar.data);
     CFFree(battery_bar_red.data);
@@ -1718,7 +1718,7 @@ void freeResources(){
 	CFFree(dialog_box_titlebar_texture.data);
 	CFFree(dialog_box_titlebar_long_texture.data);
 	CFFree(dialog_box_icon_texture.data);
-//	CFFree(menu_graphics_wireframe_texture.data);
+	CFFree(menu_graphics_wireframe_texture.data);
 	CFFree(menu_graphics_box1_texture.data);
 	CFFree(menu_graphics_box2_texture.data);
     CFFree(progress_step_texture.data);

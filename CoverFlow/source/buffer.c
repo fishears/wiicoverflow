@@ -18,18 +18,18 @@
 #define COVER_PROCESSING 2
 
 //#define PNG_START_ADDRESS 0x90100000
-#define PNG_START_ADDRESS 0x91300000
+#define PNG_START_ADDRESS 0x90700000 // this must match the __Arena2Hi address in rvl.ld
 
 // this is the start adrress of MEM2 see http://wiibrew.org/wiki/Memory_Map
 //#define MEM2_START_ADDRESS 0x90100000
-#define MEM2_START_ADDRESS 0x91900000
+#define MEM2_START_ADDRESS (PNG_START_ADDRESS+0x200000)
 //this is lower than the extent address of MEM2 which should be 54394880 (0x33E0000) - but there is a crash before that point
 //  IOS has the range 0x933E0000-0x93400000  for a heap but who knows what IOS 249 uses, if there are issues at the end of memory
 // then lower this number
 #define MEM2_EXTENT (0x93300000-MEM2_START_ADDRESS)
 
 #define LO_START_ADDRESS 0x80003F00
-#define LO_EXTENT (0x80e00000-LO_START_ADDRESS)
+#define LO_EXTENT (0x80e00000-LO_START_ADDRESS) //first address must match init in rvl.ld
 
 
 
@@ -79,7 +79,7 @@ int GraphicModes[GRAPHIC_MODES][2] =
 
 
 // this is the chunk of MEM2 allocated for other tasks (i.e. things that don't fit in normal memory)
-#define BUFFER_SLOTS 23
+#define BUFFER_SLOTS 14
 unsigned int CacheMemorySlotAddresses[MAX_BUFFERED_COVERS];
 
 unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
@@ -89,23 +89,14 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	128,//2 string buffer for thread 2
 	128,//3 string buffer for thread 3
 	128,//4 string buffer for thread 4
-	512*340*4, // 5 3d no cover
-	240*480*4, //6 ambilight
-	160*224*4, //7 no cover
+	0, // 5 3d no cover
+	0, //6 ambilight
+	0, //7 no cover
 	0, //8 Cheat Manager Array 1
 	0, //9 Cheat Manager Array 2
 	160*160*4, //10 current_cover_texture
 	128,//11 string buffer tokenurlParsing
 	128,//12 string buffer tokenurlParsing
-	160*160*4, //13 no_disc_texture
-	472*172*4, //14 menu_graphics_wireframe_texture
-	0,//2*1024*1024, //15 alt dol buffer
-    512*340*4, //16 case_3d_shadow         
-	20*224*4, //17 case_right         
-	4*4*4, //18 matte grey         
-	4*4*4, //19 matte black         
-	1*1024*1024, //20 Fishears         
-	0,//*1024*1024, //21 LoudBob 
 	0};
 
 // returns the offset to the memory slot required
