@@ -174,3 +174,17 @@ void ClearAllocatedMemory()
 	}
 }
 
+unsigned int MaximumAddress()
+{
+	unsigned int i,ret=0;
+	int TotalAddress=0;
+	for (i=0;i<MEMORY_TRACKER_SIZE;i++)
+	{
+		if (TrackingBuffer[i][MEMORY_TRACKER_POINTER]!=0)
+		{
+			TotalAddress = TrackingBuffer[i][MEMORY_TRACKER_POINTER] + TrackingBuffer[i][MEMORY_TRACKER_POINTER_SIZE];
+			if(ret<TotalAddress) ret = TotalAddress;
+		}
+	}
+	return ret;
+}

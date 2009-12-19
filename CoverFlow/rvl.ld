@@ -273,7 +273,7 @@ __intrstack_end = (__stack_addr);
 __Arena1Lo = (__intrstack_addr + 31) & (-32);
 __Arena1Hi = (0x816ffff0);
 __Arena2Lo = (0x90002000);
-__Arena2Hi = (0x906fffff);
+__Arena2Hi = (0x90800000);
 
 __gxregs = (__Arena1Hi + 31) & (-32);
 __ipcbufferLo = (0x933e0000);

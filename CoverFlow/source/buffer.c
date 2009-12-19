@@ -18,11 +18,7 @@
 #define COVER_PROCESSING 2
 
 //#define PNG_START_ADDRESS 0x90100000
-#define PNG_START_ADDRESS 0x90700000 // this must match the __Arena2Hi address in rvl.ld
 
-// this is the start adrress of MEM2 see http://wiibrew.org/wiki/Memory_Map
-//#define MEM2_START_ADDRESS 0x90100000
-#define MEM2_START_ADDRESS (PNG_START_ADDRESS+0x200000)
 //this is lower than the extent address of MEM2 which should be 54394880 (0x33E0000) - but there is a crash before that point
 //  IOS has the range 0x933E0000-0x93400000  for a heap but who knows what IOS 249 uses, if there are issues at the end of memory
 // then lower this number
@@ -743,3 +739,7 @@ void BufferImageToSlot(GRRLIB_texImg * my_texture,const unsigned char* pngDataAd
 	}
 }
 
+int CurrentButtonUsage()
+{
+	return nextAllocationAddress - PNG_START_ADDRESS;
+}

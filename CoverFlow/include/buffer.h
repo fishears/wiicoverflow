@@ -6,6 +6,9 @@
 #include "GRRLIB.h"
 
 #define MAX_BUFFERED_COVERS  500
+#define PNG_START_ADDRESS 0x90800000 // this must match the __Arena2Hi address in rvl.ld and now drives the free memory amount
+// this is the start adrress of MEM2 see http://wiibrew.org/wiki/Memory_Map
+#define MEM2_START_ADDRESS (PNG_START_ADDRESS+0x200000) // the 0x200000 is for button images and the few remaining buffer slots
 
 #define MAX_THREADS 3
 #define GRAPHIC_MODES 2
@@ -82,5 +85,7 @@ void * GetSlotBufferAddress(int slot);
 void BufferImageToSlot(GRRLIB_texImg * my_texture,const unsigned char* pngDataAddress,int slot);
 
 void LoadTextureToBuffer(GRRLIB_texImg * my_texture,const unsigned char* pngDataAddress);
+
+int CurrentButtonUsage(); 
 
 #endif
