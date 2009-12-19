@@ -2115,14 +2115,14 @@ void MemInfo()
 	char linebuf[300] = "";
 	char memtotal[20];
 	char memused[20];
+	char buttonuse[20];
 	char memnotinuse[20];
-	char memcanbefreed[20];
 	struct mallinfo mymallinfo = mallinfo();
 	sprintf(memtotal,"%d",mymallinfo.arena/1024);
 	sprintf(memused,"%d",mymallinfo.uordblks/1024);
-	sprintf(memnotinuse,"%d",mymallinfo.fordblks/1024);
-	sprintf(memcanbefreed,"%d",mymallinfo.keepcost/1024);
-	sprintf(linebuf, "all: %s KB\nused: %s KB \nnotused: %s KB \ncanfree: %sKB", memtotal, memused, memnotinuse, memcanbefreed);
+	sprintf(memnotinuse,"%d",((uint)PNG_START_ADDRESS-MaximumAddress())/(1024));
+	sprintf(buttonuse,"%x",CurrentButtonUsage());
+	sprintf(linebuf, "all: %s KB\nused: %s KB \nnotused: %s KB \nUsed in buttons: %sKB", memtotal, memused, memnotinuse, buttonuse);
 	
 	WindowPrompt("Memory", linebuf, &okButton, 0);
 	
@@ -2131,15 +2131,18 @@ void MemInfo()
 void MemInfo_2()
 {
 	//char linebuf[300] = "";
+	char linebuf[300] = "";
 	char memtotal[20];
 	char memused[20];
+	char buttonuse[20];
 	char memnotinuse[20];
-	char memcanbefreed[20];
 	struct mallinfo mymallinfo = mallinfo();
 	sprintf(memtotal,"%d",mymallinfo.arena/1024);
 	sprintf(memused,"%d",mymallinfo.uordblks/1024);
-	sprintf(memnotinuse,"%d",mymallinfo.fordblks/1024);
-	sprintf(memcanbefreed,"%d",mymallinfo.keepcost/1024);
-	sprintf(self.linebuf, "all: %s KB used: %s KB notused: %s KB canfree: %sKB", memtotal, memused, memnotinuse, memcanbefreed);
+	sprintf(memnotinuse,"%d",((uint)PNG_START_ADDRESS-MaximumAddress())/(1024));
+	sprintf(buttonuse,"%x",CurrentButtonUsage());
+	sprintf(self.linebuf, "all: %s KB\nused: %s KB \nnotused: %s KB \nUsed in buttons: %sKB", memtotal, memused, memnotinuse, buttonuse);
+	
+	WindowPrompt("Memory", linebuf, &okButton, 0);
 }
 

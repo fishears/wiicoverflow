@@ -34,5 +34,6 @@ void TrackedFree(void * ptr);
 
 int ReportNumberOfAllocations();
 int ReportSizeOfAllocations();
+unsigned int MaximumAddress();
 
 void ClearAllocatedMemory();

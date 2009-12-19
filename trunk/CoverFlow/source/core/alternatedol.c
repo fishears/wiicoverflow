@@ -52,7 +52,7 @@ bool Load_Dol(void **buffer, int* dollen, char * filepath)
 	fseek(file, 0, SEEK_SET);
 
 #ifdef LOUDTEST
-	dol_buffer = (void *) 0x90900000; //safest
+	dol_buffer = (void *) MEM2_START_ADDRESS; //safest
 #else
 	dol_buffer = CFMalloc(filesize);
 #endif
