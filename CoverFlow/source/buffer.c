@@ -9,10 +9,9 @@
 #include <string.h>
 #include <malloc.h>
 
-#define NEW_MEMORY_METHOD
-
 #define DENSITY_METHOD 1
 #define ALL_CACHED 2
+#define PNGS_CACHED 3
 
 #define COVER_REQUESTED 1
 #define COVER_PROCESSING 2
@@ -25,7 +24,7 @@
 #define MEM2_EXTENT (0x93300000-MEM2_START_ADDRESS)
 
 #define LO_START_ADDRESS 0x80003F00
-#define LO_EXTENT (0x80e00000-LO_START_ADDRESS) //first address must match init in rvl.ld
+#define LO_EXTENT (0x80CA1F00-LO_START_ADDRESS) //first address must match init in rvl.ld
 
 
 
@@ -313,24 +312,14 @@ void HandleLoadRequest(int index,int threadNo)
 			int thisDataMem2Address=-1;
 			if (_cq.permaBufferPosition[index]!=-1)// permanent cache
 			{
-				#ifdef NEW_MEMORY_METHOD
-				// new memory
 				thisDataMem2Address=CacheMemorySlotAddresses[_cq.permaBufferPosition[index]];
-				#else
-				thisDataMem2Address=MEM2_START_ADDRESS + tW * tH * 4 * _cq.permaBufferPosition[index];
-				#endif
 			}
 			else // floating cache
 			{
 				int floatingPosition=GetFLoatingQueuePosition(index); // should have a slot allocated
 				if (floatingPosition!=-1)
 				{
-					#ifdef NEW_MEMORY_METHOD
-					// new memory
 					thisDataMem2Address=CacheMemorySlotAddresses[MainCacheSize + floatingPosition];
-					#else
-					thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition) * tW * tH * 4 ;
-					#endif
 				}
 				else
 				{
@@ -605,7 +594,6 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 
 	maxSlots=(MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS))/(textureDataSize)-MAX_THREADS; // this is the number of slots available
 	
-	// new memory
 	int newMaxslots=LO_EXTENT/textureDataSize;
 	for (i=0;i<newMaxslots;i++)
 	{
@@ -616,15 +604,8 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 		CacheMemorySlotAddresses[i+newMaxslots]=MEM2_START_ADDRESS+textureDataSize*i;
 	}
 	newMaxslots+=maxSlots;
-	//end new memory
 
-	#ifdef NEW_MEMORY_METHOD
-	// new memory
 	if (gameCount<=newMaxslots) // can we fit all the covers in memory
-	#else
-	//decide on buffering method
-	if (gameCount<=maxSlots) // can we fit all the covers in memory
-	#endif
 	{
 		BufferMethod=ALL_CACHED;
 		MainCacheSize=gameCount;
@@ -633,23 +614,11 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	{
 		BufferMethod=DENSITY_METHOD;
 
-		#ifdef NEW_MEMORY_METHOD
-		// new memory
 		Density = ((float)newMaxslots) / ((float)(gameCount));
-		#else
-		Density = ((float)maxSlots) / ((float)(gameCount));
-		#endif
 		FloatingCacheSize=(int)(((1-Density)*numberOfCoversToBeShown+1)*4);// works well for 2d may be too big for 3d
 
-		#ifdef NEW_MEMORY_METHOD
-		// new memory
 		if (FloatingCacheSize>newMaxslots) FloatingCacheSize=maxSlots;
 		MainCacheSize = newMaxslots - FloatingCacheSize;
-		#else
-		if (FloatingCacheSize>maxSlots) FloatingCacheSize=maxSlots;
-		MainCacheSize = maxSlots - FloatingCacheSize;
-		#endif
-		// new memory
 		Density = ((float)(MainCacheSize-1)) / ((float)(gameCount)); // the -1 is important - how many fence posts to cover 10 meters if they are 1 meter apart
 		for (i=0;i<FloatingCacheSize;i++)
 		{
