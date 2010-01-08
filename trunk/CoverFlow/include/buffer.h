@@ -7,23 +7,6 @@
 
 #define MAX_BUFFERED_COVERS  500
 #define PNG_START_ADDRESS 0x90800000 // this must match the __Arena2Hi address in rvl.ld and now drives the free memory amount
-/*
-It should be arranged that this +0x200000 is one of the following (for most efficient memory use)
-90DD0000
-90D26000
-90C7C000
-90BD2000
-90B28000
-90A7E000
-909D4000
-9092A000
-90880000
-907D6000
-9072C000
-90682000
-905D8000
-
-*/
 // this is the start adrress of MEM2 see http://wiibrew.org/wiki/Memory_Map
 #define MEM2_START_ADDRESS (PNG_START_ADDRESS+0x200000) // the 0x200000 is for button images and the few remaining buffer slots
 
