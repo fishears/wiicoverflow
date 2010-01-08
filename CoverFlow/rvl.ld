@@ -28,18 +28,8 @@ SECTIONS
 
 	/* default base address */
 	/* use -Wl,--section-start,.init=0xADDRESS to change */
-	/* this is the vaule to change  equivilent to init - Potential addresses are:
-	  80AA3F00
-	  80B4DF00
-	  80BF7F00
-	  80CA1F00
-	  80D4BF00
-	  80DF5F00
-	  80E9FF00
-	  80F49F00
-	  80FF3F00
-	*/
-	. = 0x80CA1F00;
+	/* this is the vaule to change  equivilent to init - I can't get it much higher (yet)*/
+	. = 0x80e00000;
 
 	/* Program */
 	.init          :
