@@ -9,9 +9,10 @@ extern int COVER_COUNT;
 extern s_coverFlip coverFlip[];
 extern s_pointer      pointer;
 extern s_path dynPath;
+extern s_gameSettings gameSetting;
 
 bool init_usbfs()
-{    
+{
    // __Disc_SetLowMem();
 	s32 ret;
 
@@ -19,12 +20,12 @@ bool init_usbfs()
 
 	self.progress+=0.05;
 	Paint_Progress(self.progress, TX.initUSBFS);
-	
+
 	/* Initialize DIP module */
 	ret = Disc_Init();
 	self.progress+=0.05;
 	Paint_Progress(self.progress, TX.initDisc);
-	
+
 	if (ret < 0) {
 		printf(TX.addError);
 		printf(TX.errorDIP, ret);
@@ -38,13 +39,13 @@ bool init_usbfs()
 bool reinit_usbfs()
 {
 	u32 ret;
-	
+
 	SDCard_Init();
 	USBDevice_Init();
-	
+
 	/* Initialize DIP module */
 	ret = Disc_Init();
-	
+
 	if (ret < 0) {
 		printf(TX.addError);
 		printf(TX.errorDIP, ret);
@@ -56,9 +57,9 @@ bool reinit_usbfs()
 }
 
 bool saveFile(char* imgPath, struct block file){
-			
+
 	/* save png to sd card for future use*/
-			
+
 	FILE *f;
 	f = fopen(imgPath, "wb");
 	if(f)
@@ -71,12 +72,12 @@ bool saveFile(char* imgPath, struct block file){
 }
 
 void checkDirs(){
-	
+
 	int result = 0;
 
 //  DIR_ITER* dir = diropen("SD:/codes");
 	DIR_ITER* dir = diropen(dynPath.dir_codes);
-    if(dir == NULL) 
+    if(dir == NULL)
 		{
 			//mkdir("SD:/codes", S_ISVTX);
 			mkdir(dynPath.dir_codes, S_ISVTX);
@@ -88,11 +89,11 @@ void checkDirs(){
 	//dir = diropen(USBLOADER_PATH);
 	dir = diropen(dynPath.dir_usb_loader);
 	if (dir == NULL) {
-		
+
 		mkdir(dynPath.dir_usb_loader, S_ISVTX);
 
 		result = chdir(dynPath.dir_usb_loader);
-		
+
 		if(result == 0){
 			//WindowPrompt("Cover download","result = 0", &okButton, NULL);
 			mkdir("disks", S_ISVTX);
@@ -101,20 +102,20 @@ void checkDirs(){
 			mkdir("games", S_ISVTX);
                         mkdir("3dcovers", S_ISVTX);
             mkdir("txtcodes", S_ISVTX);
-			
+
 		}
 		else{
 			WindowPrompt(TX.error, TX.errorReadDir, &okButton, NULL);
 		}
 	}
 	else{
-	
+
 	//	WindowPrompt("Cover download","Closing dir", &okButton, NULL);
 		dirclose(dir);
-		
+
 		//result = chdir(USBLOADER_PATH);
 		result = chdir(dynPath.dir_usb_loader);
-		
+
 		if(result == 0){
 			dir = diropen("disks");
 	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);
@@ -124,25 +125,25 @@ void checkDirs(){
 			else{
 				dirclose(dir);
 			}
-			
+
 			dir = diropen("covers");
-	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);	
+	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);
 			if(dir == NULL) {
 				mkdir("covers", S_ISVTX);
 			}
 			else{
 				dirclose(dir);
 			}
-			
+
 			dir = diropen("3dcovers");
-	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);	
+	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);
 			if(dir == NULL) {
 				mkdir("3dcovers", S_ISVTX);
 			}
 			else{
 				dirclose(dir);
 			}
-			
+
 			dir = diropen("txtcodes"); //dir for storing wiird cheat files
 	//		WindowPrompt("Cover download",USBLOADER_PATH "/txtcodes/", &okButton, NULL);
 			if(dir == NULL) {
@@ -151,11 +152,11 @@ void checkDirs(){
 			else{
 				dirclose(dir);
 			}
-			
+
 			//WindowPrompt("Codes test",USBLOADER_PATH "/txtcodes/", &okButton, NULL);
-			
+
 		}
-		
+
 		else{
 			WindowPrompt(TX.error, TX.errorCreateDir, &okButton, NULL);
 		}
@@ -166,11 +167,11 @@ void checkFiles(){
 
 	char fbuff[255];
 	FILE* fp;
-	
+
 	sprintf(fbuff, "%s/gamelist.xml", dynPath.dir_usb_loader);
 	fp = fopen(fbuff, "r");
 	//fp = fopen(USBLOADER_PATH "/gamelist.xml", "r");
-	
+
 	if(fp == NULL)
 		createEmptyGameSettingsFile();
 	else
@@ -179,7 +180,7 @@ void checkFiles(){
 	sprintf(fbuff, "%s/wiicoverflow.xml", dynPath.dir_usb_loader);
 	fp = fopen(fbuff, "r");
 	//fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
-	
+
 	if(fp == NULL)
 		createEmptyWiiCoverFlowFile();
 	else
@@ -191,11 +192,11 @@ bool check_write_access(){
 
     char fbuff[255];
 	FILE* fp;
-    
+
 	sprintf(fbuff, "%s/temp.txt", dynPath.dir_usb_loader);
 	fp = fopen(fbuff, "wb");
 	//fp = fopen(USBLOADER_PATH "/temp.txt","wb");
-    
+
 	if(fp==NULL)
     {
         WindowPrompt(TX.error, TX.errorSD, &okButton,0);
@@ -217,7 +218,7 @@ void initWBFS(){
 	int retried =0;
 	int ret;
 	bool init=true;
-	
+
 	self.progress += .1;
 	sprintf(self.debugMsg, TX.initWBFS);
 	Paint_Progress(self.progress,self.debugMsg);
@@ -255,7 +256,7 @@ void initWBFS(){
 				{
 					NoDrive=WindowPrompt(TX.error, TX.errorNoUSBDrv, 0, &cancelButton);
 				}
-				
+
 				if(NoDrive)
 				{
 					retries = 10;
@@ -316,18 +317,18 @@ s32 __Menu_EntryCmp(const void *a, const void *b)
 	struct discHdr *hdr2 = (struct discHdr *)b;
 
 	/* Compare strings */
-	
+
 	if(self.usingTitlesTxt){
-	
+
 		char title1[MAX_TITLE_LEN];
 		char title2[MAX_TITLE_LEN];
-	
+
 		sprintf(title1, "%s", hdr1->title);
 		sprintf(title2, "%s", hdr2->title);
-		
+
 		getTitle(titleList, (char*)hdr1->id, title1);
 		getTitle(titleList, (char*)hdr2->id, title2);
-		
+
 		return strcasecmp(title1, title2);
 	}
 	else
@@ -361,7 +362,7 @@ s32 GetEntries()
 	self.progress+=0.05;
 	sprintf(self.debugMsg, TX.gettingGL );
 	Paint_Progress(self.progress, self.debugMsg);
-	
+
 	/* Get header list */
 	ret = WBFS_GetHeaders(buffer, cnt, sizeof(struct discHdr));
 	if (ret < 0)
@@ -370,29 +371,33 @@ s32 GetEntries()
 	self.progress+=0.05;
 	sprintf(self.debugMsg, TX.sortingGL );
 	Paint_Progress(self.progress, self.debugMsg);
-	
+
 	/* Sort entries */
 	qsort(buffer, cnt, sizeof(struct discHdr), __Menu_EntryCmp);
 
 	self.progress+=0.05;
 	Paint_Progress(self.progress, self.debugMsg);
-	
+
 	/* Free memory */
 	if (self.gameList)
 		CFFree(self.gameList);
-
+#ifdef FAVTEST
+        /* check for favorite mode */
+        if(settings.favorites == 1)
+            cnt = filterFavorites(buffer,cnt);
+#endif
 	/* Set values */
 	self.gameList = buffer;
 	self.gameCnt  = cnt;
 	COVER_COUNT = self.gameCnt;
-	
+
 	if(self.gameCnt > 2)
 	{
 		if ( ((int)((COVER_COUNT/2.0) + 0.5)) - (COVER_COUNT/2.0) == 0) // even # of covers
 			self.max_cover = (int)(COVER_COUNT/2.0);
 		else // odd # of covers
 			self.max_cover = (int)((COVER_COUNT/2.0) - 0.5);
-		
+
 		self.min_cover = (-1*((int)((COVER_COUNT/2.0) + 0.5)) +1);
 	}
 	else if (self.gameCnt == 2)
@@ -405,12 +410,12 @@ s32 GetEntries()
 		self.min_cover = 0;
 		self.max_cover = 0;
 	}
-	
+
 	Init_Covers();
 
 	self.progress+=0.05;
 	Paint_Progress(self.progress, self.debugMsg);
-	
+
 	/* Reset variables */
 	self.gameSelected = self.gameStart = 0;
 	int i = 0;
@@ -419,7 +424,7 @@ s32 GetEntries()
 		coverFlip[i].flip = false;
 		coverFlip[i].angle = 0.0;
 	}
-	
+
 	//Init Filter
 	//InitFilter(&gameFilter, gameList);
 
@@ -469,19 +474,23 @@ s32 GetEntriesSilent()
 	/* Free memory */
 	if (self.gameList)
 		CFFree(self.gameList);
-
+#ifdef FAVTEST
+        /* check for favorite mode */
+        if(settings.favorites == 1)
+            cnt = filterFavorites(buffer,cnt);
+#endif
 	/* Set values */
 	self.gameList = buffer;
 	self.gameCnt  = cnt;
 	COVER_COUNT = self.gameCnt;
-	
+
 	if(self.gameCnt > 2)
 	{
 		if ( ((int)((COVER_COUNT/2.0) + 0.5)) - (COVER_COUNT/2.0) == 0) // even # of covers
 			self.max_cover = (int)(COVER_COUNT/2.0);
 		else // odd # of covers
 			self.max_cover = (int)((COVER_COUNT/2.0) - 0.5);
-		
+
 		self.min_cover = (-1*((int)((COVER_COUNT/2.0) + 0.5)) +1);
 	}
 	else if (self.gameCnt == 2)
@@ -494,7 +503,7 @@ s32 GetEntriesSilent()
 		self.min_cover = 0;
 		self.max_cover = 0;
 	}
-	
+
 	Init_Covers();
 
 	/* Reset variables */
@@ -519,11 +528,11 @@ err:
 bool Init_Game_List(){
 
 	Paint_Progress(self.progress, TX.initWBFS_GL);
-	
+
 	/* Try to open device */
 	if (WBFS_Open() >= 0) {
 		/* Get game list */
-		
+
 		self.progress+=0.05;
 		Paint_Progress(self.progress, TX.getEntryWBFS);
 		GetEntries();
@@ -548,7 +557,7 @@ USB_RETRY:
 			CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.errorNoWBFS, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
             CFreeTypeGX_DrawText(ttf14pt, 190,160, TX.hold12B, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 			GRRLIB_Render();
-				
+
 			if (WPAD_ButtonsHeld(0) & WPAD_BUTTON_1 && WPAD_ButtonsHeld(0) & WPAD_BUTTON_2)
 			{
 				//TODO ADD WBFS Format code
@@ -557,21 +566,21 @@ USB_RETRY:
 				CFreeTypeGX_DrawText(ttf14pt, 190,140, TX.findPartitions, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 				GRRLIB_Render();
 				sleep(1);
-				
+
 				partitionEntry partitions[MAX_PARTITIONS];
 				u32 cnt, sector_size = 2000;
 				char txtBuff[MAX_PARTITIONS][256];
 				bool valid[MAX_PARTITIONS];
 				u32 retv;
-				
+
 				retv = Partition_GetEntries(partitions, &sector_size);
-				
+
 				for(cnt = 0; cnt < MAX_PARTITIONS; cnt++)
 				{
 					partitionEntry *entry = &partitions[cnt];
-					
+
 					f32 size = entry->size * (sector_size / GB_SIZE);
-					
+
 					if(size) {
 						sprintf(txtBuff[cnt], TX.partition, cnt+1, size);
 						valid[cnt] = true;
@@ -582,14 +591,14 @@ USB_RETRY:
 						valid[cnt] = false;
 					}
 				}
-				
+
 				for(cnt = 0; cnt < MAX_PARTITIONS; cnt++)
 				{
 					if(valid[cnt])
 					{
 						partitionEntry *entry = &partitions[cnt];
-						
-						if(entry->size) 
+
+						if(entry->size)
 						{
 							if(WindowPrompt(TX.askFormat, txtBuff[cnt], &okButton, &noButton))
 							{
@@ -600,9 +609,9 @@ USB_RETRY:
 								CFreeTypeGX_DrawText(ttf14pt, 190,140, tTemp, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 								CFreeTypeGX_DrawText(ttf14pt, 190,160, TX.pleaseWait, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_LEFT);
 								GRRLIB_Render();
-								
-								ret = WBFS_Format(entry->sector, entry->size); 
-							
+
+								ret = WBFS_Format(entry->sector, entry->size);
+
 								if(ret < 0)
 								{
 									WindowPrompt(TX.error, TX.errorFormat, &okButton, 0);
@@ -611,16 +620,16 @@ USB_RETRY:
 								{
 									WindowPrompt(TX.successFormat, TX.formatComplete, &okButton, 0);
 								}
-								
+
 								goto USB_RETRY;
 							}
 						}
 					}
-				}			
-						
+				}
+
 				goto USB_RETRY;
 			}
-			
+
 			if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B)
 			{
 				GRRLIB_Exit();
@@ -628,4 +637,30 @@ USB_RETRY:
 			}
 		}
 	}
+}
+int filterFavorites(struct discHdr *list, int cnt)
+{
+	int i;
+	for (i=0; i<cnt;) {
+		if (!isFavorite(list[i].id)) {
+			memcpy(list+i, list+i+1, (cnt-i-1) * sizeof(struct discHdr));
+			cnt--;
+		}
+                else
+			i++;
+
+	}
+	return cnt;
+}
+
+bool isFavorite(u8 *id)
+{
+        char titleID[7];
+	sprintf(titleID, "%s", id);
+	if(getGameSettings(titleID, &gameSetting))
+        {
+            if(gameSetting.favorite==1)
+                return true;
+        }
+        return false;
 }
