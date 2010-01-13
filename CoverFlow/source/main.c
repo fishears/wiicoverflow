@@ -731,8 +731,12 @@ int main( int argc, char **argv )
 							editGameID();
                         }
 						else if(Button_Select(&bookmarkOnButton, pointer.p_x, pointer.p_y) || Button_Select(&bookmarkOffButton, pointer.p_x, pointer.p_y))
-						{	
-							self.dummy ^= 1;
+						{
+                                                        struct discHdr *header = &self.gameList[self.gameSelected];
+							char titleID[7];
+							sprintf(titleID, "%s", header->id);
+							gameSetting.favorite ^= 1;
+                                                        setGameSettings(titleID, &gameSetting,-1);
 						}
 					}
 				}
@@ -1043,12 +1047,16 @@ int main( int argc, char **argv )
 		{
 			MemInfo();
 		}
-		
+#ifdef FAVTEST
 		if ((WPAD_ButtonsDown(0) & WPAD_BUTTON_MINUS))
 		{
-            // free
+                    settings.favorites = (settings.favorites) ? 0 : 1;
+                    BUFFER_KillBuffer();
+                    GetEntriesSilent();
+                    BUFFER_InitBuffer();
+                    InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
 		}
-			
+#endif
 		// Check for parental lock button combo A + B + 1 + 2
 		if ((WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) &&
 			(WPAD_ButtonsHeld(0) & WPAD_BUTTON_B) &&

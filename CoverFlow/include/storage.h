@@ -15,5 +15,6 @@ s32 GetEntriesSilent();
 bool Init_Game_List();
 void initUSBFS();
 bool check_write_access();
-
+int filterFavorites(struct discHdr *list, int cnt);
+bool isFavorite(u8 *id);
 #endif

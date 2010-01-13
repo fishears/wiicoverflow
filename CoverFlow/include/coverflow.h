@@ -84,6 +84,7 @@
 #define DEBUG 1
 #define CHEAT_MANAGER
 
+//#define FAVTEST
 #define LOUDTEST
  
 #define _TEXT(t) L ## t /**< Unicode helper macro. */

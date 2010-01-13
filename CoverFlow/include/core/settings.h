@@ -21,7 +21,7 @@ typedef struct {
     int theme;
 	
 	int auto_hide;
-	
+        int favorites; //favorites mode
 	int covers3d;
 	int covers3dThickness;
 	int hideScroll;

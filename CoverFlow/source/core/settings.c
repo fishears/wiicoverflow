@@ -55,6 +55,7 @@ void SETTINGS_Init()
 	settings.quickstart   = 0;
 	settings.enablepitch  = 0;
 	settings.auto_hide    = 1;
+        settings.favorites  = 0; //default is OFF
 	
 	strcpy(settings.localLanguage, "default"); // en-US 
  	//Global Game
@@ -202,6 +203,8 @@ int SETTINGS_Load()
 			  settings.enablepitch     = atof(mxmlElementGetAttr(next_n,"enablepitch"));
 		  if(mxmlElementGetAttr(next_n,"localizeLang"))
 			  strcpy(settings.localLanguage, mxmlElementGetAttr(next_n,"localizeLang"));
+                  if(mxmlElementGetAttr(next_n,"favorites"))
+			  strcpy(settings.localLanguage, mxmlElementGetAttr(next_n,"favorites"));
 #ifdef NEWS_READER	  
 		  if(mxmlElementGetAttr(next_n,"newsID"))
 			  strcpy(settings.newsID, mxmlElementGetAttr(next_n,"newsID"));
@@ -378,7 +381,10 @@ int SETTINGS_Save()
 	mxmlElementSetAttr(node, "enablepitch", buffer);
 
 	mxmlElementSetAttr(node, "localizeLang", settings.localLanguage);
-	
+
+	sprintf(buffer, "%d", settings.favorites);
+	mxmlElementSetAttr(node, "favorites", buffer);
+
 	sprintf(buffer, "%d", SVN_VERSION);
 	mxmlElementSetAttr(node, "rev", buffer);	
 

@@ -163,7 +163,7 @@ void manage_cheats(int id, struct discHdr *gameList)
 {
     //parses the txt file and allows user to enable/disable cheats
     //then turns enabled codes into a gct file to be used with ocarina
-    //TODO: editable codelines, viewable comment lines, heading lines...
+    //TODO: viewable comment lines, heading lines...
 
     WPAD_Rumble(0,0); //sometimes rumble remain active
     CHEAT *cheat;
@@ -480,7 +480,7 @@ int is_code(char* line)
     //0 if NOT a codeline
     //1 if it is a codeline
     //2 if it is an editable codeline
-    if(strlen(line)>16) //don't mess about if it's just too short to be a code then it't NOT a code
+    if(strlen(line)>16) //don't mess about if it's just too short to be a code then it's NOT a code
     {
         char tempCode[17];
         int x;
@@ -503,7 +503,7 @@ int is_code(char* line)
                             checkFlag=false;
                     }
                 }
-                for (x=0;x<8;x++) //but if there are ANY numbers is must be a code
+                for (x=0;x<8;x++) //but if there are ANY numbers it must be a code
                 {
                     if (((tempCode[x] >= '0') && (tempCode[x] <= '9')))
                     {

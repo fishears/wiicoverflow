@@ -269,8 +269,8 @@ void Init_Buttons()
     Duplicate_Button_TTF(&backButton, okButton, 468, 335, TX.backB);
 	Button_Init(&deleteButton, button_round_delete_png, button_round_delete_over_png, 505, 120);
     Duplicate_Button(&gsettingsButton, settingsButton, 543, 120);
-	Button_Init(&bookmarkOnButton, star_on_png, star_on_png, 515, 140);  
-    Button_Init(&bookmarkOffButton, star_off_png, star_on_png, 515, 140);
+	Button_Init(&bookmarkOnButton, star_on_png, star_on_png, 467, 118);
+    Button_Init(&bookmarkOffButton, star_off_png, star_on_png, 467, 118);
 	// 'Home' button menu buttons
     Button_Init(&homeMenuTopButton, menu_home_top_png,     menu_home_top_over_png, 0, 0);
     Button_Init(&homeMenuBottomButton, menu_home_bottom_png,  menu_home_bottom_over_png, 0, 376);
@@ -801,13 +801,15 @@ int DrawLoadGameDialog(bool load, bool hover)
 		
 		Button_TTF_Paint(&backButton);
 		
-		//Button_Toggle_Paint(&bookmarkOffButton, &bookmarkOnButton, self.dummy);
 		if(!settings.parentalLock)
 		{
 			Button_Paint(&deleteButton);
 			Button_Paint(&gsettingsButton);
 			Button_Paint(&editGameIDButton);
-			
+#ifdef FAVTEST
+			Button_Toggle_Paint(&bookmarkOffButton,&bookmarkOnButton,gameSetting.favorite);
+                        if((gameSetting.favorite) ? Button_Hover(&bookmarkOffButton, pointer.p_x, pointer.p_y) : Button_Hover(&bookmarkOnButton, pointer.p_x, pointer.p_y))
+#endif
 			Button_Hover(&gsettingsButton, pointer.p_x, pointer.p_y);
 			Button_Hover(&deleteButton, pointer.p_x, pointer.p_y);
 			Button_Hover(&editGameIDButton, pointer.p_x, pointer.p_y);

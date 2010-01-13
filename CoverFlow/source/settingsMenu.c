@@ -1583,7 +1583,7 @@ void Game_Settings_Menu_Show()
 			 Button_Hover(&gciosdownButton, pointer.p_x, pointer.p_y) ||
 			 ((gameSetting.ios > 0) ? Button_Hover(&gblockOnButton, pointer.p_x, pointer.p_y) : false) ||
 			 ((gameSetting.ios > 0) ? Button_Hover(&gblockOffButton, pointer.p_x, pointer.p_y) : false) ||
-			 ((gameSetting.lock) ? Button_Hover(&unlockButton, pointer.p_x, pointer.p_y) : Button_Hover(&lockButton, pointer.p_x, pointer.p_y) )
+			 ((gameSetting.lock) ? Button_Hover(&unlockButton, pointer.p_x, pointer.p_y) : Button_Hover(&lockButton, pointer.p_x, pointer.p_y))
 			 #ifdef CHEAT_MANAGER
 			 || ((hasTXT) ? Button_Hover(&manageCheatsButton, pointer.p_x, pointer.p_y) : false)
 			 #endif
