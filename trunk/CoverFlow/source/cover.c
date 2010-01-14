@@ -3,17 +3,17 @@
 #include "TrackedMemoryManager.h"
 
 #define SITE_BASE "http://wiitdb.com/wiitdb/artwork/"
-#define ALT_SITE_BASE "http://www.muntrue.nl/covers/ALL/"
+//#define ALT_SITE_BASE "http://www.muntrue.nl/covers/ALL/"
 
 #define COVER "cover"
 #define COVERFULL "coverfull"
 #define DISK "disc"
-#define ALT_COVER "160/224/boxart"
-#define ALT_COVERFULL "512/340/fullcover"
-#define ALT_DISK "160/160/disc"
+//#define ALT_COVER "160/224/boxart"
+//#define ALT_COVERFULL "512/340/fullcover"
+//#define ALT_DISK "160/160/disc"
 
 #define PARAMTERISED_ARTWORK_LOCATION "/[Lang]/[GameID].png"
-#define ALT_PARAMTERISED_ARTWORK_LOCATION "/[GameID].png"
+//#define ALT_PARAMTERISED_ARTWORK_LOCATION "/[GameID].png"
 
 extern s_self self;
 extern s_settings settings;
@@ -232,6 +232,7 @@ void Download_Cover(char* id, int v, int max)
 				}
 			}
 	
+/*
 			if(!getCoverFromServer(parsedUrl, imgPath, v, max)){ //all that failed so try other supplier
                             {
                             if(!(settings.covers3d))
@@ -245,6 +246,7 @@ void Download_Cover(char* id, int v, int max)
                         }
                         getCoverFromServer(parsedUrl, imgPath, v, max);
                         }
+*/
 		}
 	}
 	
@@ -277,11 +279,13 @@ void Download_Cover(char* id, int v, int max)
 			else
 				parsedUrl=ParseTokenedUrl(SITE_BASE,DISK,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 			
+/*
 			if(!getCoverFromServer(parsedUrl, imgPath, v, max)) //first supplier failed so try second
                         {
                             parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_DISK,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
                             getCoverFromServer(parsedUrl, imgPath, v, max);
                         }
+*/
 		}
 	}
 } /* end download */
