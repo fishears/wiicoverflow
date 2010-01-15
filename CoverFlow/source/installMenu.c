@@ -105,13 +105,13 @@ bool Menu_Install()
 			BUFFER_KillBuffer();
 			ret = ProgressWindow(self.hdd, gametxt, name);
 			if (ret != 0) {
-				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
+				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,(settings.covers3d+settings.hq));
 				BUFFER_InitBuffer();
 				WindowPrompt (TX.error, TX.errorInstall, &cancelButton, 0);
 				return false;
 			} else {
 				GetEntries();
-				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
+				InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,(settings.covers3d+settings.hq));
 				BUFFER_InitBuffer();
 				
 				WiiLight(1);

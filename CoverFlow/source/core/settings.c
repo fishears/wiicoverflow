@@ -45,6 +45,11 @@ void SETTINGS_Init()
 	settings.autoUpdate   = 1;
 	settings.theme		  = 0; // default to black
 	settings.covers3d     = 0;
+#ifdef HQTEST
+        settings.hq           = 1;
+#else
+        settings.hq           = 0; //default to standard quality
+#endif
 	settings.covers3dThickness = 0; //default to 0=Fat, 1=flat
 	settings.hideScroll   = 1;
 	//General
@@ -175,6 +180,8 @@ int SETTINGS_Load()
 			  settings.enablepitch  = atoi(mxmlElementGetAttr(next_n,"enablepitch"));
 		  if(mxmlElementGetAttr(next_n,"c3d"))
 			  settings.covers3d  = atoi(mxmlElementGetAttr(next_n,"c3d"));
+                  if(mxmlElementGetAttr(next_n,"chq"))
+			  settings.hq  = atoi(mxmlElementGetAttr(next_n,"chq"));
 		  if(mxmlElementGetAttr(next_n,"c3dThickness"))
 			  settings.covers3dThickness  = atoi(mxmlElementGetAttr(next_n,"c3dThickness"));
 		  if(mxmlElementGetAttr(next_n,"hideScroll"))
@@ -350,6 +357,9 @@ int SETTINGS_Save()
 	
 	sprintf(buffer, "%d", settings.covers3d);
 	mxmlElementSetAttr(node, "c3d", buffer);
+
+        sprintf(buffer, "%d", settings.hq);
+	mxmlElementSetAttr(node, "chq", buffer);
 
 	sprintf(buffer, "%d", settings.covers3dThickness);
 	mxmlElementSetAttr(node, "c3dThickness", buffer);

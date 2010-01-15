@@ -23,6 +23,7 @@ typedef struct {
 	int auto_hide;
         int favorites; //favorites mode
 	int covers3d;
+        int hq; //High Quality 3D cover mode
 	int covers3dThickness;
 	int hideScroll;
 

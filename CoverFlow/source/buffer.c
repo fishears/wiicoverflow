@@ -64,7 +64,8 @@ int textureDataSize; // the size needed for a texture in this graphic mode
 int GraphicModes[GRAPHIC_MODES][2] =
 {
 	{160,224},//2d
-	{512,340} //3d
+	{512,340}, //3d
+        {1024,680} //HQ
 };
 
 // instructions for getting a chunk of MEM2
@@ -286,25 +287,42 @@ void HandleLoadRequest(int index,int threadNo)
 			//snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
 			snprintf(filepath,256, "%s/%s.png", dynPath.dir_covers, _cq.requestId[index]->id);
 		}
-		else
+                else if(graphicMode==1) //standard 3d covers
 		{
 			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
 			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%s.png", _cq.requestId[index]->id);
 			snprintf(filepath,256, "%s/%s.png", dynPath.dir_3dcovers, _cq.requestId[index]->id);
 		}
+                else if(graphicMode==2)//HQ covers
+		{
+			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
+			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%s.png", _cq.requestId[index]->id);
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_HQcovers, _cq.requestId[index]->id);
+		}
 
 		int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
 		ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress,tW * tH * 4);
 
-		if(graphicMode && ret <= 0)
+		if(graphicMode==1 && ret <= 0)
 		{
 			sW = GraphicModes[0][0];
 			sH = GraphicModes[0][1];
 
-			//read failed, try to load in 2D cover instead
+			//3D read failed, try to load in 2D cover instead
 			int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
 			//snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
 			snprintf(filepath,256, "%s/%s.png", dynPath.dir_covers, _cq.requestId[index]->id);
+			ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress, sW * sH * 4);
+		}
+                else if(graphicMode==2 && ret <= 0)
+		{
+			sW = GraphicModes[1][0];
+			sH = GraphicModes[1][1];
+
+			//read failed, try to load in 3D cover instead
+			int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
+			//snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_3dcovers, _cq.requestId[index]->id);
 			ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress, sW * sH * 4);
 		}
 
@@ -589,6 +607,9 @@ void RequestForCache(int index)
 // call at start, on add or on delete - kill the buffer first
 void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversToBeShown,int initialSelection, int graphMode)
 {
+#ifdef HQTEST
+        graphMode=2;
+#endif
 	graphicMode=graphMode;
 	textureDataSize=GraphicModes[graphicMode][0]*GraphicModes[graphicMode][1]*4;
 	CurrentSelection=initialSelection+gameCount/2.0;
@@ -597,7 +618,7 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	nCovers=gameCount;
 	nCoversInWindow=numberOfCoversToBeShown;
 
-	//start from a clear point
+        //start from a clear point
 	for (i=0;i<gameCount;i++) ResetQueueItem(i);
 	memset((void *)MEM2_START_ADDRESS,0,MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS)); // clear all the memory
 

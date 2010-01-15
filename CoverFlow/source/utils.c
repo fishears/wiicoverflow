@@ -547,7 +547,7 @@ int editGameID()
 			self.shift = (COVER_COUNT/2)-i;
 	 }
 	 
-	 InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
+	 InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,(settings.covers3d+settings.hq));
 	 return 1;
 	}
 	return 0;

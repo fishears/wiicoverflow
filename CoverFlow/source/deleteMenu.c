@@ -45,14 +45,14 @@ bool Menu_Delete(){
 		BUFFER_KillBuffer();
 		if(0 > WBFS_RemoveGame(header->id))
 		{
-			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
+			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,(settings.covers3d+settings.hq));
 			BUFFER_InitBuffer();
 			WindowPrompt(TX.errorDelete, TX.cantDelete, &okButton, 0);
 		}
 		else
 		{
 			GetEntries();
-			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
+			InitializeBuffer(self.gameList,self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,(settings.covers3d+settings.hq));
 			BUFFER_InitBuffer();
 			WindowPrompt(TX.successDelete, TX.pressOkContinue, &okButton, 0);
 			WBFS_DiskSpace(&self.usedSpace, &self.freeSpace);

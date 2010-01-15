@@ -17,7 +17,6 @@ bool init_usbfs()
 	s32 ret;
 
 	Paint_Progress(self.progress, TX.initSys);
-
 	self.progress+=0.05;
 	Paint_Progress(self.progress, TX.initUSBFS);
 
@@ -101,6 +100,7 @@ void checkDirs(){
 			mkdir("covers", S_ISVTX);
 			mkdir("games", S_ISVTX);
                         mkdir("3dcovers", S_ISVTX);
+                        mkdir("HQcovers", S_ISVTX);
             mkdir("txtcodes", S_ISVTX);
 
 		}
@@ -110,15 +110,12 @@ void checkDirs(){
 	}
 	else{
 
-	//	WindowPrompt("Cover download","Closing dir", &okButton, NULL);
 		dirclose(dir);
 
-		//result = chdir(USBLOADER_PATH);
 		result = chdir(dynPath.dir_usb_loader);
 
 		if(result == 0){
 			dir = diropen("disks");
-	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);
 			if(dir == NULL) {
 				mkdir("disks", S_ISVTX);
 			}
@@ -127,7 +124,6 @@ void checkDirs(){
 			}
 
 			dir = diropen("covers");
-	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);
 			if(dir == NULL) {
 				mkdir("covers", S_ISVTX);
 			}
@@ -136,7 +132,6 @@ void checkDirs(){
 			}
 
 			dir = diropen("3dcovers");
-	//		WindowPrompt("Cover download",USBLOADER_PATH "/disks/", &okButton, NULL);
 			if(dir == NULL) {
 				mkdir("3dcovers", S_ISVTX);
 			}
@@ -144,17 +139,21 @@ void checkDirs(){
 				dirclose(dir);
 			}
 
+                        dir = diropen("HQcovers");
+			if(dir == NULL) {
+				mkdir("HQcovers", S_ISVTX);
+			}
+			else{
+				dirclose(dir);
+			}
+
 			dir = diropen("txtcodes"); //dir for storing wiird cheat files
-	//		WindowPrompt("Cover download",USBLOADER_PATH "/txtcodes/", &okButton, NULL);
 			if(dir == NULL) {
 				mkdir("txtcodes", S_ISVTX);
 			}
 			else{
 				dirclose(dir);
 			}
-
-			//WindowPrompt("Codes test",USBLOADER_PATH "/txtcodes/", &okButton, NULL);
-
 		}
 
 		else{
@@ -170,7 +169,6 @@ void checkFiles(){
 
 	sprintf(fbuff, "%s/gamelist.xml", dynPath.dir_usb_loader);
 	fp = fopen(fbuff, "r");
-	//fp = fopen(USBLOADER_PATH "/gamelist.xml", "r");
 
 	if(fp == NULL)
 		createEmptyGameSettingsFile();
@@ -179,7 +177,6 @@ void checkFiles(){
 
 	sprintf(fbuff, "%s/wiicoverflow.xml", dynPath.dir_usb_loader);
 	fp = fopen(fbuff, "r");
-	//fp = fopen(USBLOADER_PATH "/wiicoverflow.xml", "r");
 
 	if(fp == NULL)
 		createEmptyWiiCoverFlowFile();
@@ -195,7 +192,6 @@ bool check_write_access(){
 
 	sprintf(fbuff, "%s/temp.txt", dynPath.dir_usb_loader);
 	fp = fopen(fbuff, "wb");
-	//fp = fopen(USBLOADER_PATH "/temp.txt","wb");
 
 	if(fp==NULL)
     {
@@ -206,7 +202,6 @@ bool check_write_access(){
     {
         fclose(fp);
 		chdir(dynPath.dir_usb_loader);
-		//chdir(USBLOADER_PATH);
         remove("temp.txt");
         return true;
     }
@@ -383,7 +378,7 @@ s32 GetEntries()
 		CFFree(self.gameList);
 #ifdef FAVTEST
         /* check for favorite mode */
-        if(settings.favorites == 1)
+        if(settings.favorites)
             cnt = filterFavorites(buffer,cnt);
 #endif
 	/* Set values */
@@ -476,7 +471,7 @@ s32 GetEntriesSilent()
 		CFFree(self.gameList);
 #ifdef FAVTEST
         /* check for favorite mode */
-        if(settings.favorites == 1)
+        if(settings.favorites)
             cnt = filterFavorites(buffer,cnt);
 #endif
 	/* Set values */

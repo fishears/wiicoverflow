@@ -135,6 +135,7 @@ void initPaths()
  sprintf(dynPath.dir_usb_loader, "%s/usb-loader", dynPath.bootDevice);
  sprintf(dynPath.dir_codes,      "%s/codes",      dynPath.bootDevice);
  sprintf(dynPath.dir_3dcovers,   "%s/3dcovers",   dynPath.dir_usb_loader);
+ sprintf(dynPath.dir_HQcovers,   "%s/HQcovers",   dynPath.dir_usb_loader);
  sprintf(dynPath.dir_covers,     "%s/covers",     dynPath.dir_usb_loader);
  sprintf(dynPath.dir_disks,      "%s/disks",      dynPath.dir_usb_loader);
  sprintf(dynPath.dir_games,      "%s/games",      dynPath.dir_usb_loader);
@@ -248,7 +249,7 @@ int main( int argc, char **argv )
 	loadProgressStep();	// Load selected ProgressStep
 	languageLoad();		// Load translated Messages 
 	Label_Buttons();	// Localize buttons	
-	
+
     // Load Custom IOS
     if (settings.cios == ios222 && IOS_GetVersion() != 222) 
 		{
@@ -336,7 +337,7 @@ int main( int argc, char **argv )
 #endif
 
 	BUFFER_InitBuffer();
-	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
+	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,(settings.covers3d+settings.hq));
 	
 	float wait = 10; //ms
 	float prog = 2.1/wait;
@@ -1054,7 +1055,7 @@ int main( int argc, char **argv )
                     BUFFER_KillBuffer();
                     GetEntriesSilent();
                     BUFFER_InitBuffer();
-                    InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,settings.covers3d);
+                    InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,(settings.covers3d+settings.hq));
 		}
 #endif
 		// Check for parental lock button combo A + B + 1 + 2
