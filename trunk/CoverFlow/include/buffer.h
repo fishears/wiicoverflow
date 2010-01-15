@@ -11,7 +11,7 @@
 #define MEM2_START_ADDRESS (PNG_START_ADDRESS+0x200000) // the 0x200000 is for button images and the few remaining buffer slots
 
 #define MAX_THREADS 3
-#define GRAPHIC_MODES 2
+#define GRAPHIC_MODES 3
 
 #include "core/disc.h"
 

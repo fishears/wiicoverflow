@@ -7,6 +7,7 @@
 
 #define COVER "cover"
 #define COVERFULL "coverfull"
+#define COVERFULLHQ "coverfullHQ"
 #define DISK "disc"
 //#define ALT_COVER "160/224/boxart"
 //#define ALT_COVERFULL "512/340/fullcover"
@@ -172,12 +173,11 @@ void Download_Cover(char* id, int v, int max)
 	}
 
 	if(!(settings.covers3d))
-		//snprintf(imgPath, sizeof(imgPath), "%s/covers/%s.png", USBLOADER_PATH, id);
 		snprintf(imgPath, sizeof(imgPath), "%s/%s.png", dynPath.dir_covers, id);
+	else if(settings.covers3d && settings.hq==1)
+	    snprintf(imgPath, sizeof(imgPath), "%s/%s.png", dynPath.dir_HQcovers, id);
 	else
-		//snprintf(imgPath, sizeof(imgPath), "%s/3dcovers/%s.png", USBLOADER_PATH, id);
 	    snprintf(imgPath, sizeof(imgPath), "%s/%s.png", dynPath.dir_3dcovers, id);
-		
 	sprintf(self.debugMsg, TX.checkPresence, imgPath);
 	Paint_Progress_Generic(v, max, self.debugMsg);
 	
@@ -199,11 +199,15 @@ void Download_Cover(char* id, int v, int max)
 		
 	else{ // cover not found, we try to download it
 
-		if(!(settings.covers3d))
+		if(!(settings.covers3d)) //2d mode
 		{
 			parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
 		}
-		else
+                else if(settings.covers3d && settings.hq==1) //3D HQ mode
+		{
+			parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULLHQ,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+		}
+                else //3D mode
 		{
 			parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
 		}
@@ -216,7 +220,11 @@ void Download_Cover(char* id, int v, int max)
 				{
 					parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
 				}
-				else
+				else if(settings.covers3d && settings.hq==1) //3D HQ mode
+				{
+					parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULLHQ,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
+				}
+                                else
 				{
 					parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","EN",region,id);
 				}
@@ -226,28 +234,27 @@ void Download_Cover(char* id, int v, int max)
 				{
 					parsedUrl=ParseTokenedUrl(SITE_BASE,COVER,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 				}
-				else
+				else if(settings.covers3d && settings.hq==1) //3D HQ mode
+				{
+					parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULLHQ,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
+				}
+                                else
 				{
 					parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword","US",region,id);
 				}
 			}
-	
-/*
-			if(!getCoverFromServer(parsedUrl, imgPath, v, max)){ //all that failed so try other supplier
-                            {
-                            if(!(settings.covers3d))
-                            {
-                                    parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVER,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
-                            }
-                            else
-                            {
-                                    parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_COVERFULL,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
-                            }
-                        }
                         getCoverFromServer(parsedUrl, imgPath, v, max);
+/*
+			if(!getCoverFromServer(parsedUrl, imgPath, v, max)){ //HQ failed so try normal 3D
+                            if(settings.covers3d)
+                            {
+                                    parsedUrl=ParseTokenedUrl(SITE_BASE,COVERFULL,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+                            
+                                    getCoverFromServer(parsedUrl, imgPath, v, max);
+                            }
                         }
 */
-		}
+                }
 	}
 	
 	//

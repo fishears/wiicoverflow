@@ -71,12 +71,6 @@
 
 #define BLOCKSIZE 1024
 
-#define COVER_WIDTH    160
-#define COVER_HEIGHT   224
-
-#define COVER_WIDTH_3D    512
-#define COVER_HEIGHT_3D   340
-
 /* Aspect ratio fix for some image*/
 #define AR_16_9 0.80F //0.85
 
@@ -85,6 +79,7 @@
 #define CHEAT_MANAGER
 
 //#define FAVTEST
+//#define HQTEST
 #define LOUDTEST
  
 #define _TEXT(t) L ## t /**< Unicode helper macro. */
@@ -95,7 +90,12 @@
 
 /* Constants */
 #define MAX_CHARACTERS	 	 30
-#define BUFFER_WINDOW        15
+#ifdef HQTEST
+    #define BUFFER_WINDOW        5
+#else
+    #define BUFFER_WINDOW       15
+#endif
+
 #define BUFFER_THREAD_COUNT  1
 #define MAX_COVERS           15
 
@@ -305,6 +305,7 @@ typedef struct
  char dir_codes[255];
  char dir_usb_loader[255];
  char dir_3dcovers[255];
+ char dir_HQcovers[255];
  char dir_covers[255];
  char dir_disks[255];
  char dir_games[255];
