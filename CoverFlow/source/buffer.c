@@ -84,9 +84,9 @@ unsigned int FreeMemorySlots[BUFFER_SLOTS+1] =
 	128,//0 string buffer for thread 0
 	128,//1 string buffer for thread 1
 	128,//2 string buffer for thread 2
-	128,//3 string buffer for thread 3
-	128,//4 string buffer for thread 4
-	0, // 5 3d no cover
+	96, //3 stat buffer
+	0, //4 string buffer for thread 4
+	0, //5 3d no cover
 	0, //6 ambilight
 	0, //7 no cover
 	0, //8 Cheat Manager Array 1
@@ -262,6 +262,24 @@ int GetFLoatingQueuePosition(int index)
 	return ret;
 }
 
+char * GetFilePath(int graphicsMode,int index,int threadNo)
+{
+	char * filepath=GetSlotBufferAddress(threadNo);
+	switch (graphicsMode)
+	{
+		case 0://2d
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_covers, _cq.requestId[index]->id);
+			break;
+		case 1://3d
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_3dcovers, _cq.requestId[index]->id);
+			break;
+		case 2://hq
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_HQcovers, _cq.requestId[index]->id);
+			break;
+	}
+	return filepath;
+}
+
 //  This does the actual work
 void HandleLoadRequest(int index,int threadNo)
 {
@@ -281,48 +299,25 @@ void HandleLoadRequest(int index,int threadNo)
 		int sW = GraphicModes[graphicMode][0];
 		int sH = GraphicModes[graphicMode][1];
 
-		// determines the cover location
-		if(!graphicMode)
-		{
-			//snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
-			snprintf(filepath,256, "%s/%s.png", dynPath.dir_covers, _cq.requestId[index]->id);
-		}
-                else if(graphicMode==1) //standard 3d covers
-		{
-			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
-			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%s.png", _cq.requestId[index]->id);
-			snprintf(filepath,256, "%s/%s.png", dynPath.dir_3dcovers, _cq.requestId[index]->id);
-		}
-                else if(graphicMode==2)//HQ covers
-		{
-			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%c%c%c%c.png", _cq.requestId[index]->id[0], _cq.requestId[index]->id[1], _cq.requestId[index]->id[2], _cq.requestId[index]->id[3]);
-			//snprintf(filepath,256, USBLOADER_PATH "/3dcovers/%s.png", _cq.requestId[index]->id);
-			snprintf(filepath,256, "%s/%s.png", dynPath.dir_HQcovers, _cq.requestId[index]->id);
-		}
+		filepath=GetFilePath(graphicMode,index,threadNo);
 
 		int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
 		ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress,tW * tH * 4);
 
-		if(graphicMode==1 && ret <= 0)
+		if(graphicMode>=1 && ret <= 0)
 		{
-			sW = GraphicModes[0][0];
-			sH = GraphicModes[0][1];
+			sW = GraphicModes[graphicMode-1][0];
+			sH = GraphicModes[graphicMode-1][1];
 
-			//3D read failed, try to load in 2D cover instead
-			int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
-			//snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
-			snprintf(filepath,256, "%s/%s.png", dynPath.dir_covers, _cq.requestId[index]->id);
+			filepath=GetFilePath(graphicMode-1,index,threadNo);
 			ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress, sW * sH * 4);
 		}
-                else if(graphicMode==2 && ret <= 0)
+        if(graphicMode>=2 && ret <= 0)
 		{
-			sW = GraphicModes[1][0];
-			sH = GraphicModes[1][1];
+			sW = GraphicModes[graphicMode-2][0];
+			sH = GraphicModes[graphicMode-2][1];
 
-			//read failed, try to load in 3D cover instead
-			int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
-			//snprintf(filepath,256, USBLOADER_PATH "/covers/%s.png", _cq.requestId[index]->id);
-			snprintf(filepath,256, "%s/%s.png", dynPath.dir_3dcovers, _cq.requestId[index]->id);
+			filepath=GetFilePath(graphicMode-2,index,threadNo);
 			ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress, sW * sH * 4);
 		}
 
@@ -363,7 +358,7 @@ void HandleLoadRequest(int index,int threadNo)
 				pthread_mutex_lock(&buffer_mutex[index]);
 				if (!(textureData.h == sH && textureData.w == sW && textureData.data!=0)) // sanity check
 				{
-					_cq.coverMissing[index]=true; // bad image size
+					//_cq.coverMissing[index]=true; // bad image size
 					_cq.ready[index]   = false;
 					_cq.request[index]=0;
 				}
@@ -388,7 +383,7 @@ void HandleLoadRequest(int index,int threadNo)
 				  FloatingCacheCovers[floatingPosition]=-1;
 				}
 			}
-			_cq.coverMissing[index]=true;
+			//_cq.coverMissing[index]=true;
 			_cq.ready[index]   = false;
 			_cq.request[index]=0;
 			pthread_mutex_unlock(&buffer_mutex[index]);
@@ -592,6 +587,30 @@ void ResetQueueItem(int index)
 	_texture_data[index].data=0;
 }
 
+bool FindMatch(int index)
+{
+	bool ret=false;
+	char * filePath;
+	struct stat * st;
+	int i;
+	st=GetSlotBufferAddress(4);
+
+	for (i=3;i>0;i--)
+	{
+		filePath=GetFilePath(i-1,index,0);
+		if (stat(filePath, st)==0)
+		{
+			ret=true;
+		}
+	}
+	if (!ret)
+	{
+		_cq.coverMissing[index]=true;
+	}
+
+	return ret;
+}
+
 
 // internal only - no need to lock (already locked)
 // request for an item to be loaded (permanently)
@@ -609,6 +628,7 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 {
 #ifdef HQTEST
         graphMode=2;
+		numberOfCoversToBeShown=8;
 #endif
 	graphicMode=graphMode;
 	textureDataSize=GraphicModes[graphicMode][0]*GraphicModes[graphicMode][1]*4;
