@@ -283,6 +283,7 @@ char * GetFilePath(int graphicsMode,int index,int threadNo)
 //  This does the actual work
 void HandleLoadRequest(int index,int threadNo)
 {
+	int i;
 	if(index >= nCovers)
 		return ;
 
@@ -299,26 +300,16 @@ void HandleLoadRequest(int index,int threadNo)
 		int sW = GraphicModes[graphicMode][0];
 		int sH = GraphicModes[graphicMode][1];
 
-		filepath=GetFilePath(graphicMode,index,threadNo);
 
 		int imgDataAddress=MEM2_START_ADDRESS + tW * tH * 4 * (maxSlots+threadNo);
-		ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress,tW * tH * 4);
 
-		if(graphicMode>=1 && ret <= 0)
+		for (i=graphicMode;i>=0;i--)
 		{
-			sW = GraphicModes[graphicMode-1][0];
-			sH = GraphicModes[graphicMode-1][1];
-
-			filepath=GetFilePath(graphicMode-1,index,threadNo);
-			ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress, sW * sH * 4);
-		}
-        if(graphicMode>=2 && ret <= 0)
-		{
-			sW = GraphicModes[graphicMode-2][0];
-			sH = GraphicModes[graphicMode-2][1];
-
-			filepath=GetFilePath(graphicMode-2,index,threadNo);
-			ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress, sW * sH * 4);
+			sW = GraphicModes[i][0];
+			sH = GraphicModes[i][1];
+			filepath=GetFilePath(i,index,threadNo);
+			ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress,tW * tH * 4);
+			if (ret>0) break;
 		}
 
 		if (ret > 0)
