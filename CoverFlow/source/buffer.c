@@ -9,7 +9,6 @@
 #include <string.h>
 #include <malloc.h>
 
-#define NEW_MEMORY_METHOD
 
 #define DENSITY_METHOD 1
 #define ALL_CACHED 2
@@ -262,19 +261,19 @@ int GetFLoatingQueuePosition(int index)
 	return ret;
 }
 
-char * GetFilePath(int graphicsMode,int index,int threadNo)
+char * GetFilePath(int graphicsMode,int index,int threadNo, u8 * id)
 {
 	char * filepath=GetSlotBufferAddress(threadNo);
 	switch (graphicsMode)
 	{
 		case 0://2d
-			snprintf(filepath,256, "%s/%s.png", dynPath.dir_covers, _cq.requestId[index]->id);
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_covers, id);
 			break;
 		case 1://3d
-			snprintf(filepath,256, "%s/%s.png", dynPath.dir_3dcovers, _cq.requestId[index]->id);
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_3dcovers, id);
 			break;
 		case 2://hq
-			snprintf(filepath,256, "%s/%s.png", dynPath.dir_HQcovers, _cq.requestId[index]->id);
+			snprintf(filepath,256, "%s/%s.png", dynPath.dir_HQcovers, id);
 			break;
 	}
 	return filepath;
@@ -307,7 +306,7 @@ void HandleLoadRequest(int index,int threadNo)
 		{
 			sW = GraphicModes[i][0];
 			sH = GraphicModes[i][1];
-			filepath=GetFilePath(i,index,threadNo);
+			filepath=GetFilePath(i,index,threadNo,_cq.requestId[index]->id);
 			ret = Fat_ReadFileToBuffer(filepath,(void *) imgDataAddress,tW * tH * 4);
 			if (ret>0) break;
 		}
@@ -317,24 +316,14 @@ void HandleLoadRequest(int index,int threadNo)
 			int thisDataMem2Address=-1;
 			if (_cq.permaBufferPosition[index]!=-1)// permanent cache
 			{
-				#ifdef NEW_MEMORY_METHOD
-				// new memory
 				thisDataMem2Address=CacheMemorySlotAddresses[_cq.permaBufferPosition[index]];
-				#else
-				thisDataMem2Address=MEM2_START_ADDRESS + tW * tH * 4 * _cq.permaBufferPosition[index];
-				#endif
 			}
 			else // floating cache
 			{
 				int floatingPosition=GetFLoatingQueuePosition(index); // should have a slot allocated
 				if (floatingPosition!=-1)
 				{
-					#ifdef NEW_MEMORY_METHOD
-					// new memory
 					thisDataMem2Address=CacheMemorySlotAddresses[MainCacheSize + floatingPosition];
-					#else
-					thisDataMem2Address=MEM2_START_ADDRESS+ (MainCacheSize + floatingPosition) * tW * tH * 4 ;
-					#endif
 				}
 				else
 				{
@@ -388,7 +377,7 @@ void HandleLoadRequest(int index,int threadNo)
 int GetPrioritisedCover(int selection)
 {
 	int i,j,ret=-1;
-	for(i = 0; i <= (nCoversInWindow+1)/2; i++)
+	for(i = 0; i <= (nCovers+1)/2; i++)
 	{
 		for (j=0;j<2;j++)
 		{
@@ -398,7 +387,17 @@ int GetPrioritisedCover(int selection)
 				if(index >= MAX_BUFFERED_COVERS)
 					return -1;
 
-				if (_cq.request[index]==COVER_REQUESTED && !_cq.ready[index]) return index;
+				if (_cq.request[index]==COVER_REQUESTED && !_cq.ready[index])
+				{
+					if (_cq.permaBufferPosition[i] == -1) // floating
+					{
+						if (abs(index-selection)<nCoversInWindow) return index;
+					}
+					else //full cache
+					{
+						return index;
+					}
+				}
 			}
 		}
 	}
@@ -578,7 +577,7 @@ void ResetQueueItem(int index)
 	_texture_data[index].data=0;
 }
 
-bool FindMatch(int index)
+bool FindMatch(int graphicsMode, int index,u8 * id)
 {
 	bool ret=false;
 	char * filePath;
@@ -586,9 +585,10 @@ bool FindMatch(int index)
 	int i;
 	st=GetSlotBufferAddress(4);
 
-	for (i=3;i>0;i--)
+	for (i=graphicsMode+1;i>0;i--)
 	{
-		filePath=GetFilePath(i-1,index,0);
+		filePath=GetFilePath(i-1,index,0,id);
+		
 		if (stat(filePath, st)==0)
 		{
 			ret=true;
@@ -624,13 +624,17 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	graphicMode=graphMode;
 	textureDataSize=GraphicModes[graphicMode][0]*GraphicModes[graphicMode][1]*4;
 	CurrentSelection=initialSelection+gameCount/2.0;
-	int i=0;
+	int i=0, nAvailableCovers=0;
 	CoverList=gameList;
 	nCovers=gameCount;
 	nCoversInWindow=numberOfCoversToBeShown;
 
         //start from a clear point
-	for (i=0;i<gameCount;i++) ResetQueueItem(i);
+	for (i=0;i<gameCount;i++) 
+	{
+		ResetQueueItem(i);
+		if (FindMatch(graphMode,i,gameList[i].id)) nAvailableCovers++;
+	}
 	memset((void *)MEM2_START_ADDRESS,0,MEM2_EXTENT-GetOffsetToSlot(BUFFER_SLOTS)); // clear all the memory
 
 	_covers3d=graphMode;
@@ -650,13 +654,7 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	newMaxslots+=maxSlots;
 	//end new memory
 
-	#ifdef NEW_MEMORY_METHOD
-	// new memory
-	if (gameCount<=newMaxslots) // can we fit all the covers in memory
-	#else
-	//decide on buffering method
-	if (gameCount<=maxSlots) // can we fit all the covers in memory
-	#endif
+	if (nAvailableCovers<=newMaxslots) // can we fit all the covers in memory
 	{
 		BufferMethod=ALL_CACHED;
 		MainCacheSize=gameCount;
@@ -665,24 +663,17 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	{
 		BufferMethod=DENSITY_METHOD;
 
-		#ifdef NEW_MEMORY_METHOD
-		// new memory
-		Density = ((float)newMaxslots) / ((float)(gameCount));
-		#else
-		Density = ((float)maxSlots) / ((float)(gameCount));
-		#endif
-		FloatingCacheSize=(int)(((1-Density)*numberOfCoversToBeShown+1)*4);// works well for 2d may be too big for 3d
+		Density = ((float)newMaxslots) / ((float)(nAvailableCovers));
 
-		#ifdef NEW_MEMORY_METHOD
-		// new memory
+		for (i=0;i<5;i++)
+		{
+			FloatingCacheSize=(int)(((1-Density)*numberOfCoversToBeShown)*3)+1;// better algorithm
+			MainCacheSize = newMaxslots - FloatingCacheSize;
+			Density = ((float)(MainCacheSize-1)) / ((float)(nAvailableCovers)); // the -1 is important - how many fence posts to cover 10 meters if they are 1 meter apart
+		}
 		if (FloatingCacheSize>newMaxslots) FloatingCacheSize=maxSlots;
 		MainCacheSize = newMaxslots - FloatingCacheSize;
-		#else
-		if (FloatingCacheSize>maxSlots) FloatingCacheSize=maxSlots;
-		MainCacheSize = maxSlots - FloatingCacheSize;
-		#endif
-		// new memory
-		Density = ((float)(MainCacheSize-1)) / ((float)(gameCount)); // the -1 is important - how many fence posts to cover 10 meters if they are 1 meter apart
+		Density = ((float)(MainCacheSize-1)) / ((float)(nAvailableCovers)); // the -1 is important - how many fence posts to cover 10 meters if they are 1 meter apart
 		for (i=0;i<FloatingCacheSize;i++)
 		{
 			FloatingCacheCovers[i]=-1;
@@ -690,9 +681,11 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 	}
 	if (BufferMethod==ALL_CACHED)
 	{
+		int j=0;
 		for (i=0;i<gameCount;i++)
 		{
-			_cq.permaBufferPosition[i]=i;
+			_cq.permaBufferPosition[j]=i;
+			if (!_cq.coverMissing[i]) j++;
 		}
 	}
 	else // allocate all the permanent covers we can, minimising the maximum number of cached covers on screen
@@ -701,6 +694,7 @@ void InitializeBuffer(struct discHdr *gameList,int gameCount,int numberOfCoversT
 		double dPosition=0;
 		for (i=0;i<gameCount;i++)
 		{
+			if (_cq.coverMissing[i]) continue;
 			dPosition+=Density;
 			if ((int)dPosition!=lastValue)
 			{
