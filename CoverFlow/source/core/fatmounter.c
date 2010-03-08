@@ -10,12 +10,15 @@
 #include "usbstorage.h"
 
 //these are the only stable and speed is good
-#define CACHE 8
+#define CACHE 32
 #define SECTORS 64
+#define SD_SECTORS 32
 
 extern bool fatMount (const char* name, const DISC_INTERFACE* interface, sec_t startSector, uint32_t cacheSize, uint32_t SectorsPerPage);
 extern void fatUnmount (const char* name);
-extern DISC_INTERFACE __io_sdhc;
+extern bool fatMountSimple (const char* name, const DISC_INTERFACE* interface);
+
+//extern DISC_INTERFACE __io_sdhc;
 
 int USBDevice_Init()
 {
@@ -35,7 +38,7 @@ int USBDevice_Init()
 void USBDevice_deInit()
 {
 	//closing all open Files write back the cache and then shutdown em!
-	fatUnmount("usb:");
+	fatUnmount("USB:/");
 }
 
 int SDCard_Init()
@@ -43,10 +46,11 @@ int SDCard_Init()
 	//closing all open Files write back the cache and then shutdown em!
 	fatUnmount("SD:/");
 	//right now mounts first FAT-partition
-	if (fatMount("SD", &__io_sdhc, 0, CACHE, SDHC_SECTOR_SIZE))
+	if (fatMount("SD", &__io_wiisd, 0, CACHE, SD_SECTORS))
 		return 1;
-	else if (fatMount("SD", &__io_wiisd, 0, CACHE, SECTORS))
-		return 1;
+//        else if (fatMount("sd:", &__io_sdhc, 0, CACHE, SDHC_SECTOR_SIZE))
+//		return 1;
+	
 	return -1;
 }
 
