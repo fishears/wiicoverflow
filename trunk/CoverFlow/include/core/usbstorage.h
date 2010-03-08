@@ -13,6 +13,7 @@ s32 USBStorage_Watchdog(u32 on_off);
 s32  USBStorage_ReadSectors(u32, u32, void *);
 s32  USBStorage_WriteSectors(u32, u32, const void *);
 extern const DISC_INTERFACE __io_wiiums;
+extern const DISC_INTERFACE __io_usb2storage;
 #ifdef __cplusplus
 }
 #endif

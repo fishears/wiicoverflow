@@ -17,6 +17,7 @@
 #include "OSK.h"
 #include "mload.h"
 #include "discbrowser.h"
+#include "usbstorage.h"
 	
 //this is how to use mem2 but I can't find info - if you feel brave try it	
 #ifdef DONTKNOWHOWTHISWORKS
@@ -176,7 +177,7 @@ int main( int argc, char **argv )
 	if (ret < 0)
 	{
 		ret = IOS_ReloadIOS(222);
-        load_ehc_module();
+                load_ehc_module();
 		if(ret <0) 
 		{
 			printf("[+] ERROR:\n");
@@ -186,7 +187,7 @@ int main( int argc, char **argv )
 		}	
 	}
 
-
+//        USBStorage_Init();
 	int fadeButton = 255;
 	u8 FPS = 0;			// frames per second counter
 

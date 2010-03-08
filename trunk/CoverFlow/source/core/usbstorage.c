@@ -156,6 +156,16 @@ void USBStorage_Deinit(void)
 	}
 }
 
+bool USBStorage_IsInserted(void)
+{
+	return (USBStorage_GetCapacity(NULL)) ? true : false;
+}
+
+bool USBStorage_ClearStatus(void)
+{
+	return true;
+}
+
 s32 USBStorage_ReadSectors(u32 sector, u32 numSectors, void *buffer) {
 
 	void *buf = (void *)buffer;
@@ -293,7 +303,16 @@ bool umsio_Shutdown()
 	USBStorage_Deinit();
 	return true;
 }
-
+const DISC_INTERFACE __io_usb2storage = {
+	DEVICE_TYPE_WII_USB,
+	FEATURE_MEDIUM_CANREAD | FEATURE_MEDIUM_CANWRITE | FEATURE_WII_USB,
+	(FN_MEDIUM_STARTUP)&USBStorage_Init,
+	(FN_MEDIUM_ISINSERTED)&USBStorage_IsInserted,
+	(FN_MEDIUM_READSECTORS)&USBStorage_ReadSectors,
+	(FN_MEDIUM_WRITESECTORS)&USBStorage_WriteSectors,
+	(FN_MEDIUM_CLEARSTATUS)&USBStorage_ClearStatus,
+	(FN_MEDIUM_SHUTDOWN)&USBStorage_Deinit
+};
 const DISC_INTERFACE __io_wiiums =
 {
 	DEVICE_TYPE_WII_UMS,
