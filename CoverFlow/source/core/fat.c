@@ -8,33 +8,11 @@
 #include "TrackedMemoryManager.h"
 
 /* Constants */
-#define SDHC_MOUNT	"SD"
+#define SDHC_MOUNT	"sd:"
 #define CACHE 4
 #define SECTORS 64
 /* Disc interfaces */
 extern const DISC_INTERFACE __io_sdhc;
-
-
-//extern bool fatMountSimple (const char* name, const DISC_INTERFACE* interface);
-
-extern void fatUnmount (const char* name);
-
-s32 Fat_MountSDHC(void)
-{
-	s32 ret;
-
-	/* Initialize SDHC interface */
-	ret = __io_sdhc.startup();
-	if (!ret)
-		return -1;
-
-	/* Mount device */
-	ret = fatMount(SDHC_MOUNT, &__io_sdhc, 0, CACHE, SECTORS);
-	if (!ret)
-		return -2;
-
-	return 0;
-}
 
 s32 Fat_ReadFile(const char *filepath, void **outbuf)
 {
@@ -158,19 +136,4 @@ out:
 		fclose(fp);
 
 	return ret;
-}
-
-s32 Fat_UnmountSDHC(void)
-{
-	s32 ret;
-
-	/* Unmount device */
-	fatUnmount(SDHC_MOUNT);
-	
-	/* Close SDHC interface */
-	ret = __io_sdhc.shutdown();
-	if (!ret)
-		return -1;
-
-	return 0;
 }

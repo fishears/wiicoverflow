@@ -1,6 +1,6 @@
 #include "buffer.h"
 #include "core/disc.h"
-#include <fatsvn.h>
+#include <fat.h>
 #include "coverflow.h"
 
 #include <stdio.h>
