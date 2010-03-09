@@ -470,7 +470,8 @@ void Settings_Menu_Show()
 								{
 										batchDownloadCover(self.gameList);
 										CoversDownloaded();
-								}
+                                                                                ResetBuffer();
+                                                                }
 								else
 										WindowPrompt(TX.error, TX.iniNetErr , &okButton, 0);
 							}
