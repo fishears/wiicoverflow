@@ -339,7 +339,7 @@ int main( int argc, char **argv )
 
 	BUFFER_InitBuffer();
         //ResetBuffer();
-	//InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,(settings.covers3d+settings.hq));
+	InitializeBuffer(self.gameList, self.gameCnt,BUFFER_WINDOW,COVER_COUNT/2.0 +self.shift,(settings.covers3d+settings.hq));
 	float wait = 10; //ms
 	float prog = 2.1/wait;
 	
