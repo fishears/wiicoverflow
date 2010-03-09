@@ -1,4 +1,3 @@
-880
-coverflow 1.2+
+1052
+changelog:
 +Auto Update Support
-+New Features
