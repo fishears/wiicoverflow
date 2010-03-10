@@ -332,7 +332,7 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 300,150, TX.rumble, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,185, TX.oneClickLaunch, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,219, TX.theme, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-				CFreeTypeGX_DrawText(ttf16pt, 300,254, "ProgressBar:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 300,254, "ProgressBar", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 
 				int i;
 				for(i = 0; i < 8; i++)
@@ -486,7 +486,27 @@ void Settings_Menu_Show()
 						 self.blinkBlue = true;
 						}
 					}
-#endif					
+#endif
+                                        else if (Button_Select(&updateAppButton, pointer.p_x,pointer.p_y))
+                                        {
+                                            if(networkInit(self.ipAddress)){
+                                            //app updater stuff in here
+                                            if(checkForUpdate())
+                                            {
+                                                if(promptForUpdate())
+                                                {
+                                                    if(downloadUpdate())
+                                                    {
+                                                        WindowPrompt("Success!","Please restart CoverFloader",&okButton,0);
+                                                    }
+                                                    else
+                                                        WindowPrompt("Failed!","Please try later",&okButton,0);
+                                                }
+                                            }
+                                            else
+                                            WindowPrompt("Sorry","No update available",&okButton,0);
+                                            }
+                                        }
 					else if(Button_Select(&cheatDownButton, pointer.p_x,pointer.p_y))
 					{
 						WPAD_Rumble(0,0); //sometimes rumble remain active
@@ -554,15 +574,15 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 158,263, "Misc", (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER);
 
 
-				CFreeTypeGX_DrawText(ttf16pt, 300, 116, "IOS Boot default:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 300, 116, "IOS Boot default", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 455, 116, sysCIOS[settings.cios], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 300,150, TX.getAddData, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
-				CFreeTypeGX_DrawText(ttf16pt, 300,184, "Download News:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 300,184, "Check for", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 
 				CFreeTypeGX_DrawText(ttf16pt, 300,285, TX.patchVIDTV, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 300,318, TX.videoMode, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 455,318, vidmodes[settings.video], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 300,352, "Online cheating:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
+				CFreeTypeGX_DrawText(ttf16pt, 300,352, "Online cheating", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 188,387, TX.ocarina, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_RIGHT);
 				CFreeTypeGX_DrawText(ttf16pt, 510,387, hooks[settings.hooktype], (GXColor){0xff, 0xff, 0xff, 0xff}, FTGX_JUSTIFY_CENTER);
 
@@ -581,6 +601,7 @@ void Settings_Menu_Show()
 #ifdef NEWS_READER
 				Button_TTF_Paint(&checkNewsButton);
 #endif
+                                Button_TTF_Paint(&updateAppButton);
 				Button_TTF_Toggle_Paint(&vidtvoffButton, &vidtvonButton, TX.toggleOffB, TX.toggleOnB, settings.vipatch);
 				Button_Paint(&vidupButton);
 				Button_Paint(&viddownButton);
@@ -600,7 +621,8 @@ void Settings_Menu_Show()
 					Button_Hover(&titlesButton, pointer.p_x, pointer.p_y) ||
 #ifdef NEWS_READER					
 					Button_Hover(&checkNewsButton, pointer.p_x, pointer.p_y) ||
-#endif					
+#endif
+                                        Button_Hover(&updateAppButton, pointer.p_x,pointer.p_y) ||
 					Button_Hover(&vidtvonButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&vidtvoffButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&vidupButton, pointer.p_x, pointer.p_y) ||
@@ -1056,7 +1078,7 @@ void Settings_Menu_Show()
 				CFreeTypeGX_DrawText(ttf16pt, 320, 255, "blackbird399, LoudBob11", (GXColor){0x22, 0x22, 0x22, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 281, "Many thanks to:", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_CENTER);
 				CFreeTypeGX_DrawText(ttf16pt, 320, 430, "Flag icons courtesy of www.icondrawer.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
-				CFreeTypeGX_DrawText(ttf16pt, 320, 450, "Covers courtesy of wiitdb.com", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
+				CFreeTypeGX_DrawText(ttf16pt, 320, 450, "Covers courtesy of wiitdb.com/muntrue.nl", (GXColor){0x44, 0x44, 0x44, 0xff}, FTGX_JUSTIFY_CENTER);
 				// Check for button-pointer intersections, and rumble
 				if (Button_Hover(&menuSettingsButton, pointer.p_x, pointer.p_y) ||
 					Button_Hover(&menuGraphicsButton, pointer.p_x, pointer.p_y) ||
