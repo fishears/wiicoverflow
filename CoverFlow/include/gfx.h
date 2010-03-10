@@ -94,6 +94,7 @@ extern const u8 button_round_news_over_png[];
 extern const u8 button_round_news_blue_png[];
 Button3 newsButton;
 Button  checkNewsButton;
+Button updateAppButton;
 #endif
 
 

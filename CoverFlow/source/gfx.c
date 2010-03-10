@@ -297,8 +297,9 @@ void Init_Buttons()
 
 #ifdef NEWS_READER
 	Button3_Init(&newsButton, button_round_news_png, button_round_news_over_png, button_round_news_blue_png, 30, 44);
-	Duplicate_Button_TTF(&checkNewsButton, okButton,310,164,"Check");
-#endif	
+	Duplicate_Button_TTF(&checkNewsButton, okButton,310,164,"News");
+#endif
+        Duplicate_Button_TTF(&updateAppButton, okButton,422,164,"Update");
 
 	Button_Init(&infoLeftButton,  button_left_png,  button_left_over_png,  490,380);
 	Button_Init(&infoRightButton, button_right_png, button_right_over_png, 518,380);
@@ -1751,8 +1752,9 @@ void freeResources(){
 	FreeButtonResources(&infoButton);
 #ifdef NEWS_READER
 	FreeButton3Resources(&newsButton);
-	FreeButtonResources( &checkNewsButton);
+	FreeButtonResources(&checkNewsButton);
 #endif
+        FreeButtonResources(&updateAppButton);
  	// Dialog Box Buttons
 	FreeButtonResources(&okButton);
 	FreeButtonResources(&cancelButton);

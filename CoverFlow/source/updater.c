@@ -2,7 +2,9 @@
   
  #include "updater.h" 
  #include "TrackedMemoryManager.h" 
-  
+
+#define UPDATE_PATH "http://wiicoverflow.googlecode.com/files/"
+
  static lwp_t networkthread = LWP_THREAD_NULL; 
   
  extern s_self self; 
@@ -161,13 +163,13 @@
  bool checkForUpdate(){ 
           
          struct block file; 
-         char* url = "http://wiicoverflow.googlecode.com/svn/trunk/CoverFlow/Current_Release/current.txt"; 
+         char* url = UPDATE_PATH "current.txt";
          char serverRevision[10]; 
          int rev; 
          char buff[255]; 
           
          sprintf(buff,"%s/current.txt", dynPath.dir_usb_loader); 
-         unlink(buff); 
+         unlink(buff);
          //unlink(USBLOADER_PATH "/current.txt"); 
          file = downloadfile(url); 
           
@@ -183,7 +185,7 @@
                  fclose(fp); 
                   
                  rev = atoi(serverRevision); 
-                  
+
                  if(rev > SVN_VERSION){ 
                          return true; 
                  } 
@@ -194,7 +196,7 @@
   
  bool downloadUpdate(){ 
   
-     s32 filesize = download_request("http://wiicoverflow.googlecode.com/svn/trunk/CoverFlow/Current_Release/current.dol"); 
+     s32 filesize = download_request(UPDATE_PATH "current.dol");
           
          char progtxt[100]; 
          int percent = 0; 
@@ -203,9 +205,9 @@
          sprintf(dolpath,"%s/current.dol", dynPath.dir_usb_loader); 
           
          char dolpathsuccess[255]; 
-         sprintf(dolpathsuccess,"%s/boot.dol", dynPath.dir_usb_loader); 
+         sprintf(dolpathsuccess,"%s/apps/coverfloader/boot.dol", dynPath.bootDevice);
   
-         int failed = 1; 
+         bool failed = false;
          s32 i  = 0; 
          s32 ret = 0; 
           
@@ -231,13 +233,15 @@
   
                          ret = network_read(blockbuffer, blksize); 
                           
+/* this fails so we'll go without a net for now
                          if (ret != (s32) blksize) { 
-                                 failed = -1; 
+                                 failed = true;
                                  ret = -1; 
                                  fclose(pfile); 
                                  remove(dolpath); 
                                  break; 
                          } 
+*/
                           
                          fwrite(blockbuffer,1,blksize, pfile); 
                  } 
@@ -253,7 +257,9 @@
                          //remove old 
                          if (existFile(dolpathsuccess)) { 
                                  remove(dolpathsuccess); 
-                         } 
+                         }
+                         else
+                             return false;
                           
                          //rename new to old 
                          rename(dolpath, dolpathsuccess); 
@@ -335,7 +341,7 @@
          fclose(fp); 
          unlink(buff); 
          //unlink(USBLOADER_PATH "/current.txt"); 
-         return WindowPrompt("Update Available!", message, &okButton, &cancelButton); 
+         return WindowPrompt("Download update?", message, &yesButton, &noButton);
  } 
   
  #ifdef NEWS_READER  
