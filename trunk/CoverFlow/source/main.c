@@ -904,7 +904,7 @@ int main( int argc, char **argv )
 				// Take a screen shot
 				//GRRLIB_ScrShot(USBLOADER_PATH "/sshot.png");
 
-			
+
 				//
 				// SCOGNITO'S TRASH TEST CORNER
 				//
