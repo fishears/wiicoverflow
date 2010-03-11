@@ -9,6 +9,7 @@
 #define COVERFULL "coverfull"
 #define COVERFULLHQ "coverfullHQ"
 #define DISK "disc"
+#define CUSTOMDISK "disccustom"
 #define ALT_COVER "160/224/boxart"
 #define ALT_COVERFULL "512/340/fullcover"
 #define ALT_DISK "160/160/disc"
@@ -305,6 +306,10 @@ void Download_Cover(char* id, int v, int max)
 			if(!getCoverFromServer(parsedUrl, imgPath, v, max)) //first supplier failed so try second
                         {
                             parsedUrl=ParseTokenedUrl(ALT_SITE_BASE,ALT_DISK,ALT_PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
+                        }
+                        if(!getCoverFromServer(parsedUrl, imgPath, v, max)) //try custom disc image
+                        {
+                            parsedUrl=ParseTokenedUrl(SITE_BASE,CUSTOMDISK,PARAMTERISED_ARTWORK_LOCATION,"testUsername","testPassword",country,region,id);
                             getCoverFromServer(parsedUrl, imgPath, v, max);
                         }
 
