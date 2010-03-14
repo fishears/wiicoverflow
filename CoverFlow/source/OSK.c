@@ -78,36 +78,25 @@ bool Caps;
 int showOSK(char *kbtitle)
 {
 	bool doloop = true;
-        //bool usbkb = false;
 	int fade = 5;
 	int i, j;
 	char temp[2];
 	char kb_buf[STRMAX];
 	int ret = 0;	//ESC
-/*
         KEYBOARD_Init(NULL); //usb keyboard
-        keyboard_event ke;
-        s32 res=KEYBOARD_GetEvent(&ke);
-        if(res && (ke.type==KEYBOARD_CONNECTED))
-        {
-            usbkb=true;
-            WindowPrompt("KB","CONNECTED",0,0);
-        }
-        else
-            KEYBOARD_Deinit();
-*/
+
 	strcpy(kb_buf, self.kb_buffer);
 	self.kb_OK = false;
-	
+
 	Shift = false;
 	Caps  = false;
-		
+
 	Duplicate_Button_Key(&kb_function[0], kb_function[0], 10*42+90, 0*42+150, "Back");
 	Duplicate_Button_Key(&kb_function[1], kb_function[0], 10*42+90, 4*42+150, "Clear");
 	Duplicate_Button_Key(&kb_function[2], kb_function[0],  0*42+50, 2*42+150, "Caps");
 	Duplicate_Button_Key(&kb_function[3], kb_function[0],  0*42+70, 3*42+150, "Shift");
-	
-	
+
+
 	for(i=0; i<4; i++)
 	{
 		for(j=0; j<11; j++)
@@ -121,33 +110,33 @@ int showOSK(char *kbtitle)
 		}
 	}
 
-	
+
 	kb_OK.x = 60;
 	kb_OK.y = 420;
 	kb_ESC.x = 472;
 	kb_ESC.y = 420;
-	
+
 	do{
-		
+
 		WPAD_ScanPads();
 		PAD_ScanPads();
 		GetWiimoteData();
-		
+
 		draw_covers();
 		GRRLIB_2D_Init();
 		GRRLIB_FillScreen(0x00000000|fade);
-		
+
 		GRRLIB_Rectangle(30,  20, 580, 440, 0xffffffdd, true);
 		GRRLIB_Rectangle(32,  22, 576, 436, 0x000000FF, true);
 		GRRLIB_Rectangle(32, 410, 576,  48, 0x737373FF, true);
-		
+
 		GRRLIB_DrawImg(200, 10, dialog_box_titlebar_long_texture, 0, 1, 1, 0xFFFFFFFF);
 		CFreeTypeGX_DrawText(ttf16pt, 320, 23, kbtitle, (GXColor){0xFF, 0xFF, 0xFF, 0xff}, FTGX_JUSTIFY_CENTER | FTGX_ALIGN_MIDDLE);
-		
+
 		GRRLIB_Rectangle(70, 70, 500, 40, 0xffffffdd, true);   // TextField
 		CFreeTypeGX_DrawText(ttf18pt, 75, 98, kb_buf, (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
-		
-		
+
+
 		for(i=0; i<4; i++)
 		{
 			for(j=0; j<11; j++)
@@ -166,7 +155,7 @@ int showOSK(char *kbtitle)
 		Button_TTF_Paint(&kb_OK);
 		Button_TTF_Paint(&kb_ESC);
 		Button_Hover(&kb_space, pointer.p_x, pointer.p_y);
-		
+
 ////////////  DirtyFix BEGIN
 		if (((Shift == false) && (Caps == true )) || ((Shift == false) && (Caps == false))|| ((Shift == true) && (Caps == true)))
 		{
@@ -180,19 +169,19 @@ int showOSK(char *kbtitle)
 			CFreeTypeGX_DrawText(ttf18pt, 547, 220, "_", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 			CFreeTypeGX_DrawText(ttf18pt, 570, 260, "\"", (GXColor){0x00, 0x00, 0x00, 0xff}, FTGX_JUSTIFY_LEFT);
 		}
-		
-//////////// DirtyFix End	
-	
+
+//////////// DirtyFix End
+
 		DrawCursor(0, pointer.p_x, pointer.p_y, pointer.p_ang, 1, 1, 0xFFFFFFFF);
-		
-		
+
+
 		if (Button_Hover(&kb_OK,  pointer.p_x, pointer.p_y) ||
 			Button_Hover(&kb_ESC, pointer.p_x, pointer.p_y)   )
 		{
 			// Should we be rumbling?
 			if (--self.rumbleAmt > 0)
 				WPAD_Rumble(0,1); // Turn on Wiimote rumble
-			else 
+			else
 				WPAD_Rumble(0,0); // Kill the rumble
 		}
 		else
@@ -200,7 +189,7 @@ int showOSK(char *kbtitle)
 			WPAD_Rumble(0,0);
 			self.rumbleAmt = 5;
 		}
-		
+
 		if(WPAD_ButtonsDown(0) & WPAD_BUTTON_A)
 		{
 			if(Button_Select(&kb_OK, pointer.p_x, pointer.p_y))
@@ -210,7 +199,7 @@ int showOSK(char *kbtitle)
 				ret = 1; //OK
 				doloop = false;
 			}
-			
+
 			else if(Button_Select(&kb_ESC, pointer.p_x, pointer.p_y))
 			{
 				strcpy(self.kb_buffer, "");
@@ -252,8 +241,8 @@ int showOSK(char *kbtitle)
 				Shift = !Shift;
 				SOUND_PlaySound(FX_BUTTON_CLICK, 0);
 				setCharSet();
-			}		   
-		    else 
+			}
+		    else
 			{
 				for(i=0; i<4; i++)
 				{
@@ -278,9 +267,6 @@ int showOSK(char *kbtitle)
 
 		}
                 //START handle USB Keyboards
-/*
-                if(usbkb)
-                {
                     keyboard_event ke;
                     s32 res = KEYBOARD_GetEvent(&ke);
                     char key[1];
@@ -332,8 +318,7 @@ int showOSK(char *kbtitle)
                             setCharSet();
                         }
                     }
-                }
-*/
+
                 //END handle USB Keyboards
 		GRRLIB_Render();
 
@@ -362,7 +347,7 @@ void setCharSet()
 {
 	int i,j;
 	char temp[2];
-	
+
 	for(i=0; i<4; i++)
 	{
 		for(j=0; j<11; j++)
@@ -382,6 +367,3 @@ void setCharSet()
 	}
 }
 #endif
-
-
-
