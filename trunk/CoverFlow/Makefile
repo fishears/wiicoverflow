@@ -42,7 +42,7 @@ LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map -T../rvl.ld
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
 #LIBS	:=	-lfat -lpng -lm -lz -lwiiuse -lbte -lasnd -logc -lfreetype -ltremor -lmxml -lwiikeyboard
-LIBS	:=	-ltremor -lfreetype -lwiiuse -lbte -lasnd -lpng -lz -logc -lm -lfat -lmxml 
+LIBS	:=	-ltremor -lfreetype -lwiiuse -lbte -lasnd -lpng -lz -logc -lm -lfat -lmxml -lwiikeyboard
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
