@@ -71,6 +71,8 @@ void SETTINGS_Init()
 	settings.video        = 0;
 	settings.vipatch      = 0;
 	settings.cios		  = 0;
+        settings.partition = "ask"; //user will be asked for the partition
+
 	settings.barstep      = 9;   // grey
 	strcpy(settings.lastplayed,"");
 	settings.presetFix	  = 0;
@@ -211,7 +213,7 @@ int SETTINGS_Load()
 		  if(mxmlElementGetAttr(next_n,"localizeLang"))
 			  strcpy(settings.localLanguage, mxmlElementGetAttr(next_n,"localizeLang"));
                   if(mxmlElementGetAttr(next_n,"favorites"))
-			  strcpy(settings.localLanguage, mxmlElementGetAttr(next_n,"favorites"));
+			  strcpy(settings.favorites, mxmlElementGetAttr(next_n,"favorites"));
 #ifdef NEWS_READER	  
 		  if(mxmlElementGetAttr(next_n,"newsID"))
 			  strcpy(settings.newsID, mxmlElementGetAttr(next_n,"newsID"));
