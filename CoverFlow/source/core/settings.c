@@ -71,7 +71,7 @@ void SETTINGS_Init()
 	settings.video        = 0;
 	settings.vipatch      = 0;
 	settings.cios		  = 0;
-        settings.partition = "ask"; //user will be asked for the partition
+        strcpy(settings.partition, "ask"); //user will be asked for the partition
 
 	settings.barstep      = 9;   // grey
 	strcpy(settings.lastplayed,"");
