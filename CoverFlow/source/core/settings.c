@@ -213,7 +213,7 @@ int SETTINGS_Load()
 		  if(mxmlElementGetAttr(next_n,"localizeLang"))
 			  strcpy(settings.localLanguage, mxmlElementGetAttr(next_n,"localizeLang"));
                   if(mxmlElementGetAttr(next_n,"favorites"))
-			  strcpy(settings.favorites, mxmlElementGetAttr(next_n,"favorites"));
+			  settings.favorites= atoi(mxmlElementGetAttr(next_n,"favorites"));
 #ifdef NEWS_READER	  
 		  if(mxmlElementGetAttr(next_n,"newsID"))
 			  strcpy(settings.newsID, mxmlElementGetAttr(next_n,"newsID"));
