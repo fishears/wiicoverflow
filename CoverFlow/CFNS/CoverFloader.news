@@ -1,38 +1,54 @@
-NEWSID = 200912220
+NEWSID = 201004040
 ############ Common ############
-LINES = 17
+LINES = 19
 SPEED = 4
 DELAY = 5
 REPEAT = 1
-BACKCOLOR = 0xFF0000FF
+BACKCOLOR = 0x962DFFFF
 TX_SIZE = 24
-TX_COLOR = 0xFF, 0xFF, 0x00, 0xff
-TX_STYLE = FTGX_JUSTIFY_CENTER
+TX_COLOR = 0xff, 0xff, 0xff, 0xFF
+TX_STYLE = FTGX_JUSTIFY_LEFT
 ############ Lines #############
-TX_COLORLINE = 17, 0x00, 0x00, 0x00, 0xff
-#TX_COLORLINE = 5, 0xff, 0x00, 0xff, 0xff
-TX_SIZELINE = 4, 16
-TX_SIZELINE = 17, 18
+TX_COLORLINE = 2, 0xFA, 0xB1, 0x0A, 0xFF
+TX_COLORLINE = 4, 0x00, 0x00, 0x00, 0xFF
+TX_COLORLINE = 8, 0xFF, 0xFF, 0x00, 0xFF
+TX_COLORLINE = 10, 0xFF, 0xFF, 0x00, 0xFF
+TX_COLORLINE = 12, 0xFF, 0xFF, 0x00, 0xFF
+TX_COLORLINE = 19, 0x00, 0x00, 0x00, 0xFF
+TX_STYLELINE = 2, FTGX_JUSTIFY_CENTER
 TX_STYLELINE = 4, FTGX_JUSTIFY_RIGHT
-TX_STYLELINE = 17, FTGX_JUSTIFY_LEFT
+TX_STYLELINE = 8, FTGX_JUSTIFY_CENTER
+TX_STYLELINE = 10, FTGX_JUSTIFY_CENTER
+TX_STYLELINE = 12, FTGX_JUSTIFY_CENTER
+TX_STYLELINE = 19, FTGX_JUSTIFY_LEFT
+TX_SIZELINE = 2, 24
+TX_SIZELINE = 4, 16
+TX_SIZELINE = 8, 24
+TX_SIZELINE = 10, 24
+TX_SIZELINE = 12, 24
+TX_SIZELINE = 19, 18
 ############ Text ###############
 1 = 
-2 = Merry Xm@s
+2 = Happy Easter !
 3 = 
-4 = December 22nd, 2009
+4 = April 4th, 2010
 5 = 
 6 = 
 7 = 
-8 = We wish you all
+8 = We wish you all 
 9 =   
-10 = a very Merry Christmas
+10 = Happy Easter
 11 =  
-12 = and health and success
+12 = and Happy Holidays!
 13 = 
-14 = in the New Year!
-15 =
-16 = 
-17 = Your CoverFloader Team
+14 = 
+15 = /)/)
+16 = =(';')=
+17 = ("),("),
+18 =
+19 = Your CoverFloader Team
 ############ Add Tabs ##################
-#TX_TABLINE = 17, 7
-
+TX_TABLINE = 15, 10
+TX_TABLINE = 16, 7
+TX_TABLINE = 17, 8
+#TX_TABLINE = 19, 3
