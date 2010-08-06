@@ -38,7 +38,7 @@ s32 WII_BootHBC()
 	}
 	
 	for(i=0; i<titlecount; i++) {
-		if (list[i]==TITLE_ID(0x00010001,0x4A4F4449) || list[i]==TITLE_ID(0x00010001,0x48415858))
+		if (list[i]==TITLE_ID(0x00010001,0x4A4F4449) || list[i]==TITLE_ID(0x00010001,0x48415858) || list[i]==TITLE_ID(0x00010001,0xaf1bf516))
 		{
 			tid = list[i];
 			break;
