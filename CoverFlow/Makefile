@@ -20,7 +20,7 @@ BUILD		:=	build
 SOURCES		:=	source source/pngu images source/libwbfs source/core source/mload 
 #DATA		:=	data bootloader sounds fonts languages
 DATA		:=	data sounds fonts languages
-INCLUDES	:=  include include/pngu include/libwbfs include/core include/mload 
+INCLUDES	:=  include include/libwbfs include/core include/mload 
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -47,7 +47,7 @@ LIBS	:=	-ltremor -lfreetype -lwiiuse -lbte -lasnd -lpng -lz -logc -lm -lfat -lmx
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(CURDIR)/libs/png $(CURDIR)/libs/mxml $(CURDIR)/libs/freetype $(CURDIR)/libs/sndlib $(CURDIR)/libs/libfat
+LIBDIRS	:= $(PORTLIBS) $(CURDIR)/libs/mxml $(CURDIR)/libs/freetype $(CURDIR)/libs/sndlib $(CURDIR)/libs/libfat
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
 # rules for different file extensions
@@ -92,7 +92,9 @@ export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 					-I$(CURDIR)/$(BUILD) \
-					-I$(LIBOGC_INC)
+					-I$(LIBOGC_INC) \
+					-I$(PORTLIBS)/include \
+					-I$(PORTLIBS)/include/freetype2
 
 #---------------------------------------------------------------------------------
 # build a list of library paths
