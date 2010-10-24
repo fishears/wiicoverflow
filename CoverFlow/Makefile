@@ -20,7 +20,7 @@ BUILD		:=	build
 SOURCES		:=	source source/pngu images source/libwbfs source/core source/mload 
 #DATA		:=	data bootloader sounds fonts languages
 DATA		:=	data sounds fonts languages
-INCLUDES	:=  include include/libwbfs include/core include/mload 
+INCLUDES	:=  include include/pngu include/libwbfs include/core include/mload 
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -47,7 +47,7 @@ LIBS	:=	-ltremor -lfreetype -lwiiuse -lbte -lasnd -lpng -lz -logc -lm -lfat -lmx
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(PORTLIBS) $(CURDIR)/libs/mxml $(CURDIR)/libs/freetype $(CURDIR)/libs/sndlib $(CURDIR)/libs/libfat
+LIBDIRS	:= $(PORTLIBS)
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
 # rules for different file extensions
