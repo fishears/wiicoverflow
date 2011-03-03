@@ -1,0 +1,38 @@
+NEWSID = 200912220
+############ Common ############
+LINES = 17
+SPEED = 4
+DELAY = 5
+REPEAT = 1
+BACKCOLOR = 0xFF0000FF
+TX_SIZE = 24
+TX_COLOR = 0xFF, 0xFF, 0x00, 0xff
+TX_STYLE = FTGX_JUSTIFY_CENTER
+############ Lines #############
+TX_COLORLINE = 17, 0x00, 0x00, 0x00, 0xff
+#TX_COLORLINE = 5, 0xff, 0x00, 0xff, 0xff
+TX_SIZELINE = 4, 16
+TX_SIZELINE = 17, 18
+TX_STYLELINE = 4, FTGX_JUSTIFY_RIGHT
+TX_STYLELINE = 17, FTGX_JUSTIFY_LEFT
+############ Text ###############
+1 = 
+2 = Merry Xm@s
+3 = 
+4 = December 22nd, 2009
+5 = 
+6 = 
+7 = 
+8 = We wish you all
+9 =   
+10 = a very Merry Christmas
+11 =  
+12 = and health and success
+13 = 
+14 = in the New Year!
+15 =
+16 = 
+17 = Your CoverFloader Team
+############ Add Tabs ##################
+#TX_TABLINE = 17, 7
+
