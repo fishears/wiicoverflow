@@ -1,0 +1,966 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="69">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <df name="CoverFlow" root=".">
+      <df name=".svn">
+        <df name="prop-base" kind="SOURCE_LOGICAL_FOLDER">
+        </df>
+        <df name="props" kind="SOURCE_LOGICAL_FOLDER">
+        </df>
+        <df name="text-base" kind="SOURCE_LOGICAL_FOLDER">
+        </df>
+        <df name="tmp" kind="SOURCE_LOGICAL_FOLDER">
+          <df name="prop-base" kind="SOURCE_LOGICAL_FOLDER">
+          </df>
+          <df name="props" kind="SOURCE_LOGICAL_FOLDER">
+          </df>
+          <df name="text-base" kind="SOURCE_LOGICAL_FOLDER">
+          </df>
+        </df>
+        <in>all-wcprops</in>
+        <in>entries</in>
+      </df>
+      <df name="bootloader">
+      </df>
+      <df name="CFNS">
+      </df>
+      <df name="Current_Release">
+      </df>
+      <df name="data">
+      </df>
+      <df name="fonts">
+      </df>
+      <df name="images">
+      </df>
+      <df name="include">
+        <df name="core">
+          <in>alternatedol.h</in>
+          <in>apploader.h</in>
+          <in>disc.h</in>
+          <in>discbrowser.h</in>
+          <in>dvd_broadway.h</in>
+          <in>fat.h</in>
+          <in>frag.h</in>
+          <in>fst.h</in>
+          <in>fstfile.h</in>
+          <in>fwrite_patch.h</in>
+          <in>gameSettings.h</in>
+          <in>geckomenu.h</in>
+          <in>kenobiwii.h</in>
+          <in>mload.h</in>
+          <in>mload_modules.h</in>
+          <in>partition.h</in>
+          <in>patchcode.h</in>
+          <in>ppc.h</in>
+          <in>restart.h</in>
+          <in>sdhc.h</in>
+          <in>settings.h</in>
+          <in>splits.h</in>
+          <in>subsystem.h</in>
+          <in>sys.h</in>
+          <in>usbstorage.h</in>
+          <in>video.h</in>
+          <in>wbfs.h</in>
+          <in>wbfs_fat.h</in>
+          <in>wdvd.h</in>
+          <in>wiipad.h</in>
+          <in>wiisys.h</in>
+        </df>
+        <df name="pngu">
+          <in>pngu.h</in>
+        </df>
+        <in>CFreeTypeGX.h</in>
+        <in>FreeTypeGX.h</in>
+        <in>GRRLIB.h</in>
+        <in>Kmemory.h</in>
+        <in>Metaphrasis.h</in>
+        <in>OSK.h</in>
+        <in>T_error.h</in>
+        <in>TrackedMemoryManager.h</in>
+        <in>app.h</in>
+        <in>app_dol.h</in>
+        <in>asm.h</in>
+        <in>banner.h</in>
+        <in>bootMenu.h</in>
+        <in>buffer.h</in>
+        <in>button.h</in>
+        <in>capp_dol.h</in>
+        <in>cheats.h</in>
+        <in>cover.h</in>
+        <in>coverflow.h</in>
+        <in>defines.h</in>
+        <in>deleteMenu.h</in>
+        <in>dns.h</in>
+        <in>dol.h</in>
+        <in>fileParser.h</in>
+        <in>filter.h</in>
+        <in>gettext.h</in>
+        <in>gfx.h</in>
+        <in>homemenu.h</in>
+        <in>http.h</in>
+        <in>info.h</in>
+        <in>installMenu.h</in>
+        <in>localization.h</in>
+        <in>menuMultiDOL.h</in>
+        <in>newsreader.h</in>
+        <in>oggplayer.h</in>
+        <in>processor.h</in>
+        <in>pthread.h</in>
+        <in>scrollbox.h</in>
+        <in>settingsMenu.h</in>
+        <in>soundfile.h</in>
+        <in>soundmanager.h</in>
+        <in>storage.h</in>
+        <in>titles.h</in>
+        <in>updater.h</in>
+        <in>urlLogin.h</in>
+        <in>useScrollBox.h</in>
+        <in>util.h</in>
+        <in>utils.h</in>
+        <in>version.h</in>
+      </df>
+      <df name="languages">
+      </df>
+      <df name="libs">
+        <df name="libfat">
+          <df name="include">
+            <in>fat.h</in>
+          </df>
+          <df name="lib">
+          </df>
+          <df name="libfat">
+            <df name="gba">
+              <df name="include">
+                <in>fat.h</in>
+              </df>
+            </df>
+            <df name="include">
+              <in>fat.h</in>
+              <in>libfatversion.h</in>
+            </df>
+            <df name="libogc">
+              <df name="include">
+                <in>fat.h</in>
+              </df>
+            </df>
+            <df name="nds">
+              <df name="include">
+                <in>fat.h</in>
+              </df>
+            </df>
+            <df name="source">
+              <in>bit_ops.h</in>
+              <in>cache.c</in>
+              <in>cache.h</in>
+              <in>common.h</in>
+              <in>directory.c</in>
+              <in>directory.h</in>
+              <in>disc.c</in>
+              <in>disc.h</in>
+              <in>fatdir.c</in>
+              <in>fatdir.h</in>
+              <in>fatfile.c</in>
+              <in>fatfile.h</in>
+              <in>file_allocation_table.c</in>
+              <in>file_allocation_table.h</in>
+              <in>filetime.c</in>
+              <in>filetime.h</in>
+              <in>libfat.c</in>
+              <in>lock.h</in>
+              <in>mem_allocate.h</in>
+              <in>partition.c</in>
+              <in>partition.h</in>
+            </df>
+          </df>
+        </df>
+        <df name="libntfs">
+          <df name="example">
+            <df name="data">
+            </df>
+            <df name="lib">
+            </df>
+            <df name="source">
+              <in>ehcmodule_elf.h</in>
+              <in>main.c</in>
+              <in>mload.c</in>
+              <in>mload.h</in>
+              <in>ntfs.h</in>
+            </df>
+          </df>
+          <df name="include">
+            <in>ntfs.h</in>
+          </df>
+          <df name="lib">
+          </df>
+          <df name="source">
+            <in>acls.c</in>
+            <in>acls.h</in>
+            <in>attrib.c</in>
+            <in>attrib.h</in>
+            <in>attrib_frag.c</in>
+            <in>attrlist.c</in>
+            <in>attrlist.h</in>
+            <in>bitmap.c</in>
+            <in>bitmap.h</in>
+            <in>bootsect.c</in>
+            <in>bootsect.h</in>
+            <in>cache.c</in>
+            <in>cache.h</in>
+            <in>collate.c</in>
+            <in>collate.h</in>
+            <in>compat.c</in>
+            <in>compat.h</in>
+            <in>compress.c</in>
+            <in>compress.h</in>
+            <in>config.h</in>
+            <in>debug.c</in>
+            <in>debug.h</in>
+            <in>device.c</in>
+            <in>device.h</in>
+            <in>device_io.c</in>
+            <in>device_io.h</in>
+            <in>dir.c</in>
+            <in>dir.h</in>
+            <in>efs.c</in>
+            <in>efs.h</in>
+            <in>endians.h</in>
+            <in>gekko_io.c</in>
+            <in>gekko_io.h</in>
+            <in>index.c</in>
+            <in>index.h</in>
+            <in>inode.c</in>
+            <in>inode.h</in>
+            <in>layout.h</in>
+            <in>lcnalloc.c</in>
+            <in>lcnalloc.h</in>
+            <in>logfile.c</in>
+            <in>logfile.h</in>
+            <in>logging.c</in>
+            <in>logging.h</in>
+            <in>mem_allocate.h</in>
+            <in>mft.c</in>
+            <in>mft.h</in>
+            <in>misc.c</in>
+            <in>misc.h</in>
+            <in>mst.c</in>
+            <in>mst.h</in>
+            <in>ntfs.c</in>
+            <in>ntfsdir.c</in>
+            <in>ntfsdir.h</in>
+            <in>ntfsfile.c</in>
+            <in>ntfsfile.h</in>
+            <in>ntfsfile_frag.c</in>
+            <in>ntfsinternal.c</in>
+            <in>ntfsinternal.h</in>
+            <in>ntfstime.h</in>
+            <in>reparse.c</in>
+            <in>reparse.h</in>
+            <in>runlist.c</in>
+            <in>runlist.h</in>
+            <in>security.c</in>
+            <in>security.h</in>
+            <in>support.h</in>
+            <in>types.h</in>
+            <in>unistr.c</in>
+            <in>unistr.h</in>
+            <in>volume.c</in>
+            <in>volume.h</in>
+          </df>
+        </df>
+      </df>
+      <df name="Release">
+        <df name="SD_USB-Loader">
+        </df>
+      </df>
+      <df name="sounds">
+      </df>
+      <df name="source">
+        <df name="core">
+          <in>alternatedol.c</in>
+          <in>apploader.c</in>
+          <in>disc.c</in>
+          <in>discbrowser.c</in>
+          <in>dvd_broadway.c</in>
+          <in>fat.c</in>
+          <in>frag.c</in>
+          <in>fst.c</in>
+          <in>fstfile.c</in>
+          <in>gameSettings.c</in>
+          <in>mload.c</in>
+          <in>mload_modules.c</in>
+          <in>partition.c</in>
+          <in>patchcode.c</in>
+          <in>restart.c</in>
+          <in>sdhc.c</in>
+          <in>settings.c</in>
+          <in>splits.c</in>
+          <in>subsystem.c</in>
+          <in>sys.c</in>
+          <in>usbstorage.c</in>
+          <in>video.c</in>
+          <in>wbfs.c</in>
+          <in>wbfs_fat.c</in>
+          <in>wdvd.c</in>
+          <in>wiipad.c</in>
+          <in>wiisys.c</in>
+        </df>
+        <df name="libwbfs">
+          <in>libwbfs.c</in>
+          <in>libwbfs.h</in>
+          <in>libwbfs_os.h</in>
+          <in>rijndael.c</in>
+          <in>wiidisc.c</in>
+          <in>wiidisc.h</in>
+        </df>
+        <df name="pngu">
+          <in>pngu.c</in>
+        </df>
+        <in>CFreeTypeGX.cpp</in>
+        <in>FreeTypeGX.cpp</in>
+        <in>GRRLIB.c</in>
+        <in>Kmemory.c</in>
+        <in>Metaphrasis.cpp</in>
+        <in>OSK.c</in>
+        <in>TrackedMemoryManager.c</in>
+        <in>app.cpp</in>
+        <in>app_dol.cpp</in>
+        <in>banner.c</in>
+        <in>bootMenu.c</in>
+        <in>buffer.c</in>
+        <in>button.c</in>
+        <in>capp_dol.cpp</in>
+        <in>cheats.c</in>
+        <in>cover.c</in>
+        <in>deleteMenu.c</in>
+        <in>dns.c</in>
+        <in>dol.c</in>
+        <in>fileParser.c</in>
+        <in>filter.c</in>
+        <in>gettext.c</in>
+        <in>gfx.c</in>
+        <in>homemenu.c</in>
+        <in>http.c</in>
+        <in>info.c</in>
+        <in>installMenu.c</in>
+        <in>localization.c</in>
+        <in>main.c</in>
+        <in>menuMultiDOL.c</in>
+        <in>newsreader.c</in>
+        <in>oggplayer.c</in>
+        <in>pthread.c</in>
+        <in>scrollbox.c</in>
+        <in>settingsMenu.c</in>
+        <in>soundfile.c</in>
+        <in>soundmanager.c</in>
+        <in>storage.c</in>
+        <in>titles.c</in>
+        <in>updater.c</in>
+        <in>urlLogin.c</in>
+        <in>useScrollBox.c</in>
+        <in>utils.c</in>
+      </df>
+      <df name="UI_Resources">
+      </df>
+      <df name="unused">
+        <df name="openbnr">
+          <in>MD5.c</in>
+          <in>MD5.h</in>
+          <in>dumpbanner.c</in>
+          <in>dumpbanner.h</in>
+          <in>openingbnr.c</in>
+          <in>openingbnr.h</in>
+          <in>utils.c</in>
+          <in>utils.h</in>
+        </df>
+        <df name="Updater">
+          <df name="Networking">
+            <in>networking.c</in>
+            <in>networking.h</in>
+          </df>
+        </df>
+        <df name="wiitdb">
+          <df name="GameInfo">
+            <in>gameinfo.c</in>
+            <in>gameinfo.h</in>
+          </df>
+          <in>crypt.h</in>
+          <in>ioapi.c</in>
+          <in>ioapi.h</in>
+          <in>miniunz.c</in>
+          <in>miniunz.h</in>
+          <in>mztools.c</in>
+          <in>mztools.h</in>
+          <in>unzip.c</in>
+          <in>unzip.h</in>
+          <in>xml.c</in>
+          <in>xml.h</in>
+        </df>
+        <in>ee.c</in>
+        <in>ee.h</in>
+        <in>konami.c</in>
+        <in>konami.h</in>
+      </df>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false">
+      <itemPath>Makefile</itemPath>
+      <itemPath>Makefile-CoverFlow.mk</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile-CoverFlow.mk</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>PPC|GNU</compilerSet>
+        <assemblerRequired>true</assemblerRequired>
+        <platform>2</platform>
+      </toolsSet>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>/home/jb/developer/src/wiicoverflow/CoverFlow</buildCommandWorkingDir>
+          <buildCommand>$(MAKE) -f Makefile</buildCommand>
+          <cleanCommand>$(MAKE) -f Makefile clean</cleanCommand>
+          <executablePath>CoverFlow.dol</executablePath>
+          <cTool>
+            <incDir>
+              <pElem>include</pElem>
+              <pElem>include/core</pElem>
+              <pElem>.</pElem>
+              <pElem>/home/jb/developer/devkitPro/libogc/include</pElem>
+              <pElem>libs</pElem>
+              <pElem>libs/libntfs/include</pElem>
+              <pElem>libs/libfat/include</pElem>
+              <pElem>source</pElem>
+            </incDir>
+          </cTool>
+          <ccTool>
+            <incDir>
+              <pElem>include</pElem>
+            </incDir>
+          </ccTool>
+        </makeTool>
+      </makefileType>
+      <folder path="CoverFlow/source/pngu">
+        <cTool>
+          <incDir>
+            <pElem>libs/png/include</pElem>
+            <pElem>include/pngu</pElem>
+          </incDir>
+        </cTool>
+      </folder>
+      <item path="source/CFreeTypeGX.cpp" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>libs/metaphrasis/include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="source/FreeTypeGX.cpp" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>libs/metaphrasis/include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="source/GRRLIB.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/Kmemory.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/bootMenu.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/buffer.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/button.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/apploader.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/disc.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/dvd_broadway.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>include/core</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/fat.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>include/core</pElem>
+            <pElem>libs/libfat/include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/fst.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/libfat/include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/gameSettings.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/partition.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/patchcode.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/restart.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/sdhc.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>include/core</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/settings.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/subsystem.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/libfat/include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/sys.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/video.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>include/core</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/wbfs.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/core/wiipad.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/cover.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/deleteMenu.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/dns.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/dol.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/fileParser.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/filter.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/gfx.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/homemenu.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/http.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/installMenu.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/libwbfs/libwbfs.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>include/libwbfs</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/libwbfs/wiidisc.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>include/libwbfs</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/localization.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/main.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/oggplayer.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/settingsMenu.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/soundfile.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/soundmanager.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/storage.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/titles.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="source/utils.c" ex="false" tool="0">
+        <cTool>
+          <incDir>
+            <pElem>libs/sndlib/include</pElem>
+            <pElem>libs/wiiuse/include</pElem>
+            <pElem>include/core</pElem>
+            <pElem>libs/freetype/include</pElem>
+            <pElem>include/libwbfs</pElem>
+            <pElem>libs/mxml/include</pElem>
+            <pElem>libs/libfat/include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+        </cTool>
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
